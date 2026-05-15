@@ -92,6 +92,10 @@ func _ready() -> void:
 		if not GameManager.glitch_meter_changed.is_connected(_on_glitch_meter_changed):
 			GameManager.glitch_meter_changed.connect(_on_glitch_meter_changed)
 
+	var legacy_hud = get_node_or_null("UI/CombatHUD")
+	if legacy_hud:
+		legacy_hud.visible = false
+
 	# Check for random encounter mode
 	if _has_gm() and GameManager.has_meta("pending_encounter"):
 		_start_random_encounter()

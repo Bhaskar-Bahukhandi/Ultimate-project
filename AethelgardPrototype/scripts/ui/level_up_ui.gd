@@ -8,6 +8,7 @@ extends CanvasLayer
 ## ==========================================================================
 
 # XP Bar elements
+var _xp_bar_container: Control
 var _xp_bar_bg: ColorRect
 var _xp_bar_fill: ColorRect
 var _xp_label: Label
@@ -46,11 +47,15 @@ func _ready() -> void:
 	if GameManager:
 		if not GameManager.player_leveled_up.is_connected(_on_player_leveled_up):
 			GameManager.player_leveled_up.connect(_on_player_leveled_up)
+		if not GameManager.state_changed.is_connected(_on_game_state_changed):
+			GameManager.state_changed.connect(_on_game_state_changed)
 	
 	# Initialize XP bar
 	_update_xp_bar_instant()
+	_update_xp_bar_visibility()
 
 func _process(delta) -> void:
+	_update_xp_bar_visibility()
 	# PERF: Skip when idle (no popup, no animation)
 	if not _popup_visible and abs(_xp_display_value - _xp_target_value) < 0.001:
 		return
@@ -85,6 +90,7 @@ func _build_xp_bar() -> void:
 	container.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
 	container.position = Vector2(20, -30)
 	add_child(container)
+	_xp_bar_container = container
 	
 	# Level label
 	_level_label = Label.new()
@@ -115,6 +121,17 @@ func _build_xp_bar() -> void:
 	_xp_label.add_theme_font_size_override("font_size", 11)
 	_xp_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.8))
 	container.add_child(_xp_label)
+
+
+func _on_game_state_changed(_new_state: int) -> void:
+	_update_xp_bar_visibility()
+
+
+func _update_xp_bar_visibility() -> void:
+	if not _xp_bar_container or not has_node("/root/GameManager"):
+		return
+	var state = GameManager.current_state
+	_xp_bar_container.visible = state == GameManager.GameState.EXPLORATION
 
 # ==========================================================================
 # LEVEL-UP POPUP — Animated stat display

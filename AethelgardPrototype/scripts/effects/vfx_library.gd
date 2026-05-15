@@ -480,6 +480,20 @@ var _cached_scale_curve: Curve = null
 # PERF: Gradient cache keyed by (color_start, color_end) to avoid per-spawn Gradient+Point creation
 var _gradient_cache: Dictionary = {}
 
+func _can_add_effect_now(parent: Node) -> bool:
+	return parent and is_instance_valid(parent) and parent.is_inside_tree() and parent.is_node_ready()
+
+
+func _add_effect_child(parent: Node, child: Node) -> bool:
+	if not parent or not is_instance_valid(parent) or not child or not is_instance_valid(child):
+		return false
+	if _can_add_effect_now(parent):
+		parent.add_child(child)
+		return true
+	parent.call_deferred("add_child", child)
+	return false
+
+
 func spawn(effect_name: String, pos: Vector2, parent: Node) -> Node:
 	if not EFFECTS.has(effect_name):
 		push_warning("VFXLibrary: Unknown effect '%s'" % effect_name)
@@ -579,7 +593,7 @@ func _spawn_particles(config: Dictionary, pos: Vector2, parent: Node) -> CPUPart
 		_gradient_cache[grad_key] = gradient
 	particles.color_ramp = gradient
 
-	parent.add_child(particles)
+	_add_effect_child(parent, particles)
 
 	if particles.one_shot:
 		var timer = parent.get_tree().create_timer(config.get("lifetime", 0.5) + 0.3)
@@ -958,16 +972,23 @@ func spawn_status_indicator(text: String, pos: Vector2, parent: Node, is_buff: b
 	label.add_theme_font_size_override("font_size", 14)
 	label.add_theme_constant_override("outline_size", 2)
 	label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.7))
-	parent.add_child(label)
 
-	label.scale = Vector2(0.4, 0.4)
-	label.pivot_offset = Vector2(40, 15)
-	var tween = label.create_tween()
-	tween.tween_property(label, "scale", Vector2(1.15, 1.15), 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.tween_property(label, "scale", Vector2(1.0, 1.0), 0.08).set_trans(Tween.TRANS_SINE)
-	tween.tween_property(label, "position:y", pos.y - 60, 1.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.6).set_delay(0.45).set_trans(Tween.TRANS_SINE)
-	tween.tween_callback(label.queue_free)
+	var animate_label = func() -> void:
+		if not is_instance_valid(label):
+			return
+		label.scale = Vector2(0.4, 0.4)
+		label.pivot_offset = Vector2(40, 15)
+		var tween = label.create_tween()
+		tween.tween_property(label, "scale", Vector2(1.15, 1.15), 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.tween_property(label, "scale", Vector2(1.0, 1.0), 0.08).set_trans(Tween.TRANS_SINE)
+		tween.tween_property(label, "position:y", pos.y - 60, 1.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween.parallel().tween_property(label, "modulate:a", 0.0, 0.6).set_delay(0.45).set_trans(Tween.TRANS_SINE)
+		tween.tween_callback(label.queue_free)
+
+	if _add_effect_child(parent, label):
+		animate_label.call()
+	else:
+		label.ready.connect(animate_label, CONNECT_ONE_SHOT)
 
 	return label
 

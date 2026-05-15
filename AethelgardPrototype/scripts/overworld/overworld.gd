@@ -494,7 +494,7 @@ func _create_zone_label_ui() -> void:
 	instructions.text = "[WASD] Move  |  [Shift] Sprint  |  [F] Interact  |  [M] Map  |  [I] Status  |  [TAB] Data Vision"
 	instructions.add_theme_font_size_override("font_size", 9)
 	instructions.add_theme_color_override("font_color", Color(0.6, 0.6, 0.5))
-	instructions.position = Vector2(20, 690)
+	instructions.position = Vector2(250, 690)
 	ui_layer.add_child(instructions)
 
 

@@ -588,7 +588,7 @@ func _build_ui() -> void:
 	_margin = MarginContainer.new()
 	_margin.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
 	_margin.offset_top = -190
-	_margin.offset_bottom = -15
+	_margin.offset_bottom = -8
 	_margin.offset_left = 30
 	_margin.offset_right = -30
 	_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -599,7 +599,7 @@ func _build_ui() -> void:
 	_panel.name = "DialoguePanel"
 	_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var style = StyleBoxFlat.new()
-	style.bg_color = Color(0.03, 0.03, 0.08, 0.96)
+	style.bg_color = Color(0.03, 0.03, 0.08, 1.0)
 	style.border_color = Color(0.0, 0.7, 1.0, 0.5)
 	style.set_border_width_all(2)
 	style.set_corner_radius_all(6)

@@ -83,6 +83,10 @@ func animate_glitch() -> void:
 
 func _build_game_over_options() -> void:
 	## Add visible button prompts to the game over screen
+	var old_prompt = _shake_container.get_node_or_null("CenterContainer/VBox/ContinueLabel") if _shake_container else get_node_or_null("CenterContainer/VBox/ContinueLabel")
+	if old_prompt:
+		old_prompt.visible = false
+
 	var options_vbox = VBoxContainer.new()
 	options_vbox.name = "OptionsContainer"
 	options_vbox.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)

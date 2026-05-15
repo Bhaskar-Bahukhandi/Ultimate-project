@@ -373,7 +373,7 @@ func _build_camera() -> void:
 # ======================================================================
 func _build_ui() -> void:
 	ui_layer = CanvasLayer.new()
-	ui_layer.layer = 80
+	ui_layer.layer = 110
 	add_child(ui_layer)
 
 	# ── Boss HP Bar ──────────────────────────────────────────
@@ -424,14 +424,14 @@ func _build_ui() -> void:
 	dialogue_box = PanelContainer.new()
 	dialogue_box.name = "DialogueBox"
 	dialogue_box.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	dialogue_box.offset_bottom = -24
+	dialogue_box.offset_bottom = -12
 	dialogue_box.offset_top = -120
 	dialogue_box.offset_left = 80
 	dialogue_box.offset_right = -80
 	dialogue_box.visible = false
 
 	var panel_style = StyleBoxFlat.new()
-	panel_style.bg_color = Color(0.05, 0.04, 0.08, 0.92)
+	panel_style.bg_color = Color(0.05, 0.04, 0.08, 0.98)
 	panel_style.border_color = Color(0.4, 0.3, 0.6, 0.8)
 	panel_style.border_width_top = 2
 	panel_style.border_width_bottom = 2
