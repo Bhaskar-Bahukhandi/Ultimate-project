@@ -1,0 +1,75 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/chapter2/ch2_seraphina_encounter.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/camera/cinematic_camera.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/cutscene/cutscene_manager.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/effects/screen_transition.gd" id="4"]
+
+[node name="SeraphinaEncounter" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="BackgroundLayer" type="CanvasLayer" parent="."]
+layer = -100
+
+[node name="Background" type="ColorRect" parent="BackgroundLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.15, 0.1, 0.08, 1)
+
+[node name="CharactersLayer" type="Node2D" parent="."]
+
+[node name="CinematicCamera" type="Camera2D" parent="."]
+position = Vector2(640, 360)
+script = ExtResource("2")
+
+[node name="CutsceneManager" type="Node" parent="."]
+script = ExtResource("3")
+
+[node name="ScreenTransition" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+script = ExtResource("4")
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="DialogueBox" type="PanelContainer" parent="UILayer"]
+visible = false
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -180.0
+offset_left = 30.0
+offset_right = -30.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="EffectsLayer" type="CanvasLayer" parent="."]
+layer = 5
+
+[node name="GlitchOverlay" type="ColorRect" parent="EffectsLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 1, 0, 0)
+
+[node name="FlashOverlay" type="ColorRect" parent="EffectsLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(1, 1, 1, 0)

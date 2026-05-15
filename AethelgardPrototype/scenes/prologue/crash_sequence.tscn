@@ -1,0 +1,95 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7qvmxg4eqp2t"]
+
+[ext_resource type="Script" path="res://scripts/prologue/crash_sequence.gd" id="1"]
+
+[sub_resource type="Shader" id="Shader_glitch"]
+code = "shader_type canvas_item;
+
+uniform float glitch_strength : hint_range(0.0, 1.0) = 0.0;
+uniform float time_offset = 0.0;
+
+void fragment() {
+	vec2 uv = UV;
+	
+	// Glitch displacement
+	float glitch = sin(uv.y * 50.0 + TIME * 10.0 + time_offset) * glitch_strength;
+	uv.x += glitch * 0.1;
+	
+	// Color separation
+	vec4 col_r = texture(TEXTURE, uv + vec2(glitch_strength * 0.01, 0.0));
+	vec4 col_g = texture(TEXTURE, uv);
+	vec4 col_b = texture(TEXTURE, uv - vec2(glitch_strength * 0.01, 0.0));
+	
+	COLOR = vec4(col_r.r, col_g.g, col_b.b, col_g.a);
+	
+	// Scanlines
+	float scanline = sin(uv.y * 800.0) * 0.04;
+	COLOR.rgb -= scanline * glitch_strength;
+	
+	// Random pixelation
+	if (glitch_strength > 0.5) {
+		float noise = fract(sin(dot(floor(uv * 50.0), vec2(12.9898, 78.233))) * 43758.5453);
+		if (noise > 0.95) {
+			COLOR = vec4(0.0, 0.0, 0.0, 1.0);
+		}
+	}
+}
+"
+
+[node name="CrashSequence" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("Shader_glitch")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.1, 0.2, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="StatusLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "[SYSTEM ERROR]"
+horizontal_alignment = 1
+
+[node name="MessageLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "REALITY.dll has stopped responding"
+horizontal_alignment = 1
+
+[node name="ProgressLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Compiling entities... 0%"
+horizontal_alignment = 1
+
+[node name="AnimationTimer" type="Timer" parent="."]
+wait_time = 0.05
+
+[node name="SequenceTimer" type="Timer" parent="."]
+wait_time = 4.0
+one_shot = true
+
+[connection signal="timeout" from="AnimationTimer" to="." method="_on_animation_timer_timeout"]
+[connection signal="timeout" from="SequenceTimer" to="." method="_on_sequence_timer_timeout"]

@@ -1,0 +1,83 @@
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+
+AssetManager initialized - Scanning for assets...
+✓ Asset loaded: player
+✓ Asset loaded: player_before_ch1
+✓ Asset loaded: player_after_ch1
+✓ Asset loaded: player_top_down
+✓ Asset loaded: player_sprite_sheet
+✓ Asset loaded: char_kaelen
+✓ Asset loaded: char_elara
+✓ Asset loaded: char_mira
+✓ Asset loaded: char_tutorial_knight
+✓ Asset loaded: char_elder
+✓ Asset loaded: char_farmer_jenkins
+✓ Asset loaded: char_seraphina
+✓ Asset loaded: char_nyx
+✓ Asset loaded: char_pip
+✓ Asset loaded: char_gate_guard
+✓ Asset loaded: portrait_kaelen
+✓ Asset loaded: portrait_kaelen_internal
+✓ Asset loaded: portrait_elara
+✓ Asset loaded: portrait_mira
+✓ Asset loaded: portrait_system
+✓ Asset loaded: portrait_unknown
+✓ Asset loaded: portrait_tutorial_knight
+✓ Asset loaded: portrait_elder
+✓ Asset loaded: portrait_seraphina
+✓ Asset loaded: portrait_nyx
+✓ Asset loaded: portrait_gate_guard
+○ Asset not found (using placeholder): bg_plane_interior
+○ Asset not found (using placeholder): bg_plane_glitch1
+○ Asset not found (using placeholder): bg_plane_glitch2
+○ Asset not found (using placeholder): bg_plane_glitch3
+○ Asset not found (using placeholder): bg_plane_glitch4
+○ Asset not found (using placeholder): bg_night_sky
+○ Asset not found (using placeholder): bg_bsod
+○ Asset not found (using placeholder): bg_boot_screen
+○ Asset not found (using placeholder): bg_crash_sequence
+○ Asset not found (using placeholder): bg_glitch_crater
+○ Asset not found (using placeholder): bg_forest_twilight
+○ Asset not found (using placeholder): bg_oakhaven_sky
+○ Asset not found (using placeholder): bg_oakhaven_buildings_far
+○ Asset not found (using placeholder): bg_oakhaven_buildings_near
+○ Asset not found (using placeholder): bg_oakhaven_ground
+○ Asset not found (using placeholder): bg_tutorial_arena
+○ Asset not found (using placeholder): bg_shatter_bridge
+○ Asset not found (using placeholder): bg_ironhold_sky
+○ Asset not found (using placeholder): bg_ironhold_industrial
+○ Asset not found (using placeholder): bg_ironhold_market
+○ Asset not found (using placeholder): bg_ironhold_arena
+○ Asset not found (using placeholder): bg_ironhold_clock_tower
+○ Asset not found (using placeholder): bg_underground
+○ Asset not found (using placeholder): bg_admin_boss_arena
+✓ Asset loaded: slime_green
+✓ Asset loaded: boar_corrupted
+✓ Asset loaded: knight_tutorial
+✓ Asset loaded: arachnid_clockwork
+✓ Asset loaded: sentinel_steam
+✓ Asset loaded: gear_hulk
+✓ Asset loaded: bone_construct
+✓ Asset loaded: wraith
+✓ Asset loaded: lich_lord
+✓ Asset loaded: corrupted_rat
+✓ Asset loaded: glitch_wolf
+✓ Asset loaded: corrupted_guard
+✓ Asset loaded: data_sprite
+✓ Asset loaded: clockwork_soldier
+✓ Asset loaded: shadow_wraith
+✓ Asset loaded: tileset_oakhaven
+✓ Asset loaded: tileset_oakhaven_forest
+✓ Asset loaded: tileset_ironhold
+✓ Asset loaded: tileset_necropolis
+✓ Asset loaded: tileset_celestia
+✓ Asset loaded: tileset_deepblue
+○ Asset not found (using placeholder): bg_celestia_sky
+○ Asset not found (using placeholder): bg_deepblue
+✓ Asset loaded: ui_frame
+✓ Asset loaded: ui_button
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized — Press I to toggle
+[BackgroundManager] Initialized — procedural backgrounds active

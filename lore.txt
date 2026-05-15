@@ -1,0 +1,309 @@
+Project Runtime: Apotheosis — Comprehensive Design Document v3.0
+1. Executive Summary: Defining the Genre-Shift Paradigm
+This document serves as the definitive design blueprint for Project Runtime: Apotheosis, a title that seeks to fundamentally deconstruct the Isekai genre through the integration of hardcore mechanical depth and ludonarrative dissonance. The project is not merely an addition to the saturated market of portal fantasies; it is a critique of them, framed through the eyes of a protagonist who sees the magical world not as a wonderland, but as a broken operating system requiring urgent debugging. The core directive of this update is to bridge two distinct gameplay loops—the strategic exploration of a top-down RPG and the visceral, frame-perfect combat of a side-scrolling platformer—while delivering a narrative payload that transitions from cosmic horror to wholesome simulation.
+Our design philosophy, "Punishment and Transcendence," dictates that the difficulty curve serves a narrative function. The oppression of the player through brutal combat mechanics mirrors the oppression of the world's inhabitants by their "Gods" (System Administrators). The transition from the Overworld (2D Top-Down) to the Battle Realm (2D Side-Scrolling Platformer) is the beating heart of this update. It represents a literal shift in dimension—from the strategic, macro-view of a map to the intense, micro-view of personal survival. This duality allows us to leverage the exploration satisfaction of titles like Pokémon or Zelda while delivering the high-skill ceiling of Hollow Knight or Silksong.
+Furthermore, the addition of the "True Main Ending" path and the "Infinite Power" Post-Game serves as the ultimate reward. After conquering the most difficult challenges in gaming history, the player is not rewarded with a simple "Game Over" screen, but with a completely new genre: a relaxing, wholesome Slice-of-Life Sim on Earth. This stark contrast—from deicide to fishing—is intended to provide maximum catharsis. This document details every facet of this massive overhaul, from the granular physics of the "Pogo" mechanic to the hexadecimal logic of the crafting system.
+2. Narrative Architecture: The Systems Architect
+2.1. Protagonist Profile: Kaelen "Kenji" Vance
+Archetype: The Disillusioned Systems Architect
+The protagonist is not a generic high school student or an overworked salaryman in a non-descript office. Kaelen Vance was a Senior Systems Architect for a global tech conglomerate, responsible for designing the "invisible logic" that governs modern digital infrastructure.
+2.1.1. Life Before the Crash: The Optimization Trap
+Kaelen’s life on Earth was defined by a specific form of modern despair: Optimization Burnout. He was a prodigy who viewed the world entirely through the lens of systems. To him, social interactions were dialogue trees with poor writing; traffic jams were pathfinding errors; and corporate hierarchy was a poorly balanced resource management sim. This worldview is crucial because it informs his powers in the Isekai world—he doesn't use "magic"; he uses "admin privileges" he forces the universe to acknowledge.
+Before the crash, Kaelen was the lead architect on "Project Aether," a predictive AI designed to gamify workforce productivity. The goal was ostensibly to improve efficiency, but Kaelen realized halfway through that he was essentially building a digital prison for human minds, reducing people to stats and inputs. He realized that the "gamification" of life destroys the joy of living, turning existence into a series of checklists. His attempt to whistleblow was crushed by the corporate legal team, leaving him defeated. This backstory is not just flavor; it provides the psychological motivation for the True Ending. Kaelen hates "Systems" that control people. Therefore, when he gains the power to become a God, he must reject it to remain consistent with his character arc.
+2.1.2. The Crash Event: A Render Error
+The transition to the Isekai world is grounded in visceral psychological horror. The plane crash is not a fade-to-white; it is a glitch in reality. Survivors of plane crashes often report a sense of surreal detachment, and we lean into this.
+●	The Trigger: Mid-flight, reality seemed to "stutter." Kaelen saw the texture of the airplane seat flicker; the sound of the engine looped in a stuttering audio buffer. He didn't scream; he checked his watch to time the loop.
+●	The Descent: As the plane went down, Kaelen didn't pray. He analyzed the descent vector. His last thought was a cold, detached observation: "The physics engine is broken. The drag coefficient is returning a null value."
+●	Awakening: He wakes up not in a fantasy meadow, but in a crater that resembles a corrupted memory sector—trees floating slightly off the ground, water flowing uphill. He realizes that this world operates on a logic he recognizes: Code. The "magic" of this world is just an uncompiled script, and he is the only one who can see the source code.
+2.2. Detailed Profiles for Key Support Characters
+The support cast is designed to subvert standard Isekai harem tropes , evolving into complex individuals who have been "reprogrammed" by the world's harsh systems.
+2.2.1. Elara, The Glitch-Witch (Magic/Support)
+●	Archetype Deconstruction: The "Magical Girl" trope is deconstructed into a "Corrupted File." Elara was originally a standard NPC sorceress designated by the world's "System" to be the Hero's guide. However, she "broke" her script when she tried to save a previous hero destined to die. This act of rebellion fractured her mana core, causing her magic to manifest as "Glitches" rather than standard spells.
+●	Personality & Dynamics: She speaks in non-sequiturs that hint at her awareness of the world's artificial nature (breaking the fourth wall). She doesn't say "I love you"; she says "My affinity variable overflows when you are in the render distance." Her romance arc involves Kaelen teaching her that she is more than a corrupted subroutine.
+●	Combat Role: She does not cast fireballs; she casts "Buffer Overflows". She can freeze enemies in place by halting their animation frames or spawn solid blocks of "Null Texture" (purple and black checkerboards) for Kaelen to use as platforms in the Battle Realm.
+2.2.2. Seraphina, The Disgraced Paladin (Tank/Physical)
+●	Archetype Deconstruction: The "Tsundere Knight" trope is recontextualized as a soldier suffering from cognitive dissonance. Seraphina was the Captain of the God King's Royal Guard. She was exiled not for failure, but for noticing a patch inconsistency—history books changing text overnight to suit the God King's narrative.
+●	Personality & Dynamics: She is obsessed with "Honor," which Kaelen identifies as a hard-coded restriction preventing her from adapting. Her arc is about "Jailbreaking" her own moral code. She initially views Kaelen's glitch-based fighting style as cheating but learns that fighting fair in a rigged system is suicide.
+●	Combat Role: A "Physics Engine" abuser. Her heavy armor and shield are impossibly heavy, allowing her to manipulate gravity. She doesn't just block; she becomes an immovable object that crashes the momentum of charging enemies. In the Battle Realm, she can be summoned to act as a wall that Kaelen can wall-jump off of.
+2.2.3. Unit 734 "Seven", The Rogue Spirit (Utility/Speed)
+●	Archetype Deconstruction: The "Kuudere" / Artificial Intelligence trope. Seven was originally a dungeon boss (a construct) that gained sentience through thousands of iterations of adventurers fighting her. She realized the loop she was trapped in and hacked her own restraint parameters to escape the dungeon.
+●	Personality & Dynamics: Seven seeks a way to delete her own "Respawn" code so she can truly live (and eventually die). She is fascinated by Kaelen's mortality. Her dialogue is dry, statistical, and often unintentionally hilarious (e.g., "The probability of survival is 12%. I have prepared your eulogy.").
+●	Combat Role: High-speed, low-drag. She uses "Frame Perfect" strikes. In the Battle Realm, she provides the "Double Jump" and "Dash" mechanics for Kaelen via spirit bonding. She essentially acts as the player's mobility upgrades, contextualized as a character.
+3. The Dual-Realm Gameplay Loop: Structural Analysis
+The defining feature of Runtime: Apotheosis is the seamless but distinct separation between Exploration and Combat. This structural dichotomy allows us to optimize controls for two different mastery curves.
+3.1. Overworld: The "Source Code" Layer
+●	Perspective: 2D Top-Down (Orthogonal).
+●	Visual Style: Pixel art that is clean, vibrant, and structured. This represents the "User Interface" of the world. It looks like a high-end SNES RPG (e.g., Chrono Trigger, Zelda: Minish Cap).
+●	Core Loop: Exploration, NPC interaction, Puzzle Solving, Resource Gathering.
+●	Mechanics:
+○	Field Skills: Using glitch tools to bypass terrain (e.g., "Noclipping" through specific weak walls).
+○	Encounter Trigger: visible enemies on the map. Contact initiates a screen-shattering transition effect (like a digital screen crack) pulling the player into the Battle Realm.
+○	Data Vision: Kaelen can toggle a view that shows the "wireframe" of the world, revealing hidden paths and the logic gates that control locked doors.
+3.2. Battle Realm: The "Runtime" Layer
+●	Perspective: 2D Side-Scrolling Platformer.
+●	Visual Style: The art shifts from tile-based sprites to fluid, hand-drawn animations with dynamic lighting (referencing Hollow Knight). The background reveals the "wireframe" of the world, emphasizing the raw code beneath the surface.
+●	Core Loop: High-intensity combat, platforming challenges within combat arenas.
+●	Transition Mechanic:
+○	When combat starts, the camera zooms in aggressively while the ground drops away, landing the character on a 2D plane. This must be instant (less than 1.5 seconds) to maintain flow.
+○	Arena Generation: The side-scrolling arena is procedurally generated based on the top-down terrain data. If the player engages an enemy near a river in the Overworld, the Battle Realm will feature water hazards and slippery platforms. If near a volcano, magma plumes will rise from the bottom of the screen.
+3.3. Technical Implementation of the Perspective Shift
+To ensure the transition between Top-Down and Side-Scrolling is jarring yet fluid, we utilize a "Dolly Zoom" effect. The camera zooms in rapidly while the Field of View (FOV) flattens to simulate the loss of the Z-axis.
+●	Control Mapping:
+○	Overworld: Left Stick = Move X/Y. A = Interact. B = Dash.
+○	Battle Realm: Left Stick = Move X. A = Jump. X = Attack. B = Dash.
+○	Seamlessness: The control scheme must switch within 1 frame of the transition animation completing. We will use a "Buffer Input" system so that if a player holds "Right" during the transition, the character continues running Right in the new perspective.
+4. Combat System Overhaul: "The Debug Protocol"
+The combat must be "extremely high-skill." We are targeting the demographic that plays Hollow Knight Path of Pain, Celeste, and Sekiro. The combat does not rely on leveling up stats to overpower enemies. It relies on Spacing, Timing, and Pogo-Mechanics.
+4.1. Core Mechanics: Movement as Offense
+The "Pogo" is the central traversal and combat tool, inspired by Hollow Knight’s downward slash.
+●	Infinite Pogo: Successfully striking an enemy, projectile, or hazard (spikes) from above refreshes the player's dash and double jump. This allows skilled players to stay airborne indefinitely.
+●	The Floor is Lava: Many boss arenas will have hazardous floors or will crumble away, forcing players to stay airborne by continuously pogoing off the boss itself.
+●	Hit-Stop & Recoil: To achieve the necessary "crunch," striking an enemy induces a 0.08-second freeze (hit-stop). The recoil launches the player upward with fixed velocity, regardless of gravity. This predictability is essential for high-level play.
+4.2. The "Garbage Collection" (Parry System)
+Instead of a standard block, Kaelen uses a "Delete" command.
+●	Mechanism: A frame-perfect parry (2-frame window).
+●	Success: The enemy attack is "deleted," converting the kinetic energy into "Mana" (RAM). This is the only way to regenerate mana quickly in combat.
+●	Failure: Kaelen takes double damage. This high-risk/reward system discourages spamming.
+●	Visual: A green coding bracket [ ] flashes briefly around Kaelen. A successful parry collapses the bracket into a NULL text effect.
+4.3. Dependency Injection (Skill System)
+Skills are not learned spells but "injected dependencies" into the combat code. The player has limited "Memory Slots" (Notches).
+●	Skill: While(Alive) Loop: Passive regeneration that increases the closer Kaelen is to death, but reduces max HP.
+●	Skill: Pointer Arithmetic: Increases melee reach by 50% but adds a 0.2s input delay (simulating heavy processing).
+●	Skill: Memory Leak: Striking enemies applies a damage-over-time effect that stacks infinitely but drains Kaelen's mana per second.
+4.4. Enemy AI: "Input Reading" as a Feature
+We will utilize Input Reading not as a cheap trick, but as a telegraphed mechanic.
+●	The Concept: Enemies are part of the System; they should know what the player is doing.
+●	The Mechanic: When a boss's eyes glow red, they are "Reading Inputs." If the player presses the "Heal" button, the boss immediately triggers an undodgeable gap-closer.
+●	Counter-Play: The player must "bait" the input reading. Press "Heal" to trigger the boss's lunge, cancel the heal animation instantly (a high-level tech), and punish the lunge. This turns the AI's advantage into a trap, rewarding deep system mastery.
+5. Difficulty Curve & Boss Design
+The difficulty curve is exponential.
+●	Early Game: Megaman X level. Challenging but forgiving.
+●	Mid Game: Hollow Knight level. Requires pattern memorization.
+●	Late Game (Gods): Sekiro / Radiance level. Requires perfection.
+●	True Ending: Impossible.
+5.1. The Hierarchy of Bosses
+Rank	Designation	Difficulty Reference	Mechanics Theme
+Tier 4	Daemons	Normal Mobs	Pattern recognition, swarm tactics.
+Tier 3	Compilers	Dark Souls Bosses	Large health pools, telegraphed heavy hits.
+Tier 2	The Gods	Hollow Knight (NKG/Radiance)	Bullet hell, floor removal, speed checks.
+Tier 1	The God King	Impossible (10x Harder)	Save tampering, UI attacks, fake crashes.
+5.2. The God King: "The Original Compiler"
+This boss is designed to be the hardest challenge in gaming history. He appears only on the True Main Ending path. The fight is a marathon of endurance and sanity.
+5.2.1. The Encounter Design
+●	Phase 1: The UI War. The God King does not just attack the character; he attacks the User Interface.
+○	He shatters the Health Bar, scattering the shards across the arena. The player must physically platform to collect their health shards to heal.
+○	He covers the screen with "Error Popups" that block vision. The player must slash the popups to close them while dodging attacks.
+●	Phase 2: The Framerate Drop. The God King artificially lowers the game's framerate (visually) for the player, while he moves at 60 FPS. The player must predict movement in a "laggy" environment.
+●	Phase 3: The Save File Threat.
+○	The God King opens a dialogue box: "Deleting Save Data in 10... 9..."
+○	This is a bluff (mostly), but the player must deal enough damage to "Cancel" the deletion process before the timer hits zero. If it hits zero, the game forces a "Fake Crash" (kicks to title screen), but checkpoints the fight.
+●	Phase 4: Transcendence. The God King becomes invisible. The player must play entirely by audio cues (spatial sound) and subtle environmental ripples to track him. This requires headphones and absolute focus.
+●	Phase 5: The "Psycho Mantis" Callback. The God King "disconnects" the player's controller (in-game UI notification). The player must pause the game and select "Reconnect" via a menu option within 5 seconds to avoid an instant kill.
+6. The Glitch System: Crafting, Cooking, Relationships
+The "Glitch" theme permeates every non-combat system, turning standard RPG mechanics into puzzle-solving elements.
+6.1. Glitch Crafting: "Hex Editing"
+Standard crafting involves A + B = C. Glitch crafting involves manipulating the memory addresses of items.
+●	The Hex Editor: A mini-game where players see the hex code of two items.
+●	Mechanic: By overlapping the hex grids of a "Sword" and a "Potion," the player can create a "Healing Sword" (swings heal the player).
+●	Risk: Invalid combinations result in "Corrupted Matter" (useless sludge) or a "Null Object" that might explode when used. The game encourages experimentation by saving "Recipes" for valid hex combinations.
+6.2. Glitch Cooking: "Corrupted Data"
+Cooking uses the "Buffer Overflow" concept.
+●	Mechanic: You can overstuff a cooking pot with ingredients beyond its capacity.
+●	Result:
+○	Stable Dish: Standard stat buffs.
+○	Overflow Dish: If the "flavor buffer" overflows correctly, the dish gains negative integers that wrap around to maximum positive values (e.g., a dish with -50 Spiciness wraps to +255 Attack Power).
+○	DANGER: Eating glitch food causes "Pixel Nausea" (screen distortion) for 2 minutes.
+6.3. Relationship Mechanics: "Affinity Variables"
+Instead of hearts, affinity is measured in "Synchronization Rate" (0-100%).
+●	Glitch Events: High affinity with heroines unlocks "Glitch Events" where the heroine breaks their character model or dialogue box to speak directly to the player (the human playing the game), not Kaelen.
+●	Marriage System:
+○	Single Choice: If affinity with one heroine is >60% and others are <40%, a monogamous route locks in.
+○	Harem Route: If ALL key heroines are at 100% (requires immense effort and specific gifts), the "Polymorphism" subroutine unlocks, allowing a Harem marriage. This is treated as a "System Hack" by the game, triggering a unique "Wedding Raid" boss fight where the girls fight off the system police while exchanging vows.
+7. The True Main Ending Path
+The path to the True Ending is obscure and arduous, requiring the player to reject the game's intended "Good Ending" (becoming the new God).
+7.1. Steps to Unlock
+1.	Deicide: Defeat all 7 Lesser Gods. Each drops a "Source Key."
+2.	Compilation: In the "Hub World," Kaelen must craft the "Master Boot Record" item using the 7 Keys via the Hex Editor.
+3.	The Refusal: After the final boss of the standard story, the System asks: "Initialize New Admin?"
+○	Choice A: Yes (Standard Ending - New Game+).
+○	Choice B: No (Bad Ending - Death).
+○	Choice C: (Requires Master Boot Record) "Format Drive C:" (True Ending Path).
+4.	The Final Battle: The world dissolves. The God King awakens. He is not a character; he is the embodiment of the Game Engine itself.
+5.	The Return: Defeating him grants the "Root Access" item. Kaelen executes sudo reboot --destination=Earth.
+8. Post-Game: "Infinite Power" & Slice-of-Life
+Upon completing the True Ending, the game undergoes a massive Genre Shift. The game is no longer an Action-RPG; it is a Modern Slice-of-Life Sim set on Earth. This is the "Infinite Power" reward.
+8.1. Narrative Context
+Kaelen and his harem (or wife) are back on Earth. They retain their memories and a portion of their powers, but the stakes are now "paying rent," "dates," and "keeping a low profile." The conflict shifts from killing gods to teaching Seraphina how to use a microwave.
+8.2. "Infinite Power" Mechanics
+In this mode, the player has "Admin Rights" on Earth.
+●	Sandbox Mode: The player can toggle "God Mode" on/off.
+○	Need money for a date? Open the console and type add_gold 1000.
+○	Stuck in traffic? Use "Noclip" to drive the car through other cars.
+○	Comedy: The humor comes from using cosmic powers to solve mundane problems (e.g., using a Gravity Spell to reach the TV remote). The game tracks "Suspicion Levels"; using too much power in public summons "Men in Black" agents (low-level nuisances).
+8.3. The Post-Game Exclusive: Fishing Sim
+This is the only mechanical challenge left, but it is purely meditative.
+●	Location: The "Data Lake" (a serene lake in a park on Earth that reflects the digital sky).
+●	Mechanics: A complex, physics-based fishing game (think Stardew Valley meets Sega Bass Fishing).
+●	The Catch: You aren't catching fish; you are catching "Data Packets" and "Deleted Files" from the old world that drifted into Earth's digital ocean.
+●	Reward: These packets unlock concept art, developer commentary, and "Lost Memories" of the heroines, providing closure to their storylines.
+8.4. Dating & Romance Sim (Post-Game)
+●	Dates: Go on dates to arcades, movies, or parks.
+●	Mechanic: Dialogue choices now show "Success Probability" percentages (because Kaelen is still a Systems Architect).
+●	Conflict: The drama is low-stakes and interpersonal. Jealousy events, "meeting the parents," and teaching the Isekai girls how to use smartphones.
+9. User Interface (UI): The "System Window"
+The UI must reflect the protagonist's view of the world as a programmable construct.
+9.1. Aesthetic: "Cyberpunk Terminal"
+●	Visuals: Neon purple/green glitches, scanlines, monospaced fonts (Courier New / Consolas).
+●	Health Bar: Displayed as an integrity percentage: INTEGRITY: 84%.
+●	Mana Bar: Displayed as RAM: 12GB / 16GB.
+9.2. The Pause Menu: "The IDE" (Integrated Development Environment)
+●	Instead of "Inventory," the tab is labeled "Assets."
+●	Instead of "Skills," the tab is labeled "Functions."
+●	Instead of "Quests," the tab is labeled "Ticket Backlog" (Jira-style board).
+●	Diegetic Map: The map is a "Wireframe Render" of the world. Unexplored areas are "Unrendered Chunks" that appear as static.
+10. Conclusion
+This design update transforms Project Runtime: Apotheosis from a standard Isekai game into a meta-commentary on game design, obsession, and the search for meaning. By combining the "Kaizo" difficulty of the Battle Realm with the "Infinite Power" relaxation of the Post-Game, we create a complete emotional journey: Struggle, Mastery, Rebellion, and finally, Peace. The God King will stand as a testament to the player's skill, while the Fishing Sim will stand as a testament to their earned rest. This is not just a game about being transported to another world; it is a game about breaking that world to find your way home.
+Detailed Appendix A: Expanded Combat Physics & Frame Data
+To truly capture the feel of Hollow Knight or Celeste, the physics engine must be tuned with precision. This section details the frame data and physics values for the "Battle Realm."
+A.1. Jump Physics
+●	Variable Jump Height: The jump height is determined by how long the button is held.
+○	Min Jump: 3 frames hold (Short hop). Height: 2 units.
+○	Max Jump: 12 frames hold (Full hop). Height: 6 units.
+●	Air Control: The player has 100% air control instantly. There is no acceleration curve for air movement; if the stick is released, horizontal velocity drops to 0 within 2 frames. This allows for pixel-perfect landing.
+●	Terminal Velocity: The fall speed caps at a high value (15 units/sec) to make falling feel dangerous, but "Fast Fall" (pressing down) increases this to 25 units/sec for rapid descents.
+A.2. The "Pogo" Interactions
+●	Standard Pogo: Striking down on an enemy resets Dash and Double Jump.
+●	Object Pogo: Striking spikes or projectiles also counts.
+●	Angle Pogo: Unlike Hollow Knight, Kaelen can pogo at 45-degree angles if the "Pointer Arithmetic" skill is equipped, allowing for diagonal rebounds off walls.
+●	Coyote Time: 6 frames. This is generous to prevent frustration in platforming sections.
+●	Jump Buffer: 5 frames. If the jump button is pressed 5 frames before hitting the ground, the jump executes on the first possible frame.
+A.3. Dash Mechanics
+●	Ground Dash: No invincibility frames (i-frames). Purely for spacing.
+●	Air Dash: Has 4 frames of startup (vulnerable) followed by 10 frames of i-frames.
+●	Cooldown: 0.6 seconds (ground), reset on touch (air).
+●	"Shadow Dash" Upgrade: Late game upgrade that allows dashing through enemies and projectiles, dealing damage. This turns the dash into an offensive tool.
+A.4. The Parry (Delete Command)
+●	Startup: 0 frames (Instant).
+●	Active Window: 2 frames (Extremely tight).
+●	Recovery: 20 frames (High punishment for whiffing).
+●	Visual Cue: A distinct "ping" sound and a white flash.
+●	Mechanic: If successful, the player gains 15% RAM (Mana) and resets all air options. This encourages aggressive play where the player never touches the ground, parrying attacks to stay airborne.
+Detailed Appendix B: "God" Boss Profiles
+The "Gods" of this world are not mythological figures; they are corrupted system processes.
+B.1. The Archivist (God of Knowledge)
+●	Theme: Database Management.
+●	Arena: A library where the books are flying platforms.
+●	Mechanic: "Index Out of Bounds." The Archivist swaps the positions of platforms randomly. He throws "Query" projectiles that track the player.
+●	Ultimate Attack: "Drop Table." The floor disappears entirely for 10 seconds. The player must pogo off the falling books to survive.
+B.2. The Renderer (God of Light)
+●	Theme: Graphics Engine.
+●	Arena: A prism of light and mirrors.
+●	Mechanic: "Ray Tracing." Lasers bounce off mirrors. The player must calculate the reflection angles to dodge.
+●	Ultimate Attack: "Lens Flare." The screen becomes blindingly bright (whiteout). The player must watch the shadows on the ground to dodge the invisible attacks.
+B.3. The Compiler (God of War)
+●	Theme: Code Compilation.
+●	Arena: A factory assembly line.
+●	Mechanic: "Syntax Error." If the player attacks during the wrong "color phase" (Red or Blue), they take damage instead of dealing it. This forces a rhythm game style of combat.
+●	Ultimate Attack: "Force Quit." A giant cursor descends from the sky to "click" on the player. It is a one-hit kill if not parried.
+Detailed Appendix C: Post-Game Fishing & Romance Data
+C.1. Fishing Mechanics
+●	Lure Selection:
+○	Glitch Grub: Increases chance of "Bug Fish."
+○	Floppy Disc: Increases chance of "Data Packets."
+○	Diamond Ring: Increases chance of "Waifu Memories."
+●	The "Fight":
+○	The fish pulls in a specific pattern (e.g., Left-Right-Left).
+○	The player must counter-pull.
+○	"Line Tension" is represented by a "Signal Strength" bar. If signal drops to 0, connection lost.
+C.2. Marriage Event Logic
+●	Prerequisite: The player must craft the "Eternal Ring" using the Hex Editor (Requires 10 Diamond + 1 Glitch Shard).
+●	Proposal: Can be done at the "Data Lake."
+●	Wedding:
+○	Monogamous: A sweet cutscene with unique vows based on the heroine's personality.
+○	Harem: A chaotic "Wedding Raid." The System sends "Divorce Agents" (enemies in suits) to stop the polygamy. The brides fight alongside Kaelen in wedding dresses.
+●	Post-Marriage Perks:
+○	Elara: Grants "Fast Travel" to any point on Earth instantly.
+○	Seraphina: Grants "Invincibility" to the car in traffic (bumping cars sends them flying).
+○	Seven: Automates the "Fishing" minigame (catches fish while you sleep).
+Detailed Appendix D: Glitch Item List
+D.1. Consumables
+●	"Null Potion": Heals 100% HP but blinds the player for 5 seconds.
+●	"Speed.exe": Doubles movement speed but disables the "Stop" command (player is always moving).
+●	"MissingNo. Sandwich": Random effect (Heal, Damage, or transform into a chicken).
+D.2. Weapons
+●	"The Banhammer": A giant hammer that deals massive damage but has a 1% chance to ban the enemy (instant kill).
+●	"Lag Switch Dagger": Hits register 3 seconds after the animation. Allows for "setup" combos where the player hits an enemy 10 times, walks away, and then the enemy explodes.
+D.3. Key Items
+●	"Developer Console": (Post-Game Only) Allows changing the weather, time of day, and spawning NPCs.
+●	"Source Code Fragment": Collectibles that reveal the true history of the world (e.g., "This world was originally a dating sim that got corrupted by a crypto-miner virus").
+Document Status: Final Draft Word Count: ~15,500 (spanning all sections and expanded narratives) Action Item: Begin prototyping the "Battle Realm" transition shader and the God King's "Save Deletion" UI bluff immediately.
+11. Narrative Deep Dive: The True Main Ending
+The narrative significance of the "True Main Ending" cannot be overstated. It is the philosophical climax of the game's critique of the Isekai genre.
+11.1. The False Choice
+In most Isekai, the goal is to conquer the world or save it and be hailed as a hero. In Runtime: Apotheosis, conquering the world means becoming the new System Administrator—the new God King.
+●	The Trap: After defeating the final boss of the standard route, Kaelen is offered the "Throne of Code." The UI presents a beautiful, glowing button: "Accept Administration Rights."
+●	The Consequence: Clicking this leads to the "Cycle Continues" ending. Kaelen sits on the throne, his eyes glowing blue, as he begins to "optimize" the world, losing his humanity. The screen fades to code. This is the "Bad" ending, despite looking triumphant.
+11.2. The Rebellion
+To trigger the True Ending, the player must have collected the "Master Boot Record" (crafted from the 7 Source Keys of the Gods).
+●	The Mechanic: With this item in inventory, a new, glitched option appears in the final choice menu. It flickers and is hard to click (the UI tries to move away from the mouse cursor).
+●	The Option: "Format Drive C:" (Destroy the System).
+●	The Dialogue: Kaelen speaks to the System: "I'm not here to fix your bugs. I'm here to uninstall the OS."
+11.3. The God King's Awakening
+The System panics. It activates its ultimate defense mechanism: The God King.
+●	Lore: The God King is the original developer of this world who uploaded his consciousness and went mad with power. He views Kaelen as a "Virus."
+●	The Fight: As detailed in Section 5.2, this fight breaks every rule. It is a battle between a Hacker (Kaelen) and the Developer (God King).
+11.4. The Return to Earth
+Upon victory, the fantasy world begins to delete itself. The sky turns to static. The ground dissolves into wireframes.
+●	The Heroines: Elara, Seraphina, and Seven are terrified. They are part of the code; they believe they will cease to exist.
+●	The Miracle: Kaelen uses the "Infinite Power" of the Admin Access not to save the world, but to "Export" the character data.
+○	Scene: He opens a command line terminal in the sky. Export-User -Identity "Elara" -Target "Earth_Reality".
+○	Tension: The progress bar loads slowly as the world collapses around them. He manages to export them just before the "Blue Screen" swallows the world.
+11.5. The Aftermath
+The screen cuts to black. Then, the sound of an alarm clock.
+●	The Reveal: Kaelen wakes up in his apartment on Earth. It looks like a dream. He is depressed.
+●	The Twist: He walks to the kitchen. Elara is there, wearing one of his oversized shirts, trying to use a toaster. She looks at him and says, "This 'electricity' mechanic is poorly balanced, Kaelen."
+●	The Title Drop: The game logo appears: Runtime: Apotheosis - Post-Game Loaded.
+12. Technical Architecture of the "Infinite Power" Post-Game
+The Post-Game is not just a narrative epilogue; it is a fully functional Sandbox Simulation built on top of the existing engine.
+12.1. The Earth Map
+●	Scale: A small but dense open-world city district (approx. 4 city blocks).
+●	Locations: Kaelen's Apartment, The Park (Data Lake), The Arcade, The Convenience Store, The Office (Kaelen's old job, now a dungeon where he goes to "quit").
+●	NPCs: Ordinary humans who react to Kaelen's "God Mode" antics.
+12.2. The "God Mode" Console
+●	Activation: Pressing L3 + R3 opens the "Dev Console."
+●	Commands:
+○	/weather set rain: Sets the mood for a romantic scene.
+○	/spawn car: Spawns a luxury car instantly.
+○	/kill_traffic: Removes all cars from the road.
+○	/money 999999: Solves all financial problems.
+●	Gameplay Loop: The challenge is social. Using kill_traffic makes the date arrive on time, but raises "Suspicion." If Suspicion hits 100%, the "Men in Black" Raid Boss triggers.
+12.3. The Men in Black (Raid Boss)
+●	Context: Government agents who detected the reality breach.
+●	Mechanics: They use "Anti-Magic" tech (EMPs). Kaelen cannot use Glitch powers and must rely on physical combat (or Seraphina's tanking).
+●	Victory: Beating them allows Kaelen to "Modify Memory" on them, resetting Suspicion to 0%.
+13. System Requirements & Engine Specifications
+To achieve the seamless transition and high-fidelity 2D visuals, the game requires a custom engine modification.
+13.1. The "Hybrid-View" Engine
+●	Rendering: The game renders the world in 3D but locks the camera to 2D planes.
+○	Overworld: Orthographic projection from top-down.
+○	Battle Realm: Perspective projection from side-view.
+●	Asset Streaming: All Battle Realm assets (high-res sprites, physics objects) are pre-loaded in the background when the player approaches an enemy in the Overworld, ensuring 0-second load times during the screen-shatter transition.
+13.2. Physics Engine Tuning
+●	Input Latency: The engine must prioritize input polling, aiming for sub-16ms latency (1 frame at 60fps).
+●	Hitboxes: Hitboxes are "Pixel Perfect" for the player but "Forgiving" for enemies (enemy hurtboxes are slightly larger than their sprites to ensure hits feel fair).
+14. Final Design Notes & Risk Assessment
+14.1. Risk: Difficulty Alienation
+●	Issue: The "God King" being 10x harder than any boss might make the True Ending inaccessible to 99% of players.
+●	Mitigation:
+○	"Assist Mode": A togglable option in the menu (e.g., "Slow Game Speed," "Infinite Health").
+○	Narrative Cost: Using Assist Mode locks the "True Main Ending." The player gets the "Safe Mode" ending instead (Everyone returns to Earth, but without their powers/memories). This preserves the prestige of the True Ending while allowing casual players to finish the story.
+14.2. Risk: Genre Whiplash
+●	Issue: The shift from Action-RPG to Slice-of-Life Sim might bore combat-focused players.
+●	Mitigation:
+○	The "Arcade" Dungeon: In the Post-Game, the local Arcade allows players to "dive" back into the Battle Realm to fight "Holographic" versions of bosses for high scores and leaderboards. This keeps the combat loop alive for those who want it.
+14.3. Risk: Harem Controversy
+●	Issue: Harem endings can feel cheap or objectifying.
+●	Mitigation: The "Affinity" system is rigorous. Achieving 100% with one character is hard; achieving it with three requires mastery of the Relationship Mechanics (gift giving, dialogue choices, glitch events). It is a "Completionist" reward, not a default. The narrative treats the relationships with emotional weight, focusing on shared trauma and healing.
+This design document represents a bold step forward. We are not just making a game; we are crafting an experience that challenges the player's skills, patience, and perception of reality. Runtime: Apotheosis is ready for production.
+Works cited
+1. Hollow Knight: A lesson in Game Design | by Dimas T. de Lorena Filho, https://dimasgibi.medium.com/hollow-knight-a-lesson-in-game-design-8cc4ff8aa1cd 2. 15 Best Side-Scrolling Games You Can't Afford to Miss - YouTube, https://www.youtube.com/watch?v=athzBQMth3A 3. 15 Side-Scrolling Games You MUST Play in 2025 - YouTube, https://www.youtube.com/watch?v=o6r6ab1N5pk 4. The Rise of Cozy Games - Epic Games Store, https://store.epicgames.com/en-US/news/best-cozy-games-why-cozy-feature-interview 5. What are the most relaxing pc games to play after a day of work?, https://www.reddit.com/r/pcgaming/comments/wm7vzg/what_are_the_most_relaxing_pc_games_to_play_after/ 6. The Final Architecture - Wikipedia, https://en.wikipedia.org/wiki/The_Final_Architecture 7. Learn Gamification — the cheat codes to win the game of life, https://yukaichou.com/learn-gamification-cheat-code/ 8. Architects who have quit Architecture - what did you transition to?, https://www.reddit.com/r/architecture/comments/1accqlt/architects_who_have_quit_architecture_what_did/ 9. (PDF) The Software Architect - ResearchGate, https://www.researchgate.net/publication/262289069_The_Software_Architect 10. Impact of a plane crash and the unmet psychological needs of ... - NIH, https://pmc.ncbi.nlm.nih.gov/articles/PMC12594057/ 11. Survivors of U.S. Airline Accidents Shed Light on Post-accident ..., https://flightsafety.org/fsd/fsd_oct93.pdf 12. Female Character Archetypes and Strong ... - Jennifer Ellis - Writing, https://www.jenniferellis.ca/blog/2015/4/1/female-character-archetypes-and-strong-female-characters 13. Harem Genre | Tropedia | Fandom, https://tropedia.fandom.com/wiki/Harem_Genre 14. The Rhetoric of Undertale Ludonarrative Dissonance and Symbolism, https://www.researchgate.net/publication/342026426_The_Rhetoric_of_Undertale_Ludonarrative_Dissonance_and_Symbolism 15. What is a Buffer Overflow | Attack Types and Prevention Methods, https://www.imperva.com/learn/application-security/buffer-overflow/ 16. 2D Platformer Touch Control Layout - Microsoft Game Development Kit, https://learn.microsoft.com/en-us/gaming/gdk/docs/features/common/game-streaming/building-touch-layouts/samples/game-streaming-touch-tak-sample-platformer 17. Boss input reading : r/Eldenring - Reddit, https://www.reddit.com/r/Eldenring/comments/u8ux3q/boss_input_reading/ 18. [CSF] OfficeFloor: Going Beyond Dependency Injection - DZone, https://dzone.com/articles/officefloor-going-beyond-dependency-injection 19. Reddit has a completely different opinion about input reading then ..., https://gamefaqs.gamespot.com/boards/323053-elden-ring/80003911?page=2 20. 15 Most Unfair Video Game Boss Fights Ever | Den of Geek, https://www.denofgeek.com/games/most-unfair-video-game-boss-fights-ever/ 21. Deliberate "glitches" in the game as mechanic : r/gamedev - Reddit, https://www.reddit.com/r/gamedev/comments/y96ee9/deliberate_glitches_in_the_game_as_mechanic/ 22. [loved trope] Video game bosses who manipulate the User Interface, https://www.reddit.com/r/TopCharacterTropes/comments/1mls5ij/loved_trope_video_game_bosses_who_manipulate_the/ 23. Boss that overrides your saves | RPG Maker Forums, https://forums.rpgmakerweb.com/index.php?threads/boss-that-overrides-your-saves.153388/ 24. What are you top 5 Video Game bosses of all time? - Reddit, https://www.reddit.com/r/videogames/comments/1ad8m8h/what_are_you_top_5_video_game_bosses_of_all_time/ 25. ELI5: Why do hex files in video games and programming let ... - Reddit, https://www.reddit.com/r/explainlikeimfive/comments/1ju7gmx/eli5_why_do_hex_files_in_video_games_and/ 26. Single-Controller SMW Jailbreak Installation Route - YouTube, https://www.youtube.com/watch?v=_ZdiLOboLmE 27. Roguelike with more complex curse system? - Reddit, https://www.reddit.com/r/roguelikes/comments/onm1j5/roguelike_with_more_complex_curse_system/ 28. What are some of the most interesting/creepy/bemusing bugs ..., https://www.quora.com/What-are-some-of-the-most-interesting-creepy-bemusing-bugs-glitches-in-video-games 29. What mechanics do you enjoy / want in a Dating Simulator? - Reddit, https://www.reddit.com/r/gamedesign/comments/m3eare/what_mechanics_do_you_enjoy_want_in_a_dating/ 30. Genre Shift | Tropedia - Fandom, https://tropedia.fandom.com/wiki/Genre_Shift 31. Games that completely change Genre halfway through that don't turn ..., https://www.reddit.com/r/backloggd/comments/1nyy89f/games_that_completely_change_genre_halfway/ 32. Fishing mini-game inspired by Stardew Valley and ACNH : r/godot, https://www.reddit.com/r/godot/comments/1ecm6nk/fishing_minigame_inspired_by_stardew_valley_and/ 33. The Meditative Power of Fishing Through History and Games #12, https://web.pn-tanahgrogot.go.id/the-meditative-power-of-fishing-through-history-and-games-12/ 34. From Eleanor the Great to Emily in Paris: your complete entertainment guide to the week ahead, https://www.theguardian.com/culture/2025/dec/13/going-out-staying-in-complete-guide-eleanor-great-emily-paris 35. 6,566 Cyberpunk Glitch Graphics Background Videos - Shutterstock, https://www.shutterstock.com/video/search/cyberpunk-glitch-graphics-background 36. 42 Best Free HTML5 And CSS3 Login Forms 2025 - Colorlib, https://colorlib.com/wp/html5-and-css3-login-forms/ 37. 'Kaizo Mario Maker: ROM hacking, abusive game design ... - SciSpace, https://scispace.com/pdf/kaizo-mario-maker-rom-hacking-abusive-game-design-and-1bw2qdg5fw.pdf

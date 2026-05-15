@@ -1,0 +1,585 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/chapter1/ch1_oakhaven_village.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/exploration/player_topdown.gd" id="2"]
+
+[sub_resource type="RectangleShape2D" id="player_col"]
+size = Vector2(24, 24)
+
+[sub_resource type="RectangleShape2D" id="npc_col"]
+size = Vector2(48, 48)
+
+[sub_resource type="RectangleShape2D" id="boar_col"]
+size = Vector2(56, 56)
+
+[sub_resource type="RectangleShape2D" id="trigger_col"]
+size = Vector2(150, 150)
+
+[sub_resource type="RectangleShape2D" id="bridge_trigger_col"]
+size = Vector2(180, 100)
+
+[node name="OakhavenVillage" type="Node2D"]
+script = ExtResource("1")
+
+[node name="Ground" type="ColorRect" parent="."]
+offset_right = 3000.0
+offset_bottom = 2000.0
+color = Color(0.25, 0.55, 0.3, 1)
+
+[node name="VillageSquare" type="ColorRect" parent="."]
+offset_left = 800.0
+offset_top = 600.0
+offset_right = 1600.0
+offset_bottom = 1200.0
+color = Color(0.55, 0.45, 0.3, 1)
+
+[node name="WellCenter" type="ColorRect" parent="."]
+offset_left = 1100.0
+offset_top = 850.0
+offset_right = 1150.0
+offset_bottom = 900.0
+color = Color(0.3, 0.3, 0.35, 1)
+
+[node name="ApothecaryBuilding" type="ColorRect" parent="."]
+offset_left = 400.0
+offset_top = 300.0
+offset_right = 700.0
+offset_bottom = 500.0
+color = Color(0.5, 0.35, 0.25, 1)
+
+[node name="ApothecaryRoof" type="ColorRect" parent="."]
+offset_left = 380.0
+offset_top = 270.0
+offset_right = 720.0
+offset_bottom = 310.0
+color = Color(0.7, 0.2, 0.2, 1)
+
+[node name="ApothecarySign" type="Label" parent="."]
+offset_left = 450.0
+offset_top = 510.0
+offset_right = 650.0
+offset_bottom = 535.0
+text = "Apothecary"
+horizontal_alignment = 1
+
+[node name="AuctionHouseBuilding" type="ColorRect" parent="."]
+offset_left = 1700.0
+offset_top = 400.0
+offset_right = 2100.0
+offset_bottom = 650.0
+color = Color(0.4, 0.4, 0.45, 1)
+
+[node name="AuctionHouseRoof" type="ColorRect" parent="."]
+offset_left = 1680.0
+offset_top = 370.0
+offset_right = 2120.0
+offset_bottom = 410.0
+color = Color(0.3, 0.3, 0.5, 1)
+
+[node name="AuctionSign" type="Label" parent="."]
+offset_left = 1780.0
+offset_top = 660.0
+offset_right = 2020.0
+offset_bottom = 685.0
+text = "Auction House"
+horizontal_alignment = 1
+
+[node name="GatePosts" type="Node2D" parent="."]
+
+[node name="LeftPost" type="ColorRect" parent="GatePosts"]
+offset_left = 1350.0
+offset_top = 1450.0
+offset_right = 1380.0
+offset_bottom = 1550.0
+color = Color(0.4, 0.25, 0.15, 1)
+
+[node name="RightPost" type="ColorRect" parent="GatePosts"]
+offset_left = 1500.0
+offset_top = 1450.0
+offset_right = 1530.0
+offset_bottom = 1550.0
+color = Color(0.4, 0.25, 0.15, 1)
+
+[node name="BridgeArea" type="ColorRect" parent="."]
+offset_left = 1350.0
+offset_top = 1600.0
+offset_right = 1530.0
+offset_bottom = 1800.0
+color = Color(0.45, 0.35, 0.2, 1)
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(640, 900)
+script = ExtResource("2")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position_smoothing_enabled = true
+position_smoothing_speed = 5.0
+zoom = Vector2(2, 2)
+
+[node name="Sprite" type="ColorRect" parent="Player"]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0, 0.5, 1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("player_col")
+
+[node name="PlayerLabel" type="Label" parent="Player"]
+offset_left = -30.0
+offset_top = -40.0
+offset_right = 30.0
+offset_bottom = -20.0
+text = "Kaelen"
+horizontal_alignment = 1
+
+[node name="NPCs" type="Node2D" parent="."]
+
+[node name="Elara" type="Area2D" parent="NPCs"]
+position = Vector2(700, 900)
+
+[node name="Sprite" type="ColorRect" parent="NPCs/Elara"]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0.8, 0.3, 1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NPCs/Elara"]
+shape = SubResource("npc_col")
+
+[node name="Label" type="Label" parent="NPCs/Elara"]
+offset_left = -30.0
+offset_top = -40.0
+offset_right = 30.0
+offset_bottom = -20.0
+text = "Elara"
+horizontal_alignment = 1
+
+[node name="Apothecary" type="Area2D" parent="NPCs"]
+position = Vector2(550, 530)
+
+[node name="Sprite" type="ColorRect" parent="NPCs/Apothecary"]
+offset_left = -14.0
+offset_top = -14.0
+offset_right = 14.0
+offset_bottom = 14.0
+color = Color(0.9, 0.6, 0.3, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NPCs/Apothecary"]
+shape = SubResource("npc_col")
+
+[node name="Label" type="Label" parent="NPCs/Apothecary"]
+offset_left = -40.0
+offset_top = -38.0
+offset_right = 40.0
+offset_bottom = -18.0
+text = "Apothecary"
+horizontal_alignment = 1
+
+[node name="AuctionTerminal" type="Area2D" parent="NPCs"]
+position = Vector2(1900, 680)
+
+[node name="Sprite" type="ColorRect" parent="NPCs/AuctionTerminal"]
+offset_left = -14.0
+offset_top = -14.0
+offset_right = 14.0
+offset_bottom = 14.0
+color = Color(0.3, 0.3, 0.8, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NPCs/AuctionTerminal"]
+shape = SubResource("npc_col")
+
+[node name="Label" type="Label" parent="NPCs/AuctionTerminal"]
+offset_left = -45.0
+offset_top = -38.0
+offset_right = 45.0
+offset_bottom = -18.0
+text = "Auction Terminal"
+horizontal_alignment = 1
+
+[node name="CorruptedBoar" type="Area2D" parent="NPCs"]
+position = Vector2(1440, 1400)
+
+[node name="Sprite" type="ColorRect" parent="NPCs/CorruptedBoar"]
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+color = Color(0.7, 0.15, 0.15, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NPCs/CorruptedBoar"]
+shape = SubResource("boar_col")
+
+[node name="Label" type="Label" parent="NPCs/CorruptedBoar"]
+offset_left = -50.0
+offset_top = -45.0
+offset_right = 50.0
+offset_bottom = -25.0
+text = "Corrupted Boar"
+horizontal_alignment = 1
+
+[node name="Farmer" type="Area2D" parent="NPCs" groups=["interactable", "npc"]]
+position = Vector2(300, 1100)
+
+[node name="Sprite" type="ColorRect" parent="NPCs/Farmer"]
+offset_left = -14.0
+offset_top = -14.0
+offset_right = 14.0
+offset_bottom = 14.0
+color = Color(0.6, 0.8, 0.3, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NPCs/Farmer"]
+shape = SubResource("npc_col")
+
+[node name="Label" type="Label" parent="NPCs/Farmer"]
+offset_left = -55.0
+offset_top = -38.0
+offset_right = 55.0
+offset_bottom = -18.0
+text = "Farmer Jenkins"
+horizontal_alignment = 1
+
+[node name="Child" type="Area2D" parent="NPCs" groups=["interactable", "npc"]]
+position = Vector2(1050, 950)
+
+[node name="Sprite" type="ColorRect" parent="NPCs/Child"]
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+color = Color(1.0, 0.8, 0.5, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NPCs/Child"]
+shape = SubResource("npc_col")
+
+[node name="Label" type="Label" parent="NPCs/Child"]
+offset_left = -50.0
+offset_top = -32.0
+offset_right = 50.0
+offset_bottom = -12.0
+text = "Village Child"
+horizontal_alignment = 1
+
+[node name="Guard" type="Area2D" parent="NPCs" groups=["interactable", "npc"]]
+position = Vector2(1420, 1350)
+
+[node name="Sprite" type="ColorRect" parent="NPCs/Guard"]
+offset_left = -14.0
+offset_top = -14.0
+offset_right = 14.0
+offset_bottom = 14.0
+color = Color(0.5, 0.6, 0.7, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NPCs/Guard"]
+shape = SubResource("npc_col")
+
+[node name="Label" type="Label" parent="NPCs/Guard"]
+offset_left = -50.0
+offset_top = -38.0
+offset_right = 50.0
+offset_bottom = -18.0
+text = "Village Guard"
+horizontal_alignment = 1
+
+[node name="Triggers" type="Node2D" parent="."]
+
+[node name="ApothecaryTrigger" type="Area2D" parent="Triggers"]
+position = Vector2(550, 530)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/ApothecaryTrigger"]
+shape = SubResource("trigger_col")
+
+[node name="AuctionTrigger" type="Area2D" parent="Triggers"]
+position = Vector2(1900, 680)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/AuctionTrigger"]
+shape = SubResource("trigger_col")
+
+[node name="BoarTrigger" type="Area2D" parent="Triggers"]
+position = Vector2(1440, 1400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/BoarTrigger"]
+shape = SubResource("trigger_col")
+
+[node name="BridgeTrigger" type="Area2D" parent="Triggers"]
+position = Vector2(1440, 1700)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/BridgeTrigger"]
+shape = SubResource("bridge_trigger_col")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="HUD" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TopBar" type="PanelContainer" parent="UI/HUD"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 80.0
+grow_horizontal = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/HUD/TopBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/HUD/TopBar/MarginContainer"]
+layout_mode = 2
+
+[node name="LeftInfo" type="VBoxContainer" parent="UI/HUD/TopBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NameLabel" type="Label" parent="UI/HUD/TopBar/MarginContainer/HBoxContainer/LeftInfo"]
+layout_mode = 2
+text = "Kaelen - Lv. 1"
+theme_override_font_sizes/font_size = 16
+
+[node name="ClassLabel" type="Label" parent="UI/HUD/TopBar/MarginContainer/HBoxContainer/LeftInfo"]
+layout_mode = 2
+text = "Admin_Guest | RAM: 12/16 GB"
+
+[node name="HPBar" type="ProgressBar" parent="UI/HUD/TopBar/MarginContainer/HBoxContainer/LeftInfo"]
+layout_mode = 2
+value = 84.0
+show_percentage = false
+
+[node name="HPLabel" type="Label" parent="UI/HUD/TopBar/MarginContainer/HBoxContainer/LeftInfo/HPBar"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -11.5
+offset_right = 40.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "HP: 84/100"
+horizontal_alignment = 1
+
+[node name="RightInfo" type="VBoxContainer" parent="UI/HUD/TopBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LocationLabel" type="Label" parent="UI/HUD/TopBar/MarginContainer/HBoxContainer/RightInfo"]
+layout_mode = 2
+text = "Location: Oakhaven Village"
+horizontal_alignment = 2
+
+[node name="GlitchMeter" type="ProgressBar" parent="UI/HUD/TopBar/MarginContainer/HBoxContainer/RightInfo"]
+layout_mode = 2
+value = 5.0
+show_percentage = false
+
+[node name="GlitchLabel" type="Label" parent="UI/HUD/TopBar/MarginContainer/HBoxContainer/RightInfo"]
+layout_mode = 2
+text = "Corruption: 0.05%"
+horizontal_alignment = 2
+
+[node name="GoldLabel" type="Label" parent="UI/HUD/TopBar/MarginContainer/HBoxContainer/RightInfo"]
+layout_mode = 2
+text = "Gold: 0"
+horizontal_alignment = 2
+
+[node name="ControlsLabel" type="Label" parent="UI/HUD"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -60.0
+offset_right = 400.0
+grow_vertical = 0
+text = "WASD - Move | F/E - Talk | TAB - Data Vision | SPACE - Continue"
+
+[node name="DialogueBox" type="PanelContainer" parent="UI"]
+visible = false
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -200.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/DialogueBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 15
+
+[node name="VBox" type="VBoxContainer" parent="UI/DialogueBox/MarginContainer"]
+layout_mode = 2
+
+[node name="SpeakerLabel" type="Label" parent="UI/DialogueBox/MarginContainer/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Speaker"
+
+[node name="DialogueText" type="Label" parent="UI/DialogueBox/MarginContainer/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Dialogue text..."
+autowrap_mode = 2
+
+[node name="ContinueLabel" type="Label" parent="UI/DialogueBox/MarginContainer/VBox"]
+layout_mode = 2
+text = "[Press SPACE to continue]"
+horizontal_alignment = 2
+
+[node name="ShopPanel" type="PanelContainer" parent="UI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -180.0
+offset_right = 250.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/ShopPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="UI/ShopPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="UI/ShopPanel/MarginContainer/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "~~ Apothecary ~~"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="UI/ShopPanel/MarginContainer/VBox"]
+layout_mode = 2
+
+[node name="ItemList" type="VBoxContainer" parent="UI/ShopPanel/MarginContainer/VBox"]
+layout_mode = 2
+
+[node name="CloseBtn" type="Button" parent="UI/ShopPanel/MarginContainer/VBox"]
+layout_mode = 2
+text = "CLOSE"
+
+[node name="AuctionPanel" type="PanelContainer" parent="UI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -200.0
+offset_right = 280.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/AuctionPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="UI/AuctionPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="UI/AuctionPanel/MarginContainer/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "// AUCTION HOUSE — MARKET_NODE"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="UI/AuctionPanel/MarginContainer/VBox"]
+layout_mode = 2
+
+[node name="Description" type="Label" parent="UI/AuctionPanel/MarginContainer/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Agent-driven economy. Prices fluctuate based on NPC trade AI."
+autowrap_mode = 2
+
+[node name="Row1" type="HBoxContainer" parent="UI/AuctionPanel/MarginContainer/VBox"]
+layout_mode = 2
+
+[node name="Item" type="Label" parent="UI/AuctionPanel/MarginContainer/VBox/Row1"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Iron Sword"
+
+[node name="Price" type="Label" parent="UI/AuctionPanel/MarginContainer/VBox/Row1"]
+layout_mode = 2
+text = "42g (▲)"
+horizontal_alignment = 2
+
+[node name="Row2" type="HBoxContainer" parent="UI/AuctionPanel/MarginContainer/VBox"]
+layout_mode = 2
+
+[node name="Item" type="Label" parent="UI/AuctionPanel/MarginContainer/VBox/Row2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Leather Armor"
+
+[node name="Price" type="Label" parent="UI/AuctionPanel/MarginContainer/VBox/Row2"]
+layout_mode = 2
+text = "55g (▼)"
+horizontal_alignment = 2
+
+[node name="Row3" type="HBoxContainer" parent="UI/AuctionPanel/MarginContainer/VBox"]
+layout_mode = 2
+
+[node name="Item" type="Label" parent="UI/AuctionPanel/MarginContainer/VBox/Row3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Glitch Shard"
+
+[node name="Price" type="Label" parent="UI/AuctionPanel/MarginContainer/VBox/Row3"]
+layout_mode = 2
+text = "???g (ERR)"
+horizontal_alignment = 2
+
+[node name="StatusLabel" type="Label" parent="UI/AuctionPanel/MarginContainer/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Your access level: GUEST — Browse only"
+horizontal_alignment = 1
+
+[node name="CloseBtn" type="Button" parent="UI/AuctionPanel/MarginContainer/VBox"]
+layout_mode = 2
+text = "CLOSE"
+
+[node name="FadeRect" type="ColorRect" parent="."]
+z_index = 100
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[connection signal="body_entered" from="Triggers/ApothecaryTrigger" to="." method="_on_apothecary_interaction"]
+[connection signal="body_entered" from="Triggers/AuctionTrigger" to="." method="_on_auction_interaction"]
+[connection signal="body_entered" from="Triggers/BoarTrigger" to="." method="_on_boar_trigger"]
+[connection signal="body_entered" from="Triggers/BridgeTrigger" to="." method="_on_bridge_trigger"]

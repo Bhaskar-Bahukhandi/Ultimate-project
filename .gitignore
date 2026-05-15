@@ -1,0 +1,21 @@
+# Windows reserved/device-name artifact.
+/nul
+
+# Temporary tool/session files.
+**/tmpclaude-*-cwd
+
+# Local editor settings.
+/.vscode/
+
+# Godot generated/editor cache.
+**/.godot/
+**/.import/
+
+# Godot export output/config that can contain local machine paths or secrets.
+export.cfg
+export_presets.cfg
+
+# Mono/.NET generated files for Godot C# projects.
+.mono/
+data_*/
+mono_crash.*.json

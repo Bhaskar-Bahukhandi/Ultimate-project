@@ -1,0 +1,303 @@
+Project Runtime: Apotheosis — Chapter 0: The Runtime Exception
+Comprehensive Technical Design Document & Narrative Script Specification
+1. Executive Summary: The Prologue as a Paradigm Shift
+This document serves as the definitive production blueprint for Chapter 0: The Runtime Exception, the prologue of Project Runtime: Apotheosis (formerly Project Aethelgard). This prologue is not merely a narrative introduction; it is a structural tutorial designed to establish the core design philosophy of "Systemic Dissonance" that defines the entire 100-hour gameplay loop.1
+The primary objective of Chapter 0 is to ground the player in the "Mundane Reality" of Flight 707 before violently deconstructing it. Unlike standard Isekai introductions which treat the transition to a fantasy world as a magical or divine event, Project Runtime treats it as a Stack Overflow or Critical System Failure. The player must feel the stability of the game engine eroding around them. This requires a meticulous integration of 16x16 top-down pixel art assets 2 with high-fidelity, diegetic shader effects 3 to simulate the breakdown of a digital reality.
+The narrative payload of this chapter transitions from cosmic horror to simulation management. The protagonist, Kaelen "Kenji" Vance, is a Senior Systems Architect who views the world through the lens of code.1 Therefore, the "crash" is not just a physical event but a "Render Error," and his awakening in the fantasy world of Oakhaven is a "System Reboot." This document details every frame, sprite, line of code, and dialogue branch required to execute this vision, ensuring the transition from the modern world to the fractured "Glitchlands" of Chapter 1 is seamless, terrifying, and technically impressive.
+2. Narrative Architecture: The "Mundane" Layer
+The narrative design of Chapter 0 is predicated on the concept of "Uncanny Normality." The environment of Flight 707 must feel authentically boring and sterile to maximize the impact when the glitches begin. We are not creating a horror game; we are creating a simulation that is failing.
+2.1. Protagonist Profile: Kaelen Vance (The User)
+To write the dialogue and interactions correctly, we must adhere to Kaelen's psychological profile as defined in the "Game Mechanics and Narrative Expansion" document.1
+●	Role: Senior Systems Architect.
+●	State of Mind: Optimization Burnout. He sees life as a series of poorly optimized subroutines.
+●	Perception: He does not see "magic"; he sees "admin privileges." He does not see "monsters"; he sees "corrupted assets."
+●	Motivation: He is fleeing the corporate structure of "Project Aether," an AI designed to gamify workforce productivity.
+2.2. The Setting: Flight 707 Economy Class
+The setting is a 16x16 pixel art representation of a Boeing 747 interior.
+●	Visual Tone: Sterile, desaturated blues and greys.
+●	Audioscape: A constant, low-frequency 60Hz hum (Cabin Pressure) mixed with the rhythmic clacking of a keyboard.
+●	Ludonarrative Role: The plane represents the "Rigid System" (The Old World). It is a linear corridor (the aisle) with no deviations, symbolizing the lack of agency Kaelen feels. The crash destroys this linearity.
+________________________________________3. Detailed Walkthrough & Script: Chapter 0
+This section outlines the exact sequence of events, dialogue, and interactions for the prologue.
+3.1. Scene 0: Initialization (The Boot Sequence)
+Visuals: The game opens with a pitch-black screen. There are no logos or splash screens. A single, blinking cursor (green block, 8x16px) appears in the top-left corner. Text begins to type out rapidly (Typewriter effect, 30ms delay per character) in a monospace "Terminal" font.4
+Audio:
+●	SFX: Hard drive spinning up (high-pitched whine).
+●	SFX: Mechanical keyboard strokes (Key_Press_v2.wav) synchronized with text appearance.
+Script (Terminal Output):
+KERNEL_PANIC: CRITICAL_PROCESS_DIED
+ATTEMPTING RESTORE...
+ERROR: SECTOR 707 CORRUPTED.
+LOADING BACKUP: MEMORY_FRAGMENT_001.DAT
+...
+...
+RENDER COMPLETE.
+Transition: The text fades out. A "CRT Turn On" effect (a horizontal white line expanding vertically) plays, revealing the game world.6
+3.2. Scene 1: Cruising Altitude (The Mundane)
+Visuals:
+The camera fades in on Seat 14C (Aisle). The view is Top-Down Orthographic.
+Kaelen is sitting, typing on a laptop.
+The lighting is flat and artificial (Fluorescent tube shader).
+Audio:
+●	BGM: "Cabin Hum" (White noise drone) + Muffled Lo-Fi beats (Diegetic: Coming from Kaelen's headphones).
+●	Ambience: Occasional coughing, rustling of paper.
+Action:
+The player has control immediately but is constrained to the seat. A prompt appears above Kaelen's head: ``.
+Interaction: The Laptop (Lore Establishment)
+When the player presses 'E', a UI window overlays the screen. It is a pixel art representation of a modern OS desktop (Dark Mode).
+●	Window Title: Outlook - Inbox (1 Unread)
+●	Content:
+○	From: Admin@AetherCorp.net
+○	Subject: RE: Project Aether Concerns
+○	Body:"Vance, your report on the 'Ethical Implications of Gamified Workforce' has been rejected. The metrics are solid. The system works because people want to be controlled. Deploy the patch by Monday. - Mgmt"
+Player Choice (The First Branch): The player must choose a response using the D-Pad/Arrow Keys. This choice sets a hidden variable Corruption_Level.1
+●	Option A:
+○	Animation: Kaelen types furiously. The screen shakes slightly (Magnitude: 2.0).
+○	Result: Corruption +1. Kaelen's resistance destabilizes the system.
+●	Option B:
+○	Animation: Kaelen sighs (Sprite frame change: Shoulders drop). The screen dims.
+○	Result: Corruption +0. Compliance maintains stability.
+●	Option C: [Close Laptop]
+○	Animation: Kaelen slams the lid shut.
+○	Result: Returns to Overworld immediately.
+System Prompt:
+After the laptop interaction, a new prompt appears: ``.
+Movement:
+Kaelen stands up in the aisle. The camera zooms out slightly (Zoom 1.2 -> 1.0) to reveal the cabin layout. The player can now move freely up and down the aisle.
+3.3. Scene 2: Exploration (The Simulation)
+The player is encouraged to explore the cabin. This section is crucial for establishing the "NPCs as Systems" metaphor.
+Interactable Elements & Dialogue
+1. The Window (Seat 14A - Empty)
+●	Interaction: Kaelen looks out the window.
+●	Visuals: Parallax clouds scrolling horizontally.
+●	Kaelen's Thought (Internal Monologue):"30,000 feet. The render distance is impressive today. Procedural generation... fractal noise algorithm... stop it, Kenji. Just look at the clouds."
+●	Insight: This confirms Kaelen cannot turn off his analytical brain.
+2. The Child (Seat 5A)
+●	Sprite: Small child in a bright red shirt (high contrast to the grey cabin). Holding a GameBoy-like device.
+●	Interaction:
+○	Child: "Mister, my game crashed! It just shows numbers now."
+○	Kaelen: "Did you try a hard reset?"
+○	Child: "I pressed everything! It's like the code is leaking out!"
+●	Visual Glitch: As the child speaks, the screen of the GameBoy glows an intense, unnatural green (#00ff00). A small particle effect of "binary numbers" floats up from it.
+●	Significance: Foreshadowing that the "crash" is spreading.
+3. The Businessman (Seat 4B)
+●	Sprite: Suit, reading a newspaper.
+●	Interaction:
+○	Kaelen: "Excuse me."
+○	Businessman: "..." (Does not respond).
+●	Passive Effect: If the player uses the "Data Vision" button (Left Trigger / Shift) 1, the text on the newspaper briefly changes from garbled pixels to 0101010101.
+4. The Lavatory (Back of Plane)
+●	Interaction: The door is locked.
+●	Audio: A looping sound of a flush that never stops.
+●	Text: "Occupied."
+●	Kaelen's Thought: "That sound loop... it's missing the exit condition."
+3.4. Scene 3: The Glitch (The Stewardess Encounter)
+Trigger:
+The sequence triggers when Kaelen attempts to return to his seat or walk toward the cockpit (Row 1).
+Event: The Stewardess sprite "slides" into the aisle path. She does not play a walking animation; she simply translates coordinates, emphasizing the artificiality.1
+Dialogue (Yarn Spinner Script):
+Stewardess: "Sir, the seatbelt sign is on. Please return to your designated coordinates."
+Player Options:
+1.	"I was just stretching."
+2.	"Coordinates? You mean seat."
+Branch 1 (Defensive):
+●	Stewardess: "Compliance is mandatory for optimization. Return. Return. Return."
+●	Visual Effect: The word "Return" repeats in the text box, eventually overflowing the UI boundaries and covering Kaelen's sprite.
+Branch 2 (Analytical):
+●	Stewardess: "Seat 14C. Vector 3(14, 0, 3). Entity ID: Vance. Please execute Sit_Down_Animation."
+●	Kaelen: "Execute what? Are you okay?"
+The Visual Glitch (The Reveal): As the Stewardess speaks, her sprite undergoes a violent transformation using the Data_Mosh shader.3
+●	Frame 1: Normal Sprite (Perfect Smile).
+●	Frame 2: Wireframe Mesh (Green lines revealing she is a 3D object rendered as 2D).1
+●	Frame 3: A "MissingNo" block of garbled purple/black pixels.
+●	Sound: A sharp "digital screech" (bitcrushed sine wave) plays every time she glitches.
+●	Kaelen's Reaction: He steps back automatically. "Did you just... flicker?"
+3.5. Scene 4: The Crash (The Render Error)
+Trigger:
+Kaelen sits back down in Seat 14C. The camera zooms back in.
+Cinematic Event (In-Engine):
+This is not a cutscene video; it is a scripted sequence using the game engine to demonstrate the "Physics Engine Failure."
+Sequence of Events:
+1.	The Audio Loop:
+The ambient "Cabin Hum" begins to stutter.
+○	Audio: "Hum... Hum... H-H-H-Hum-m-m..."
+○	The "Bing" of the seatbelt sign plays, then overlaps itself rapidly: Bing-Bing-Bi-Bi-Bi-Bi-iiiiiiiii... (Turning into a continuous tone).
+2.	The Texture Failure:
+○	Swap: The carpet tiles (Floor) swap textures with the ceiling tiles.
+○	NPCs: The passengers in the rows ahead turn into T-Posing grey mannequins (The "Default Mesh").
+○	Lighting: The lights turn off, then strobing Red (#ff0000).
+3.	Kaelen's Monologue:
+Text appears floating over his head, not in a box.
+○	"Drag coefficient... null."
+○	"Gravity... unassigned."
+○	"This isn't turbulence. It's a memory leak."
+4.	The Physics Break:
+The plane does not nose-dive. It simply falls straight down, maintaining its horizontal orientation, ignoring aerodynamics.
+○	Camera: The orthographic camera uncouples from the grid, shaking violently (Screenshake Magnitude: 15.0).
+○	Shader: The "Glitch Shader" 3 ramps up aberrationAmt from 0.0 to 1.0 over 5 seconds.
+5.	The Pilot (PA System):
+○	Voice: Deep, distorted, robotic.
+○	Dialogue: "Ladies and Gentlemen, we are experiencing a... FATAL_EXCEPTION. Please assume the... DEBUG_POSITION."
+The "Shatter" Transition: This is the critical technical showcase.1
+1.	The screen freezes on a frame of the chaotic, glitched cabin.
+2.	A 3D plane is instantiated with this frame as a texture.
+3.	A Voronoi Fracture script executes, breaking the plane into 50+ irregular shards.
+4.	Physics is enabled on the shards; they fall outward towards the player camera (Z-axis positive), leaving a pure black void behind.
+________________________________________4. Technical Architecture & Implementation
+To achieve the "Perfect Details" requested, specific technical implementations in the Godot Engine (4.x) are required.
+4.1. Viewport Management (The Hybrid Engine)
+The game uses a dual-viewport system to manage the transition from the high-fidelity pixel art of Chapter 0 to the gameplay of Chapter 1.
+Node Structure	Role	Configuration
+MainScene	Root Node	-
+├── CanvasLayer (UI)	Holds Dialogue/Menus	Scale: 1.0
+├── SubViewportContainer	Displays the Game World	Stretch Mode: Keep Aspect
+│ └── SubViewport (World)	The Simulation	Size: 320x180 (Integer Scaled)
+│ ├── TileMapLayer	Plane Interior	16x16 Tiles
+│ ├── Kaelen (CharacterBody2D)	Player Controller	-
+│ └── Camera2D	Main Camera	Zoom: 1.0, Pixel Snap: On
+└── ColorRect (GlitchOverlay)	Post-Processing	Material: Glitch.gdshader
+4.2. The Glitch Shader Logic
+The "Glitch" is not a single effect but a stack of three shaders applied to the GlitchOverlay.
+1.	Chromatic Aberration: Offsets the Red and Blue channels based on the distance from the screen center.
+OpenGL Shading Language
+// Fragment Shader Snippet
+float r = texture(SCREEN_TEXTURE, SCREEN_UV + vec2(aberration_amount, 0.0)).r;
+float b = texture(SCREEN_TEXTURE, SCREEN_UV - vec2(aberration_amount, 0.0)).b;
+
+2.	Pixel Displacement (Data Mosh): Uses a noise texture to offset rows of pixels horizontally, simulating digital video corruption.
+OpenGL Shading Language
+// Displacement Logic
+float displacement = texture(noise_texture, vec2(0.0, UV.y + time)).r;
+vec2 displaced_uv = vec2(UV.x + (displacement * intensity), UV.y);
+
+3.	Scanline Overlay: Adds faint horizontal lines to mimic a CRT monitor, reinforcing the idea that Kaelen is viewing a screen.
+4.3. The "Shatter" Transition Script (C#)
+This script handles the seamless transition from 2D Viewport to 3D Physics Shatter.8
+
+C#
+
+
+// VoronoiShatter.cs
+using Godot;
+
+public partial class VoronoiShatter : Node3D
+{
+    [Export] public SubViewport SourceViewport;
+    [Export] public float ExplosionForce = 15.0f;
+    
+    public void TriggerShatter()
+    {
+        // 1. Capture the current frame from the 2D Viewport
+        Texture2D screenshot = SourceViewport.GetTexture();
+        
+        // 2. Instantiate the fractured mesh (Pre-generated Voronoi shards)
+        var shards = (Node3D)ResourceLoader.Load("res://VFX/ScreenShards.tscn").Instantiate();
+        AddChild(shards);
+        
+        // 3. Apply the screenshot as a texture to the shards
+        foreach (RigidBody3D shard in shards.GetChildren())
+        {
+            var mat = new StandardMaterial3D();
+            mat.AlbedoTexture = screenshot;
+            mat.Uv1Scale = new Vector3(1, 1, 1); // Project UVs to screen space
+            mat.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded; // Retain pixel colors
+            shard.GetNode<MeshInstance3D>("Mesh").MaterialOverride = mat;
+            
+            // 4. Apply Force towards camera
+            shard.ApplyImpulse(Vector3.Back * ExplosionForce);
+            
+            // 5. Add torque for realistic tumbling
+            shard.ApplyTorque(new Vector3(GD.Randf(), GD.Randf(), GD.Randf()) * 5.0f);
+        }
+        
+        // 6. Hide the 2D Viewport to reveal the 3D shards
+        SourceViewport.GetParent<Control>().Visible = false;
+    }
+}
+
+________________________________________5. Asset Specification: The Flight 707 Tileset
+To meet the requirement for "perfect sprites," we define the asset specifications based on the 16x16 standard.2
+5.1. Character Sprites (16x32px)
+We use a 16x32 format (1 tile wide, 2 tiles high) for characters to allow for more realistic proportions and detailed animations.
+
+Character	Visual Description	Animation States	Glitch State	Source Ref
+Kaelen Vance	Modern business casual. Unbuttoned white collar shirt, grey slacks. Dark circles under eyes (1px dark grey pixels).	Idle (Breathing), Walk (4-Dir), Sit (Profile), Typing (Laptop).	Panic: Eyes glow blue (Admin Access), binary code tattoos appear on arms.	1
+Stewardess	Generic airline uniform. Blue vest, pencil skirt. Hair in a tight bun.	Idle (Smiling), Walk (Pathfinding), Serve Drink.	Corrupted: Head rotates 360 degrees. Face replaced by "Missing Texture" checkerboard.	9
+Businessman (Seat 4B)	Suit and tie. Holding a newspaper.	Idle (Page Turn), Sleep.	Data: Newspaper texture becomes binary code when "Data Vision" is active.	10
+Child (Seat 5A)	Bright red shirt (contrast to grey cabin). Holding a GameBoy.	Idle (Button mashing).	T-Pose: Floats in mid-air, rigid mesh pose.	2
+The "Sleeping" Man	Hoodie, face obscured.	Static.	Deleted: Disappears entirely for 1 frame every 2 seconds.	9
+5.2. Environment Tileset (16x16px)
+●	Floor: Blue carpet with a repeating geometric pattern (dithered).11
+●	Seats: 16x32px (occupies two tiles vertical). Grey fabric with white headrest covers.
+○	Variant: "Occupied" (sprite integrated).
+○	Variant: "Empty" (interactable).
+●	Windows: 16x16px.
+○	Animation: Scrolling clouds (Parallax layer behind the window tile).
+○	Glitch State: Clouds freeze or turn into wireframes.
+●	Overhead Bins: 16x16px (Top Wall).
+○	Interact: "Stow Luggage."
+●	Cockpit Door: Reinforced steel texture. Locked.
+○	Interact Message: "Access Denied. Admin Privileges Required."
+________________________________________6. The Transition: Chapter 1 Initialization
+Following the "Shatter" sequence, the game transitions to the "First Chapter" setup as requested.
+6.1. The Boot Sequence (Transition Text)
+The screen is absolute black (Hex: #000000). Text types out rapidly. This is the "System" speaking to Kaelen's consciousness.12
+
+Bash
+
+
+> SYSTEM REBOOT INITIATED...
+> CHECKING HARDWARE... [OK]
+> CHECKING SOFTWARE...
+>
+> WARNING: UNAUTHORIZED USER DETECTED.
+> USER_ID: VANCE_K
+> ORIGIN: EARTH_REALITY
+>
+> ATTEMPTING DELETION...
+> REASON: USER HAS ROOT ACCESS.
+>
+> LOADING MAP: OAKHAVEN_V1.0
+> ASSET PACK: "HIGH_FANTASY"
+> DIFFICULTY: HARDCORE
+>...
+> WAKE_UP.EXE EXECUTED.
+
+6.2. Waking Up (Oakhaven)
+Visual Fade In: From Black to White (Bloom effect).
+Scene: Oakhaven, The Starting Kingdom.
+Visual Contrast: The sterile grey of the plane is replaced by oversaturated greens and bloom lighting.1
+●	Asset Source: "Sprout Lands" tilemap.
+●	The Contrast: While the grass is lush, a tree nearby flickers, momentarily showing its wireframe. This is Kaelen's "Systems Vision" lingering from the crash.
+Kaelen's Sprite:
+●	He is lying face down in a crater (The impact site).
+●	He stands up. His suit is torn, revealing glowing blue circuit-board patterns on his skin.
+The First Dialogue (The System Voice):
+A blue, semi-transparent window (diegetic UI) pops up next to Kaelen.
+●	System: "Welcome, User. You have successfully crashed into Sector 1. Current Objective: Survive the Tutorial."
+●	Kaelen: "Survive the tutorial? I wrote the tutorial."
+●	System: "Correction. You wrote the old tutorial. This one has been... patched."
+End of Chapter 0.
+________________________________________7. Production Roadmap & Dependencies
+To execute Chapter 0, the following dependencies must be prioritized in the production schedule 1:
+1.	Shader Development (Week 1): The VoronoiShatter and GlitchStack shaders are critical path items. Without them, the crash sequence will lack impact.
+2.	Asset Generation (Week 2): The 16x16 "Modern Airplane" tileset must be created. Reference materials include 14 and.15
+3.	Yarn Spinner Integration (Week 3): The branching dialogue for the Laptop and Stewardess interactions must be scripted and tagged for "Glitch" triggers.
+4.	Audio Design (Week 4): The "Audio Loop" crash effect needs to be engineered using FMOD to ensure it syncs with the visual glitching.
+This concludes the detailed design report for Chapter 0. This prologue sets the stage for a game that is not just played, but solved, turning the player from a passive participant into an active codebreaker.
+Works cited
+1.	Context.pdf
+2.	16x16 top down pixel art asset - Autotiles Godot and GMS2 ready, accessed February 11, 2026, https://www.reddit.com/r/godot/comments/10gx1on/pixel_mood_16x16_top_down_pixel_art_asset/
+3.	How to create a glitch shader like this ? : r/godot - Reddit, accessed February 11, 2026, https://www.reddit.com/r/godot/comments/gc4gt4/how_to_create_a_glitch_shader_like_this/
+4.	Cyberpunk Ui illustrations - Shutterstock, accessed February 11, 2026, https://www.shutterstock.com/search/cyberpunk-ui?image_type=illustration&page=16
+5.	Create a Cyberpunk 2077-Inspired Boot-up Display in After Effects, accessed February 11, 2026, https://www.premiumbeat.com/blog/cyberpunk-2077-bootup-display-after-effects/
+6.	Retro Crt Terminal Booting Neural Interface Stock Footage Video, accessed February 11, 2026, https://www.shutterstock.com/video/clip-3815482409-retro-crt-terminal-booting-neural-interface-features
+7.	Pixel Art Shaders - Live Demo + Godot 4 Asset Pack - Nojoule, accessed February 11, 2026, https://nojoule.itch.io/pixel-art-shaders
+8.	robertvaradan/voronoishatter: An easy and dynamic way to ... - GitHub, accessed February 11, 2026, https://github.com/robertvaradan/voronoishatter
+9.	r/PixelArt - Pixel Mood - Free Pack - Top Down 16x16 pixel art asset, accessed February 11, 2026, https://www.reddit.com/r/PixelArt/comments/11osdyh/pixel_mood_free_pack_top_down_16x16_pixel_art/
+10.	RPG Pixel Character Pack – 3 Topdown Sprites with Walk Animations, accessed February 11, 2026, https://www.gamedevmarket.net/asset/rpg-pixel-character-pack-3-topdown-sprites-with-walk-animations
+11.	Top-down Pixel Art Characters: Download 40 for free✴️, accessed February 11, 2026, https://gamebetweenthelines.com/top-down-pixel-art-characters/
+12.	The Hacknet fake bootup sequence text - Discover gists · GitHub, accessed February 11, 2026, https://gist.github.com/bc26e996247242173242351e7d8e5477
+13.	Boot Sequence Initiated - by The Quantum Terminal - Medium, accessed February 11, 2026, https://medium.com/@TheQuantumTerminal/boot-sequence-initiated-a205ac181fc7
+14.	Pixel Art Airplane royalty-free images - Shutterstock, accessed February 11, 2026, https://www.shutterstock.com/search/pixel-art-airplane
+15.	16x16 Wood Cabin : r/PixelArt - Reddit, accessed February 11, 2026, https://www.reddit.com/r/PixelArt/comments/1779qdu/16x16_wood_cabin/

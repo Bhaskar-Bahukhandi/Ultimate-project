@@ -1,0 +1,108 @@
+[gd_scene load_steps=2 format=3 uid="uid://bh7ywg4pm3r5d"]
+
+[ext_resource type="Script" path="res://scripts/exploration/oakhaven_post_combat.gd" id="1"]
+
+[node name="OakhavenPostCombat" type="Node2D"]
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0.1, 0.15, 0.2, 1)
+
+[node name="FadeRect" type="ColorRect" parent="."]
+z_index = 100
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0, 0, 0, 1)
+mouse_filter = 2
+
+[node name="GlitchOverlay" type="ColorRect" parent="."]
+z_index = 50
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0.5, 1, 0.5, 0.1)
+mouse_filter = 2
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="DialogueBox" type="Panel" parent="UI"]
+visible = false
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -200.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/DialogueBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="UI/DialogueBox/MarginContainer"]
+layout_mode = 2
+
+[node name="SpeakerLabel" type="Label" parent="UI/DialogueBox/MarginContainer/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "Speaker"
+
+[node name="DialogueText" type="RichTextLabel" parent="UI/DialogueBox/MarginContainer/VBox"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 18
+bbcode_enabled = true
+fit_content = true
+
+[node name="ContinuePrompt" type="Label" parent="UI/DialogueBox/MarginContainer/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "[Press SPACE to continue]"
+horizontal_alignment = 2
+
+[node name="ChoicesPanel" type="Panel" parent="UI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -150.0
+offset_right = 300.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/ChoicesPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="UI/ChoicesPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="ChoiceQuestion" type="Label" parent="UI/ChoicesPanel/MarginContainer/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Make your choice:"
+autowrap_mode = 2

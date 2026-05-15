@@ -1,0 +1,249 @@
+Project Aethelgard: Technical Design Blueprint & Production Roadmap
+Comprehensive Architecture for a 100-Hour Hybrid Action-RPG/Simulation
+1. Executive Summary and Design Philosophy
+The objective of Project Aethelgard: The Glitch Sovereign (working title: Codebreaker) is to deliver a "AAA-tier" indie experience characterized by deep systemic complexity, a 100-hour gameplay loop, and a meta-narrative that deconstructs the medium of video games. By synthesizing the nostalgic aesthetic of Game Boy Advance-era top-down RPGs with the high-fidelity, punishing combat mechanics of modern "Soulslike" platformers , the project aims to capture a demographic intersection of hardcore action enthusiasts and narrative simulation players.
+This document serves as the master blueprint for production, detailing the technical architecture, asset sourcing strategy, and gameplay systems required to actualize the vision. The core design philosophy centers on "Systemic Dissonance"—the deliberate clashing of game genres (Pastoral RPG vs. Industrial Horror, Top-Down vs. Side-Scroller) to mirror the narrative theme of a fractured, compiled reality.
+To achieve the requisite scale and polish without an eight-figure budget, the production pipeline relies on a "Smart Asset Integration" strategy. This involves utilizing high-quality open-source and Creative Commons assets (primarily from Itch.io and OpenGameArt) and unifying them through a proprietary post-processing stack and shader architecture. The "AAA feel" is not derived from raw asset fidelity, but from the cohesion of lighting, the responsiveness of the "Hybrid Engine," and the depth of the simulated economy.
+The 100-hour playtime target is structured around a modular content hierarchy:
+1.	The "Golden Path" (30 Hours): The linear narrative progression through the 15 Kingdoms.
+2.	The "Social Web" (25 Hours): A Persona-style relationship system with 15 major NPCs, featuring branching dialogue and combat synergies.
+3.	The "Market Game" (20 Hours): A fully simulated, algorithmic economy where players manipulate the global Auction House to monopolize resources.
+4.	The "Glitchlands" (25 Hours): Procedurally generated endgame dungeons that utilize "Root Access" mechanics for infinite replayability.
+2. Technical Architecture: The Hybrid Engine
+The defining technical challenge of Codebreaker is the "Dual-Render" requirement: the seamless transition between a top-down exploration view (The "Pokemon Layer") and a side-scrolling combat view (The "Hollow Knight Layer"). To minimize technical debt and maximize 2D performance, the Godot Engine (4.x) has been selected as the development platform. Godot's node-based architecture and first-class support for 2D viewports offer a significant advantage over Unity's render pipeline overhead for this specific visual style.
+2.1 The Viewport State Machine
+The game does not load separate scenes for combat; doing so would introduce friction and loading screens that break immersion. Instead, the engine maintains two persistent SubViewport nodes active in memory, controlled by a master StateManager.
+●	Primary Viewport (Exploration): Renders the tilemap, NPCs, and interaction triggers. This viewport utilizes a standard orthographic camera with a custom "Pixel Perfect" shader to prevent sprite jitter during movement. The logic tick rate is set to 60hz, prioritizing economy calculations and AI schedules.
+●	Secondary Viewport (Combat): Renders the side-scrolling arena. This viewport is normally masked (hidden). When a combat trigger occurs, the StateManager pauses the Primary Viewport's logic thread (freezing the economy and NPC movement) and unmasks the Secondary Viewport via a transition shader.
+●	Transition Logic (The "Shatter"): Utilizing the voronoi fracture technique , the screen texture of the exploration layer is captured and mapped onto a 3D plane which is then "shattered" using physics impulses. This hides the initialization of the combat arena, ensuring the player feels the transition is instantaneous.
+2.2 Procedural Arena Generation
+To support 100 hours of gameplay without repetitive level design, combat arenas are procedurally generated based on the player's location in the Overworld.
+●	Input Data: The GameManager passes a TerrainContext object containing the biome ID (e.g., Forest, Factory), terrain geometry (Bridge, Cave, Slope), and hazard density.
+●	Generation Algorithm: The system uses a Wave Function Collapse (WFC) algorithm to assemble pre-fabricated "Arena Chunks" (32x32 pixel blocks).
+○	Example: If the player initiates combat on a bridge in the Ironhold kingdom, the WFC algorithm constrains the generation to "Platform" chunks, removing "Floor" chunks, thereby creating an arena with death pits on either side.
+2.3 The "Root Access" Debug Layer
+Ren's ability to manipulate code is implemented via Godot's reflection capabilities.
+●	Reflection System: Every interactive object inherits from a HackableEntity class. This class registers specific variables (e.g., gravity_scale, friction, is_hostile) into a dictionary accessible by the "Root Access" tool.
+●	Runtime Modification: When the player opens the "Edit" menu, the game pauses. The UI instantiates input fields corresponding to the registered variables. Upon confirmation, the new values are injected back into the object instance at runtime using object.set(property, value).
+●	Visual Feedback: To visualize the "code" nature of the world, a Sobel Edge Detection shader is applied to the screen buffer when Root Access is active, highlighting the wireframes of objects.
+3. Detailed World Design: The 15 Kingdoms
+The world of Aethelgard is a "patchwork" reality, where incompatible genres have been compiled together. This section details the aesthetic direction, asset sourcing, and enemy ecosystems for each kingdom, ensuring a diverse and cohesive 100-hour journey.
+3.1 Oakhaven (The Starting Kingdom)
+●	Archetype: Generic High Fantasy / Pastoral Deception.
+●	Visual Aesthetic: Vibrant greens, cozy thatched-roof cottages, bloom lighting. The idyll is superficial; textures occasionally flicker to reveal wireframes.
+●	Asset Source: "Sprout Lands" serves as the base tilemap for the village, augmented by "Mystic Woods" for the surrounding forests. The 16x16 pixel art style establishes the baseline "retro" feel.
+●	Enemy Ecosystem:
+○	Common: Green Slime. Source: "Pixel Art Slime Monsters". Behavior: Simple jump attacks. Can be hacked to change elasticity to 0, preventing them from jumping.
+○	Elite: Corrupted Boar. Standard boar sprite with a glitch shader applied to the eyes. Source: "Tiny Tales Animals". Behavior: Charge attacks that destroy destructible environment objects.
+○	Boss: The Tutorial Knight. A generic knight sprite that has been scaled up 300%. Source: "Fantasy Knight". Mechanics: Telegraphs attacks with text boxes ("I AM ATTACKING NOW").
+3.2 Ironhold (The Steampunk Empire)
+●	Archetype: Industrial Revolution / Gear-punk.
+●	Visual Aesthetic: Brass, steam, smog, cobblestone streets, dynamic lighting from furnaces.
+●	Asset Source: "Steampunk RPG Tileset" for interiors and "Industrial Tileset" for factory floors.
+●	Enemy Ecosystem:
+○	Common: Clockwork Arachnid. Mechanical spiders that swarm. Source: "Steampunk Bot Enemy Pack". Behavior: They can repair each other if not destroyed quickly.
+○	Elite: Steam-Vent Sentinel. Stationary turrets. Source: "Sci-Fi Turrets" (recolored brass). Vulnerability: Hacking the pressure_limit variable causes them to explode.
+○	Boss: The Gear Hulk. A massive construct of gears and pistons. Source: "Robot Master Series".
+3.3 Necropolis (The Dark Fantasy Realm)
+●	Archetype: Gothic Horror / Perpetual Night.
+●	Visual Aesthetic: Desaturated purples and greys, heavy use of shadow casting , rain particle effects.
+●	Asset Source: "GothicVania" collection and "Dark Halls Tileset".
+●	Enemy Ecosystem:
+○	Common: Bone Construct. Skeletons fused together. Source: "Pixel Art Skeletons Pack".
+○	Elite: Wraith. Flying enemies that phase through walls. Source: "Dark Fantasy Enemies". Mechanic: The player must use the "Noclip" glitch ability to damage them.
+○	Boss: The Lich Lord. Uses area-of-effect necromancy. Source: "2D Pixel Art Lich Sprites".
+3.4 Celestia (The Floating Islands)
+●	Archetype: Sky Realm / Divine Magic.
+●	Visual Aesthetic: White marble, gold trim, parallax backgrounds of infinite sky and clouds.
+●	Asset Source: "Floating Islands" tilesets and "Cloudy Sky Parallax".
+●	Enemy Ecosystem:
+○	Common: Harpy Wind-Caller. Uses wind gusts to push players into death pits. Source: "Harpy 2D Pixel Art".
+○	Elite: Angel Construct. Marble statues that function like Weeping Angels (move only when not observed). Source: "Pixel Statue Pack".
+○	Boss: The Seraphim. Multi-winged eye entity. Source: "Biblically Accurate Angel" assets.
+3.5 Deepblue (The Underwater Kingdom)
+●	Archetype: Bioluminescent Abyss / Atlantis.
+●	Visual Aesthetic: Screen distortion shader to simulate water , dark blue palette with neon cyan highlights.
+●	Asset Source: "Underwater Fantasy Pixel Art Environment" and "Underwater Tileset Pack".
+●	Enemy Ecosystem:
+○	Common: Abyssal Angler. Uses light to attract the player. Source: "Sea Creatures Pack".
+○	Elite: Coral Golem. High defense, regenerates health while standing on water tiles. Source: "Elemental Golem Pack".
+○	Boss: The Kraken. Tentacles emerge from the background layers. Source: "Giant Octopus" assets.
+#### 3.6 Verdant (The Biopunk Jungle)
+●	Archetype: Flesh-Technology / Overgrowth.
+●	Visual Aesthetic: Organic machinery, pulsing walls, vines made of muscle tissue.
+●	Asset Source: "Biopunk/Organic Tileset" and "Alien Planet" assets.
+●	Enemy Ecosystem:
+○	Common: Spore Carrier. Explodes on death, inflicting "Virus" status (drains Glitch Meter). Source: "Mutant Plant Monsters".
+○	Elite: Flesh-Weaver. Spiders made of tissue. Source: "Insectoid Enemies".
+○	Boss: The Biomass. A shifting wall of flesh. Source: "Gore Texture Pack" adapted into a boss sprite.
+3.7 Frostfall (The Cryogenic Wastes)
+●	Archetype: Survival / Ice Age.
+●	Visual Aesthetic: Heavy snow particles, white/blue palette, "frozen" UI shader.
+●	Asset Source: "Winter Platformer Tiles" and "Ice Cave Backgrounds".
+●	Enemy Ecosystem:
+○	Common: Ice Wraith. Nearly invisible in the blizzard (alpha transparency = 0.1). Source: "Elemental Wraith".
+○	Elite: Yeti Behemoth. Massive knockback attacks. Source: "Winter Monster Pack".
+○	Boss: The Cryo-Mancer. Freezes the player's cooldown timers. Source: "Fantasy Wizard Pack".
+3.8 The Sands (The Nomadic Desert)
+●	Archetype: Post-Apocalyptic / Dunes.
+●	Visual Aesthetic: Heat haze shader, blinding sun bloom, shifting sand tiles.
+●	Asset Source: "Desert Tileset" and "Wasteland Assets".
+●	Enemy Ecosystem:
+○	Common: Sandworm. Burrows and erupts from below. Source: "Worm Monster Sprites".
+○	Elite: Scavenger Bot. Steals gold from the player on hit. Source: "Rust Town Robots".
+○	Boss: The Dune King. A giant scorpion construct. Source: "Giant Scorpion".
+3.9 Clockwork (The Realm of Logic)
+●	Archetype: Mathematical / Fractal / Automaton.
+●	Visual Aesthetic: Monochromatic, geometric shapes, fractal backgrounds, rhythmic movement synced to music.
+●	Asset Source: "1-Bit Tileset" and "Tech Dungeon".
+●	Enemy Ecosystem:
+○	Common: Logic Gate. Enemies that only take damage if hit with specific elements (AND/OR logic mechanics).
+○	Elite: Automaton Arbiter. Floating geometric shapes firing lasers. Source: "Sci-Fi Drones".
+○	Boss: * The Algorithm.* A boss that changes its attack pattern based on the player's input history.
+3.10 The Shadow Realm (The Stealth Kingdom)
+●	Archetype: Ninja / Assassin / Void.
+●	Visual Aesthetic: High contrast, dynamic lighting is the only way to see the environment.
+●	Asset Source: "Shadow Series" characters and "Dark Dungeon".
+●	Enemy Ecosystem:
+○	Common: Shadow Stalker. Instantly kills if seen; must be backstabbed. Source: "Ninja Adventure Pack".
+○	Elite: Doppelganger. Takes the form of one of Ren's party members, mimicking their attacks.
+○	Boss: The Shade. Ren's own shadow, detached and hostile.
+#### 3.11 Crystal Peak (The Refraction Zone)
+●	Archetype: Mirror / Glass / Laser Puzzles.
+●	Visual Aesthetic: Reflective surfaces, chromatic aberration, laser mechanics.
+●	Asset Source: "Crystal Cave" and "Glass Shader" resources.
+●	Enemy Ecosystem:
+○	Common: Prism Golem. Splits incoming magical attacks into multiple beams. Source: "Crystal Golem".
+○	Elite: Glass Cannon. Extremely high damage, 1 HP. Source: "Crystal Enemies".
+○	Boss: The Reflection. A mirror entity that reflects all projectiles.
+3.12 The Hive (The Insectoid Collective)
+●	Archetype: Zerg-like / Swarm Consciousness.
+●	Visual Aesthetic: Hexagonal tiles, sticky webs, moving background layers simulating swarms.
+●	Asset Source: "Insect Genelines" and "Hivetech" assets.
+●	Enemy Ecosystem:
+○	Common: Hive Drone. Weak individually but spawns in hundreds. Source: "Top Down Ant".
+○	Elite: Royal Guard. Armored beetles with high defense. Source: "Armored Beetle".
+○	Boss: The Hive Mind. A stationary brain that controls all other enemies in the arena.
+3.13 Diesel (The Industrial War)
+●	Archetype: WWI Trenches / Dieselpunk.
+●	Visual Aesthetic: Mud, barbed wire, constant explosions, sepia tone filter.
+●	Asset Source: "WW1 Pixel Pack" and "Dieselpunk Kit".
+●	Enemy Ecosystem:
+○	Common: Trench Raider. Uses gas grenades and bayonets. Source: "WW1 Soldiers".
+○	Elite: Panzer Walker. Bipedal tanks requiring heavy damage to destroy. Source: "Dieselpunk Mechs".
+○	Boss: The Iron Behemoth. A massive tank that occupies the entire background layer.
+3.14 Solaris (The Solarpunk Utopia)
+●	Archetype: Clean Tech / Nature Harmony.
+●	Visual Aesthetic: Bright white, glass, greenery, lens flares, utopian architecture.
+●	Asset Source: "Solarpunk Platformer Tileset" and "Green Spire" assets.
+●	Enemy Ecosystem:
+○	Common: Garden Guardian. Robots covered in moss and flowers. Source: "Robot Master Series".
+○	Elite: Solar Wisp. Fidgety energy beings that fire solar beams. Source: "Elemental Wisps".
+○	Boss: The Sun God. Uses orbital strikes and heat mechanics.
+#### 3.15 The Glitchlands (The Forbidden Zone)
+●	Archetype: Broken Data / Meta-Horror.
+●	Visual Aesthetic: Missing textures (purple/black checkerboard), wireframes, T-posing models, raw code visible in the environment.
+●	Asset Source: Standard engine assets with intentionally broken shaders.
+●	Enemy Ecosystem:
+○	Common: MissingNo. A block of garbled pixels. Source: "Glitch Slime".
+○	Elite: Deleted Asset. An enemy that is invisible but has a shadow and hitbox.
+○	Boss: The Null Pointer. A void entity that crashes the player's UI components.
+4. Gameplay Systems: The "Root Access" Mechanic
+The "Root Access" mechanic is the core differentiator of Codebreaker, elevating it from a standard RPG to a meta-game about game design itself.
+4.1 Implementation of Runtime Hacking
+Unlike scripted events, "Root Access" allows players to modify object properties at runtime.
+●	Reflection-Based Architecture: The game utilizes C# Reflection (in Godot Mono) to expose private variables of game objects to the player. A custom attribute [Hackable] is placed above specific variables in the source code (e.g., [Hackable] public float JumpHeight;).
+●	The Inspector UI: When Ren activates Root Access, the game pauses, and a diegetic "Inspector Window" overlays the screen. This window dynamically populates with the [Hackable] properties of the selected object.
+●	Gameplay Examples:
+○	Puzzle Solving: A rock is too heavy to push. The player hacks the rock and changes mass = 100 to mass = 1.
+○	Combat Advantage: An enemy has attack_speed = 1.5. The player changes it to 0.1 to make them harmless, or 10.0 to make them dangerously fast but prone to overheating (a custom mechanic).
+4.2 The Glitch Meter & Corruption
+Using Root Access generates "Corruption." This is a global variable that affects the stability of the simulation.
+●	Visual & Audio Artifacts: As corruption rises, the "Glitch Shader" intensifies, introducing chromatic aberration, pixel displacement, and audio stuttering.
+●	System Response:
+○	25% Corruption: Minor texture swaps (trees look like swords).
+○	50% Corruption: Physics anomalies (gravity fluctuates).
+○	75% Corruption: "System Administrators" spawn. These are invincible enemies that pathfind directly to the player using A* navigation, ignoring collision layers (noclip).
+○	100% Corruption: Immediate Game Over (The "Blue Screen of Death" ending).
+4.3 The "Perfect Enemy Removal" Button
+This is a persistent UI element (a red button) available from the start of the game.
+●	Function: Clicking it instantly calls the queue_free() method on the targeted enemy, bypassing all death logic, loot generation, and XP rewards.
+●	Limitation: It has exactly 3 charges for the entire 100-hour playthrough.
+●	Meta-Consequence: Using the button flags the save file as "Tainted." This prevents the "True Ending" but unlocks the "Hacker Ending." The game does not explicitly warn the player of this consequence, relying on the player's intuition that "cheating" has a price.
+5. Simulated Economy: The Agent-Based Market
+To simulate a living MMO economy in a single-player environment, Codebreaker utilizes an Agent-Based Model (ABM).
+5.1 Virtual Agents (Simulated Players)
+The game runs a background simulation of 500 "Virtual Players" (VPs). These are not rendered entities but state machines that interact with the global Auction House database.
+●	VP Archetypes:
+○	Grinders: Generate raw resources (ore, wood, herbs) and list them at low prices. They operate on a schedule, dumping inventory every "in-game evening."
+○	Merchants: Scan the Auction House for items listed below market average and buy them to resell at a markup. They create "Price Floors."
+○	Whales: Possess infinite gold and will instantly buy rare items listed at maximum price.
+○	Noobs: Occasionally list high-value items for extremely low prices (e.g., 1 gold), creating "snipe" opportunities for the observant player.
+5.2 Pricing Algorithm (Sinusoidal Trends)
+Market prices are not static; they follow a procedural curve based on supply, demand, and time.
+●	Base Formula: Price(t) = BaseValue + (Seasonality * sin(t)) + (Demand * PlayerActivity) + RandomNoise
+●	Dynamics:
+○	Seasonality: Prices fluctuate based on the in-game day (e.g., "Weekend" surges).
+○	Player Impact: If the player buys 1000 Iron Ore, the Demand variable spikes, causing the price of Iron Ore to rise for all VPs. This allows the player to manipulate the market (e.g., cornering the market on healing potions before a boss fight).
+5.3 The Auction House UI
+The Auction House interface mimics real-world MMOs (like World of Warcraft). It allows players to:
+●	Buy/Sell: List items with buyout and bid prices.
+●	Bid Sniping: The player can use a "Lag Switch" ability (a Glitch power) to freeze the auction timer for 5 seconds, preventing VPs from placing last-second bids.
+●	Data Analysis: The UI provides graphs showing price history, allowing players to engage in "Market PvP" by buying low and selling high.
+6. Narrative & Social Systems: The "Persona" Layer
+The emotional core of Codebreaker is the relationship system. The enemies Ren fights are not faceless monsters; they are the corrupted avatars of his fellow passengers from Flight 707.
+6.1 Yarn Spinner Integration
+The dialogue system is built using Yarn Spinner , integrated into Godot via the Dialogue Manager plugin. This allows for complex branching narratives and state tracking.
+●	Social Links: There are 10 distinct Social Links (the Support Characters).
+●	Progression:
+○	Rank 1-3: Unlocks character backstory and basic vendor discounts.
+○	Rank 4-7: Unlocks passive combat buffs (e.g., "Guardian Angel" - chance to block fatal damage).
+○	Rank 8-9: Unlocks "Tag Team" attacks in combat and potential romance options.
+○	Rank 10: The character becomes "Self-Aware" of the simulation, unlocking unique meta-dialogue and endings.
+●	Conflict: Increasing affinity with one character may decrease it with another (e.g., The Rebel vs. The Royalist), forcing the player to make choices that impact the ending.
+6.2 The "Traitor" Algorithm
+To add replayability, one of the 10 support characters is randomly selected as the "Traitor" at the start of each new game (based on the randomization seed).
+●	Subtle Clues: The Traitor will have slight variations in their dialogue scripts (handled by Yarn Spinner conditionals).
+●	The Betrayal: In Chapter 20, the Traitor will sabotage the party. If the player has identified them correctly (using Root Access to read their loyalty value), they can prevent the betrayal or confront them early.
+7. Production Roadmap & Scoping
+Delivering 100 hours of content requires a disciplined production schedule. The project follows a modular development path.
+7.1 Development Phases (24 Months)
+●	Phase 1: Prototype (Months 1-3):
+○	Establish the Hybrid Engine (Viewport switching).
+○	Implement basic Root Access mechanics.
+○	Build one biome (Oakhaven) with one boss.
+●	Phase 2: Vertical Slice (Months 4-8):
+○	Complete Chapters 1-5.
+○	Implement the Auction House backend.
+○	Finalize the combat physics (Hollow Knight feel).
+●	Phase 3: Production (Months 9-18):
+○	Mass asset integration for the remaining 14 Kingdoms.
+○	Writing the 300,000+ words of dialogue using Yarn Spinner.
+○	Procedural generation for the Glitchlands.
+●	Phase 4: Polish & Balancing (Months 19-24):
+○	Tuning the economy (preventing hyper-inflation).
+○	Balancing the God Bosses (ensuring they are fair but punishing).
+○	Bug fixing (distinguishing "real" bugs from "narrative" glitches).
+7.2 Content Quantities
+●	Main Story: 30 Hours (30 Chapters, linear progression).
+●	Side Quests: 20 Hours (Fetch quests and monster hunts, generated via templates ).
+●	Social Links: 20 Hours (Visual novel segments and dating sim mechanics).
+●	Economy & Crafting: 15 Hours (Market manipulation, crafting "Glitch Gear").
+●	Endgame (Glitchlands): 15 Hours (Procedural dungeon crawling for high-score leaderboards).
+8. Conclusion
+Codebreaker: The Glitch Sovereign is designed to be a genre-defining title that leverages the constraints of indie development as narrative strengths. By using free assets and unifying them through a "Glitch" aesthetic, the game achieves a unique visual identity without the cost of a full art team. The technical innovation of the Hybrid Engine and Root Access mechanic provides a fresh gameplay loop that respects the player's intelligence and agency.
+This blueprint provides a comprehensive path to execution. By adhering to the modular asset strategy, the agent-based economy design, and the rigid production roadmap, the team can deliver a massive, 100-hour experience that feels polished, deep, and emotionally resonant.
+Addendum: Asset & Tool Reference Table
+System	Tool/Asset Source	Purpose
+Engine	Godot 4.x (C#)	Core Architecture
+Dialogue	Dialogue Manager (Nathan Hoad)	Branching Narrative
+Physics	Custom "Celeste-like" Controller	Precision Platforming
+Economy	Agent-Based Model (ABM)	Simulated Auction House
+Steampunk Art	Itch.io (Szadi Art, Penusbmic)	Ironhold Biome
+Underwater Art	Ansimuz Underwater Pack	Deepblue Biome
+Glitch FX	Godot Shaders (Screen Shatter)	Transition/Combat FX
+Generative	Wave Function Collapse (Godot Plugin)	Glitchlands Procedural Map
+Audio	FMOD / Wwise (Free Indie License)	Adaptive Music & SFX
+Sorting Algo	Python Visualizer logic adapted to C#	Sorting Algorithm Minigames
+Works cited
+1. [Godot Shader] Render 3D Models as Pixel Art - Medium, https://medium.com/@merxon22/godot-shader-render-3d-models-as-pixel-art-4839e6528601 2. 3D Pixel Art Rendering - David Holland, https://www.davidhol.land/articles/3d-pixel-art-rendering/ 3. Unity vs. Godot, pros and cons of each? Which is better for ... - Reddit, https://www.reddit.com/r/gamedev/comments/1fxd33a/unity_vs_godot_pros_and_cons_of_each_which_is/ 4. 2D Lighting for Pixel Art - Unity Learn, https://learn.unity.com/course/2d-lighting-for-pixel-art 5. Creating a Broken Screen Effect Shader in Unity | by Moein Saadati, https://medium.com/@moeinsaadati/creating-a-broken-screen-effect-shader-in-unity-a1b47a25fa4b 6. Shatter - Godot Shaders, https://godotshaders.com/shader-tag/shatter/ 7. gdquest-demos/godot-procedural-generation - GitHub, https://github.com/gdquest-demos/godot-procedural-generation 8. How to make the editor reflect changes to GDNative variables during ..., https://www.reddit.com/r/godot/comments/dcdxbf/how_to_make_the_editor_reflect_changes_to/ 9. Object — Godot Engine (stable) documentation in English, https://docs.godotengine.org/en/stable/classes/class_object.html 10. Top free game assets - itch.io, https://itch.io/game-assets/free 11. Top free game assets tagged Monsters and Pixel Art - itch.io, https://itch.io/game-assets/free/tag-monsters/tag-pixel-art 12. Top game assets tagged Pixel Art and Steampunk - itch.io, https://itch.io/game-assets/tag-pixel-art/tag-steampunk 13. [Godot] Mastering 2D Lighting - Medium, https://medium.com/@merxon22/godot-mastering-2d-lighting-a949320e1f68 14. Top game assets tagged 16-bit and Sci-fi - itch.io, https://itch.io/game-assets/tag-16-bit/tag-science-fiction 15. Games like Steampunk Bot Enemy Pack - V1 - itch.io, https://itch.io/games-like/2869096/steampunk-bot-enemy-pack 16. Top free game assets tagged 2D and Steampunk - itch.io, https://itch.io/game-assets/free/tag-2d/tag-steampunk 17. Top free game assets tagged Pixel Art and Robots - itch.io, https://itch.io/game-assets/free/tag-pixel-art/tag-robots 18. Making 2D Stage Dark and lighting? - Help - Godot Forum, https://forum.godotengine.org/t/making-2d-stage-dark-and-lighting/74901 19. Top game assets tagged Pixel Art and water - itch.io, https://itch.io/game-assets/tag-pixel-art/tag-water 20. Top free game assets tagged Dark and Sprites - itch.io, https://itch.io/game-assets/free/tag-dark/tag-sprites 21. Top free game assets tagged Side Scroller - itch.io, https://itch.io/game-assets/free/tag-side-scroller 22. Top game assets tagged Pixel Art and undead - itch.io, https://itch.io/game-assets/tag-pixel-art/tag-undead 23. 2d game island sprites Images - Free Download on Freepik, https://www.freepik.com/free-photos-vectors/2d-game-island-sprites 24. Tilesets and Backgrounds (PixelArt) - OpenGameArt.org |, https://opengameart.org/content/tilesets-and-backgrounds-pixelart 25. Page 14 | 2d game island sprites Images - Free Download on Freepik, https://www.freepik.com/free-photos-vectors/2d-game-island-sprites/14 26. Games like Harpy 2D Pixel Art - itch.io, https://itch.io/games-like/2260874/harpy-2d-pixel-art 27. Top game assets tagged angel - itch.io, https://itch.io/game-assets/tag-angel 28. 20 advanced 2D shader effects - part 1 - YouTube, https://www.youtube.com/watch?v=wav3YUcqUCA 29. Free Underwater Pixel Art Environment Asset : r/gamedev - Reddit, https://www.reddit.com/r/gamedev/comments/63wyrz/free_underwater_pixel_art_environment_asset/ 30. Top game assets tagged 2D and underwater - itch.io, https://itch.io/game-assets/tag-2d/tag-underwater 31. Top free game assets tagged underwater - itch.io, https://itch.io/game-assets/free/tag-underwater 32. ideas of crystal enemies : r/dndnext - Reddit, https://www.reddit.com/r/dndnext/comments/10pxaol/ideas_of_crystal_enemies/ 33. Bionic modification concept art for my biopunk technofantasy setting ..., https://www.reddit.com/r/worldbuilding/comments/11aq9h0/bionic_modification_concept_art_for_my_biopunk/ 34. Top game assets tagged biopunk and Sprites - itch.io, https://itch.io/game-assets/tag-biopunk/tag-sprites 35. Free Pixel Predator Plant Mob Sprites, https://free-game-assets.itch.io/free-predator-plant-mobs-pixel-art-pack 36. Insectoid Enemies, mid-level? : r/Pathfinder2e - Reddit, https://www.reddit.com/r/Pathfinder2e/comments/1jyeyxy/insectoid_enemies_midlevel/ 37. Top game assets tagged ice and Pixel Art - itch.io, https://itch.io/game-assets/tag-ice/tag-pixel-art 38. Top free game assets tagged 2D and ice - itch.io, https://itch.io/game-assets/free/tag-2d/tag-ice 39. Snow Enemy 2D Sprites Pixel Art, https://free-game-assets.itch.io/snow-enemy-2d-sprites-pixel-art 40. Anyone know where I can find a lot of 2d RPG enemy sprites? - Reddit, https://www.reddit.com/r/gamedev/comments/1lz9azr/anyone_know_where_i_can_find_a_lot_of_2d_rpg/ 41. Top free game assets tagged 2D and desert - itch.io, https://itch.io/game-assets/free/tag-2d/tag-desert 42. Top free game assets tagged Dystopian and Pixel Art - itch.io, https://itch.io/game-assets/free/tag-dystopian/tag-pixel-art 43. Top free game assets tagged 2D and enemy - itch.io, https://itch.io/game-assets/free/tag-2d/tag-enemy 44. Top game assets tagged 2D and Cyberpunk - itch.io, https://itch.io/game-assets/tag-2d/tag-cyberpunk 45. Dnd Crystal Monster - Etsy, https://www.etsy.com/market/dnd_crystal_monster 46. Top free game assets tagged Sci-fi and Tilemap - itch.io, https://itch.io/game-assets/free/tag-science-fiction/tag-tilemap 47. Top game assets tagged Metroidvania and Project template - itch.io, https://itch.io/game-assets/tag-metroidvania/tag-template 48. Fantasy Music Starter Pack v 2.0 - Orchestral Music (Free Pack), https://cinematsic.itch.io/fantasy-music-starter-pack 49. glass - Godot Shaders, https://godotshaders.com/shader-tag/glass/ 50. Crystal Enemies - Pixel Art 2D by CamkoalatiXD, https://camkoalatixd.itch.io/crystal-enemies 51. Vanilla Factions Expanded Insectoids 2 - Rimworld Mod Rundown ..., https://www.youtube.com/watch?v=HLL_5ZJvzxo 52. Steam Workshop::Vanilla Factions Expanded - Insectoids 2, https://steamcommunity.com/sharedfiles/filedetails/?id=3309003431 53. Top game assets tagged insect - itch.io, https://itch.io/game-assets/tag-insect 54. Top game assets tagged insect and Monsters - itch.io, https://itch.io/game-assets/tag-insect/tag-monsters 55. Top game assets tagged 2D and World War I - itch.io, https://itch.io/game-assets/tag-2d/tag-world-war-i 56. 3 FREE Unreal Engine 5 Assets You Need to Try (Dieselpunk, LED ..., https://www.youtube.com/watch?v=wtCWBtP54Wo 57. WW1 Asset | 2D Pixel Art Pack - GameDev Market, https://www.gamedevmarket.net/asset/ww1-soldiers-2d-pixel-art-pack 58. Top game assets tagged Pixel Art and solarpunk - itch.io, https://itch.io/game-assets/tag-pixel-art/tag-solarpunk 59. Top game assets tagged 2D and solarpunk - itch.io, https://itch.io/game-assets/tag-2d/tag-solarpunk 60. Free Fantasy Enemies Pixel Art Sprite Pack - CraftPix.net, https://craftpix.net/freebies/free-fantasy-enemies-pixel-art-sprite-pack/ 61. Made a glitch effect shader for Unity3D Sprites - Reddit, https://www.reddit.com/r/Unity3D/comments/2ad23z/made_a_glitch_effect_shader_for_unity3d_sprites/ 62. A glitch effect shader for Sprites in Unity3D - GitHub Gist, https://gist.github.com/KeyMaster-/363d3d5c35b956dfacdd 63. C# Reflection - changing the value of a field of a variable, https://stackoverflow.com/questions/1965635/c-sharp-reflection-changing-the-value-of-a-field-of-a-variable 64. Glitch Effect Shader, https://godotshaders.com/shader/glitch-effect-shader/ 65. Empowering Economic Simulation for Massively Multiplayer Online ..., https://arxiv.org/html/2506.04699v1 66. Auction House Behavior in the Massively Multi-Player Online Game, https://arxiv.org/pdf/1603.07610 67. How to code a one-sided virtual economy, https://softwareengineering.stackexchange.com/questions/266975/how-to-code-a-one-sided-virtual-economy 68. Simulated Economy (1) - Jason Fantl, https://jasonfantl.com/posts/Simulated-Economy-(1)/ 69. Tutorial - Yarn Spinner, https://v1.yarnspinner.dev/docs/tutorial 70. A powerful nonlinear dialogue system for Godot - GitHub, https://github.com/nathanhoad/godot_dialogue_manager 71. Large Language Models for dynamic game content: procedural side ..., https://www.researchgate.net/publication/385292792_Large_Language_Models_for_dynamic_game_content_procedural_side-quest_generation

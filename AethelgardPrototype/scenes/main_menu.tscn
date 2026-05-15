@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://c2vmpxybw7yxr"]
+
+[ext_resource type="Script" uid="uid://chx5fbu18v7ax" path="res://scripts/main_menu.gd" id="1_main_menu"]
+
+[node name="MainMenu" type="Control" unique_id=17273900]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_main_menu")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1290761412]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.1, 0.15, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1127796511]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -120.0
+offset_right = 150.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="VBoxContainer" unique_id=468315507]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "AETHELGARD"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="VBoxContainer" unique_id=392712536]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The Glitch Sovereign"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="VBoxContainer" unique_id=1531687283]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="NewGameButton" type="Button" parent="VBoxContainer" unique_id=1635484930]
+layout_mode = 2
+text = "NEW GAME"
+
+[node name="SkipPrologueButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "SKIP PROLOGUE"
+
+[node name="LoadGameButton" type="Button" parent="VBoxContainer" unique_id=319580365]
+layout_mode = 2
+text = "LOAD GAME"
+
+[node name="OptionsButton" type="Button" parent="VBoxContainer" unique_id=1214822187]
+layout_mode = 2
+text = "OPTIONS"
+
+[node name="ChapterSelectButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "CHAPTER SELECT"
+
+[node name="CreditsButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "CREDITS"
+
+[node name="CompletionButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "COMPLETION"
+
+[node name="QuitButton" type="Button" parent="VBoxContainer" unique_id=25383722]
+layout_mode = 2
+text = "QUIT"
+
+[node name="VersionLabel" type="Label" parent="." unique_id=771251955]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -30.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "v1.0"
+horizontal_alignment = 2
+
+[connection signal="pressed" from="VBoxContainer/NewGameButton" to="." method="_on_new_game_pressed"]
+[connection signal="pressed" from="VBoxContainer/SkipPrologueButton" to="." method="_on_skip_prologue_pressed"]
+[connection signal="pressed" from="VBoxContainer/LoadGameButton" to="." method="_on_load_game_pressed"]
+[connection signal="pressed" from="VBoxContainer/OptionsButton" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="VBoxContainer/ChapterSelectButton" to="." method="_on_chapter_select_pressed"]
+[connection signal="pressed" from="VBoxContainer/CreditsButton" to="." method="_on_credits_pressed"]
+[connection signal="pressed" from="VBoxContainer/CompletionButton" to="." method="_on_completion_pressed"]
+[connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_pressed"]
