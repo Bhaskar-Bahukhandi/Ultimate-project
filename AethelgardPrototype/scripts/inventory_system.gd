@@ -238,6 +238,11 @@ var equipment: Dictionary = {
 # Currency
 var gold: int = 0
 
+const STARTING_ITEMS: Dictionary = {
+	"health_potion": 3,
+	"glitch_stabilizer": 2
+}
+
 func _ready() -> void:
 	# Sync gold from GameManager
 	if has_node("/root/GameManager"):
@@ -245,13 +250,20 @@ func _ready() -> void:
 	
 	# Only add starting items if inventory is empty (first launch)
 	if items.is_empty():
-		add_item("health_potion", 3)
-		add_item("glitch_stabilizer", 2)
+		add_starting_items()
+
+func add_starting_items() -> void:
+	## Grant the existing new-game starter items.
+	for item_id in STARTING_ITEMS.keys():
+		add_item(item_id, STARTING_ITEMS[item_id])
 
 func add_item(item_id: String, quantity: int = 1) -> bool:
 	## Add item to inventory
+	if quantity <= 0:
+		push_warning("[INVENTORY] Ignoring non-positive add quantity for %s: %d" % [item_id, quantity])
+		return false
 	if not ITEMS.has(item_id):
-		push_error("[INVENTORY] Unknown item: " + item_id)
+		push_warning("[INVENTORY] Unknown item: " + item_id)
 		return false
 	
 	var item_data = ITEMS[item_id]
@@ -283,6 +295,9 @@ func add_item(item_id: String, quantity: int = 1) -> bool:
 
 func remove_item(item_id: String, quantity: int = 1) -> bool:
 	## Remove item from inventory
+	if quantity <= 0:
+		push_warning("[INVENTORY] Ignoring non-positive remove quantity for %s: %d" % [item_id, quantity])
+		return false
 	if not items.has(item_id):
 		return false
 	
@@ -299,9 +314,14 @@ func remove_item(item_id: String, quantity: int = 1) -> bool:
 
 func use_item(item_id: String) -> bool:
 	## Use a consumable item
-	if not items.has(item_id):
+	if not items.has(item_id) or int(items.get(item_id, 0)) <= 0:
 		if OS.is_debug_build():
 			print("[INVENTORY] Don't have item: " + item_id)
+		if items.has(item_id) and int(items.get(item_id, 0)) <= 0:
+			items.erase(item_id)
+		return false
+	if not ITEMS.has(item_id):
+		push_warning("[INVENTORY] Item in inventory is missing from database: " + item_id)
 		return false
 	
 	var item_data = ITEMS[item_id]
@@ -371,9 +391,17 @@ func _apply_item_effect(item_data: Dictionary) -> bool:
 
 func equip_item(item_id: String, slot: String) -> bool:
 	## Equip an item to an equipment slot
-	if not items.has(item_id):
+	if not equipment.has(slot):
+		push_warning("[INVENTORY] Unknown equipment slot: " + slot)
+		return false
+	if not items.has(item_id) or int(items.get(item_id, 0)) <= 0:
 		if OS.is_debug_build():
 			print("[INVENTORY] Don't have item: " + item_id)
+		if items.has(item_id) and int(items.get(item_id, 0)) <= 0:
+			items.erase(item_id)
+		return false
+	if not ITEMS.has(item_id):
+		push_warning("[INVENTORY] Item in inventory is missing from database: " + item_id)
 		return false
 	
 	var item_data = ITEMS[item_id]
@@ -405,17 +433,23 @@ func equip_item(item_id: String, slot: String) -> bool:
 
 func unequip_item(slot: String) -> bool:
 	## Unequip an item from a slot
+	if not equipment.has(slot):
+		push_warning("[INVENTORY] Unknown equipment slot: " + slot)
+		return false
 	if not equipment[slot]:
 		return false
 
 	var item_id = equipment[slot]
 	equipment[slot] = null
-	add_item(item_id, 1)
+	if ITEMS.has(item_id):
+		add_item(item_id, 1)
+	else:
+		push_warning("[INVENTORY] Equipped item missing from database, clearing slot: " + str(item_id))
 
 	equipment_changed.emit(slot, null)
 	if has_node("/root/SFXManager"):
 		SFXManager.play("item_equip")
-	if OS.is_debug_build():
+	if OS.is_debug_build() and ITEMS.has(item_id):
 		print("[INVENTORY] Unequipped " + ITEMS[item_id].name + " from " + slot)
 	
 	_apply_equipment_bonuses()
@@ -433,6 +467,9 @@ func _apply_equipment_bonuses() -> void:
 	for slot in equipment.keys():
 		var item_id = equipment[slot]
 		if item_id:
+			if not ITEMS.has(item_id):
+				push_warning("[INVENTORY] Skipping missing equipment item: " + str(item_id))
+				continue
 			var item_data = ITEMS[item_id]
 			attack_bonus += item_data.get("attack_bonus", 0.0)
 			defense_bonus += item_data.get("defense_bonus", 0.0)
@@ -454,6 +491,8 @@ func _apply_equipment_bonuses() -> void:
 
 func has_item(item_id: String, quantity: int = 1) -> bool:
 	## Check if player has item
+	if quantity <= 0:
+		return false
 	return items.get(item_id, 0) >= quantity
 
 func get_item_count(item_id: String) -> int:
@@ -490,8 +529,14 @@ func get_inventory_summary() -> Array:
 	## Get list of all items with details
 	var summary = []
 	for item_id in items.keys():
+		var quantity = int(items[item_id])
+		if quantity <= 0:
+			continue
+		if not ITEMS.has(item_id):
+			push_warning("[INVENTORY] Skipping unknown item in summary: " + str(item_id))
+			continue
 		var item_data = ITEMS[item_id].duplicate()
 		item_data["id"] = item_id
-		item_data["quantity"] = items[item_id]
+		item_data["quantity"] = quantity
 		summary.append(item_data)
 	return summary

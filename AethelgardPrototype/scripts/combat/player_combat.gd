@@ -262,6 +262,9 @@ const _PlayerAnimCtrl = preload("res://scripts/player_animation_controller.gd")
 # ══════════════════════════════════════════════════════════════════════════
 
 func _ready() -> void:
+	collision_layer = 2
+	collision_mask = 1
+
 	# Cache the Sprite child node for performance (avoids repeated get_node calls)
 	_sprite = get_node_or_null("Sprite")
 

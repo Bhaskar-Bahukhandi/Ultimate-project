@@ -1445,8 +1445,9 @@ func _award_death_rewards() -> void:
 	# In random encounters, XP/gold is batch-awarded by RandomEncounterSystem,
 	# but item drops should still spawn so the player can collect them.
 	var in_encounter: bool = has_node("/root/RandomEncounterSystem") and RandomEncounterSystem.is_in_encounter()
+	var suppress_base_rewards: bool = bool(get_meta("suppress_base_rewards", false))
 
-	if not in_encounter:
+	if not in_encounter and not suppress_base_rewards:
 		var final_xp = xp_reward
 		var final_gold = gold_reward
 		if has_node("/root/GameManager"):

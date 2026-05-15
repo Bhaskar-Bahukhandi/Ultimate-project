@@ -76,6 +76,9 @@ func spawn_drops(pos: Vector2, loot_table: Resource, parent: Node = null) -> Arr
 
 func spawn_item(pos: Vector2, item_id: String, quantity: int = 1, parent: Node = null) -> Node2D:
 	## Spawn a single item pickup at position.
+	if quantity <= 0:
+		push_warning("[DROP] Ignoring non-positive item pickup quantity for %s: %d" % [item_id, quantity])
+		return null
 	var target_parent = parent if parent else _get_default_parent()
 	var pickup = _create_item_pickup(item_id, quantity)
 	if pickup:
@@ -89,6 +92,8 @@ func spawn_item(pos: Vector2, item_id: String, quantity: int = 1, parent: Node =
 
 func spawn_gold(pos: Vector2, amount: int, parent: Node = null) -> Node2D:
 	## Spawn a gold pickup at position.
+	if amount <= 0:
+		return null
 	var target_parent = parent if parent else _get_default_parent()
 	var gold_pickup = _create_gold_pickup(amount)
 	if gold_pickup:
@@ -111,6 +116,9 @@ func clear_all_pickups() -> void:
 func _create_item_pickup(item_id: String, quantity: int = 1, rarity_override: int = -1) -> Node2D:
 	## Create an item pickup node with visual feedback.
 	if _active_pickups.size() >= MAX_PICKUPS:
+		return null
+	if quantity <= 0:
+		push_warning("[DROP] Ignoring non-positive item pickup quantity for %s: %d" % [item_id, quantity])
 		return null
 	
 	# Look up item data
@@ -200,6 +208,8 @@ func _create_item_pickup(item_id: String, quantity: int = 1, rarity_override: in
 func _create_gold_pickup(amount: int) -> Node2D:
 	## Create a gold coin pickup.
 	if _active_pickups.size() >= MAX_PICKUPS:
+		return null
+	if amount <= 0:
 		return null
 	
 	var pickup = Node2D.new()
@@ -339,15 +349,15 @@ func _update_label_visibility(pickup: Node2D, player: Node2D) -> void:
 
 func _on_pickup_touched(body: Node2D, pickup: Node2D) -> void:
 	## Player walked over an item pickup.
-	if not body.is_in_group("player"):
+	if not is_instance_valid(body) or not body.is_in_group("player"):
 		return
 	if not is_instance_valid(pickup):
 		return
 	
 	var item_id = pickup.get_meta("item_id", "")
-	var quantity = pickup.get_meta("quantity", 1)
+	var quantity: int = int(pickup.get_meta("quantity", 1))
 	
-	if item_id == "":
+	if item_id == "" or quantity <= 0:
 		return
 	
 	# Add to inventory
@@ -380,7 +390,7 @@ func _on_pickup_touched(body: Node2D, pickup: Node2D) -> void:
 
 func _on_gold_touched(body: Node2D, pickup: Node2D) -> void:
 	## Player walked over a gold pickup.
-	if not body.is_in_group("player"):
+	if not is_instance_valid(body) or not body.is_in_group("player"):
 		return
 	if not is_instance_valid(pickup):
 		return

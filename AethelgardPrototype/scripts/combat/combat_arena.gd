@@ -112,6 +112,7 @@ func _ready() -> void:
 	_setup_sprites()
 	_validate_scene()
 	_update_ui()
+	_configure_scripted_reward_enemy(slime)
 
 	# Connect slime signals
 	if slime:
@@ -367,6 +368,7 @@ func _start_boss_fight(boss_id: String) -> void:
 	await get_tree().process_frame
 	if is_instance_valid(boss_node):
 		_boss_initial_hp = boss_node.get("max_health") if boss_node.get("max_health") else 0.0
+		_configure_scripted_reward_enemy(boss_node)
 
 	# Connect died signal
 	if boss_node.has_signal("died"):
@@ -831,6 +833,18 @@ func _has_gm() -> bool:
 
 func _has_dm() -> bool:
 	return has_node("/root/DialogueManager")
+
+func _configure_scripted_reward_enemy(enemy: Node) -> void:
+	## Scripted fights award XP/gold in their scene controller, not in EnemyBase.
+	if not is_instance_valid(enemy):
+		return
+	enemy.set_meta("suppress_base_rewards", true)
+	var table = enemy.get("loot_table")
+	if table:
+		table.gold_min = 0
+		table.gold_max = 0
+		table.xp_min = 0
+		table.xp_max = 0
 
 func _has_am() -> bool:
 	return has_node("/root/AssetManager")

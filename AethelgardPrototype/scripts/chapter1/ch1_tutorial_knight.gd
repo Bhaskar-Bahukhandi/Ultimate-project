@@ -340,6 +340,7 @@ func _spawn_boss() -> void:
 	boss.set_script(boss_script)
 
 	add_child(boss)
+	_configure_scripted_reward_enemy(boss)
 
 	# Connect signals
 	if not boss.phase_changed.is_connected(_on_boss_phase_changed):
@@ -1211,6 +1212,18 @@ func _give_loot() -> void:
 # ======================================================================
 #  UTILITIES
 # ======================================================================
+func _configure_scripted_reward_enemy(enemy: Node) -> void:
+	## Tutorial knight rewards are granted by this scene after the story choice.
+	if not is_instance_valid(enemy):
+		return
+	enemy.set_meta("suppress_base_rewards", true)
+	var table = enemy.get("loot_table")
+	if table:
+		table.gold_min = 0
+		table.gold_max = 0
+		table.xp_min = 0
+		table.xp_max = 0
+
 func _notification(what) -> void:
 	if what == NOTIFICATION_PREDELETE:
 		# Cleanup

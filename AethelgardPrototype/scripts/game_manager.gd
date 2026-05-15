@@ -1154,11 +1154,11 @@ func load_game(slot: int = 0) -> bool:
 		if saved_items is Dictionary:
 			for item_id in saved_items:
 				var qty = saved_items[item_id]
-				if item_id is String and (qty is float or qty is int):  # Pass 55: Fix operator precedence
+				if item_id is String and Inventory.ITEMS.has(item_id) and (qty is float or qty is int) and int(qty) > 0:  # Pass 55: Fix operator precedence
 					Inventory.items[item_id] = int(qty)
 				else:
 					push_warning("[LOAD] Skipping invalid inventory entry: %s" % str(item_id))
-		Inventory.gold = int(data.get("inventory_gold", 0))
+		Inventory.gold = maxi(0, int(data.get("inventory_gold", 0)))
 		var saved_eq = data.get("inventory_equipment", {})
 		if saved_eq is Dictionary:
 			Inventory.equipment = {"weapon": null, "armor": null, "accessory": null}
@@ -1325,6 +1325,8 @@ func reset_game() -> void:
 		Inventory.items.clear()
 		Inventory.equipment = {"weapon": null, "armor": null, "accessory": null}
 		Inventory.gold = 0
+		if Inventory.has_method("add_starting_items"):
+			Inventory.add_starting_items()
 	if has_node("/root/SideQuestManager"):
 		SideQuestManager.reset()
 	if has_node("/root/PauseScreen"):

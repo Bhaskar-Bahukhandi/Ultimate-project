@@ -11,6 +11,7 @@ const SPRINT_STAMINA_REGEN = 8.0  # Stamina regen per second while not sprinting
 
 @onready var debug_label = get_node_or_null("DebugLabel")
 @onready var interaction_area = get_node_or_null("InteractionArea")
+@onready var body_collision = get_node_or_null("CollisionShape2D")
 
 var nearby_interactable = null
 var nearby_interactables: Array = []  # Track all nearby for cycling
@@ -40,6 +41,8 @@ func _ready() -> void:
 	# Setup interaction area if it doesn't exist
 	if not interaction_area:
 		_create_interaction_area()
+	if not body_collision:
+		_create_body_collision()
 	
 	# Create interaction prompt label
 	_create_interaction_prompt()
@@ -51,6 +54,16 @@ func _ready() -> void:
 	_anim_controller = _PlayerAnimCtrl.new()
 	_anim_controller.set_mode_topdown()
 	add_child(_anim_controller)
+
+func _create_body_collision() -> void:
+	body_collision = CollisionShape2D.new()
+	body_collision.name = "CollisionShape2D"
+	var shape = CapsuleShape2D.new()
+	shape.radius = 8.0
+	shape.height = 24.0
+	body_collision.shape = shape
+	body_collision.position = Vector2(0, -14)
+	add_child(body_collision)
 
 func _create_interaction_area() -> void:
 	## Create an Area2D for detecting nearby interactables

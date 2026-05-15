@@ -310,6 +310,8 @@ func _create_gate(gate_name: String, pos: Vector2, gate_size: Vector2, region_id
 
 	gate.set_meta("region_id", region_id)
 	gate.body_entered.connect(_on_region_gate_entered.bind(gate))
+	gate.body_entered.connect(_on_gate_body_entered.bind(gate))
+	gate.body_exited.connect(_on_gate_body_exited.bind(gate))
 	add_child(gate)
 
 	# Recommended level indicator
