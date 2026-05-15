@@ -71,14 +71,14 @@ func _collect_buttons(node: Node, results: Array) -> void:
 		_collect_buttons(child, results)
 
 func _check_ng_plus_availability() -> void:
-	## If NG+ is available (ch3 beaten), add a NEW GAME+ button after NEW GAME
+	## If NG+ is available (true ending beaten), add a NEW GAME+ button after NEW GAME
 	if not GameManager.ng_plus_available:
-		# Also check any save slot for ch3_complete
+		# Also check any save slot for the true ending flag
 		for slot in SAVE_SLOTS:
 			var info = GameManager.get_save_info(slot)
 			if info.get("exists", false):
 				var flags = info.get("story_flags", {})
-				if flags.get("ch3_complete", false):
+				if flags.get("ch10_complete", false):
 					GameManager.ng_plus_available = true
 					break
 	if not GameManager.ng_plus_available:
@@ -415,6 +415,60 @@ const CHAPTER_SELECT_DATA: Array = [
 		"flags": {"ch1_complete": true, "ch2_complete": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "ch3_fragment_3_collected": true, "source_key_fragment_3": true, "ch3_archive_floor4_complete": true, "ch3_sovereign_origin_discovered": true, "ch3_fragment_4_collected": true, "source_key_fragment_4": true},
 		"gold": 700,
 		"level": 13
+	},
+	{
+		"label": "Chapter 4 — Forgotten Sectors",
+		"desc": "Enter SOVEREIGN's deleted region and meet the Null Court.",
+		"scene": "res://scenes/chapter4/ch4_forgotten_sectors_intro.tscn",
+		"chapter": 4,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch3_reality_shatter": true, "ch4_unlocked": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true},
+		"gold": 850,
+		"level": 14
+	},
+	{
+		"label": "Chapter 4 — Null Court",
+		"desc": "Make the first choice about the people SOVEREIGN deleted.",
+		"scene": "res://scenes/chapter4/ch4_null_court.tscn",
+		"chapter": 4,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch3_reality_shatter": true, "ch4_unlocked": true, "ch4_forgotten_sectors_entered": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true},
+		"gold": 900,
+		"level": 14
+	},
+	{
+		"label": "Chapter 5 — Mirror City",
+		"desc": "Enter the city where every reflection is a rejected Kaelen.",
+		"scene": "res://scenes/chapter5/ch5_mirror_city_intro.tscn",
+		"chapter": 5,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_unlocked": true, "ch4_choice_preserve_deleted": true, "ch4_fragment_5_collected": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true},
+		"gold": 1050,
+		"level": 15
+	},
+	{
+		"label": "Chapter 5 - Mirror Plaza",
+		"desc": "Meet the obedient, savior, and coward echoes before the trial.",
+		"scene": "res://scenes/chapter5/ch5_mirror_plaza.tscn",
+		"chapter": 5,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_unlocked": true, "ch5_mirror_city_entered": true, "ch4_choice_preserve_deleted": true, "ch4_fragment_5_collected": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true},
+		"gold": 1075,
+		"level": 15
+	},
+	{
+		"label": "Chapter 5 — Reflection Trial",
+		"desc": "Confront Mirror Kaelen and the consequences of Chapter 4.",
+		"scene": "res://scenes/chapter5/ch5_reflection_trial.tscn",
+		"chapter": 5,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_unlocked": true, "ch5_mirror_city_entered": true, "ch5_mirror_plaza_entered": true, "ch5_echo_ch4_preserve_seen": true, "ch5_echo_obedient_met": true, "ch5_echo_savior_met": true, "ch5_echo_coward_met": true, "ch5_all_echoes_resolved": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch4_choice_preserve_deleted": true, "ch4_fragment_5_collected": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true},
+		"gold": 1100,
+		"level": 15
+	},
+	{
+		"label": "Chapter 5 - Mirror Kaelen",
+		"desc": "Finish the expanded Mirror City confrontation and reveal the Chapter 6 trail.",
+		"scene": "res://scenes/chapter5/ch5_mirror_kaelen_confrontation.tscn",
+		"chapter": 5,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_unlocked": true, "ch5_mirror_city_entered": true, "ch5_mirror_plaza_entered": true, "ch5_echo_ch4_preserve_seen": true, "ch5_echo_obedient_met": true, "ch5_echo_savior_met": true, "ch5_echo_coward_met": true, "ch5_all_echoes_resolved": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch5_reflection_trial_started": true, "ch5_mirror_kaelen_met": true, "ch5_choice_echo_resolved": true, "ch5_echo_control_rejected": true, "ch4_choice_preserve_deleted": true, "ch4_fragment_5_collected": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true},
+		"gold": 1280,
+		"level": 15
 	},
 ]
 

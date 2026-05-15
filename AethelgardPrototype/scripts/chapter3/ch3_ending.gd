@@ -2,7 +2,7 @@ extends Control
 
 ## Chapter 3: The Source Code — CHAPTER ENDING
 ## SOVEREIGN visual confrontation, Reality Shatter, Stats Card
-## Sets ch3_complete flag, returns to main menu
+## Sets ch3_complete flag, then opens Chapter 4
 
 var fade_rect: ColorRect
 var background: ColorRect
@@ -232,7 +232,7 @@ func _chapter_stats() -> void:
 		stats_text += "  \"Are you still Kaelen? Or are you safety_protocol_v2.0?\"\n"
 
 	stats_text += "\n[b]Reality Integrity:[/b] 41%% (critical)\n"
-	stats_text += "\n[center][i]Chapter 4: The Forgotten Sectors — Coming Soon[/i][/center]"
+	stats_text += "\n[center][i]Chapter 4: The Forgotten Sectors — Opening[/i][/center]"
 
 	# Create stats panel
 	stats_panel = PanelContainer.new()
@@ -282,16 +282,14 @@ func _chapter_stats() -> void:
 
 func _end_chapter() -> void:
 	GameManager.set_story_flag("ch3_complete", true)
-	GameManager.ng_plus_available = true
-	GameManager.auto_save()
+	GameManager.set_story_flag("ch4_unlocked", true)
+	GameManager.current_chapter = 4
+	GameManager.ng_plus_available = false
+	GameManager.save_game(GameManager.AUTOSAVE_SLOT)
 
-	# Show credits before returning to menu
-	if has_node("/root/CreditsScreen"):
-		CreditsScreen.show_credits(true)  # Returns to main menu after credits
-	else:
-		await _fade_to_black(2.0)
-		if not is_inside_tree(): return
-		SceneTransitions.change_scene("res://scenes/main_menu.tscn")
+	await _fade_to_black(2.0)
+	if not is_inside_tree(): return
+	SceneTransitions.change_scene("res://scenes/chapter4/ch4_forgotten_sectors_intro.tscn")
 
 # ─── Utility ─────────────────────────────────────────────────────────
 

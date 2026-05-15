@@ -114,12 +114,64 @@ const OBJECTIVES: Array = [
 		"target": Vector2(1500, 500),
 	},
 
+	# ── Chapter 4 ──
+	{
+		"blocker": "ch4_forgotten_sectors_entered",
+		"required": "ch3_complete",
+		"text": "Enter the Forgotten Sectors",
+		"hint": "Follow the crack beyond the Archive into SOVEREIGN's deleted region",
+		"region": "forgotten_sectors",
+		"target": Vector2(640, 360),
+	},
+	{
+		"blocker": "ch4_complete",
+		"required": "ch4_forgotten_sectors_entered",
+		"text": "Answer the Null Court",
+		"hint": "The deleted citizens guard the fifth Source Key fragment",
+		"region": "forgotten_sectors",
+		"target": Vector2(640, 360),
+	},
+
+	# ── Chapter 5 ──
+	{
+		"blocker": "ch5_mirror_city_entered",
+		"required": "ch4_complete",
+		"text": "Enter the Mirror City",
+		"hint": "Follow the reflected road from the Null Court",
+		"region": "mirror_city",
+		"target": Vector2(640, 360),
+	},
+	{
+		"blocker": "ch5_all_echoes_resolved",
+		"required": "ch5_mirror_city_entered",
+		"text": "Resolve the Mirror Plaza echoes",
+		"hint": "Meet the obedient, savior, and coward reflections before the trial",
+		"region": "mirror_city",
+		"target": Vector2(640, 360),
+	},
+	{
+		"blocker": "ch5_choice_echo_resolved",
+		"required": "ch5_all_echoes_resolved",
+		"text": "Begin the Reflection Trial",
+		"hint": "Let Mirror Kaelen judge the consequences of Chapter 4",
+		"region": "mirror_city",
+		"target": Vector2(640, 360),
+	},
+	{
+		"blocker": "ch5_complete",
+		"required": "ch5_choice_echo_resolved",
+		"text": "Confront Mirror Kaelen",
+		"hint": "Refine the trail toward Source Key Fragment #6",
+		"region": "mirror_city",
+		"target": Vector2(640, 360),
+	},
+
 	# ── Endgame / Free Roam ──
 	{
 		"blocker": "",
-		"required": "ch3_complete",
-		"text": "Free Roam — Explore at will",
-		"hint": "All regions are open. Find secrets, complete side quests, challenge the arena",
+		"required": "ch5_complete",
+		"text": "Prepare for the Cathedral Server",
+		"hint": "Chapter 6 is planned. Explore, craft, shop, and prepare for the next route.",
 		"region": "",
 		"target": Vector2.ZERO,
 	},

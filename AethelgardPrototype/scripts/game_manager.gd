@@ -131,6 +131,32 @@ const DEFAULT_STORY_FLAGS: Dictionary = {
 	"ch3_sovereign_doubting": false, "ch3_reality_shatter": false,
 	"ch3_sovereign_defeated": false,
 	"ch3_complete": false,
+	# Chapter 4 flags
+	"ch4_unlocked": false, "ch4_forgotten_sectors_entered": false,
+	"ch4_null_court_entered": false, "ch4_echo_mirror_met": false,
+	"ch4_choice_preserve_deleted": false, "ch4_choice_release_deleted": false,
+	"ch4_choice_bargain_deleted": false,
+	"ch4_fragment_5_collected": false, "source_key_fragment_5": false,
+	"ch4_complete": false, "ch5_path_revealed": false,
+	# Chapter 5 flags
+	"ch5_unlocked": false, "ch5_mirror_city_entered": false,
+	"ch5_mirror_plaza_entered": false,
+	"ch5_echo_ch4_preserve_seen": false, "ch5_echo_ch4_release_seen": false,
+	"ch5_echo_ch4_bargain_seen": false,
+	"ch5_echo_obedient_met": false, "ch5_echo_savior_met": false,
+	"ch5_echo_coward_met": false, "ch5_all_echoes_resolved": false,
+	"ch5_identity_choice_made": false,
+	"ch5_identity_refused_obedience": false,
+	"ch5_identity_refused_perfect_rescue": false,
+	"ch5_identity_refused_abandonment": false,
+	"ch5_reflection_trial_started": false, "ch5_mirror_kaelen_met": false,
+	"ch5_choice_echo_resolved": false,
+	"ch5_echo_control_rejected": false, "ch5_echo_guilt_named": false,
+	"ch5_echo_witnesses_promised": false,
+	"ch5_mirror_kaelen_confronted": false, "ch5_fragment_6_trail_found": false,
+	"ch5_complete": false, "ch6_path_revealed": false,
+	# Future final-story flag. NG+ should unlock only after the true ending.
+	"ch10_complete": false,
 }
 
 const DEFAULT_ARENA_STATS: Dictionary = {
@@ -219,7 +245,7 @@ var _is_saving: bool = false
 
 # ── New Game Plus ─────────────────────────────────────────────────────
 var ng_plus_cycle: int = 0  # 0 = first playthrough, 1 = NG+, 2 = NG++, etc.
-var ng_plus_available: bool = false  # True after ch3_complete
+var ng_plus_available: bool = false  # True after ch10_complete / true ending
 var titles_earned: Array = []  # Quest reward titles (e.g. "Arena Legend")
 var shop_discount: float = 0.0  # Quest reward shop discount (0.0–1.0)
 const NG_PLUS_ENEMY_SCALE: float = 0.25  # +25% enemy HP/DMG per cycle
@@ -868,6 +894,8 @@ func normalize_source_key_progression() -> void:
 		story_flags["source_key_fragment_3"] = true
 	if story_flags.get("ch3_fragment_4_collected", false):
 		story_flags["source_key_fragment_4"] = true
+	if story_flags.get("ch4_fragment_5_collected", false):
+		story_flags["source_key_fragment_5"] = true
 	var counted_fragments: int = 0
 	for i in range(1, 8):
 		if story_flags.get("source_key_fragment_%d" % i, false):
@@ -879,9 +907,10 @@ func get_completion_percentage() -> float:
 	var total_done: float = 0.0
 	var total_all: float = 0.0
 
-	# Story chapters (3)
-	total_all += 3.0
-	for ch in ["ch1_complete", "ch2_complete", "ch3_complete"]:
+	# Story chapters currently implemented
+	var implemented_chapters: Array[String] = ["ch1_complete", "ch2_complete", "ch3_complete", "ch4_complete", "ch5_complete"]
+	total_all += float(implemented_chapters.size())
+	for ch in implemented_chapters:
 		if get_flag(ch): total_done += 1.0
 
 	# Source key fragments — count only implemented ones (2 currently)
@@ -1129,7 +1158,7 @@ func load_game(slot: int = 0) -> bool:
 	# Restore region/overworld data
 	current_region = data.get("current_region", "")
 	ng_plus_cycle = int(data.get("ng_plus_cycle", 0))
-	ng_plus_available = story_flags.get("ch3_complete", false)
+	ng_plus_available = story_flags.get("ch10_complete", false)
 	var saved_ow_pos = data.get("player_overworld_position", {})
 	if saved_ow_pos is Dictionary and not saved_ow_pos.is_empty():
 		player_overworld_position = Vector2(saved_ow_pos.get("x", 1500.0), saved_ow_pos.get("y", 1100.0))
