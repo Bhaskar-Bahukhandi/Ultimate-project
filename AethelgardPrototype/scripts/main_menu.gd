@@ -385,7 +385,7 @@ const CHAPTER_SELECT_DATA: Array = [
 		"desc": "Survive the corrupted wastelands. Recruit Lyra.",
 		"scene": "res://scenes/chapter3/fractured_wastes.tscn",
 		"chapter": 3,
-		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_ironhold_departed": true},
+		"flags": {"ch1_complete": true, "ch2_complete": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "ch3_ironhold_departed": true},
 		"gold": 550,
 		"level": 10
 	},
@@ -394,7 +394,7 @@ const CHAPTER_SELECT_DATA: Array = [
 		"desc": "Navigate the on-rails data stream corridor.",
 		"scene": "res://scenes/chapter3/data_stream.tscn",
 		"chapter": 3,
-		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_wastes_survived": true},
+		"flags": {"ch1_complete": true, "ch2_complete": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "ch3_ironhold_departed": true, "ch3_fractured_wastes_entered": true, "ch3_lyra_recruited": true, "ch3_fragment_3_collected": true, "source_key_fragment_3": true},
 		"gold": 600,
 		"level": 11
 	},
@@ -403,7 +403,7 @@ const CHAPTER_SELECT_DATA: Array = [
 		"desc": "Explore the infinite Archive. Meet Kaelthas and the Archivist.",
 		"scene": "res://scenes/chapter3/archive_depths.tscn",
 		"chapter": 3,
-		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_data_stream_complete": true},
+		"flags": {"ch1_complete": true, "ch2_complete": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "ch3_ironhold_departed": true, "ch3_fractured_wastes_entered": true, "ch3_lyra_recruited": true, "ch3_fragment_3_collected": true, "source_key_fragment_3": true, "ch3_data_stream_complete": true},
 		"gold": 650,
 		"level": 12
 	},
@@ -412,7 +412,7 @@ const CHAPTER_SELECT_DATA: Array = [
 		"desc": "Confront Kaelthas — boss fight or chase through the Archive.",
 		"scene": "res://scenes/chapter3/kaelthas_betrayal.tscn",
 		"chapter": 3,
-		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_archive_complete": true, "source_key_fragment_4": true},
+		"flags": {"ch1_complete": true, "ch2_complete": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "ch3_fragment_3_collected": true, "source_key_fragment_3": true, "ch3_archive_floor4_complete": true, "ch3_sovereign_origin_discovered": true, "ch3_fragment_4_collected": true, "source_key_fragment_4": true},
 		"gold": 700,
 		"level": 13
 	},
@@ -546,6 +546,7 @@ func _launch_chapter(entry: Dictionary) -> void:
 	var flags = entry.get("flags", {})
 	for key in flags:
 		GameManager.set_story_flag(key, flags[key])
+	GameManager.normalize_source_key_progression()
 	
 	# Set player stats
 	var gold_val = entry.get("gold", 0)

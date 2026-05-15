@@ -13,6 +13,7 @@ var corruption_label: Label = null
 
 # Tab panels
 var assets_panel = null
+var crafting_panel = null
 var functions_panel = null
 var charms_panel = null
 var tickets_panel = null
@@ -21,6 +22,10 @@ var map_panel = null
 # Assets tab elements
 var inventory_list = null
 var item_detail_label: Label = null
+
+# Crafting tab elements
+var crafting_list = null
+var crafting_detail_label: Label = null
 
 # Functions tab elements
 var ability_list = null
@@ -150,6 +155,7 @@ func toggle_pause() -> void:
 func _refresh_all_tabs() -> void:
 	## Refresh all tab contents with current game state
 	_refresh_assets_tab()
+	_refresh_crafting_tab()
 	_refresh_functions_tab()
 	_refresh_charms_tab()
 	_refresh_tickets_tab()
@@ -310,6 +316,121 @@ func _refresh_assets_tab() -> void:
 func _on_item_selected(item: Dictionary) -> void:
 	if item_detail_label:
 		item_detail_label.text = "%s\nType: %s\n\n%s" % [item["name"], item["type"], item["desc"]]
+
+func _refresh_crafting_tab() -> void:
+	if not crafting_list:
+		return
+
+	for child in crafting_list.get_children():
+		child.queue_free()
+
+	if not has_node("/root/CraftingSystem"):
+		var missing = Label.new()
+		missing.text = "Crafting module unavailable."
+		crafting_list.add_child(missing)
+		return
+
+	var recipes: Dictionary = CraftingSystem.get_recipes()
+	if recipes.is_empty():
+		var empty = Label.new()
+		empty.text = "No recipes available."
+		crafting_list.add_child(empty)
+		return
+
+	for recipe_id in recipes.keys():
+		var rid := str(recipe_id)
+		var recipe: Dictionary = recipes[recipe_id]
+		var row = HBoxContainer.new()
+		row.custom_minimum_size = Vector2(0, 42)
+		crafting_list.add_child(row)
+
+		var info_btn = Button.new()
+		info_btn.text = "%s -> %s" % [recipe.get("name", rid), _format_recipe_output(recipe)]
+		info_btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		info_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		info_btn.pressed.connect(_on_recipe_selected.bind(rid, recipe))
+		row.add_child(info_btn)
+
+		var craft_btn = Button.new()
+		craft_btn.text = "Craft"
+		craft_btn.custom_minimum_size = Vector2(80, 32)
+		craft_btn.disabled = not CraftingSystem.can_craft(rid)
+		craft_btn.pressed.connect(func():
+			var ok: bool = CraftingSystem.craft(rid)
+			_refresh_crafting_tab()
+			_refresh_assets_tab()
+			if crafting_detail_label:
+				if ok:
+					crafting_detail_label.text = "Crafted %s." % _format_recipe_output(recipe)
+				else:
+					crafting_detail_label.text = "Cannot craft: %s" % _craft_blocker_text(CraftingSystem.get_craft_blocker(rid))
+		)
+		row.add_child(craft_btn)
+
+	if crafting_detail_label and crafting_detail_label.text == "":
+		crafting_detail_label.text = "Select a recipe to view required materials."
+
+func _on_recipe_selected(recipe_id: String, recipe: Dictionary) -> void:
+	if not crafting_detail_label:
+		return
+	var blocker := ""
+	if has_node("/root/CraftingSystem"):
+		blocker = CraftingSystem.get_craft_blocker(recipe_id)
+	var status := "READY" if blocker == "" else _craft_blocker_text(blocker)
+	crafting_detail_label.text = "%s\nOutput: %s\nRequires: %s\nStatus: %s\n\n%s" % [
+		recipe.get("name", recipe_id),
+		_format_recipe_output(recipe),
+		_format_recipe_ingredients(recipe),
+		status,
+		recipe.get("description", "")
+	]
+
+func _format_recipe_ingredients(recipe: Dictionary) -> String:
+	var ingredients = recipe.get("ingredients", {})
+	if not (ingredients is Dictionary) or ingredients.is_empty():
+		return "None"
+	var parts: Array[String] = []
+	for item_id in ingredients.keys():
+		parts.append("%s x%d" % [_item_display_name(str(item_id)), int(ingredients[item_id])])
+	return ", ".join(parts)
+
+func _format_recipe_output(recipe: Dictionary) -> String:
+	var output = recipe.get("output", {})
+	if not (output is Dictionary):
+		return "Unknown"
+	var item_id := str(output.get("item_id", ""))
+	var quantity := int(output.get("quantity", 0))
+	return "%s x%d" % [_item_display_name(item_id), quantity]
+
+func _item_display_name(item_id: String) -> String:
+	if has_node("/root/Inventory") and Inventory.ITEMS.has(item_id):
+		return str(Inventory.ITEMS[item_id].get("name", item_id))
+	return item_id.replace("_", " ").capitalize()
+
+func _craft_blocker_text(blocker: String) -> String:
+	match blocker:
+		"":
+			return "READY"
+		"missing_ingredients":
+			return "missing materials"
+		"output_stack_full":
+			return "output stack full"
+		"invalid_recipe":
+			return "invalid recipe"
+		"invalid_output":
+			return "invalid output"
+		"invalid_ingredients":
+			return "invalid ingredients"
+		"missing_ingredient_definition":
+			return "missing material definition"
+		"inventory_unavailable":
+			return "inventory unavailable"
+		"consume_failed":
+			return "could not consume materials"
+		"output_add_failed":
+			return "could not add crafted item"
+		_:
+			return blocker
 
 func _refresh_functions_tab() -> void:
 	## Populate abilities/functions list
@@ -780,6 +901,37 @@ func _build_pause_ui() -> void:
 	item_detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD
 	detail_panel.add_child(item_detail_label)
 	assets_panel = assets_scroll
+
+	# == CRAFTING TAB ==
+	var crafting_scroll = ScrollContainer.new()
+	crafting_scroll.name = "Crafting"
+	tab_container.add_child(crafting_scroll)
+
+	var crafting_vbox = VBoxContainer.new()
+	crafting_vbox.name = "VBox"
+	crafting_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	crafting_scroll.add_child(crafting_vbox)
+
+	var crafting_header = Label.new()
+	crafting_header.text = "=== CRAFTING ==="
+	crafting_header.add_theme_font_size_override("font_size", 16)
+	crafting_vbox.add_child(crafting_header)
+
+	crafting_list = VBoxContainer.new()
+	crafting_list.name = "RecipeList"
+	crafting_vbox.add_child(crafting_list)
+
+	var crafting_detail_panel = PanelContainer.new()
+	crafting_detail_panel.name = "CraftingDetailPanel"
+	crafting_detail_panel.custom_minimum_size = Vector2(0, 110)
+	crafting_vbox.add_child(crafting_detail_panel)
+
+	crafting_detail_label = Label.new()
+	crafting_detail_label.name = "CraftingDetailText"
+	crafting_detail_label.text = "Select a recipe to view required materials."
+	crafting_detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	crafting_detail_panel.add_child(crafting_detail_label)
+	crafting_panel = crafting_scroll
 	
 	# == FUNCTIONS TAB ==
 	var func_scroll = ScrollContainer.new()

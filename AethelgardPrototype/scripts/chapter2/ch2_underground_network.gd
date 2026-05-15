@@ -364,8 +364,7 @@ func _on_data_wraith_defeated() -> void:
 	data_wraith_defeated = true
 	GameManager.set_story_flag("ch2_data_wraith_defeated", true)
 	GameManager.auto_save()  # Autosave on boss defeat
-	GameManager.set_story_flag("source_key_fragment_2", true)
-	GameManager.source_key_count += 1
+	GameManager.collect_source_key(2)
 	var has_elara = _has_elara()
 
 	await get_tree().create_timer(1.0).timeout

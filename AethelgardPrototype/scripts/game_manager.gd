@@ -114,14 +114,15 @@ const DEFAULT_STORY_FLAGS: Dictionary = {
 	"ch3_fractured_wastes_entered": false,
 	"ch3_data_paths_discovered": false, "ch3_lyra_met": false,
 	"ch3_corruption_storm_survived": false,
-	"ch3_fragment_3_collected": false, "ch3_elara_powers_amplified": false,
+	"ch3_fragment_3_collected": false, "source_key_fragment_3": false,
+	"ch3_elara_powers_amplified": false,
 	"ch3_ironhold_departed": false, "ch3_kaelthas_betrayed": false,
 	"ch3_kaelthas_met": false, "ch3_archivist_met": false,
 	"ch3_archive_entered": false,
 	"ch3_archive_floor1_complete": false, "ch3_archive_floor2_complete": false,
 	"ch3_archive_floor3_complete": false, "ch3_archive_floor4_complete": false,
 	"ch3_sovereign_origin_discovered": false,
-	"ch3_fragment_4_collected": false,
+	"ch3_fragment_4_collected": false, "source_key_fragment_4": false,
 	"ch3_data_stream_entered": false, "ch3_data_stream_complete": false,
 	"ch3_lyra_recruited": false, "ch3_lyra_left_alone": false,
 	"ch3_kaelthas_allied": false, "ch3_kaelthas_refused": false,
@@ -853,10 +854,25 @@ func advance_arena_tier() -> void:
 # ══════════════════════════════════════════════════════════════════════════
 
 func collect_source_key(fragment_number: int) -> void:
+	if fragment_number < 1 or fragment_number > 7:
+		push_warning("[PROGRESSION] Ignoring invalid Source Key fragment: %d" % fragment_number)
+		return
 	var flag = "source_key_fragment_%d" % fragment_number
 	if not story_flags.get(flag, false):
 		set_story_flag(flag, true)
 		source_key_count += 1
+
+func normalize_source_key_progression() -> void:
+	# Keep legacy chapter-specific fragment flags aligned with generic Source Key flags.
+	if story_flags.get("ch3_fragment_3_collected", false):
+		story_flags["source_key_fragment_3"] = true
+	if story_flags.get("ch3_fragment_4_collected", false):
+		story_flags["source_key_fragment_4"] = true
+	var counted_fragments: int = 0
+	for i in range(1, 8):
+		if story_flags.get("source_key_fragment_%d" % i, false):
+			counted_fragments += 1
+	source_key_count = counted_fragments
 
 func get_completion_percentage() -> float:
 	## Unified completion formula — matches CompletionTracker categories.
@@ -1093,7 +1109,7 @@ func load_game(slot: int = 0) -> bool:
 	# Restore with safe merging
 	player_stats = _merge_dict(DEFAULT_PLAYER_STATS.duplicate(true), data.get("player_stats", {}))
 	relationships = _merge_dict(DEFAULT_RELATIONSHIPS.duplicate(true), data.get("relationships", {}))
-	story_flags = _merge_dict(DEFAULT_STORY_FLAGS.duplicate(true), data.get("story_flags", {}))
+	story_flags = _merge_dict(DEFAULT_STORY_FLAGS.duplicate(true), data.get("story_flags", {}), true)
 	arena_stats = _merge_dict(DEFAULT_ARENA_STATS.duplicate(true), data.get("arena_stats", {}))
 	stats = _merge_dict(DEFAULT_SESSION_STATS.duplicate(true), data.get("stats", {}))
 	glitch_meter = float(data.get("glitch_meter", 0.0))
@@ -1103,6 +1119,7 @@ func load_game(slot: int = 0) -> bool:
 	playtime_seconds = float(data.get("playtime_seconds", 0.0))
 	current_chapter = int(data.get("current_chapter", 1))
 	source_key_count = int(data.get("source_key_count", 0))
+	normalize_source_key_progression()
 	speedrun_active = data.get("speedrun_active", false)
 	_dda_performance_score = float(data.get("dda_performance_score", 50.0))
 	_dda_recent_deaths = float(data.get("dda_recent_deaths", 0.0))
@@ -1338,11 +1355,11 @@ func reset_game() -> void:
 # UTILITY
 # ══════════════════════════════════════════════════════════════════════════
 
-func _merge_dict(base: Dictionary, overlay: Dictionary) -> Dictionary:
+func _merge_dict(base: Dictionary, overlay: Dictionary, preserve_extra_keys: bool = false) -> Dictionary:
 	if not overlay is Dictionary:
 		return base
 	for key in overlay:
-		if base.has(key):  # Only merge keys that exist in the base defaults
+		if base.has(key) or preserve_extra_keys:
 			base[key] = overlay[key]
 	return base
 

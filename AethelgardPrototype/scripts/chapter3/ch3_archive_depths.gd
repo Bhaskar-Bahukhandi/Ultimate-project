@@ -544,9 +544,8 @@ func _floor_4_source_key() -> void:
 		SFXManager.play("source_key")
 	await _screen_flash(Color(0.3, 0.7, 1.0, 0.5), 1.0)
 
-	GameManager.source_key_count = GameManager.get("source_key_count") if GameManager.get("source_key_count") != null else 0
-	GameManager.source_key_count += 1
 	GameManager.set_story_flag("ch3_fragment_4_collected", true)
+	GameManager.collect_source_key(4)
 
 	await _show_dialogue("SYSTEM", "// SOURCE KEY FRAGMENT #4 ACQUIRED — Total: %d/7" % GameManager.source_key_count)
 

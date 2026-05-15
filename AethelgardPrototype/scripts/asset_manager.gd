@@ -474,6 +474,10 @@ func get_sprite(asset_name: String) -> Texture2D:
 			return texture
 	return null
 
+func get_texture(asset_name: String) -> Texture2D:
+	## Compatibility alias used by procedural background/story scenes.
+	return get_sprite(asset_name)
+
 func is_asset_available(asset_name: String) -> bool:
 	## Check if a real asset is available
 	return assets_available.get(asset_name, false)

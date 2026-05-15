@@ -549,8 +549,8 @@ func _phase_fragment() -> void:
 		SFXManager.play("source_key")
 	await _screen_flash(Color(0.2, 0.6, 1.0, 0.5), 0.8)
 
-	GameManager.source_key_count += 1
 	GameManager.set_story_flag("ch3_fragment_3_collected", true)
+	GameManager.collect_source_key(3)
 	fragment_collected = true
 
 	await _show_dialogue("SYSTEM", "// SOURCE KEY FRAGMENT #3 ACQUIRED — Total: %d/7" % GameManager.source_key_count)

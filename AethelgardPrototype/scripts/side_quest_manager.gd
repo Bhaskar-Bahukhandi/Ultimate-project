@@ -443,7 +443,7 @@ func _process_notification_queue() -> void:
 	notif.position = Vector2(300, 80)
 	notif.z_index = 200
 
-	get_tree().root.add_child(notif)
+	get_tree().root.add_child.call_deferred(notif)
 	var tw = create_tween()
 	tw.tween_property(notif, "position:y", 60, 0.5).set_trans(Tween.TRANS_BACK)
 	tw.tween_interval(3.0)

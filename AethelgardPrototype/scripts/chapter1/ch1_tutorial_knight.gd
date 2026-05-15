@@ -1006,8 +1006,7 @@ func _play_post_battle_choice() -> void:
 	_give_loot()
 	GameManager.set_story_flag("ch1_tutorial_knight_defeated", true)
 	# Award Source Key Fragment #1
-	GameManager.set_story_flag("source_key_fragment_1", true)
-	GameManager.source_key_count += 1
+	GameManager.collect_source_key(1)
 	
 	# Transition after the choice plays out
 	await get_tree().create_timer(2.0).timeout
