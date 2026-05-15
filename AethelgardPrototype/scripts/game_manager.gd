@@ -1007,8 +1007,7 @@ func save_game(slot: int = 0) -> bool:
 	var save_path = "user://save_slot_%d.save" % slot
 	# Create backup of existing save before overwriting
 	_backup_save_file(save_path)
-	var json_string = JSON.stringify(save_data, "\t")
-	save_data["_checksum"] = json_string.hash()
+	save_data["_checksum"] = _calculate_save_checksum(save_data)
 	# Pass 55: Atomic save — write to temp then rename
 	var tmp_path = save_path + ".tmp"
 	var file = FileAccess.open(tmp_path, FileAccess.WRITE)
@@ -1063,18 +1062,15 @@ func load_game(slot: int = 0) -> bool:
 			return await load_game(slot)  # Recursive call — load_game is async
 		_load_in_progress = false
 		return false
-	var data: Dictionary = json.data
-	if not data is Dictionary:
+	if not json.data is Dictionary:
 		push_error("[LOAD] Invalid data slot %d" % slot)
 		_load_in_progress = false
 		return false
+	var data: Dictionary = json.data
 	# ── Checksum verification ──
 	var saved_checksum = data.get("_checksum", -1)
 	if saved_checksum != -1:
-		var verify_data = data.duplicate(true)
-		verify_data.erase("_checksum")
-		var verify_string = JSON.stringify(verify_data, "\t")
-		if verify_string.hash() != int(saved_checksum):
+		if _calculate_save_checksum(data) != int(saved_checksum):
 			push_warning("[LOAD] Checksum mismatch in slot %d — save may be tampered/corrupted" % slot)
 			# Continue loading (warn-only) — the backup system handles actual corruption
 	data.erase("_checksum")  # Strip internal field before restoring
@@ -1258,7 +1254,8 @@ func get_save_info(slot: int = 0) -> Dictionary:
 	if not json.data is Dictionary:
 		return {"exists": false}
 	var data: Dictionary = json.data
-	var ps: Dictionary = data.get("player_stats", {})
+	var ps_data = data.get("player_stats", {})
+	var ps: Dictionary = ps_data if ps_data is Dictionary else {}
 	return {
 		"exists": true,
 		"timestamp": data.get("timestamp", "Unknown"),
@@ -1348,6 +1345,44 @@ func _merge_dict(base: Dictionary, overlay: Dictionary) -> Dictionary:
 		if base.has(key):  # Only merge keys that exist in the base defaults
 			base[key] = overlay[key]
 	return base
+
+func _calculate_save_checksum(data: Dictionary) -> int:
+	## Hash a canonical save payload so JSON parse numeric/order changes do not false-fail.
+	var canonical_payload = _canonicalize_save_value(data)
+	return JSON.stringify(canonical_payload).hash()
+
+func _canonicalize_save_value(value: Variant) -> Variant:
+	if value is Dictionary:
+		var output: Dictionary = {}
+		var keys: Array = value.keys()
+		keys.sort_custom(func(a, b): return str(a) < str(b))
+		for key in keys:
+			if str(key) == "_checksum":
+				continue
+			output[str(key)] = _canonicalize_save_value(value[key])
+		return output
+	if value is Array:
+		var output_array: Array = []
+		for entry in value:
+			output_array.append(_canonicalize_save_value(entry))
+		return output_array
+	if value is bool:
+		return value
+	if value is int or value is float:
+		return _canonical_number_string(value)
+	return value
+
+func _canonical_number_string(value: Variant) -> String:
+	var number: float = float(value)
+	var rounded: float = roundf(number)
+	if absf(number - rounded) <= 0.000001:
+		return str(int(rounded))
+	var text: String = "%.8f" % number
+	while text.ends_with("0"):
+		text = text.left(text.length() - 1)
+	if text.ends_with("."):
+		text = text.left(text.length() - 1)
+	return text
 
 func _backup_save_file(save_path: String) -> void:
 	## Create a .bak copy of an existing save before overwriting (atomic).
