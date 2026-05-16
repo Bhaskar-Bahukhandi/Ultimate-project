@@ -646,6 +646,101 @@ func _handle_attack() -> void:
 		_update_charge_indicator()
 
 
+func _get_enemies_in_melee_hitbox(center_offset: Vector2, size: Vector2, debug_color: Color = Color(1.0, 0.85, 0.2, 0.2)) -> Array:
+	var enemies: Array = []
+	var world := get_world_2d()
+	if not world:
+		return enemies
+
+	var shape := RectangleShape2D.new()
+	shape.size = size
+
+	var params := PhysicsShapeQueryParameters2D.new()
+	params.shape = shape
+	params.transform = Transform2D(0.0, global_position + center_offset)
+	params.collide_with_bodies = true
+	params.collide_with_areas = true
+	params.collision_mask = 0xFFFFFFFF
+	params.exclude = [get_rid()]
+
+	var hit_rect := Rect2(global_position + center_offset - size * 0.5, size)
+	var hits := world.direct_space_state.intersect_shape(params, 32)
+	for hit in hits:
+		var collider = hit.get("collider")
+		var enemy = _resolve_enemy_collider(collider)
+		if enemy and hit_rect.has_point(enemy.global_position) and _enemy_matches_melee_hitbox(enemy, center_offset, enemies):
+			enemies.append(enemy)
+
+	if enemies.is_empty():
+		for candidate in get_tree().get_nodes_in_group("enemies"):
+			if not is_instance_valid(candidate):
+				continue
+			if hit_rect.has_point(candidate.global_position) and _enemy_matches_melee_hitbox(candidate, center_offset, enemies):
+				enemies.append(candidate)
+
+	_spawn_melee_hitbox_debug(center_offset, size, debug_color)
+	return enemies
+
+
+func _enemy_matches_melee_hitbox(enemy, center_offset: Vector2, already_hit: Array) -> bool:
+	if enemy in already_hit or not enemy.has_method("take_damage"):
+		return false
+	if center_offset.x > 0.0 and enemy.global_position.x < global_position.x:
+		return false
+	if center_offset.x < 0.0 and enemy.global_position.x > global_position.x:
+		return false
+	return true
+
+
+func _resolve_enemy_collider(collider: Object):
+	var node = collider as Node
+	while node:
+		if node.is_in_group("enemies"):
+			return node
+		node = node.get_parent()
+	return null
+
+
+func _spawn_melee_hitbox_debug(center_offset: Vector2, size: Vector2, color: Color) -> void:
+	if not OS.is_debug_build():
+		return
+	if has_node("/root/GameManager") and GameManager.get_meta("combat_debug_hitboxes", false) != true:
+		return
+
+	var parent := get_parent()
+	if not parent:
+		return
+
+	var area := Area2D.new()
+	area.name = "MeleeHitboxDebug"
+	area.collision_layer = 0
+	area.collision_mask = 0
+	area.modulate = Color(1.0, 1.0, 1.0, color.a)
+
+	var collision := CollisionShape2D.new()
+	var shape := RectangleShape2D.new()
+	shape.size = size
+	collision.shape = shape
+	area.add_child(collision)
+
+	var polygon := Polygon2D.new()
+	var half_size := size * 0.5
+	polygon.color = color
+	polygon.polygon = PackedVector2Array([
+		Vector2(-half_size.x, -half_size.y),
+		Vector2(half_size.x, -half_size.y),
+		Vector2(half_size.x, half_size.y),
+		Vector2(-half_size.x, half_size.y)
+	])
+	area.add_child(polygon)
+
+	parent.add_child(area)
+	area.global_position = global_position + center_offset
+	var tween := area.create_tween()
+	tween.tween_property(area, "modulate:a", 0.0, 0.08)
+	tween.tween_callback(area.queue_free)
+
+
 func _perform_combo_attack() -> void:
 	if attack_cooldown > 0.0 or is_attacking:
 		return
@@ -696,7 +791,9 @@ func _perform_combo_attack() -> void:
 	_vfx("vfx_slash_arc", global_position + slash_offset)
 
 	var hit_count = 0
-	var enemies = get_tree().get_nodes_in_group("enemies")
+	var hitbox_size := Vector2(ATTACK_RANGE * range_mult, 76.0)
+	var hitbox_offset := Vector2(facing * hitbox_size.x * 0.5, -12.0)
+	var enemies = _get_enemies_in_melee_hitbox(hitbox_offset, hitbox_size, Color(1.0, 0.8, 0.15, 0.22))
 	var counter_mult = parry_counter_damage_mult if parry_counter_active else 1.0
 	var combo_mult = _get_combo_multiplier()
 	var final_damage = damage * counter_mult * combo_mult
@@ -706,38 +803,36 @@ func _perform_combo_attack() -> void:
 	for enemy in enemies:
 		if not is_instance_valid(enemy):
 			continue
-		var distance = global_position.distance_to(enemy.global_position)
-		if distance < ATTACK_RANGE * range_mult:
-			if enemy.has_method("take_damage"):
-				enemy.take_damage(final_damage, global_position)
-				hit_count += 1
-				_sfx("critical_hit" if parry_counter_active else "sword_hit")
-				if has_node("/root/GameJuice"):
-					GameJuice.on_hit_connect(self, enemy, final_damage, parry_counter_active)
-				total_combo_hits += 1
-				combo_decay_timer = COMBO_DECAY_TIME
-				if total_combo_hits > GameManager.stats.get("highest_combo", 0):
-					GameManager.stats["highest_combo"] = total_combo_hits
-				GameManager.stats["total_damage_dealt"] = GameManager.stats.get("total_damage_dealt", 0) + int(final_damage)
-				_add_soul(SOUL_PER_HIT)
+		if enemy.has_method("take_damage"):
+			enemy.take_damage(final_damage, global_position)
+			hit_count += 1
+			_sfx("critical_hit" if parry_counter_active else "sword_hit")
+			if has_node("/root/GameJuice"):
+				GameJuice.on_hit_connect(self, enemy, final_damage, parry_counter_active)
+			total_combo_hits += 1
+			combo_decay_timer = COMBO_DECAY_TIME
+			if total_combo_hits > GameManager.stats.get("highest_combo", 0):
+				GameManager.stats["highest_combo"] = total_combo_hits
+			GameManager.stats["total_damage_dealt"] = GameManager.stats.get("total_damage_dealt", 0) + int(final_damage)
+			_add_soul(SOUL_PER_HIT)
+			if has_node("/root/CombatFX"):
+				CombatFX.apply_hit_effects(final_damage, enemy.global_position, parry_counter_active)
+			_vfx("vfx_hit_spark", enemy.global_position)
+			var dmg_color = Color(1.0, 0.85, 0.0) if parry_counter_active else Color.WHITE
+			_spawn_damage_number(int(final_damage), enemy.global_position + Vector2(0, -30), parry_counter_active, dmg_color)
+			if combo_step == 0:
 				if has_node("/root/CombatFX"):
-					CombatFX.apply_hit_effects(final_damage, enemy.global_position, parry_counter_active)
-				_vfx("vfx_hit_spark", enemy.global_position)
-				var dmg_color = Color(1.0, 0.85, 0.0) if parry_counter_active else Color.WHITE
-				_spawn_damage_number(int(final_damage), enemy.global_position + Vector2(0, -30), parry_counter_active, dmg_color)
-				if combo_step == 0:
-					if has_node("/root/CombatFX"):
-						CombatFX.apply_hitstop(CombatFX.HITSTOP_HEAVY)
-						var hit_dir = (enemy.global_position - global_position).normalized()
-						CombatFX.apply_directional_shake(12.0, 0.2, hit_dir)
-						CombatFX.apply_zoom_pulse(1.06, 0.25)
-				else:
-					# Graduated hitstop per combo step for escalating impact
-					if has_node("/root/CombatFX"):
-						match anim_step:
-							1: CombatFX.apply_hitstop(CombatFX.HITSTOP_LIGHT)
-							2: CombatFX.apply_hitstop(CombatFX.HITSTOP_NORMAL)
-							3: CombatFX.apply_hitstop(CombatFX.HITSTOP_HEAVY)
+					CombatFX.apply_hitstop(CombatFX.HITSTOP_HEAVY)
+					var hit_dir = (enemy.global_position - global_position).normalized()
+					CombatFX.apply_directional_shake(12.0, 0.2, hit_dir)
+					CombatFX.apply_zoom_pulse(1.06, 0.25)
+			else:
+				# Graduated hitstop per combo step for escalating impact
+				if has_node("/root/CombatFX"):
+					match anim_step:
+						1: CombatFX.apply_hitstop(CombatFX.HITSTOP_LIGHT)
+						2: CombatFX.apply_hitstop(CombatFX.HITSTOP_NORMAL)
+						3: CombatFX.apply_hitstop(CombatFX.HITSTOP_HEAVY)
 
 	if hit_count == 0:
 		_sfx("sword_swing", 0.05)
@@ -784,31 +879,32 @@ func _perform_charged_attack() -> void:
 	velocity.x = facing * 200.0
 
 	var hit_count := 0
-	var enemies = get_tree().get_nodes_in_group("enemies")
+	var hitbox_size := Vector2(CHARGED_ATTACK_RANGE, 96.0)
+	var hitbox_offset := Vector2(facing * hitbox_size.x * 0.5, -8.0)
+	var enemies = _get_enemies_in_melee_hitbox(hitbox_offset, hitbox_size, Color(0.3, 0.85, 1.0, 0.25))
 	for enemy in enemies:
 		if not is_instance_valid(enemy):
 			continue
-		if global_position.distance_to(enemy.global_position) < CHARGED_ATTACK_RANGE:
-			if enemy.has_method("take_damage"):
-				enemy.take_damage(damage, global_position)
-				hit_count += 1
-				_add_soul(SOUL_PER_HIT * 2.0)
-				# Track combo for charged attacks
-				total_combo_hits += 1
-				combo_decay_timer = COMBO_DECAY_TIME
-				if total_combo_hits > GameManager.stats.get("highest_combo", 0):
-					GameManager.stats["highest_combo"] = total_combo_hits
-				GameManager.stats["total_damage_dealt"] = GameManager.stats.get("total_damage_dealt", 0) + int(damage)
-				if has_node("/root/GameJuice"):
-					GameJuice.on_hit_connect(self, enemy, damage, true)
-				if has_node("/root/CombatFX"):
-					CombatFX.apply_hit_effects(damage, enemy.global_position, true)
-					CombatFX.apply_hitstop(CombatFX.HITSTOP_HEAVY)
-					var hit_dir = (enemy.global_position - global_position).normalized()
-					CombatFX.apply_directional_shake(14.0, 0.25, hit_dir)
-					CombatFX.apply_zoom_pulse(1.08, 0.3)
-				_vfx("vfx_hit_spark", enemy.global_position)
-				_spawn_damage_number(int(damage), enemy.global_position + Vector2(0, -40), true, Color(1.0, 0.85, 0.2))
+		if enemy.has_method("take_damage"):
+			enemy.take_damage(damage, global_position)
+			hit_count += 1
+			_add_soul(SOUL_PER_HIT * 2.0)
+			# Track combo for charged attacks
+			total_combo_hits += 1
+			combo_decay_timer = COMBO_DECAY_TIME
+			if total_combo_hits > GameManager.stats.get("highest_combo", 0):
+				GameManager.stats["highest_combo"] = total_combo_hits
+			GameManager.stats["total_damage_dealt"] = GameManager.stats.get("total_damage_dealt", 0) + int(damage)
+			if has_node("/root/GameJuice"):
+				GameJuice.on_hit_connect(self, enemy, damage, true)
+			if has_node("/root/CombatFX"):
+				CombatFX.apply_hit_effects(damage, enemy.global_position, true)
+				CombatFX.apply_hitstop(CombatFX.HITSTOP_HEAVY)
+				var hit_dir = (enemy.global_position - global_position).normalized()
+				CombatFX.apply_directional_shake(14.0, 0.25, hit_dir)
+				CombatFX.apply_zoom_pulse(1.08, 0.3)
+			_vfx("vfx_hit_spark", enemy.global_position)
+			_spawn_damage_number(int(damage), enemy.global_position + Vector2(0, -40), true, Color(1.0, 0.85, 0.2))
 
 	if hit_count > 0:
 		_screen_shake(18.0, 0.3)
@@ -965,7 +1061,7 @@ func _execute_pogo() -> void:
 	var combo_mult = _get_combo_multiplier()
 	var pogo_dmg = attack_damage * pogo_mult * combo_mult
 
-	var enemies = get_tree().get_nodes_in_group("enemies")
+	var enemies = _get_enemies_in_melee_hitbox(Vector2(0.0, 55.0), Vector2(90.0, 105.0), Color(0.95, 0.95, 1.0, 0.22))
 	for enemy in enemies:
 		if not is_instance_valid(enemy):
 			continue
@@ -1401,7 +1497,7 @@ func _perform_upslash() -> void:
 	_vfx("vfx_slash_arc", global_position + Vector2(0, -50))
 
 	var hit_count = 0
-	var enemies = get_tree().get_nodes_in_group("enemies")
+	var enemies = _get_enemies_in_melee_hitbox(Vector2(0.0, -UPSLASH_RANGE * 0.5), Vector2(90.0, UPSLASH_RANGE), Color(0.55, 0.75, 1.0, 0.22))
 	for enemy in enemies:
 		if not is_instance_valid(enemy):
 			continue
