@@ -155,6 +155,64 @@ const DEFAULT_STORY_FLAGS: Dictionary = {
 	"ch5_echo_witnesses_promised": false,
 	"ch5_mirror_kaelen_confronted": false, "ch5_fragment_6_trail_found": false,
 	"ch5_complete": false, "ch6_path_revealed": false,
+	# Chapter 6 flags
+	"ch6_unlocked": false, "ch6_cathedral_entered": false,
+	"ch6_nave_entered": false, "ch6_obedience_voice_heard": false,
+	"ch6_efficiency_voice_heard": false, "ch6_mercy_voice_heard": false,
+	"ch6_all_voices_heard": false, "ch6_choir_core_met": false,
+	"ch6_choice_made": false,
+	"ch6_choir_silenced": false, "ch6_choir_preserved": false,
+	"ch6_choir_rewritten": false,
+	"ch6_fragment_6_collected": false, "source_key_fragment_6": false,
+	"ending_route_ch6_silence": false, "ending_route_ch6_preserve": false,
+	"ending_route_ch6_rewrite": false,
+	"ch6_complete": false, "ch7_path_revealed": false,
+	# Chapter 7 flags
+	"ch7_unlocked": false, "ch7_deep_backup_entered": false,
+	"ch7_memory_ocean_entered": false,
+	"ch7_backup_oakhaven_seen": false, "ch7_backup_ironhold_seen": false,
+	"ch7_backup_mirror_city_seen": false, "ch7_all_backups_seen": false,
+	"ch7_leviathan_met": false, "ch7_choice_made": false,
+	"ch7_backups_preserved": false, "ch7_backups_collapsed": false,
+	"ch7_backups_merged": false,
+	"ending_route_ch7_preserve": false, "ending_route_ch7_collapse": false,
+	"ending_route_ch7_merge": false,
+	"ch7_fragment_7_collected": false, "source_key_fragment_7": false,
+	"ch7_complete": false, "ch8_path_revealed": false,
+	# Chapter 8 flags
+	"ch8_unlocked": false, "ch8_revolt_intro_seen": false,
+	"ch8_saved_assembly_entered": false,
+	"ch8_oakhaven_faction_heard": false, "ch8_ironhold_faction_heard": false,
+	"ch8_mirror_faction_heard": false, "ch8_choir_faction_heard": false,
+	"ch8_backup_faction_heard": false, "ch8_all_factions_heard": false,
+	"ch8_revolt_crisis_started": false, "ch8_choice_made": false,
+	"ch8_revolt_led": false, "ch8_council_formed": false,
+	"ch8_witness_network_created": false,
+	"ending_route_ch8_lead": false, "ending_route_ch8_council": false,
+	"ending_route_ch8_witness": false,
+	"ch8_complete": false, "ch9_path_revealed": false,
+	# Chapter 9 flags
+	"ch9_unlocked": false, "ch9_human_patch_entered": false,
+	"ch9_memory_lab_entered": false,
+	"ch9_truth_aethelgard_origin_seen": false,
+	"ch9_truth_kaelen_role_seen": false,
+	"ch9_truth_sovereign_birth_seen": false,
+	"ch9_truth_source_key_seen": false, "ch9_all_truths_seen": false,
+	"ch9_creator_trial_started": false, "ch9_truth_choice_made": false,
+	"ch9_truth_confessed": false, "ch9_truth_hidden": false,
+	"ch9_truth_distributed": false,
+	"ending_route_ch9_confess": false, "ending_route_ch9_hide": false,
+	"ending_route_ch9_distribute": false,
+	"ch9_complete": false, "ch10_path_revealed": false,
+	# Chapter 10 flags
+	"ch10_unlocked": false, "ch10_root_entered": false,
+	"ch10_kernel_descent_started": false,
+	"ch10_witness_chamber_entered": false,
+	"ch10_sovereign_confronted": false,
+	"ch10_final_choice_made": false,
+	"ch10_destroy_sovereign": false, "ch10_rewrite_sovereign": false,
+	"ch10_dissolve_control": false, "ch10_synthesis_route": false,
+	"true_ending_seen": false, "ng_plus_unlocked": false,
 	# Future final-story flag. NG+ should unlock only after the true ending.
 	"ch10_complete": false,
 }
@@ -896,6 +954,10 @@ func normalize_source_key_progression() -> void:
 		story_flags["source_key_fragment_4"] = true
 	if story_flags.get("ch4_fragment_5_collected", false):
 		story_flags["source_key_fragment_5"] = true
+	if story_flags.get("ch6_fragment_6_collected", false):
+		story_flags["source_key_fragment_6"] = true
+	if story_flags.get("ch7_fragment_7_collected", false):
+		story_flags["source_key_fragment_7"] = true
 	var counted_fragments: int = 0
 	for i in range(1, 8):
 		if story_flags.get("source_key_fragment_%d" % i, false):
@@ -908,7 +970,7 @@ func get_completion_percentage() -> float:
 	var total_all: float = 0.0
 
 	# Story chapters currently implemented
-	var implemented_chapters: Array[String] = ["ch1_complete", "ch2_complete", "ch3_complete", "ch4_complete", "ch5_complete"]
+	var implemented_chapters: Array[String] = ["ch1_complete", "ch2_complete", "ch3_complete", "ch4_complete", "ch5_complete", "ch6_complete", "ch7_complete", "ch8_complete", "ch9_complete", "ch10_complete"]
 	total_all += float(implemented_chapters.size())
 	for ch in implemented_chapters:
 		if get_flag(ch): total_done += 1.0

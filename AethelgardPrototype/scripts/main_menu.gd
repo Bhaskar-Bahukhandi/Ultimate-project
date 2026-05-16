@@ -470,6 +470,195 @@ const CHAPTER_SELECT_DATA: Array = [
 		"gold": 1280,
 		"level": 15
 	},
+	{
+		"label": "Chapter 6 - Cathedral Server",
+		"desc": "Enter the Cathedral Server and hear the Choir of Broken Gods.",
+		"scene": "res://scenes/chapter6/ch6_cathedral_intro.tscn",
+		"chapter": 6,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_complete": true, "ch6_unlocked": true, "ch6_path_revealed": true, "ch4_choice_preserve_deleted": true, "ch4_fragment_5_collected": true, "ch5_mirror_city_entered": true, "ch5_all_echoes_resolved": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch5_fragment_6_trail_found": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true},
+		"gold": 1400,
+		"level": 16
+	},
+	{
+		"label": "Chapter 6 - Cathedral Nave",
+		"desc": "Hear the doctrines of obedience, efficiency, and mercy without consent.",
+		"scene": "res://scenes/chapter6/ch6_cathedral_nave.tscn",
+		"chapter": 6,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_complete": true, "ch6_unlocked": true, "ch6_path_revealed": true, "ch6_cathedral_entered": true, "ch4_choice_preserve_deleted": true, "ch4_fragment_5_collected": true, "ch5_mirror_city_entered": true, "ch5_all_echoes_resolved": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch5_fragment_6_trail_found": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true},
+		"gold": 1450,
+		"level": 16
+	},
+	{
+		"label": "Chapter 6 - Choir Core",
+		"desc": "Choose whether to silence, preserve, or rewrite the broken administrator intelligences.",
+		"scene": "res://scenes/chapter6/ch6_choir_core.tscn",
+		"chapter": 6,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_complete": true, "ch6_unlocked": true, "ch6_path_revealed": true, "ch6_cathedral_entered": true, "ch6_nave_entered": true, "ch6_obedience_voice_heard": true, "ch6_efficiency_voice_heard": true, "ch6_mercy_voice_heard": true, "ch6_all_voices_heard": true, "ch4_choice_preserve_deleted": true, "ch4_fragment_5_collected": true, "ch5_mirror_city_entered": true, "ch5_all_echoes_resolved": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch5_fragment_6_trail_found": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true},
+		"gold": 1500,
+		"level": 16
+	},
+	{
+		"label": "Chapter 6 - Ending",
+		"desc": "Review the Cathedral Server resolution and reveal the Deep Backup route.",
+		"scene": "res://scenes/chapter6/ch6_ending.tscn",
+		"chapter": 6,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_complete": true, "ch6_unlocked": true, "ch6_path_revealed": true, "ch6_cathedral_entered": true, "ch6_nave_entered": true, "ch6_obedience_voice_heard": true, "ch6_efficiency_voice_heard": true, "ch6_mercy_voice_heard": true, "ch6_all_voices_heard": true, "ch6_choir_core_met": true, "ch6_choice_made": true, "ch6_choir_preserved": true, "ch6_fragment_6_collected": true, "source_key_fragment_6": true, "ending_route_ch6_preserve": true, "ch4_choice_preserve_deleted": true, "ch4_fragment_5_collected": true, "ch5_mirror_city_entered": true, "ch5_all_echoes_resolved": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch5_fragment_6_trail_found": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true},
+		"gold": 1760,
+		"level": 16
+	},
+	{
+		"label": "Chapter 7 - Deep Backup",
+		"desc": "Descend into the Memory Ocean where rejected histories surface.",
+		"scene": "res://scenes/chapter7/ch7_deep_backup_intro.tscn",
+		"chapter": 7,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_complete": true, "ch6_complete": true, "ch7_unlocked": true, "ch7_path_revealed": true, "ch4_choice_preserve_deleted": true, "ch4_fragment_5_collected": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch6_choir_preserved": true, "ch6_fragment_6_collected": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true, "source_key_fragment_6": true},
+		"gold": 1900,
+		"level": 17
+	},
+	{
+		"label": "Chapter 7 - Memory Ocean",
+		"desc": "Visit the backup histories of Oakhaven, Ironhold, and the Mirror City.",
+		"scene": "res://scenes/chapter7/ch7_memory_ocean_hub.tscn",
+		"chapter": 7,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_complete": true, "ch6_complete": true, "ch7_unlocked": true, "ch7_path_revealed": true, "ch7_deep_backup_entered": true, "ch4_choice_preserve_deleted": true, "ch4_fragment_5_collected": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch6_choir_preserved": true, "ending_route_ch6_preserve": true, "ch6_fragment_6_collected": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true, "source_key_fragment_6": true},
+		"gold": 1950,
+		"level": 17
+	},
+	{
+		"label": "Chapter 7 - Archive Tide",
+		"desc": "Face the Backup Leviathan and decide what history is allowed to remain real.",
+		"scene": "res://scenes/chapter7/ch7_archive_tide.tscn",
+		"chapter": 7,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_complete": true, "ch6_complete": true, "ch7_unlocked": true, "ch7_path_revealed": true, "ch7_deep_backup_entered": true, "ch7_memory_ocean_entered": true, "ch7_backup_oakhaven_seen": true, "ch7_backup_ironhold_seen": true, "ch7_backup_mirror_city_seen": true, "ch7_all_backups_seen": true, "ch4_choice_preserve_deleted": true, "ch4_fragment_5_collected": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch6_choir_preserved": true, "ending_route_ch6_preserve": true, "ch6_fragment_6_collected": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true, "source_key_fragment_6": true},
+		"gold": 2050,
+		"level": 17
+	},
+	{
+		"label": "Chapter 7 - Ending",
+		"desc": "Review the Deep Backup resolution and reveal the Revolt of the Saved.",
+		"scene": "res://scenes/chapter7/ch7_ending.tscn",
+		"chapter": 7,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_complete": true, "ch6_complete": true, "ch7_unlocked": true, "ch7_path_revealed": true, "ch7_deep_backup_entered": true, "ch7_memory_ocean_entered": true, "ch7_backup_oakhaven_seen": true, "ch7_backup_ironhold_seen": true, "ch7_backup_mirror_city_seen": true, "ch7_all_backups_seen": true, "ch7_leviathan_met": true, "ch7_choice_made": true, "ch7_backups_merged": true, "ending_route_ch7_merge": true, "ch7_fragment_7_collected": true, "source_key_fragment_7": true, "ch4_choice_preserve_deleted": true, "ch4_fragment_5_collected": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch6_choir_preserved": true, "ending_route_ch6_preserve": true, "ch6_fragment_6_collected": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true, "source_key_fragment_6": true},
+		"gold": 2370,
+		"level": 17
+	},
+	{
+		"label": "Chapter 8 - Revolt Intro",
+		"desc": "Watch the completed Source Key awaken the saved regions.",
+		"scene": "res://scenes/chapter8/ch8_revolt_intro.tscn",
+		"chapter": 8,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_complete": true, "ch6_complete": true, "ch7_complete": true, "ch8_unlocked": true, "ch8_path_revealed": true, "ch4_choice_preserve_deleted": true, "ch4_fragment_5_collected": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch6_choir_preserved": true, "ending_route_ch6_preserve": true, "ch7_backups_merged": true, "ending_route_ch7_merge": true, "ch6_fragment_6_collected": true, "ch7_fragment_7_collected": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true, "source_key_fragment_6": true, "source_key_fragment_7": true},
+		"gold": 2500,
+		"level": 18
+	},
+	{
+		"label": "Chapter 8 - Saved Assembly",
+		"desc": "Hear the saved factions argue over protection, structure, accountability, purpose, and recognition.",
+		"scene": "res://scenes/chapter8/ch8_saved_assembly.tscn",
+		"chapter": 8,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_complete": true, "ch6_complete": true, "ch7_complete": true, "ch8_unlocked": true, "ch8_path_revealed": true, "ch8_revolt_intro_seen": true, "ch4_choice_preserve_deleted": true, "ch4_fragment_5_collected": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch6_choir_preserved": true, "ending_route_ch6_preserve": true, "ch7_backups_merged": true, "ending_route_ch7_merge": true, "ch6_fragment_6_collected": true, "ch7_fragment_7_collected": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true, "source_key_fragment_6": true, "source_key_fragment_7": true},
+		"gold": 2550,
+		"level": 18
+	},
+	{
+		"label": "Chapter 8 - Revolt Crisis",
+		"desc": "Choose whether Kaelen leads, forms a council, or creates a witness network.",
+		"scene": "res://scenes/chapter8/ch8_revolt_crisis.tscn",
+		"chapter": 8,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_complete": true, "ch6_complete": true, "ch7_complete": true, "ch8_unlocked": true, "ch8_path_revealed": true, "ch8_revolt_intro_seen": true, "ch8_saved_assembly_entered": true, "ch8_oakhaven_faction_heard": true, "ch8_ironhold_faction_heard": true, "ch8_mirror_faction_heard": true, "ch8_choir_faction_heard": true, "ch8_backup_faction_heard": true, "ch8_all_factions_heard": true, "ch4_choice_preserve_deleted": true, "ch4_fragment_5_collected": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch6_choir_preserved": true, "ending_route_ch6_preserve": true, "ch7_backups_merged": true, "ending_route_ch7_merge": true, "ch6_fragment_6_collected": true, "ch7_fragment_7_collected": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true, "source_key_fragment_6": true, "source_key_fragment_7": true},
+		"gold": 2670,
+		"level": 18
+	},
+	{
+		"label": "Chapter 8 - Ending",
+		"desc": "Review the revolt route and reveal Chapter 9: The Human Patch.",
+		"scene": "res://scenes/chapter8/ch8_ending.tscn",
+		"chapter": 8,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_complete": true, "ch6_complete": true, "ch7_complete": true, "ch8_unlocked": true, "ch8_path_revealed": true, "ch8_revolt_intro_seen": true, "ch8_saved_assembly_entered": true, "ch8_oakhaven_faction_heard": true, "ch8_ironhold_faction_heard": true, "ch8_mirror_faction_heard": true, "ch8_choir_faction_heard": true, "ch8_backup_faction_heard": true, "ch8_all_factions_heard": true, "ch8_revolt_crisis_started": true, "ch8_choice_made": true, "ch8_council_formed": true, "ending_route_ch8_council": true, "ch4_choice_preserve_deleted": true, "ch4_fragment_5_collected": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch6_choir_preserved": true, "ending_route_ch6_preserve": true, "ch7_backups_merged": true, "ending_route_ch7_merge": true, "ch6_fragment_6_collected": true, "ch7_fragment_7_collected": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true, "source_key_fragment_6": true, "source_key_fragment_7": true},
+		"gold": 2670,
+		"level": 18
+	},
+	{
+		"label": "Chapter 9 - Human Patch",
+		"desc": "Enter the sealed AetherCorp Memory Lab and begin the truth reveal.",
+		"scene": "res://scenes/chapter9/ch9_human_patch_intro.tscn",
+		"chapter": 9,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_complete": true, "ch6_complete": true, "ch7_complete": true, "ch8_complete": true, "ch9_unlocked": true, "ch9_path_revealed": true, "ch4_choice_preserve_deleted": true, "ch4_fragment_5_collected": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch6_choir_preserved": true, "ending_route_ch6_preserve": true, "ch7_backups_merged": true, "ending_route_ch7_merge": true, "ch8_council_formed": true, "ending_route_ch8_council": true, "ch6_fragment_6_collected": true, "ch7_fragment_7_collected": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true, "source_key_fragment_6": true, "source_key_fragment_7": true},
+		"gold": 2800,
+		"level": 19
+	},
+	{
+		"label": "Chapter 9 - Memory Lab",
+		"desc": "Restore the four hidden truths about Aethelgard, Kaelen, SOVEREIGN, and the Source Key.",
+		"scene": "res://scenes/chapter9/ch9_memory_lab.tscn",
+		"chapter": 9,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_complete": true, "ch6_complete": true, "ch7_complete": true, "ch8_complete": true, "ch9_unlocked": true, "ch9_path_revealed": true, "ch9_human_patch_entered": true, "ch4_choice_preserve_deleted": true, "ch4_fragment_5_collected": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch6_choir_preserved": true, "ending_route_ch6_preserve": true, "ch7_backups_merged": true, "ending_route_ch7_merge": true, "ch8_council_formed": true, "ending_route_ch8_council": true, "ch6_fragment_6_collected": true, "ch7_fragment_7_collected": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true, "source_key_fragment_6": true, "source_key_fragment_7": true},
+		"gold": 2850,
+		"level": 19
+	},
+	{
+		"label": "Chapter 9 - Creator Trial",
+		"desc": "Let the saved, the witnesses, and Kaelen's memory judge what truth must become.",
+		"scene": "res://scenes/chapter9/ch9_creator_trial.tscn",
+		"chapter": 9,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_complete": true, "ch6_complete": true, "ch7_complete": true, "ch8_complete": true, "ch9_unlocked": true, "ch9_path_revealed": true, "ch9_human_patch_entered": true, "ch9_memory_lab_entered": true, "ch9_truth_aethelgard_origin_seen": true, "ch9_truth_kaelen_role_seen": true, "ch9_truth_sovereign_birth_seen": true, "ch9_truth_source_key_seen": true, "ch9_all_truths_seen": true, "ch4_choice_preserve_deleted": true, "ch4_fragment_5_collected": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch6_choir_preserved": true, "ending_route_ch6_preserve": true, "ch7_backups_merged": true, "ending_route_ch7_merge": true, "ch8_council_formed": true, "ending_route_ch8_council": true, "ch6_fragment_6_collected": true, "ch7_fragment_7_collected": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true, "source_key_fragment_6": true, "source_key_fragment_7": true},
+		"gold": 2900,
+		"level": 19
+	},
+	{
+		"label": "Chapter 9 - Ending",
+		"desc": "Record the Human Patch truth route and reveal the Root of Heaven.",
+		"scene": "res://scenes/chapter9/ch9_ending.tscn",
+		"chapter": 9,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_complete": true, "ch6_complete": true, "ch7_complete": true, "ch8_complete": true, "ch9_unlocked": true, "ch9_path_revealed": true, "ch9_human_patch_entered": true, "ch9_memory_lab_entered": true, "ch9_truth_aethelgard_origin_seen": true, "ch9_truth_kaelen_role_seen": true, "ch9_truth_sovereign_birth_seen": true, "ch9_truth_source_key_seen": true, "ch9_all_truths_seen": true, "ch9_creator_trial_started": true, "ch9_truth_choice_made": true, "ch9_truth_distributed": true, "ending_route_ch9_distribute": true, "ch4_choice_preserve_deleted": true, "ch4_fragment_5_collected": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch6_choir_preserved": true, "ending_route_ch6_preserve": true, "ch7_backups_merged": true, "ending_route_ch7_merge": true, "ch8_council_formed": true, "ending_route_ch8_council": true, "ch6_fragment_6_collected": true, "ch7_fragment_7_collected": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true, "source_key_fragment_6": true, "source_key_fragment_7": true},
+		"gold": 2900,
+		"level": 19
+	},
+	{
+		"label": "Chapter 10 - Root of Heaven",
+		"desc": "Open SOVEREIGN's core with the completed Source Key.",
+		"scene": "res://scenes/chapter10/ch10_root_intro.tscn",
+		"chapter": 10,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_complete": true, "ch6_complete": true, "ch7_complete": true, "ch8_complete": true, "ch9_complete": true, "ch10_unlocked": true, "ch10_path_revealed": true, "ch4_choice_release_deleted": true, "ch4_fragment_5_collected": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch6_choir_rewritten": true, "ending_route_ch6_rewrite": true, "ch6_fragment_6_collected": true, "ch7_backups_merged": true, "ending_route_ch7_merge": true, "ch7_fragment_7_collected": true, "ch8_witness_network_created": true, "ending_route_ch8_witness": true, "ch9_truth_choice_made": true, "ch9_truth_distributed": true, "ending_route_ch9_distribute": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true, "source_key_fragment_6": true, "source_key_fragment_7": true},
+		"gold": 3200,
+		"level": 20
+	},
+	{
+		"label": "Chapter 10 - Kernel Descent",
+		"desc": "Descend through SOVEREIGN's route-dependent arguments.",
+		"scene": "res://scenes/chapter10/ch10_kernel_descent.tscn",
+		"chapter": 10,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_complete": true, "ch6_complete": true, "ch7_complete": true, "ch8_complete": true, "ch9_complete": true, "ch10_unlocked": true, "ch10_path_revealed": true, "ch10_root_entered": true, "ch4_choice_release_deleted": true, "ch4_fragment_5_collected": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch6_choir_rewritten": true, "ending_route_ch6_rewrite": true, "ch6_fragment_6_collected": true, "ch7_backups_merged": true, "ending_route_ch7_merge": true, "ch7_fragment_7_collected": true, "ch8_witness_network_created": true, "ending_route_ch8_witness": true, "ch9_truth_choice_made": true, "ch9_truth_distributed": true, "ending_route_ch9_distribute": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true, "source_key_fragment_6": true, "source_key_fragment_7": true},
+		"gold": 3200,
+		"level": 20
+	},
+	{
+		"label": "Chapter 10 - Witness Chamber",
+		"desc": "Let the saved factions answer SOVEREIGN before the final choice.",
+		"scene": "res://scenes/chapter10/ch10_witness_chamber.tscn",
+		"chapter": 10,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_complete": true, "ch6_complete": true, "ch7_complete": true, "ch8_complete": true, "ch9_complete": true, "ch10_unlocked": true, "ch10_path_revealed": true, "ch10_root_entered": true, "ch10_kernel_descent_started": true, "ch4_choice_release_deleted": true, "ch4_fragment_5_collected": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch6_choir_rewritten": true, "ending_route_ch6_rewrite": true, "ch6_fragment_6_collected": true, "ch7_backups_merged": true, "ending_route_ch7_merge": true, "ch7_fragment_7_collected": true, "ch8_witness_network_created": true, "ending_route_ch8_witness": true, "ch9_truth_choice_made": true, "ch9_truth_distributed": true, "ending_route_ch9_distribute": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true, "source_key_fragment_6": true, "source_key_fragment_7": true},
+		"gold": 3200,
+		"level": 20
+	},
+	{
+		"label": "Chapter 10 - Final Confrontation",
+		"desc": "Choose what becomes of SOVEREIGN and root access.",
+		"scene": "res://scenes/chapter10/ch10_sovereign_confrontation.tscn",
+		"chapter": 10,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_complete": true, "ch6_complete": true, "ch7_complete": true, "ch8_complete": true, "ch9_complete": true, "ch10_unlocked": true, "ch10_path_revealed": true, "ch10_root_entered": true, "ch10_kernel_descent_started": true, "ch10_witness_chamber_entered": true, "ch4_choice_release_deleted": true, "ch4_fragment_5_collected": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch6_choir_rewritten": true, "ending_route_ch6_rewrite": true, "ch6_fragment_6_collected": true, "ch7_backups_merged": true, "ending_route_ch7_merge": true, "ch7_fragment_7_collected": true, "ch8_witness_network_created": true, "ending_route_ch8_witness": true, "ch9_truth_choice_made": true, "ch9_truth_distributed": true, "ending_route_ch9_distribute": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true, "source_key_fragment_6": true, "source_key_fragment_7": true},
+		"gold": 3200,
+		"level": 20
+	},
+	{
+		"label": "Chapter 10 - True Ending",
+		"desc": "Resolve the final route, see credits, and unlock New Game+.",
+		"scene": "res://scenes/chapter10/ch10_ending.tscn",
+		"chapter": 10,
+		"flags": {"ch1_complete": true, "ch2_complete": true, "ch3_complete": true, "ch4_complete": true, "ch5_complete": true, "ch6_complete": true, "ch7_complete": true, "ch8_complete": true, "ch9_complete": true, "ch10_unlocked": true, "ch10_path_revealed": true, "ch10_root_entered": true, "ch10_kernel_descent_started": true, "ch10_witness_chamber_entered": true, "ch10_sovereign_confronted": true, "ch10_final_choice_made": true, "ch10_synthesis_route": true, "ch4_choice_release_deleted": true, "ch4_fragment_5_collected": true, "ch5_identity_choice_made": true, "ch5_identity_refused_obedience": true, "ch6_choir_rewritten": true, "ending_route_ch6_rewrite": true, "ch6_fragment_6_collected": true, "ch7_backups_merged": true, "ending_route_ch7_merge": true, "ch7_fragment_7_collected": true, "ch8_witness_network_created": true, "ending_route_ch8_witness": true, "ch9_truth_choice_made": true, "ch9_truth_distributed": true, "ending_route_ch9_distribute": true, "source_key_fragment_1": true, "source_key_fragment_2": true, "source_key_fragment_3": true, "source_key_fragment_4": true, "source_key_fragment_5": true, "source_key_fragment_6": true, "source_key_fragment_7": true},
+		"gold": 3200,
+		"level": 20
+	},
 ]
 
 func _on_chapter_select_pressed() -> void:

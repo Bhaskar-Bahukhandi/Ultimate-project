@@ -12,6 +12,7 @@ func _ready() -> void:
 	GameManager.current_region = "mirror_city"
 	GameManager.set_story_flag("ch5_complete", true)
 	GameManager.set_story_flag("ch6_path_revealed", true)
+	GameManager.set_story_flag("ch6_unlocked", true)
 	GameManager.save_game(GameManager.AUTOSAVE_SLOT)
 	_build_visuals()
 
@@ -25,7 +26,7 @@ func _ready() -> void:
 	if not is_inside_tree(): return
 	await _fade_to_black(1.0)
 	if not is_inside_tree(): return
-	SceneTransitions.change_scene("res://scenes/main_menu.tscn")
+	SceneTransitions.change_scene("res://scenes/chapter6/ch6_cathedral_intro.tscn")
 
 func _build_visuals() -> void:
 	var bg := ColorRect.new()
@@ -61,7 +62,7 @@ func _build_visuals() -> void:
 	label.bbcode_enabled = true
 	label.fit_content = true
 	label.scroll_active = false
-	label.text = "[center][b]CHAPTER 5 COMPLETE[/b]\n[i]The Mirror City[/i]\n\nSource Key Fragments: %d / 7\nFragment #6: Location Trace Found\n\nNext: Chapter 6 - The Choir of Broken Gods\nComing in the next story pass.[/center]" % GameManager.source_key_count
+	label.text = "[center][b]CHAPTER 5 COMPLETE[/b]\n[i]The Mirror City[/i]\n\nSource Key Fragments: %d / 7\nFragment #6: Location Trace Found\n\nNext: Chapter 6 - The Choir of Broken Gods\nOpening now.[/center]" % GameManager.source_key_count
 	label.add_theme_font_size_override("normal_font_size", 18)
 	label.add_theme_font_size_override("bold_font_size", 24)
 	label.add_theme_color_override("default_color", Color(0.88, 0.94, 1.0))
@@ -84,7 +85,7 @@ func _play_ending() -> void:
 	await DialogueManager.say("System", "// Fragment #6 trace: CATHEDRAL_SERVER")
 	await DialogueManager.say("SOVEREIGN", "The Choir will show you what happens when abandoned systems learn to pray.")
 	await DialogueManager.say("Kaelen", "Then I will listen before I cut the power.")
-	await DialogueManager.say("System", "// Chapter 6: The Choir of Broken Gods - planned. Returning to main menu.")
+	await DialogueManager.say("System", "// Chapter 6: The Choir of Broken Gods - loading.")
 
 func _fade_to_black(duration: float) -> void:
 	fade_rect.z_index = 100
