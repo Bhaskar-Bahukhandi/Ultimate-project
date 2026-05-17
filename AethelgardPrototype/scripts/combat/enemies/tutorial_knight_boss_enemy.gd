@@ -26,12 +26,12 @@ const PHASE_4_HP_PCT = 0.10
 var current_boss_phase: BossPhase = BossPhase.PHASE_1
 var _phase_paused: bool = false
 var _phase_pause_timer: float = 0.0
-var _phase_pause_duration: float = 1.5
+var _phase_pause_duration: float = 1.0
 var _pending_phase: int = 0
 
 # ── Attack bookkeeping ──────────────────────────────────────────────────
 var _boss_attack_timer: float = 0.0
-var _boss_attack_cooldown: float = 1.6
+var _boss_attack_cooldown: float = 1.15
 var _boss_combo_count: int = 0
 var _boss_max_combo: int = 2
 var _attack_active: bool = false
@@ -58,18 +58,19 @@ var _intro_played: bool = false
 func _ready() -> void:
 	# Set boss stats BEFORE super._ready() so level scaling applies correctly
 	enemy_name = "Tutorial Knight"
-	max_health = 600.0
-	contact_damage = 35.0
-	movement_speed = 120.0
+	max_health = 420.0
+	contact_damage = 22.0
+	movement_speed = 135.0
 	detection_range = 450.0
-	attack_range = 80.0
+	attack_range = 92.0
 	xp_reward = 400
 	gold_reward = 200
-	zone_level = 5  # Rec Lv 5 — soft gate for Oakhaven boss
+	zone_level = 2  # First real boss: challenging without becoming a stat sponge.
 	elasticity = 1.0
 	gravity_scale = 1.0
 	super._ready()
 	current_health = max_health
+	_apply_phase_combat_tuning()
 
 	add_to_group("boss")
 
@@ -236,7 +237,7 @@ func _boss_chase(_delta: float) -> void:
 
 	var spd = movement_speed
 	if _is_enraged:
-		spd *= 1.6
+		spd *= 1.45
 
 	var dir = direction_to_player()
 	velocity.x = dir.x * spd
@@ -298,13 +299,18 @@ func _execute_boss_attack() -> void:
 
 func _pick_attack() -> String:
 	var available: Array[String] = []
+	var dist := distance_to_player()
 	match current_boss_phase:
 		BossPhase.PHASE_1:
 			available = ["slash", "overhead_slam"]
 		BossPhase.PHASE_2:
 			available = ["slash", "overhead_slam", "charge", "shield_bash"]
+			if dist > attack_range * 1.55:
+				available = ["charge", "slash"]
 		BossPhase.PHASE_3, BossPhase.PHASE_3_RAGE:
 			available = ["slash", "overhead_slam", "charge", "teleport_slash", "shockwave"]
+			if dist > attack_range * 1.7:
+				available = ["teleport_slash", "charge", "shockwave"]
 		BossPhase.PHASE_4:
 			return "slash"
 	if available.is_empty():
@@ -327,70 +333,86 @@ func _attack_slash() -> void:
 	# Telegraph flash
 	if has_node("Sprite"):
 		get_node("Sprite").modulate = Color(1.0, 0.6, 0.3)
-	await get_tree().create_timer(0.3).timeout
+	_status_text("SLASH", global_position + Vector2(0, -62), false)
+	await get_tree().create_timer(0.22).timeout
 	if not _safe(): return
 	if has_node("Sprite"):
 		get_node("Sprite").modulate = Color.WHITE if not _is_enraged else Color(1.5, 0.3, 0.3)
 	var dir = direction_to_player()
-	velocity.x = dir.x * 200.0
+	velocity.x = dir.x * 230.0
 	_sfx("sword_swing", 0.1)
-	await get_tree().create_timer(0.25).timeout
+	await get_tree().create_timer(0.10).timeout
 	if not _safe():
 		return
-	_deal_boss_damage(attack_range, contact_damage)
+	_deal_boss_melee_damage(attack_range, contact_damage, "boss_slash")
 	velocity.x = 0.0
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.24).timeout
 
 
 func _attack_overhead_slam() -> void:
 	velocity.x = 0.0
+	_status_text("JUMP", global_position + Vector2(0, -62), false)
+	if has_node("Sprite"):
+		get_node("Sprite").modulate = Color(1.0, 0.25, 0.2)
 	_sfx("heavy_windup")
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.42).timeout
 	if not _safe():
 		return
 	var dir = direction_to_player()
 	velocity.x = dir.x * 250.0
 	_sfx("sword_slam")
 	_screen_shake(10.0, 0.2)
-	await get_tree().create_timer(0.2).timeout
+	await get_tree().create_timer(0.14).timeout
 	if not _safe():
 		return
-	_deal_boss_damage(attack_range * 1.2, contact_damage * 1.5)
+	_deal_boss_melee_damage(attack_range * 1.2, contact_damage * 1.5, "boss_slam")
 	_spawn_slam_wave()
 	velocity.x = 0.0
-	await get_tree().create_timer(0.6).timeout
+	if has_node("Sprite"):
+		get_node("Sprite").modulate = Color.WHITE if not _is_enraged else Color(1.5, 0.3, 0.3)
+	await get_tree().create_timer(0.52).timeout
 
 
 func _attack_charge() -> void:
 	velocity.x = 0.0
-	_status_text("!", global_position + Vector2(0, -50), false)
-	await get_tree().create_timer(0.4).timeout
+	_status_text("DASH", global_position + Vector2(0, -62), false)
+	if has_node("Sprite"):
+		get_node("Sprite").modulate = Color(1.0, 0.45, 0.15)
+	await get_tree().create_timer(0.34).timeout
 	if not _safe():
 		return
 	_charge_rushing = true
 	var dir = direction_to_player()
-	velocity.x = dir.x * 350.0
+	velocity.x = dir.x * 430.0
 	velocity.y = -100.0
 	_sfx("dash", 0.15)
-	await get_tree().create_timer(0.45).timeout
+	await get_tree().create_timer(0.16).timeout
 	if not _safe():
 		_charge_rushing = false
 		return
-	_deal_boss_damage(attack_range * 1.5, contact_damage * 1.3)
+	_deal_boss_melee_damage(attack_range * 1.5, contact_damage * 1.3, "boss_charge")
 	_screen_shake(8.0, 0.15)
+	await get_tree().create_timer(0.20).timeout
 	velocity.x = 0.0
 	_charge_rushing = false
-	await get_tree().create_timer(0.4).timeout
+	if has_node("Sprite"):
+		get_node("Sprite").modulate = Color.WHITE if not _is_enraged else Color(1.5, 0.3, 0.3)
+	await get_tree().create_timer(0.34).timeout
 
 
 func _attack_shield_bash() -> void:
+	_status_text("BLOCK", global_position + Vector2(0, -62), false)
 	var dir = direction_to_player()
-	velocity.x = dir.x * 180.0
+	velocity.x = 0.0
 	_sfx("shield_hit")
-	await get_tree().create_timer(0.2).timeout
+	await get_tree().create_timer(0.18).timeout
 	if not _safe():
 		return
-	_deal_boss_damage(attack_range * 0.8, contact_damage * 0.8)
+	velocity.x = dir.x * 240.0
+	await get_tree().create_timer(0.08).timeout
+	if not _safe():
+		return
+	_deal_boss_melee_damage(attack_range * 0.8, contact_damage * 0.8, "boss_bash")
 	# Knockback emphasis
 	var player = find_player()
 	if player and is_instance_valid(player):
@@ -398,7 +420,7 @@ func _attack_shield_bash() -> void:
 		if player.has_method("apply_knockback"):
 			player.apply_knockback(kb_dir * 200.0)
 	velocity.x = 0.0
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.42).timeout
 
 
 func _attack_teleport_slash() -> void:
@@ -411,18 +433,24 @@ func _attack_teleport_slash() -> void:
 	var behind = -sign(player.global_position.x - global_position.x) * 70.0
 	global_position = Vector2(player.global_position.x + behind, player.global_position.y)
 	_vfx("vfx_glitch_sparkle", global_position)
-	await get_tree().create_timer(0.30).timeout
+	_status_text("TURN", global_position + Vector2(0, -62), false)
+	if has_node("Sprite"):
+		get_node("Sprite").modulate = Color(0.85, 0.45, 1.0)
+	await get_tree().create_timer(0.34).timeout
 	if not _safe():
 		return
-	_deal_boss_damage(attack_range, contact_damage * 1.2)
+	_deal_boss_melee_damage(attack_range, contact_damage * 1.2, "boss_teleport_slash")
 	_sfx("sword_swing")
-	await get_tree().create_timer(0.3).timeout
+	if has_node("Sprite"):
+		get_node("Sprite").modulate = Color.WHITE if not _is_enraged else Color(1.5, 0.3, 0.3)
+	await get_tree().create_timer(0.32).timeout
 
 
 func _attack_shockwave() -> void:
 	velocity.y = -500.0
+	_status_text("AIR", global_position + Vector2(0, -62), false)
 	_sfx("heavy_windup")
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.46).timeout
 	if not _safe():
 		return
 	velocity.y = 800.0
@@ -432,7 +460,7 @@ func _attack_shockwave() -> void:
 	_deal_boss_damage(150.0, contact_damage * 1.8)
 	_screen_shake(18.0, 0.4)
 	_vfx("vfx_hit_spark", global_position + Vector2(0, 10))
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.48).timeout
 
 
 # ── Slam wave helper ────────────────────────────────────────────────────
@@ -486,6 +514,36 @@ func _deal_boss_damage(range_px: float, damage: float) -> void:
 
 
 # ═════════════════════════════════════════════════════════════════════════
+func _deal_boss_melee_damage(range_px: float, damage: float, damage_type: String) -> void:
+	if _is_enraged:
+		damage *= 1.25
+	var dir = direction_to_player()
+	var facing := signf(dir.x)
+	if facing == 0.0:
+		facing = 1.0
+	var hitbox_size := Vector2(range_px, 96.0)
+	_deal_damage_in_attack_hitbox(Vector2(facing * hitbox_size.x * 0.5, -32.0), hitbox_size, damage, damage_type, 0.16)
+
+
+func _apply_phase_combat_tuning() -> void:
+	match current_boss_phase:
+		BossPhase.PHASE_1:
+			_boss_attack_cooldown = 1.15
+			_boss_max_combo = 1
+		BossPhase.PHASE_2:
+			_boss_attack_cooldown = 1.0
+			_boss_max_combo = 2
+		BossPhase.PHASE_3:
+			_boss_attack_cooldown = 0.9
+			_boss_max_combo = 2
+		BossPhase.PHASE_3_RAGE:
+			_boss_attack_cooldown = 0.78
+			_boss_max_combo = 3
+		BossPhase.PHASE_4:
+			_boss_attack_cooldown = 1.2
+			_boss_max_combo = 1
+
+
 # PHASE MANAGEMENT
 # ═════════════════════════════════════════════════════════════════════════
 
@@ -516,6 +574,7 @@ func _trigger_phase_pause(phase_number: int) -> void:
 	_attack_active = false
 	_charge_rushing = false
 	velocity = Vector2.ZERO
+	_apply_phase_combat_tuning()
 
 	# Full juice pipeline: hitstop + shake + flash + slowmo + zoom
 	if has_node("/root/GameJuice"):
@@ -536,7 +595,7 @@ func _trigger_phase_pause(phase_number: int) -> void:
 func _enter_rage_phase() -> void:
 	## Desperation — corruption overwhelms, relentless combos.
 	_is_enraged = true
-	_boss_max_combo = 3
+	_apply_phase_combat_tuning()
 	_phase_paused = true
 	_phase_pause_timer = 0.0
 	_pending_phase = 35
@@ -555,8 +614,8 @@ func _enter_rage_phase() -> void:
 	_vfx("vfx_glitch_sparkle", global_position + Vector2(-30, -30))
 	_vfx("vfx_enemy_death", global_position + Vector2(0, -20))
 
-	contact_damage *= 1.35
-	movement_speed *= 1.7
+	contact_damage *= 1.18
+	movement_speed *= 1.35
 	phase_changed.emit(35)
 
 
@@ -567,6 +626,7 @@ func _enter_phase_4() -> void:
 	_charge_rushing = false
 	current_state = State.IDLE
 	velocity = Vector2.ZERO
+	_apply_phase_combat_tuning()
 
 	# Full phase transition juice for the climactic moment
 	if has_node("/root/GameJuice"):

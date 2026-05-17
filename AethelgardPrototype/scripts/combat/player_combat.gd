@@ -41,7 +41,7 @@ const MAX_AIR_JUMPS = 1
 # ── Dash ──────────────────────────────────────────────────────────────────
 const DASH_SPEED = 720.0
 const DASH_DURATION = 0.18
-const DASH_COOLDOWN = 0.38
+const DASH_COOLDOWN = 0.34
 const DASH_GHOST_COUNT = 4
 const AIR_DASH_ENABLED = true
 
@@ -52,7 +52,7 @@ const WALL_JUMP_LOCK_TIME = 0.10
 
 # ── Attack / Combo ────────────────────────────────────────────────────────
 const ATTACK_RANGE = 110.0
-const COMBO_WINDOW = 0.40
+const COMBO_WINDOW = 0.46
 const ATTACK_COOLDOWN_BASE = 0.22
 const CHARGED_ATTACK_TIME = 1.2
 const CHARGED_ATTACK_RANGE = 180.0
@@ -84,7 +84,7 @@ const SOUL_PER_PARRY = 25.0
 const SPELL_COST = 33.0
 const HEAL_COST = 33.0
 const HEAL_AMOUNT = 30.0
-const HEAL_CHANNEL_TIME = 0.85
+const HEAL_CHANNEL_TIME = 0.95
 const VENGEFUL_SPIRIT_DAMAGE = 45.0
 const DESOLATE_DIVE_DAMAGE = 60.0
 const VENGEFUL_SPIRIT_SPEED = 750.0
@@ -93,7 +93,7 @@ const HOWLING_WRAITHS_RANGE = 130.0
 
 # ── Parry / Block ────────────────────────────────────────────────────────
 const PARRY_WINDOW = 0.18
-const PARRY_COOLDOWN = 0.15
+const PARRY_COOLDOWN = 0.24
 const BLOCK_DAMAGE_REDUCTION = 0.7
 const PARRY_FREEZE_TIME = 0.12
 const PARRY_COUNTERATTACK_WINDOW = 0.4
@@ -759,18 +759,18 @@ func _perform_combo_attack() -> void:
 	match combo_step:
 		1:
 			damage *= 1.0
-			cooldown = 0.24
+			cooldown = 0.21
 			lunge_force = 40.0
 		2:
 			damage *= 1.25
 			range_mult = 1.2
-			cooldown = 0.26
-			lunge_force = 60.0
+			cooldown = 0.23
+			lunge_force = 65.0
 		3:
 			damage *= 1.5
 			range_mult = 1.4
-			cooldown = 0.35
-			lunge_force = 160.0
+			cooldown = 0.32
+			lunge_force = 145.0
 
 	attack_cooldown = cooldown
 	_update_combo_indicator()
@@ -846,7 +846,7 @@ func _perform_combo_attack() -> void:
 	await get_tree().create_timer(cooldown * 0.5).timeout
 	if not is_inside_tree():
 		return
-	attack_recovery_timer = cooldown * 0.45
+	attack_recovery_timer = cooldown * 0.35
 	is_attacking = false
 
 
@@ -909,7 +909,7 @@ func _perform_charged_attack() -> void:
 	if hit_count > 0:
 		_screen_shake(18.0, 0.3)
 
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.42).timeout
 	if not is_inside_tree():
 		return
 	is_attacking = false
@@ -1484,7 +1484,7 @@ func _perform_upslash() -> void:
 		return
 
 	is_attacking = true
-	attack_cooldown = 0.28
+	attack_cooldown = 0.24
 	_sfx("sword_swing", 0.1)
 
 	var damage = attack_damage * UPSLASH_DAMAGE_MULT
@@ -1519,10 +1519,10 @@ func _perform_upslash() -> void:
 		if has_node("/root/CombatFX"):
 			CombatFX.apply_hitstop(0.06)
 
-	await get_tree().create_timer(0.2).timeout
+	await get_tree().create_timer(0.16).timeout
 	if not is_inside_tree():
 		return
-	attack_recovery_timer = 0.15
+	attack_recovery_timer = 0.10
 	is_attacking = false
 
 

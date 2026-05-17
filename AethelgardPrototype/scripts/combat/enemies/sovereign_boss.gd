@@ -260,7 +260,11 @@ func _phase1_attack() -> void:
 			is_attacking = false
 			return
 
-		_deal_damage_in_range(attack_range * 1.2, contact_damage)
+		var slash_size := Vector2(attack_range * 1.2, 100.0)
+		var facing := signf(direction_to_player().x)
+		if facing == 0.0:
+			facing = 1.0
+		_deal_damage_in_attack_hitbox(Vector2(facing * slash_size.x * 0.5, -38.0), slash_size, contact_damage, "sovereign_slash", 0.16)
 		if has_node("/root/CombatFX"):
 			CombatFX.apply_screen_shake(8.0, 0.15)
 	else:
@@ -518,7 +522,11 @@ func _phase5_attack() -> void:
 			await _sovereign_teleport()
 			await get_tree().create_timer(0.3).timeout
 			if is_inside_tree() and current_state != State.DEAD:
-				_deal_damage_in_range(attack_range * 1.5, contact_damage * 1.3)
+				var combo_size := Vector2(attack_range * 1.5, 104.0)
+				var combo_facing := signf(direction_to_player().x)
+				if combo_facing == 0.0:
+					combo_facing = 1.0
+				_deal_damage_in_attack_hitbox(Vector2(combo_facing * combo_size.x * 0.5, -40.0), combo_size, contact_damage * 1.3, "sovereign_combo", 0.16)
 				if has_node("/root/CombatFX"):
 					CombatFX.apply_screen_shake(12.0, 0.2)
 		2:

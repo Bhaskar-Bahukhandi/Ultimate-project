@@ -60,6 +60,7 @@ var attack_cooldown: float = 0.0
 var attack_cooldown_base: float = 1.2
 var telegraph_timer: float = 0.0
 var telegraph_duration: float = 0.45
+var attack_active_duration: float = 0.14
 var recover_timer: float = 0.0
 var recover_duration: float = 0.6
 var current_attack: int = AttackType.SLASH
@@ -460,14 +461,17 @@ func _execute_attack() -> void:
 
 	match current_attack:
 		AttackType.SLASH:
-			_deal_damage_in_range(attack_range * 1.1, contact_damage)
+			var slash_size := Vector2(attack_range * 1.1, 84.0)
+			_deal_damage_in_attack_hitbox(Vector2(dir.x * slash_size.x * 0.5, -30.0), slash_size, contact_damage, "slash")
 			_vfx("vfx_hit_spark", global_position + dir * 40.0)
 		AttackType.THRUST:
 			velocity.x = dir.x * movement_speed * 3.0
-			_deal_damage_in_range(attack_range * 1.5, contact_damage * 1.3)
+			var thrust_size := Vector2(attack_range * 1.5, 64.0)
+			_deal_damage_in_attack_hitbox(Vector2(dir.x * thrust_size.x * 0.5, -28.0), thrust_size, contact_damage * 1.3, "thrust")
 			_vfx("vfx_hit_spark", global_position + dir * 60.0)
 		AttackType.SLAM:
-			_deal_damage_in_range(attack_range * 0.8, contact_damage * 1.6)
+			var slam_size := Vector2(attack_range * 1.4, 96.0)
+			_deal_damage_in_attack_hitbox(Vector2(0.0, -24.0), slam_size, contact_damage * 1.6, "slam")
 			_vfx("vfx_hit_spark", global_position + Vector2(0.0, 10.0))
 		AttackType.CHARGE:
 			velocity.x = dir.x * movement_speed * 4.5
@@ -494,7 +498,9 @@ func _state_attack(delta: float) -> void:
 	if _charge_damage_pending:
 		_charge_travel_timer += delta
 		if _charge_travel_timer >= CHARGE_MIN_TRAVEL_TIME:
-			_deal_damage_in_range(attack_range * 2.0, contact_damage * 1.2)
+			var dir = direction_to_player()
+			var charge_size := Vector2(attack_range * 2.0, 74.0)
+			_deal_damage_in_attack_hitbox(Vector2(dir.x * charge_size.x * 0.5, -30.0), charge_size, contact_damage * 1.2, "charge")
 			_charge_damage_pending = false
 
 	recover_timer += delta
@@ -544,6 +550,139 @@ func _deal_damage_in_range(range_px: float, damage: float) -> void:
 		var display_name: String = enemy_name if enemy_name != "" else name.capitalize()
 		var scaled_atk_dmg = damage * get_enemy_damage_multiplier()
 		player.take_damage(scaled_atk_dmg, global_position, display_name)
+
+
+func _deal_damage_in_attack_hitbox(center_offset: Vector2, size: Vector2, damage: float, damage_type: String = "enemy_melee", active_duration: float = -1.0) -> bool:
+	var player = find_player()
+	if not player:
+		return false
+	if active_duration < 0.0:
+		active_duration = attack_active_duration
+
+	var hitbox := Area2D.new()
+	hitbox.name = "EnemyAttackHitbox"
+	hitbox.collision_layer = 0
+	hitbox.collision_mask = 2
+	hitbox.set_meta("hit_targets", [])
+	hitbox.set_meta("damage", damage)
+	hitbox.set_meta("damage_type", damage_type)
+	hitbox.set_meta("hitbox_size", size)
+
+	var collision := CollisionShape2D.new()
+	var shape := RectangleShape2D.new()
+	shape.size = size
+	collision.shape = shape
+	hitbox.add_child(collision)
+	_add_attack_hitbox_debug_visual(hitbox, size)
+
+	add_child(hitbox)
+	hitbox.global_position = global_position + center_offset
+	hitbox.body_entered.connect(_on_enemy_attack_hitbox_body_entered.bind(hitbox))
+	var tween := hitbox.create_tween()
+	tween.tween_interval(active_duration)
+	tween.tween_callback(hitbox.queue_free)
+
+	var did_hit := false
+	for target in _get_players_in_attack_hitbox(center_offset, size):
+		if _damage_player_from_attack_hitbox(target, hitbox):
+			did_hit = true
+	return did_hit
+
+
+func _get_players_in_attack_hitbox(center_offset: Vector2, size: Vector2) -> Array:
+	var players: Array = []
+	var world := get_world_2d()
+	if not world:
+		return players
+
+	var shape := RectangleShape2D.new()
+	shape.size = size
+	var params := PhysicsShapeQueryParameters2D.new()
+	params.shape = shape
+	params.transform = Transform2D(0.0, global_position + center_offset)
+	params.collide_with_bodies = true
+	params.collide_with_areas = true
+	params.collision_mask = 2
+	params.exclude = [get_rid()]
+
+	var hit_rect := Rect2(global_position + center_offset - size * 0.5, size)
+	for hit in world.direct_space_state.intersect_shape(params, 16):
+		var target = _resolve_player_collider(hit.get("collider"))
+		if target and hit_rect.has_point(target.global_position) and target not in players:
+			players.append(target)
+
+	if players.is_empty():
+		for candidate in get_tree().get_nodes_in_group("player"):
+			if is_instance_valid(candidate) and hit_rect.has_point(candidate.global_position) and candidate not in players:
+				players.append(candidate)
+	return players
+
+
+func _resolve_player_collider(collider: Object):
+	var node = collider as Node
+	while node:
+		if node.is_in_group("player"):
+			return node
+		node = node.get_parent()
+	return null
+
+
+func _on_enemy_attack_hitbox_body_entered(body: Node, hitbox: Area2D) -> void:
+	var target = _resolve_player_collider(body)
+	if target:
+		_damage_player_from_attack_hitbox(target, hitbox)
+
+
+func _damage_player_from_attack_hitbox(player, hitbox: Area2D) -> bool:
+	if current_state == State.DEAD or not is_instance_valid(hitbox):
+		return false
+	if not is_instance_valid(player) or not player.has_method("take_damage"):
+		return false
+	var hit_targets: Array = hitbox.get_meta("hit_targets", [])
+	if player in hit_targets:
+		return false
+	var hitbox_size: Vector2 = hitbox.get_meta("hitbox_size", Vector2.ZERO)
+	if hitbox_size != Vector2.ZERO:
+		var active_rect := Rect2(hitbox.global_position - hitbox_size * 0.5, hitbox_size)
+		if not active_rect.has_point(player.global_position):
+			return false
+	if not _has_line_of_sight_to_player(player):
+		return false
+
+	hit_targets.append(player)
+	hitbox.set_meta("hit_targets", hit_targets)
+	var display_name: String = enemy_name if enemy_name != "" else name.capitalize()
+	var scaled_atk_dmg = float(hitbox.get_meta("damage", contact_damage)) * get_enemy_damage_multiplier()
+	var damage_type := str(hitbox.get_meta("damage_type", "enemy_melee"))
+	player.take_damage(scaled_atk_dmg, global_position, display_name, damage_type)
+	return true
+
+
+func _has_line_of_sight_to_player(player) -> bool:
+	var space_state = get_world_2d().direct_space_state
+	if not space_state:
+		return true
+	var query = PhysicsRayQueryParameters2D.create(global_position, player.global_position, 1)
+	query.exclude = [get_rid()]
+	var result = space_state.intersect_ray(query)
+	return result.is_empty() or result.collider == player
+
+
+func _add_attack_hitbox_debug_visual(hitbox: Area2D, size: Vector2) -> void:
+	if not OS.is_debug_build():
+		return
+	if has_node("/root/GameManager") and GameManager.get_meta("combat_debug_hitboxes", false) != true:
+		return
+	var polygon := Polygon2D.new()
+	var half_size := size * 0.5
+	polygon.color = Color(1.0, 0.2, 0.15, 0.28)
+	polygon.polygon = PackedVector2Array([
+		Vector2(-half_size.x, -half_size.y),
+		Vector2(half_size.x, -half_size.y),
+		Vector2(half_size.x, half_size.y),
+		Vector2(-half_size.x, half_size.y)
+	])
+	hitbox.add_child(polygon)
 
 
 func _spawn_projectile(dir: Vector2) -> void:
