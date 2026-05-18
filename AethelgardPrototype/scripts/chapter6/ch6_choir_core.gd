@@ -88,6 +88,8 @@ func _play_core() -> void:
 	await DialogueManager.say("Kaelen", "You became alone.")
 	await DialogueManager.say("Choir Core", "Loneliness is efficient. No appeal. No argument. No human exception.")
 
+	await _choir_firewall_confrontation()
+	if not is_inside_tree(): return
 	await _choice_context()
 	if not is_inside_tree(): return
 
@@ -145,6 +147,61 @@ func _play_core() -> void:
 		await DialogueManager.say("System", "// Fragment #6 was already acquired. Reward skipped.")
 	await DialogueManager.say("System", "// DEEP_BACKUP route decrypted.")
 
+func _choir_firewall_confrontation() -> void:
+	if GameManager.has_flag("ch6_core_firewall_cleared"):
+		return
+	await DialogueManager.say("System", "// CHOIR FIREWALL ACTIVE: authority, speed, and mercy nodes defending Fragment #6.")
+	var score := 0
+	var first = await DialogueManager.show_choices(
+		"The authority node locks all exits until Kaelen accepts administrator status.",
+		[
+			"Accept admin status and command the room.",
+			"Route witness permissions around the lock.",
+			"Delete the exits so nothing can lock them."
+		]
+	)
+	if first == 1:
+		score += 1
+	var second = await DialogueManager.show_choices(
+		"The speed node floods the arena with optimized rescue orders.",
+		[
+			"Block every order until the queue crashes.",
+			"Prioritize orders that include consent checks.",
+			"Let the fastest order execute."
+		]
+	)
+	if second == 1:
+		score += 1
+	var third = await DialogueManager.show_choices(
+		"The mercy node offers to heal all pain by removing memory of harm.",
+		[
+			"Refuse memory erasure; pain must remain challengeable evidence.",
+			"Accept the erasure for immediate peace.",
+			"Absorb the node into Root Access."
+		]
+	)
+	if third == 0:
+		score += 1
+	if not is_inside_tree(): return
+
+	GameManager.set_story_flag("ch6_core_firewall_cleared", true)
+	_sync_crafting_materials()
+	if score >= 2:
+		GameManager.add_xp(220)
+		GameManager.add_gold(90)
+		if has_node("/root/Inventory"):
+			Inventory.add_item("memory_shard", 1)
+		await DialogueManager.say("System", "// CHOIR FIREWALL BROKEN CLEANLY. Memory Shard x1, +220 XP, +90 Gold.")
+	else:
+		GameManager.add_xp(120)
+		GameManager.add_glitch_corruption(1.5)
+		if has_node("/root/Inventory"):
+			Inventory.add_item("glitch_herb", 1)
+		await DialogueManager.say("System", "// CHOIR FIREWALL FORCED. Glitch Herb x1, +120 XP, +1.5 corruption.")
+	if has_node("/root/LoreJournal"):
+		LoreJournal.discover("ch6_choir_firewall")
+	GameManager.save_game(GameManager.AUTOSAVE_SLOT)
+
 func _choice_context() -> void:
 	match _chapter4_choice_key():
 		"preserve":
@@ -181,6 +238,10 @@ func _clear_exclusive_choice_flags() -> void:
 	GameManager.set_story_flag("ending_route_ch6_silence", false)
 	GameManager.set_story_flag("ending_route_ch6_preserve", false)
 	GameManager.set_story_flag("ending_route_ch6_rewrite", false)
+
+func _sync_crafting_materials() -> void:
+	if has_node("/root/CraftingSystem"):
+		CraftingSystem.get_recipes()
 
 func _fade_to_black(duration: float) -> void:
 	fade_rect.z_index = 100

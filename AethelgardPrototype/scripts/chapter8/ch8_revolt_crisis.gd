@@ -91,6 +91,8 @@ func _play_crisis() -> void:
 	await DialogueManager.say("SOVEREIGN", "Observe: liberation becomes governance, governance becomes conflict, conflict becomes my return.")
 	await _route_pressure()
 	if not is_inside_tree(): return
+	await _revolt_stabilization_trial()
+	if not is_inside_tree(): return
 
 	var choice = await DialogueManager.show_choices(
 		"What role should Kaelen take in the revolt?",
@@ -132,6 +134,51 @@ func _play_crisis() -> void:
 	await DialogueManager.say("System", "// No Source Key fragments awarded. Source Key remains complete: %d / 7." % GameManager.source_key_count)
 	await DialogueManager.say("SOVEREIGN", "You still believe the truth is outside you.")
 	await DialogueManager.say("Kaelen", "Chapter Nine is where you finally explain why that scares you.")
+
+func _revolt_stabilization_trial() -> void:
+	if GameManager.has_flag("ch8_revolt_stabilization_cleared"):
+		await DialogueManager.say("System", "// Revolt stabilization already cleared.")
+		return
+
+	var support := 0
+	if GameManager.has_flag("ch8_oakhaven_request_fulfilled"):
+		support += 1
+	if GameManager.has_flag("ch8_ironhold_request_fulfilled"):
+		support += 1
+	if GameManager.has_flag("ch8_mirror_request_fulfilled"):
+		support += 1
+
+	await DialogueManager.say("Assembly Ledger", "Before Kaelen can answer leadership, three fires need triage: panic, sabotage, and competing testimony.")
+	var choice = await DialogueManager.show_choices(
+		"Which crisis should Kaelen personally stabilize first?",
+		[
+			"Set up evacuation lanes for Oakhaven's frightened families.",
+			"Secure Ironhold's repair grid before it fails.",
+			"Broadcast Mirror testimony so no faction controls the record."
+		]
+	)
+	if not is_inside_tree(): return
+	if choice == null or choice < 0 or choice > 2:
+		choice = 2
+
+	GameManager.set_story_flag("ch8_revolt_stabilization_cleared", true)
+	_discover_lore("ch8_revolt_supply_record")
+	if support >= 2:
+		GameManager.add_xp(240)
+		GameManager.add_gold(120)
+		await DialogueManager.say("System", "// Prior faction support turns crisis into coordination. +240 XP, +120 Gold.")
+	else:
+		GameManager.add_xp(130)
+		await DialogueManager.say("System", "// Revolt crisis contained, but low faction support leaves visible strain. +130 XP.")
+
+	match choice:
+		0:
+			await DialogueManager.say("Oakhaven Survivor", "Protection first, but this time the warning comes before the screams.")
+		1:
+			await DialogueManager.say("Ironhold Delegate", "Structure first, but audited. We can work with that.")
+		2:
+			await DialogueManager.say("Mirror Witness", "Accountability first. Now no one gets to narrate the revolt alone.")
+
 
 func _route_pressure() -> void:
 	match _chapter4_choice_key():
@@ -198,6 +245,10 @@ func _clear_exclusive_choice_flags() -> void:
 	GameManager.set_story_flag("ending_route_ch8_lead", false)
 	GameManager.set_story_flag("ending_route_ch8_council", false)
 	GameManager.set_story_flag("ending_route_ch8_witness", false)
+
+func _discover_lore(lore_id: String) -> void:
+	if has_node("/root/LoreJournal") and LoreJournal.has_method("discover"):
+		LoreJournal.discover(lore_id)
 
 func _fade_to_black(duration: float) -> void:
 	fade_rect.z_index = 100

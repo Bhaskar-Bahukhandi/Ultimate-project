@@ -95,6 +95,8 @@ func _play_plaza() -> void:
 	await DialogueManager.say("Narrator", "The boulevard opens into a plaza where the mirrors have learned to arrange themselves like witnesses.")
 	await DialogueManager.say("Echo Mirror", "The trial does not begin with Mirror Kaelen. It begins with the selves you nearly became.")
 
+	await _mirror_plaza_interaction_loop()
+	if not is_inside_tree(): return
 	await _elara_echo()
 	if not is_inside_tree(): return
 	await _chapter4_echo()
@@ -120,6 +122,55 @@ func _play_plaza() -> void:
 		await DialogueManager.say("System", "// Reflection Trial access granted. +220 XP, +80 Gold.")
 	else:
 		await DialogueManager.say("System", "// Reflection Trial access already granted.")
+
+func _mirror_plaza_interaction_loop() -> void:
+	await DialogueManager.say("System", "// MIRROR PLAZA HUB: optional reflection fragments and calibration gate detected.")
+	if not GameManager.has_flag("ch5_optional_mirrors_found"):
+		GameManager.set_story_flag("ch5_optional_mirrors_found", true)
+		await DialogueManager.say("Oakhaven Mirror", _oakhaven_reflection_text())
+		await DialogueManager.say("Aldric Mirror", _aldric_reflection_text())
+		await DialogueManager.say("Null Court Mirror", _chapter4_reflection_text())
+		_sync_crafting_materials()
+		if has_node("/root/Inventory"):
+			Inventory.add_item("memory_shard", 1)
+		if has_node("/root/LoreJournal"):
+			LoreJournal.discover("ch5_mirror_plaza_fragments")
+		await DialogueManager.say("System", "// OPTIONAL MIRRORS READ: Memory Shard x1.")
+
+	await _reflection_calibration_challenge()
+
+func _reflection_calibration_challenge() -> void:
+	if GameManager.has_flag("ch5_reflection_calibration_cleared"):
+		return
+	await DialogueManager.say("Echo Mirror", "The plaza gate opens only when the self can name the difference between witness and control.")
+	var choice = await DialogueManager.show_choices(
+		"The mirrors present three commands. Which one keeps Kaelen challengeable?",
+		[
+			"Command every reflection to agree before the trial begins.",
+			"Name one witness who can contradict Kaelen later.",
+			"Break the mirrors before they can accuse anyone."
+		]
+	)
+	if not is_inside_tree(): return
+	if choice == null or choice < 0 or choice > 2:
+		choice = 1
+
+	GameManager.set_story_flag("ch5_reflection_calibration_cleared", true)
+	GameManager.set_story_flag("ch5_route_reflection_reward_claimed", true)
+	_sync_crafting_materials()
+	if choice == 1:
+		GameManager.add_xp(120)
+		if has_node("/root/Inventory"):
+			Inventory.add_item("memory_shard", 1)
+		await DialogueManager.say("System", "// REFLECTION CALIBRATED. Memory Shard x1, +120 XP.")
+	else:
+		GameManager.add_xp(60)
+		GameManager.add_glitch_corruption(1.0)
+		if has_node("/root/Inventory"):
+			Inventory.add_item("glitch_herb", 1)
+		await DialogueManager.say("System", "// REFLECTION FORCED OPEN. Glitch Herb x1, +60 XP, +1 corruption.")
+	if has_node("/root/LoreJournal"):
+		LoreJournal.discover("ch5_reflection_calibration")
 
 func _chapter4_echo() -> void:
 	match _chapter4_choice_key():
@@ -216,6 +267,37 @@ func _chapter4_choice_key() -> String:
 	if GameManager.has_flag("ch4_choice_bargain_deleted"):
 		return "bargain"
 	return "unknown"
+
+func _oakhaven_reflection_text() -> String:
+	if GameManager.has_flag("ch1_oakhaven_warned_villagers"):
+		return "The glass shows Oakhaven lanterns lit before the corruption arrived. Warning people did not save everyone, but it gave them time to become more than casualties."
+	if GameManager.has_flag("ch1_oakhaven_left_quietly"):
+		return "The glass shows Oakhaven waking late to danger. Silence protected Kaelen's momentum, not the village."
+	return "The glass cannot resolve Oakhaven's warning record. Missing choices still cast shadows."
+
+func _aldric_reflection_text() -> String:
+	if GameManager.has_flag("ch1_root_purge"):
+		return "Aldric's reflection is repaired and afraid. Root Access saved his function, but the mirror asks who signed the repair."
+	if GameManager.has_flag("ch1_knight_spared"):
+		return "Aldric lowers his sword in the glass. Mercy becomes a witness, not a pardon."
+	if GameManager.has_flag("ch1_knight_killed"):
+		return "Aldric falls again in the glass. The city records every clean kill as an argument SOVEREIGN can quote."
+	return "Aldric's reflection is too fractured to testify."
+
+func _chapter4_reflection_text() -> String:
+	match _chapter4_choice_key():
+		"preserve":
+			return "The Null Court reflection shows doors held closed with careful hands. Some citizens call it patience. Some call it another lock."
+		"release":
+			return "The Null Court reflection shows doors opening into unstable streets. Freedom arrives with dust in its lungs."
+		"bargain":
+			return "The Null Court reflection shows signatures on a jailbreak contract. The ink looks too much like SOVEREIGN's voice."
+		_:
+			return "The Null Court reflection has no verdict, only fog."
+
+func _sync_crafting_materials() -> void:
+	if has_node("/root/CraftingSystem"):
+		CraftingSystem.get_recipes()
 
 func _fade_to_black(duration: float) -> void:
 	fade_rect.z_index = 100

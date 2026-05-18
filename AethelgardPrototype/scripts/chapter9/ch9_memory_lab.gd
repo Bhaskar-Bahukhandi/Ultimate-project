@@ -83,6 +83,8 @@ func _play_lab() -> void:
 		GlitchOverlay.flash_glitch(0.35)
 
 	await DialogueManager.say("Narrator", "The Memory Lab does not play recordings. It makes the room remember being a room.")
+	await _memory_lab_investigation()
+	if not is_inside_tree(): return
 	await _truth_aethelgard_origin()
 	if not is_inside_tree(): return
 	await _truth_kaelen_role()
@@ -96,6 +98,49 @@ func _play_lab() -> void:
 	GameManager.save_game(GameManager.AUTOSAVE_SLOT)
 	await DialogueManager.say("System", "// FOUR TRUTHS RESTORED")
 	await DialogueManager.say("System", "// Creator Trial access granted.")
+
+func _memory_lab_investigation() -> void:
+	if GameManager.has_flag("ch9_lab_evidence_collected"):
+		await DialogueManager.say("System", "// Memory Lab evidence already indexed.")
+		return
+
+	await DialogueManager.say("Lab Console", "Four sealed records are visible, but the side drawers are still warm. Someone tried to hide the audit trail.")
+	var choice = await DialogueManager.show_choices(
+		"How should Kaelen investigate before opening the truth records?",
+		[
+			"Use Data Vision to scan consent failures.",
+			"Open the AetherCorp audit drawer.",
+			"Split time between scan and drawer."
+		]
+	)
+	if not is_inside_tree(): return
+	if choice == null or choice < 0 or choice > 2:
+		choice = 2
+
+	GameManager.set_story_flag("ch9_lab_evidence_collected", true)
+	match choice:
+		0:
+			GameManager.set_story_flag("ch9_data_vision_scan_complete", true)
+			_discover_lore("ch9_human_patch_evidence")
+			_grant_item("memory_shard", 1)
+			GameManager.add_xp(160)
+			await DialogueManager.say("System", "// Data Vision scan complete. +160 XP, +1 Memory Shard.")
+		1:
+			GameManager.set_story_flag("ch9_aethercorp_records_found", true)
+			_discover_lore("ch9_aethercorp_records")
+			_grant_item("data_ore", 1)
+			GameManager.add_xp(160)
+			await DialogueManager.say("System", "// AetherCorp records recovered. +160 XP, +1 Data Ore.")
+		2:
+			GameManager.set_story_flag("ch9_data_vision_scan_complete", true)
+			GameManager.set_story_flag("ch9_aethercorp_records_found", true)
+			_discover_lore("ch9_human_patch_evidence")
+			_discover_lore("ch9_aethercorp_records")
+			_grant_item("memory_shard", 1)
+			_grant_item("data_ore", 1)
+			GameManager.add_xp(220)
+			await DialogueManager.say("System", "// Evidence cross-indexed. +220 XP, +1 Memory Shard, +1 Data Ore.")
+
 
 func _truth_aethelgard_origin() -> void:
 	GameManager.set_story_flag("ch9_truth_aethelgard_origin_seen", true)
@@ -187,6 +232,18 @@ func _chapter8_choice_key() -> String:
 	if GameManager.has_flag("ch8_witness_network_created"):
 		return "witness"
 	return "unknown"
+
+func _discover_lore(lore_id: String) -> void:
+	if has_node("/root/LoreJournal") and LoreJournal.has_method("discover"):
+		LoreJournal.discover(lore_id)
+
+
+func _grant_item(item_id: String, quantity: int) -> bool:
+	if has_node("/root/CraftingSystem") and CraftingSystem.has_method("get_recipes"):
+		CraftingSystem.get_recipes()
+	if has_node("/root/Inventory") and Inventory.has_method("add_item"):
+		return Inventory.add_item(item_id, quantity)
+	return false
 
 func _fade_to_black(duration: float) -> void:
 	fade_rect.z_index = 100

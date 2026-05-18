@@ -87,6 +87,8 @@ func _play_witness_chamber() -> void:
 		GlitchOverlay.flash_glitch(0.35)
 
 	await DialogueManager.say("Narrator", "The root tries to isolate Kaelen. The saved arrive anyway, not as an army, but as records SOVEREIGN cannot redact.")
+	await _witness_preparation_point()
+	if not is_inside_tree(): return
 	await _early_choice_witnesses()
 	if not is_inside_tree(): return
 	await _deleted_citizen_witness()
@@ -101,6 +103,53 @@ func _play_witness_chamber() -> void:
 	if not is_inside_tree(): return
 	await DialogueManager.say("Kaelen", "This is the answer. Not me alone. Not you alone. Everyone you tried to make manageable.")
 	await DialogueManager.say("SOVEREIGN", "Then I will ask everyone the final question through you.")
+
+func _witness_preparation_point() -> void:
+	if GameManager.has_flag("ch10_witness_preparation_complete"):
+		await DialogueManager.say("System", "// Witness preparation already complete.")
+		return
+
+	GameManager.set_story_flag("ch10_witness_preparation_complete", true)
+	_discover_lore("ch10_witness_preparation_manifest")
+	await DialogueManager.say("Witness Quartermaster", "Final access is not heroic solitude. Take one last preparation from the people who refuse to let you enter alone.")
+	var choice = await DialogueManager.show_choices(
+		"What final preparation should Kaelen accept?",
+		[
+			"Spend 1 Memory Shard to stabilize witness relays.",
+			"Spend 1 Glitch Stabilizer to shield the final route.",
+			"Accept an emergency cache without spending materials."
+		]
+	)
+	if not is_inside_tree(): return
+	if choice == null or choice < 0 or choice > 2:
+		choice = 2
+
+	match choice:
+		0:
+			if _remove_item("memory_shard", 1):
+				GameManager.add_xp(160)
+				GameManager.add_gold(80)
+				await DialogueManager.say("System", "// Witness relays stabilized. +160 XP, +80 Gold.")
+			else:
+				await _grant_final_cache()
+		1:
+			if _remove_item("glitch_stabilizer", 1):
+				GameManager.add_xp(180)
+				await DialogueManager.say("System", "// Final route shielded by crafted stabilizer. +180 XP.")
+			else:
+				await _grant_final_cache()
+		2:
+			await _grant_final_cache()
+
+
+func _grant_final_cache() -> void:
+	if GameManager.has_flag("ch10_final_cache_claimed"):
+		await DialogueManager.say("System", "// Emergency cache already claimed.")
+		return
+	GameManager.set_story_flag("ch10_final_cache_claimed", true)
+	_grant_item("health_potion", 1)
+	_grant_item("mana_potion", 1)
+	await DialogueManager.say("System", "// Emergency final cache claimed: +1 Health Potion, +1 Mana Potion.")
 
 
 func _early_choice_witnesses() -> void:
@@ -351,6 +400,28 @@ func _chapter9_truth_key() -> String:
 	if GameManager.has_flag("ch9_truth_distributed"):
 		return "distribute"
 	return "unknown"
+
+
+func _discover_lore(lore_id: String) -> void:
+	if has_node("/root/LoreJournal") and LoreJournal.has_method("discover"):
+		LoreJournal.discover(lore_id)
+
+
+func _grant_item(item_id: String, quantity: int) -> bool:
+	if has_node("/root/CraftingSystem") and CraftingSystem.has_method("get_recipes"):
+		CraftingSystem.get_recipes()
+	if has_node("/root/Inventory") and Inventory.has_method("add_item"):
+		return Inventory.add_item(item_id, quantity)
+	return false
+
+
+func _remove_item(item_id: String, quantity: int) -> bool:
+	if has_node("/root/CraftingSystem") and CraftingSystem.has_method("get_recipes"):
+		CraftingSystem.get_recipes()
+	if has_node("/root/Inventory") and Inventory.has_method("remove_item") and Inventory.has_method("has_item"):
+		if Inventory.has_item(item_id, quantity):
+			return Inventory.remove_item(item_id, quantity)
+	return false
 
 
 func _fade_to_black(duration: float) -> void:

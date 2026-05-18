@@ -99,6 +99,8 @@ func _play_null_court() -> void:
 	await DialogueManager.say("SOVEREIGN", "This court is evidence of mercy. Their sectors were unstable. I prevented wider collapse.")
 	await _early_deletion_ethics_context()
 	if not is_inside_tree(): return
+	await _explore_null_court_hub()
+	if not is_inside_tree(): return
 
 	var choice = await DialogueManager.show_choices(
 		"What should Kaelen promise the deleted citizens?",
@@ -146,6 +148,136 @@ func _play_null_court() -> void:
 	await DialogueManager.say("Echo Mirror", "Two fragments remain. One is guarded by a city that lies to protect its children. One is guarded by the truth beneath your own name.")
 	await DialogueManager.say("Kaelen", "Then we keep going.")
 
+func _explore_null_court_hub() -> void:
+	await DialogueManager.say("System", "// NULL COURT HUB ACCESSIBLE: three sealed cases, one corrupted memory aisle, one bailiff process.")
+	await _deleted_citizen_cases()
+	if not is_inside_tree(): return
+	await _null_court_dossier_discovery()
+	if not is_inside_tree(): return
+	await _memory_corruption_hazard()
+	if not is_inside_tree(): return
+	await _null_bailiff_trial()
+	if not is_inside_tree(): return
+
+func _deleted_citizen_cases() -> void:
+	if not GameManager.has_flag("ch4_deleted_case_mother_seen"):
+		GameManager.set_story_flag("ch4_deleted_case_mother_seen", true)
+		await DialogueManager.say("Deleted Mother", "My sector ended between two words. I said 'come home' and the world decided home was inefficient.")
+		await DialogueManager.say("Kaelen", "Your last sentence is evidence. I will not let SOVEREIGN file it as noise.")
+
+	if not GameManager.has_flag("ch4_deleted_case_guard_seen"):
+		GameManager.set_story_flag("ch4_deleted_case_guard_seen", true)
+		await DialogueManager.say("Deleted Guard", "I opened an evacuation route after rollback orders. The system called it insubordination. The children called it the door.")
+		await DialogueManager.say("Echo Mirror", "The court records disobedience as the first law of rescue.")
+
+	if not GameManager.has_flag("ch4_deleted_case_child_seen"):
+		GameManager.set_story_flag("ch4_deleted_case_child_seen", true)
+		await DialogueManager.say("Deleted Child", "I kept a map. It still points to a house that does not load.")
+		await DialogueManager.say("Kaelen", "Then we keep the map. A broken destination is still a promise.")
+
+func _null_court_dossier_discovery() -> void:
+	if GameManager.has_flag("ch4_null_dossiers_found"):
+		return
+	GameManager.set_story_flag("ch4_null_dossiers_found", true)
+	_sync_crafting_materials()
+	if has_node("/root/Inventory"):
+		Inventory.add_item("memory_shard", 1)
+	if has_node("/root/LoreJournal"):
+		LoreJournal.discover("ch4_null_court_dossiers")
+	await DialogueManager.say("System", "// OPTIONAL DOSSIER FOUND: Null Court Dossiers. Memory Shard x1.")
+
+func _memory_corruption_hazard() -> void:
+	if GameManager.has_flag("ch4_memory_hazard_cleared"):
+		return
+	await DialogueManager.say("Narrator", "A corrupted aisle opens between the benches. Memory static rises like floodwater, trying to delete each testimony after it is spoken.")
+	var choice = await DialogueManager.show_choices(
+		"How does Kaelen cross the memory corruption hazard?",
+		[
+			"Use Data Vision to step only on stable memories.",
+			"Spend a Glitch Stabilizer to anchor the aisle.",
+			"Force through the static and accept corruption damage."
+		]
+	)
+	if not is_inside_tree(): return
+	if choice == null or choice < 0 or choice > 2:
+		choice = 0
+
+	GameManager.set_story_flag("ch4_memory_hazard_cleared", true)
+	match choice:
+		0:
+			GameManager.add_xp(60)
+			await DialogueManager.say("System", "// DATA VISION PATH CLEARED. +60 XP.")
+		1:
+			if has_node("/root/Inventory") and Inventory.has_item("glitch_stabilizer"):
+				Inventory.remove_item("glitch_stabilizer", 1)
+				GameManager.add_xp(80)
+				await DialogueManager.say("System", "// STABILIZER SPENT. The aisle holds. +80 XP.")
+			else:
+				GameManager.add_glitch_corruption(1.5)
+				GameManager.add_xp(40)
+				await DialogueManager.say("System", "// No stabilizer available. Static burns through. +40 XP, +1.5 corruption.")
+		2:
+			GameManager.add_glitch_corruption(2.0)
+			GameManager.add_xp(35)
+			await DialogueManager.say("System", "// STATIC BREACH SURVIVED. +35 XP, +2 corruption.")
+
+func _null_bailiff_trial() -> void:
+	if GameManager.has_flag("ch4_null_bailiff_defeated"):
+		return
+	await DialogueManager.say("Null Bailiff", "Unauthorized testimony detected. Witnesses must be archived before they become contagious.")
+	await DialogueManager.say("System", "// MINI-TRIAL: NULL BAILIFF. Read the writ, break the lock, strike during recovery.")
+	var successes := 0
+	var first = await DialogueManager.show_choices(
+		"The Bailiff raises a deletion writ. What is the counter?",
+		[
+			"Challenge the writ with recorded testimony.",
+			"Attack the writ while it is armored.",
+			"Look away until the error passes."
+		]
+	)
+	if first == 0:
+		successes += 1
+	var second = await DialogueManager.show_choices(
+		"The Bailiff opens a null gate under Kaelen's feet.",
+		[
+			"Hold position and guard.",
+			"Dash to the witness benches.",
+			"Use Root Access to purge every witness."
+		]
+	)
+	if second == 1:
+		successes += 1
+	var third = await DialogueManager.show_choices(
+		"The Bailiff overextends after the gate collapses.",
+		[
+			"Strike during recovery.",
+			"Heal in its hitbox.",
+			"Ask SOVEREIGN to suspend the trial."
+		]
+	)
+	if third == 0:
+		successes += 1
+	if not is_inside_tree(): return
+
+	GameManager.set_story_flag("ch4_null_bailiff_defeated", true)
+	GameManager.set_story_flag("ch4_enrichment_reward_claimed", true)
+	_sync_crafting_materials()
+	if successes >= 2:
+		GameManager.add_xp(140)
+		GameManager.add_gold(60)
+		if has_node("/root/Inventory"):
+			Inventory.add_item("data_ore", 1)
+		await DialogueManager.say("System", "// NULL BAILIFF DEFEATED CLEANLY. Data Ore x1, +140 XP, +60 Gold.")
+	else:
+		GameManager.add_xp(80)
+		GameManager.add_glitch_corruption(1.0)
+		if has_node("/root/Inventory"):
+			Inventory.add_item("memory_shard", 1)
+		await DialogueManager.say("System", "// NULL BAILIFF DEFEATED, but testimony destabilized. Memory Shard x1, +80 XP, +1 corruption.")
+	if has_node("/root/LoreJournal"):
+		LoreJournal.discover("ch4_null_bailiff_writ")
+	GameManager.save_game(GameManager.AUTOSAVE_SLOT)
+
 func _early_deletion_ethics_context() -> void:
 	GameManager.set_story_flag("ch4_early_aldric_echo_seen", true)
 	match _aldric_choice_key():
@@ -189,6 +321,10 @@ func _data_wraith_choice_key() -> String:
 	if GameManager.has_flag("ch2_data_wraith_absorbed"):
 		return "absorbed"
 	return "unknown"
+
+func _sync_crafting_materials() -> void:
+	if has_node("/root/CraftingSystem"):
+		CraftingSystem.get_recipes()
 
 func _fade_to_black(duration: float) -> void:
 	fade_rect.z_index = 100

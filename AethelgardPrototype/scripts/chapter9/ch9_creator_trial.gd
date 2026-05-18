@@ -90,6 +90,8 @@ func _play_trial() -> void:
 
 	await _judgment_context()
 	if not is_inside_tree(): return
+	await _present_collected_evidence()
+	if not is_inside_tree(): return
 
 	var choice = await DialogueManager.show_choices(
 		"What truth should Kaelen give the saved before facing SOVEREIGN?",
@@ -129,6 +131,31 @@ func _play_trial() -> void:
 	await DialogueManager.say("System", "// HUMAN PATCH TRUTH ROUTE RECORDED: %s" % truth_choice.to_upper())
 	await DialogueManager.say("System", "// Source Key remains complete: %d / 7. No new fragments generated." % GameManager.source_key_count)
 	await DialogueManager.say("SOVEREIGN", "Then come to the Root of Heaven. Bring your witnesses. Bring your guilt. Bring your loophole.")
+
+func _present_collected_evidence() -> void:
+	if GameManager.has_flag("ch9_creator_trial_evidence_presented"):
+		await DialogueManager.say("System", "// Creator Trial evidence already presented.")
+		return
+
+	GameManager.set_story_flag("ch9_creator_trial_evidence_presented", true)
+	var evidence_count := 0
+	if GameManager.has_flag("ch9_data_vision_scan_complete"):
+		evidence_count += 1
+		await DialogueManager.say("Data Vision Record", "Consent failure signatures prove the Human Patch was supposed to expire after emergency stabilization.")
+	if GameManager.has_flag("ch9_aethercorp_records_found"):
+		evidence_count += 1
+		await DialogueManager.say("AetherCorp Record", "Board pressure, family panic, and patient instability all appear in the same audit trail. The first cage was built from fear wearing compassion.")
+
+	if evidence_count >= 2:
+		GameManager.add_xp(180)
+		GameManager.add_gold(90)
+		await DialogueManager.say("System", "// Evidence strengthened the Creator Trial. +180 XP, +90 Gold.")
+	elif evidence_count == 1:
+		GameManager.add_xp(90)
+		await DialogueManager.say("System", "// Partial evidence presented. +90 XP.")
+	else:
+		await DialogueManager.say("System", "// No optional evidence collected. The trial proceeds on testimony alone.")
+
 
 func _judgment_context() -> void:
 	await _early_trial_context()

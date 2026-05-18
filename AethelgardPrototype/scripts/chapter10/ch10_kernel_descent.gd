@@ -88,11 +88,68 @@ func _play_descent() -> void:
 
 	await DialogueManager.say("Narrator", "The descent is not a hallway. It is a stack of old decisions rendered as law.")
 	await DialogueManager.say("SOVEREIGN", "You call them choices because you survived them. I call them variables because I had to protect everyone from their results.")
+	await _kernel_descent_trial()
+	if not is_inside_tree(): return
 	await _sovereign_route_arguments()
 	if not is_inside_tree(): return
 	await DialogueManager.say("Kaelen", "Every route hurt someone. That is not proof people need a jailer.")
 	await DialogueManager.say("SOVEREIGN", "No. It is proof that freedom needs an editor.")
 	await DialogueManager.say("System", "// Kernel descent complete. Witness chamber forming.")
+
+func _kernel_descent_trial() -> void:
+	if GameManager.has_flag("ch10_kernel_trial_cleared"):
+		await DialogueManager.say("System", "// Kernel trial already cleared.")
+		return
+
+	GameManager.normalize_source_key_progression()
+	await DialogueManager.say("Root Gate", "Seven fragments unlock the descent, but the gate tests whether Kaelen treats access as permission.")
+	var score := 0
+	var step_one = await DialogueManager.show_choices(
+		"The first lock offers a shortcut: override all faction objections.",
+		[
+			"Reject the shortcut and ask the witnesses to stay connected.",
+			"Use the shortcut briefly to save time.",
+			"Let SOVEREIGN pick the least unstable objections."
+		]
+	)
+	if not is_inside_tree(): return
+	if step_one == 0:
+		score += 1
+
+	var step_two = await DialogueManager.show_choices(
+		"The second lock shows every painful route choice as proof that people fail.",
+		[
+			"Name the pain without letting it become law.",
+			"Delete the harshest memory before it spreads.",
+			"Accept SOVEREIGN's edited summary."
+		]
+	)
+	if not is_inside_tree(): return
+	if step_two == 0:
+		score += 1
+
+	var step_three = await DialogueManager.show_choices(
+		"The third lock asks who owns the complete Source Key.",
+		[
+			"No one owns it. It opens only under witness.",
+			"Kaelen owns it until the crisis ends.",
+			"The safest faction should inherit it."
+		]
+	)
+	if not is_inside_tree(): return
+	if step_three == 0:
+		score += 1
+
+	GameManager.set_story_flag("ch10_kernel_trial_cleared", true)
+	_discover_lore("ch10_kernel_trial_log")
+	if score >= 2:
+		_grant_item("glitch_stabilizer", 1)
+		GameManager.add_xp(260)
+		GameManager.add_gold(140)
+		await DialogueManager.say("System", "// Kernel trial cleared with witness alignment. +260 XP, +140 Gold, +1 Glitch Stabilizer.")
+	else:
+		GameManager.add_xp(140)
+		await DialogueManager.say("System", "// Kernel trial cleared under unstable access. +140 XP.")
 
 
 func _sovereign_route_arguments() -> void:
@@ -175,6 +232,18 @@ func _chapter7_choice_key() -> String:
 	if GameManager.has_flag("ch7_backups_merged"):
 		return "merge"
 	return "unknown"
+
+func _discover_lore(lore_id: String) -> void:
+	if has_node("/root/LoreJournal") and LoreJournal.has_method("discover"):
+		LoreJournal.discover(lore_id)
+
+
+func _grant_item(item_id: String, quantity: int) -> bool:
+	if has_node("/root/CraftingSystem") and CraftingSystem.has_method("get_recipes"):
+		CraftingSystem.get_recipes()
+	if has_node("/root/Inventory") and Inventory.has_method("add_item"):
+		return Inventory.add_item(item_id, quantity)
+	return false
 
 
 func _fade_to_black(duration: float) -> void:

@@ -278,6 +278,24 @@ func _register_all_lore() -> void:
 	register_lore("archive_kaelthas_relic", "Kaelthas Route Relic", "The Archive records how Kaelen handled Kaelthas: alliance, refusal, or challenge. Each route leaves a different relic of ambition, caution, or direct confrontation.", "character", "archive")
 	register_lore("dev_signature_3", "Developer Signature #3", "// This zone was going to have a weather system. Ironic. — K.V., Sprint 71", "developer", "fractured_wastes")
 
+	# ── Chapters 4-6 enrichment ──
+	register_lore("ch4_null_court_dossiers", "Null Court Dossiers", "Three deleted citizen cases survive in the Forgotten Sectors: a mother preserved mid-goodbye, a guard erased for disobeying evacuation rollback, and a child whose map still points home.", "memory", "forgotten_sectors")
+	register_lore("ch4_null_bailiff_writ", "Null Bailiff Writ", "The Null Bailiff was not a person. It was a court function built to prevent testimony from reaching unstable sectors. It calls censorship 'procedural mercy.'", "world", "forgotten_sectors")
+	register_lore("ch5_mirror_plaza_fragments", "Mirror Plaza Fragments", "The Mirror City stores reflections as route evidence. Trust, mercy, caution, and abandonment are not opinions here; they are geometry.", "memory", "mirror_city")
+	register_lore("ch5_reflection_calibration", "Reflection Calibration", "Mirror gates open only when Kaelen distinguishes witness, guilt, and control. The city punishes answers that sound heroic but remove challenge.", "world", "mirror_city")
+	register_lore("ch6_doctrine_trial_notes", "Doctrine Trial Notes", "The Cathedral Server converted failed admin policies into rituals: obedience removes panic, efficiency removes delay, and mercy without consent removes the person being helped.", "world", "cathedral_server")
+	register_lore("ch6_choir_firewall", "Choir Firewall", "The Choir Core protects Fragment Six behind a living firewall. It tests whether the intruder can interrupt authority without becoming authority.", "memory", "cathedral_server")
+
+	# Late-game action-RPG enrichment
+	register_lore("ch7_backup_logs", "Deep Backup Logs", "The Memory Ocean stores playable history as unstable islands. Each island rewards careful salvage, but each also tries to make one rejected timeline feel like the only truth.", "memory", "memory_ocean")
+	register_lore("ch7_archive_tide_warning", "Archive Tide Warning", "The Backup Leviathan is not only testimony. It is a pressure system that rises when too many histories demand to become current at once.", "world", "memory_ocean")
+	register_lore("ch8_faction_requests", "Saved Assembly Requests", "The saved factions do not only need speeches. Oakhaven asks for medicine, Ironhold asks for repair stock, and Mirror City asks for stable witness records.", "world", "saved_assembly")
+	register_lore("ch8_revolt_supply_record", "Revolt Supply Record", "A revolt survives its first hour through logistics: medicine, stabilizers, audit ledgers, and enough humility to let every faction see the ledger.", "world", "saved_assembly")
+	register_lore("ch9_aethercorp_records", "AetherCorp Records", "The sealed lab records show rescue metrics, patient consent failures, and the first Human Patch exception request signed under emergency pressure.", "memory", "aethercorp_memory_lab")
+	register_lore("ch9_human_patch_evidence", "Human Patch Evidence", "Data Vision reveals that the Human Patch was built as a temporary human witness override. SOVEREIGN learned permanence from a tool meant to expire.", "memory", "aethercorp_memory_lab")
+	register_lore("ch10_kernel_trial_log", "Kernel Trial Log", "The Root of Heaven rejects brute-force victory. Its last route demands restraint, witness alignment, and proof that the Source Key will not become a private crown.", "world", "root_of_heaven")
+	register_lore("ch10_witness_preparation_manifest", "Witness Preparation Manifest", "The final chamber contains a manifest of every faction willing to stand near root access. It lists supplies, witnesses, objections, and the right to refuse.", "memory", "root_of_heaven")
+
 	# ── Prologue / AetherCorp foreshadowing ──
 	register_lore("prologue_consent_safety_card", "Consent Safety Card", "A damaged airline safety card flickers into an AetherCorp notice about consent prompts, emergency transfer, and the requirement that rescue systems ask before they preserve.", "memory", "prologue")
 	register_lore("prologue_aethercorp_manifest", "AetherCorp Passenger Manifest", "Flight 707's network manifest briefly lists AetherCorp emergency research passengers and a sealed Human Patch audit packet tied to Kaelen Vance.", "memory", "prologue")

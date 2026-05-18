@@ -89,6 +89,8 @@ func _play_tide() -> void:
 	await DialogueManager.say("Backup Leviathan", "Evidence can drown the world.")
 	await _choice_context()
 	if not is_inside_tree(): return
+	await _archive_tide_gameplay_trial()
+	if not is_inside_tree(): return
 
 	var choice = await DialogueManager.show_choices(
 		"What should become of the rejected histories?",
@@ -144,6 +146,70 @@ func _play_tide() -> void:
 		await DialogueManager.say("System", "// Source Key Fragment #7 was already acquired. Reward skipped.")
 	await DialogueManager.say("SOVEREIGN", "Seven fragments. Seven unauthorized truths. Do you understand what you are opening?")
 	await DialogueManager.say("Kaelen", "A door you spent the whole game pretending was a wall.")
+
+func _archive_tide_gameplay_trial() -> void:
+	if GameManager.has_flag("ch7_archive_tide_trial_cleared"):
+		await DialogueManager.say("System", "// Archive Tide trial already cleared.")
+		return
+
+	await DialogueManager.say("Backup Leviathan", "Before judgment, survive the tide. Three waves. Three answers. No perfect shore.")
+	var score := 0
+	var wave_one = await DialogueManager.show_choices(
+		"Wave One rises with Oakhaven's drowned warning bells.",
+		[
+			"Anchor the bells with witness records.",
+			"Cut the bells loose before they pull the island down.",
+			"Ignore the sound and sprint for higher code."
+		]
+	)
+	if not is_inside_tree(): return
+	if wave_one == 0:
+		score += 1
+		await DialogueManager.say("System", "// Witness anchor held.")
+	else:
+		await DialogueManager.say("System", "// The first wave clips the island, but Kaelen stays standing.")
+
+	var wave_two = await DialogueManager.show_choices(
+		"Wave Two folds Ironhold's perfect schedules into a moving wall.",
+		[
+			"Dash through the opening between commands.",
+			"Obey the safest route exactly.",
+			"Spend power forcing the wall to stop."
+		]
+	)
+	if not is_inside_tree(): return
+	if wave_two == 0:
+		score += 1
+		await DialogueManager.say("System", "// Timing route cleared.")
+	else:
+		await DialogueManager.say("System", "// The schedule breaks, but the route remains open.")
+
+	var wave_three = await DialogueManager.show_choices(
+		"Wave Three shows Mirror City without witnesses.",
+		[
+			"Call the witnesses forward before answering.",
+			"Answer alone to keep them safe.",
+			"Let the mirror decide which answer hurts least."
+		]
+	)
+	if not is_inside_tree(): return
+	if wave_three == 0:
+		score += 1
+		await DialogueManager.say("System", "// Witness route stabilized.")
+	else:
+		await DialogueManager.say("System", "// The mirror accepts the answer, but records the risk.")
+
+	GameManager.set_story_flag("ch7_archive_tide_trial_cleared", true)
+	_discover_lore("ch7_archive_tide_warning")
+	if score >= 2:
+		_grant_item("memory_shard", 1)
+		GameManager.add_xp(220)
+		GameManager.add_gold(120)
+		await DialogueManager.say("System", "// Archive Tide trial cleared cleanly. +220 XP, +120 Gold, +1 Memory Shard.")
+	else:
+		GameManager.add_xp(120)
+		await DialogueManager.say("System", "// Archive Tide trial survived. +120 XP.")
+
 
 func _choice_context() -> void:
 	await _early_backup_context()
@@ -242,6 +308,18 @@ func _clear_exclusive_choice_flags() -> void:
 	GameManager.set_story_flag("ending_route_ch7_preserve", false)
 	GameManager.set_story_flag("ending_route_ch7_collapse", false)
 	GameManager.set_story_flag("ending_route_ch7_merge", false)
+
+func _discover_lore(lore_id: String) -> void:
+	if has_node("/root/LoreJournal") and LoreJournal.has_method("discover"):
+		LoreJournal.discover(lore_id)
+
+
+func _grant_item(item_id: String, quantity: int) -> bool:
+	if has_node("/root/CraftingSystem") and CraftingSystem.has_method("get_recipes"):
+		CraftingSystem.get_recipes()
+	if has_node("/root/Inventory") and Inventory.has_method("add_item"):
+		return Inventory.add_item(item_id, quantity)
+	return false
 
 func _fade_to_black(duration: float) -> void:
 	fade_rect.z_index = 100

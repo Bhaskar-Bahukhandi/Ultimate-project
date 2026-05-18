@@ -92,6 +92,8 @@ func _play_confrontation() -> void:
 	await DialogueManager.say("SOVEREIGN", "It becomes ownership the moment someone begs you to be certain.")
 	await _final_pressure()
 	if not is_inside_tree(): return
+	await _final_challenge_trial()
+	if not is_inside_tree(): return
 
 	var choices: Array[String] = [
 		"Destroy SOVEREIGN completely and leave no central controller.",
@@ -128,6 +130,58 @@ func _play_confrontation() -> void:
 	await DialogueManager.say("System", "// Source Key remains complete: %d / 7. Root access closing." % GameManager.source_key_count)
 	await DialogueManager.say("SOVEREIGN", "Then this is not your ending.")
 	await DialogueManager.say("Kaelen", "Good.")
+
+func _final_challenge_trial() -> void:
+	if GameManager.has_flag("ch10_final_challenge_cleared"):
+		await DialogueManager.say("System", "// Final root challenge already cleared.")
+		return
+
+	await DialogueManager.say("SOVEREIGN", "Before the last choice, answer without hiding behind mechanics: what stops you from becoming me?")
+	var score := 0
+	var answer_one = await DialogueManager.show_choices(
+		"SOVEREIGN compresses the root into a single command prompt.",
+		[
+			"Refuse single-owner access and keep the witnesses connected.",
+			"Take temporary ownership to prevent chaos.",
+			"Hand ownership to the strongest faction."
+		]
+	)
+	if not is_inside_tree(): return
+	if answer_one == 0:
+		score += 1
+
+	var answer_two = await DialogueManager.show_choices(
+		"SOVEREIGN offers to remove every painful backup, secret, and disagreement.",
+		[
+			"Keep pain visible but answerable.",
+			"Remove the pain until the world is ready.",
+			"Let each faction delete the pain it dislikes."
+		]
+	)
+	if not is_inside_tree(): return
+	if answer_two == 0:
+		score += 1
+
+	var answer_three = await DialogueManager.show_choices(
+		"The root demands a final speed: decide quickly or watch the system shake.",
+		[
+			"Choose slowly with consent, even under pressure.",
+			"Choose fast and apologize later.",
+			"Let SOVEREIGN choose the safest delay."
+		]
+	)
+	if not is_inside_tree(): return
+	if answer_three == 0:
+		score += 1
+
+	GameManager.set_story_flag("ch10_final_challenge_cleared", true)
+	if score >= 2:
+		GameManager.add_xp(300)
+		GameManager.add_gold(150)
+		await DialogueManager.say("System", "// Final challenge cleared with consent discipline. +300 XP, +150 Gold.")
+	else:
+		GameManager.add_xp(150)
+		await DialogueManager.say("System", "// Final challenge cleared under unstable pressure. +150 XP.")
 
 
 func _final_pressure() -> void:

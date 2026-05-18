@@ -92,6 +92,8 @@ func _play_hub() -> void:
 		GlitchOverlay.flash_glitch(0.35)
 
 	await DialogueManager.say("Narrator", "The Memory Ocean does not ask Kaelen where he wants to go. It shows him where other Kaelens failed.")
+	await _memory_island_interactions()
+	if not is_inside_tree(): return
 	await _oakhaven_backup()
 	if not is_inside_tree(): return
 	await _ironhold_backup()
@@ -111,6 +113,68 @@ func _play_hub() -> void:
 		await DialogueManager.say("System", "// Archive Tide access granted. +280 XP, +100 Gold.")
 	else:
 		await DialogueManager.say("System", "// Archive Tide access already granted.")
+
+func _memory_island_interactions() -> void:
+	await DialogueManager.say("System", "// Three unstable backup islands are reachable. Salvage is possible, but every island rewrites the safest path as the only path.")
+	if not GameManager.has_flag("ch7_backup_logs_found"):
+		GameManager.set_story_flag("ch7_backup_logs_found", true)
+		_discover_lore("ch7_backup_logs")
+		_grant_item("memory_shard", 1)
+		await DialogueManager.say("Kaelen", "These logs are not side notes. They are the parts of history SOVEREIGN could not make useful.")
+		await DialogueManager.say("System", "// Optional discovery: Deep Backup Logs. +1 Memory Shard.")
+
+	await _backup_history_hazard()
+	if not is_inside_tree(): return
+
+	if not GameManager.has_flag("ch7_backup_salvage_claimed"):
+		GameManager.set_story_flag("ch7_backup_salvage_claimed", true)
+		_grant_item("data_ore", 1)
+		_grant_item("glitch_herb", 1)
+		GameManager.add_gold(90)
+		await DialogueManager.say("System", "// Backup salvage secured: +1 Data Ore, +1 Glitch Herb, +90 Gold.")
+
+
+func _backup_history_hazard() -> void:
+	if GameManager.has_flag("ch7_memory_island_hazard_cleared"):
+		await DialogueManager.say("System", "// Memory island hazard already stabilized.")
+		return
+
+	var choice = await DialogueManager.show_choices(
+		"The nearest island fractures into three moving timestamps. How should Kaelen cross?",
+		[
+			"Spend a Memory Shard to anchor the safest timestamp.",
+			"Dash between stable frames and accept the risk.",
+			"Follow Lyra's old storm-map logic through the broken route."
+		]
+	)
+	if not is_inside_tree(): return
+	if choice == null or choice < 0 or choice > 2:
+		choice = 1
+
+	GameManager.set_story_flag("ch7_memory_island_hazard_cleared", true)
+	match choice:
+		0:
+			if _remove_item("memory_shard", 1):
+				GameManager.add_xp(160)
+				await DialogueManager.say("System", "// Memory anchor held. +160 XP.")
+			else:
+				GameManager.add_xp(80)
+				await DialogueManager.say("System", "// No Memory Shard available. Kaelen crossed on unstable timing. +80 XP.")
+		1:
+			GameManager.add_xp(120)
+			await DialogueManager.say("Kaelen", "The safe path kept moving. So did I.")
+			await DialogueManager.say("System", "// Traversal hazard cleared. +120 XP.")
+		2:
+			if GameManager.has_flag("ch3_lyra_recruited"):
+				GameManager.add_xp(150)
+				_grant_item("glitch_herb", 1)
+				await DialogueManager.say("Lyra", "Storms and backups both lie about where the ground ends. Step where the lie hesitates.")
+				await DialogueManager.say("System", "// Lyra's route read the hazard cleanly. +150 XP, +1 Glitch Herb.")
+			else:
+				GameManager.add_xp(95)
+				await DialogueManager.say("Lyra Echo", "Even without the ranger beside you, her old marks keep one island from sinking.")
+				await DialogueManager.say("System", "// Storm-map logic partially recovered. +95 XP.")
+
 
 func _oakhaven_backup() -> void:
 	GameManager.set_story_flag("ch7_backup_oakhaven_seen", true)
@@ -180,6 +244,27 @@ func _chapter6_choice_key() -> String:
 	if GameManager.has_flag("ch6_choir_rewritten"):
 		return "rewrite"
 	return "unknown"
+
+func _discover_lore(lore_id: String) -> void:
+	if has_node("/root/LoreJournal") and LoreJournal.has_method("discover"):
+		LoreJournal.discover(lore_id)
+
+
+func _grant_item(item_id: String, quantity: int) -> bool:
+	if has_node("/root/CraftingSystem") and CraftingSystem.has_method("get_recipes"):
+		CraftingSystem.get_recipes()
+	if has_node("/root/Inventory") and Inventory.has_method("add_item"):
+		return Inventory.add_item(item_id, quantity)
+	return false
+
+
+func _remove_item(item_id: String, quantity: int) -> bool:
+	if has_node("/root/CraftingSystem") and CraftingSystem.has_method("get_recipes"):
+		CraftingSystem.get_recipes()
+	if has_node("/root/Inventory") and Inventory.has_method("remove_item") and Inventory.has_method("has_item"):
+		if Inventory.has_item(item_id, quantity):
+			return Inventory.remove_item(item_id, quantity)
+	return false
 
 func _fade_to_black(duration: float) -> void:
 	fade_rect.z_index = 100

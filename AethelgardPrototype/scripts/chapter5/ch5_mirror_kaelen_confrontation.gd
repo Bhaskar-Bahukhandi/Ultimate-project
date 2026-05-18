@@ -105,6 +105,9 @@ func _play_confrontation() -> void:
 	if GameManager.has_flag("ch3_lyra_recruited"):
 		await DialogueManager.say("Lyra", "I can do no. I am spectacular at no.")
 
+	await _mirror_duel_trial()
+	if not is_inside_tree(): return
+
 	await DialogueManager.say("Mirror Kaelen", "Then take the only useful gift a reflection can give.")
 	await DialogueManager.say("Mirror Kaelen", "Fragment Six is not a prize. It is a choir. Failed admin intelligences, abandoned by SOVEREIGN, repeating prayers made of broken permissions.")
 	await DialogueManager.say("System", "// FRAGMENT #6 TRAIL REFINED: CATHEDRAL_SERVER / CHOIR_OF_BROKEN_GODS")
@@ -118,6 +121,63 @@ func _play_confrontation() -> void:
 	await DialogueManager.say("Mirror Kaelen", "Go listen to the gods your code left behind.")
 	await DialogueManager.say("Kaelen", "And if they ask me to kneel?")
 	await DialogueManager.say("Mirror Kaelen", "Then remember what obedience sounded like in the plaza.")
+
+func _mirror_duel_trial() -> void:
+	if GameManager.has_flag("ch5_mirror_duel_cleared"):
+		return
+	await DialogueManager.say("System", "// MIRROR DUEL: three reflections attack with Kaelen's habits. Win by answering the pattern, not by mashing.")
+	var score := 0
+	var first = await DialogueManager.show_choices(
+		"Mirror Kaelen opens with a reckless rush, copying early button-mash aggression.",
+		[
+			"Backstep, wait for recovery, then punish.",
+			"Trade hits until the mirror breaks.",
+			"Heal while the rush is active."
+		]
+	)
+	if first == 0:
+		score += 1
+	var second = await DialogueManager.show_choices(
+		"The reflection raises a perfect rescue barrier that punishes impatience.",
+		[
+			"Keep attacking the barrier.",
+			"Stop, let the barrier expire, then strike the exposed core.",
+			"Ask SOVEREIGN to disable the reflection."
+		]
+	)
+	if second == 1:
+		score += 1
+	var third = await DialogueManager.show_choices(
+		"The final reflection abandons the arena, leaving only a delayed counter-image.",
+		[
+			"Chase the empty image.",
+			"Stand still inside the warning flash.",
+			"Dash through the delayed slash and counter from behind."
+		]
+	)
+	if third == 2:
+		score += 1
+	if not is_inside_tree(): return
+
+	GameManager.set_story_flag("ch5_mirror_duel_cleared", true)
+	_sync_crafting_materials()
+	if score >= 2:
+		GameManager.add_xp(180)
+		GameManager.add_gold(70)
+		if has_node("/root/Inventory"):
+			Inventory.add_item("memory_shard", 1)
+		await DialogueManager.say("System", "// MIRROR DUEL CLEARED. Memory Shard x1, +180 XP, +70 Gold.")
+	else:
+		GameManager.add_xp(90)
+		GameManager.add_glitch_corruption(1.0)
+		if has_node("/root/Inventory"):
+			Inventory.add_item("glitch_herb", 1)
+		await DialogueManager.say("System", "// MIRROR DUEL SURVIVED. Glitch Herb x1, +90 XP, +1 corruption.")
+	GameManager.save_game(GameManager.AUTOSAVE_SLOT)
+
+func _sync_crafting_materials() -> void:
+	if has_node("/root/CraftingSystem"):
+		CraftingSystem.get_recipes()
 
 func _fade_to_black(duration: float) -> void:
 	fade_rect.z_index = 100

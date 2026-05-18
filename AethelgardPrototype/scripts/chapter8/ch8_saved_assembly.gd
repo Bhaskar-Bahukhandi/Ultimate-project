@@ -83,6 +83,8 @@ func _play_assembly() -> void:
 		GlitchOverlay.flash_glitch(0.35)
 
 	await DialogueManager.say("Narrator", "The assembly forms in a rebuilt plaza stitched from every region the Source Key touched. Nobody agrees where the center should be.")
+	await _faction_request_board()
+	if not is_inside_tree(): return
 	await _oakhaven_faction()
 	if not is_inside_tree(): return
 	await _ironhold_faction()
@@ -106,6 +108,104 @@ func _play_assembly() -> void:
 		await DialogueManager.say("System", "// Revolt Crisis unlocked. +300 XP, +120 Gold.")
 	else:
 		await DialogueManager.say("System", "// Revolt Crisis already unlocked.")
+
+func _faction_request_board() -> void:
+	GameManager.set_story_flag("ch8_faction_requests_started", true)
+	_discover_lore("ch8_faction_requests")
+	await DialogueManager.say("Assembly Ledger", "The first saved assembly is not only a debate. It is a supply table with too many empty rows.")
+	await _resolve_oakhaven_request()
+	if not is_inside_tree(): return
+	await _resolve_ironhold_request()
+	if not is_inside_tree(): return
+	await _resolve_mirror_request()
+	if not is_inside_tree(): return
+
+	var fulfilled := 0
+	if GameManager.has_flag("ch8_oakhaven_request_fulfilled"):
+		fulfilled += 1
+	if GameManager.has_flag("ch8_ironhold_request_fulfilled"):
+		fulfilled += 1
+	if GameManager.has_flag("ch8_mirror_request_fulfilled"):
+		fulfilled += 1
+
+	if fulfilled >= 2 and not GameManager.has_flag("ch8_faction_trust_reward_claimed"):
+		GameManager.set_story_flag("ch8_faction_trust_reward_claimed", true)
+		_grant_item("glitch_stabilizer", 1)
+		GameManager.add_xp(180)
+		GameManager.add_gold(80)
+		await DialogueManager.say("System", "// Faction trust stabilized. +180 XP, +80 Gold, +1 Glitch Stabilizer.")
+	elif fulfilled > 0:
+		await DialogueManager.say("System", "// Assembly support recorded: %d / 3 requests fulfilled." % fulfilled)
+	else:
+		await DialogueManager.say("System", "// No faction requests fulfilled yet. The debate continues with lower trust.")
+
+
+func _resolve_oakhaven_request() -> void:
+	if GameManager.has_flag("ch8_oakhaven_request_fulfilled"):
+		return
+	var choice = await DialogueManager.show_choices(
+		"Oakhaven requests medicine for crater survivors.",
+		[
+			"Donate 1 Glitch Herb.",
+			"Fund emergency supplies with 80 Gold.",
+			"Offer sympathy, but save supplies for now."
+		]
+	)
+	if not is_inside_tree(): return
+	if choice == 0 and _remove_item("glitch_herb", 1):
+		GameManager.set_story_flag("ch8_oakhaven_request_fulfilled", true)
+		await DialogueManager.say("Oakhaven Survivor", "Medicine before speeches. We remember that.")
+	elif choice == 1 and _remove_gold(80):
+		GameManager.set_story_flag("ch8_oakhaven_request_fulfilled", true)
+		await DialogueManager.say("Oakhaven Survivor", "Gold is not protection, but it buys bandages before policy does.")
+	else:
+		await DialogueManager.say("Oakhaven Survivor", "Then protection is still a promise waiting on proof.")
+
+
+func _resolve_ironhold_request() -> void:
+	if GameManager.has_flag("ch8_ironhold_request_fulfilled"):
+		return
+	var choice = await DialogueManager.show_choices(
+		"Ironhold asks for repair stock to keep local systems independent.",
+		[
+			"Donate 1 Data Ore.",
+			"Fund clockwork repairs with 100 Gold.",
+			"Decline the request."
+		]
+	)
+	if not is_inside_tree(): return
+	if choice == 0 and _remove_item("data_ore", 1):
+		GameManager.set_story_flag("ch8_ironhold_request_fulfilled", true)
+		await DialogueManager.say("Ironhold Delegate", "Material support is a clearer argument than any speech.")
+	elif choice == 1 and _remove_gold(100):
+		GameManager.set_story_flag("ch8_ironhold_request_fulfilled", true)
+		await DialogueManager.say("Ironhold Delegate", "Funded repairs buy us time to debate without panic.")
+	else:
+		await DialogueManager.say("Ironhold Delegate", "Then structure will have to survive on caution alone.")
+
+
+func _resolve_mirror_request() -> void:
+	if GameManager.has_flag("ch8_mirror_request_fulfilled"):
+		return
+	var choice = await DialogueManager.show_choices(
+		"Mirror City asks for stable witness media before the crisis distorts testimony.",
+		[
+			"Donate 1 Memory Shard.",
+			"Record a public testimony instead.",
+			"Leave the mirrors uncalibrated."
+		]
+	)
+	if not is_inside_tree(): return
+	if choice == 0 and _remove_item("memory_shard", 1):
+		GameManager.set_story_flag("ch8_mirror_request_fulfilled", true)
+		await DialogueManager.say("Mirror Witness", "The shard holds testimony without making it obey.")
+	elif choice == 1:
+		GameManager.set_story_flag("ch8_mirror_request_fulfilled", true)
+		await DialogueManager.say("Kaelen", "Record this: the Source Key is not a right to be believed.")
+		await DialogueManager.say("Mirror Witness", "Accepted. Accountability can begin before the perfect archive exists.")
+	else:
+		await DialogueManager.say("Mirror Witness", "Uncalibrated mirrors still reflect. They just hurt more people.")
+
 
 func _oakhaven_faction() -> void:
 	GameManager.set_story_flag("ch8_oakhaven_faction_heard", true)
@@ -265,6 +365,33 @@ func _chapter7_choice_key() -> String:
 	if GameManager.has_flag("ch7_backups_merged"):
 		return "merge"
 	return "unknown"
+
+func _discover_lore(lore_id: String) -> void:
+	if has_node("/root/LoreJournal") and LoreJournal.has_method("discover"):
+		LoreJournal.discover(lore_id)
+
+
+func _grant_item(item_id: String, quantity: int) -> bool:
+	if has_node("/root/CraftingSystem") and CraftingSystem.has_method("get_recipes"):
+		CraftingSystem.get_recipes()
+	if has_node("/root/Inventory") and Inventory.has_method("add_item"):
+		return Inventory.add_item(item_id, quantity)
+	return false
+
+
+func _remove_item(item_id: String, quantity: int) -> bool:
+	if has_node("/root/CraftingSystem") and CraftingSystem.has_method("get_recipes"):
+		CraftingSystem.get_recipes()
+	if has_node("/root/Inventory") and Inventory.has_method("remove_item") and Inventory.has_method("has_item"):
+		if Inventory.has_item(item_id, quantity):
+			return Inventory.remove_item(item_id, quantity)
+	return false
+
+
+func _remove_gold(amount: int) -> bool:
+	if has_node("/root/Inventory") and Inventory.has_method("remove_gold"):
+		return Inventory.remove_gold(amount)
+	return false
 
 func _fade_to_black(duration: float) -> void:
 	fade_rect.z_index = 100

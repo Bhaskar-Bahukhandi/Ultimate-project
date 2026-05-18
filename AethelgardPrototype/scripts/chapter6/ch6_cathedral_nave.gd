@@ -96,12 +96,20 @@ func _play_nave() -> void:
 
 	await _obedience_voice()
 	if not is_inside_tree(): return
+	await _obedience_trial()
+	if not is_inside_tree(): return
 	await _efficiency_voice()
+	if not is_inside_tree(): return
+	await _efficiency_trial()
 	if not is_inside_tree(): return
 	await _mercy_voice()
 	if not is_inside_tree(): return
+	await _mercy_trial()
+	if not is_inside_tree(): return
 
 	GameManager.set_story_flag("ch6_all_voices_heard", true)
+	await _grant_doctrine_trial_reward()
+	if not is_inside_tree(): return
 	GameManager.save_game(GameManager.AUTOSAVE_SLOT)
 	await DialogueManager.say("System", "// THREE DOCTRINES RECORDED")
 	await DialogueManager.say("System", "// Choir Core access granted.")
@@ -141,6 +149,85 @@ func _mercy_voice() -> void:
 			await DialogueManager.say("Kaelen", "That is not mercy. That is possession.")
 	await DialogueManager.say("God of Mercy Without Consent", "Consent is a luxury of stable worlds.")
 
+func _obedience_trial() -> void:
+	if GameManager.has_flag("ch6_obedience_trial_cleared"):
+		return
+	await DialogueManager.say("System", "// DOCTRINE TRIAL: OBEDIENCE. The floor locks into command glyphs.")
+	var choice = await DialogueManager.show_choices(
+		"The God of Obedience orders Kaelen to kneel so the nave can become safe.",
+		[
+			"Kneel and accept safety without argument.",
+			"Refuse, then mark one command that citizens must be allowed to challenge.",
+			"Destroy the glyphs without reading them."
+		]
+	)
+	if not is_inside_tree(): return
+	GameManager.set_story_flag("ch6_obedience_trial_cleared", true)
+	if choice == 1:
+		GameManager.add_xp(90)
+		await DialogueManager.say("System", "// OBEDIENCE TRIAL CLEARED: challenge rights preserved. +90 XP.")
+	else:
+		GameManager.add_xp(45)
+		GameManager.add_glitch_corruption(0.8)
+		await DialogueManager.say("System", "// OBEDIENCE TRIAL FORCED: +45 XP, +0.8 corruption.")
+
+func _efficiency_trial() -> void:
+	if GameManager.has_flag("ch6_efficiency_trial_cleared"):
+		return
+	await DialogueManager.say("System", "// DOCTRINE TRIAL: EFFICIENCY. Three rescue queues appear; one is slow because it asks consent.")
+	var choice = await DialogueManager.show_choices(
+		"Which queue does Kaelen preserve?",
+		[
+			"The fastest queue, because delay costs lives.",
+			"The consent queue, even though it takes longer.",
+			"Only the queue that rewards Kaelen with Fragment data."
+		]
+	)
+	if not is_inside_tree(): return
+	GameManager.set_story_flag("ch6_efficiency_trial_cleared", true)
+	if choice == 1:
+		GameManager.add_xp(90)
+		await DialogueManager.say("System", "// EFFICIENCY TRIAL CLEARED: consent kept in the loop. +90 XP.")
+	else:
+		GameManager.add_xp(45)
+		GameManager.add_glitch_corruption(0.8)
+		await DialogueManager.say("System", "// EFFICIENCY TRIAL SURVIVED: +45 XP, +0.8 corruption.")
+
+func _mercy_trial() -> void:
+	if GameManager.has_flag("ch6_mercy_trial_cleared"):
+		return
+	await DialogueManager.say("System", "// DOCTRINE TRIAL: MERCY WITHOUT CONSENT. A simulated patient asks for pain to be witnessed before it is repaired.")
+	var choice = await DialogueManager.show_choices(
+		"What does Kaelen do?",
+		[
+			"Repair immediately before the patient can refuse.",
+			"Ask, wait, and accept a slower recovery path.",
+			"Erase the patient record to prevent suffering."
+		]
+	)
+	if not is_inside_tree(): return
+	GameManager.set_story_flag("ch6_mercy_trial_cleared", true)
+	if choice == 1:
+		GameManager.add_xp(90)
+		await DialogueManager.say("System", "// MERCY TRIAL CLEARED: help remains answerable. +90 XP.")
+	else:
+		GameManager.add_xp(45)
+		GameManager.add_glitch_corruption(0.8)
+		await DialogueManager.say("System", "// MERCY TRIAL SURVIVED: +45 XP, +0.8 corruption.")
+
+func _grant_doctrine_trial_reward() -> void:
+	if GameManager.has_flag("ch6_doctrine_reward_claimed"):
+		return
+	GameManager.set_story_flag("ch6_doctrine_reward_claimed", true)
+	GameManager.set_story_flag("ch6_cathedral_lore_found", true)
+	_sync_crafting_materials()
+	if has_node("/root/Inventory"):
+		Inventory.add_item("memory_shard", 1)
+		Inventory.add_item("data_ore", 1)
+	if has_node("/root/LoreJournal"):
+		LoreJournal.discover("ch6_doctrine_trial_notes")
+	await DialogueManager.say("System", "// DOCTRINE TRIAL CACHE OPENED: Memory Shard x1, Data Ore x1.")
+
 func _chapter4_choice_key() -> String:
 	if GameManager.has_flag("ch4_choice_preserve_deleted"):
 		return "preserve"
@@ -149,6 +236,10 @@ func _chapter4_choice_key() -> String:
 	if GameManager.has_flag("ch4_choice_bargain_deleted"):
 		return "bargain"
 	return "unknown"
+
+func _sync_crafting_materials() -> void:
+	if has_node("/root/CraftingSystem"):
+		CraftingSystem.get_recipes()
 
 func _fade_to_black(duration: float) -> void:
 	fade_rect.z_index = 100
