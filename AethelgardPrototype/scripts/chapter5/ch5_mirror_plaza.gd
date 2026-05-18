@@ -95,6 +95,8 @@ func _play_plaza() -> void:
 	await DialogueManager.say("Narrator", "The boulevard opens into a plaza where the mirrors have learned to arrange themselves like witnesses.")
 	await DialogueManager.say("Echo Mirror", "The trial does not begin with Mirror Kaelen. It begins with the selves you nearly became.")
 
+	await _elara_echo()
+	if not is_inside_tree(): return
 	await _chapter4_echo()
 	if not is_inside_tree(): return
 	await _obedient_echo()
@@ -181,6 +183,30 @@ func _identity_choice() -> void:
 			identity_choice = "abandonment_refused"
 			GameManager.set_story_flag("ch5_identity_refused_abandonment", true)
 			await DialogueManager.say("Kaelen", "I refuse the comfort of leaving. Aethelgard is real enough to hurt. That makes it real enough to answer.")
+
+func _elara_echo() -> void:
+	GameManager.set_story_flag("ch5_early_elara_echo_seen", true)
+	match _elara_choice_key():
+		"trusted":
+			await DialogueManager.say("Elara Reflection", "You trusted the first impossible person who reached for you. That trust became a witness SOVEREIGN could not isolate.")
+			await DialogueManager.say("Mirror Kaelen", "A hero with someone watching him is harder to turn into a ruler.")
+		"cautious":
+			await DialogueManager.say("Elara Reflection", "You walked beside Elara without giving away every answer. Caution became a bridge instead of a wall.")
+			await DialogueManager.say("Mirror Kaelen", "Remember that. Consent can begin with uncertainty.")
+		"distrusted":
+			await DialogueManager.say("Elara Reflection", "You doubted Elara when she offered help. The mirror keeps that loneliness because SOVEREIGN feeds on isolated creators.")
+			await DialogueManager.say("Kaelen", "Then I need to stop treating distance like safety.")
+		_:
+			await DialogueManager.say("Elara Reflection", "The first bond is missing from the glass. A mirror cannot reflect trust that was never recorded.")
+
+func _elara_choice_key() -> String:
+	if GameManager.has_flag("ch1_elara_trusted"):
+		return "trusted"
+	if GameManager.has_flag("ch1_elara_cautious"):
+		return "cautious"
+	if GameManager.has_flag("ch1_elara_distrusted"):
+		return "distrusted"
+	return "unknown"
 
 func _chapter4_choice_key() -> String:
 	if GameManager.has_flag("ch4_choice_preserve_deleted"):

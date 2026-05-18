@@ -21,13 +21,27 @@ const PHASE_2_HP_PCT = 0.70
 const PHASE_3_HP_PCT = 0.45
 const PHASE_RAGE_HP_PCT = 0.20
 const PHASE_4_HP_PCT = 0.10
+const BASE_MAX_HEALTH = 420.0
+const BASE_CONTACT_DAMAGE = 22.0
+const BASE_MOVEMENT_SPEED = 135.0
+const BASE_ATTACK_RANGE = 92.0
+const ROOT_ACCESS_HP_PCT = 0.04
+const CLOSE_PRESSURE_WINDOW = 1.4
+const CLOSE_PRESSURE_HITS = 3
+const CLOSE_PRESSURE_COOLDOWN = 1.25
+const CLOSE_PRESSURE_GUARD_TIME = 0.48
+const TRANSITION_GUARD_MULT = 0.2
+const DEFENSIVE_ANSWER_STAGGER = 0.55
+const STATUS_CALLOUT_REPEAT_GAP_MS = 520
 
 # ── Phase state ─────────────────────────────────────────────────────────
 var current_boss_phase: BossPhase = BossPhase.PHASE_1
 var _phase_paused: bool = false
 var _phase_pause_timer: float = 0.0
-var _phase_pause_duration: float = 1.0
+var _phase_pause_duration: float = 0.5
 var _pending_phase: int = 0
+var _phase_elapsed: float = 0.0
+var _phase_attack_count: int = 0
 
 # ── Attack bookkeeping ──────────────────────────────────────────────────
 var _boss_attack_timer: float = 0.0
@@ -39,6 +53,16 @@ var _stagger_active: bool = false
 var _slam_wave_active: bool = false
 var _charge_rushing: bool = false
 var _recent_attacks: Array[String] = []
+var _phase_pattern_step: int = 0
+var _root_access_ready: bool = false
+var _forced_attack: String = ""
+var _close_pressure_hits: int = 0
+var _close_pressure_timer: float = 0.0
+var _close_pressure_cooldown: float = 0.0
+var _guard_timer: float = 0.0
+var _heal_punish_cooldown: float = 0.0
+var _flinch_cooldown: float = 0.0
+var _status_callout_times: Dictionary = {}
 
 # ── Rage ────────────────────────────────────────────────────────────────
 var _is_enraged: bool = false
@@ -58,11 +82,11 @@ var _intro_played: bool = false
 func _ready() -> void:
 	# Set boss stats BEFORE super._ready() so level scaling applies correctly
 	enemy_name = "Tutorial Knight"
-	max_health = 420.0
-	contact_damage = 22.0
-	movement_speed = 135.0
+	max_health = BASE_MAX_HEALTH
+	contact_damage = BASE_CONTACT_DAMAGE
+	movement_speed = BASE_MOVEMENT_SPEED
 	detection_range = 450.0
-	attack_range = 92.0
+	attack_range = BASE_ATTACK_RANGE
 	xp_reward = 400
 	gold_reward = 200
 	zone_level = 2  # First real boss: challenging without becoming a stat sponge.
@@ -193,6 +217,17 @@ func _start_boss_intro() -> void:
 func _ai_behavior(delta: float) -> void:
 	if current_state == State.DEAD:
 		return
+	_phase_elapsed += delta
+	_close_pressure_timer = maxf(0.0, _close_pressure_timer - delta)
+	_close_pressure_cooldown = maxf(0.0, _close_pressure_cooldown - delta)
+	_guard_timer = maxf(0.0, _guard_timer - delta)
+	_heal_punish_cooldown = maxf(0.0, _heal_punish_cooldown - delta)
+	_flinch_cooldown = maxf(0.0, _flinch_cooldown - delta)
+	if _close_pressure_timer <= 0.0:
+		_close_pressure_hits = 0
+	_maybe_pressure_healing_player()
+	if _current_phase_floor_pct() > 0.0 and current_health / max_health <= _current_phase_floor_pct() and _phase_requirements_met():
+		_check_phase_transitions()
 
 	# Phase-pause overlay (stagger on transition)
 	if _phase_paused:
@@ -233,6 +268,7 @@ func _boss_chase(_delta: float) -> void:
 	var dist = distance_to_player()
 	if dist < attack_range:
 		current_state = State.ATTACK
+		_boss_attack_timer = maxf(_boss_attack_timer, _boss_attack_cooldown * 0.8)
 		return
 
 	var spd = movement_speed
@@ -268,10 +304,13 @@ func _boss_attack(_delta: float) -> void:
 func _execute_boss_attack() -> void:
 	_attack_active = true
 	var attack = _pick_attack()
+	_phase_attack_count += 1
 
 	match attack:
 		"slash":
 			await _attack_slash()
+		"low_sweep":
+			await _attack_low_sweep()
 		"overhead_slam":
 			await _attack_overhead_slam()
 		"charge":
@@ -282,6 +321,8 @@ func _execute_boss_attack() -> void:
 			await _attack_teleport_slash()
 		"shockwave":
 			await _attack_shockwave()
+		"corrupt_rift":
+			await _attack_corrupt_rift()
 
 	if not is_inside_tree() or current_state == State.DEAD:
 		_attack_active = false
@@ -298,29 +339,41 @@ func _execute_boss_attack() -> void:
 
 
 func _pick_attack() -> String:
+	if _forced_attack != "":
+		var forced := _forced_attack
+		_forced_attack = ""
+		_recent_attacks.append(forced)
+		if _recent_attacks.size() > 2:
+			_recent_attacks.pop_front()
+		return forced
 	var available: Array[String] = []
 	var dist := distance_to_player()
 	match current_boss_phase:
 		BossPhase.PHASE_1:
-			available = ["slash", "overhead_slam"]
+			available = ["slash", "charge", "slash"]
 		BossPhase.PHASE_2:
-			available = ["slash", "overhead_slam", "charge", "shield_bash"]
+			available = ["low_sweep", "shield_bash", "slash", "charge"]
 			if dist > attack_range * 1.55:
 				available = ["charge", "slash"]
 		BossPhase.PHASE_3, BossPhase.PHASE_3_RAGE:
-			available = ["slash", "overhead_slam", "charge", "teleport_slash", "shockwave"]
+			available = ["corrupt_rift", "teleport_slash", "low_sweep", "shockwave", "charge"]
 			if dist > attack_range * 1.7:
-				available = ["teleport_slash", "charge", "shockwave"]
+				available = ["teleport_slash", "charge", "corrupt_rift"]
 		BossPhase.PHASE_4:
-			return "slash"
+			available = ["charge", "low_sweep", "shield_bash", "corrupt_rift", "slash"]
 	if available.is_empty():
 		return "slash"
+	var chosen = available[_phase_pattern_step % available.size()]
+	_phase_pattern_step += 1
+	if dist > attack_range * 2.0 and chosen not in ["charge", "teleport_slash", "corrupt_rift"]:
+		chosen = "charge"
 	# Filter out the most recent attack to prevent repeats
-	if _recent_attacks.size() > 0:
+	if _recent_attacks.size() > 0 and chosen == _recent_attacks.back():
 		available = available.filter(func(a): return a != _recent_attacks.back())
-	if available.is_empty():
-		available = ["slash"]
-	var chosen = available[randi() % available.size()]
+		if available.is_empty():
+			available = ["slash"]
+		chosen = available[_phase_pattern_step % available.size()]
+		_phase_pattern_step += 1
 	_recent_attacks.append(chosen)
 	if _recent_attacks.size() > 2:
 		_recent_attacks.pop_front()
@@ -329,24 +382,105 @@ func _pick_attack() -> String:
 
 # ── Individual attacks ──────────────────────────────────────────────────
 
+func _front_warning(size: Vector2, y_offset: float, color: Color, duration: float) -> void:
+	var facing := _facing_to_player()
+	_front_warning_facing(facing, size, y_offset, color, duration)
+
+func _front_warning_facing(facing: float, size: Vector2, y_offset: float, color: Color, duration: float) -> void:
+	_spawn_attack_warning(Vector2(facing * size.x * 0.5, y_offset), size, color, duration)
+
+func _facing_to_player() -> float:
+	var dir = direction_to_player()
+	var facing := signf(dir.x)
+	if facing == 0.0:
+		facing = 1.0
+	return facing
+
+func _spawn_attack_warning(center_offset: Vector2, size: Vector2, color: Color, duration: float) -> void:
+	var parent = get_parent()
+	if not parent:
+		return
+	var warning = ColorRect.new()
+	warning.name = "BossAttackWarning"
+	warning.color = color
+	warning.size = size
+	warning.position = global_position + center_offset - size / 2.0
+	warning.z_index = 30
+	warning.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(warning)
+	var tw = warning.create_tween()
+	tw.tween_property(warning, "color:a", 0.08, maxf(duration, 0.05)).set_trans(Tween.TRANS_SINE)
+	tw.tween_callback(warning.queue_free)
+
+func _reset_phase_pattern() -> void:
+	_phase_pattern_step = 0
+	_recent_attacks.clear()
+
+func _force_next_attack(attack_name: String) -> void:
+	_forced_attack = attack_name
+	_boss_attack_timer = _boss_attack_cooldown
+	if current_state != State.DEAD and not phase_4_locked:
+		current_state = State.ATTACK
+
+
+func _status_text(text: String, pos: Vector2, is_positive: bool = false) -> void:
+	var now_ms := Time.get_ticks_msec()
+	var last_ms := int(_status_callout_times.get(text, -100000))
+	var gap := STATUS_CALLOUT_REPEAT_GAP_MS
+	if text in ["ROOT ACCESS", "[E] ROOT ACCESS", "VICTORY", "OPEN!"]:
+		gap = 120
+	if now_ms - last_ms < gap:
+		return
+	_status_callout_times[text] = now_ms
+	if has_node("/root/VFXLibrary"):
+		VFXLibrary.spawn_status_indicator(text, pos, get_parent(), is_positive)
+
 func _attack_slash() -> void:
 	# Telegraph flash
+	var slash_facing := _facing_to_player()
+	var slash_size := Vector2(attack_range * 1.05, 112.0)
+	var slash_y_offset := -10.0
 	if has_node("Sprite"):
 		get_node("Sprite").modulate = Color(1.0, 0.6, 0.3)
 	_status_text("SLASH", global_position + Vector2(0, -62), false)
+	_front_warning_facing(slash_facing, slash_size, slash_y_offset, Color(1.0, 0.55, 0.15, 0.34), 0.22)
 	await get_tree().create_timer(0.22).timeout
 	if not _safe(): return
 	if has_node("Sprite"):
 		get_node("Sprite").modulate = Color.WHITE if not _is_enraged else Color(1.5, 0.3, 0.3)
-	var dir = direction_to_player()
-	velocity.x = dir.x * 230.0
+	velocity.x = slash_facing * 230.0
 	_sfx("sword_swing", 0.1)
 	await get_tree().create_timer(0.10).timeout
 	if not _safe():
 		return
-	_deal_boss_melee_damage(attack_range, contact_damage, "boss_slash")
+	if _deal_boss_slash_damage(slash_facing, slash_size, slash_y_offset, contact_damage):
+		_on_attack_connected(6.0, 0.10)
 	velocity.x = 0.0
 	await get_tree().create_timer(0.24).timeout
+
+
+func _attack_low_sweep() -> void:
+	velocity.x = 0.0
+	_status_text("JUMP / POGO", global_position + Vector2(0, -62), false)
+	if has_node("Sprite"):
+		get_node("Sprite").modulate = Color(0.35, 0.9, 1.0)
+	_front_warning(Vector2(attack_range * 1.55, 42.0), -6.0, Color(0.25, 0.95, 1.0, 0.38), 0.30)
+	_sfx("heavy_windup", 0.12)
+	await get_tree().create_timer(0.30).timeout
+	if not _safe():
+		return
+	var dir = direction_to_player()
+	velocity.x = dir.x * 170.0
+	_sfx("sword_swing", 0.08)
+	await get_tree().create_timer(0.08).timeout
+	if not _safe():
+		return
+	if _deal_boss_low_sweep_damage(attack_range * 1.45, contact_damage * 0.9):
+		_on_attack_connected(8.0, 0.14)
+	velocity.x = 0.0
+	if has_node("Sprite"):
+		get_node("Sprite").modulate = Color.WHITE if not _is_enraged else Color(1.5, 0.3, 0.3)
+	await get_tree().create_timer(0.40).timeout
 
 
 func _attack_overhead_slam() -> void:
@@ -354,6 +488,7 @@ func _attack_overhead_slam() -> void:
 	_status_text("JUMP", global_position + Vector2(0, -62), false)
 	if has_node("Sprite"):
 		get_node("Sprite").modulate = Color(1.0, 0.25, 0.2)
+	_front_warning(Vector2(attack_range * 1.2, 110.0), -30.0, Color(1.0, 0.1, 0.08, 0.35), 0.42)
 	_sfx("heavy_windup")
 	await get_tree().create_timer(0.42).timeout
 	if not _safe():
@@ -365,7 +500,8 @@ func _attack_overhead_slam() -> void:
 	await get_tree().create_timer(0.14).timeout
 	if not _safe():
 		return
-	_deal_boss_melee_damage(attack_range * 1.2, contact_damage * 1.5, "boss_slam")
+	if _deal_boss_melee_damage(attack_range * 1.15, contact_damage * 1.5, "boss_slam", 88.0, -28.0, 0.12):
+		_on_attack_connected(12.0, 0.18)
 	_spawn_slam_wave()
 	velocity.x = 0.0
 	if has_node("Sprite"):
@@ -378,6 +514,7 @@ func _attack_charge() -> void:
 	_status_text("DASH", global_position + Vector2(0, -62), false)
 	if has_node("Sprite"):
 		get_node("Sprite").modulate = Color(1.0, 0.45, 0.15)
+	_front_warning(Vector2(attack_range * 2.1, 58.0), -28.0, Color(1.0, 0.45, 0.0, 0.36), 0.34)
 	await get_tree().create_timer(0.34).timeout
 	if not _safe():
 		return
@@ -390,7 +527,8 @@ func _attack_charge() -> void:
 	if not _safe():
 		_charge_rushing = false
 		return
-	_deal_boss_melee_damage(attack_range * 1.5, contact_damage * 1.3, "boss_charge")
+	if _deal_boss_melee_damage(attack_range * 1.35, contact_damage * 1.3, "boss_charge", 58.0, -28.0, 0.10):
+		_on_attack_connected(12.0, 0.16)
 	_screen_shake(8.0, 0.15)
 	await get_tree().create_timer(0.20).timeout
 	velocity.x = 0.0
@@ -403,7 +541,10 @@ func _attack_charge() -> void:
 func _attack_shield_bash() -> void:
 	_status_text("BLOCK", global_position + Vector2(0, -62), false)
 	var dir = direction_to_player()
+	var player = find_player()
+	var defensive_answer := _player_is_defending_or_parrying(player)
 	velocity.x = 0.0
+	_front_warning(Vector2(attack_range * 0.9, 88.0), -30.0, Color(0.85, 0.85, 1.0, 0.32), 0.18)
 	_sfx("shield_hit")
 	await get_tree().create_timer(0.18).timeout
 	if not _safe():
@@ -412,15 +553,19 @@ func _attack_shield_bash() -> void:
 	await get_tree().create_timer(0.08).timeout
 	if not _safe():
 		return
-	_deal_boss_melee_damage(attack_range * 0.8, contact_damage * 0.8, "boss_bash")
+	if _deal_boss_melee_damage(attack_range * 0.75, contact_damage * 0.8, "boss_bash", 72.0, -28.0, 0.10):
+		defensive_answer = defensive_answer or _player_is_defending_or_parrying(player)
+		if defensive_answer:
+			_reward_defensive_answer()
+		else:
+			_on_attack_connected(9.0, 0.12)
 	# Knockback emphasis
-	var player = find_player()
 	if player and is_instance_valid(player):
 		var kb_dir = (player.global_position - global_position).normalized()
-		if player.has_method("apply_knockback"):
+		if player.has_method("apply_knockback") and not defensive_answer:
 			player.apply_knockback(kb_dir * 200.0)
 	velocity.x = 0.0
-	await get_tree().create_timer(0.42).timeout
+	await get_tree().create_timer(0.50 if defensive_answer else 0.42).timeout
 
 
 func _attack_teleport_slash() -> void:
@@ -436,10 +581,12 @@ func _attack_teleport_slash() -> void:
 	_status_text("TURN", global_position + Vector2(0, -62), false)
 	if has_node("Sprite"):
 		get_node("Sprite").modulate = Color(0.85, 0.45, 1.0)
+	_front_warning(Vector2(attack_range, 96.0), -32.0, Color(0.8, 0.25, 1.0, 0.36), 0.34)
 	await get_tree().create_timer(0.34).timeout
 	if not _safe():
 		return
-	_deal_boss_melee_damage(attack_range, contact_damage * 1.2, "boss_teleport_slash")
+	if _deal_boss_melee_damage(attack_range * 0.95, contact_damage * 1.2, "boss_teleport_slash", 82.0, -30.0, 0.11):
+		_on_attack_connected(10.0, 0.14)
 	_sfx("sword_swing")
 	if has_node("Sprite"):
 		get_node("Sprite").modulate = Color.WHITE if not _is_enraged else Color(1.5, 0.3, 0.3)
@@ -449,6 +596,7 @@ func _attack_teleport_slash() -> void:
 func _attack_shockwave() -> void:
 	velocity.y = -500.0
 	_status_text("AIR", global_position + Vector2(0, -62), false)
+	_spawn_attack_warning(Vector2(0, -6.0), Vector2(310, 46), Color(0.95, 0.15, 0.95, 0.32), 0.46)
 	_sfx("heavy_windup")
 	await get_tree().create_timer(0.46).timeout
 	if not _safe():
@@ -457,13 +605,43 @@ func _attack_shockwave() -> void:
 	await get_tree().create_timer(0.3).timeout
 	if not _safe():
 		return
-	_deal_boss_damage(150.0, contact_damage * 1.8)
+	if _deal_grounded_wave_damage(155.0, contact_damage * 1.45, "boss_shockwave"):
+		_on_attack_connected(10.0, 0.16)
 	_screen_shake(18.0, 0.4)
 	_vfx("vfx_hit_spark", global_position + Vector2(0, 10))
 	await get_tree().create_timer(0.48).timeout
 
 
 # ── Slam wave helper ────────────────────────────────────────────────────
+
+func _attack_corrupt_rift() -> void:
+	velocity.x = 0.0
+	_status_text("RIFT", global_position + Vector2(0, -62), false)
+	var player = find_player()
+	var dir = direction_to_player()
+	var facing := signf(dir.x)
+	if facing == 0.0:
+		facing = 1.0
+	if has_node("Sprite"):
+		get_node("Sprite").modulate = Color(1.0, 0.15, 0.85)
+	_vfx("vfx_glitch_sparkle", global_position)
+	_sfx("glitch_teleport", 0.12)
+	var target_offset = Vector2(facing * attack_range * 0.85, -30.0)
+	if player and is_instance_valid(player):
+		target_offset = (player.global_position - global_position).clamp(Vector2(-150, -80), Vector2(150, 20))
+	_spawn_attack_warning(target_offset, Vector2(76, 130), Color(0.95, 0.05, 1.0, 0.42), 0.38)
+	_spawn_attack_warning(Vector2(-target_offset.x * 0.55, -30.0), Vector2(58, 104), Color(0.45, 0.15, 1.0, 0.25), 0.38)
+	await get_tree().create_timer(0.38).timeout
+	if not _safe():
+		return
+	var hit_primary := _deal_boss_rift_damage(target_offset, Vector2(76, 130), contact_damage * 1.15)
+	var hit_secondary := _deal_boss_rift_damage(Vector2(-target_offset.x * 0.55, -30.0), Vector2(58, 104), contact_damage * 0.75)
+	if hit_primary or hit_secondary:
+		_on_attack_connected(14.0, 0.18)
+	_vfx("vfx_glitch_sparkle", global_position + target_offset)
+	if has_node("Sprite"):
+		get_node("Sprite").modulate = Color.WHITE if not _is_enraged else Color(1.5, 0.3, 0.3)
+	await get_tree().create_timer(0.44).timeout
 
 func _spawn_slam_wave() -> void:
 	if _slam_wave_active:
@@ -514,43 +692,214 @@ func _deal_boss_damage(range_px: float, damage: float) -> void:
 
 
 # ═════════════════════════════════════════════════════════════════════════
-func _deal_boss_melee_damage(range_px: float, damage: float, damage_type: String) -> void:
+func _deal_boss_melee_damage(range_px: float, damage: float, damage_type: String, hitbox_height: float = 86.0, y_offset: float = -30.0, active_duration: float = 0.12) -> bool:
 	if _is_enraged:
 		damage *= 1.25
 	var dir = direction_to_player()
 	var facing := signf(dir.x)
 	if facing == 0.0:
 		facing = 1.0
-	var hitbox_size := Vector2(range_px, 96.0)
-	_deal_damage_in_attack_hitbox(Vector2(facing * hitbox_size.x * 0.5, -32.0), hitbox_size, damage, damage_type, 0.16)
+	var hitbox_size := Vector2(range_px, hitbox_height)
+	return _deal_damage_in_attack_hitbox(Vector2(facing * hitbox_size.x * 0.5, y_offset), hitbox_size, damage, damage_type, active_duration)
+
+func _deal_boss_slash_damage(facing: float, hitbox_size: Vector2, y_offset: float, damage: float) -> bool:
+	if _is_enraged:
+		damage *= 1.25
+	var player = find_player()
+	if not player or not is_instance_valid(player) or not player.has_method("take_damage"):
+		return false
+	if bool(player.get("invulnerable")) or bool(player.get("is_dead")):
+		return false
+	var center_offset := Vector2(facing * hitbox_size.x * 0.5, y_offset)
+	var hit_rect := Rect2(global_position + center_offset - hitbox_size * 0.5, hitbox_size)
+	if not _player_collision_overlaps_rect(player, hit_rect):
+		return false
+	if not _has_line_of_sight_to_player(player):
+		return false
+	player.take_damage(damage * get_enemy_damage_multiplier(), global_position, enemy_name, "boss_slash")
+	return true
+
+func _player_collision_overlaps_rect(player: Node, rect: Rect2) -> bool:
+	for child in player.get_children():
+		if child is CollisionShape2D and not child.disabled:
+			var shape: Shape2D = child.shape
+			if not shape:
+				continue
+			var extents := _shape_extents_for_rect(shape)
+			var collision_rect := Rect2(child.global_position - extents, extents * 2.0)
+			if collision_rect.intersects(rect):
+				return true
+	return rect.has_point(player.global_position)
+
+func _shape_extents_for_rect(shape: Shape2D) -> Vector2:
+	if shape is RectangleShape2D:
+		return shape.size * 0.5
+	if shape is CircleShape2D:
+		return Vector2.ONE * shape.radius
+	if shape is CapsuleShape2D:
+		return Vector2(shape.radius, maxf(shape.height * 0.5, shape.radius))
+	return Vector2(16.0, 32.0)
+
+func _deal_boss_low_sweep_damage(range_px: float, damage: float) -> bool:
+	if _is_enraged:
+		damage *= 1.25
+	var player = find_player()
+	if not player or not is_instance_valid(player) or not player.has_method("take_damage"):
+		return false
+	if player.has_method("is_on_floor") and not player.is_on_floor():
+		return false
+	var dir = direction_to_player()
+	var facing := signf(dir.x)
+	if facing == 0.0:
+		facing = 1.0
+	var hitbox_size := Vector2(range_px, 34.0)
+	var center_offset := Vector2(facing * hitbox_size.x * 0.5, -2.0)
+	var hit_rect := Rect2(global_position + center_offset - hitbox_size * 0.5, hitbox_size)
+	if not hit_rect.has_point(player.global_position) or not _has_line_of_sight_to_player(player):
+		return false
+	player.take_damage(damage * get_enemy_damage_multiplier(), global_position, enemy_name, "boss_low_sweep")
+	return true
+
+func _deal_grounded_wave_damage(half_width: float, damage: float, damage_type: String) -> bool:
+	var player = find_player()
+	if not player or not is_instance_valid(player) or not player.has_method("take_damage"):
+		return false
+	if player.has_method("is_on_floor") and not player.is_on_floor():
+		return false
+	if absf(player.global_position.x - global_position.x) > half_width:
+		return false
+	if absf(player.global_position.y - global_position.y) > 96.0:
+		return false
+	if not _has_line_of_sight_to_player(player):
+		return false
+	player.take_damage(damage * get_enemy_damage_multiplier(), global_position, enemy_name, damage_type)
+	return true
+
+func _deal_boss_rift_damage(center_offset: Vector2, size: Vector2, damage: float) -> bool:
+	if _is_enraged:
+		damage *= 1.18
+	return _deal_damage_in_attack_hitbox(center_offset, size, damage, "boss_corrupt_rift", 0.10)
+
+func _on_attack_connected(shake_intensity: float, shake_duration: float) -> void:
+	if has_node("/root/CombatFX"):
+		CombatFX.apply_hitstop(0.045)
+	_screen_shake(shake_intensity, shake_duration)
+
+
+func _player_is_defending_or_parrying(player: Node) -> bool:
+	if not player or not is_instance_valid(player):
+		return false
+	return bool(player.get("is_defending")) or bool(player.get("parry_active")) or bool(player.get("parry_counter_active"))
+
+
+func _reward_defensive_answer() -> void:
+	_status_text("OPEN!", global_position + Vector2(0, -78), true)
+	if has_node("/root/CombatFX"):
+		CombatFX.apply_hitstop(0.075)
+	_screen_shake(7.0, 0.14)
+	_vfx("vfx_parry_flash", global_position + Vector2(0, -18))
+	stagger(DEFENSIVE_ANSWER_STAGGER)
 
 
 func _apply_phase_combat_tuning() -> void:
 	match current_boss_phase:
 		BossPhase.PHASE_1:
-			_boss_attack_cooldown = 1.15
+			_boss_attack_cooldown = 0.78
 			_boss_max_combo = 1
 		BossPhase.PHASE_2:
-			_boss_attack_cooldown = 1.0
+			_boss_attack_cooldown = 0.68
 			_boss_max_combo = 2
 		BossPhase.PHASE_3:
-			_boss_attack_cooldown = 0.9
+			_boss_attack_cooldown = 0.62
 			_boss_max_combo = 2
 		BossPhase.PHASE_3_RAGE:
-			_boss_attack_cooldown = 0.78
-			_boss_max_combo = 3
+			_boss_attack_cooldown = 0.58
+			_boss_max_combo = 2
 		BossPhase.PHASE_4:
-			_boss_attack_cooldown = 1.2
-			_boss_max_combo = 1
+			_boss_attack_cooldown = 0.64
+			_boss_max_combo = 2
 
 
 # PHASE MANAGEMENT
 # ═════════════════════════════════════════════════════════════════════════
 
+func _current_phase_floor_pct() -> float:
+	match current_boss_phase:
+		BossPhase.PHASE_1:
+			return PHASE_2_HP_PCT
+		BossPhase.PHASE_2:
+			return PHASE_3_HP_PCT
+		BossPhase.PHASE_3:
+			return PHASE_RAGE_HP_PCT
+		BossPhase.PHASE_3_RAGE:
+			return PHASE_4_HP_PCT
+		BossPhase.PHASE_4:
+			return ROOT_ACCESS_HP_PCT
+	return 0.0
+
+
+func _phase_min_duration() -> float:
+	match current_boss_phase:
+		BossPhase.PHASE_1:
+			return 2.2
+		BossPhase.PHASE_2:
+			return 2.7
+		BossPhase.PHASE_3:
+			return 2.9
+		BossPhase.PHASE_3_RAGE:
+			return 1.9
+		BossPhase.PHASE_4:
+			return 1.8
+	return 0.0
+
+
+func _phase_min_attacks() -> int:
+	match current_boss_phase:
+		BossPhase.PHASE_1:
+			return 2
+		BossPhase.PHASE_2:
+			return 3
+		BossPhase.PHASE_3:
+			return 3
+		BossPhase.PHASE_3_RAGE:
+			return 2
+		BossPhase.PHASE_4:
+			return 2
+	return 0
+
+
+func _phase_requirements_met() -> bool:
+	return _phase_elapsed >= _phase_min_duration() and _phase_attack_count >= _phase_min_attacks()
+
+
+func _reset_phase_progress() -> void:
+	_phase_elapsed = 0.0
+	_phase_attack_count = 0
+	_boss_attack_timer = _boss_attack_cooldown
+
+
+func _maybe_pressure_healing_player() -> void:
+	if _heal_punish_cooldown > 0.0 or _attack_active or _phase_paused:
+		return
+	var player = find_player()
+	if not player or not is_instance_valid(player):
+		return
+	if not bool(player.get("is_healing")):
+		return
+	_heal_punish_cooldown = 2.0
+	_status_text("NO FREE HEAL", global_position + Vector2(0, -72), false)
+	if current_boss_phase >= BossPhase.PHASE_3:
+		_force_next_attack("corrupt_rift")
+	else:
+		_force_next_attack("charge")
+
+
 func _check_phase_transitions() -> void:
 	if max_health <= 0:
 		return
 	var hp_pct = current_health / max_health
+	if not _phase_requirements_met() and hp_pct <= _current_phase_floor_pct():
+		return
 
 	if current_boss_phase == BossPhase.PHASE_1 and hp_pct <= PHASE_2_HP_PCT:
 		current_boss_phase = BossPhase.PHASE_2
@@ -570,11 +919,19 @@ func _trigger_phase_pause(phase_number: int) -> void:
 	## Brief stagger + VFX on phase change with full game juice.
 	_phase_paused = true
 	_phase_pause_timer = 0.0
+	_phase_pause_duration = 0.45
 	_pending_phase = phase_number
 	_attack_active = false
 	_charge_rushing = false
 	velocity = Vector2.ZERO
+	_reset_phase_pattern()
 	_apply_phase_combat_tuning()
+	_reset_phase_progress()
+	match phase_number:
+		2:
+			_forced_attack = "low_sweep"
+		3:
+			_forced_attack = "corrupt_rift"
 
 	# Full juice pipeline: hitstop + shake + flash + slowmo + zoom
 	if has_node("/root/GameJuice"):
@@ -598,10 +955,14 @@ func _enter_rage_phase() -> void:
 	_apply_phase_combat_tuning()
 	_phase_paused = true
 	_phase_pause_timer = 0.0
+	_phase_pause_duration = 0.5
 	_pending_phase = 35
 	_attack_active = false
 	_charge_rushing = false
 	velocity = Vector2.ZERO
+	_reset_phase_pattern()
+	_reset_phase_progress()
+	_forced_attack = "teleport_slash"
 
 	_screen_shake(35.0, 0.8)
 	_hitstop(0.15)
@@ -620,13 +981,21 @@ func _enter_rage_phase() -> void:
 
 
 func _enter_phase_4() -> void:
-	## Knight locks in infinite loop — Root Access or finish by force.
-	phase_4_locked = true
+	current_boss_phase = BossPhase.PHASE_4
+	## Final Stand first; Root Access opens only after the last sliver of HP.
+	phase_4_locked = false
+	_root_access_ready = false
 	_attack_active = false
 	_charge_rushing = false
-	current_state = State.IDLE
+	current_state = State.CHASE
+	is_hostile = true
 	velocity = Vector2.ZERO
+	_reset_phase_pattern()
+	movement_speed = BASE_MOVEMENT_SPEED * 1.6
+	contact_damage = BASE_CONTACT_DAMAGE * 1.15
 	_apply_phase_combat_tuning()
+	_reset_phase_progress()
+	_forced_attack = "charge"
 
 	# Full phase transition juice for the climactic moment
 	if has_node("/root/GameJuice"):
@@ -636,21 +1005,37 @@ func _enter_phase_4() -> void:
 		_hitstop(0.15)
 
 	if has_node("Sprite"):
-		get_node("Sprite").modulate = Color(0.65, 0.45, 0.45)
-		# Pulsing glitch effect to signal the knight is stuck in a loop
-		if _phase_pulse_tween and _phase_pulse_tween.is_valid():
-			_phase_pulse_tween.kill()
-		_phase_pulse_tween = create_tween().set_loops()
-		_phase_pulse_tween.tween_property(get_node("Sprite"), "modulate:a", 0.5, 0.4).set_trans(Tween.TRANS_SINE)
-		_phase_pulse_tween.tween_property(get_node("Sprite"), "modulate:a", 1.0, 0.4).set_trans(Tween.TRANS_SINE)
+		get_node("Sprite").modulate = Color(1.35, 0.35, 0.35)
 
 	_vfx("vfx_glitch_sparkle", global_position)
 	_vfx("vfx_glitch_sparkle", global_position + Vector2(0, -50))
 	_vfx("vfx_enemy_death", global_position + Vector2(0, -30))
 
-	# Spawn persistent "ROOT ACCESS" prompt above boss
-	_status_text("[E] ROOT ACCESS", global_position + Vector2(0, -80), true)
+	_status_text("FINAL STAND", global_position + Vector2(0, -80), false)
 
+	phase_changed.emit(4)
+
+
+func _enter_root_access_lock() -> void:
+	if _root_access_ready:
+		return
+	_root_access_ready = true
+	phase_4_locked = true
+	_attack_active = false
+	_charge_rushing = false
+	current_state = State.IDLE
+	velocity = Vector2.ZERO
+	if _phase_pulse_tween and _phase_pulse_tween.is_valid():
+		_phase_pulse_tween.kill()
+	if has_node("Sprite"):
+		var spr = get_node("Sprite")
+		spr.modulate = Color(0.65, 0.45, 0.45)
+		_phase_pulse_tween = create_tween().set_loops()
+		_phase_pulse_tween.tween_property(spr, "modulate:a", 0.5, 0.4).set_trans(Tween.TRANS_SINE)
+		_phase_pulse_tween.tween_property(spr, "modulate:a", 1.0, 0.4).set_trans(Tween.TRANS_SINE)
+	_screen_shake(18.0, 0.4)
+	_vfx("vfx_glitch_sparkle", global_position)
+	_status_text("[E] ROOT ACCESS", global_position + Vector2(0, -80), true)
 	root_access_triggered.emit()
 
 
@@ -665,9 +1050,55 @@ func hack_disable_attacking() -> void:
 # DAMAGE & DEATH OVERRIDES
 # ═════════════════════════════════════════════════════════════════════════
 
+func _register_close_pressure_hit(knockback_source: Vector2) -> void:
+	if knockback_source == Vector2.ZERO or _close_pressure_cooldown > 0.0 or phase_4_locked:
+		return
+	if knockback_source.distance_to(global_position) > attack_range * 1.25:
+		return
+	_close_pressure_hits += 1
+	_close_pressure_timer = CLOSE_PRESSURE_WINDOW
+	if _close_pressure_hits >= CLOSE_PRESSURE_HITS:
+		_trigger_close_pressure_guard()
+
+
+func _trigger_close_pressure_guard() -> void:
+	_close_pressure_hits = 0
+	_close_pressure_cooldown = CLOSE_PRESSURE_COOLDOWN
+	_guard_timer = CLOSE_PRESSURE_GUARD_TIME
+	_attack_active = false
+	_charge_rushing = false
+	velocity = Vector2.ZERO
+	_status_text("GUARD COUNTER", global_position + Vector2(0, -72), false)
+	if has_node("Sprite"):
+		get_node("Sprite").modulate = Color(0.65, 0.85, 1.0)
+	_front_warning(Vector2(attack_range * 0.9, 88.0), -30.0, Color(0.85, 0.95, 1.0, 0.34), 0.16)
+	_force_next_attack("shield_bash")
+
+
+func _apply_phase_floor_if_needed() -> bool:
+	var floor_pct := _current_phase_floor_pct()
+	if floor_pct <= 0.0 or _phase_requirements_met():
+		return false
+	var floor_hp := max_health * floor_pct + 1.0
+	if current_health > floor_hp:
+		return false
+	current_health = floor_hp
+	health_changed.emit(current_health, max_health)
+	_update_health_bar()
+	if _guard_timer <= 0.0:
+		_guard_timer = 0.22
+	_status_text("READ THE PATTERN", global_position + Vector2(0, -72), false)
+	return true
+
+
 func take_damage(amount: float, knockback_source: Vector2 = Vector2.ZERO) -> void:
 	if current_state == State.DEAD:
 		return
+	_register_close_pressure_hit(knockback_source)
+	if _phase_paused:
+		amount *= TRANSITION_GUARD_MULT
+	if _guard_timer > 0.0:
+		amount *= 0.28
 
 	# Lighter knockback for boss
 	if knockback_source != Vector2.ZERO:
@@ -693,16 +1124,22 @@ func take_damage(amount: float, knockback_source: Vector2 = Vector2.ZERO) -> voi
 	_play_hit_flash()
 	_tween_hurt()
 	_vfx("vfx_hit_spark", global_position + Vector2(0, -15))
+	if _apply_phase_floor_if_needed():
+		return
 
 	if current_health <= 0:
 		die()
 		return
 
 	_check_phase_transitions()
+	if current_boss_phase == BossPhase.PHASE_4 and not phase_4_locked and current_health / max_health <= ROOT_ACCESS_HP_PCT:
+		_enter_root_access_lock()
+		return
 
 	# Phase-specific flinch behavior
-	if current_boss_phase == BossPhase.PHASE_1 and current_state != State.STUNNED and not _stagger_active:
+	if current_boss_phase == BossPhase.PHASE_1 and current_state != State.STUNNED and not _stagger_active and _flinch_cooldown <= 0.0 and _guard_timer <= 0.0:
 		_stagger_active = true
+		_flinch_cooldown = 1.05
 		var _prev = current_state
 		current_state = State.STUNNED
 		velocity.x = move_toward(velocity.x, 0.0, 300.0)
@@ -765,6 +1202,51 @@ func die() -> void:
 	await get_tree().create_timer(1.0).timeout
 	if is_inside_tree() and is_instance_valid(self):
 		queue_free()
+
+func reset_for_retry() -> void:
+	if _phase_pulse_tween and _phase_pulse_tween.is_valid():
+		_phase_pulse_tween.kill()
+	current_boss_phase = BossPhase.PHASE_1
+	_phase_paused = false
+	_phase_pause_timer = 0.0
+	_pending_phase = 0
+	_phase_elapsed = 0.0
+	_phase_attack_count = 0
+	_boss_attack_timer = 0.0
+	_boss_combo_count = 0
+	_attack_active = false
+	_stagger_active = false
+	_slam_wave_active = false
+	_charge_rushing = false
+	_recent_attacks.clear()
+	_phase_pattern_step = 0
+	_forced_attack = ""
+	_close_pressure_hits = 0
+	_close_pressure_timer = 0.0
+	_close_pressure_cooldown = 0.0
+	_guard_timer = 0.0
+	_heal_punish_cooldown = 0.0
+	_flinch_cooldown = 0.0
+	_status_callout_times.clear()
+	_is_enraged = false
+	phase_4_locked = false
+	_root_access_ready = false
+	contact_damage = BASE_CONTACT_DAMAGE
+	movement_speed = BASE_MOVEMENT_SPEED
+	attack_range = BASE_ATTACK_RANGE
+	current_health = max_health
+	collision_layer = 4
+	collision_mask = 1
+	is_hostile = true
+	current_state = State.CHASE
+	set_physics_process(true)
+	if has_node("Sprite"):
+		var spr = get_node("Sprite")
+		spr.modulate = Color.WHITE
+		spr.modulate.a = 1.0
+	_apply_phase_combat_tuning()
+	health_changed.emit(current_health, max_health)
+	_update_health_bar()
 
 
 # ═════════════════════════════════════════════════════════════════════════

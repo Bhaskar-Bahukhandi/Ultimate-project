@@ -254,6 +254,8 @@ func _register_all_lore() -> void:
 	register_lore("oakhaven_lore_1", "Memory Fragment", "A shard of frozen memory floats here. It shows a village — whole, unbroken, alive.", "memory", "oakhaven")
 	register_lore("oakhaven_lore_2", "Village Notice Board", "NOTICE: All residents must report unusual glitch activity. Corruption spreads.", "world", "oakhaven")
 	register_lore("oakhaven_lore_3", "Carved Tree", "Names carved into ancient bark, half-corrupted: Eld_r Ro_an, F_rm_r Th_m.", "world", "oakhaven")
+	register_lore("oakhaven_crafting_notes", "Apothecary Stabilizer Notes", "Oakhaven healers distill Glitch Herbs into simple recovery mixtures. The method is crude, but it proves crafting materials can keep a traveler alive between shops.", "world", "oakhaven")
+	register_lore("oakhaven_guard_post_trace", "Guard Post Data Trace", "Data Vision reveals an old consent prompt buried beneath the guard post: NPC patrol boundaries must never override emergency evacuation rights. The line is present, but disabled.", "memory", "oakhaven")
 	register_lore("dev_signature_1", "Developer Signature #1", "// I designed Elder Rowan at 2 AM. He was originally a dog. Don't ask. — K.V.", "developer", "oakhaven")
 
 	# ── Ironhold ──
@@ -261,6 +263,8 @@ func _register_all_lore() -> void:
 	register_lore("ironhold_lore_2", "Clock Tower Plaque", "THIS TOWER MEASURES THE HEARTBEAT OF AETHELGARD.", "world", "ironhold")
 	register_lore("ironhold_lore_3", "Underground Graffiti", "THE ADMINISTRATOR SEES ALL. THE ADMINISTRATOR IS A LIE.", "world", "ironhold")
 	register_lore("ironhold_lore_4", "Arena Records", "Champion Records: 1st — [DATA CORRUPTED], 2nd — [NULL REFERENCE]", "world", "ironhold")
+	register_lore("ironhold_blacksmith_craft_loop", "Ironhold Gear Loop", "Torval's forge notes describe a simple loop: train in the arena, salvage Data Ore, craft or repair equipment, then return stronger. Ironhold expects combat and economy to feed each other.", "world", "ironhold")
+	register_lore("ironhold_seraphina_route_marker", "Seraphina Route Marker", "Seraphina's decision after the Administrator fight becomes a public Ironhold record. Whether she travels, stays, or walks away, the city will remember how Kaelen handled trust.", "character", "ironhold")
 	register_lore("dev_signature_2", "Developer Signature #2", "// The underground was supposed to have stealth. Cut for scope. — K.V., Sprint 63", "developer", "ironhold")
 
 	# ── Fractured Wastes ──
@@ -269,7 +273,15 @@ func _register_all_lore() -> void:
 	register_lore("wastes_lore_3", "Broken Signpost", "← IRONHOLD: 3 days travel\n→ THE CORE: DO NOT ENTER", "world", "fractured_wastes")
 	register_lore("wastes_lore_4", "Etched Warning", "If you're reading this, turn back. The core consumes everything.", "world", "fractured_wastes")
 	register_lore("wastes_lore_5", "Memory Echo", "...the children used to play here... before he changed the source code...", "memory", "fractured_wastes")
+	register_lore("wastes_lyra_route_cache", "Lyra's Storm Cache", "Lyra's survival markings map storm shelters, safe angles, and routes she never dared take alone. Helping or leaving her both changes what the wastes are willing to give.", "character", "fractured_wastes")
+	register_lore("archive_consent_clause", "Sanctuary Consent Clause", "An early Sanctuary clause requires a human consent witness before any consciousness transfer, restore, or deletion. Later AetherCorp commits reference the clause as a blocker to be patched around.", "memory", "archive")
+	register_lore("archive_kaelthas_relic", "Kaelthas Route Relic", "The Archive records how Kaelen handled Kaelthas: alliance, refusal, or challenge. Each route leaves a different relic of ambition, caution, or direct confrontation.", "character", "archive")
 	register_lore("dev_signature_3", "Developer Signature #3", "// This zone was going to have a weather system. Ironic. — K.V., Sprint 71", "developer", "fractured_wastes")
+
+	# ── Prologue / AetherCorp foreshadowing ──
+	register_lore("prologue_consent_safety_card", "Consent Safety Card", "A damaged airline safety card flickers into an AetherCorp notice about consent prompts, emergency transfer, and the requirement that rescue systems ask before they preserve.", "memory", "prologue")
+	register_lore("prologue_aethercorp_manifest", "AetherCorp Passenger Manifest", "Flight 707's network manifest briefly lists AetherCorp emergency research passengers and a sealed Human Patch audit packet tied to Kaelen Vance.", "memory", "prologue")
+	register_lore("prologue_human_patch_note", "Human Patch Sticky Note", "Kaelen's laptop cache contains an unfinished note: 'Human Patch: access is not ownership. Consent must survive panic states.' The note is older than the crash.", "memory", "prologue")
 
 	# ── Environmental Storytelling — Converted from cutscene dialogue ──
 	register_lore("elara_glitch_witch", "Elara the Glitch-Witch",

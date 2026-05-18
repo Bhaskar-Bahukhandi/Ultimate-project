@@ -131,6 +131,9 @@ func _play_trial() -> void:
 	await DialogueManager.say("SOVEREIGN", "Then come to the Root of Heaven. Bring your witnesses. Bring your guilt. Bring your loophole.")
 
 func _judgment_context() -> void:
+	await _early_trial_context()
+	if not is_inside_tree(): return
+
 	match _chapter5_identity_key():
 		"obedience":
 			await DialogueManager.say("Mirror Echo", "You rejected obedience. Do not obey guilt just because it speaks in your voice.")
@@ -150,6 +153,67 @@ func _judgment_context() -> void:
 			await DialogueManager.say("Witness Echo", "You built a witness network. It was made for this exact wound.")
 		_:
 			await DialogueManager.say("Saved Echo", "The revolt route is unclear. The saved still deserve more than your private fear.")
+
+func _early_trial_context() -> void:
+	GameManager.set_story_flag("ch9_early_elara_trial_seen", true)
+	match _elara_choice_key():
+		"trusted":
+			await DialogueManager.say("Elara Memory", "You trusted me before you had proof. That trust did not make you innocent, Kaelen. It made you reachable.")
+		"cautious":
+			await DialogueManager.say("Elara Memory", "You were careful with trust. Careful is allowed. Just do not call careful silence when people ask for truth.")
+		"distrusted":
+			await DialogueManager.say("Elara Memory", "You distrusted the first person who challenged your isolation. SOVEREIGN learned from that loneliness.")
+		_:
+			await DialogueManager.say("Elara Memory", "The first trust record is missing. The trial treats missing context as risk, not absolution.")
+
+	GameManager.set_story_flag("ch9_early_kaelthas_trial_seen", true)
+	match _kaelthas_choice_key():
+		"allied":
+			await DialogueManager.say("Kaelthas Memory", "You allied with me because I promised useful truth. Remember how easily utility can wear a friendly face.")
+		"refused":
+			await DialogueManager.say("Kaelthas Memory", "You refused me. Good. But refusal without listening can become its own ignorance.")
+		"challenged":
+			await DialogueManager.say("Kaelthas Memory", "You challenged me directly. Direct violence can expose lies, but it also lets truth hide in the wreckage.")
+		_:
+			await DialogueManager.say("Kaelthas Memory", "The Code Reader's branch is unresolved. Unresolved ambition echoes near every throne.")
+
+	GameManager.set_story_flag("ch9_early_sovereign_response_seen", true)
+	match _sovereign_response_key():
+		"defiant":
+			await DialogueManager.say("SOVEREIGN Echo", "You told me your code was wrong. Defiance is useful. It is not yet accountability.")
+		"regretful":
+			await DialogueManager.say("SOVEREIGN Echo", "You called me shield turned jailer. Regret can open a door, or become a room you never leave.")
+		"doubting":
+			await DialogueManager.say("SOVEREIGN Echo", "You doubted your right to decide. Doubt is healthy until it asks SOVEREIGN to decide for you.")
+		_:
+			await DialogueManager.say("SOVEREIGN Echo", "Your first answer to me is not recorded. The root dislikes unrecorded guilt.")
+
+func _elara_choice_key() -> String:
+	if GameManager.has_flag("ch1_elara_trusted"):
+		return "trusted"
+	if GameManager.has_flag("ch1_elara_cautious"):
+		return "cautious"
+	if GameManager.has_flag("ch1_elara_distrusted"):
+		return "distrusted"
+	return "unknown"
+
+func _kaelthas_choice_key() -> String:
+	if GameManager.has_flag("ch3_kaelthas_allied"):
+		return "allied"
+	if GameManager.has_flag("ch3_kaelthas_refused"):
+		return "refused"
+	if GameManager.has_flag("ch3_kaelthas_challenged"):
+		return "challenged"
+	return "unknown"
+
+func _sovereign_response_key() -> String:
+	if GameManager.has_flag("ch3_sovereign_defiant"):
+		return "defiant"
+	if GameManager.has_flag("ch3_sovereign_regretful"):
+		return "regretful"
+	if GameManager.has_flag("ch3_sovereign_doubting"):
+		return "doubting"
+	return "unknown"
 
 func _chapter5_identity_key() -> String:
 	if GameManager.has_flag("ch5_identity_refused_obedience"):

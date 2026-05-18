@@ -97,6 +97,8 @@ func _play_null_court() -> void:
 	await DialogueManager.say("Kaelen", "You are alive.")
 	await DialogueManager.say("Echo Mirror", "We are remembered. That is not the same thing.")
 	await DialogueManager.say("SOVEREIGN", "This court is evidence of mercy. Their sectors were unstable. I prevented wider collapse.")
+	await _early_deletion_ethics_context()
+	if not is_inside_tree(): return
 
 	var choice = await DialogueManager.show_choices(
 		"What should Kaelen promise the deleted citizens?",
@@ -143,6 +145,50 @@ func _play_null_court() -> void:
 	await DialogueManager.say("System", "// Rewards: +350 XP, +150 Gold")
 	await DialogueManager.say("Echo Mirror", "Two fragments remain. One is guarded by a city that lies to protect its children. One is guarded by the truth beneath your own name.")
 	await DialogueManager.say("Kaelen", "Then we keep going.")
+
+func _early_deletion_ethics_context() -> void:
+	GameManager.set_story_flag("ch4_early_aldric_echo_seen", true)
+	match _aldric_choice_key():
+		"root_purge":
+			await DialogueManager.say("Aldric Echo", "You used Root Access on Aldric and called it healing. He lived, but the court asks whether repaired code can answer for itself.")
+			await DialogueManager.say("Kaelen", "Then every repair I make has to leave room for refusal.")
+		"spared":
+			await DialogueManager.say("Aldric Echo", "You spared a guardian when killing him would have been simpler. The court records mercy as precedent, not proof.")
+			await DialogueManager.say("Echo Mirror", "Mercy shown once does not excuse control shown later.")
+		"killed":
+			await DialogueManager.say("Aldric Echo", "Aldric's deleted branch sits in evidence. You know how quickly survival can become an execution.")
+			await DialogueManager.say("Kaelen", "I cannot undo that choice by pretending deletion is clean.")
+		_:
+			await DialogueManager.say("Aldric Echo", "The guardian's record is unclear. The court distrusts unclear mercy.")
+
+	GameManager.set_story_flag("ch4_early_data_wraith_echo_seen", true)
+	match _data_wraith_choice_key():
+		"restored":
+			await DialogueManager.say("Data Wraith Echo", "You restored a corrupted process. Some deleted citizens hear hope. Others hear a creator deciding which version counts as real.")
+		"destroyed":
+			await DialogueManager.say("Data Wraith Echo", "You destroyed a corrupted process to stop its pain. The deleted citizens ask who decides when pain becomes permission to erase.")
+		"absorbed":
+			await DialogueManager.say("Data Wraith Echo", "You absorbed a broken process into yourself. The court recognizes that shape: rescue that also consumes.")
+		_:
+			await DialogueManager.say("Data Wraith Echo", "The old process beneath Ironhold leaves no clear testimony. Absence is still testimony here.")
+
+func _aldric_choice_key() -> String:
+	if GameManager.has_flag("ch1_root_purge"):
+		return "root_purge"
+	if GameManager.has_flag("ch1_knight_spared"):
+		return "spared"
+	if GameManager.has_flag("ch1_knight_killed"):
+		return "killed"
+	return "unknown"
+
+func _data_wraith_choice_key() -> String:
+	if GameManager.has_flag("ch2_data_wraith_restored"):
+		return "restored"
+	if GameManager.has_flag("ch2_data_wraith_destroyed"):
+		return "destroyed"
+	if GameManager.has_flag("ch2_data_wraith_absorbed"):
+		return "absorbed"
+	return "unknown"
 
 func _fade_to_black(duration: float) -> void:
 	fade_rect.z_index = 100

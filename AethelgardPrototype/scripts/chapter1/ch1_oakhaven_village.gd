@@ -250,6 +250,8 @@ func _on_apothecary_interaction(body) -> void:
 			_apothecary_dialogue_done = true
 			await _play_dialogue_array(apothecary_dialogue, "open_shop")
 			if not is_inside_tree(): return
+			await _grant_crafting_intro_materials()
+			if not is_inside_tree(): return
 		else:
 			# Skip dialogue on repeat visit — go straight to shop
 			open_shop()
@@ -379,6 +381,41 @@ func _on_guard_interaction(body) -> void:
 	if body.name == "Player" and not in_dialogue and not _is_transitioning:
 		await _play_dialogue_array(guard_npc_dialogue)
 		if not is_inside_tree(): return
+		await _discover_guard_post_data_vision_secret()
+		if not is_inside_tree(): return
+
+func _grant_crafting_intro_materials() -> void:
+	if GameManager.has_flag("ch1_crafting_materials_intro_seen"):
+		return
+	GameManager.set_story_flag("ch1_crafting_materials_intro_seen", true)
+	_sync_crafting_materials()
+	var granted := false
+	if has_node("/root/Inventory"):
+		granted = Inventory.add_item("glitch_herb", 2)
+	if has_node("/root/LoreJournal"):
+		LoreJournal.discover("oakhaven_crafting_notes")
+	await DialogueManager.say("System", "[CRAFTING MATERIAL FOUND]\nReceived: Glitch Herb x2\nOpen the pause menu's Crafting tab to brew a Health Potion.", Color(0.0, 1.0, 0.5), true)
+	if not is_inside_tree(): return
+	if not granted:
+		await DialogueManager.say("System", "[CRAFTING NOTE RECORDED]\nMaterial handoff skipped because the inventory was unavailable.", Color(1.0, 0.8, 0.2), true)
+
+func _discover_guard_post_data_vision_secret() -> void:
+	if GameManager.has_flag("ch1_data_vision_secret_found"):
+		return
+	if not GameManager.has_flag("ch1_data_vision_unlocked"):
+		return
+	GameManager.set_story_flag("ch1_data_vision_secret_found", true)
+	_sync_crafting_materials()
+	if has_node("/root/Inventory"):
+		Inventory.add_item("memory_shard", 1)
+	GameManager.add_xp(15)
+	if has_node("/root/LoreJournal"):
+		LoreJournal.discover("oakhaven_guard_post_trace")
+	await DialogueManager.say("System", "[DATA VISION SECRET]\nA disabled evacuation-rights clause flickers under the guard post.\nRecovered: Memory Shard x1, +15 XP.", Color(0.3, 0.9, 1.0), true)
+
+func _sync_crafting_materials() -> void:
+	if has_node("/root/CraftingSystem"):
+		CraftingSystem.get_recipes()
 
 func open_shop() -> void:
 	## Open the apothecary shop using global ShopSystem

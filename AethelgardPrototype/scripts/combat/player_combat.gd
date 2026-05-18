@@ -54,6 +54,18 @@ const WALL_JUMP_LOCK_TIME = 0.10
 const ATTACK_RANGE = 110.0
 const COMBO_WINDOW = 0.46
 const ATTACK_COOLDOWN_BASE = 0.22
+const COMBO1_STARTUP = 0.07
+const COMBO1_ACTIVE = 0.08
+const COMBO1_RECOVERY = 0.17
+const COMBO2_STARTUP = 0.08
+const COMBO2_ACTIVE = 0.08
+const COMBO2_RECOVERY = 0.19
+const COMBO3_STARTUP = 0.11
+const COMBO3_ACTIVE = 0.10
+const COMBO3_RECOVERY = 0.26
+const CHARGED_ATTACK_STARTUP = 0.16
+const CHARGED_ATTACK_ACTIVE = 0.12
+const CHARGED_ATTACK_RECOVERY = 0.34
 const CHARGED_ATTACK_TIME = 1.2
 const CHARGED_ATTACK_RANGE = 180.0
 const CHARGED_ATTACK_MULT = 3.5
@@ -63,6 +75,10 @@ const POGO_DAMAGE_MULT = 1.8
 # ── Directional Attack ───────────────────────────────────────────────────
 const UPSLASH_RANGE = 90.0
 const UPSLASH_DAMAGE_MULT = 1.1
+const UPSLASH_STARTUP = 0.08
+const UPSLASH_ACTIVE = 0.08
+const UPSLASH_RECOVERY = 0.17
+const POGO_ACTIVE = 0.07
 const AIR_ATTACK_RANGE = 100.0
 const AIR_ATTACK_DAMAGE_MULT = 1.15
 
@@ -229,6 +245,9 @@ var speed_multiplier: float = 1.0
 var _last_damage_source: String = ""
 var _last_damage_type: String = ""
 
+# QA-only combat feel metrics. These are read by scratch playtest harnesses and do not affect gameplay.
+var combat_attack_metrics: Dictionary = {}
+
 # HUD references
 var _hud_layer: CanvasLayer
 var _hp_bar: ProgressBar
@@ -264,6 +283,7 @@ const _PlayerAnimCtrl = preload("res://scripts/player_animation_controller.gd")
 func _ready() -> void:
 	collision_layer = 2
 	collision_mask = 1
+	_reset_combat_attack_metrics()
 
 	# Cache the Sprite child node for performance (avoids repeated get_node calls)
 	_sprite = get_node_or_null("Sprite")
@@ -291,6 +311,7 @@ func _ready() -> void:
 	_anim_controller.set_mode_combat()
 	add_child(_anim_controller)
 	_build_combat_hud()
+	refresh_visual_references()
 
 
 func _exit_tree() -> void:
@@ -335,6 +356,9 @@ func _physics_process(delta: float) -> void:
 		invuln_timer -= delta
 		if invuln_timer <= 0.0:
 			invulnerable = false
+			set_meta("local_retry_disable_flicker", false)
+			_set_sprite_alpha(1.0)
+		elif bool(get_meta("local_retry_disable_flicker", false)):
 			_set_sprite_alpha(1.0)
 		else:
 			var flicker = 0.35 + 0.65 * absf(sin(invuln_timer * 14.0))
@@ -615,15 +639,73 @@ func _handle_variable_jump() -> void:
 # 3-HIT COMBO CHAIN
 # ══════════════════════════════════════════════════════════════════════════
 
+func _reset_combat_attack_metrics() -> void:
+	combat_attack_metrics = {
+		"attempted": 0,
+		"started": 0,
+		"ignored_recovery": 0,
+		"buffered_combo": 0,
+		"hitbox_active_duration": {},
+		"last_attack_timing": {}
+	}
+
+
+func get_combat_attack_metrics() -> Dictionary:
+	return combat_attack_metrics.duplicate(true)
+
+
+func _metric_inc(key: String, amount: int = 1) -> void:
+	if not combat_attack_metrics.has(key):
+		combat_attack_metrics[key] = 0
+	combat_attack_metrics[key] = int(combat_attack_metrics[key]) + amount
+
+
+func _metric_attack_window(attack_name: String, startup: float, active: float, recovery: float, combo_window_start: float) -> void:
+	_metric_inc("started")
+	var active_map: Dictionary = combat_attack_metrics.get("hitbox_active_duration", {})
+	active_map[attack_name] = float(active_map.get(attack_name, 0.0)) + active
+	combat_attack_metrics["hitbox_active_duration"] = active_map
+	combat_attack_metrics["last_attack_timing"] = {
+		"attack": attack_name,
+		"startup": startup,
+		"active": active,
+		"recovery": recovery,
+		"combo_cancel_window": recovery,
+		"combo_window_start": combo_window_start
+	}
+
+
+func _buffer_attack_input() -> void:
+	if attack_buffer_timer <= 0.0:
+		attack_buffer_timer = float(ATTACK_BUFFER_FRAMES) / 60.0
+		_metric_inc("buffered_combo")
+	else:
+		_metric_inc("ignored_recovery")
+
+
+func _consume_attack_buffer_if_ready() -> void:
+	if attack_buffer_timer <= 0.0:
+		return
+	if is_attacking or is_dashing or is_defending or is_healing or is_casting or attack_cooldown > 0.0:
+		return
+	attack_buffer_timer = 0.0
+	call_deferred("_perform_combo_attack")
+
+
 func _handle_attack() -> void:
+	var attack_pressed := Input.is_action_just_pressed("attack")
+	if attack_pressed:
+		_metric_inc("attempted")
 	if is_dashing or is_defending or is_healing or is_casting:
+		if attack_pressed:
+			_metric_inc("ignored_recovery")
 		return
 	if is_attacking:
-		if attack_cooldown > 0.0:
-			attack_buffer_timer = float(ATTACK_BUFFER_FRAMES) / 60.0
+		if attack_pressed:
+			_buffer_attack_input()
 		return
 
-	if Input.is_action_just_pressed("attack") and attack_cooldown <= 0.0:
+	if attack_pressed and attack_cooldown <= 0.0:
 		if Input.is_action_pressed("move_up"):
 			return
 		if not is_on_floor() and Input.is_action_pressed("move_down"):
@@ -631,8 +713,8 @@ func _handle_attack() -> void:
 		is_charging = true
 		charge_timer = 0.0
 		charged_attack_ready = false
-	elif Input.is_action_just_pressed("attack") and attack_cooldown > 0.0:
-		attack_buffer_timer = float(ATTACK_BUFFER_FRAMES) / 60.0
+	elif attack_pressed and attack_cooldown > 0.0:
+		_buffer_attack_input()
 
 	if Input.is_action_just_released("attack") and is_charging:
 		if charged_attack_ready:
@@ -753,26 +835,35 @@ func _perform_combo_attack() -> void:
 
 	var damage = attack_damage
 	var range_mult = 1.0
-	var cooldown = ATTACK_COOLDOWN_BASE
+	var startup = COMBO1_STARTUP
+	var active_window = COMBO1_ACTIVE
+	var recovery = COMBO1_RECOVERY
 	var lunge_force = 0.0
 
 	match combo_step:
 		1:
 			damage *= 1.0
-			cooldown = 0.21
+			startup = COMBO1_STARTUP
+			active_window = COMBO1_ACTIVE
+			recovery = COMBO1_RECOVERY
 			lunge_force = 40.0
 		2:
 			damage *= 1.25
 			range_mult = 1.2
-			cooldown = 0.23
+			startup = COMBO2_STARTUP
+			active_window = COMBO2_ACTIVE
+			recovery = COMBO2_RECOVERY
 			lunge_force = 65.0
 		3:
 			damage *= 1.5
 			range_mult = 1.4
-			cooldown = 0.32
+			startup = COMBO3_STARTUP
+			active_window = COMBO3_ACTIVE
+			recovery = COMBO3_RECOVERY
 			lunge_force = 145.0
 
-	attack_cooldown = cooldown
+	var total_commitment = startup + active_window + recovery
+	attack_cooldown = total_commitment
 	_update_combo_indicator()
 	# Reset combo step AFTER updating indicator so step 3 text shows
 	if combo_step == 3:
@@ -784,11 +875,15 @@ func _perform_combo_attack() -> void:
 	var anim_step = combo_step if combo_step > 0 else 3
 	var anim_target = _sprite if _sprite else self
 	TweenAnimator.play_attack_combo(anim_target, facing, anim_step)
+	_metric_attack_window("slash_%d" % anim_step, startup, active_window, recovery, startup + active_window)
 
-	velocity.x = facing * lunge_force
+	velocity.x = facing * lunge_force * 0.45
 
 	var slash_offset = Vector2(45.0 * facing, -10.0)
 	_vfx("vfx_slash_arc", global_position + slash_offset)
+	await get_tree().create_timer(startup).timeout
+	if not is_inside_tree() or is_dead:
+		return
 
 	var hit_count = 0
 	var hitbox_size := Vector2(ATTACK_RANGE * range_mult, 76.0)
@@ -843,11 +938,17 @@ func _perform_combo_attack() -> void:
 		if parry_counter_active:
 			parry_counter_active = false
 
-	await get_tree().create_timer(cooldown * 0.5).timeout
+	await get_tree().create_timer(active_window).timeout
 	if not is_inside_tree():
 		return
-	attack_recovery_timer = cooldown * 0.35
+	can_cancel_attack = true
+	attack_recovery_timer = recovery
+	await get_tree().create_timer(recovery).timeout
+	if not is_inside_tree():
+		return
+	can_cancel_attack = false
 	is_attacking = false
+	_consume_attack_buffer_if_ready()
 
 
 func _handle_charged_attack() -> void:
@@ -856,7 +957,7 @@ func _handle_charged_attack() -> void:
 
 func _perform_charged_attack() -> void:
 	is_attacking = true
-	attack_cooldown = 0.6
+	attack_cooldown = CHARGED_ATTACK_STARTUP + CHARGED_ATTACK_ACTIVE + CHARGED_ATTACK_RECOVERY
 	combo_step = 0
 	combo_timer = 0.0
 
@@ -875,8 +976,12 @@ func _perform_charged_attack() -> void:
 	var slash_pos = global_position + Vector2(60.0 * facing, -15.0)
 	_vfx("vfx_slash_arc", slash_pos)
 	_vfx("vfx_glitch_sparkle", slash_pos)
+	_metric_attack_window("charged_slash", CHARGED_ATTACK_STARTUP, CHARGED_ATTACK_ACTIVE, CHARGED_ATTACK_RECOVERY, CHARGED_ATTACK_STARTUP + CHARGED_ATTACK_ACTIVE)
 
-	velocity.x = facing * 200.0
+	velocity.x = facing * 90.0
+	await get_tree().create_timer(CHARGED_ATTACK_STARTUP).timeout
+	if not is_inside_tree() or is_dead:
+		return
 
 	var hit_count := 0
 	var hitbox_size := Vector2(CHARGED_ATTACK_RANGE, 96.0)
@@ -909,10 +1014,17 @@ func _perform_charged_attack() -> void:
 	if hit_count > 0:
 		_screen_shake(18.0, 0.3)
 
-	await get_tree().create_timer(0.42).timeout
+	await get_tree().create_timer(CHARGED_ATTACK_ACTIVE).timeout
 	if not is_inside_tree():
 		return
+	can_cancel_attack = true
+	attack_recovery_timer = CHARGED_ATTACK_RECOVERY
+	await get_tree().create_timer(CHARGED_ATTACK_RECOVERY).timeout
+	if not is_inside_tree():
+		return
+	can_cancel_attack = false
 	is_attacking = false
+	_consume_attack_buffer_if_ready()
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -1053,6 +1165,7 @@ func _handle_pogo() -> void:
 func _execute_pogo() -> void:
 	is_pogoing = true
 	pogo_cooldown = 0.2
+	_metric_attack_window("pogo", 0.0, POGO_ACTIVE, 0.0, 0.0)
 	# Don't set downward velocity here — only bounce on hit
 
 	var pogo_mult = POGO_DAMAGE_MULT
@@ -1484,7 +1597,7 @@ func _perform_upslash() -> void:
 		return
 
 	is_attacking = true
-	attack_cooldown = 0.24
+	attack_cooldown = UPSLASH_STARTUP + UPSLASH_ACTIVE + UPSLASH_RECOVERY
 	_sfx("sword_swing", 0.1)
 
 	var damage = attack_damage * UPSLASH_DAMAGE_MULT
@@ -1495,6 +1608,10 @@ func _perform_upslash() -> void:
 	var anim_target = _sprite if _sprite else self
 	TweenAnimator.play_upslash(anim_target, facing_direction)
 	_vfx("vfx_slash_arc", global_position + Vector2(0, -50))
+	_metric_attack_window("upslash", UPSLASH_STARTUP, UPSLASH_ACTIVE, UPSLASH_RECOVERY, UPSLASH_STARTUP + UPSLASH_ACTIVE)
+	await get_tree().create_timer(UPSLASH_STARTUP).timeout
+	if not is_inside_tree() or is_dead:
+		return
 
 	var hit_count = 0
 	var enemies = _get_enemies_in_melee_hitbox(Vector2(0.0, -UPSLASH_RANGE * 0.5), Vector2(90.0, UPSLASH_RANGE), Color(0.55, 0.75, 1.0, 0.22))
@@ -1519,11 +1636,17 @@ func _perform_upslash() -> void:
 		if has_node("/root/CombatFX"):
 			CombatFX.apply_hitstop(0.06)
 
-	await get_tree().create_timer(0.16).timeout
+	await get_tree().create_timer(UPSLASH_ACTIVE).timeout
 	if not is_inside_tree():
 		return
-	attack_recovery_timer = 0.10
+	can_cancel_attack = true
+	attack_recovery_timer = UPSLASH_RECOVERY
+	await get_tree().create_timer(UPSLASH_RECOVERY).timeout
+	if not is_inside_tree():
+		return
+	can_cancel_attack = false
 	is_attacking = false
+	_consume_attack_buffer_if_ready()
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -1759,6 +1882,8 @@ func die() -> void:
 	await get_tree().create_timer(1.0).timeout
 	if not is_inside_tree():
 		return
+	if bool(get_meta("local_boss_retry_enabled", false)):
+		return
 	await _on_death_complete()
 
 
@@ -1836,16 +1961,19 @@ func set_speed_multiplier(mult: float) -> void:
 # ══════════════════════════════════════════════════════════════════════════
 
 func _set_sprite_alpha(alpha: float) -> void:
+	_refresh_sprite_cache_if_needed()
 	if _sprite:
 		_sprite.modulate.a = alpha
 
 
 func _set_sprite_color(color: Color) -> void:
+	_refresh_sprite_cache_if_needed()
 	if _sprite:
 		_sprite.modulate = color
 
 
 func _flash_red() -> void:
+	_refresh_sprite_cache_if_needed()
 	if not is_inside_tree() or not _sprite:
 		return
 	var sprite = _sprite
@@ -1854,6 +1982,179 @@ func _flash_red() -> void:
 	if not is_inside_tree() or not is_instance_valid(sprite):
 		return
 	sprite.modulate = Color.WHITE
+
+
+func refresh_visual_references() -> void:
+	## Re-cache the active Sprite child after scenes replace placeholder art.
+	_sprite = get_node_or_null("Sprite")
+	if _anim_controller and _anim_controller.has_method("on_sprite_replaced"):
+		_anim_controller.on_sprite_replaced()
+	_remember_retry_visual_baseline()
+
+
+func force_restore_after_death_retry(spawn_position: Vector2) -> Dictionary:
+	## Hard reset used by local boss retries. This kills death tweens on both
+	## the root player and active visual child so a late fade cannot re-hide us.
+	Engine.time_scale = 1.0
+	_refresh_sprite_cache_if_needed()
+	TweenAnimator._kill_existing(self)
+	_restore_retry_canvas_item(self, false)
+
+	global_position = spawn_position
+	velocity = Vector2.ZERO
+	is_dead = false
+	invulnerable = true
+	invuln_timer = 0.75
+	set_meta("local_retry_disable_flicker", true)
+	is_attacking = false
+	is_dashing = false
+	is_defending = false
+	is_healing = false
+	is_casting = false
+	is_charging = false
+	parry_active = false
+	parry_counter_active = false
+	charged_attack_ready = false
+	attack_cooldown = 0.0
+	attack_recovery_timer = 0.0
+	attack_buffer_timer = 0.0
+	dash_timer = 0.0
+	dash_cooldown_timer = 0.0
+	heal_timer = 0.0
+	cast_lock_timer = 0.0
+	combo_timer = 0.0
+	charge_timer = 0.0
+	combo_step = 0
+	dash_available = true
+	air_jumps_remaining = 1
+
+	current_health = max_health
+	GameManager.player_stats["hp"] = int(current_health)
+	GameManager.player_stats["soul"] = int(current_soul)
+	health_changed.emit(current_health, max_health)
+	soul_changed.emit(current_soul, MAX_SOUL)
+
+	collision_layer = 2
+	collision_mask = 1
+	for child in get_children():
+		if child is CollisionShape2D:
+			child.disabled = false
+
+	if _sprite and is_instance_valid(_sprite):
+		_restore_retry_visual_tree(_sprite)
+		if _sprite is AnimatedSprite2D:
+			var animated := _sprite as AnimatedSprite2D
+			if animated.sprite_frames and animated.sprite_frames.has_animation("idle"):
+				animated.play("idle")
+
+	if _anim_controller:
+		_anim_controller.on_sprite_replaced()
+		_anim_controller.current_anim = ""
+		_anim_controller.last_anim = ""
+
+	set_process(true)
+	set_physics_process(true)
+	set_process_input(true)
+	set_process_unhandled_input(true)
+	if has_method("_update_hud"):
+		_update_hud()
+
+	return get_retry_visual_debug_state()
+
+
+func get_retry_visual_debug_state() -> Dictionary:
+	_refresh_sprite_cache_if_needed()
+	var sprite_visible := false
+	var sprite_alpha := -1.0
+	var sprite_self_alpha := -1.0
+	var sprite_scale := -1.0
+	if _sprite and is_instance_valid(_sprite) and _sprite is CanvasItem:
+		var canvas := _sprite as CanvasItem
+		sprite_visible = canvas.visible
+		sprite_alpha = canvas.modulate.a
+		sprite_self_alpha = canvas.self_modulate.a
+		if "scale" in canvas:
+			sprite_scale = (canvas.get("scale") as Vector2).length()
+	var collision_enabled := true
+	for child in get_children():
+		if child is CollisionShape2D and child.disabled:
+			collision_enabled = false
+	return {
+		"player_visible": visible,
+		"sprite_visible": sprite_visible,
+		"player_alpha": modulate.a,
+		"player_self_alpha": self_modulate.a,
+		"sprite_alpha": sprite_alpha,
+		"sprite_self_alpha": sprite_self_alpha,
+		"sprite_scale": sprite_scale,
+		"collision_enabled": collision_enabled,
+		"input_enabled": is_processing_input(),
+		"process_enabled": is_processing(),
+		"physics_enabled": is_physics_processing(),
+		"is_dead": is_dead,
+		"hp": current_health,
+		"time_scale": Engine.time_scale
+	}
+
+
+func _refresh_sprite_cache_if_needed() -> void:
+	if _sprite == null or not is_instance_valid(_sprite) or (_sprite is Node and _sprite.get_parent() != self):
+		_sprite = get_node_or_null("Sprite")
+
+
+func _remember_retry_visual_baseline() -> void:
+	_store_retry_canvas_baseline(self)
+	_refresh_sprite_cache_if_needed()
+	if _sprite and is_instance_valid(_sprite):
+		_store_retry_visual_baseline_tree(_sprite)
+
+
+func _store_retry_visual_baseline_tree(node: Node) -> void:
+	if node is CanvasItem:
+		_store_retry_canvas_baseline(node as CanvasItem)
+	for child in node.get_children():
+		_store_retry_visual_baseline_tree(child)
+
+
+func _store_retry_canvas_baseline(item: CanvasItem) -> void:
+	item.set_meta("retry_base_visible", item.visible)
+	item.set_meta("retry_base_modulate", item.modulate)
+	item.set_meta("retry_base_self_modulate", item.self_modulate)
+	if item.material:
+		item.set_meta("retry_base_material", item.material)
+	if "position" in item:
+		item.set_meta("retry_base_position", item.get("position"))
+	if "rotation" in item:
+		item.set_meta("retry_base_rotation", item.get("rotation"))
+	if "scale" in item:
+		item.set_meta("retry_base_scale", item.get("scale"))
+
+
+func _restore_retry_visual_tree(node: Node) -> void:
+	if node is CanvasItem:
+		_restore_retry_canvas_item(node as CanvasItem, true)
+	for child in node.get_children():
+		_restore_retry_visual_tree(child)
+
+
+func _restore_retry_canvas_item(item: CanvasItem, restore_transform: bool) -> void:
+	TweenAnimator._kill_existing(item)
+	item.visible = true
+	var base_modulate: Color = item.get_meta("retry_base_modulate", Color.WHITE)
+	base_modulate.a = 1.0
+	item.modulate = base_modulate
+	var base_self_modulate: Color = item.get_meta("retry_base_self_modulate", Color.WHITE)
+	base_self_modulate.a = 1.0
+	item.self_modulate = base_self_modulate
+	if item.has_meta("retry_base_material"):
+		item.material = item.get_meta("retry_base_material")
+	if restore_transform:
+		if "position" in item:
+			item.set("position", item.get_meta("retry_base_position", item.get("position")))
+		if "rotation" in item:
+			item.set("rotation", item.get_meta("retry_base_rotation", item.get("rotation")))
+		if "scale" in item:
+			item.set("scale", item.get_meta("retry_base_scale", item.get("scale")))
 
 
 # ══════════════════════════════════════════════════════════════════════════

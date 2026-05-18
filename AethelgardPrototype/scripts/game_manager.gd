@@ -83,6 +83,8 @@ const DEFAULT_RELATIONSHIPS: Dictionary = {
 const DEFAULT_STORY_FLAGS: Dictionary = {
 	"plane_crash_completed": false, "tutorial_completed": false,
 	"first_slime_defeated": false, "root_access_unlocked": false, "elara_met": false,
+	"prologue_consent_card_found": false, "prologue_aethercorp_manifest_found": false,
+	"prologue_human_patch_note_found": false,
 	"ch1_awakening_complete": false, "ch1_elara_glitch_witch_met": false,
 	"ch1_glitch_magic_shown": false, "ch1_data_vision_unlocked": false,
 	"ch1_slime_root_access_tutorial": false, "ch1_oakhaven_entered": false,
@@ -90,6 +92,8 @@ const DEFAULT_STORY_FLAGS: Dictionary = {
 	"ch1_corrupted_boar_defeated": false, "ch1_tutorial_knight_defeated": false,
 	"ch1_shatter_witnessed": false, "ch1_complete": false,
 	"source_key_fragment_1": false,
+	"ch1_crafting_materials_intro_seen": false, "ch1_data_vision_secret_found": false,
+	"ch1_aldric_outcome_reward_claimed": false,
 	"ch1_elara_trusted": false, "ch1_elara_distrusted": false, "ch1_elara_cautious": false,
 	"ch1_knight_spared": false, "ch1_knight_killed": false,
 	"ch1_oakhaven_warned_villagers": false, "ch1_oakhaven_left_quietly": false,
@@ -97,6 +101,7 @@ const DEFAULT_STORY_FLAGS: Dictionary = {
 	"ch2_arena_unlocked": false, "ch2_arena_bronze_complete": false,
 	"ch2_arena_silver_complete": false, "ch2_arena_gold_complete": false,
 	"ch2_arena_platinum_complete": false, "ch2_arena_complete": false,
+	"ch2_blacksmith_crafting_tip_seen": false, "ch2_arena_material_reward_claimed": false,
 	"ch2_seraphina_met": false, "ch2_seraphina_truth": false,
 	"ch2_seraphina_cautious": false, "ch2_seraphina_showoff": false,
 	"ch2_underground_unlocked": false, "ch2_underground_complete": false,
@@ -107,6 +112,8 @@ const DEFAULT_STORY_FLAGS: Dictionary = {
 	"ch2_clockwork_automaton_defeated": false, "ch2_administrator_proxy_defeated": false,
 	"ch2_seraphina_recruited": false, "ch2_seraphina_stayed": false,
 	"ch2_seraphina_rejected": false, "ch2_sovereign_revealed": false,
+	"ch2_seraphina_bond_marker": false, "ch2_seraphina_ironhold_marker": false,
+	"ch2_seraphina_rift_marker": false,
 	"ch2_complete": false, "player_died": false,
 	"ch1_glitch_crater_complete": false, "ch1_root_purge": false,
 	"prologue_skipped": false,
@@ -116,6 +123,8 @@ const DEFAULT_STORY_FLAGS: Dictionary = {
 	"ch3_corruption_storm_survived": false,
 	"ch3_fragment_3_collected": false, "source_key_fragment_3": false,
 	"ch3_elara_powers_amplified": false,
+	"ch3_lyra_route_reward_claimed": false, "ch3_archive_consent_clause_found": false,
+	"ch3_kaelthas_route_relic_claimed": false,
 	"ch3_ironhold_departed": false, "ch3_kaelthas_betrayed": false,
 	"ch3_kaelthas_met": false, "ch3_archivist_met": false,
 	"ch3_archive_entered": false,
@@ -215,6 +224,16 @@ const DEFAULT_STORY_FLAGS: Dictionary = {
 	"true_ending_seen": false, "ng_plus_unlocked": false,
 	# Future final-story flag. NG+ should unlock only after the true ending.
 	"ch10_complete": false,
+	# Early-choice payoff flags
+	"ch4_early_aldric_echo_seen": false, "ch4_early_data_wraith_echo_seen": false,
+	"ch5_early_elara_echo_seen": false,
+	"ch7_early_data_wraith_history_seen": false, "ch7_early_lyra_memory_seen": false,
+	"ch8_early_oakhaven_consequence_seen": false, "ch8_early_seraphina_consequence_seen": false,
+	"ch9_early_elara_trial_seen": false, "ch9_early_kaelthas_trial_seen": false,
+	"ch9_early_sovereign_response_seen": false,
+	"ch10_early_witnesses_seen": false,
+	"ending_route_early_mercy": false, "ending_route_early_control_scars": false,
+	"ending_route_early_witness_support": false, "ending_route_early_isolated": false,
 }
 
 const DEFAULT_ARENA_STATS: Dictionary = {

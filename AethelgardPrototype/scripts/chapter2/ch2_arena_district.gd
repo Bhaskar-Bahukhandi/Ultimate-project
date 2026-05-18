@@ -276,6 +276,10 @@ func _on_arena_victory(tier: String) -> void:
 	if tier == "gold" and not GameManager.story_flags.get("ch2_arena_complete", false):
 		GameManager.set_story_flag("ch2_arena_complete", true)
 
+	if tier == "bronze":
+		await _grant_bronze_arena_material_reward()
+		if not is_inside_tree(): return
+
 	# Check if this triggers Seraphina encounter
 	if tier == "bronze" and not GameManager.story_flags.get("ch2_seraphina_met", false):
 		await DialogueManager.say("Vex", "Not bad, newcomer! Not bad at all! But someone VERY important wants to have a word with you...")
@@ -288,6 +292,25 @@ func _on_arena_victory(tier: String) -> void:
 	DialogueManager.hide_dialogue()
 	_in_results = false
 	_waiting_for_input = true
+
+func _grant_bronze_arena_material_reward() -> void:
+	if GameManager.has_flag("ch2_arena_material_reward_claimed"):
+		return
+
+	GameManager.set_story_flag("ch2_arena_material_reward_claimed", true)
+	_sync_crafting_materials()
+	if has_node("/root/Inventory"):
+		Inventory.add_item("data_ore", 1)
+	if has_node("/root/LoreJournal"):
+		LoreJournal.discover("ironhold_blacksmith_craft_loop")
+
+	await DialogueManager.say("Vex", "Bronze tier spoils! Torval asked me to pass along a chunk of Data Ore. Survive the arena, improve your kit, come back louder.")
+	if not is_inside_tree(): return
+	await DialogueManager.say("System", "[ARENA MATERIAL]\nReceived: Data Ore x1", Color(0.0, 1.0, 0.5), true)
+
+func _sync_crafting_materials() -> void:
+	if has_node("/root/CraftingSystem"):
+		CraftingSystem.get_recipes()
 
 func _on_arena_defeat() -> void:
 	## Called when player is defeated

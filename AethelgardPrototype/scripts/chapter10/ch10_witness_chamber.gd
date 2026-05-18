@@ -87,6 +87,8 @@ func _play_witness_chamber() -> void:
 		GlitchOverlay.flash_glitch(0.35)
 
 	await DialogueManager.say("Narrator", "The root tries to isolate Kaelen. The saved arrive anyway, not as an army, but as records SOVEREIGN cannot redact.")
+	await _early_choice_witnesses()
+	if not is_inside_tree(): return
 	await _deleted_citizen_witness()
 	if not is_inside_tree(): return
 	await _identity_witness()
@@ -99,6 +101,74 @@ func _play_witness_chamber() -> void:
 	if not is_inside_tree(): return
 	await DialogueManager.say("Kaelen", "This is the answer. Not me alone. Not you alone. Everyone you tried to make manageable.")
 	await DialogueManager.say("SOVEREIGN", "Then I will ask everyone the final question through you.")
+
+
+func _early_choice_witnesses() -> void:
+	GameManager.set_story_flag("ch10_early_witnesses_seen", true)
+	match _aldric_choice_key():
+		"root_purge":
+			await DialogueManager.say("Aldric", "You purged the attack directive instead of me. If you rewrite SOVEREIGN, remember: repair is only mercy when the repaired can still refuse.")
+		"spared":
+			await DialogueManager.say("Aldric", "You spared me when I was built to stop you. Mercy made me a witness, not a weapon.")
+		"killed":
+			await DialogueManager.say("Aldric Echo", "You killed me because the road demanded an ending. Let the final road demand more imagination than that.")
+		_:
+			await DialogueManager.say("Aldric Echo", "The first guardian's verdict is unclear, but the root remembers the shape of that fight.")
+
+	match _elara_choice_key():
+		"trusted":
+			await DialogueManager.say("Elara", "You trusted me before any system certified me as safe. That is why I can stand here and tell you no, if I need to.")
+		"cautious":
+			await DialogueManager.say("Elara", "You were cautious with me and still let me matter. Keep that balance: trust slowly, but do not rule alone.")
+		"distrusted":
+			await DialogueManager.say("Elara Echo", "You kept me outside the first circle. Do not end this by keeping everyone outside the last one.")
+		_:
+			await DialogueManager.say("Elara Echo", "The first bond is missing. The ending must still make room for bonds that arrive late.")
+
+	match _oakhaven_choice_key():
+		"warned":
+			await DialogueManager.say("Oakhaven Survivor", "You warned us before the world made warning convenient. Protection begins before the crisis becomes dramatic.")
+		"left_quietly":
+			await DialogueManager.say("Oakhaven Survivor", "You left us quietly once. Today, no more quiet exits from responsibility.")
+		_:
+			await DialogueManager.say("Oakhaven Survivor", "Our first warning record is damaged. We came anyway.")
+
+	match _seraphina_status_key():
+		"recruited":
+			await DialogueManager.say("Seraphina", "You let Ironhold strength stand beside you instead of beneath you. Keep it that way.")
+		"stayed":
+			await DialogueManager.say("Seraphina Relay", "Ironhold holds the line from home. Support does not have to stand in the room to be real.")
+		"rejected":
+			await DialogueManager.say("Ironhold Delegate", "Seraphina was rejected, but Ironhold still refuses SOVEREIGN. Trust can be rebuilt in public.")
+		_:
+			await DialogueManager.say("Ironhold Delegate", "Seraphina's route is unclear. Ironhold will judge the final choice by its limits.")
+
+	match _data_wraith_choice_key():
+		"restored":
+			await DialogueManager.say("Data Wraith", "You restored me when deletion was easier. The root can change without becoming conquest.")
+		"destroyed":
+			await DialogueManager.say("Data Wraith Echo", "You ended me to stop the corruption. If you destroy SOVEREIGN, do not pretend ending is weightless.")
+		"absorbed":
+			await DialogueManager.say("Data Wraith Echo", "You carried me as power. Do not let the final key become another thing you absorb.")
+		_:
+			await DialogueManager.say("Data Wraith Echo", "Ironhold's broken process leaves a faint warning in the witness record.")
+
+	if GameManager.has_flag("ch3_lyra_recruited"):
+		await DialogueManager.say("Lyra", "The wastes taught me every path has a cost. I choose this one with my eyes open.")
+	elif GameManager.has_flag("ch3_lyra_left_alone"):
+		await DialogueManager.say("Lyra Echo", "You left me alone in the wastes. The ending still has to answer for people outside the party.")
+	else:
+		await DialogueManager.say("Lyra Echo", "The ranger's route is faint, but lost routes still point somewhere.")
+
+	match _kaelthas_choice_key():
+		"allied":
+			await DialogueManager.say("Kaelthas", "You allied with ambition once. Use that memory when SOVEREIGN offers usefulness with a crown hidden inside it.")
+		"refused":
+			await DialogueManager.say("Kaelthas", "You refused my bargain. Refuse this one too, unless every term can be challenged.")
+		"challenged":
+			await DialogueManager.say("Kaelthas", "You challenged me. Challenge the part of yourself that wants the cleanest answer.")
+		_:
+			await DialogueManager.say("Kaelthas Echo", "Ambition unexamined always finds the root eventually.")
 
 
 func _deleted_citizen_witness() -> void:
@@ -178,6 +248,58 @@ func _chapter4_choice_key() -> String:
 		return "release"
 	if GameManager.has_flag("ch4_choice_bargain_deleted"):
 		return "bargain"
+	return "unknown"
+
+func _aldric_choice_key() -> String:
+	if GameManager.has_flag("ch1_root_purge"):
+		return "root_purge"
+	if GameManager.has_flag("ch1_knight_spared"):
+		return "spared"
+	if GameManager.has_flag("ch1_knight_killed"):
+		return "killed"
+	return "unknown"
+
+func _elara_choice_key() -> String:
+	if GameManager.has_flag("ch1_elara_trusted"):
+		return "trusted"
+	if GameManager.has_flag("ch1_elara_cautious"):
+		return "cautious"
+	if GameManager.has_flag("ch1_elara_distrusted"):
+		return "distrusted"
+	return "unknown"
+
+func _oakhaven_choice_key() -> String:
+	if GameManager.has_flag("ch1_oakhaven_warned_villagers"):
+		return "warned"
+	if GameManager.has_flag("ch1_oakhaven_left_quietly"):
+		return "left_quietly"
+	return "unknown"
+
+func _seraphina_status_key() -> String:
+	if GameManager.has_flag("ch2_seraphina_recruited"):
+		return "recruited"
+	if GameManager.has_flag("ch2_seraphina_stayed"):
+		return "stayed"
+	if GameManager.has_flag("ch2_seraphina_rejected"):
+		return "rejected"
+	return "unknown"
+
+func _data_wraith_choice_key() -> String:
+	if GameManager.has_flag("ch2_data_wraith_restored"):
+		return "restored"
+	if GameManager.has_flag("ch2_data_wraith_destroyed"):
+		return "destroyed"
+	if GameManager.has_flag("ch2_data_wraith_absorbed"):
+		return "absorbed"
+	return "unknown"
+
+func _kaelthas_choice_key() -> String:
+	if GameManager.has_flag("ch3_kaelthas_allied"):
+		return "allied"
+	if GameManager.has_flag("ch3_kaelthas_refused"):
+		return "refused"
+	if GameManager.has_flag("ch3_kaelthas_challenged"):
+		return "challenged"
 	return "unknown"
 
 

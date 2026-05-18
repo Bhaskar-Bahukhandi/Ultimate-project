@@ -93,6 +93,9 @@ func start_cinematic_prologue() -> void:
 		await transition_to_crash()
 		if not is_inside_tree(): return
 		return
+
+	await _play_optional_flight_observations()
+	if not is_inside_tree(): return
 	
 	# Final sequence - building to crash
 	await play_crash_buildup()
@@ -409,6 +412,61 @@ func create_prologue_cutscene() -> Dictionary:
 			}
 		]
 	}
+
+func _play_optional_flight_observations() -> void:
+	## Optional prologue interactions: small lore reads before the crash escalates.
+	var inspected: Dictionary = {}
+	while inspected.size() < 3 and not skip_requested:
+		var options: Array[String] = []
+		var keys: Array[String] = []
+		if not inspected.has("card"):
+			options.append("Check the safety card tucked into the seat pocket")
+			keys.append("card")
+		if not inspected.has("manifest"):
+			options.append("Glance at the cabin network manifest on Mira's tablet")
+			keys.append("manifest")
+		if not inspected.has("laptop"):
+			options.append("Review the unfinished AetherCorp note on Kaelen's laptop")
+			keys.append("laptop")
+		options.append("Stop looking around and try to rest")
+		keys.append("continue")
+
+		var choice := await DialogueManager.show_choices("The cabin is quiet for one last minute. What does Kaelen notice?", options, "Kaelen")
+		if not is_inside_tree(): return
+		var key := keys[clampi(choice, 0, keys.size() - 1)]
+		if key == "continue":
+			break
+		inspected[key] = true
+		await _resolve_flight_observation(key)
+		if not is_inside_tree(): return
+
+	DialogueManager.hide_dialogue()
+
+
+func _resolve_flight_observation(key: String) -> void:
+	match key:
+		"card":
+			GameManager.set_story_flag("prologue_consent_card_found", true)
+			await DialogueManager.say("Kaelen (Internal)", "The safety card flickers for half a second. Not oxygen masks. AetherCorp language: 'Emergency preservation requires consent confirmation unless subject is nonresponsive.'")
+			if not is_inside_tree(): return
+			await DialogueManager.say("Kaelen (Internal)", "Why would an airline safety card know AetherCorp transfer protocol?")
+			if has_node("/root/LoreJournal"):
+				LoreJournal.discover("prologue_consent_safety_card")
+		"manifest":
+			GameManager.set_story_flag("prologue_aethercorp_manifest_found", true)
+			await DialogueManager.say("Mira", "My tablet just connected to something called AETHER-MANIFEST-707. That's... not the plane Wi-Fi.")
+			if not is_inside_tree(): return
+			await DialogueManager.say("Kaelen (Internal)", "The manifest lists sealed research packets, emergency audit keys, and my name beside a phrase I do not remember approving: Human Patch.")
+			if has_node("/root/LoreJournal"):
+				LoreJournal.discover("prologue_aethercorp_manifest")
+		"laptop":
+			GameManager.set_story_flag("prologue_human_patch_note_found", true)
+			await DialogueManager.say("Kaelen (Internal)", "My laptop restores a draft note I thought I deleted: 'Human Patch: access is not ownership. Consent must survive panic states.'")
+			if not is_inside_tree(): return
+			await DialogueManager.say("Kaelen (Internal)", "That sounds like my writing. It also sounds like a warning I failed to finish.")
+			if has_node("/root/LoreJournal"):
+				LoreJournal.discover("prologue_human_patch_note")
+
 
 func play_crash_buildup() -> void:
 	## Final sequence before crash - intensifying glitches

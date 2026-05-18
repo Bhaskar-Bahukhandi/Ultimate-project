@@ -441,10 +441,29 @@ func _dialogue_blacksmith(visit: int) -> void:
 		if not is_inside_tree(): return
 		await DialogueManager.say("Kaelen (Internal)", "Data-ore. Source code in the steel. Every item in this world has metadata. Of course the weapons do too.")
 		if not is_inside_tree(): return
+		await _grant_blacksmith_crafting_tip()
+		if not is_inside_tree(): return
 	else:
 		await DialogueManager.say("Blacksmith Torval", "Back again? The arena chews through gear fast. Best be prepared before you step into the ring.")
 		if not is_inside_tree(): return
 	DialogueManager.hide_dialogue()
+
+func _grant_blacksmith_crafting_tip() -> void:
+	if GameManager.has_flag("ch2_blacksmith_crafting_tip_seen"):
+		return
+
+	GameManager.set_story_flag("ch2_blacksmith_crafting_tip_seen", true)
+	_sync_crafting_materials()
+	if has_node("/root/Inventory"):
+		Inventory.add_item("data_ore", 1)
+	if has_node("/root/LoreJournal"):
+		LoreJournal.discover("ironhold_blacksmith_craft_loop")
+
+	await DialogueManager.say("System", "[BLACKSMITH MATERIAL]\nReceived: Data Ore x1\nArena rewards can provide enough ore to craft or upgrade a starter blade.", Color(0.0, 1.0, 0.5), true)
+
+func _sync_crafting_materials() -> void:
+	if has_node("/root/CraftingSystem"):
+		CraftingSystem.get_recipes()
 
 func _dialogue_nyx(visit: int) -> void:
 	var knight_killed = GameManager.has_flag("ch1_knight_killed")

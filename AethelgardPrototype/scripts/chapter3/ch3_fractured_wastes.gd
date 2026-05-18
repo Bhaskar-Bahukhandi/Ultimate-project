@@ -444,6 +444,9 @@ func _phase_lyra_encounter() -> void:
 		await _show_dialogue("SYSTEM", "// ITEM RECEIVED: Storm Pattern Map — reduces corruption storm damage by 30%")
 		if not is_inside_tree(): return
 
+	await _grant_lyra_route_cache()
+	if not is_inside_tree(): return
+
 	await get_tree().create_timer(0.5).timeout
 	if not is_inside_tree(): return
 
@@ -677,6 +680,29 @@ func _has_elara() -> bool:
 
 func _has_flag(flag_name: String) -> bool:
 	return GameManager.has_flag(flag_name)
+
+func _grant_lyra_route_cache() -> void:
+	if GameManager.has_flag("ch3_lyra_route_reward_claimed"):
+		return
+
+	GameManager.set_story_flag("ch3_lyra_route_reward_claimed", true)
+	_sync_crafting_materials()
+	var reward_text := "Recorded"
+	if has_node("/root/Inventory"):
+		if GameManager.has_flag("ch3_lyra_recruited"):
+			Inventory.add_item("memory_shard", 1)
+			reward_text = "Memory Shard x1"
+		else:
+			Inventory.add_item("glitch_herb", 1)
+			reward_text = "Glitch Herb x1"
+	if has_node("/root/LoreJournal"):
+		LoreJournal.discover("wastes_lyra_route_cache")
+	GameManager.add_xp(15)
+	await _show_dialogue("SYSTEM", "// LYRA ROUTE CACHE: %s, +15 XP. The wastes remember how you handled her trust." % reward_text)
+
+func _sync_crafting_materials() -> void:
+	if has_node("/root/CraftingSystem"):
+		CraftingSystem.get_recipes()
 
 func _show_dialogue(speaker: String, text: String) -> bool:
 	await DialogueManager.say(speaker, text)

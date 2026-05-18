@@ -110,6 +110,14 @@ func _play_assembly() -> void:
 func _oakhaven_faction() -> void:
 	GameManager.set_story_flag("ch8_oakhaven_faction_heard", true)
 	await DialogueManager.say("Oakhaven Survivor", "We want walls. Patrols. A promise that freedom does not mean being left alone with the next crater.")
+	GameManager.set_story_flag("ch8_early_oakhaven_consequence_seen", true)
+	match _oakhaven_choice_key():
+		"warned":
+			await DialogueManager.say("Oakhaven Survivor", "When the first warning came, you gave us time to move children, medicine, and stubborn elders. That time is why some of us stand here.")
+		"left_quietly":
+			await DialogueManager.say("Oakhaven Survivor", "When you left quietly, we learned the crater was spreading from the screams. Freedom cannot rely on heroes forgetting to warn people.")
+		_:
+			await DialogueManager.say("Oakhaven Survivor", "Oakhaven's first warning record is missing. Missing warnings are how disasters become traditions.")
 	match _chapter4_choice_key():
 		"preserve":
 			await DialogueManager.say("Oakhaven Survivor", "You preserved the deleted. You understand safety can be mercy, even when it feels like restraint.")
@@ -124,6 +132,25 @@ func _oakhaven_faction() -> void:
 func _ironhold_faction() -> void:
 	GameManager.set_story_flag("ch8_ironhold_faction_heard", true)
 	await DialogueManager.say("Ironhold Delegate", "We want structure. Not tyranny. Not market chaos. Something strong enough to survive disagreement.")
+	GameManager.set_story_flag("ch8_early_seraphina_consequence_seen", true)
+	match _seraphina_status_key():
+		"recruited":
+			await DialogueManager.say("Seraphina", "Ironhold will stand with the saved, but not under another command structure that cannot be questioned.")
+		"stayed":
+			await DialogueManager.say("Seraphina Relay", "Seraphina stayed behind to keep Ironhold from eating itself. She sends support, conditions, and a very pointed warning about heroes with keys.")
+		"rejected":
+			await DialogueManager.say("Ironhold Delegate", "You rejected Seraphina's help. Ironhold remembers. Cooperation now will need proof, not speeches.")
+		_:
+			await DialogueManager.say("Ironhold Delegate", "Seraphina's status is unclear. Ironhold distrusts unclear chains of command.")
+	match _seraphina_truth_key():
+		"truth":
+			await DialogueManager.say("Ironhold Delegate", "You told Seraphina the truth about Root Access. Honest power is still dangerous, but at least it can be audited.")
+		"cautious":
+			await DialogueManager.say("Ironhold Delegate", "You were cautious with Seraphina. The city respects caution; it fears secrecy.")
+		"showoff":
+			await DialogueManager.say("Ironhold Delegate", "You showed off Root Access like a weapon. The assembly needs to know you have learned humility since then.")
+		_:
+			await DialogueManager.say("Ironhold Delegate", "The first Root Access explanation never reached our records.")
 	match _chapter7_choice_key():
 		"preserve":
 			await DialogueManager.say("Ironhold Delegate", "If every backup remains public, structure is the only thing between truth and panic.")
@@ -185,6 +212,31 @@ func _chapter4_choice_key() -> String:
 		return "release"
 	if GameManager.has_flag("ch4_choice_bargain_deleted"):
 		return "bargain"
+	return "unknown"
+
+func _oakhaven_choice_key() -> String:
+	if GameManager.has_flag("ch1_oakhaven_warned_villagers"):
+		return "warned"
+	if GameManager.has_flag("ch1_oakhaven_left_quietly"):
+		return "left_quietly"
+	return "unknown"
+
+func _seraphina_status_key() -> String:
+	if GameManager.has_flag("ch2_seraphina_recruited"):
+		return "recruited"
+	if GameManager.has_flag("ch2_seraphina_stayed"):
+		return "stayed"
+	if GameManager.has_flag("ch2_seraphina_rejected"):
+		return "rejected"
+	return "unknown"
+
+func _seraphina_truth_key() -> String:
+	if GameManager.has_flag("ch2_seraphina_truth"):
+		return "truth"
+	if GameManager.has_flag("ch2_seraphina_cautious"):
+		return "cautious"
+	if GameManager.has_flag("ch2_seraphina_showoff"):
+		return "showoff"
 	return "unknown"
 
 func _chapter5_identity_key() -> String:

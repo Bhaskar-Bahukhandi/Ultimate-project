@@ -228,6 +228,31 @@ func _meet_kaelthas() -> void:
 			await _kaelthas_challenge_fight()
 			if not is_inside_tree(): return
 
+	await _grant_kaelthas_route_relic()
+	if not is_inside_tree(): return
+
+func _grant_kaelthas_route_relic() -> void:
+	if GameManager.has_flag("ch3_kaelthas_route_relic_claimed"):
+		return
+
+	GameManager.set_story_flag("ch3_kaelthas_route_relic_claimed", true)
+	_sync_crafting_materials()
+	var reward_text := "Recorded"
+	if has_node("/root/Inventory"):
+		if kaelthas_allied:
+			Inventory.add_item("memory_shard", 1)
+			reward_text = "Memory Shard x1"
+		elif kaelthas_challenged:
+			Inventory.add_item("data_ore", 1)
+			reward_text = "Data Ore x1"
+		else:
+			Inventory.add_item("glitch_herb", 1)
+			reward_text = "Glitch Herb x1"
+	if has_node("/root/LoreJournal"):
+		LoreJournal.discover("archive_kaelthas_relic")
+
+	await _show_dialogue("SYSTEM", "// ROUTE RELIC RECOVERED: Kaelthas archive trace. Reward: %s" % reward_text)
+
 func _kaelthas_challenge_fight() -> void:
 	## Simulated combat encounter with Kaelthas in the Archive.
 	await _show_dialogue("SYSTEM", "// COMBAT: Kaelthas, the Code Reader — HP: 150. Uses data constructs and code attacks.")
@@ -330,12 +355,39 @@ func _floor_1_original_design() -> void:
 	if _has_elara():
 		await _show_dialogue("Elara", "A sanctuary for minds... is that what I am? A consciousness that was meant to be PRESERVED?")
 
+	await _optional_consent_clause_discovery()
+	if not is_inside_tree(): return
+
 	# Floor 1 puzzle: Memory allocation
 	await _floor_1_puzzle()
 	if not is_inside_tree(): return
 
 	await _floor_2_aethercorp()
 	if not is_inside_tree(): return
+
+func _optional_consent_clause_discovery() -> void:
+	if GameManager.has_flag("ch3_archive_consent_clause_found"):
+		return
+
+	var choice = await DialogueManager.show_choices(
+		"An early Sanctuary consent clause is sealed in the margins. Inspect it?",
+		[
+			"Read the consent clause",
+			"Leave it sealed"
+		]
+	)
+	if choice != 0:
+		await _show_dialogue("The Archivist", "// Clause remains sealed. Ignorance is a valid branch, but not a harmless one.")
+		return
+
+	GameManager.set_story_flag("ch3_archive_consent_clause_found", true)
+	_sync_crafting_materials()
+	if has_node("/root/Inventory"):
+		Inventory.add_item("memory_shard", 1)
+	GameManager.add_xp(20)
+	if has_node("/root/LoreJournal"):
+		LoreJournal.discover("archive_consent_clause")
+	await _show_dialogue("SYSTEM", "// LORE RECOVERED: Sanctuary Consent Clause. +20 XP, Memory Shard x1")
 
 func _floor_1_puzzle() -> void:
 	## Puzzle: Memory allocation — fit data structures into limited space.
@@ -589,6 +641,10 @@ func _has_elara() -> bool:
 
 func _has_flag(flag_name: String) -> bool:
 	return GameManager.has_flag(flag_name)
+
+func _sync_crafting_materials() -> void:
+	if has_node("/root/CraftingSystem"):
+		CraftingSystem.get_recipes()
 
 func _show_dialogue(speaker: String, text: String) -> bool:
 	await DialogueManager.say(speaker, text)

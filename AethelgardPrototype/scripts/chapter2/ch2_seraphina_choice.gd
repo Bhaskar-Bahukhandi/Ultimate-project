@@ -275,6 +275,8 @@ func _choice_recruit() -> void:
 		await DialogueManager.say("Seraphina", "*raising an eyebrow* Well, whatever you decided, you've got me now. And I don't abandon my crew. Flight attendant oath. ...Okay, that's not a real oath, but you get the idea.")
 		if not is_inside_tree(): return
 
+	await _mark_seraphina_route("recruited")
+	if not is_inside_tree(): return
 	DialogueManager.hide_dialogue()
 
 func _choice_stay() -> void:
@@ -307,6 +309,8 @@ func _choice_stay() -> void:
 		await DialogueManager.say("Kaelen (Internal)", "At least someone will be watching over this place. And she said she'd come if I called. That's... something. More than I deserve, after the bridges I've burned.")
 		if not is_inside_tree(): return
 
+	await _mark_seraphina_route("stayed")
+	if not is_inside_tree(): return
 	DialogueManager.hide_dialogue()
 
 func _choice_reject() -> void:
@@ -343,11 +347,28 @@ func _choice_reject() -> void:
 		await DialogueManager.say("Kaelen (Internal)", "Two real people. Two outstretched hands. Both rejected. If I keep this up, I'll find the Source Keys alone — or I'll die alone. Maybe both.")
 		if not is_inside_tree(): return
 
+	await _mark_seraphina_route("rejected")
+	if not is_inside_tree(): return
 	DialogueManager.hide_dialogue()
 
 # --------------------------------------------------------------------------- #
 #  Sequence wrap-up and transition
 # --------------------------------------------------------------------------- #
+
+func _mark_seraphina_route(route: String) -> void:
+	match route:
+		"recruited":
+			GameManager.set_story_flag("ch2_seraphina_bond_marker", true)
+			await DialogueManager.say("System", "[ROUTE MARKER]\nSeraphina will be remembered as a traveling witness in later chapters.", Color(0.3, 0.9, 1.0), true)
+		"stayed":
+			GameManager.set_story_flag("ch2_seraphina_ironhold_marker", true)
+			await DialogueManager.say("System", "[ROUTE MARKER]\nSeraphina's protection of Ironhold is now recorded for later faction reactions.", Color(0.3, 0.9, 1.0), true)
+		"rejected":
+			GameManager.set_story_flag("ch2_seraphina_rift_marker", true)
+			await DialogueManager.say("System", "[ROUTE MARKER]\nSeraphina's rejection is now recorded. Late-game witnesses may question Kaelen's trust.", Color(1.0, 0.75, 0.25), true)
+
+	if has_node("/root/LoreJournal"):
+		LoreJournal.discover("ironhold_seraphina_route_marker")
 
 func _sequence_complete() -> void:
 	## Show completion message and transition to chapter ending

@@ -434,17 +434,21 @@ func play_chapter_end_card() -> void:
 	# Build chapter end card text
 	var knight_killed = GameManager.story_flags.get("ch1_knight_killed", false)
 	var knight_spared = GameManager.story_flags.get("ch1_knight_spared", false)
+	var knight_purged = GameManager.story_flags.get("ch1_root_purge", false)
 	var has_elara = GameManager.story_flags.get("ch1_elara_trusted", false) or GameManager.story_flags.get("ch1_elara_cautious", false)
 	var warned_village = GameManager.story_flags.get("ch1_oakhaven_warned_villagers", false)
 	
 	var knight_status = "DEFEATED"
-	if knight_spared:
+	if knight_purged:
+		knight_status = "ROOT PURGED"
+	elif knight_spared:
 		knight_status = "FREED"
 	elif knight_killed:
 		knight_status = "SLAIN"
 	
 	var companion_status = "Elara — ALLIED" if has_elara else "SOLO PATH"
 	var village_status = "Warned" if warned_village else "Left in silence"
+	var aldric_reward = _grant_aldric_outcome_reward(knight_status)
 	
 	var end_text = ""
 	end_text += "═══════════════════════════════════\n"
@@ -460,6 +464,7 @@ func play_chapter_end_card() -> void:
 	end_text += "  REWARDS:\n"
 	end_text += "    • 500 Gold\n"
 	end_text += "    • Level Up (RAM: 13GB)\n\n"
+	end_text += "    - Aldric Outcome: %s\n\n" % aldric_reward
 	end_text += "  METRICS:\n"
 	end_text += "    Corruption Level: %d%%\n" % int(GameManager.glitch_meter)
 	end_text += "    Root Access Uses: 2\n"
@@ -517,6 +522,32 @@ func play_chapter_end_card() -> void:
 	await transition.transition_out(ScreenTransition.TransitionType.FADE, 2.0)
 	if not is_inside_tree(): return
 	SceneTransitions.change_scene("res://scenes/chapter2/ironhold_gate.tscn", SceneTransitions.TransitionStyle.SHATTER)
+
+func _grant_aldric_outcome_reward(knight_status: String) -> String:
+	if GameManager.has_flag("ch1_aldric_outcome_reward_claimed"):
+		return "Already claimed"
+
+	GameManager.set_story_flag("ch1_aldric_outcome_reward_claimed", true)
+	if has_node("/root/CraftingSystem"):
+		CraftingSystem.get_recipes()
+	if not has_node("/root/Inventory"):
+		return "Recorded"
+
+	match knight_status:
+		"ROOT PURGED":
+			if Inventory.add_item("memory_shard", 2):
+				return "Memory Shard x2"
+		"FREED":
+			if Inventory.add_item("memory_shard", 1):
+				return "Memory Shard x1"
+		"SLAIN":
+			if Inventory.add_item("data_ore", 1):
+				return "Data Ore x1"
+		_:
+			if Inventory.add_item("glitch_herb", 1):
+				return "Glitch Herb x1"
+
+	return "Recorded"
 
 func _on_custom_effect(effect_name: String, _parameters: Dictionary) -> void:
 	match effect_name:

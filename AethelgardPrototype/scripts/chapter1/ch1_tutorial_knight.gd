@@ -24,6 +24,9 @@ const PLATFORM_HEIGHT = 16.0
 
 const PLAYER_SPAWN = Vector2(200, 540)
 const BOSS_SPAWN = Vector2(1050, 480)
+const ARENA_HAZARD_BASE_DAMAGE = 10.0
+const ARENA_HAZARD_INTERVAL = 0.75
+const PLATFORM_ONE_WAY_MARGIN = 4.0
 
 # ─── NODE REFERENCES (built in code) ────────────────────────────────────
 var player: CharacterBody2D = null
@@ -44,6 +47,17 @@ var _dialogue_queue: Array[Dictionary] = []
 var _dialogue_active: bool = false
 var _current_dialogue_timer: float = 0.0
 var _transition_timer: float = -1.0
+var _arena_hazard_visuals: Array[ColorRect] = []
+var _arena_hazard_players: Array[Node] = []
+var _arena_hazard_damage: float = ARENA_HAZARD_BASE_DAMAGE
+var _arena_hazard_cooldown: float = 0.0
+var _arena_hazard_enabled: bool = true
+var _arena_hazard_active: bool = false
+var _arena_hazard_cycle_timer: float = 0.0
+var _arena_hazard_cycle_length: float = 3.2
+var _arena_hazard_active_window: float = 0.9
+var _retry_in_progress: bool = false
+var _root_access_completing: bool = false
 
 # ─── COMBAT TUTORIAL STATE ──────────────────────────────────────────────
 var _tutorial_active: bool = true
@@ -109,6 +123,8 @@ func _ready() -> void:
 	_build_arena_colliders()
 	# Platforms
 	_build_platforms()
+	# Arena pressure for the combat vertical slice
+	_build_arena_pressure()
 	# Spawn entities
 	_spawn_player()
 	_spawn_boss()
@@ -128,6 +144,7 @@ func _process(delta) -> void:
 	_update_dialogue(delta)
 	_update_boss_hp_bar()
 	_update_combat_tutorial(delta)
+	_update_arena_pressure(delta)
 
 	# Scene transition countdown (one-shot — disable timer before calling change_scene)
 	# BUG-21-17: Guard timer so it won't fire mid-dialogue
@@ -192,7 +209,7 @@ func _build_arena_colliders() -> void:
 	floor_line.z_index = -5
 	add_child(floor_line)
 
-func _add_static_rect(center: Vector2, size: Vector2, node_name: String) -> void:
+func _add_static_rect(center: Vector2, size: Vector2, node_name: String, one_way: bool = false) -> void:
 	var body = StaticBody2D.new()
 	body.name = node_name
 	body.position = center
@@ -202,18 +219,21 @@ func _add_static_rect(center: Vector2, size: Vector2, node_name: String) -> void
 	var rect = RectangleShape2D.new()
 	rect.size = size
 	shape.shape = rect
+	shape.one_way_collision = one_way
+	if one_way:
+		shape.one_way_collision_margin = PLATFORM_ONE_WAY_MARGIN
 	body.add_child(shape)
 	add_child(body)
 
 func _build_platforms() -> void:
 	var platform_data = [
-		{"pos": Vector2(170, 430), "width": 200.0, "name": "PlatformLeft"},
-		{"pos": Vector2(910, 430), "width": 200.0, "name": "PlatformRight"},
-		{"pos": Vector2(510, 310), "width": 260.0, "name": "PlatformCenter"},
+		{"pos": Vector2(180, 405), "width": 150.0, "name": "PlatformLeft"},
+		{"pos": Vector2(1100, 405), "width": 150.0, "name": "PlatformRight"},
+		{"pos": Vector2(640, 285), "width": 170.0, "name": "PlatformCenter"},
 	]
 	for p in platform_data:
 		# Collision
-		_add_static_rect(p.pos, Vector2(p.width, PLATFORM_HEIGHT), p.name)
+		_add_static_rect(p.pos, Vector2(p.width, PLATFORM_HEIGHT), p.name, true)
 		# Visual
 		var vis = ColorRect.new()
 		vis.color = Color(0.2, 0.18, 0.28)
@@ -228,6 +248,140 @@ func _build_platforms() -> void:
 		edge.position = Vector2(p.pos.x - p.width / 2, p.pos.y - PLATFORM_HEIGHT / 2)
 		edge.z_index = -3
 		add_child(edge)
+
+func _build_arena_pressure() -> void:
+	# A pulsing corruption lane forces jumps, dash routes, and platform repositioning without punishing Phase 1 learning.
+	_add_arena_hazard(Vector2(ARENA_WIDTH / 2.0, FLOOR_Y - 38.0), Vector2(300, 76), "CentralCorruptionLane")
+	_add_arena_marker(Vector2(ARENA_WIDTH / 2.0, 317), Vector2(130, 8), Color(0.25, 0.95, 1.0, 0.55), "FocusHealSigil", -2)
+	_add_arena_marker(Vector2(270, FLOOR_Y - 5), Vector2(180, 5), Color(0.35, 0.95, 0.45, 0.5), "LeftSafeLane", -3)
+	_add_arena_marker(Vector2(1010, FLOOR_Y - 5), Vector2(180, 5), Color(0.35, 0.95, 0.45, 0.5), "RightSafeLane", -3)
+	_set_arena_pressure_phase(1)
+
+func _add_arena_hazard(center: Vector2, area_size: Vector2, node_name: String) -> void:
+	var visual = ColorRect.new()
+	visual.name = "%sVisual" % node_name
+	visual.color = Color(0.85, 0.12, 0.45, 0.45)
+	visual.size = Vector2(area_size.x, 20)
+	visual.position = Vector2(center.x - visual.size.x / 2.0, FLOOR_Y - 16.0)
+	visual.z_index = -2
+	add_child(visual)
+	_arena_hazard_visuals.append(visual)
+
+	var area = Area2D.new()
+	area.name = node_name
+	area.position = center
+	area.collision_layer = 0
+	area.collision_mask = 2
+	area.monitoring = true
+	area.monitorable = false
+	var shape = CollisionShape2D.new()
+	var rect = RectangleShape2D.new()
+	rect.size = area_size
+	shape.shape = rect
+	area.add_child(shape)
+	area.body_entered.connect(_on_arena_hazard_body_entered.bind(area))
+	area.body_exited.connect(_on_arena_hazard_body_exited)
+	add_child(area)
+
+func _add_arena_marker(center: Vector2, size: Vector2, color: Color, node_name: String, z: int) -> void:
+	var marker = ColorRect.new()
+	marker.name = node_name
+	marker.color = color
+	marker.size = size
+	marker.position = center - size / 2.0
+	marker.z_index = z
+	add_child(marker)
+
+func _update_arena_pressure(delta: float) -> void:
+	if _arena_hazard_enabled and combat_started and not combat_ended:
+		_arena_hazard_cycle_timer = fmod(_arena_hazard_cycle_timer + delta, _arena_hazard_cycle_length)
+		_arena_hazard_active = _arena_hazard_cycle_timer >= _arena_hazard_cycle_length - _arena_hazard_active_window
+	else:
+		_arena_hazard_active = false
+
+	var warning_window := minf(_arena_hazard_active_window + 0.60, _arena_hazard_cycle_length)
+	var warning_active := _arena_hazard_enabled and _arena_hazard_cycle_timer >= _arena_hazard_cycle_length - warning_window
+	var pulse = 0.18
+	if warning_active:
+		pulse = 0.38 + 0.2 * sin(Time.get_ticks_msec() / 90.0)
+	if _arena_hazard_active:
+		pulse = 0.72 + 0.18 * sin(Time.get_ticks_msec() / 55.0)
+	for visual in _arena_hazard_visuals:
+		if is_instance_valid(visual):
+			var c = visual.color
+			c.a = pulse if _arena_hazard_enabled else 0.12
+			visual.color = c
+
+	if not _arena_hazard_enabled or not _arena_hazard_active or combat_ended or not combat_started:
+		return
+	if _arena_hazard_cooldown > 0.0:
+		_arena_hazard_cooldown -= delta
+		return
+	for body in _arena_hazard_players.duplicate():
+		if not is_instance_valid(body):
+			_arena_hazard_players.erase(body)
+			continue
+		_damage_arena_hazard_player(body)
+		break
+
+func _on_arena_hazard_body_entered(body: Node, hazard: Area2D) -> void:
+	if body and body.is_in_group("player") and body not in _arena_hazard_players:
+		_arena_hazard_players.append(body)
+		_damage_arena_hazard_player(body, hazard)
+
+func _on_arena_hazard_body_exited(body: Node) -> void:
+	_arena_hazard_players.erase(body)
+
+func _damage_arena_hazard_player(body: Node, hazard: Area2D = null) -> void:
+	if not _arena_hazard_enabled or not _arena_hazard_active or _arena_hazard_cooldown > 0.0:
+		return
+	if not is_instance_valid(body) or not body.has_method("take_damage"):
+		return
+	if "is_dead" in body and body.is_dead:
+		return
+	var source = hazard.global_position if hazard else Vector2(ARENA_WIDTH / 2.0, FLOOR_Y)
+	body.take_damage(_arena_hazard_damage, source, "Corruption Floor", "arena_hazard")
+	if has_node("/root/CombatFX"):
+		CombatFX.apply_screen_shake(4.0, 0.12)
+	_arena_hazard_cooldown = ARENA_HAZARD_INTERVAL
+
+func _set_arena_pressure_phase(phase_id: int) -> void:
+	_arena_hazard_enabled = phase_id >= 2 and phase_id != 4
+	_arena_hazard_cycle_timer = 0.0
+	_arena_hazard_active = false
+	match phase_id:
+		2:
+			_arena_hazard_damage = 8.0
+			_arena_hazard_cycle_length = 3.2
+			_arena_hazard_active_window = 0.85
+			_set_hazard_color(Color(1.0, 0.35, 0.12, 0.5))
+		3:
+			_arena_hazard_damage = 12.0
+			_arena_hazard_cycle_length = 2.65
+			_arena_hazard_active_window = 1.0
+			_set_hazard_color(Color(0.85, 0.12, 0.85, 0.55))
+		35:
+			_arena_hazard_damage = 14.0
+			_arena_hazard_cycle_length = 2.25
+			_arena_hazard_active_window = 1.08
+			_set_hazard_color(Color(1.0, 0.05, 0.05, 0.6))
+		4:
+			_arena_hazard_damage = 0.0
+			_arena_hazard_cycle_length = 3.2
+			_arena_hazard_active_window = 0.9
+			_set_hazard_color(Color(0.1, 0.9, 0.45, 0.18))
+		_:
+			_arena_hazard_damage = ARENA_HAZARD_BASE_DAMAGE
+			_arena_hazard_cycle_length = 3.2
+			_arena_hazard_active_window = 0.9
+			_set_hazard_color(Color(0.85, 0.12, 0.45, 0.45))
+	if _arena_hazard_enabled:
+		_arena_hazard_cycle_timer = maxf(0.0, _arena_hazard_cycle_length - _arena_hazard_active_window - 0.35)
+
+func _set_hazard_color(color: Color) -> void:
+	for visual in _arena_hazard_visuals:
+		if is_instance_valid(visual):
+			visual.color = color
 
 # ======================================================================
 #  ENTITY SPAWNING
@@ -289,7 +443,23 @@ func _spawn_player() -> void:
 
 	add_child(player)
 	player.add_to_group("player")
+	player.set_meta("local_boss_retry_enabled", true)
+	var died_callback = Callable(self, "_on_player_died")
+	if player.has_signal("died") and not player.is_connected("died", died_callback):
+		player.connect("died", died_callback)
 	AssetManager.replace_player_sprite(player, "combat")
+	if player.has_method("refresh_visual_references"):
+		player.refresh_visual_references()
+	_remember_player_visual_baseline()
+
+func _remember_player_visual_baseline() -> void:
+	if not player:
+		return
+	var sprite = player.get_node_or_null("Sprite")
+	if sprite and sprite is CanvasItem:
+		sprite.set_meta("retry_base_position", sprite.position)
+		sprite.set_meta("retry_base_rotation", sprite.rotation)
+		sprite.set_meta("retry_base_scale", sprite.scale)
 
 func _spawn_boss() -> void:
 	boss = CharacterBody2D.new()
@@ -516,7 +686,7 @@ func _build_root_access_panel() -> void:
 	root_access_panel.add_child(vbox)
 
 	var title = Label.new()
-	title.text = "[ ROOT ACCESS — CORRUPTED SENTINEL ]"
+	title.text = "[ ROOT ACCESS - CORRUPTED SENTINEL ]"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_color_override("font_color", Color(0.0, 1.0, 0.0))
@@ -552,20 +722,28 @@ func _build_root_access_panel() -> void:
 	vbox.add_child(cb_hostile)
 
 	var hint = Label.new()
-	hint.text = "\nUncheck is_attacking to end the battle peacefully."
+	hint.text = "\nDisable the attack directive to end the loop."
 	hint.add_theme_font_size_override("font_size", 11)
 	hint.add_theme_color_override("font_color", Color(0.4, 0.8, 0.4))
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD
 	vbox.add_child(hint)
 
+	var disable_btn = Button.new()
+	disable_btn.name = "DisableAttackDirectiveButton"
+	disable_btn.text = "Disable Attack Directive"
+	disable_btn.add_theme_font_size_override("font_size", 14)
+	disable_btn.add_theme_color_override("font_color", Color(0.0, 1.0, 0.0))
+	disable_btn.pressed.connect(_on_disable_attack_directive_pressed)
+	vbox.add_child(disable_btn)
+
 	ui_layer.add_child(root_access_panel)
 
 func _on_hack_attacking_toggled(enabled: bool) -> void:
-	if boss and boss.has_method("hack_disable_attacking"):
-		if not enabled:
-			boss.hack_disable_attacking()
-			root_access_panel.visible = false
-			_on_boss_defeated()
+	if boss and boss.has_method("hack_disable_attacking") and not enabled:
+		_complete_root_access_shutdown()
+
+func _on_disable_attack_directive_pressed() -> void:
+	_complete_root_access_shutdown()
 
 func _on_hack_hostile_toggled(enabled: bool) -> void:
 	if boss:
@@ -810,6 +988,7 @@ func _update_dialogue(delta) -> void:
 #  BOSS EVENT HANDLERS
 # ======================================================================
 func _on_boss_phase_changed(new_phase: int) -> void:
+	_set_arena_pressure_phase(new_phase)
 	match new_phase:
 		2:   # Phase 2 — Aggression ramps up
 			_dialogue_queue = [phase2_dialogue]
@@ -860,10 +1039,58 @@ func _on_boss_phase_changed(new_phase: int) -> void:
 
 func _on_root_access_triggered() -> void:
 	# Phase 4 — show hint with green hack flash
-	_dialogue_queue = [phase4_dialogue]
+	_arena_hazard_enabled = false
+	_arena_hazard_active = false
+	_arena_hazard_players.clear()
+	if boss:
+		boss.velocity = Vector2.ZERO
+		boss.set_physics_process(false)
+	_dialogue_queue = [{
+		"speaker": "Elara",
+		"text": "The control loop is exposed. Root Access is open.\nClick Disable Attack Directive to end the fight.",
+		"duration": 3.4
+	}]
 	_advance_dialogue()
+	_show_root_access_panel()
 	if has_node("/root/SceneTransitions"):
 		SceneTransitions.flash(Color(0.0, 1.0, 0.0, 0.8), 0.5)
+
+func _show_root_access_panel() -> void:
+	if not root_access_panel:
+		return
+	root_access_panel.visible = true
+	root_access_panel.modulate.a = 1.0
+	var disable_btn = root_access_panel.find_child("DisableAttackDirectiveButton", true, false)
+	if disable_btn and disable_btn is Control:
+		disable_btn.grab_focus()
+
+func _complete_root_access_shutdown() -> void:
+	if _root_access_completing or combat_ended:
+		return
+	_root_access_completing = true
+	_arena_hazard_enabled = false
+	_arena_hazard_active = false
+	_arena_hazard_players.clear()
+	if root_access_panel:
+		var disable_btn = root_access_panel.find_child("DisableAttackDirectiveButton", true, false)
+		if disable_btn and disable_btn is Button:
+			disable_btn.disabled = true
+			disable_btn.text = "Directive Disabled"
+	if boss:
+		boss.velocity = Vector2.ZERO
+		boss.set_physics_process(false)
+	if has_node("/root/VFXLibrary") and boss:
+		VFXLibrary.spawn_status_indicator("DIRECTIVE DISABLED", boss.global_position + Vector2(0, -96), self, true)
+	if has_node("/root/CombatFX"):
+		CombatFX.apply_hitstop(0.10)
+	await get_tree().create_timer(0.35).timeout
+	if not is_inside_tree():
+		return
+	if boss and boss.has_method("hack_disable_attacking"):
+		boss.hack_disable_attacking()
+	if root_access_panel:
+		root_access_panel.visible = false
+	_on_boss_defeated()
 
 func _on_boss_defeated() -> void:
 	if combat_ended:
@@ -888,6 +1115,13 @@ func _on_boss_defeated() -> void:
 	# Victory music
 	if has_node("/root/MusicManager"):
 		MusicManager.play_track("victory")
+	if has_node("/root/CombatFX"):
+		CombatFX.apply_hitstop(0.12)
+		CombatFX.apply_screen_shake(11.0, 0.32)
+	if has_node("/root/SceneTransitions"):
+		SceneTransitions.boss_phase_flash(Color(1.0, 0.85, 0.35))
+	if has_node("/root/VFXLibrary") and player:
+		VFXLibrary.spawn_status_indicator("VICTORY", player.global_position + Vector2(0, -84), self, true)
 
 	# Play initial victory dialogue using the timer system
 	_dialogue_queue = victory_dialogues.duplicate()
@@ -913,6 +1147,115 @@ func _update_boss_hp_bar() -> void:
 		return
 	if "current_health" in boss:
 		boss_hp_bar.value = boss.current_health
+
+func _on_player_died() -> void:
+	if combat_ended or _retry_in_progress:
+		return
+	_retry_in_progress = true
+	combat_started = false
+	if boss:
+		boss.set_physics_process(false)
+		boss.velocity = Vector2.ZERO
+
+	if has_node("/root/GameManager"):
+		GameManager.set_story_flag("player_died", true)
+		GameManager.add_death_corruption()
+		var hp_removed := 0.0
+		if boss and "current_health" in boss and "max_health" in boss and boss.max_health > 0.0:
+			hp_removed = clampf(1.0 - (boss.current_health / boss.max_health), 0.0, 1.0)
+		GameManager.record_boss_progress("tutorial_knight", hp_removed, _get_boss_phase_number())
+
+	if has_node("/root/VFXLibrary") and player:
+		VFXLibrary.spawn_status_indicator("RETRY", player.global_position + Vector2(0, -70), self, false)
+
+	await get_tree().create_timer(1.05, true, false, true).timeout
+	if not is_inside_tree():
+		return
+
+	_arena_hazard_players.clear()
+	_arena_hazard_cooldown = 0.0
+	_reset_player_for_retry("primary")
+	_reset_boss_for_retry()
+	_set_arena_pressure_phase(1)
+	if root_access_panel:
+		root_access_panel.visible = false
+	combat_started = true
+	await get_tree().process_frame
+	if is_inside_tree():
+		_reset_player_for_retry("late-frame")
+	_retry_in_progress = false
+
+func _get_boss_phase_number() -> int:
+	if not boss or not "current_boss_phase" in boss:
+		return 1
+	match int(boss.current_boss_phase):
+		0:
+			return 1
+		1:
+			return 2
+		2:
+			return 3
+		3:
+			return 35
+		4:
+			return 4
+	return 1
+
+func _reset_player_for_retry(label: String = "retry") -> void:
+	if not player:
+		return
+	if player.has_method("force_restore_after_death_retry"):
+		var state: Dictionary = player.force_restore_after_death_retry(PLAYER_SPAWN)
+		_log_retry_restore_state(label, state)
+		return
+	Engine.time_scale = 1.0
+	player.global_position = PLAYER_SPAWN
+	player.velocity = Vector2.ZERO
+	player.visible = true
+	player.modulate = Color.WHITE
+	player.self_modulate = Color.WHITE
+	player.scale = Vector2.ONE
+	player.rotation = 0.0
+	player.collision_layer = 2
+	player.collision_mask = 1
+	for child in player.get_children():
+		if child is CollisionShape2D:
+			child.disabled = false
+	if "is_dead" in player:
+		player.is_dead = false
+	if "max_health" in player and "current_health" in player:
+		player.current_health = player.max_health
+		GameManager.player_stats["hp"] = int(player.current_health)
+	player.set_process(true)
+	player.set_physics_process(true)
+	player.set_process_input(true)
+	_log_retry_restore_state(label, {"player_visible": player.visible, "sprite_visible": false, "player_alpha": player.modulate.a, "sprite_alpha": -1.0, "collision_enabled": true, "input_enabled": player.is_processing_input(), "process_enabled": player.is_processing(), "physics_enabled": player.is_physics_processing(), "is_dead": player.get("is_dead"), "hp": player.get("current_health"), "time_scale": Engine.time_scale})
+
+func _log_retry_restore_state(label: String, state: Dictionary) -> void:
+	print("[TK-RETRY:%s] player_visible=%s sprite_visible=%s player_alpha=%.2f sprite_alpha=%.2f collision=%s input=%s process=%s physics=%s is_dead=%s hp=%.1f time_scale=%.2f" % [
+		label,
+		str(state.get("player_visible", false)),
+		str(state.get("sprite_visible", false)),
+		float(state.get("player_alpha", -1.0)),
+		float(state.get("sprite_alpha", -1.0)),
+		str(state.get("collision_enabled", false)),
+		str(state.get("input_enabled", false)),
+		str(state.get("process_enabled", false)),
+		str(state.get("physics_enabled", false)),
+		str(state.get("is_dead", true)),
+		float(state.get("hp", -1.0)),
+		float(state.get("time_scale", -1.0))
+	])
+
+func _reset_boss_for_retry() -> void:
+	if not boss:
+		return
+	boss.global_position = BOSS_SPAWN
+	boss.velocity = Vector2.ZERO
+	if boss.has_method("reset_for_retry"):
+		boss.reset_for_retry()
+	else:
+		boss.set_physics_process(true)
 
 # ======================================================================
 #  POST-BATTLE NARRATIVE + KILL/SPARE CHOICE
@@ -1207,6 +1550,8 @@ func _give_loot() -> void:
 	if GameManager:
 		GameManager.add_xp(200)
 		GameManager.set_story_flag("ch1_tutorial_knight_defeated", true)
+	if has_node("/root/VFXLibrary") and player:
+		VFXLibrary.spawn_status_indicator("BLADE +500G +200XP", player.global_position + Vector2(0, -96), self, true)
 
 # ======================================================================
 #  UTILITIES

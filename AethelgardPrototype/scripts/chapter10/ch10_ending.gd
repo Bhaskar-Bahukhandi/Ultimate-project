@@ -119,16 +119,31 @@ func _play_ending() -> void:
 		_:
 			await DialogueManager.say("Narrator", "The root closes around an unstable ending. The saved live, but the route will need review.")
 
+	await _early_choice_epilogue()
+	if not is_inside_tree(): return
 	await DialogueManager.say("Narrator", "Some citizens wake in rebuilt regions. Some remain in memory. Some choose not to forgive Kaelen. None of them vanish.")
 	await DialogueManager.say("Kaelen", "Aethelgard was built to rescue people. Now it has to learn how to let them leave, stay, argue, and remember.")
 	await DialogueManager.say("System", "// CREDITS COMPLETE. Returning to main menu.")
+
+
+func _early_choice_epilogue() -> void:
+	if GameManager.has_flag("ending_route_early_witness_support"):
+		await DialogueManager.say("Narrator", "Because Kaelen kept early witnesses close, the first councils begin with names people already trust: Elara, Seraphina or her Ironhold relays, Lyra's maps, and Oakhaven's warning bells.")
+	elif GameManager.has_flag("ending_route_early_isolated"):
+		await DialogueManager.say("Narrator", "Because Kaelen made early choices alone, the first free days are harsher. The saved insist every future key must have witnesses before it has power.")
+	elif GameManager.has_flag("ending_route_early_control_scars"):
+		await DialogueManager.say("Narrator", "Early scars remain in the ending: Aldric's branch, the Data Wraith's verdict, and the allies Kaelen pushed away all become public limits on future authority.")
+	elif GameManager.has_flag("ending_route_early_mercy"):
+		await DialogueManager.say("Narrator", "The early mercies echo forward. Oakhaven remembers the warning, Aldric's record remains open, and restored processes become proof that endings can be repaired.")
+	else:
+		await DialogueManager.say("Narrator", "The earliest choices leave mixed testimony. Aethelgard does not smooth it over; it teaches from the contradiction.")
 
 
 func _ending_key() -> String:
 	if GameManager.has_flag("ch10_synthesis_route"):
 		return "synthesis"
 	if GameManager.has_flag("ch10_destroy_sovereign"):
-		if GameManager.has_flag("ch9_truth_hidden") or GameManager.has_flag("ch4_choice_bargain_deleted"):
+		if GameManager.has_flag("ch9_truth_hidden") or GameManager.has_flag("ch4_choice_bargain_deleted") or GameManager.has_flag("ending_route_early_control_scars"):
 			return "bittersweet_liberation"
 		return "liberation"
 	if GameManager.has_flag("ch10_rewrite_sovereign"):

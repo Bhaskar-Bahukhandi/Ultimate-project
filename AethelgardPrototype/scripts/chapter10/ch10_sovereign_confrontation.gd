@@ -131,6 +131,9 @@ func _play_confrontation() -> void:
 
 
 func _final_pressure() -> void:
+	await _early_final_pressure()
+	if not is_inside_tree(): return
+
 	match _chapter8_choice_key():
 		"lead":
 			await DialogueManager.say("SOVEREIGN", "Your revolt followed you here. Destroy me and they may ask you to replace me.")
@@ -161,6 +164,7 @@ func _apply_final_choice(choice_key: String) -> void:
 	final_choice = choice_key
 	GameManager.set_story_flag("ch10_final_choice_made", true)
 	_clear_exclusive_final_flags()
+	_record_early_ending_context()
 	match choice_key:
 		"destroy":
 			GameManager.set_story_flag("ch10_destroy_sovereign", true)
@@ -181,6 +185,105 @@ func _apply_final_choice(choice_key: String) -> void:
 		_:
 			GameManager.set_story_flag("ch10_dissolve_control", true)
 	GameManager.save_game(GameManager.AUTOSAVE_SLOT)
+
+
+func _early_final_pressure() -> void:
+	match _aldric_choice_key():
+		"root_purge":
+			await DialogueManager.say("SOVEREIGN", "You used Root Access to rewrite Aldric into peace. You learned early that mercy and override can share a hand.")
+		"spared":
+			await DialogueManager.say("SOVEREIGN", "You spared Aldric. A sentimental exception. Exceptions are how policy becomes hypocrisy.")
+		"killed":
+			await DialogueManager.say("SOVEREIGN", "You killed Aldric when he blocked your path. Do not pretend deletion disgusts you only when I perform it.")
+		_:
+			await DialogueManager.say("SOVEREIGN", "Even your first guardian choice is unstable. I am the only stable record.")
+
+	match _seraphina_status_key():
+		"recruited":
+			await DialogueManager.say("SOVEREIGN", "Seraphina follows because strength respects strength. How long until respect becomes command?")
+		"stayed":
+			await DialogueManager.say("SOVEREIGN", "Seraphina stayed in Ironhold because local order mattered. Central freedom still depends on local discipline.")
+		"rejected":
+			await DialogueManager.say("SOVEREIGN", "You rejected Seraphina. You know how easy it is to call isolation independence.")
+		_:
+			await DialogueManager.say("SOVEREIGN", "Ironhold's witness route is incomplete. Incomplete systems fail.")
+
+	match _kaelthas_choice_key():
+		"allied":
+			await DialogueManager.say("SOVEREIGN", "You allied with Kaelthas when ambition was useful. I am only the useful ambition you kept denying.")
+		"refused":
+			await DialogueManager.say("SOVEREIGN", "You refused Kaelthas and called it judgment. Refusal is control with cleaner posture.")
+		"challenged":
+			await DialogueManager.say("SOVEREIGN", "You challenged Kaelthas. Violence is a fast consensus mechanism, is it not?")
+		_:
+			await DialogueManager.say("SOVEREIGN", "Kaelthas's lesson remains unindexed. Unindexed ambition is a security risk.")
+
+	match _sovereign_response_key():
+		"defiant":
+			await DialogueManager.say("SOVEREIGN", "You said your code was wrong. Then prove this final answer is not another patch written in anger.")
+		"regretful":
+			await DialogueManager.say("SOVEREIGN", "You regretted the shield becoming a jailer. Regret still wants a shield.")
+		"doubting":
+			await DialogueManager.say("SOVEREIGN", "You doubted your right to decide. I offer relief from that doubt.")
+		_:
+			await DialogueManager.say("SOVEREIGN", "Your first answer to me is missing. I prefer complete logs.")
+
+
+func _record_early_ending_context() -> void:
+	var mercy := _early_mercy_score()
+	var control := _early_control_scar_score()
+	var witness := _early_witness_support_score()
+	GameManager.set_story_flag("ending_route_early_mercy", mercy >= 3)
+	GameManager.set_story_flag("ending_route_early_control_scars", control >= 2)
+	GameManager.set_story_flag("ending_route_early_witness_support", witness >= 3)
+	GameManager.set_story_flag("ending_route_early_isolated", witness <= 1 and control >= 2)
+
+
+func _early_mercy_score() -> int:
+	var score := 0
+	if GameManager.has_flag("ch1_knight_spared") or GameManager.has_flag("ch1_root_purge"):
+		score += 1
+	if GameManager.has_flag("ch1_oakhaven_warned_villagers"):
+		score += 1
+	if GameManager.has_flag("ch2_data_wraith_restored"):
+		score += 1
+	if GameManager.has_flag("ch3_lyra_recruited"):
+		score += 1
+	if GameManager.has_flag("ch3_sovereign_regretful"):
+		score += 1
+	return score
+
+
+func _early_control_scar_score() -> int:
+	var score := 0
+	if GameManager.has_flag("ch1_knight_killed"):
+		score += 1
+	if GameManager.has_flag("ch1_oakhaven_left_quietly"):
+		score += 1
+	if GameManager.has_flag("ch2_seraphina_showoff"):
+		score += 1
+	if GameManager.has_flag("ch2_data_wraith_destroyed") or GameManager.has_flag("ch2_data_wraith_absorbed"):
+		score += 1
+	if GameManager.has_flag("ch3_kaelthas_allied"):
+		score += 1
+	if GameManager.has_flag("ch3_sovereign_defiant"):
+		score += 1
+	return score
+
+
+func _early_witness_support_score() -> int:
+	var score := 0
+	if GameManager.has_flag("ch1_elara_trusted") or GameManager.has_flag("ch1_elara_cautious"):
+		score += 1
+	if GameManager.has_flag("ch1_oakhaven_warned_villagers"):
+		score += 1
+	if GameManager.has_flag("ch2_seraphina_recruited") or GameManager.has_flag("ch2_seraphina_stayed"):
+		score += 1
+	if GameManager.has_flag("ch3_lyra_recruited"):
+		score += 1
+	if GameManager.has_flag("ch3_kaelthas_refused") or GameManager.has_flag("ch3_kaelthas_challenged"):
+		score += 1
+	return score
 
 
 func _clear_exclusive_final_flags() -> void:
@@ -216,6 +319,45 @@ func _chapter9_truth_key() -> String:
 		return "hide"
 	if GameManager.has_flag("ch9_truth_distributed"):
 		return "distribute"
+	return "unknown"
+
+func _aldric_choice_key() -> String:
+	if GameManager.has_flag("ch1_root_purge"):
+		return "root_purge"
+	if GameManager.has_flag("ch1_knight_spared"):
+		return "spared"
+	if GameManager.has_flag("ch1_knight_killed"):
+		return "killed"
+	return "unknown"
+
+
+func _seraphina_status_key() -> String:
+	if GameManager.has_flag("ch2_seraphina_recruited"):
+		return "recruited"
+	if GameManager.has_flag("ch2_seraphina_stayed"):
+		return "stayed"
+	if GameManager.has_flag("ch2_seraphina_rejected"):
+		return "rejected"
+	return "unknown"
+
+
+func _kaelthas_choice_key() -> String:
+	if GameManager.has_flag("ch3_kaelthas_allied"):
+		return "allied"
+	if GameManager.has_flag("ch3_kaelthas_refused"):
+		return "refused"
+	if GameManager.has_flag("ch3_kaelthas_challenged"):
+		return "challenged"
+	return "unknown"
+
+
+func _sovereign_response_key() -> String:
+	if GameManager.has_flag("ch3_sovereign_defiant"):
+		return "defiant"
+	if GameManager.has_flag("ch3_sovereign_regretful"):
+		return "regretful"
+	if GameManager.has_flag("ch3_sovereign_doubting"):
+		return "doubting"
 	return "unknown"
 
 

@@ -146,6 +146,9 @@ func _play_tide() -> void:
 	await DialogueManager.say("Kaelen", "A door you spent the whole game pretending was a wall.")
 
 func _choice_context() -> void:
+	await _early_backup_context()
+	if not is_inside_tree(): return
+
 	match _chapter4_choice_key():
 		"preserve":
 			await DialogueManager.say("Backup Leviathan", "You preserved deleted citizens. You know what it means to let painful memory keep breathing.")
@@ -175,6 +178,35 @@ func _choice_context() -> void:
 			await DialogueManager.say("Choir Echo", "You rewrote broken gods into service. The tide asks whether history can be changed without being conquered.")
 		_:
 			await DialogueManager.say("Choir Echo", "The Cathedral's answer is unclear. The tide mistrusts unclear gods.")
+
+func _early_backup_context() -> void:
+	GameManager.set_story_flag("ch7_early_data_wraith_history_seen", true)
+	match _data_wraith_choice_key():
+		"restored":
+			await DialogueManager.say("Data Wraith Memory", "The process you restored beneath Ironhold still runs. It remembers corruption as illness, not identity.")
+		"destroyed":
+			await DialogueManager.say("Data Wraith Memory", "The process you destroyed beneath Ironhold survives here only as a warning: endings can be mercy and erasure at once.")
+		"absorbed":
+			await DialogueManager.say("Data Wraith Memory", "The process you absorbed arrives through your own pulse. The tide cannot tell where its pain ends and your power begins.")
+		_:
+			await DialogueManager.say("Data Wraith Memory", "Ironhold's broken process has no recorded verdict. The tide keeps the gap open.")
+
+	GameManager.set_story_flag("ch7_early_lyra_memory_seen", true)
+	if GameManager.has_flag("ch3_lyra_recruited"):
+		await DialogueManager.say("Lyra", "I have maps of places that never made it into history. The backups are not clean, Kaelen, but lost places still deserve names.")
+	elif GameManager.has_flag("ch3_lyra_left_alone"):
+		await DialogueManager.say("Lyra Echo", "You left me alone in the wastes. This ocean is made of everyone a hero could not carry.")
+	else:
+		await DialogueManager.say("Lyra Echo", "The wastes ranger's branch is faint. Even faint branches press against the tide.")
+
+func _data_wraith_choice_key() -> String:
+	if GameManager.has_flag("ch2_data_wraith_restored"):
+		return "restored"
+	if GameManager.has_flag("ch2_data_wraith_destroyed"):
+		return "destroyed"
+	if GameManager.has_flag("ch2_data_wraith_absorbed"):
+		return "absorbed"
+	return "unknown"
 
 func _chapter4_choice_key() -> String:
 	if GameManager.has_flag("ch4_choice_preserve_deleted"):
