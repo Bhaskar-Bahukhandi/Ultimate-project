@@ -756,6 +756,20 @@ const PLAYER_TOPDOWN_ANIMS = {
 	"walk_up":    { "frames": 4, "row": 5, "speed": 8.0,  "loop": true },
 }
 
+const PLAYER_TOPDOWN_V2_SHEET = "res://assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png"
+const PLAYER_TOPDOWN_V2_ANIMS = {
+	# The V2 sheet uses front/back row names; the animation controller already
+	# consumes down/up directional names for top-down movement.
+	"idle_down":  { "frames": 4, "row": 0, "speed": 4.0, "loop": true },
+	"walk_down":  { "frames": 4, "row": 1, "speed": 8.0, "loop": true },
+	"idle_up":    { "frames": 4, "row": 2, "speed": 4.0, "loop": true },
+	"walk_up":    { "frames": 4, "row": 3, "speed": 8.0, "loop": true },
+	"idle_left":  { "frames": 4, "row": 4, "speed": 4.0, "loop": true },
+	"walk_left":  { "frames": 4, "row": 5, "speed": 8.0, "loop": true },
+	"idle_right": { "frames": 4, "row": 6, "speed": 4.0, "loop": true },
+	"walk_right": { "frames": 4, "row": 7, "speed": 8.0, "loop": true },
+}
+
 func build_animated_sprite_from_sheet(texture: Texture2D, anim_defs: Dictionary, frame_width: int, frame_height: int) -> AnimatedSprite2D:
 	## Create an AnimatedSprite2D by slicing a sprite sheet into named animations.
 	## texture: The full sprite sheet
@@ -823,6 +837,14 @@ func try_build_animated_player(context: String) -> AnimatedSprite2D:
 		frame_w = 32
 		frame_h = 48
 	else:
+		if FileAccess.file_exists(PLAYER_TOPDOWN_V2_SHEET):
+			var v2_tex = load(PLAYER_TOPDOWN_V2_SHEET)
+			if v2_tex:
+				print("✓ Found V2 top-down animation sheet: %s" % PLAYER_TOPDOWN_V2_SHEET)
+				return build_animated_sprite_from_sheet(v2_tex, PLAYER_TOPDOWN_V2_ANIMS, 32, 32)
+			push_warning("[AssetManager] V2 top-down player sheet failed to load; using existing player fallback.")
+		else:
+			push_warning("[AssetManager] V2 top-down player sheet missing; using existing player fallback.")
 		sheet_path = "res://assets/sprites/player/player_topdown_sheet.png"
 		anim_defs = PLAYER_TOPDOWN_ANIMS
 		frame_w = 16

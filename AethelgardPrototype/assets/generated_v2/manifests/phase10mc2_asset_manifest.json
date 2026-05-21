@@ -1,0 +1,1026 @@
+{
+  "phase": "10M-C2",
+  "generator": "assets/generated_v2/manifests/generate_phase10mc2_assets.py",
+  "assets": [
+    {
+      "path": "assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "dimensions": [
+        128,
+        256
+      ],
+      "frame_size": [
+        32,
+        32
+      ],
+      "animation_rows": [
+        {
+          "animation": "idle_front",
+          "frames": 4
+        },
+        {
+          "animation": "walk_front",
+          "frames": 4
+        },
+        {
+          "animation": "idle_back",
+          "frames": 4
+        },
+        {
+          "animation": "walk_back",
+          "frames": 4
+        },
+        {
+          "animation": "idle_left",
+          "frames": 4
+        },
+        {
+          "animation": "walk_left",
+          "frames": 4
+        },
+        {
+          "animation": "idle_right",
+          "frames": 4
+        },
+        {
+          "animation": "walk_right",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P0",
+      "improvement_notes_over_v1": "Larger body occupancy, split coat, direction-specific head shape, sword/rim accents.",
+      "alpha_required": true,
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "dimensions": [
+        256,
+        768
+      ],
+      "frame_size": [
+        64,
+        64
+      ],
+      "animation_rows": [
+        {
+          "animation": "idle",
+          "frames": 4
+        },
+        {
+          "animation": "run",
+          "frames": 4
+        },
+        {
+          "animation": "slash_1",
+          "frames": 4
+        },
+        {
+          "animation": "slash_2",
+          "frames": 4
+        },
+        {
+          "animation": "slash_3",
+          "frames": 4
+        },
+        {
+          "animation": "charged_slash",
+          "frames": 4
+        },
+        {
+          "animation": "upslash",
+          "frames": 4
+        },
+        {
+          "animation": "downslash",
+          "frames": 4
+        },
+        {
+          "animation": "dash",
+          "frames": 4
+        },
+        {
+          "animation": "cast",
+          "frames": 4
+        },
+        {
+          "animation": "hurt",
+          "frames": 4
+        },
+        {
+          "animation": "death",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P0",
+      "improvement_notes_over_v1": "Dynamic sword silhouettes, anticipation/follow-through poses, cape and rim lighting.",
+      "alpha_required": true,
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated_v2/sprites/bosses/tutorial_knight_v2_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "dimensions": [
+        384,
+        960
+      ],
+      "frame_size": [
+        96,
+        96
+      ],
+      "animation_rows": [
+        {
+          "animation": "idle",
+          "frames": 4
+        },
+        {
+          "animation": "slash",
+          "frames": 4
+        },
+        {
+          "animation": "charge",
+          "frames": 4
+        },
+        {
+          "animation": "low_sweep",
+          "frames": 4
+        },
+        {
+          "animation": "shield_bash",
+          "frames": 4
+        },
+        {
+          "animation": "teleport_slash",
+          "frames": 4
+        },
+        {
+          "animation": "corrupt_rift",
+          "frames": 4
+        },
+        {
+          "animation": "shockwave",
+          "frames": 4
+        },
+        {
+          "animation": "phase_change",
+          "frames": 4
+        },
+        {
+          "animation": "defeat",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P1",
+      "improvement_notes_over_v1": "Allowed 96x96 frame gives broader armor mass, full shield/sword patterns, and corruption escalation shapes room to read.",
+      "alpha_required": true,
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated_v2/sprites/enemies/fracture_slime_v2_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "dimensions": [
+        192,
+        240
+      ],
+      "frame_size": [
+        48,
+        48
+      ],
+      "animation_rows": [
+        {
+          "animation": "idle",
+          "frames": 4
+        },
+        {
+          "animation": "move",
+          "frames": 4
+        },
+        {
+          "animation": "attack",
+          "frames": 4
+        },
+        {
+          "animation": "hurt",
+          "frames": 4
+        },
+        {
+          "animation": "death",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "Distinct body silhouette and more separated attack/hurt/death poses.",
+      "alpha_required": true,
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated_v2/sprites/enemies/clock_mite_v2_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "dimensions": [
+        192,
+        240
+      ],
+      "frame_size": [
+        48,
+        48
+      ],
+      "animation_rows": [
+        {
+          "animation": "idle",
+          "frames": 4
+        },
+        {
+          "animation": "move",
+          "frames": 4
+        },
+        {
+          "animation": "attack",
+          "frames": 4
+        },
+        {
+          "animation": "hurt",
+          "frames": 4
+        },
+        {
+          "animation": "death",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "Distinct body silhouette and more separated attack/hurt/death poses.",
+      "alpha_required": true,
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated_v2/sprites/enemies/memory_wisp_v2_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "dimensions": [
+        192,
+        240
+      ],
+      "frame_size": [
+        48,
+        48
+      ],
+      "animation_rows": [
+        {
+          "animation": "idle",
+          "frames": 4
+        },
+        {
+          "animation": "move",
+          "frames": 4
+        },
+        {
+          "animation": "attack",
+          "frames": 4
+        },
+        {
+          "animation": "hurt",
+          "frames": 4
+        },
+        {
+          "animation": "death",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "Distinct body silhouette and more separated attack/hurt/death poses.",
+      "alpha_required": true,
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated_v2/sprites/npcs/elara_v2_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "dimensions": [
+        128,
+        96
+      ],
+      "frame_size": [
+        32,
+        32
+      ],
+      "animation_rows": [
+        {
+          "animation": "idle",
+          "frames": 4
+        },
+        {
+          "animation": "talk",
+          "frames": 4
+        },
+        {
+          "animation": "walk",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "Costume silhouette, prop language, and visible talk motion exceed V1 recolor read.",
+      "alpha_required": true,
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated_v2/sprites/npcs/seraphina_v2_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "dimensions": [
+        128,
+        96
+      ],
+      "frame_size": [
+        32,
+        32
+      ],
+      "animation_rows": [
+        {
+          "animation": "idle",
+          "frames": 4
+        },
+        {
+          "animation": "talk",
+          "frames": 4
+        },
+        {
+          "animation": "walk",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "Costume silhouette, prop language, and visible talk motion exceed V1 recolor read.",
+      "alpha_required": true,
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated_v2/sprites/npcs/lyra_v2_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "dimensions": [
+        128,
+        96
+      ],
+      "frame_size": [
+        32,
+        32
+      ],
+      "animation_rows": [
+        {
+          "animation": "idle",
+          "frames": 4
+        },
+        {
+          "animation": "talk",
+          "frames": 4
+        },
+        {
+          "animation": "walk",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "Costume silhouette, prop language, and visible talk motion exceed V1 recolor read.",
+      "alpha_required": true,
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated_v2/sprites/npcs/null_clerk_v2_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "dimensions": [
+        128,
+        96
+      ],
+      "frame_size": [
+        32,
+        32
+      ],
+      "animation_rows": [
+        {
+          "animation": "idle",
+          "frames": 4
+        },
+        {
+          "animation": "talk",
+          "frames": 4
+        },
+        {
+          "animation": "walk",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "Costume silhouette, prop language, and visible talk motion exceed V1 recolor read.",
+      "alpha_required": true,
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated_v2/sprites/npcs/assembly_runner_v2_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "dimensions": [
+        128,
+        96
+      ],
+      "frame_size": [
+        32,
+        32
+      ],
+      "animation_rows": [
+        {
+          "animation": "idle",
+          "frames": 4
+        },
+        {
+          "animation": "talk",
+          "frames": 4
+        },
+        {
+          "animation": "walk",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "Costume silhouette, prop language, and visible talk motion exceed V1 recolor read.",
+      "alpha_required": true,
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated_v2/icons/item_icons_v2_alpha_sheet.png",
+      "kind": "icon_sheet",
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_size": [
+        32,
+        32
+      ],
+      "animation_rows": [
+        {
+          "animation": "item_row_0",
+          "frames": 4
+        },
+        {
+          "animation": "item_row_1",
+          "frames": 4
+        },
+        {
+          "animation": "item_row_2",
+          "frames": 4
+        },
+        {
+          "animation": "item_row_3",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AtlasTexture/Sprite2D",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "V2 adds framed depth, internal highlights, and less glyph-flat icon silhouettes.",
+      "alpha_required": true,
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated_v2/icons/ui_icons_v2_alpha_sheet.png",
+      "kind": "icon_sheet",
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_size": [
+        32,
+        32
+      ],
+      "animation_rows": [
+        {
+          "animation": "ui_row_0",
+          "frames": 4
+        },
+        {
+          "animation": "ui_row_1",
+          "frames": 4
+        },
+        {
+          "animation": "ui_row_2",
+          "frames": 4
+        },
+        {
+          "animation": "ui_row_3",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AtlasTexture/Sprite2D",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "V2 adds framed depth, internal highlights, and less glyph-flat icon silhouettes.",
+      "alpha_required": true,
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated_v2/vfx/slash_v2_alpha_strip.png",
+      "kind": "vfx_strip",
+      "dimensions": [
+        384,
+        64
+      ],
+      "frame_size": [
+        64,
+        64
+      ],
+      "animation_rows": [
+        {
+          "animation": "frames",
+          "frames": 6
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/GPUParticles2D texture",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "Sharper active-frame silhouette, richer sparks/trails, and stronger glow hierarchy.",
+      "alpha_required": true,
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated_v2/vfx/parry_v2_alpha_strip.png",
+      "kind": "vfx_strip",
+      "dimensions": [
+        384,
+        64
+      ],
+      "frame_size": [
+        64,
+        64
+      ],
+      "animation_rows": [
+        {
+          "animation": "frames",
+          "frames": 6
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/GPUParticles2D texture",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "Sharper active-frame silhouette, richer sparks/trails, and stronger glow hierarchy.",
+      "alpha_required": true,
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated_v2/vfx/dash_v2_alpha_strip.png",
+      "kind": "vfx_strip",
+      "dimensions": [
+        384,
+        64
+      ],
+      "frame_size": [
+        64,
+        64
+      ],
+      "animation_rows": [
+        {
+          "animation": "frames",
+          "frames": 6
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/GPUParticles2D texture",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "Sharper active-frame silhouette, richer sparks/trails, and stronger glow hierarchy.",
+      "alpha_required": true,
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated_v2/vfx/heal_v2_alpha_strip.png",
+      "kind": "vfx_strip",
+      "dimensions": [
+        384,
+        64
+      ],
+      "frame_size": [
+        64,
+        64
+      ],
+      "animation_rows": [
+        {
+          "animation": "frames",
+          "frames": 6
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/GPUParticles2D texture",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "Sharper active-frame silhouette, richer sparks/trails, and stronger glow hierarchy.",
+      "alpha_required": true,
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated_v2/vfx/corruption_v2_alpha_strip.png",
+      "kind": "vfx_strip",
+      "dimensions": [
+        384,
+        64
+      ],
+      "frame_size": [
+        64,
+        64
+      ],
+      "animation_rows": [
+        {
+          "animation": "frames",
+          "frames": 6
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/GPUParticles2D texture",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "Sharper active-frame silhouette, richer sparks/trails, and stronger glow hierarchy.",
+      "alpha_required": true,
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated_v2/tilesets/oakhaven_v2_prototype_tileset.png",
+      "kind": "tileset",
+      "dimensions": [
+        128,
+        64
+      ],
+      "frame_size": [
+        32,
+        32
+      ],
+      "animation_rows": [
+        {
+          "animation": "tiles",
+          "frames": 8,
+          "tiles": [
+            "grass",
+            "path",
+            "wood",
+            "roof",
+            "hedge",
+            "flower",
+            "sign",
+            "moss"
+          ]
+        }
+      ],
+      "intended_godot_type": "TileSetAtlasSource",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "V2 tile motifs add texture, edge wear, and region-specific symbols over V1 palette blocks.",
+      "alpha_required": false,
+      "tile_size": [
+        32,
+        32
+      ],
+      "tiles": [
+        "grass",
+        "path",
+        "wood",
+        "roof",
+        "hedge",
+        "flower",
+        "sign",
+        "moss"
+      ]
+    },
+    {
+      "path": "assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png",
+      "kind": "tileset",
+      "dimensions": [
+        128,
+        64
+      ],
+      "frame_size": [
+        32,
+        32
+      ],
+      "animation_rows": [
+        {
+          "animation": "tiles",
+          "frames": 8,
+          "tiles": [
+            "brick",
+            "metal",
+            "forge",
+            "pipe",
+            "rail",
+            "crate",
+            "vent",
+            "brick"
+          ]
+        }
+      ],
+      "intended_godot_type": "TileSetAtlasSource",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "V2 tile motifs add texture, edge wear, and region-specific symbols over V1 palette blocks.",
+      "alpha_required": false,
+      "tile_size": [
+        32,
+        32
+      ],
+      "tiles": [
+        "brick",
+        "metal",
+        "forge",
+        "pipe",
+        "rail",
+        "crate",
+        "vent",
+        "brick"
+      ]
+    },
+    {
+      "path": "assets/generated_v2/tilesets/fractured_wastes_v2_prototype_tileset.png",
+      "kind": "tileset",
+      "dimensions": [
+        128,
+        64
+      ],
+      "frame_size": [
+        32,
+        32
+      ],
+      "animation_rows": [
+        {
+          "animation": "tiles",
+          "frames": 8,
+          "tiles": [
+            "dust",
+            "path",
+            "shard",
+            "glitch_rune",
+            "rune",
+            "ridge",
+            "pit",
+            "dust"
+          ]
+        }
+      ],
+      "intended_godot_type": "TileSetAtlasSource",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "V2 tile motifs add texture, edge wear, and region-specific symbols over V1 palette blocks.",
+      "alpha_required": false,
+      "tile_size": [
+        32,
+        32
+      ],
+      "tiles": [
+        "dust",
+        "path",
+        "shard",
+        "glitch_rune",
+        "rune",
+        "ridge",
+        "pit",
+        "dust"
+      ]
+    },
+    {
+      "path": "assets/generated_v2/tilesets/forgotten_sectors_v2_prototype_tileset.png",
+      "kind": "tileset",
+      "dimensions": [
+        128,
+        64
+      ],
+      "frame_size": [
+        32,
+        32
+      ],
+      "animation_rows": [
+        {
+          "animation": "tiles",
+          "frames": 8,
+          "tiles": [
+            "null_floor",
+            "archive_wall",
+            "dossier",
+            "seal",
+            "memory",
+            "void",
+            "console",
+            "rune"
+          ]
+        }
+      ],
+      "intended_godot_type": "TileSetAtlasSource",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "V2 tile motifs add texture, edge wear, and region-specific symbols over V1 palette blocks.",
+      "alpha_required": false,
+      "tile_size": [
+        32,
+        32
+      ],
+      "tiles": [
+        "null_floor",
+        "archive_wall",
+        "dossier",
+        "seal",
+        "memory",
+        "void",
+        "console",
+        "rune"
+      ]
+    },
+    {
+      "path": "assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+      "kind": "tileset",
+      "dimensions": [
+        128,
+        64
+      ],
+      "frame_size": [
+        32,
+        32
+      ],
+      "animation_rows": [
+        {
+          "animation": "tiles",
+          "frames": 8,
+          "tiles": [
+            "glass",
+            "mirror",
+            "plaza",
+            "fountain",
+            "arch",
+            "reflection",
+            "mirror",
+            "rune"
+          ]
+        }
+      ],
+      "intended_godot_type": "TileSetAtlasSource",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "V2 tile motifs add texture, edge wear, and region-specific symbols over V1 palette blocks.",
+      "alpha_required": false,
+      "tile_size": [
+        32,
+        32
+      ],
+      "tiles": [
+        "glass",
+        "mirror",
+        "plaza",
+        "fountain",
+        "arch",
+        "reflection",
+        "mirror",
+        "rune"
+      ]
+    },
+    {
+      "path": "assets/generated_v2/tilesets/cathedral_server_v2_prototype_tileset.png",
+      "kind": "tileset",
+      "dimensions": [
+        128,
+        64
+      ],
+      "frame_size": [
+        32,
+        32
+      ],
+      "animation_rows": [
+        {
+          "animation": "tiles",
+          "frames": 8,
+          "tiles": [
+            "server_floor",
+            "aisle",
+            "console",
+            "altar",
+            "firewall",
+            "choir",
+            "wire",
+            "rune"
+          ]
+        }
+      ],
+      "intended_godot_type": "TileSetAtlasSource",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "V2 tile motifs add texture, edge wear, and region-specific symbols over V1 palette blocks.",
+      "alpha_required": false,
+      "tile_size": [
+        32,
+        32
+      ],
+      "tiles": [
+        "server_floor",
+        "aisle",
+        "console",
+        "altar",
+        "firewall",
+        "choir",
+        "wire",
+        "rune"
+      ]
+    },
+    {
+      "path": "assets/generated_v2/tilesets/memory_ocean_v2_prototype_tileset.png",
+      "kind": "tileset",
+      "dimensions": [
+        128,
+        64
+      ],
+      "frame_size": [
+        32,
+        32
+      ],
+      "animation_rows": [
+        {
+          "animation": "tiles",
+          "frames": 8,
+          "tiles": [
+            "water",
+            "tide",
+            "foam",
+            "island",
+            "salvage",
+            "log",
+            "memory",
+            "rune"
+          ]
+        }
+      ],
+      "intended_godot_type": "TileSetAtlasSource",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "V2 tile motifs add texture, edge wear, and region-specific symbols over V1 palette blocks.",
+      "alpha_required": false,
+      "tile_size": [
+        32,
+        32
+      ],
+      "tiles": [
+        "water",
+        "tide",
+        "foam",
+        "island",
+        "salvage",
+        "log",
+        "memory",
+        "rune"
+      ]
+    },
+    {
+      "path": "assets/generated_v2/tilesets/root_of_heaven_v2_prototype_tileset.png",
+      "kind": "tileset",
+      "dimensions": [
+        128,
+        64
+      ],
+      "frame_size": [
+        32,
+        32
+      ],
+      "animation_rows": [
+        {
+          "animation": "tiles",
+          "frames": 8,
+          "tiles": [
+            "root",
+            "kernel",
+            "circuit",
+            "root_wall",
+            "witness",
+            "portal",
+            "throne",
+            "glitch_rune"
+          ]
+        }
+      ],
+      "intended_godot_type": "TileSetAtlasSource",
+      "integration_priority": "P2",
+      "improvement_notes_over_v1": "V2 tile motifs add texture, edge wear, and region-specific symbols over V1 palette blocks.",
+      "alpha_required": false,
+      "tile_size": [
+        32,
+        32
+      ],
+      "tiles": [
+        "root",
+        "kernel",
+        "circuit",
+        "root_wall",
+        "witness",
+        "portal",
+        "throne",
+        "glitch_rune"
+      ]
+    }
+  ]
+}

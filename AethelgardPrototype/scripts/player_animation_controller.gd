@@ -56,8 +56,8 @@ func _has_valid_frames(animated_sprite: AnimatedSprite2D) -> bool:
 	if not animated_sprite.sprite_frames:
 		return false
 	var anims = animated_sprite.sprite_frames.get_animation_names()
-	# Must have at least "idle" to be considered valid
-	return "idle" in anims
+	# Top-down sheets may expose only directional idle animations.
+	return "idle" in anims or "idle_down" in anims
 
 func set_mode_combat() -> void:
 	mode = Mode.COMBAT

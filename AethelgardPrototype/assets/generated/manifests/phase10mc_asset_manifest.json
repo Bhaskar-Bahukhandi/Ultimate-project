@@ -1,0 +1,975 @@
+{
+  "phase": "10M-C",
+  "generator": "assets/generated/manifests/generate_phase10mc_assets.py",
+  "style": "original alpha-quality procedural pixel art",
+  "assets": [
+    {
+      "path": "assets/generated/sprites/player/kaelen_topdown_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "width": 128,
+      "height": 256,
+      "frame_size": [
+        32,
+        32
+      ],
+      "rows": [
+        {
+          "animation": "idle_front",
+          "frames": 4
+        },
+        {
+          "animation": "walk_front",
+          "frames": 4
+        },
+        {
+          "animation": "idle_back",
+          "frames": 4
+        },
+        {
+          "animation": "walk_back",
+          "frames": 4
+        },
+        {
+          "animation": "idle_left",
+          "frames": 4
+        },
+        {
+          "animation": "walk_left",
+          "frames": 4
+        },
+        {
+          "animation": "idle_right",
+          "frames": 4
+        },
+        {
+          "animation": "walk_right",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P0",
+      "alpha_required": true,
+      "notes": "Four-direction top-down Kaelen sheet.",
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated/sprites/player/kaelen_combat_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "width": 256,
+      "height": 768,
+      "frame_size": [
+        64,
+        64
+      ],
+      "rows": [
+        {
+          "animation": "idle",
+          "frames": 4
+        },
+        {
+          "animation": "run",
+          "frames": 4
+        },
+        {
+          "animation": "slash_1",
+          "frames": 4
+        },
+        {
+          "animation": "slash_2",
+          "frames": 4
+        },
+        {
+          "animation": "slash_3",
+          "frames": 4
+        },
+        {
+          "animation": "charged_slash",
+          "frames": 4
+        },
+        {
+          "animation": "upslash",
+          "frames": 4
+        },
+        {
+          "animation": "downslash",
+          "frames": 4
+        },
+        {
+          "animation": "dash",
+          "frames": 4
+        },
+        {
+          "animation": "cast",
+          "frames": 4
+        },
+        {
+          "animation": "hurt",
+          "frames": 4
+        },
+        {
+          "animation": "death",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P0",
+      "alpha_required": true,
+      "notes": "Side-view combat Kaelen sheet with placeholder attack timing rows.",
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated/sprites/bosses/tutorial_knight_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "width": 256,
+      "height": 640,
+      "frame_size": [
+        64,
+        64
+      ],
+      "rows": [
+        {
+          "animation": "idle",
+          "frames": 4
+        },
+        {
+          "animation": "slash",
+          "frames": 4
+        },
+        {
+          "animation": "charge",
+          "frames": 4
+        },
+        {
+          "animation": "low_sweep",
+          "frames": 4
+        },
+        {
+          "animation": "shield_bash",
+          "frames": 4
+        },
+        {
+          "animation": "teleport_slash",
+          "frames": 4
+        },
+        {
+          "animation": "corrupt_rift",
+          "frames": 4
+        },
+        {
+          "animation": "shockwave",
+          "frames": 4
+        },
+        {
+          "animation": "phase_change",
+          "frames": 4
+        },
+        {
+          "animation": "defeat",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P1",
+      "alpha_required": true,
+      "notes": "Tutorial Knight boss sheet matching current pattern vocabulary.",
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated/sprites/enemies/fracture_slime_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "width": 192,
+      "height": 240,
+      "frame_size": [
+        48,
+        48
+      ],
+      "rows": [
+        {
+          "animation": "idle",
+          "frames": 4
+        },
+        {
+          "animation": "move",
+          "frames": 4
+        },
+        {
+          "animation": "attack",
+          "frames": 4
+        },
+        {
+          "animation": "hurt",
+          "frames": 4
+        },
+        {
+          "animation": "death",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P2",
+      "alpha_required": true,
+      "notes": "Generic fracture slime enemy sheet.",
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated/sprites/enemies/clock_mite_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "width": 192,
+      "height": 240,
+      "frame_size": [
+        48,
+        48
+      ],
+      "rows": [
+        {
+          "animation": "idle",
+          "frames": 4
+        },
+        {
+          "animation": "move",
+          "frames": 4
+        },
+        {
+          "animation": "attack",
+          "frames": 4
+        },
+        {
+          "animation": "hurt",
+          "frames": 4
+        },
+        {
+          "animation": "death",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P2",
+      "alpha_required": true,
+      "notes": "Generic clock mite enemy sheet.",
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated/sprites/enemies/memory_wisp_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "width": 192,
+      "height": 240,
+      "frame_size": [
+        48,
+        48
+      ],
+      "rows": [
+        {
+          "animation": "idle",
+          "frames": 4
+        },
+        {
+          "animation": "move",
+          "frames": 4
+        },
+        {
+          "animation": "attack",
+          "frames": 4
+        },
+        {
+          "animation": "hurt",
+          "frames": 4
+        },
+        {
+          "animation": "death",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P2",
+      "alpha_required": true,
+      "notes": "Generic memory wisp enemy sheet.",
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated/sprites/npcs/elara_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "width": 128,
+      "height": 96,
+      "frame_size": [
+        32,
+        32
+      ],
+      "rows": [
+        {
+          "animation": "idle",
+          "frames": 4
+        },
+        {
+          "animation": "talk",
+          "frames": 4
+        },
+        {
+          "animation": "walk",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P2",
+      "alpha_required": true,
+      "notes": "NPC elara idle/talk/walk sheet.",
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated/sprites/npcs/seraphina_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "width": 128,
+      "height": 96,
+      "frame_size": [
+        32,
+        32
+      ],
+      "rows": [
+        {
+          "animation": "idle",
+          "frames": 4
+        },
+        {
+          "animation": "talk",
+          "frames": 4
+        },
+        {
+          "animation": "walk",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P2",
+      "alpha_required": true,
+      "notes": "NPC seraphina idle/talk/walk sheet.",
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated/sprites/npcs/lyra_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "width": 128,
+      "height": 96,
+      "frame_size": [
+        32,
+        32
+      ],
+      "rows": [
+        {
+          "animation": "idle",
+          "frames": 4
+        },
+        {
+          "animation": "talk",
+          "frames": 4
+        },
+        {
+          "animation": "walk",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P2",
+      "alpha_required": true,
+      "notes": "NPC lyra idle/talk/walk sheet.",
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated/sprites/npcs/null_clerk_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "width": 128,
+      "height": 96,
+      "frame_size": [
+        32,
+        32
+      ],
+      "rows": [
+        {
+          "animation": "idle",
+          "frames": 4
+        },
+        {
+          "animation": "talk",
+          "frames": 4
+        },
+        {
+          "animation": "walk",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P2",
+      "alpha_required": true,
+      "notes": "NPC null clerk idle/talk/walk sheet.",
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated/sprites/npcs/assembly_runner_alpha_sheet.png",
+      "kind": "sprite_sheet",
+      "width": 128,
+      "height": 96,
+      "frame_size": [
+        32,
+        32
+      ],
+      "rows": [
+        {
+          "animation": "idle",
+          "frames": 4
+        },
+        {
+          "animation": "talk",
+          "frames": 4
+        },
+        {
+          "animation": "walk",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/SpriteFrames",
+      "integration_priority": "P2",
+      "alpha_required": true,
+      "notes": "NPC assembly runner idle/talk/walk sheet.",
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated/icons/item_icons_alpha_sheet.png",
+      "kind": "icon_sheet",
+      "width": 128,
+      "height": 128,
+      "frame_size": [
+        32,
+        32
+      ],
+      "rows": [
+        {
+          "animation": "item_row_0",
+          "frames": 4
+        },
+        {
+          "animation": "item_row_1",
+          "frames": 4
+        },
+        {
+          "animation": "item_row_2",
+          "frames": 4
+        },
+        {
+          "animation": "item_row_3",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AtlasTexture/Sprite2D",
+      "integration_priority": "P2",
+      "alpha_required": true,
+      "notes": "Original item pixel icons.",
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated/icons/ui_icons_alpha_sheet.png",
+      "kind": "icon_sheet",
+      "width": 128,
+      "height": 128,
+      "frame_size": [
+        32,
+        32
+      ],
+      "rows": [
+        {
+          "animation": "ui_row_0",
+          "frames": 4
+        },
+        {
+          "animation": "ui_row_1",
+          "frames": 4
+        },
+        {
+          "animation": "ui_row_2",
+          "frames": 4
+        },
+        {
+          "animation": "ui_row_3",
+          "frames": 4
+        }
+      ],
+      "intended_godot_type": "AtlasTexture/Sprite2D",
+      "integration_priority": "P2",
+      "alpha_required": true,
+      "notes": "Original ui pixel icons.",
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated/vfx/slash_alpha_strip.png",
+      "kind": "vfx_strip",
+      "width": 384,
+      "height": 64,
+      "frame_size": [
+        64,
+        64
+      ],
+      "rows": [
+        {
+          "animation": "frames",
+          "frames": 6
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/GPUParticles2D texture",
+      "integration_priority": "P2",
+      "alpha_required": true,
+      "notes": "slash transparent VFX strip.",
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated/vfx/parry_alpha_strip.png",
+      "kind": "vfx_strip",
+      "width": 384,
+      "height": 64,
+      "frame_size": [
+        64,
+        64
+      ],
+      "rows": [
+        {
+          "animation": "frames",
+          "frames": 6
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/GPUParticles2D texture",
+      "integration_priority": "P2",
+      "alpha_required": true,
+      "notes": "parry transparent VFX strip.",
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated/vfx/dash_alpha_strip.png",
+      "kind": "vfx_strip",
+      "width": 384,
+      "height": 64,
+      "frame_size": [
+        64,
+        64
+      ],
+      "rows": [
+        {
+          "animation": "frames",
+          "frames": 6
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/GPUParticles2D texture",
+      "integration_priority": "P2",
+      "alpha_required": true,
+      "notes": "dash transparent VFX strip.",
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated/vfx/heal_alpha_strip.png",
+      "kind": "vfx_strip",
+      "width": 384,
+      "height": 64,
+      "frame_size": [
+        64,
+        64
+      ],
+      "rows": [
+        {
+          "animation": "frames",
+          "frames": 6
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/GPUParticles2D texture",
+      "integration_priority": "P2",
+      "alpha_required": true,
+      "notes": "heal transparent VFX strip.",
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated/vfx/corruption_alpha_strip.png",
+      "kind": "vfx_strip",
+      "width": 384,
+      "height": 64,
+      "frame_size": [
+        64,
+        64
+      ],
+      "rows": [
+        {
+          "animation": "frames",
+          "frames": 6
+        }
+      ],
+      "intended_godot_type": "AnimatedSprite2D/GPUParticles2D texture",
+      "integration_priority": "P2",
+      "alpha_required": true,
+      "notes": "corruption transparent VFX strip.",
+      "tile_size": null,
+      "tiles": null
+    },
+    {
+      "path": "assets/generated/tilesets/oakhaven_prototype_tileset.png",
+      "kind": "tileset",
+      "width": 128,
+      "height": 64,
+      "frame_size": [
+        32,
+        32
+      ],
+      "rows": [
+        {
+          "animation": "tiles",
+          "frames": 8,
+          "tiles": [
+            "grass",
+            "path",
+            "moss",
+            "wood",
+            "roof",
+            "sign",
+            "hedge",
+            "flower"
+          ]
+        }
+      ],
+      "intended_godot_type": "TileSetAtlasSource",
+      "integration_priority": "P2",
+      "alpha_required": false,
+      "notes": "Oakhaven prototype atlas.",
+      "tile_size": [
+        32,
+        32
+      ],
+      "tiles": [
+        "grass",
+        "path",
+        "moss",
+        "wood",
+        "roof",
+        "sign",
+        "hedge",
+        "flower"
+      ]
+    },
+    {
+      "path": "assets/generated/tilesets/ironhold_prototype_tileset.png",
+      "kind": "tileset",
+      "width": 128,
+      "height": 64,
+      "frame_size": [
+        32,
+        32
+      ],
+      "rows": [
+        {
+          "animation": "tiles",
+          "frames": 8,
+          "tiles": [
+            "brick",
+            "metal",
+            "rail",
+            "vent",
+            "crate",
+            "forge",
+            "pipe",
+            "grate"
+          ]
+        }
+      ],
+      "intended_godot_type": "TileSetAtlasSource",
+      "integration_priority": "P2",
+      "alpha_required": false,
+      "notes": "Ironhold prototype atlas.",
+      "tile_size": [
+        32,
+        32
+      ],
+      "tiles": [
+        "brick",
+        "metal",
+        "rail",
+        "vent",
+        "crate",
+        "forge",
+        "pipe",
+        "grate"
+      ]
+    },
+    {
+      "path": "assets/generated/tilesets/fractured_wastes_prototype_tileset.png",
+      "kind": "tileset",
+      "width": 128,
+      "height": 64,
+      "frame_size": [
+        32,
+        32
+      ],
+      "rows": [
+        {
+          "animation": "tiles",
+          "frames": 8,
+          "tiles": [
+            "dust",
+            "crack",
+            "shard",
+            "glitch",
+            "rune",
+            "ridge",
+            "pit",
+            "obelisk"
+          ]
+        }
+      ],
+      "intended_godot_type": "TileSetAtlasSource",
+      "integration_priority": "P2",
+      "alpha_required": false,
+      "notes": "Fractured Wastes prototype atlas.",
+      "tile_size": [
+        32,
+        32
+      ],
+      "tiles": [
+        "dust",
+        "crack",
+        "shard",
+        "glitch",
+        "rune",
+        "ridge",
+        "pit",
+        "obelisk"
+      ]
+    },
+    {
+      "path": "assets/generated/tilesets/forgotten_sectors_prototype_tileset.png",
+      "kind": "tileset",
+      "width": 128,
+      "height": 64,
+      "frame_size": [
+        32,
+        32
+      ],
+      "rows": [
+        {
+          "animation": "tiles",
+          "frames": 8,
+          "tiles": [
+            "null_floor",
+            "wall",
+            "dossier",
+            "memory",
+            "seal",
+            "bench",
+            "rune",
+            "void"
+          ]
+        }
+      ],
+      "intended_godot_type": "TileSetAtlasSource",
+      "integration_priority": "P2",
+      "alpha_required": false,
+      "notes": "Forgotten Sectors prototype atlas.",
+      "tile_size": [
+        32,
+        32
+      ],
+      "tiles": [
+        "null_floor",
+        "wall",
+        "dossier",
+        "memory",
+        "seal",
+        "bench",
+        "rune",
+        "void"
+      ]
+    },
+    {
+      "path": "assets/generated/tilesets/mirror_city_prototype_tileset.png",
+      "kind": "tileset",
+      "width": 128,
+      "height": 64,
+      "frame_size": [
+        32,
+        32
+      ],
+      "rows": [
+        {
+          "animation": "tiles",
+          "frames": 8,
+          "tiles": [
+            "glass",
+            "mirror",
+            "plaza",
+            "reflection",
+            "frame",
+            "fountain",
+            "arch",
+            "rune"
+          ]
+        }
+      ],
+      "intended_godot_type": "TileSetAtlasSource",
+      "integration_priority": "P2",
+      "alpha_required": false,
+      "notes": "Mirror City prototype atlas.",
+      "tile_size": [
+        32,
+        32
+      ],
+      "tiles": [
+        "glass",
+        "mirror",
+        "plaza",
+        "reflection",
+        "frame",
+        "fountain",
+        "arch",
+        "rune"
+      ]
+    },
+    {
+      "path": "assets/generated/tilesets/cathedral_server_prototype_tileset.png",
+      "kind": "tileset",
+      "width": 128,
+      "height": 64,
+      "frame_size": [
+        32,
+        32
+      ],
+      "rows": [
+        {
+          "animation": "tiles",
+          "frames": 8,
+          "tiles": [
+            "server",
+            "aisle",
+            "console",
+            "altar",
+            "firewall",
+            "choir",
+            "wire",
+            "rune"
+          ]
+        }
+      ],
+      "intended_godot_type": "TileSetAtlasSource",
+      "integration_priority": "P2",
+      "alpha_required": false,
+      "notes": "Cathedral Server prototype atlas.",
+      "tile_size": [
+        32,
+        32
+      ],
+      "tiles": [
+        "server",
+        "aisle",
+        "console",
+        "altar",
+        "firewall",
+        "choir",
+        "wire",
+        "rune"
+      ]
+    },
+    {
+      "path": "assets/generated/tilesets/memory_ocean_prototype_tileset.png",
+      "kind": "tileset",
+      "width": 128,
+      "height": 64,
+      "frame_size": [
+        32,
+        32
+      ],
+      "rows": [
+        {
+          "animation": "tiles",
+          "frames": 8,
+          "tiles": [
+            "water",
+            "tide",
+            "memory",
+            "island",
+            "salvage",
+            "foam",
+            "log",
+            "rune"
+          ]
+        }
+      ],
+      "intended_godot_type": "TileSetAtlasSource",
+      "integration_priority": "P2",
+      "alpha_required": false,
+      "notes": "Memory Ocean prototype atlas.",
+      "tile_size": [
+        32,
+        32
+      ],
+      "tiles": [
+        "water",
+        "tide",
+        "memory",
+        "island",
+        "salvage",
+        "foam",
+        "log",
+        "rune"
+      ]
+    },
+    {
+      "path": "assets/generated/tilesets/root_of_heaven_prototype_tileset.png",
+      "kind": "tileset",
+      "width": 128,
+      "height": 64,
+      "frame_size": [
+        32,
+        32
+      ],
+      "rows": [
+        {
+          "animation": "tiles",
+          "frames": 8,
+          "tiles": [
+            "root",
+            "kernel",
+            "wall",
+            "circuit",
+            "witness",
+            "portal",
+            "throne",
+            "glitch"
+          ]
+        }
+      ],
+      "intended_godot_type": "TileSetAtlasSource",
+      "integration_priority": "P2",
+      "alpha_required": false,
+      "notes": "Root Of Heaven prototype atlas.",
+      "tile_size": [
+        32,
+        32
+      ],
+      "tiles": [
+        "root",
+        "kernel",
+        "wall",
+        "circuit",
+        "witness",
+        "portal",
+        "throne",
+        "glitch"
+      ]
+    }
+  ]
+}

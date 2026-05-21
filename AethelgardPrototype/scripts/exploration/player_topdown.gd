@@ -44,6 +44,8 @@ func _ready() -> void:
 	if not body_collision:
 		_create_body_collision()
 	
+	_upgrade_topdown_visual()
+	
 	# Create interaction prompt label
 	_create_interaction_prompt()
 	
@@ -54,6 +56,20 @@ func _ready() -> void:
 	_anim_controller = _PlayerAnimCtrl.new()
 	_anim_controller.set_mode_topdown()
 	add_child(_anim_controller)
+
+func _upgrade_topdown_visual() -> void:
+	## Procedural regions still build the old BodySprite placeholder.
+	## Promote it to the shared player visual slot before AssetManager upgrades it.
+	if not has_node("Sprite") and has_node("BodySprite"):
+		get_node("BodySprite").name = "Sprite"
+	
+	if not has_node("Sprite") or not has_node("/root/AssetManager"):
+		return
+	
+	if AssetManager.replace_player_sprite(self, "exploration"):
+		var direction_indicator = get_node_or_null("DirectionIndicator")
+		if direction_indicator:
+			direction_indicator.visible = false
 
 func _create_body_collision() -> void:
 	body_collision = CollisionShape2D.new()
