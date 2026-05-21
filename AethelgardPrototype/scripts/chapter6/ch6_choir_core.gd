@@ -3,7 +3,7 @@ extends Control
 ## Chapter 6: Choir Core confrontation.
 ## The player chooses how to handle failed administrator intelligences.
 
-const END_SCENE := "res://scenes/chapter6/ch6_ending.tscn"
+const END_SCENE := "res://scenes/chapter6/ch6_choir_combat_trial.tscn"
 
 var fade_rect: ColorRect
 var choir_choice: String = ""
@@ -200,6 +200,7 @@ func _choir_firewall_confrontation() -> void:
 		await DialogueManager.say("System", "// CHOIR FIREWALL FORCED. Glitch Herb x1, +120 XP, +1.5 corruption.")
 	if has_node("/root/LoreJournal"):
 		LoreJournal.discover("ch6_choir_firewall")
+		LoreJournal.discover("cathedral_admin_apocrypha")
 	GameManager.save_game(GameManager.AUTOSAVE_SLOT)
 
 func _choice_context() -> void:

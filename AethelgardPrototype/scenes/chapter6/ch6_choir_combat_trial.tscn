@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/late_game_hazard_trial.gd" id="1"]
+
+[node name="Chapter6ChoirCombatTrial" type="Node2D"]
+script = ExtResource("1")
+trial_id = "choir_core"
+trial_title = "CHOIR CORE COMBAT TRIAL"
+trial_subtitle = "A late-midgame doctrine trial: dash the beam, jump the mercy sweep, defend the efficiency bash."
+completion_flag = "ch6_choir_combat_trial_cleared"
+next_scene = "res://scenes/chapter6/ch6_ending.tscn"
+chapter = 6
+region = "cathedral_server"
+xp_reward = 320
+gold_reward = 150
+reward_item = "glitch_stabilizer"
+reward_quantity = 1

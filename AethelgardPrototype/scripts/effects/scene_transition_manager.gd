@@ -7,8 +7,8 @@ extends CanvasLayer
 ## Works as a CanvasLayer autoload so it persists across scene changes.
 ##
 ## Usage:
-##   SceneTransitions.change_scene("res://scenes/next.tscn")
-##   SceneTransitions.change_scene("res://scenes/next.tscn", TransitionStyle.GLITCH, 0.8)
+##   SceneTransitions.change_scene("res://scenes/main_menu.tscn")
+##   SceneTransitions.change_scene("res://scenes/main_menu.tscn", TransitionStyle.GLITCH, 0.8)
 ##   SceneTransitions.fade_out()    # manual half-transition
 ##   SceneTransitions.fade_in()     # manual half-transition
 ## ==========================================================================

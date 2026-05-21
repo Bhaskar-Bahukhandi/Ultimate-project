@@ -237,6 +237,7 @@ var equipment: Dictionary = {
 
 # Currency
 var gold: int = 0
+var _suppress_add_item_feedback: bool = false
 
 const STARTING_ITEMS: Dictionary = {
 	"health_potion": 3,
@@ -254,8 +255,10 @@ func _ready() -> void:
 
 func add_starting_items() -> void:
 	## Grant the existing new-game starter items.
+	_suppress_add_item_feedback = true
 	for item_id in STARTING_ITEMS.keys():
 		add_item(item_id, STARTING_ITEMS[item_id])
+	_suppress_add_item_feedback = false
 
 func add_item(item_id: String, quantity: int = 1) -> bool:
 	## Add item to inventory
@@ -287,7 +290,7 @@ func add_item(item_id: String, quantity: int = 1) -> bool:
 		items[item_id] = actual
 		item_added.emit(item_id, actual)
 	
-	if has_node("/root/SFXManager"):
+	if not _suppress_add_item_feedback and has_node("/root/SFXManager"):
 		SFXManager.play("item_pickup")
 	if OS.is_debug_build():
 		print("[INVENTORY] Added %d x %s" % [quantity, item_data.name])

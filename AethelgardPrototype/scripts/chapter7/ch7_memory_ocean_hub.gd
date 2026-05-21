@@ -130,6 +130,9 @@ func _memory_island_interactions() -> void:
 		GameManager.set_story_flag("ch7_backup_salvage_claimed", true)
 		_grant_item("data_ore", 1)
 		_grant_item("glitch_herb", 1)
+		_discover_lore("memory_ocean_salvage_manifest")
+		if has_node("/root/SideQuestManager"):
+			SideQuestManager.complete_optional_objective("memory_ocean_backup_salvage")
 		GameManager.add_gold(90)
 		await DialogueManager.say("System", "// Backup salvage secured: +1 Data Ore, +1 Glitch Herb, +90 Gold.")
 

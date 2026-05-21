@@ -65,6 +65,30 @@ const RECIPES: Dictionary = {
 		"description": "Compress Data Ore into a reliable starter blade.",
 		"ingredients": {"data_ore": 2},
 		"output": {"item_id": "iron_sword", "quantity": 1}
+	},
+	"distill_field_medicine": {
+		"name": "Distill Field Medicine",
+		"description": "Use late-game memory substrate to brew a compact healing pair.",
+		"ingredients": {"glitch_herb": 3, "memory_shard": 1},
+		"output": {"item_id": "health_potion", "quantity": 2}
+	},
+	"stabilize_focus_tonics": {
+		"name": "Stabilize Focus Tonics",
+		"description": "Refine herbs through Data Ore into two RAM-restoring tonics.",
+		"ingredients": {"glitch_herb": 2, "data_ore": 1},
+		"output": {"item_id": "mana_potion", "quantity": 2}
+	},
+	"assemble_trial_stabilizers": {
+		"name": "Assemble Trial Stabilizers",
+		"description": "Bind one of each late-game material into corruption control supplies.",
+		"ingredients": {"glitch_herb": 1, "data_ore": 1, "memory_shard": 1},
+		"output": {"item_id": "glitch_stabilizer", "quantity": 2}
+	},
+	"weave_memory_mail": {
+		"name": "Weave Memory Mail",
+		"description": "Shape stable memories and Data Ore into late-game protective armor.",
+		"ingredients": {"memory_shard": 3, "data_ore": 2},
+		"output": {"item_id": "memory_weave_mail", "quantity": 1}
 	}
 }
 

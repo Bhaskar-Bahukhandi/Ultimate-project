@@ -3,7 +3,7 @@ extends Control
 ## Chapter 10: Witness Chamber.
 ## Saved factions answer SOVEREIGN before Kaelen makes the final choice.
 
-const NEXT_SCENE := "res://scenes/chapter10/ch10_sovereign_confrontation.tscn"
+const NEXT_SCENE := "res://scenes/chapter10/ch10_sovereign_final_trial.tscn"
 
 var fade_rect: ColorRect
 
@@ -111,18 +111,20 @@ func _witness_preparation_point() -> void:
 
 	GameManager.set_story_flag("ch10_witness_preparation_complete", true)
 	_discover_lore("ch10_witness_preparation_manifest")
+	_discover_lore("root_heaven_ngplus_recap")
 	await DialogueManager.say("Witness Quartermaster", "Final access is not heroic solitude. Take one last preparation from the people who refuse to let you enter alone.")
 	var choice = await DialogueManager.show_choices(
 		"What final preparation should Kaelen accept?",
 		[
 			"Spend 1 Memory Shard to stabilize witness relays.",
 			"Spend 1 Glitch Stabilizer to shield the final route.",
+			"Fund a final supply cache with 160 Gold.",
 			"Accept an emergency cache without spending materials."
 		]
 	)
 	if not is_inside_tree(): return
-	if choice == null or choice < 0 or choice > 2:
-		choice = 2
+	if choice == null or choice < 0 or choice > 3:
+		choice = 3
 
 	match choice:
 		0:
@@ -139,7 +141,18 @@ func _witness_preparation_point() -> void:
 			else:
 				await _grant_final_cache()
 		2:
+			if _remove_gold(160):
+				GameManager.set_story_flag("ch10_final_cache_claimed", true)
+				_grant_item("health_potion", 1)
+				_grant_item("glitch_stabilizer", 1)
+				GameManager.add_xp(120)
+				await DialogueManager.say("System", "// Final supply cache funded. -160 Gold, +120 XP, +1 Health Potion, +1 Glitch Stabilizer.")
+			else:
+				await _grant_final_cache()
+		3:
 			await _grant_final_cache()
+
+	GameManager.save_game(GameManager.AUTOSAVE_SLOT)
 
 
 func _grant_final_cache() -> void:
@@ -421,6 +434,12 @@ func _remove_item(item_id: String, quantity: int) -> bool:
 	if has_node("/root/Inventory") and Inventory.has_method("remove_item") and Inventory.has_method("has_item"):
 		if Inventory.has_item(item_id, quantity):
 			return Inventory.remove_item(item_id, quantity)
+	return false
+
+
+func _remove_gold(amount: int) -> bool:
+	if has_node("/root/Inventory") and Inventory.has_method("remove_gold"):
+		return Inventory.remove_gold(amount)
 	return false
 
 

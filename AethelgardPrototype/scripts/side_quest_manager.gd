@@ -104,6 +104,47 @@ const QUEST_DATABASE: Dictionary = {
 	},
 
 	# ═══ Cross-Chapter Secrets ═══
+	"oakhaven_memory_herb_delivery": {
+		"name": "Memory Herb Delivery",
+		"chapter": 1,
+		"description": "Deliver Glitch Herbs to Apothecary Iris so Oakhaven can treat villagers whose memories keep desyncing.",
+		"steps": ["Speak with Apothecary Iris", "Bring 2 Glitch Herbs", "Deliver the herbs"],
+		"rewards": {"xp": 90, "gold": 35, "item": "mana_potion"},
+		"discovery_hint": "Apothecary Iris can turn spare Glitch Herbs into medicine for Oakhaven survivors.",
+	},
+	"ironhold_blacksmith_material_request": {
+		"name": "Forge Line Supply",
+		"chapter": 2,
+		"description": "Bring Data Ore to Ironhold's forge line so repair work can continue without Administrator rationing.",
+		"steps": ["Speak with Merchant Garro", "Bring 2 Data Ore", "Deliver the ore"],
+		"rewards": {"xp": 120, "gold": 90, "shop_discount": 0.05},
+		"discovery_hint": "Merchant Garro knows a forge contact who can keep Ironhold's citizens armed and independent.",
+	},
+	"mirror_city_lost_reflection": {
+		"name": "Lost Reflection",
+		"chapter": 5,
+		"description": "Recover an optional Mirror City reflection fragment before entering the trial.",
+		"steps": ["Inspect the Mirror Plaza", "Read the optional mirrors", "Secure the lost reflection"],
+		"rewards": {"xp": 120, "gold": 60, "item": "memory_shard"},
+		"discovery_hint": "One reflection in Mirror Plaza keeps repeating a choice Kaelen has not fully understood.",
+	},
+	"memory_ocean_backup_salvage": {
+		"name": "Backup Salvage",
+		"chapter": 7,
+		"description": "Stabilize a memory island and recover useful materials from a rejected timeline.",
+		"steps": ["Enter the Memory Ocean", "Stabilize a backup island", "Claim safe salvage"],
+		"rewards": {"xp": 150, "gold": 75, "item": "data_ore"},
+		"discovery_hint": "The Memory Ocean hides salvage for players willing to cross unstable backup histories.",
+	},
+	"saved_assembly_supply_request": {
+		"name": "Assembly Supply Pact",
+		"chapter": 8,
+		"description": "Help at least two saved factions with practical supplies before the revolt crisis peaks.",
+		"steps": ["Read the Saved Assembly request board", "Fulfill two faction requests", "Record the supply pact"],
+		"rewards": {"xp": 180, "gold": 80, "item": "glitch_stabilizer"},
+		"discovery_hint": "The Saved Assembly needs medicine, repair stock, and witness records as much as speeches.",
+	},
+
 	"secret_debug_room": {
 		"name": "The Debug Room",
 		"chapter": 0,
@@ -226,7 +267,7 @@ func complete_quest(quest_id: String) -> void:
 	if rewards.has("gold") and GameManager:
 		GameManager.add_gold(rewards["gold"])
 	if rewards.has("item") and has_node("/root/Inventory"):
-		Inventory.add_item(rewards["item"], 1)
+		Inventory.add_item(rewards["item"], int(rewards.get("item_quantity", 1)))
 	if rewards.has("stat_boost") and GameManager:
 		var boosts: Dictionary = rewards["stat_boost"]
 		for s in boosts:
@@ -252,11 +293,29 @@ func complete_quest(quest_id: String) -> void:
 		print("[SIDE QUEST] Ability unlocked: %s" % rewards["ability"])
 	if rewards.has("lore") and GameManager:
 		GameManager.set_story_flag("lore_" + rewards["lore"], true)
+		if has_node("/root/LoreJournal") and LoreJournal.has_method("discover"):
+			LoreJournal.discover(str(rewards["lore"]))
+	if GameManager:
+		GameManager.set_story_flag("side_quest_%s_complete" % quest_id, true)
 
 	print("[SIDE QUEST] Completed: %s!" % quest_data["name"])
 	quest_completed.emit(quest_id)
 	_queue_notification("QUEST COMPLETE: %s" % quest_data["name"], Color(0.3, 1.0, 0.5))
 	_update_hud_tracker()
+
+func complete_optional_objective(quest_id: String) -> void:
+	## Phase 10J helper for short optional objectives wired from chapter scenes.
+	if not QUEST_DATABASE.has(quest_id):
+		return
+	if not quests.has(quest_id):
+		quests[quest_id] = {"state": QuestState.HIDDEN, "current_step": 0, "data": {}}
+	if quests[quest_id]["state"] == QuestState.COMPLETED:
+		return
+	if quests[quest_id]["state"] == QuestState.HIDDEN:
+		discover_quest(quest_id)
+	quests[quest_id]["state"] = QuestState.ACTIVE
+	quests[quest_id]["current_step"] = QUEST_DATABASE[quest_id].get("steps", []).size()
+	complete_quest(quest_id)
 
 func get_quest_state(quest_id: String) -> int:
 	if quests.has(quest_id):
@@ -363,10 +422,17 @@ func _create_hud_tracker() -> void:
 	_hud_tracker.name = "QuestTrackerHUD"
 	_hud_tracker.layer = 90  # Below dialogue (100) but above gameplay
 	
+	var vp_size := get_viewport().get_visible_rect().size if get_viewport() else Vector2(1280, 720)
+	var panel_width: float = clampf(vp_size.x * 0.30, 320.0, 430.0)
+	var panel_height: float = 168.0
 	var panel = PanelContainer.new()
 	panel.name = "TrackerPanel"
-	panel.position = Vector2(880, 50)
-	panel.size = Vector2(380, 160)
+	panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	panel.offset_left = -panel_width - 18.0
+	panel.offset_right = -18.0
+	panel.offset_top = 46.0
+	panel.offset_bottom = 46.0 + panel_height
+	panel.custom_minimum_size = Vector2(panel_width, panel_height)
 	# Semi-transparent background
 	var style = StyleBoxFlat.new()
 	style.bg_color = Color(0.05, 0.05, 0.1, 0.7)
@@ -379,10 +445,11 @@ func _create_hud_tracker() -> void:
 	
 	_tracker_label = RichTextLabel.new()
 	_tracker_label.bbcode_enabled = true
-	_tracker_label.fit_content = true
+	_tracker_label.fit_content = false
 	_tracker_label.scroll_active = false
+	_tracker_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_tracker_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_tracker_label.custom_minimum_size = Vector2(360, 40)
+	_tracker_label.custom_minimum_size = Vector2(panel_width - 20.0, panel_height - 20.0)
 	panel.add_child(_tracker_label)
 	
 	add_child(_hud_tracker)
@@ -435,17 +502,41 @@ func _process_notification_queue() -> void:
 	_processing_notification = true
 
 	var data: Dictionary = _notification_queue.pop_front()
-	var notif = Label.new()
-	notif.text = data["text"]
-	notif.add_theme_font_size_override("font_size", 18)
-	notif.add_theme_color_override("font_color", data["color"])
-	notif.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	notif.position = Vector2(300, 80)
+	var vp_size := get_viewport().get_visible_rect().size if get_viewport() else Vector2(1280, 720)
+	var panel_width: float = clampf(vp_size.x * 0.46, 420.0, 660.0)
+	var notif = PanelContainer.new()
+	notif.name = "QuestNotification"
+	notif.position = Vector2((vp_size.x - panel_width) * 0.5, 52.0)
+	notif.size = Vector2(panel_width, 72.0)
 	notif.z_index = 200
+	notif.modulate.a = 0.0
 
-	get_tree().root.add_child.call_deferred(notif)
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.03, 0.035, 0.06, 0.92)
+	style.border_color = data["color"].lightened(0.15)
+	style.set_border_width_all(2)
+	style.set_corner_radius_all(6)
+	style.set_content_margin_all(12)
+	style.shadow_color = Color(0.0, 0.0, 0.0, 0.25)
+	style.shadow_size = 8
+	notif.add_theme_stylebox_override("panel", style)
+
+	var label := Label.new()
+	label.text = data["text"]
+	label.add_theme_font_size_override("font_size", 16)
+	label.add_theme_color_override("font_color", data["color"])
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	notif.add_child(label)
+
+	get_tree().root.add_child(notif)
+	if has_node("/root/SFXManager"):
+		SFXManager.play("ui_select")
 	var tw = create_tween()
-	tw.tween_property(notif, "position:y", 60, 0.5).set_trans(Tween.TRANS_BACK)
+	tw.parallel().tween_property(notif, "position:y", 68.0, 0.35).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.parallel().tween_property(notif, "modulate:a", 1.0, 0.22)
 	tw.tween_interval(3.0)
 	tw.tween_property(notif, "modulate:a", 0.0, 1.0)
 	tw.tween_callback(notif.queue_free)

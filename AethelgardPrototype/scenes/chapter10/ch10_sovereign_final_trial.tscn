@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/late_game_hazard_trial.gd" id="1"]
+
+[node name="Chapter10SovereignFinalTrial" type="Node2D"]
+script = ExtResource("1")
+trial_id = "sovereign_final"
+trial_title = "SOVEREIGN FINAL CHALLENGE"
+trial_subtitle = "The Root of Heaven compresses into a final movement test before the ending choice."
+completion_flag = "ch10_sovereign_final_trial_cleared"
+next_scene = "res://scenes/chapter10/ch10_sovereign_confrontation.tscn"
+chapter = 10
+region = "root_of_heaven"
+xp_reward = 450
+gold_reward = 220
+reward_item = "glitch_stabilizer"
+reward_quantity = 1

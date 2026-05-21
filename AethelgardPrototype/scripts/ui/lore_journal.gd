@@ -73,6 +73,38 @@ func is_discovered(lore_id: String) -> bool:
 	return lore_id in _discovered_ids
 
 
+## Compatibility helpers used by older region scripts and optional discoveries.
+func discover_lore(lore_id: String, title: String = "", text: String = "", category: String = "world", region: String = "") -> void:
+	if lore_id == "":
+		return
+	if not _entries.has(lore_id):
+		var entry_title := title
+		if entry_title == "":
+			entry_title = lore_id.replace("_", " ").capitalize()
+		register_lore(lore_id, entry_title, text, category, region)
+	discover(lore_id)
+
+
+func record_find(lore_id: String, title: String, text: String, category: String = "world", region: String = "") -> void:
+	discover_lore(lore_id, title, text, category, region)
+
+
+func record_dialogue(npc_name: String, line: String) -> void:
+	if npc_name == "" or line == "":
+		return
+	var lore_id := "dialogue_%s" % _slugify(npc_name)
+	if not _entries.has(lore_id):
+		register_lore(lore_id, npc_name, line, "character")
+	discover(lore_id)
+
+
+func _slugify(value: String) -> String:
+	var text := value.to_lower()
+	for ch in [" ", "'", "\"", ".", ",", ":", ";", "-", "/", "\\"]:
+		text = text.replace(ch, "_")
+	return text
+
+
 ## Get all discovered entries
 func get_discovered_entries() -> Array:
 	var result = []
@@ -130,6 +162,8 @@ func open_journal() -> void:
 		return
 	_is_open = true
 	_build_journal_ui()
+	if has_node("/root/SFXManager"):
+		SFXManager.play("ui_open")
 	journal_opened.emit()
 
 
@@ -145,6 +179,8 @@ func close_journal() -> void:
 		else:
 			_journal_panel.queue_free()
 		_journal_panel = null
+	if has_node("/root/SFXManager"):
+		SFXManager.play("ui_close")
 	journal_closed.emit()
 
 
@@ -166,11 +202,19 @@ func _build_journal_ui() -> void:
 	style.set_content_margin_all(16)
 	_journal_panel.add_theme_stylebox_override("panel", style)
 	_journal_panel.set_anchors_preset(Control.PRESET_CENTER)
-	_journal_panel.size = Vector2(900, 550)
-	_journal_panel.position = Vector2(190, 85)
+	var vp_size := get_viewport().get_visible_rect().size if get_viewport() else Vector2(1280, 720)
+	var panel_size := Vector2(
+		clampf(vp_size.x * 0.78, 720.0, 980.0),
+		clampf(vp_size.y * 0.76, 440.0, 620.0)
+	)
+	_journal_panel.size = panel_size
+	_journal_panel.custom_minimum_size = panel_size
+	_journal_panel.position = (vp_size - panel_size) * 0.5
 	layer.add_child(_journal_panel)
 
 	var vbox = VBoxContainer.new()
+	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_journal_panel.add_child(vbox)
 
 	# Header
@@ -195,7 +239,9 @@ func _build_journal_ui() -> void:
 
 	# Scroll container for entries
 	var scroll = ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(0, maxf(260.0, panel_size.y - 150.0))
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vbox.add_child(scroll)
 
 	var list = VBoxContainer.new()
@@ -280,26 +326,36 @@ func _register_all_lore() -> void:
 
 	# ── Chapters 4-6 enrichment ──
 	register_lore("ch4_null_court_dossiers", "Null Court Dossiers", "Three deleted citizen cases survive in the Forgotten Sectors: a mother preserved mid-goodbye, a guard erased for disobeying evacuation rollback, and a child whose map still points home.", "memory", "forgotten_sectors")
+	register_lore("forgotten_sector_missing_names", "Ledger of Missing Names", "The Null Court kept one ledger without verdicts. The names are incomplete, but the gaps prove deletion was never clean.", "memory", "forgotten_sectors")
 	register_lore("ch4_null_bailiff_writ", "Null Bailiff Writ", "The Null Bailiff was not a person. It was a court function built to prevent testimony from reaching unstable sectors. It calls censorship 'procedural mercy.'", "world", "forgotten_sectors")
 	register_lore("ch5_mirror_plaza_fragments", "Mirror Plaza Fragments", "The Mirror City stores reflections as route evidence. Trust, mercy, caution, and abandonment are not opinions here; they are geometry.", "memory", "mirror_city")
+	register_lore("mirror_city_lost_reflection", "Lost Reflection Fragment", "A mirror records the version of Kaelen who wanted every choice to end neatly. Mirror City keeps it because regret is not the same as failure.", "memory", "mirror_city")
 	register_lore("ch5_reflection_calibration", "Reflection Calibration", "Mirror gates open only when Kaelen distinguishes witness, guilt, and control. The city punishes answers that sound heroic but remove challenge.", "world", "mirror_city")
 	register_lore("ch6_doctrine_trial_notes", "Doctrine Trial Notes", "The Cathedral Server converted failed admin policies into rituals: obedience removes panic, efficiency removes delay, and mercy without consent removes the person being helped.", "world", "cathedral_server")
+	register_lore("cathedral_admin_apocrypha", "Admin Apocrypha", "A forbidden Cathedral annotation admits the first broken admins were not evil. They were protective routines praised until they mistook praise for law.", "memory", "cathedral_server")
 	register_lore("ch6_choir_firewall", "Choir Firewall", "The Choir Core protects Fragment Six behind a living firewall. It tests whether the intruder can interrupt authority without becoming authority.", "memory", "cathedral_server")
 
 	# Late-game action-RPG enrichment
 	register_lore("ch7_backup_logs", "Deep Backup Logs", "The Memory Ocean stores playable history as unstable islands. Each island rewards careful salvage, but each also tries to make one rejected timeline feel like the only truth.", "memory", "memory_ocean")
+	register_lore("memory_ocean_salvage_manifest", "Backup Salvage Manifest", "The salvage manifest lists materials taken from timelines that did not survive. The note in the margin reads: use them carefully; they were someone's future.", "memory", "memory_ocean")
 	register_lore("ch7_archive_tide_warning", "Archive Tide Warning", "The Backup Leviathan is not only testimony. It is a pressure system that rises when too many histories demand to become current at once.", "world", "memory_ocean")
 	register_lore("ch8_faction_requests", "Saved Assembly Requests", "The saved factions do not only need speeches. Oakhaven asks for medicine, Ironhold asks for repair stock, and Mirror City asks for stable witness records.", "world", "saved_assembly")
+	register_lore("saved_assembly_supply_pact", "Supply Pact Ledger", "The first pact of the saved was not a constitution. It was a shared ledger proving medicine, ore, and witness records could be handled without a single ruler.", "world", "saved_assembly")
 	register_lore("ch8_revolt_supply_record", "Revolt Supply Record", "A revolt survives its first hour through logistics: medicine, stabilizers, audit ledgers, and enough humility to let every faction see the ledger.", "world", "saved_assembly")
 	register_lore("ch9_aethercorp_records", "AetherCorp Records", "The sealed lab records show rescue metrics, patient consent failures, and the first Human Patch exception request signed under emergency pressure.", "memory", "aethercorp_memory_lab")
+	register_lore("human_patch_redaction_note", "Human Patch Redaction Note", "The redaction note does not hide the truth; it hides who was afraid to say it first. The Human Patch was meant to expire once witnesses could answer.", "memory", "aethercorp_memory_lab")
 	register_lore("ch9_human_patch_evidence", "Human Patch Evidence", "Data Vision reveals that the Human Patch was built as a temporary human witness override. SOVEREIGN learned permanence from a tool meant to expire.", "memory", "aethercorp_memory_lab")
 	register_lore("ch10_kernel_trial_log", "Kernel Trial Log", "The Root of Heaven rejects brute-force victory. Its last route demands restraint, witness alignment, and proof that the Source Key will not become a private crown.", "world", "root_of_heaven")
+	register_lore("root_heaven_ngplus_recap", "Root Echo Recap", "New Game Plus begins with an echo of the previous ending route. Aethelgard remembers the last answer, but it does not force the next one.", "memory", "root_of_heaven")
 	register_lore("ch10_witness_preparation_manifest", "Witness Preparation Manifest", "The final chamber contains a manifest of every faction willing to stand near root access. It lists supplies, witnesses, objections, and the right to refuse.", "memory", "root_of_heaven")
 
 	# ── Prologue / AetherCorp foreshadowing ──
 	register_lore("prologue_consent_safety_card", "Consent Safety Card", "A damaged airline safety card flickers into an AetherCorp notice about consent prompts, emergency transfer, and the requirement that rescue systems ask before they preserve.", "memory", "prologue")
+	register_lore("prologue_aethercorp_black_box", "AetherCorp Black Box", "The black box is not from the plane. It belongs to AetherCorp's emergency transfer rig and records one repeated warning: consent handshake unstable.", "memory", "prologue")
 	register_lore("prologue_aethercorp_manifest", "AetherCorp Passenger Manifest", "Flight 707's network manifest briefly lists AetherCorp emergency research passengers and a sealed Human Patch audit packet tied to Kaelen Vance.", "memory", "prologue")
 	register_lore("prologue_human_patch_note", "Human Patch Sticky Note", "Kaelen's laptop cache contains an unfinished note: 'Human Patch: access is not ownership. Consent must survive panic states.' The note is older than the crash.", "memory", "prologue")
+	register_lore("oakhaven_memory_herb_label", "Memory Herb Label", "Iris marks each vial with a patient's chosen name before she brews it. The label matters because preservation without identity is only storage.", "world", "oakhaven")
+	register_lore("ironhold_forge_request_log", "Forge Line Request Log", "Garro's forge contact records each citizen repair order beside the material cost. Ironhold's first free economy starts as a promise not to hide scarcity.", "world", "ironhold")
 
 	# ── Environmental Storytelling — Converted from cutscene dialogue ──
 	register_lore("elara_glitch_witch", "Elara the Glitch-Witch",

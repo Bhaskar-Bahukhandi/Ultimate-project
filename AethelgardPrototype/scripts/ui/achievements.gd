@@ -28,6 +28,10 @@ const ACHIEVEMENTS: Dictionary = {
 	"fragment_1": {"name": "First Fragment", "desc": "Collect your first Source Key Fragment.", "icon": "🔑", "category": "story"},
 	"fragment_4": {"name": "Key Collector", "desc": "Collect all available Source Key Fragments.", "icon": "🔑", "category": "story"},
 
+	"source_key_complete": {"name": "Source Key Complete", "desc": "Collect all seven Source Key fragments.", "icon": "*", "category": "story"},
+	"true_ending": {"name": "True Ending", "desc": "Reach a true ending of Aethelgard.", "icon": "*", "category": "story"},
+	"ng_plus_unlocked": {"name": "Again, With Memory", "desc": "Unlock New Game Plus.", "icon": "*", "category": "story"},
+
 	# Exploration
 	"first_shop": {"name": "Window Shopping", "desc": "Visit a shop for the first time.", "icon": "🛒", "category": "explore"},
 	"full_party": {"name": "Band Together", "desc": "Recruit all available party members.", "icon": "👥", "category": "explore"},
@@ -35,6 +39,9 @@ const ACHIEVEMENTS: Dictionary = {
 	"level_10": {"name": "Double Digits", "desc": "Reach level 10.", "icon": "📈", "category": "explore"},
 	"rich": {"name": "Digital Fortune", "desc": "Accumulate 1000 gold.", "icon": "💰", "category": "explore"},
 	"all_areas": {"name": "World Walker", "desc": "Visit Oakhaven, Ironhold, and the Fractured Wastes.", "icon": "🗺️", "category": "explore"},
+
+	"first_craft": {"name": "First Craft", "desc": "Craft your first item.", "icon": "*", "category": "explore"},
+	"first_lore_discovery": {"name": "Lore Seeker", "desc": "Discover your first optional lore entry.", "icon": "*", "category": "explore"},
 
 	# Arena
 	"arena_bronze": {"name": "Pit Fighter", "desc": "Complete the Bronze arena tier.", "icon": "🥉", "category": "arena"},
@@ -47,6 +54,8 @@ const ACHIEVEMENTS: Dictionary = {
 	"first_quest": {"name": "Side Tracked", "desc": "Complete your first side quest.", "icon": "📜", "category": "quest"},
 	"all_quests": {"name": "Completionist", "desc": "Complete all side quests.", "icon": "📋", "category": "quest"},
 	"all_secrets": {"name": "Code Archaeologist", "desc": "Find all hidden secrets.", "icon": "🔍", "category": "quest"},
+
+	"optional_objective": {"name": "Helpful Variables", "desc": "Complete an optional objective.", "icon": "*", "category": "quest"},
 
 	# Meta
 	"die_5": {"name": "Persistent", "desc": "Die 5 times. Keep going.", "icon": "💪", "category": "meta"},
@@ -87,6 +96,7 @@ func _ready() -> void:
 
 	# Connect to SideQuestManager signals (deferred — SideQuestManager loads after Achievements)
 	_connect_side_quest_manager.call_deferred()
+	_connect_optional_systems.call_deferred()
 
 	# Use a timer instead of polling in _process every frame
 	_stat_check_timer = Timer.new()
@@ -100,6 +110,15 @@ func _connect_side_quest_manager() -> void:
 	if has_node("/root/SideQuestManager"):
 		if not SideQuestManager.quest_completed.is_connected(_on_quest_completed):
 			SideQuestManager.quest_completed.connect(_on_quest_completed)
+
+func _connect_optional_systems() -> void:
+	## Deferred connections for Phase 10J optional replay hooks.
+	if has_node("/root/CraftingSystem"):
+		if not CraftingSystem.craft_succeeded.is_connected(_on_craft_succeeded):
+			CraftingSystem.craft_succeeded.connect(_on_craft_succeeded)
+	if has_node("/root/LoreJournal"):
+		if not LoreJournal.lore_discovered.is_connected(_on_lore_discovered):
+			LoreJournal.lore_discovered.connect(_on_lore_discovered)
 
 func _check_stat_achievements() -> void:
 	## Periodic check for stat-based achievements. Fires every 1s via Timer.
@@ -145,9 +164,12 @@ func _check_stat_achievements() -> void:
 	if GameManager.story_flags.get("ch3_complete", false): _try_unlock("ch3_complete")
 	if GameManager.story_flags.get("root_access_unlocked", false): _try_unlock("root_access")
 
-	# Fragments (only 2 currently collectible in-game)
+	# Source Key fragments
 	if GameManager.source_key_count >= 1: _try_unlock("fragment_1")
 	if GameManager.source_key_count >= 2: _try_unlock("fragment_4")
+	if GameManager.source_key_count >= 7: _try_unlock("source_key_complete")
+	if GameManager.story_flags.get("true_ending_seen", false): _try_unlock("true_ending")
+	if GameManager.story_flags.get("ng_plus_unlocked", false): _try_unlock("ng_plus_unlocked")
 
 	# Charms
 	if GameManager.equipped_charms.size() >= 3: _try_unlock("charm_3")
@@ -210,6 +232,13 @@ func _on_combo_updated(count: int, _mult: float) -> void:
 
 func _on_quest_completed(_quest_id: String) -> void:
 	_try_unlock("first_quest")
+	_try_unlock("optional_objective")
+
+func _on_craft_succeeded(_recipe_id: String, _output_id: String, _quantity: int) -> void:
+	_try_unlock("first_craft")
+
+func _on_lore_discovered(_lore_id: String) -> void:
+	_try_unlock("first_lore_discovery")
 
 func _try_unlock(id: String) -> void:
 	## Unlock an achievement if not already unlocked.
@@ -250,8 +279,11 @@ func _show_next_popup() -> void:
 	# Build popup panel
 	var panel = PanelContainer.new()
 	var vp_size = get_viewport().get_visible_rect().size if get_viewport() else Vector2(1280, 720)
-	panel.position = Vector2((vp_size.x - 480) / 2, -80)
-	panel.size = Vector2(480, 70)
+	var panel_width: float = clampf(vp_size.x * 0.42, 420.0, 560.0)
+	var panel_height: float = 88.0
+	panel.position = Vector2((vp_size.x - panel_width) / 2.0, -panel_height - 12.0)
+	panel.size = Vector2(panel_width, panel_height)
+	panel.custom_minimum_size = Vector2(panel_width, panel_height)
 
 	var style = StyleBoxFlat.new()
 	style.bg_color = Color(0.05, 0.05, 0.15, 0.95)
@@ -297,25 +329,28 @@ func _show_next_popup() -> void:
 	name_lbl.text = data.get("name", id)
 	name_lbl.add_theme_font_size_override("font_size", 16)
 	name_lbl.add_theme_color_override("font_color", Color(1, 1, 1))
+	name_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	vbox.add_child(name_lbl)
 
 	var desc_lbl = Label.new()
 	desc_lbl.text = data.get("desc", "")
 	desc_lbl.add_theme_font_size_override("font_size", 11)
 	desc_lbl.add_theme_color_override("font_color", Color(0.7, 0.7, 0.8))
+	desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	desc_lbl.custom_minimum_size = Vector2(panel_width - 92.0, 24.0)
 	vbox.add_child(desc_lbl)
 
 	_popup_layer.add_child(panel)
 
 	# SFX
 	if has_node("/root/SFXManager"):
-		SFXManager.play("powerup")
+		SFXManager.play("achievement_unlock")
 
 	# Animate: slide down, hold, slide up
 	var tw = create_tween()
 	tw.tween_property(panel, "position:y", 20.0, 0.4).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tw.tween_interval(3.0)
-	tw.tween_property(panel, "position:y", -80.0, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tw.tween_property(panel, "position:y", -panel_height - 12.0, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 	tw.tween_callback(panel.queue_free)
 	tw.tween_callback(_show_next_popup)
 

@@ -178,6 +178,7 @@ const DEFAULT_STORY_FLAGS: Dictionary = {
 	"ch6_mercy_trial_cleared": false, "ch6_cathedral_lore_found": false,
 	"ch6_all_voices_heard": false, "ch6_choir_core_met": false,
 	"ch6_core_firewall_cleared": false, "ch6_doctrine_reward_claimed": false,
+	"ch6_choir_combat_trial_cleared": false,
 	"ch6_choice_made": false,
 	"ch6_choir_silenced": false, "ch6_choir_preserved": false,
 	"ch6_choir_rewritten": false,
@@ -190,6 +191,7 @@ const DEFAULT_STORY_FLAGS: Dictionary = {
 	"ch7_memory_ocean_entered": false,
 	"ch7_backup_logs_found": false, "ch7_memory_island_hazard_cleared": false,
 	"ch7_backup_salvage_claimed": false, "ch7_archive_tide_trial_cleared": false,
+	"ch7_archive_tide_surge_cleared": false,
 	"ch7_backup_oakhaven_seen": false, "ch7_backup_ironhold_seen": false,
 	"ch7_backup_mirror_city_seen": false, "ch7_all_backups_seen": false,
 	"ch7_leviathan_met": false, "ch7_choice_made": false,
@@ -236,6 +238,7 @@ const DEFAULT_STORY_FLAGS: Dictionary = {
 	"ch10_kernel_trial_cleared": false,
 	"ch10_witness_chamber_entered": false,
 	"ch10_witness_preparation_complete": false, "ch10_final_cache_claimed": false,
+	"ch10_sovereign_final_trial_cleared": false,
 	"ch10_sovereign_confronted": false, "ch10_final_challenge_cleared": false,
 	"ch10_final_choice_made": false,
 	"ch10_destroy_sovereign": false, "ch10_rewrite_sovereign": false,
@@ -243,6 +246,10 @@ const DEFAULT_STORY_FLAGS: Dictionary = {
 	"true_ending_seen": false, "ng_plus_unlocked": false,
 	# Future final-story flag. NG+ should unlock only after the true ending.
 	"ch10_complete": false,
+	# NG+ replay context. These are set only after starting a new cycle.
+	"ng_plus_route_recap_available": false,
+	"ng_plus_previous_destroy": false, "ng_plus_previous_rewrite": false,
+	"ng_plus_previous_dissolve": false, "ng_plus_previous_synthesis": false,
 	# Early-choice payoff flags
 	"ch4_early_aldric_echo_seen": false, "ch4_early_data_wraith_echo_seen": false,
 	"ch5_early_elara_echo_seen": false,
@@ -363,6 +370,7 @@ func start_new_game_plus() -> void:
 	var carry_cycle: int = ng_plus_cycle + 1
 	var carry_arena: Dictionary = arena_stats.duplicate(true)
 	var carry_stats: Dictionary = stats.duplicate(true)  # Lifetime stats carry over
+	var carry_ending_route: String = _get_final_route_key()
 
 	# Save inventory items and equipment before reset
 	var carry_items: Dictionary = {}
@@ -401,10 +409,41 @@ func start_new_game_plus() -> void:
 		Inventory.equipment = carry_equipment
 		Inventory.gold = carry_gold
 		Inventory._apply_equipment_bonuses()
+		Inventory.add_item("glitch_stabilizer", 1)
+
+	story_flags["ng_plus_route_recap_available"] = true
+	if carry_ending_route != "":
+		story_flags["ng_plus_previous_%s" % carry_ending_route] = true
+	if has_node("/root/LoreJournal"):
+		LoreJournal.discover("root_heaven_ngplus_recap")
 
 	if OS.is_debug_build():
 		print("[NG+] Started cycle %d — Level %d, %d gold, %d charms, %d items" % [
 			ng_plus_cycle, carry_level, carry_gold, carry_charms.size(), carry_items.size()])
+
+func _get_final_route_key() -> String:
+	if story_flags.get("ch10_synthesis_route", false):
+		return "synthesis"
+	if story_flags.get("ch10_destroy_sovereign", false):
+		return "destroy"
+	if story_flags.get("ch10_rewrite_sovereign", false):
+		return "rewrite"
+	if story_flags.get("ch10_dissolve_control", false):
+		return "dissolve"
+	return ""
+
+func get_ng_plus_recap_text() -> String:
+	if not story_flags.get("ng_plus_route_recap_available", false):
+		return ""
+	if story_flags.get("ng_plus_previous_synthesis", false):
+		return "Previous ending echo: shared consent mesh."
+	if story_flags.get("ng_plus_previous_destroy", false):
+		return "Previous ending echo: SOVEREIGN destroyed."
+	if story_flags.get("ng_plus_previous_rewrite", false):
+		return "Previous ending echo: SOVEREIGN rewritten under consent limits."
+	if story_flags.get("ng_plus_previous_dissolve", false):
+		return "Previous ending echo: root authority dissolved into witnesses."
+	return "Previous ending echo: unstable root route."
 
 func get_ng_plus_enemy_multiplier() -> float:
 	## Returns the enemy stat multiplier for the current NG+ cycle.

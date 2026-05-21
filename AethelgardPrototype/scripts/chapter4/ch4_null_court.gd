@@ -184,6 +184,7 @@ func _null_court_dossier_discovery() -> void:
 		Inventory.add_item("memory_shard", 1)
 	if has_node("/root/LoreJournal"):
 		LoreJournal.discover("ch4_null_court_dossiers")
+		LoreJournal.discover("forgotten_sector_missing_names")
 	await DialogueManager.say("System", "// OPTIONAL DOSSIER FOUND: Null Court Dossiers. Memory Shard x1.")
 
 func _memory_corruption_hazard() -> void:

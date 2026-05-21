@@ -118,6 +118,7 @@ func _memory_lab_investigation() -> void:
 		choice = 2
 
 	GameManager.set_story_flag("ch9_lab_evidence_collected", true)
+	_discover_lore("human_patch_redaction_note")
 	match choice:
 		0:
 			GameManager.set_story_flag("ch9_data_vision_scan_complete", true)

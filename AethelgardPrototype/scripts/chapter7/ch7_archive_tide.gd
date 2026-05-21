@@ -3,7 +3,7 @@ extends Control
 ## Chapter 7: Archive Tide confrontation.
 ## The Backup Leviathan forces a choice about painful histories.
 
-const END_SCENE := "res://scenes/chapter7/ch7_ending.tscn"
+const END_SCENE := "res://scenes/chapter7/ch7_archive_tide_combat_trial.tscn"
 
 var fade_rect: ColorRect
 var backup_choice: String = ""

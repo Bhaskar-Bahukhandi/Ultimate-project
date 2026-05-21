@@ -131,6 +131,9 @@ func _faction_request_board() -> void:
 	if fulfilled >= 2 and not GameManager.has_flag("ch8_faction_trust_reward_claimed"):
 		GameManager.set_story_flag("ch8_faction_trust_reward_claimed", true)
 		_grant_item("glitch_stabilizer", 1)
+		_discover_lore("saved_assembly_supply_pact")
+		if has_node("/root/SideQuestManager"):
+			SideQuestManager.complete_optional_objective("saved_assembly_supply_request")
 		GameManager.add_xp(180)
 		GameManager.add_gold(80)
 		await DialogueManager.say("System", "// Faction trust stabilized. +180 XP, +80 Gold, +1 Glitch Stabilizer.")

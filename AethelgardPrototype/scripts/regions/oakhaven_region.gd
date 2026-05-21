@@ -795,6 +795,32 @@ func _interact_with_npc(npc: Area2D) -> void:
 		# Record in lore journal
 		if has_node("/root/LoreJournal"):
 			LoreJournal.record_dialogue(npc_name, line)
+		await _handle_oakhaven_side_objective(npc_name)
+
+
+func _handle_oakhaven_side_objective(npc_name: String) -> void:
+	if npc_name != "Apothecary Iris" or not has_node("/root/SideQuestManager"):
+		return
+	if SideQuestManager.is_quest_complete("oakhaven_memory_herb_delivery"):
+		return
+
+	GameManager.change_state(GameManager.GameState.DIALOGUE)
+	SideQuestManager.start_quest("oakhaven_memory_herb_delivery")
+	if not has_node("/root/Inventory") or not Inventory.has_item("glitch_herb", 2):
+		if has_node("/root/DialogueManager"):
+			await DialogueManager.say("Apothecary Iris", "If you find two Glitch Herbs, I can brew medicine for people whose memories keep desyncing.")
+		GameManager.change_state(GameManager.GameState.EXPLORATION)
+		return
+
+	var choice := 1
+	if has_node("/root/DialogueManager"):
+		choice = await DialogueManager.show_choices("Deliver two Glitch Herbs to Iris?", ["Deliver the herbs.", "Not now."])
+	if choice == 0 and Inventory.remove_item("glitch_herb", 2):
+		SideQuestManager.complete_optional_objective("oakhaven_memory_herb_delivery")
+		if has_node("/root/LoreJournal"):
+			LoreJournal.discover("oakhaven_memory_herb_label")
+		GameManager.save_game(GameManager.AUTOSAVE_SLOT)
+	GameManager.change_state(GameManager.GameState.EXPLORATION)
 
 
 func _interact_with_lore(lore: Area2D) -> void:

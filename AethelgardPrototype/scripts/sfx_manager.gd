@@ -861,6 +861,19 @@ func _ready() -> void:
 	if has_node("/root/MusicManager"):
 		_sfx_volume = MusicManager.get_sfx_volume()
 
+
+func _exit_tree() -> void:
+	## Release generated streams and active playback immediately during shutdown.
+	## This prevents quit/export QA from reporting procedural SFX as leaked objects.
+	for child in get_children():
+		if child is AudioStreamPlayer:
+			child.stop()
+			child.stream = null
+			if child.finished.is_connected(child.queue_free):
+				child.finished.disconnect(child.queue_free)
+			child.free()
+	_cache.clear()
+
 # ─── PUBLIC API ──────────────────────────────────────────────────────────
 
 ## Play a named procedural sound effect.

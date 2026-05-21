@@ -314,6 +314,8 @@ func _refresh_assets_tab() -> void:
 	inventory_list.add_child(stats_lbl)
 
 func _on_item_selected(item: Dictionary) -> void:
+	if has_node("/root/SFXManager"):
+		SFXManager.play("ui_select")
 	if item_detail_label:
 		item_detail_label.text = "%s\nType: %s\n\n%s" % [item["name"], item["type"], item["desc"]]
 
@@ -357,6 +359,8 @@ func _refresh_crafting_tab() -> void:
 		craft_btn.disabled = not CraftingSystem.can_craft(rid)
 		craft_btn.pressed.connect(func():
 			var ok: bool = CraftingSystem.craft(rid)
+			if has_node("/root/SFXManager"):
+				SFXManager.play("ui_confirm" if ok else "ui_error")
 			_refresh_crafting_tab()
 			_refresh_assets_tab()
 			if crafting_detail_label:
@@ -373,6 +377,8 @@ func _refresh_crafting_tab() -> void:
 func _on_recipe_selected(recipe_id: String, recipe: Dictionary) -> void:
 	if not crafting_detail_label:
 		return
+	if has_node("/root/SFXManager"):
+		SFXManager.play("ui_select")
 	var blocker := ""
 	if has_node("/root/CraftingSystem"):
 		blocker = CraftingSystem.get_craft_blocker(recipe_id)

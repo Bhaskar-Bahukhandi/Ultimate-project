@@ -675,9 +675,13 @@ func _interact_npc(npc: Area2D) -> void:
 		return
 	if has_node("/root/DialogueManager"):
 		GameManager.change_state(GameManager.GameState.DIALOGUE)
-		await DialogueManager.say(npc_name, dialogue[idx % dialogue.size()])
+		var line = dialogue[idx % dialogue.size()]
+		await DialogueManager.say(npc_name, line)
 		npc.set_meta("dialogue_index", (idx + 1) % dialogue.size())
 		GameManager.change_state(GameManager.GameState.EXPLORATION)
+		if has_node("/root/LoreJournal"):
+			LoreJournal.record_dialogue(npc_name, line)
+		await _handle_ironhold_side_objective(npc_name)
 
 func _interact_lore(lore: Area2D) -> void:
 	var title: String = lore.get_meta("lore_title", "Unknown")
@@ -687,8 +691,34 @@ func _interact_lore(lore: Area2D) -> void:
 		GameManager.change_state(GameManager.GameState.DIALOGUE)
 		await DialogueManager.say(title, text)
 		GameManager.change_state(GameManager.GameState.EXPLORATION)
+	if has_node("/root/LoreJournal"):
+		LoreJournal.discover_lore(lore_id, title, text, "world", "ironhold")
 	if lore_id.begins_with("dev_signature"):
 		GameManager.set_story_flag(lore_id + "_found", true)
+
+func _handle_ironhold_side_objective(npc_name: String) -> void:
+	if npc_name != "Merchant Garro" or not has_node("/root/SideQuestManager"):
+		return
+	if SideQuestManager.is_quest_complete("ironhold_blacksmith_material_request"):
+		return
+
+	GameManager.change_state(GameManager.GameState.DIALOGUE)
+	SideQuestManager.start_quest("ironhold_blacksmith_material_request")
+	if not has_node("/root/Inventory") or not Inventory.has_item("data_ore", 2):
+		if has_node("/root/DialogueManager"):
+			await DialogueManager.say("Merchant Garro", "Bring two Data Ore if you want Ironhold's repair lines to stay independent.")
+		GameManager.change_state(GameManager.GameState.EXPLORATION)
+		return
+
+	var choice := 1
+	if has_node("/root/DialogueManager"):
+		choice = await DialogueManager.show_choices("Deliver two Data Ore to Garro's forge contact?", ["Deliver the ore.", "Not now."])
+	if choice == 0 and Inventory.remove_item("data_ore", 2):
+		SideQuestManager.complete_optional_objective("ironhold_blacksmith_material_request")
+		if has_node("/root/LoreJournal"):
+			LoreJournal.discover("ironhold_forge_request_log")
+		GameManager.save_game(GameManager.AUTOSAVE_SLOT)
+	GameManager.change_state(GameManager.GameState.EXPLORATION)
 
 func _interact_shop(trigger: Area2D) -> void:
 	var shop_type: String = trigger.get_meta("shop_type", "general")

@@ -135,6 +135,9 @@ func _mirror_plaza_interaction_loop() -> void:
 			Inventory.add_item("memory_shard", 1)
 		if has_node("/root/LoreJournal"):
 			LoreJournal.discover("ch5_mirror_plaza_fragments")
+			LoreJournal.discover("mirror_city_lost_reflection")
+		if has_node("/root/SideQuestManager"):
+			SideQuestManager.complete_optional_objective("mirror_city_lost_reflection")
 		await DialogueManager.say("System", "// OPTIONAL MIRRORS READ: Memory Shard x1.")
 
 	await _reflection_calibration_challenge()

@@ -696,7 +696,7 @@ func handle_expression(beat: Dictionary) -> void:
 
 ## ─── EXTENDED BEAT: BACKGROUND ───────────────────────────────────────
 ## Usage:
-##   {"type": "background", "scene": "res://assets/backgrounds/forest.tscn", "duration": 0.5}
+##   {"type": "background", "scene": "res://scenes/prologue/flight_707.tscn", "duration": 0.5}
 ##   {"type": "background", "color": Color(0.1, 0.05, 0.2), "duration": 0.5}
 
 func handle_background(beat: Dictionary) -> void:
