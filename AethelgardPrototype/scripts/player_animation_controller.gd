@@ -30,6 +30,8 @@ var has_real_sprite: bool = false     # True if AnimatedSprite2D with real frame
 ## Current animation state
 var current_anim: String = "idle"
 var last_anim: String = ""
+var _combat_visual_override: String = ""
+var _combat_visual_override_timer: float = 0.0
 
 ## Idle bob for ColorRect placeholder
 var _idle_bob_tween: Tween = null
@@ -75,6 +77,10 @@ func update_animation(_delta: float) -> void:
 		_find_sprite()
 		if not sprite_node:
 			return
+	if mode == Mode.COMBAT and _combat_visual_override_timer > 0.0:
+		_combat_visual_override_timer = maxf(_combat_visual_override_timer - _delta, 0.0)
+		if _combat_visual_override_timer <= 0.0:
+			_combat_visual_override = ""
 
 	var new_anim: String = _determine_state()
 
@@ -103,6 +109,11 @@ func _determine_combat_state() -> String:
 	# Dead
 	if _get_flag("is_dead"):
 		return "die"
+
+	# Existing combat code owns timing; this only holds named V2 visuals for
+	# special actions that are otherwise represented by generic attack flags.
+	if _combat_visual_override_timer > 0.0 and _combat_visual_override != "":
+		return _combat_visual_override
 	
 	# Hurt (brief window after taking damage)
 	# hurt is typically a transient state driven by take_damage, not a persistent flag
@@ -189,20 +200,23 @@ func _map_animation_name(anim_name: String) -> String:
 	## Map internal state names to SpriteFrames animation names.
 	## Override this mapping when you know your sprite sheet's animation names.
 	match anim_name:
-		"walk": return "walk"
+		"walk": return "walk" if _anim_exists("walk") else "run" if _anim_exists("run") else "idle"
 		"run": return "run" if _anim_exists("run") else "walk"
 		"idle": return "idle"
 		"jump": return "jump" if _anim_exists("jump") else "idle"
 		"fall": return "fall" if _anim_exists("fall") else "jump" if _anim_exists("jump") else "idle"
-		"attack1": return "attack1" if _anim_exists("attack1") else "attack"  if _anim_exists("attack") else "idle"
-		"attack2": return "attack2" if _anim_exists("attack2") else "attack"  if _anim_exists("attack") else "idle"
-		"attack3": return "attack3" if _anim_exists("attack3") else "attack"  if _anim_exists("attack") else "idle"
+		"attack1": return "slash_1" if _anim_exists("slash_1") else "attack1" if _anim_exists("attack1") else "attack" if _anim_exists("attack") else "idle"
+		"attack2": return "slash_2" if _anim_exists("slash_2") else "attack2" if _anim_exists("attack2") else "attack" if _anim_exists("attack") else "idle"
+		"attack3": return "slash_3" if _anim_exists("slash_3") else "attack3" if _anim_exists("attack3") else "attack" if _anim_exists("attack") else "idle"
+		"slash_1", "slash_2", "slash_3", "charged_slash", "upslash", "downslash":
+			return anim_name if _anim_exists(anim_name) else "attack" if _anim_exists("attack") else "idle"
 		"dash": return "dash" if _anim_exists("dash") else "run" if _anim_exists("run") else "walk"
 		"defend": return "defend" if _anim_exists("defend") else "idle"
 		"cast": return "cast" if _anim_exists("cast") else "idle"
 		"heal": return "heal" if _anim_exists("heal") else "idle"
 		"wall_slide": return "wall_slide" if _anim_exists("wall_slide") else "fall" if _anim_exists("fall") else "idle"
-		"die": return "die" if _anim_exists("die") else "hurt" if _anim_exists("hurt") else "idle"
+		"die": return "death" if _anim_exists("death") else "die" if _anim_exists("die") else "hurt" if _anim_exists("hurt") else "idle"
+		"death": return "death" if _anim_exists("death") else "die" if _anim_exists("die") else "idle"
 		"hurt": return "hurt" if _anim_exists("hurt") else "idle"
 		_: return "idle"
 
@@ -211,6 +225,19 @@ func _anim_exists(anim_name: String) -> bool:
 		return false
 	var animated: AnimatedSprite2D = sprite_node as AnimatedSprite2D
 	return animated and animated.sprite_frames and animated.sprite_frames.has_animation(anim_name)
+
+func request_combat_visual(anim_name: String, hold_time: float) -> void:
+	## Hold a presentation-only animation while player_combat keeps gameplay timing.
+	if mode != Mode.COMBAT or hold_time <= 0.0:
+		return
+	_combat_visual_override = anim_name
+	_combat_visual_override_timer = hold_time
+	current_anim = ""
+	_play_animation(anim_name)
+
+func clear_combat_visual_override() -> void:
+	_combat_visual_override = ""
+	_combat_visual_override_timer = 0.0
 
 # ==========================================================================
 # TWEEN FALLBACK — ColorRect / Sprite2D placeholders
@@ -345,4 +372,5 @@ func _get_var(var_name: String, default = null):
 func on_sprite_replaced() -> void:
 	## Call this after AssetManager.replace_player_sprite() to refresh references.
 	_find_sprite()
+	clear_combat_visual_override()
 	current_anim = ""  # Force re-evaluation

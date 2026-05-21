@@ -972,6 +972,7 @@ func _perform_charged_attack() -> void:
 	# Charged attack animation — dramatic lunge + flash
 	var anim_target = _sprite if _sprite else self
 	TweenAnimator.play_charged_attack(anim_target, facing)
+	_request_combat_visual("charged_slash", attack_cooldown)
 
 	var slash_pos = global_position + Vector2(60.0 * facing, -15.0)
 	_vfx("vfx_slash_arc", slash_pos)
@@ -1165,6 +1166,7 @@ func _handle_pogo() -> void:
 func _execute_pogo() -> void:
 	is_pogoing = true
 	pogo_cooldown = 0.2
+	_request_combat_visual("downslash", maxf(POGO_ACTIVE, 0.18))
 	_metric_attack_window("pogo", 0.0, POGO_ACTIVE, 0.0, 0.0)
 	# Don't set downward velocity here — only bounce on hit
 
@@ -1607,6 +1609,7 @@ func _perform_upslash() -> void:
 
 	var anim_target = _sprite if _sprite else self
 	TweenAnimator.play_upslash(anim_target, facing_direction)
+	_request_combat_visual("upslash", attack_cooldown)
 	_vfx("vfx_slash_arc", global_position + Vector2(0, -50))
 	_metric_attack_window("upslash", UPSLASH_STARTUP, UPSLASH_ACTIVE, UPSLASH_RECOVERY, UPSLASH_STARTUP + UPSLASH_ACTIVE)
 	await get_tree().create_timer(UPSLASH_STARTUP).timeout
@@ -1765,6 +1768,7 @@ func take_damage(amount: float, source_position: Vector2 = Vector2.ZERO, source_
 		CombatFX.apply_hitstop(0.08)
 	var hurt_target = _sprite if _sprite else self
 	TweenAnimator.play_hurt(hurt_target)
+	_request_combat_visual("hurt", 0.25)
 	_vfx("vfx_hit_spark", global_position)
 	_spawn_damage_number(int(amount), global_position + Vector2(0, -30), false, Color(1.0, 0.3, 0.3))
 	# ── GameJuice player hurt: red screen flash + camera trauma + combo reset ──
@@ -1869,6 +1873,7 @@ func die() -> void:
 
 	var die_target = _sprite if _sprite else self
 	TweenAnimator.play_die(die_target)
+	_request_combat_visual("die", 1.0)
 	_vfx("vfx_data_dissolve", global_position)
 	# ── Death screen flash (white) + dramatic zoom + slowmo ──
 	if has_node("/root/VFXLibrary"):
@@ -1990,6 +1995,12 @@ func refresh_visual_references() -> void:
 	if _anim_controller and _anim_controller.has_method("on_sprite_replaced"):
 		_anim_controller.on_sprite_replaced()
 	_remember_retry_visual_baseline()
+
+
+func _request_combat_visual(animation_name: String, hold_time: float) -> void:
+	## The animation controller owns visual overrides; combat timing stays here.
+	if _anim_controller and _anim_controller.has_method("request_combat_visual"):
+		_anim_controller.request_combat_visual(animation_name, hold_time)
 
 
 func force_restore_after_death_retry(spawn_position: Vector2) -> Dictionary:

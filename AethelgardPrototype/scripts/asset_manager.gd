@@ -747,6 +747,22 @@ const PLAYER_COMBAT_ANIMS = {
 	"die":     { "frames": 4, "row": 6, "speed": 6.0,  "loop": false },
 }
 
+const PLAYER_COMBAT_V2_SHEET = "res://assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png"
+const PLAYER_COMBAT_V2_ANIMS = {
+	"idle":          { "frames": 4, "row": 0,  "speed": 6.0,  "loop": true },
+	"run":           { "frames": 4, "row": 1,  "speed": 10.0, "loop": true },
+	"slash_1":       { "frames": 4, "row": 2,  "speed": 12.5, "loop": false },
+	"slash_2":       { "frames": 4, "row": 3,  "speed": 11.4, "loop": false },
+	"slash_3":       { "frames": 4, "row": 4,  "speed": 8.5,  "loop": false },
+	"charged_slash": { "frames": 4, "row": 5,  "speed": 6.5,  "loop": false },
+	"upslash":       { "frames": 4, "row": 6,  "speed": 12.1, "loop": false },
+	"downslash":     { "frames": 4, "row": 7,  "speed": 18.0, "loop": false },
+	"dash":          { "frames": 4, "row": 8,  "speed": 22.0, "loop": false },
+	"cast":          { "frames": 4, "row": 9,  "speed": 10.0, "loop": false },
+	"hurt":          { "frames": 4, "row": 10, "speed": 8.0,  "loop": false },
+	"death":         { "frames": 4, "row": 11, "speed": 6.0,  "loop": false },
+}
+
 const PLAYER_TOPDOWN_ANIMS = {
 	"idle_down":  { "frames": 4, "row": 0, "speed": 6.0,  "loop": true },
 	"idle_right": { "frames": 4, "row": 1, "speed": 6.0,  "loop": true },
@@ -768,6 +784,20 @@ const PLAYER_TOPDOWN_V2_ANIMS = {
 	"walk_left":  { "frames": 4, "row": 5, "speed": 8.0, "loop": true },
 	"idle_right": { "frames": 4, "row": 6, "speed": 4.0, "loop": true },
 	"walk_right": { "frames": 4, "row": 7, "speed": 8.0, "loop": true },
+}
+
+const TUTORIAL_KNIGHT_V2_SHEET = "res://assets/generated_v2/sprites/bosses/tutorial_knight_v2_alpha_sheet.png"
+const TUTORIAL_KNIGHT_V2_ANIMS = {
+	"idle":           { "frames": 4, "row": 0, "speed": 6.0, "loop": true },
+	"slash":          { "frames": 4, "row": 1, "speed": 7.0, "loop": false },
+	"charge":         { "frames": 4, "row": 2, "speed": 6.0, "loop": false },
+	"low_sweep":      { "frames": 4, "row": 3, "speed": 5.0, "loop": false },
+	"shield_bash":    { "frames": 4, "row": 4, "speed": 6.0, "loop": false },
+	"teleport_slash": { "frames": 4, "row": 5, "speed": 6.0, "loop": false },
+	"corrupt_rift":   { "frames": 4, "row": 6, "speed": 5.0, "loop": false },
+	"shockwave":      { "frames": 4, "row": 7, "speed": 4.0, "loop": false },
+	"phase_change":   { "frames": 4, "row": 8, "speed": 6.0, "loop": false },
+	"defeat":         { "frames": 4, "row": 9, "speed": 5.0, "loop": false },
 }
 
 func build_animated_sprite_from_sheet(texture: Texture2D, anim_defs: Dictionary, frame_width: int, frame_height: int) -> AnimatedSprite2D:
@@ -832,6 +862,14 @@ func try_build_animated_player(context: String) -> AnimatedSprite2D:
 	var frame_h = 48
 	
 	if context in ["combat", "after_ch1", "before_ch1"]:
+		if FileAccess.file_exists(PLAYER_COMBAT_V2_SHEET):
+			var v2_tex = load(PLAYER_COMBAT_V2_SHEET)
+			if v2_tex:
+				print("✓ Found V2 combat animation sheet: %s" % PLAYER_COMBAT_V2_SHEET)
+				return build_animated_sprite_from_sheet(v2_tex, PLAYER_COMBAT_V2_ANIMS, 64, 64)
+			push_warning("[AssetManager] V2 combat player sheet failed to load; using existing player fallback.")
+		else:
+			push_warning("[AssetManager] V2 combat player sheet missing; using existing player fallback.")
 		sheet_path = "res://assets/sprites/player/player_combat_sheet.png"
 		anim_defs = PLAYER_COMBAT_ANIMS
 		frame_w = 32
@@ -859,6 +897,21 @@ func try_build_animated_player(context: String) -> AnimatedSprite2D:
 	
 	print("✓ Found animation sheet: %s" % sheet_path)
 	return build_animated_sprite_from_sheet(tex, anim_defs, frame_w, frame_h)
+
+func try_build_animated_tutorial_knight() -> AnimatedSprite2D:
+	## Prefer the V2 Tutorial Knight sheet for the Chapter 1 boss only.
+	if not FileAccess.file_exists(TUTORIAL_KNIGHT_V2_SHEET):
+		push_warning("[AssetManager] V2 Tutorial Knight sheet missing; using existing boss fallback.")
+		return null
+	var texture = load(TUTORIAL_KNIGHT_V2_SHEET)
+	if not texture:
+		push_warning("[AssetManager] V2 Tutorial Knight sheet failed to load; using existing boss fallback.")
+		return null
+	print("Found V2 Tutorial Knight animation sheet: %s" % TUTORIAL_KNIGHT_V2_SHEET)
+	var anim_sprite = build_animated_sprite_from_sheet(texture, TUTORIAL_KNIGHT_V2_ANIMS, 96, 96)
+	if anim_sprite:
+		anim_sprite.set_meta("tutorial_knight_v2_visual", true)
+	return anim_sprite
 
 # Speaker name to portrait asset key mapping
 const PORTRAIT_MAP = {

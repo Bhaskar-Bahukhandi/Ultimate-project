@@ -33,6 +33,7 @@ const CLOSE_PRESSURE_GUARD_TIME = 0.48
 const TRANSITION_GUARD_MULT = 0.2
 const DEFENSIVE_ANSWER_STAGGER = 0.55
 const STATUS_CALLOUT_REPEAT_GAP_MS = 520
+const V2_VISUAL_OFFSET = Vector2(0.0, -8.0)
 
 # ── Phase state ─────────────────────────────────────────────────────────
 var current_boss_phase: BossPhase = BossPhase.PHASE_1
@@ -95,6 +96,7 @@ func _ready() -> void:
 	super._ready()
 	current_health = max_health
 	_apply_phase_combat_tuning()
+	_try_install_v2_visual()
 
 	add_to_group("boss")
 
@@ -288,6 +290,7 @@ func _boss_attack(_delta: float) -> void:
 	if _attack_active:
 		return
 
+	_play_boss_visual("idle")
 	var cd = _boss_attack_cooldown
 	if _is_enraged:
 		cd *= 0.55
@@ -437,6 +440,7 @@ func _status_text(text: String, pos: Vector2, is_positive: bool = false) -> void
 
 func _attack_slash() -> void:
 	# Telegraph flash
+	_play_boss_visual("slash", true)
 	var slash_facing := _facing_to_player()
 	var slash_size := Vector2(attack_range * 1.05, 112.0)
 	var slash_y_offset := -10.0
@@ -460,6 +464,7 @@ func _attack_slash() -> void:
 
 
 func _attack_low_sweep() -> void:
+	_play_boss_visual("low_sweep", true)
 	velocity.x = 0.0
 	_status_text("JUMP / POGO", global_position + Vector2(0, -62), false)
 	if has_node("Sprite"):
@@ -510,6 +515,7 @@ func _attack_overhead_slam() -> void:
 
 
 func _attack_charge() -> void:
+	_play_boss_visual("charge", true)
 	velocity.x = 0.0
 	_status_text("DASH", global_position + Vector2(0, -62), false)
 	if has_node("Sprite"):
@@ -539,6 +545,7 @@ func _attack_charge() -> void:
 
 
 func _attack_shield_bash() -> void:
+	_play_boss_visual("shield_bash", true)
 	_status_text("BLOCK", global_position + Vector2(0, -62), false)
 	var dir = direction_to_player()
 	var player = find_player()
@@ -569,6 +576,7 @@ func _attack_shield_bash() -> void:
 
 
 func _attack_teleport_slash() -> void:
+	_play_boss_visual("teleport_slash", true)
 	_vfx("vfx_glitch_sparkle", global_position)
 	_sfx("glitch_teleport", 0.2)
 	var player = find_player()
@@ -594,6 +602,7 @@ func _attack_teleport_slash() -> void:
 
 
 func _attack_shockwave() -> void:
+	_play_boss_visual("shockwave", true)
 	velocity.y = -500.0
 	_status_text("AIR", global_position + Vector2(0, -62), false)
 	_spawn_attack_warning(Vector2(0, -6.0), Vector2(310, 46), Color(0.95, 0.15, 0.95, 0.32), 0.46)
@@ -615,6 +624,7 @@ func _attack_shockwave() -> void:
 # ── Slam wave helper ────────────────────────────────────────────────────
 
 func _attack_corrupt_rift() -> void:
+	_play_boss_visual("corrupt_rift", true)
 	velocity.x = 0.0
 	_status_text("RIFT", global_position + Vector2(0, -62), false)
 	var player = find_player()
@@ -916,6 +926,7 @@ func _check_phase_transitions() -> void:
 
 
 func _trigger_phase_pause(phase_number: int) -> void:
+	_play_boss_visual("phase_change", true)
 	## Brief stagger + VFX on phase change with full game juice.
 	_phase_paused = true
 	_phase_pause_timer = 0.0
@@ -950,6 +961,7 @@ func _trigger_phase_pause(phase_number: int) -> void:
 
 
 func _enter_rage_phase() -> void:
+	_play_boss_visual("phase_change", true)
 	## Desperation — corruption overwhelms, relentless combos.
 	_is_enraged = true
 	_apply_phase_combat_tuning()
@@ -981,6 +993,7 @@ func _enter_rage_phase() -> void:
 
 
 func _enter_phase_4() -> void:
+	_play_boss_visual("phase_change", true)
 	current_boss_phase = BossPhase.PHASE_4
 	## Final Stand first; Root Access opens only after the last sliver of HP.
 	phase_4_locked = false
@@ -1196,6 +1209,7 @@ func die() -> void:
 		CombatFX.apply_kill_zoom()
 
 	_award_death_rewards()
+	_play_boss_visual("defeat", true)
 	_tween_die()
 	_vfx("vfx_enemy_death", global_position)
 
@@ -1244,6 +1258,7 @@ func reset_for_retry() -> void:
 		var spr = get_node("Sprite")
 		spr.modulate = Color.WHITE
 		spr.modulate.a = 1.0
+	_play_boss_visual("idle", true)
 	_apply_phase_combat_tuning()
 	health_changed.emit(current_health, max_health)
 	_update_health_bar()
@@ -1252,6 +1267,55 @@ func reset_for_retry() -> void:
 # ═════════════════════════════════════════════════════════════════════════
 # HACKABLE PROPERTIES — Root Access interface
 # ═════════════════════════════════════════════════════════════════════════
+
+func _try_install_v2_visual() -> void:
+	if not has_node("/root/AssetManager") or not AssetManager.has_method("try_build_animated_tutorial_knight"):
+		return
+	var sprite_node = get_node_or_null("Sprite")
+	if not sprite_node:
+		return
+	var anim_sprite: AnimatedSprite2D = AssetManager.try_build_animated_tutorial_knight()
+	if not anim_sprite:
+		return
+	anim_sprite.offset = V2_VISUAL_OFFSET
+	var parent = sprite_node.get_parent()
+	var sprite_index = sprite_node.get_index()
+	parent.remove_child(sprite_node)
+	sprite_node.queue_free()
+	parent.add_child(anim_sprite)
+	parent.move_child(anim_sprite, sprite_index)
+	_play_boss_visual("idle", true)
+
+
+func _boss_v2_sprite() -> AnimatedSprite2D:
+	var sprite_node = get_node_or_null("Sprite")
+	if sprite_node is AnimatedSprite2D and bool(sprite_node.get_meta("tutorial_knight_v2_visual", false)):
+		return sprite_node
+	return null
+
+
+func _play_boss_visual(anim_name: String, restart: bool = false) -> void:
+	var sprite = _boss_v2_sprite()
+	if not sprite or not sprite.sprite_frames or not sprite.sprite_frames.has_animation(anim_name):
+		return
+	if restart or sprite.animation != anim_name or not sprite.is_playing():
+		sprite.play(anim_name)
+
+
+func _sync_animation_to_state() -> void:
+	var sprite = _boss_v2_sprite()
+	if not sprite:
+		super._sync_animation_to_state()
+		return
+	if current_state == State.DEAD:
+		_play_boss_visual("defeat")
+	elif not _attack_active and not _phase_paused:
+		_play_boss_visual("idle")
+	if velocity.x > 10.0:
+		sprite.flip_h = false
+	elif velocity.x < -10.0:
+		sprite.flip_h = true
+
 
 func get_hackable_properties() -> Dictionary:
 	var props = super.get_hackable_properties()
