@@ -1,0 +1,25 @@
+{
+	"collision_modified": false,
+	"contact_sheet": "res://assets/art_sources/comfyui_tests/oakhaven_p11_import_preview/contact_sheets/oakhaven_p11_actual_scene_fallback_vs_afternoon.png",
+	"fallback_result": {
+		"force_fallback": true,
+		"oakhaven_time_state": "afternoon",
+		"screenshot": "res://assets/art_sources/comfyui_tests/oakhaven_p11_import_preview/screenshots/oakhaven_p11_actual_fallback_scene.png",
+		"visual_layer_found": true,
+		"visual_tileset_path": "res://assets/generated_v2/tilesets/oakhaven_v2_prototype_tileset.png",
+		"visual_tileset_production": false
+	},
+	"fallback_screenshot": "res://assets/art_sources/comfyui_tests/oakhaven_p11_import_preview/screenshots/oakhaven_p11_actual_fallback_scene.png",
+	"gameplay_scene_file_modified": false,
+	"phase": "10M-P11",
+	"production_afternoon_result": {
+		"force_fallback": false,
+		"oakhaven_time_state": "afternoon",
+		"screenshot": "res://assets/art_sources/comfyui_tests/oakhaven_p11_import_preview/screenshots/oakhaven_p11_actual_afternoon_scene.png",
+		"visual_layer_found": true,
+		"visual_tileset_path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+		"visual_tileset_production": true
+	},
+	"production_afternoon_screenshot": "res://assets/art_sources/comfyui_tests/oakhaven_p11_import_preview/screenshots/oakhaven_p11_actual_afternoon_scene.png",
+	"scene": "res://scenes/regions/oakhaven_region.tscn"
+}

@@ -377,22 +377,22 @@ func _build_hud() -> void:
 	_objective_panel = PanelContainer.new()
 	_objective_panel.name = "ObjectivePanel"
 	_objective_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	_objective_panel.offset_left = -360
-	_objective_panel.offset_top = 12
+	_objective_panel.offset_left = -312
+	_objective_panel.offset_top = 10
 	_objective_panel.offset_right = -12
-	_objective_panel.offset_bottom = 72
+	_objective_panel.offset_bottom = 60
 	var style = StyleBoxFlat.new()
-	style.bg_color = Color(0.02, 0.02, 0.06, 0.65)
-	style.border_color = Color(0.2, 0.5, 0.9, 0.4)
-	style.border_width_left = 3
+	style.bg_color = Color(0.02, 0.02, 0.06, 0.52)
+	style.border_color = Color(0.2, 0.5, 0.9, 0.32)
+	style.border_width_left = 2
 	style.border_width_top = 0
 	style.border_width_right = 0
 	style.border_width_bottom = 0
 	style.set_corner_radius_all(3)
-	style.content_margin_left = 10
-	style.content_margin_right = 10
-	style.content_margin_top = 4
-	style.content_margin_bottom = 4
+	style.content_margin_left = 8
+	style.content_margin_right = 8
+	style.content_margin_top = 3
+	style.content_margin_bottom = 3
 	_objective_panel.add_theme_stylebox_override("panel", style)
 	_objective_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_hud_layer.add_child(_objective_panel)
@@ -406,7 +406,9 @@ func _build_hud() -> void:
 	_objective_label.fit_content = true
 	_objective_label.scroll_active = false
 	_objective_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_objective_label.custom_minimum_size = Vector2(318, 28)
+	_objective_label.add_theme_font_size_override("normal_font_size", 11)
+	_objective_label.add_theme_font_size_override("italics_font_size", 10)
+	_objective_label.custom_minimum_size = Vector2(268, 24)
 	vbox.add_child(_objective_label)
 
 	# Arrow indicator for direction

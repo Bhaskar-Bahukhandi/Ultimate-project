@@ -1,0 +1,11 @@
+{
+	"collision_modified": false,
+	"gameplay_scene_file_modified": false,
+	"oakhaven_time_state": "afternoon",
+	"phase": "10M-P11",
+	"result": "Pass",
+	"scene": "res://scenes/regions/oakhaven_region.tscn",
+	"visual_layer_found": true,
+	"visual_tileset_path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+	"visual_tileset_production": true
+}

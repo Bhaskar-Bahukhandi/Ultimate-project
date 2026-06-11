@@ -1,0 +1,131 @@
+{
+  "phase": "10M-P10",
+  "preview_only": true,
+  "production_art_changed": false,
+  "comfyui_generation_used": false,
+  "ai_generation_used": false,
+  "tile_size": [
+    32,
+    32
+  ],
+  "atlas_size": [
+    512,
+    512
+  ],
+  "shared_layout_source": "assets/art_sources/comfyui_tests/oakhaven_p8/manifest/oakhaven_p8_tile_layout.md",
+  "layout_validation": {
+    "morning": {
+      "size": [
+        512,
+        512
+      ],
+      "documented_cells": 146,
+      "documented_nonempty_cells": 145,
+      "documented_empty_cells": [
+        "transparent_empty_tile"
+      ]
+    },
+    "afternoon": {
+      "size": [
+        512,
+        512
+      ],
+      "documented_cells": 146,
+      "documented_nonempty_cells": 145,
+      "documented_empty_cells": [
+        "transparent_empty_tile"
+      ]
+    },
+    "night": {
+      "size": [
+        512,
+        512
+      ],
+      "documented_cells": 146,
+      "documented_nonempty_cells": 145,
+      "documented_empty_cells": [
+        "transparent_empty_tile"
+      ]
+    }
+  },
+  "contact_sheets": {
+    "before_after": "assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/contact_sheets/oakhaven_p10_before_after_contact_sheet.png",
+    "tuned_time_of_day": "assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/contact_sheets/oakhaven_p10_tuned_time_of_day_contact_sheet.png",
+    "fallback_vs_tuned": "assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/contact_sheets/oakhaven_p10_fallback_vs_tuned_contact_sheet.png"
+  },
+  "variants": [
+    {
+      "time_state": "Morning",
+      "original_variant": "P8 Variant A clean",
+      "original_atlas_path": "assets/art_sources/comfyui_tests/oakhaven_p8/generated_tiles/oakhaven_p8_variant_a_clean.png",
+      "tuned_atlas_path": "assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/tuned_atlases/oakhaven_p10_morning_tuned.png",
+      "preview_2x_path": "assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/contact_sheets/oakhaven_p10_morning_tuned_2x.png",
+      "screenshot_path": "assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/screenshots/oakhaven_p10_morning_preview.png",
+      "mockup_path": "assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/mockups/oakhaven_p10_morning_mockup.png",
+      "tuning_method": "warm morning lift, moderate saturation gain, subtle deterministic luminance variation",
+      "p9_score": 7.4,
+      "tile_readability": 8,
+      "path_readability": 8,
+      "cottage_building_readability": 8,
+      "fence_hedge_readability": 8,
+      "prop_readability": 8,
+      "player_npc_contrast": 8,
+      "atmosphere": 8,
+      "oakhaven_identity": 8,
+      "visual_cohesion": 8,
+      "likely_improvement_over_fallback": 8,
+      "overall_score": 8.0,
+      "verdict": "Improved morning freshness and detail while staying readable.",
+      "recommendation": "Keep as a viable morning candidate for later import review."
+    },
+    {
+      "time_state": "Afternoon",
+      "original_variant": "P8 Variant B textured",
+      "original_atlas_path": "assets/art_sources/comfyui_tests/oakhaven_p8/generated_tiles/oakhaven_p8_variant_b_textured.png",
+      "tuned_atlas_path": "assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/tuned_atlases/oakhaven_p10_afternoon_tuned.png",
+      "preview_2x_path": "assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/contact_sheets/oakhaven_p10_afternoon_tuned_2x.png",
+      "screenshot_path": "assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/screenshots/oakhaven_p10_afternoon_preview.png",
+      "mockup_path": "assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/mockups/oakhaven_p10_afternoon_mockup.png",
+      "tuning_method": "minor contrast polish, slight saturation harmony, minimal daytime warmth",
+      "p9_score": 8.0,
+      "tile_readability": 8,
+      "path_readability": 8,
+      "cottage_building_readability": 8,
+      "fence_hedge_readability": 8,
+      "prop_readability": 8,
+      "player_npc_contrast": 8,
+      "atmosphere": 8,
+      "oakhaven_identity": 8,
+      "visual_cohesion": 8,
+      "likely_improvement_over_fallback": 8,
+      "overall_score": 8.1,
+      "verdict": "Still the strongest default with only minor polish.",
+      "recommendation": "Best single import candidate if time-of-day complexity is deferred."
+    },
+    {
+      "time_state": "Night",
+      "original_variant": "P8 Variant C dark/glitch",
+      "original_atlas_path": "assets/art_sources/comfyui_tests/oakhaven_p8/generated_tiles/oakhaven_p8_variant_c_dark_glitch.png",
+      "tuned_atlas_path": "assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/tuned_atlases/oakhaven_p10_night_tuned.png",
+      "preview_2x_path": "assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/contact_sheets/oakhaven_p10_night_tuned_2x.png",
+      "screenshot_path": "assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/screenshots/oakhaven_p10_night_preview.png",
+      "mockup_path": "assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/mockups/oakhaven_p10_night_mockup.png",
+      "tuning_method": "shadow lift, cool moonlit grade, path/prop readability lift, restrained cyan-magenta retention",
+      "p9_score": 7.3,
+      "tile_readability": 8,
+      "path_readability": 8,
+      "cottage_building_readability": 8,
+      "fence_hedge_readability": 7,
+      "prop_readability": 8,
+      "player_npc_contrast": 8,
+      "atmosphere": 8,
+      "oakhaven_identity": 8,
+      "visual_cohesion": 8,
+      "likely_improvement_over_fallback": 8,
+      "overall_score": 7.9,
+      "verdict": "Night readability improved while keeping the darker magical mood.",
+      "recommendation": "Viable for a later morning/day/night import review after one in-scene scale check."
+    }
+  ],
+  "overall_recommendation": "Ready for Oakhaven production-art import pass with morning/day/night variants."
+}

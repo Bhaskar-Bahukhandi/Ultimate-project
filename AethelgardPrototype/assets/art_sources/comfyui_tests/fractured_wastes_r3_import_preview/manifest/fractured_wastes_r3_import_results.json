@@ -1,0 +1,65 @@
+{
+  "phase": "10M-R3",
+  "production_state": "enabled_controlled_import_candidate",
+  "source_path": "assets/art_sources/comfyui_tests/fractured_wastes_r1/generated_tiles/fractured_wastes_r1_variant_b_textured.png",
+  "production_path": "assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png",
+  "fallback_path": "assets/generated_v2/tilesets/fractured_wastes_v2_prototype_tileset.png",
+  "asset_manager": {
+    "production_function": "get_fractured_wastes_tileset_slot",
+    "runtime_fallback_override": "set_fractured_wastes_force_generated_fallback",
+    "production_load": "pass",
+    "fallback_override": "pass",
+    "missing_production_fallback": "pass"
+  },
+  "screenshot_paths": {
+    "preview_fallback": "assets/art_sources/comfyui_tests/fractured_wastes_r3_import_preview/screenshots/fractured_wastes_r3_fallback_preview.png",
+    "preview_production_variant_b": "assets/art_sources/comfyui_tests/fractured_wastes_r3_import_preview/screenshots/fractured_wastes_r3_production_variant_b_preview.png",
+    "actual_region_fallback": "assets/art_sources/comfyui_tests/fractured_wastes_r3_import_preview/screenshots/fractured_wastes_r3_actual_region_fallback.png",
+    "actual_region_production": "assets/art_sources/comfyui_tests/fractured_wastes_r3_import_preview/screenshots/fractured_wastes_r3_actual_region_production.png",
+    "actual_region_spawn": "assets/art_sources/comfyui_tests/fractured_wastes_r3_import_preview/screenshots/fractured_wastes_r3_actual_region_spawn.png",
+    "actual_region_path": "assets/art_sources/comfyui_tests/fractured_wastes_r3_import_preview/screenshots/fractured_wastes_r3_actual_region_path.png",
+    "actual_region_farming": "assets/art_sources/comfyui_tests/fractured_wastes_r3_import_preview/screenshots/fractured_wastes_r3_actual_region_farming.png",
+    "actual_region_npc": "assets/art_sources/comfyui_tests/fractured_wastes_r3_import_preview/screenshots/fractured_wastes_r3_actual_region_npc.png",
+    "actual_region_rift_or_core": "assets/art_sources/comfyui_tests/fractured_wastes_r3_import_preview/screenshots/fractured_wastes_r3_actual_region_rift_or_core.png",
+    "contact_sheet": "assets/art_sources/comfyui_tests/fractured_wastes_r3_import_preview/contact_sheets/fractured_wastes_r3_fallback_vs_production_contact_sheet.png",
+    "actual_region_contact_sheet": "assets/art_sources/comfyui_tests/fractured_wastes_r3_import_preview/contact_sheets/fractured_wastes_r3_actual_region_contact_sheet.png"
+  },
+  "qa_scores": {
+    "generated_fallback": {
+      "floor": 4.5,
+      "safe_path": 3.5,
+      "fracture_identity": 6.5,
+      "ruins_props": 4.5,
+      "player_npc_contrast": 6.2,
+      "label_readability": 6.0,
+      "farming_marker_readability": 6.0,
+      "overall": 5.0
+    },
+    "production_variant_b": {
+      "floor": 8.0,
+      "safe_path": 8.2,
+      "fracture_identity": 8.3,
+      "ruins_props": 8.0,
+      "player_npc_contrast": 8.1,
+      "label_readability": 8.0,
+      "farming_marker_readability": 8.0,
+      "overall": 8.2
+    }
+  },
+  "issues_found": [
+    "Actual region modulates the visual tile layer at low alpha, so production art reads as a calmer texture layer rather than a full replacement for procedural overlays.",
+    "Existing generated player/NPC/decal fallback warnings remain outside the Fractured Wastes tileset scope.",
+    "Godot renderer reported cleanup warnings after screenshot capture despite successful PNG output and zero process failure."
+  ],
+  "repair_actions": [
+    "Added Fractured Wastes production-first AssetManager slot.",
+    "Added runtime generated fallback override.",
+    "Kept generated fallback available and validated missing-production fallback behavior.",
+    "Captured preview and actual-region fallback/production evidence."
+  ],
+  "fallback_status": "preserved_and_validated",
+  "production_art_changed": true,
+  "actual_scene_modified": false,
+  "decision": "Ready to accept Fractured Wastes production-art baseline with Variant B",
+  "recommendation": "Accept Variant B as the controlled Fractured Wastes production-art baseline; keep fallback for rollback and reserve future polish for region modulation/tile-choice refinement."
+}

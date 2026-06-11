@@ -1,0 +1,46 @@
+{
+  "region_id": "oakhaven",
+  "status": "controlled import candidate",
+  "production_art_changed_in_phase": "10M-P11",
+  "import_date": "2026-06-10",
+  "tile_size": 32,
+  "atlas_size": 512,
+  "grid": {
+    "columns": 16,
+    "rows": 16
+  },
+  "default_time_state": "afternoon",
+  "fallback_path": "res://assets/generated_v2/tilesets/oakhaven_v2_prototype_tileset.png",
+  "layout_source": "res://assets/art_sources/comfyui_tests/oakhaven_p8/manifest/oakhaven_p8_tile_layout.md",
+  "lineage": [
+    "P8 deterministic Oakhaven 32x32 tile grammar variants",
+    "P9 preview-only morning/afternoon/night Godot board validation",
+    "P10 deterministic brightness and palette tuning"
+  ],
+  "notes": [
+    "These are controlled deterministic generated art assets, not final release art.",
+    "All variants preserve the same 512x512 atlas size and 32x32 tile coordinate layout.",
+    "Generated fallback assets must remain available for rollback.",
+    "Afternoon is the default time state for gameplay-facing loader calls."
+  ],
+  "variants": {
+    "morning": {
+      "name": "Morning",
+      "source_path": "res://assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/tuned_atlases/oakhaven_p10_morning_tuned.png",
+      "production_path": "res://assets/production_art/tilesets/oakhaven/oakhaven_morning_tileset.png",
+      "intended_use": "brighter/fresher early-day Oakhaven candidate"
+    },
+    "afternoon": {
+      "name": "Afternoon",
+      "source_path": "res://assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/tuned_atlases/oakhaven_p10_afternoon_tuned.png",
+      "production_path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+      "intended_use": "default daytime Oakhaven candidate"
+    },
+    "night": {
+      "name": "Night",
+      "source_path": "res://assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/tuned_atlases/oakhaven_p10_night_tuned.png",
+      "production_path": "res://assets/production_art/tilesets/oakhaven/oakhaven_night_tileset.png",
+      "intended_use": "cool darker magical night Oakhaven candidate"
+    }
+  }
+}

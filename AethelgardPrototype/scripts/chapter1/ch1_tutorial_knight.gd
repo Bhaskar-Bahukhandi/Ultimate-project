@@ -183,6 +183,41 @@ func _build_background() -> void:
 	grid.size = Vector2(ARENA_WIDTH, ARENA_HEIGHT)
 	grid.z_index = -9
 	add_child(grid)
+	for rib_data in [
+		{"name": "FarArchLeft", "pos": Vector2(44, 74), "size": Vector2(310, 350), "color": Color(0.03, 0.02, 0.07, 0.72)},
+		{"name": "FarArchRight", "pos": Vector2(928, 74), "size": Vector2(310, 350), "color": Color(0.03, 0.02, 0.07, 0.72)},
+		{"name": "UpperVault", "pos": Vector2(170, 64), "size": Vector2(940, 72), "color": Color(0.16, 0.10, 0.24, 0.32)},
+	]:
+		var rib = ColorRect.new()
+		rib.name = rib_data["name"]
+		rib.color = rib_data["color"]
+		rib.position = rib_data["pos"]
+		rib.size = rib_data["size"]
+		rib.z_index = -8
+		add_child(rib)
+	var back_depth = Polygon2D.new()
+	back_depth.name = "ArenaBackDepth"
+	back_depth.color = Color(0.20, 0.11, 0.30, 0.22)
+	back_depth.polygon = PackedVector2Array([
+		Vector2(106, 512), Vector2(244, 248), Vector2(540, 186),
+		Vector2(836, 198), Vector2(1084, 254), Vector2(1188, 512),
+	])
+	back_depth.z_index = -8
+	add_child(back_depth)
+	for banner_data in [
+		{"name": "LeftVaultBanner", "points": PackedVector2Array([Vector2(318, 106), Vector2(362, 112), Vector2(358, 284), Vector2(340, 252), Vector2(324, 292)]), "color": Color(0.18, 0.10, 0.27, 0.46)},
+		{"name": "CenterVaultBanner", "points": PackedVector2Array([Vector2(604, 84), Vector2(676, 84), Vector2(668, 232), Vector2(640, 202), Vector2(614, 238)]), "color": Color(0.24, 0.14, 0.34, 0.40)},
+		{"name": "RightVaultBanner", "points": PackedVector2Array([Vector2(914, 112), Vector2(958, 106), Vector2(960, 292), Vector2(938, 250), Vector2(920, 282)]), "color": Color(0.18, 0.10, 0.27, 0.46)},
+	]:
+		var banner = Polygon2D.new()
+		banner.name = banner_data["name"]
+		banner.color = banner_data["color"]
+		banner.polygon = banner_data["points"]
+		banner.z_index = -7
+		add_child(banner)
+	if has_node("/root/AssetManager"):
+		AssetManager.add_v3_environment_decal(self, "arena_border", Vector2(ARENA_WIDTH * 0.5, 470), Vector2(1174, 356), "V3TutorialArenaBorder", -8, Color(0.98, 0.92, 1.0, 0.92))
+		AssetManager.add_v3_environment_decal(self, "root_veins", Vector2(ARENA_WIDTH * 0.5, 540), Vector2(510, 178), "V3TutorialArenaRootVeins", -7, Color(0.94, 0.72, 1.0, 0.34))
 
 func _build_arena_colliders() -> void:
 	# Floor

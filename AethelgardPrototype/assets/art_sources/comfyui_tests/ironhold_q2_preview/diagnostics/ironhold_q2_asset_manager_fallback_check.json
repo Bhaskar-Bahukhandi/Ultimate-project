@@ -1,0 +1,30 @@
+{
+	"all_passed": true,
+	"checks": [
+		{
+			"actual": {
+				"fallback_exists": true,
+				"production_slot_exists": false,
+				"resolved_path": "res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png",
+				"texture_loaded": true,
+				"visual_tileset_production": false
+			},
+			"expected": "Ironhold production slot is absent and generated fallback loads.",
+			"result": "Pass",
+			"scenario": "Ironhold fallback behavior"
+		},
+		{
+			"actual": {
+				"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+				"production": true,
+				"texture_loaded": true,
+				"time_state": "afternoon"
+			},
+			"expected": "Oakhaven afternoon production baseline remains available.",
+			"result": "Pass",
+			"scenario": "Oakhaven baseline preservation"
+		}
+	],
+	"phase": "10M-Q2",
+	"production_art_changed": false
+}

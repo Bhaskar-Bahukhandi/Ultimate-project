@@ -1,0 +1,62 @@
+{
+	"all_passed": true,
+	"checks": [
+		{
+			"actual": {
+				"fallback_used": false,
+				"path": "res://assets/production_art/tilesets/ironhold/ironhold_tileset.png",
+				"production": true,
+				"texture_loaded": true
+			},
+			"expected": "Ironhold production Variant B loads from the controlled production-art slot.",
+			"result": "Pass",
+			"scenario": "production present"
+		},
+		{
+			"actual": {
+				"fallback_reason": "runtime fallback override enabled",
+				"fallback_used": true,
+				"path": "res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png",
+				"production": false,
+				"texture_loaded": true
+			},
+			"expected": "Generated fallback loads when the runtime override is enabled.",
+			"result": "Pass",
+			"scenario": "runtime fallback override"
+		},
+		{
+			"actual": {
+				"fallback_path": "res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png",
+				"fallback_texture_loaded": true,
+				"missing_texture_is_null": true
+			},
+			"expected": "A missing production path does not crash and can resolve to generated fallback.",
+			"result": "Pass",
+			"scenario": "missing production behavior"
+		},
+		{
+			"actual": {
+				"exists": true,
+				"path": "res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png"
+			},
+			"expected": "The generated Ironhold fallback PNG remains present.",
+			"result": "Pass",
+			"scenario": "generated fallback still available"
+		},
+		{
+			"actual": {
+				"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+				"production": true,
+				"texture_loaded": true,
+				"time_state": "afternoon"
+			},
+			"expected": "Oakhaven afternoon production baseline remains available.",
+			"result": "Pass",
+			"scenario": "Oakhaven baseline preservation"
+		}
+	],
+	"fallback_path": "res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png",
+	"oakhaven_preservation_path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+	"phase": "10M-Q3",
+	"production_path": "res://assets/production_art/tilesets/ironhold/ironhold_tileset.png"
+}

@@ -1,0 +1,23 @@
+{
+	"all_passed": true,
+	"checks": [
+		{
+			"expected_root_or_node": "MainMenu",
+			"result": "Pass",
+			"root": "MainMenu",
+			"scenario": "main menu",
+			"scene": "res://scenes/main_menu.tscn"
+		},
+		{
+			"farming_marker_found": true,
+			"player_found": true,
+			"result": "Pass",
+			"scenario": "Ironhold region scene",
+			"scene": "res://scenes/regions/ironhold_region.tscn",
+			"visual_layer_found": true,
+			"visual_layer_path": "res://assets/production_art/tilesets/ironhold/ironhold_tileset.png",
+			"visual_layer_production": true
+		}
+	],
+	"phase": "10M-Q3"
+}

@@ -1,0 +1,111 @@
+{
+	"all_passed": true,
+	"checks": [
+		{
+			"actual": {
+				"fallback_reason": "",
+				"fallback_used": false,
+				"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+				"production": true,
+				"requested_time_state": "afternoon",
+				"texture_loaded": true,
+				"time_state": "afternoon"
+			},
+			"expected": "Default Oakhaven slot resolves to afternoon production.",
+			"result": "Pass",
+			"scenario": "production default"
+		},
+		{
+			"actual": {
+				"fallback_reason": "",
+				"fallback_used": false,
+				"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_morning_tileset.png",
+				"production": true,
+				"requested_time_state": "morning",
+				"texture_loaded": true,
+				"time_state": "morning"
+			},
+			"expected": "morning production atlas is loadable through AssetManager.",
+			"result": "Pass",
+			"scenario": "morning staged variant load"
+		},
+		{
+			"actual": {
+				"fallback_reason": "",
+				"fallback_used": false,
+				"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+				"production": true,
+				"requested_time_state": "afternoon",
+				"texture_loaded": true,
+				"time_state": "afternoon"
+			},
+			"expected": "afternoon production atlas is loadable through AssetManager.",
+			"result": "Pass",
+			"scenario": "afternoon staged variant load"
+		},
+		{
+			"actual": {
+				"fallback_reason": "",
+				"fallback_used": false,
+				"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_night_tileset.png",
+				"production": true,
+				"requested_time_state": "night",
+				"texture_loaded": true,
+				"time_state": "night"
+			},
+			"expected": "night production atlas is loadable through AssetManager.",
+			"result": "Pass",
+			"scenario": "night staged variant load"
+		},
+		{
+			"actual": {
+				"fallback_reason": "invalid time state normalized to default",
+				"fallback_used": true,
+				"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+				"production": true,
+				"requested_time_state": "dusk",
+				"texture_loaded": true,
+				"time_state": "afternoon"
+			},
+			"expected": "Invalid Oakhaven time state resolves to afternoon production.",
+			"result": "Pass",
+			"scenario": "invalid time state"
+		},
+		{
+			"actual": {
+				"fallback_reason": "runtime fallback override enabled",
+				"fallback_used": true,
+				"path": "res://assets/generated_v2/tilesets/oakhaven_v2_prototype_tileset.png",
+				"production": false,
+				"requested_time_state": "afternoon",
+				"texture_loaded": true,
+				"time_state": "afternoon"
+			},
+			"expected": "Runtime override resolves Oakhaven to generated fallback without removing production files.",
+			"result": "Pass",
+			"scenario": "runtime generated fallback override"
+		},
+		{
+			"actual": {
+				"default_after_probe": {
+					"fallback_reason": "",
+					"fallback_used": false,
+					"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+					"production": true,
+					"requested_time_state": "afternoon",
+					"texture_loaded": true,
+					"time_state": "afternoon"
+				},
+				"missing_probe_path": "res://assets/production_art/tilesets/oakhaven/__missing_p12_acceptance_probe_tileset.png",
+				"missing_texture_loaded": false
+			},
+			"expected": "Missing production variant probe returns null and afternoon production remains available.",
+			"result": "Pass",
+			"scenario": "controlled missing production behavior"
+		}
+	],
+	"generated_fallback_preserved": true,
+	"morning_night_staged_only": true,
+	"phase": "10M-P12",
+	"production_default": "afternoon"
+}

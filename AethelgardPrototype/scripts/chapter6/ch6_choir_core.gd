@@ -36,6 +36,14 @@ func _build_visuals() -> void:
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bg)
+	if has_node("/root/AssetManager"):
+		var visual_tiles = AssetManager.try_create_v2_control_tileset_background("cathedral_server", "ChoirCoreV2Tiles")
+		if visual_tiles:
+			visual_tiles.modulate = Color(0.38, 0.48, 0.70, 0.72)
+			add_child(visual_tiles)
+		AssetManager.add_v3_environment_decal(self, "cathedral_circuit", Vector2(640, 398), Vector2(980, 392), "ChoirCoreV3Circuit", -1, Color(1.0, 0.92, 0.62, 0.42))
+		AssetManager.add_v3_environment_prop(self, "firewall_panel", Vector2(1040, 412), Vector2(286, 156), "ChoirCoreV3FirewallPanel", 0, Color(1.0, 0.92, 0.80, 0.76))
+		AssetManager.add_v3_environment_prop(self, "server_console", Vector2(238, 426), Vector2(286, 152), "ChoirCoreV3ServerConsole", 0, Color(0.80, 0.92, 1.0, 0.76))
 
 	for i in range(14):
 		var sigil := ColorRect.new()

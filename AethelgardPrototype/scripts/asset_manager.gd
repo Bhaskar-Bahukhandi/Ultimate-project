@@ -442,6 +442,10 @@ const PLACEHOLDER_COLORS = {
 # Cache loaded assets
 var loaded_assets = {}
 var assets_available = {}
+var _missing_production_art_warned := {}
+var _oakhaven_force_generated_fallback := false
+var _ironhold_force_generated_fallback := false
+var _fractured_wastes_force_generated_fallback := false
 
 func _ready() -> void:
 	print("AssetManager initialized - Scanning for asset availability...")
@@ -748,6 +752,7 @@ const PLAYER_COMBAT_ANIMS = {
 }
 
 const PLAYER_COMBAT_V2_SHEET = "res://assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png"
+const PLAYER_COMBAT_PRODUCTION_SHEET = "res://assets/production_art/characters/player/kaelen_combat_alpha_sheet.png"
 const PLAYER_COMBAT_V2_ANIMS = {
 	"idle":          { "frames": 4, "row": 0,  "speed": 6.0,  "loop": true },
 	"run":           { "frames": 4, "row": 1,  "speed": 10.0, "loop": true },
@@ -773,6 +778,7 @@ const PLAYER_TOPDOWN_ANIMS = {
 }
 
 const PLAYER_TOPDOWN_V2_SHEET = "res://assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png"
+const PLAYER_TOPDOWN_PRODUCTION_SHEET = "res://assets/production_art/characters/player/kaelen_topdown_alpha_sheet.png"
 const PLAYER_TOPDOWN_V2_ANIMS = {
 	# The V2 sheet uses front/back row names; the animation controller already
 	# consumes down/up directional names for top-down movement.
@@ -787,6 +793,7 @@ const PLAYER_TOPDOWN_V2_ANIMS = {
 }
 
 const TUTORIAL_KNIGHT_V2_SHEET = "res://assets/generated_v2/sprites/bosses/tutorial_knight_v2_alpha_sheet.png"
+const TUTORIAL_KNIGHT_PRODUCTION_SHEET = "res://assets/production_art/characters/bosses/tutorial_knight_alpha_sheet.png"
 const TUTORIAL_KNIGHT_V2_ANIMS = {
 	"idle":           { "frames": 4, "row": 0, "speed": 6.0, "loop": true },
 	"slash":          { "frames": 4, "row": 1, "speed": 7.0, "loop": false },
@@ -798,6 +805,118 @@ const TUTORIAL_KNIGHT_V2_ANIMS = {
 	"shockwave":      { "frames": 4, "row": 7, "speed": 4.0, "loop": false },
 	"phase_change":   { "frames": 4, "row": 8, "speed": 6.0, "loop": false },
 	"defeat":         { "frames": 4, "row": 9, "speed": 5.0, "loop": false },
+}
+
+const ENEMY_V2_ANIMS = {
+	"idle":   { "frames": 4, "row": 0, "speed": 5.0,  "loop": true },
+	"move":   { "frames": 4, "row": 1, "speed": 8.0,  "loop": true },
+	"attack": { "frames": 4, "row": 2, "speed": 10.0, "loop": false },
+	"hurt":   { "frames": 4, "row": 3, "speed": 9.0,  "loop": false },
+	"death":  { "frames": 4, "row": 4, "speed": 8.0,  "loop": false },
+}
+
+const ENEMY_V2_SHEETS = {
+	"Slime": "res://assets/generated_v2/sprites/enemies/fracture_slime_v2_alpha_sheet.png",
+	"PhaseSpider": "res://assets/generated_v2/sprites/enemies/clock_mite_v2_alpha_sheet.png",
+	"DataSprite": "res://assets/generated_v2/sprites/enemies/memory_wisp_v2_alpha_sheet.png",
+}
+const ENEMY_PRODUCTION_SHEETS = {
+	"Slime": "res://assets/production_art/characters/enemies/fracture_slime_alpha_sheet.png",
+	"PhaseSpider": "res://assets/production_art/characters/enemies/clock_mite_alpha_sheet.png",
+	"DataSprite": "res://assets/production_art/characters/enemies/memory_wisp_alpha_sheet.png",
+}
+
+const NPC_V2_ANIMS = {
+	"idle": { "frames": 4, "row": 0, "speed": 4.0, "loop": true },
+	"talk": { "frames": 4, "row": 1, "speed": 7.0, "loop": true },
+	"walk": { "frames": 4, "row": 2, "speed": 8.0, "loop": true },
+}
+
+const NPC_V2_SHEETS = {
+	"Elara": "res://assets/generated_v2/sprites/npcs/elara_v2_alpha_sheet.png",
+	"Seraphina": "res://assets/generated_v2/sprites/npcs/seraphina_v2_alpha_sheet.png",
+	"Lyra": "res://assets/generated_v2/sprites/npcs/lyra_v2_alpha_sheet.png",
+	"Null Clerk": "res://assets/generated_v2/sprites/npcs/null_clerk_v2_alpha_sheet.png",
+	"Assembly Runner": "res://assets/generated_v2/sprites/npcs/assembly_runner_v2_alpha_sheet.png",
+}
+const NPC_PRODUCTION_SHEETS = {
+	"Elara": "res://assets/production_art/characters/npcs/elara_alpha_sheet.png",
+	"Seraphina": "res://assets/production_art/characters/npcs/seraphina_alpha_sheet.png",
+	"Lyra": "res://assets/production_art/characters/npcs/lyra_alpha_sheet.png",
+	"Null Clerk": "res://assets/production_art/characters/npcs/null_clerk_alpha_sheet.png",
+	"Assembly Runner": "res://assets/production_art/characters/npcs/assembly_runner_alpha_sheet.png",
+}
+
+const V2_PROTOTYPE_TILESETS = {
+	"oakhaven": "res://assets/generated_v2/tilesets/oakhaven_v2_prototype_tileset.png",
+	"ironhold": "res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png",
+	"fractured_wastes": "res://assets/generated_v2/tilesets/fractured_wastes_v2_prototype_tileset.png",
+	"forgotten_sectors": "res://assets/generated_v2/tilesets/forgotten_sectors_v2_prototype_tileset.png",
+	"mirror_city": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+	"cathedral_server": "res://assets/generated_v2/tilesets/cathedral_server_v2_prototype_tileset.png",
+	"memory_ocean": "res://assets/generated_v2/tilesets/memory_ocean_v2_prototype_tileset.png",
+	"root_of_heaven": "res://assets/generated_v2/tilesets/root_of_heaven_v2_prototype_tileset.png",
+}
+const PRODUCTION_VISUAL_TILESETS = {
+	"oakhaven": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+	"ironhold": "res://assets/production_art/tilesets/ironhold/ironhold_tileset.png",
+	"fractured_wastes": "res://assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png",
+	"forgotten_sectors": "res://assets/production_art/tilesets/forgotten_sectors_tileset.png",
+	"mirror_city": "res://assets/production_art/tilesets/mirror_city_tileset.png",
+	"cathedral_server": "res://assets/production_art/tilesets/cathedral_server_tileset.png",
+	"memory_ocean": "res://assets/production_art/tilesets/memory_ocean_tileset.png",
+	"saved_assembly": "res://assets/production_art/tilesets/saved_assembly_tileset.png",
+	"human_patch_lab": "res://assets/production_art/tilesets/human_patch_lab_tileset.png",
+	"root_of_heaven": "res://assets/production_art/tilesets/root_of_heaven_tileset.png",
+}
+const IRONHOLD_PRODUCTION_TILESET = "res://assets/production_art/tilesets/ironhold/ironhold_tileset.png"
+const FRACTURED_WASTES_PRODUCTION_TILESET = "res://assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png"
+const OAKHAVEN_PRODUCTION_TIME_OF_DAY_ENABLED = true
+const OAKHAVEN_DEFAULT_TIME_STATE = "afternoon"
+const OAKHAVEN_PRODUCTION_TIME_TILESETS = {
+	"morning": "res://assets/production_art/tilesets/oakhaven/oakhaven_morning_tileset.png",
+	"afternoon": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+	"night": "res://assets/production_art/tilesets/oakhaven/oakhaven_night_tileset.png",
+}
+const V2_PROTOTYPE_TILE_SIZE = Vector2i(32, 32)
+
+const V3_ENVIRONMENT_PROP_ATLAS = "res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png"
+const V3_ENVIRONMENT_DECAL_ATLAS = "res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png"
+const PRODUCTION_ENVIRONMENT_PROP_ATLAS = "res://assets/production_art/props/environment_prop_atlas.png"
+const PRODUCTION_ENVIRONMENT_DECAL_ATLAS = "res://assets/production_art/backgrounds/environment_decal_atlas.png"
+const V3_ENVIRONMENT_PROP_REGIONS = {
+	"oakhaven_roof": Rect2i(32, 22, 248, 190),
+	"oakhaven_hedge_corner": Rect2i(760, 52, 390, 176),
+	"oakhaven_flowers": Rect2i(30, 264, 418, 82),
+	"oakhaven_herb_sign": Rect2i(478, 238, 128, 126),
+	"ironhold_pipes": Rect2i(616, 238, 544, 170),
+	"ironhold_forge": Rect2i(1320, 226, 164, 194),
+	"crates": Rect2i(40, 434, 540, 144),
+	"archive_shelves": Rect2i(620, 370, 356, 218),
+	"dossier_stack": Rect2i(988, 440, 94, 128),
+	"null_seal": Rect2i(1092, 432, 156, 176),
+	"mirror_plinth": Rect2i(1280, 430, 202, 192),
+	"server_console": Rect2i(36, 612, 376, 194),
+	"firewall_panel": Rect2i(430, 612, 358, 194),
+	"tide_buoy": Rect2i(824, 610, 120, 182),
+	"salvage_shelf": Rect2i(974, 610, 290, 198),
+	"ocean_cache": Rect2i(1268, 610, 236, 198),
+	"lab_console": Rect2i(34, 818, 248, 178),
+	"memory_tank": Rect2i(292, 814, 170, 186),
+	"root_circuit_rail": Rect2i(628, 816, 844, 190),
+}
+const V3_ENVIRONMENT_DECAL_REGIONS = {
+	"oakhaven_path": Rect2i(18, 10, 630, 198),
+	"oakhaven_stones": Rect2i(22, 228, 650, 128),
+	"ironhold_road": Rect2i(676, 16, 820, 224),
+	"fracture_field": Rect2i(18, 360, 500, 294),
+	"shard_spill": Rect2i(270, 350, 246, 298),
+	"archive_seals": Rect2i(520, 362, 382, 292),
+	"mirror_ripples": Rect2i(900, 246, 602, 280),
+	"cathedral_circuit": Rect2i(900, 510, 600, 240),
+	"memory_tide": Rect2i(14, 674, 476, 326),
+	"root_veins": Rect2i(492, 680, 406, 320),
+	"arena_border": Rect2i(898, 754, 620, 252),
 }
 
 func build_animated_sprite_from_sheet(texture: Texture2D, anim_defs: Dictionary, frame_width: int, frame_height: int) -> AnimatedSprite2D:
@@ -862,10 +981,12 @@ func try_build_animated_player(context: String) -> AnimatedSprite2D:
 	var frame_h = 48
 	
 	if context in ["combat", "after_ch1", "before_ch1"]:
-		if FileAccess.file_exists(PLAYER_COMBAT_V2_SHEET):
-			var v2_tex = load(PLAYER_COMBAT_V2_SHEET)
+		var combat_sheet_slot = _resolve_visual_texture_slot(PLAYER_COMBAT_PRODUCTION_SHEET, PLAYER_COMBAT_V2_SHEET, "Kaelen combat sheet")
+		var combat_sheet_path: String = combat_sheet_slot.get("path", PLAYER_COMBAT_V2_SHEET)
+		if _visual_path_exists(combat_sheet_path):
+			var v2_tex = combat_sheet_slot.get("texture") as Texture2D
 			if v2_tex:
-				print("✓ Found V2 combat animation sheet: %s" % PLAYER_COMBAT_V2_SHEET)
+				print("✓ Found combat animation sheet: %s" % combat_sheet_path)
 				return build_animated_sprite_from_sheet(v2_tex, PLAYER_COMBAT_V2_ANIMS, 64, 64)
 			push_warning("[AssetManager] V2 combat player sheet failed to load; using existing player fallback.")
 		else:
@@ -875,10 +996,12 @@ func try_build_animated_player(context: String) -> AnimatedSprite2D:
 		frame_w = 32
 		frame_h = 48
 	else:
-		if FileAccess.file_exists(PLAYER_TOPDOWN_V2_SHEET):
-			var v2_tex = load(PLAYER_TOPDOWN_V2_SHEET)
+		var topdown_sheet_slot = _resolve_visual_texture_slot(PLAYER_TOPDOWN_PRODUCTION_SHEET, PLAYER_TOPDOWN_V2_SHEET, "Kaelen top-down sheet")
+		var topdown_sheet_path: String = topdown_sheet_slot.get("path", PLAYER_TOPDOWN_V2_SHEET)
+		if _visual_path_exists(topdown_sheet_path):
+			var v2_tex = topdown_sheet_slot.get("texture") as Texture2D
 			if v2_tex:
-				print("✓ Found V2 top-down animation sheet: %s" % PLAYER_TOPDOWN_V2_SHEET)
+				print("✓ Found top-down animation sheet: %s" % topdown_sheet_path)
 				return build_animated_sprite_from_sheet(v2_tex, PLAYER_TOPDOWN_V2_ANIMS, 32, 32)
 			push_warning("[AssetManager] V2 top-down player sheet failed to load; using existing player fallback.")
 		else:
@@ -900,18 +1023,510 @@ func try_build_animated_player(context: String) -> AnimatedSprite2D:
 
 func try_build_animated_tutorial_knight() -> AnimatedSprite2D:
 	## Prefer the V2 Tutorial Knight sheet for the Chapter 1 boss only.
-	if not FileAccess.file_exists(TUTORIAL_KNIGHT_V2_SHEET):
-		push_warning("[AssetManager] V2 Tutorial Knight sheet missing; using existing boss fallback.")
-		return null
-	var texture = load(TUTORIAL_KNIGHT_V2_SHEET)
+	var sheet_slot = _resolve_visual_texture_slot(TUTORIAL_KNIGHT_PRODUCTION_SHEET, TUTORIAL_KNIGHT_V2_SHEET, "Tutorial Knight sheet")
+	var sheet_path: String = sheet_slot.get("path", TUTORIAL_KNIGHT_V2_SHEET)
+	var texture = sheet_slot.get("texture") as Texture2D
 	if not texture:
-		push_warning("[AssetManager] V2 Tutorial Knight sheet failed to load; using existing boss fallback.")
+		push_warning("[AssetManager] Tutorial Knight sheet failed to load; using existing boss fallback.")
 		return null
-	print("Found V2 Tutorial Knight animation sheet: %s" % TUTORIAL_KNIGHT_V2_SHEET)
+	print("Found Tutorial Knight animation sheet: %s" % sheet_path)
 	var anim_sprite = build_animated_sprite_from_sheet(texture, TUTORIAL_KNIGHT_V2_ANIMS, 96, 96)
 	if anim_sprite:
 		anim_sprite.set_meta("tutorial_knight_v2_visual", true)
 	return anim_sprite
+
+func try_build_v2_enemy(class_name_str: String, target_size: float = 72.0) -> AnimatedSprite2D:
+	if not ENEMY_V2_SHEETS.has(class_name_str):
+		return null
+	var sheet_slot = _resolve_visual_texture_slot(
+		ENEMY_PRODUCTION_SHEETS.get(class_name_str, ""),
+		ENEMY_V2_SHEETS[class_name_str],
+		"%s enemy sheet" % class_name_str
+	)
+	var sheet_path: String = sheet_slot.get("path", ENEMY_V2_SHEETS[class_name_str])
+	var texture = sheet_slot.get("texture") as Texture2D
+	if not texture:
+		push_warning("[AssetManager] Enemy sheet failed to load for %s; using existing enemy fallback." % class_name_str)
+		return null
+	var anim_sprite = build_animated_sprite_from_sheet(texture, ENEMY_V2_ANIMS, 48, 48)
+	if not anim_sprite:
+		return null
+	var uniform = target_size / 48.0 if target_size > 0.0 else 1.0
+	anim_sprite.scale = Vector2(uniform, uniform)
+	anim_sprite.offset = Vector2(0.0, -24.0)
+	anim_sprite.set_meta("enemy_v2_visual", true)
+	anim_sprite.set_meta("enemy_v2_sheet", sheet_path)
+	return anim_sprite
+
+func try_build_v2_npc(npc_name: String, target_size: float = 32.0) -> AnimatedSprite2D:
+	if not NPC_V2_SHEETS.has(npc_name):
+		return null
+	var sheet_slot = _resolve_visual_texture_slot(
+		NPC_PRODUCTION_SHEETS.get(npc_name, ""),
+		NPC_V2_SHEETS[npc_name],
+		"%s NPC sheet" % npc_name
+	)
+	var sheet_path: String = sheet_slot.get("path", NPC_V2_SHEETS[npc_name])
+	var texture = sheet_slot.get("texture") as Texture2D
+	if not texture:
+		push_warning("[AssetManager] NPC sheet failed to load for %s; using existing NPC fallback." % npc_name)
+		return null
+	var anim_sprite = build_animated_sprite_from_sheet(texture, NPC_V2_ANIMS, 32, 32)
+	if not anim_sprite:
+		return null
+	var uniform = target_size / 32.0 if target_size > 0.0 else 1.0
+	anim_sprite.scale = Vector2(uniform, uniform)
+	anim_sprite.offset = Vector2(0.0, -16.0)
+	anim_sprite.set_meta("npc_v2_visual", true)
+	anim_sprite.set_meta("npc_v2_sheet", sheet_path)
+	return anim_sprite
+
+func create_topdown_npc_visual(npc_name: String, fallback_color: Color, fallback_size: Vector2 = Vector2(16, 22), target_size: float = 32.0) -> CanvasItem:
+	var anim_sprite = try_build_v2_npc(npc_name, target_size)
+	if anim_sprite:
+		return anim_sprite
+	var rect = ColorRect.new()
+	rect.name = "Sprite"
+	rect.color = fallback_color
+	rect.size = fallback_size
+	rect.position = Vector2(-fallback_size.x / 2.0, -fallback_size.y)
+	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return rect
+
+func play_v2_npc_anim(npc_node: Node, anim_name: String) -> void:
+	if not npc_node:
+		return
+	var sprite = npc_node.get_node_or_null("Sprite")
+	if sprite is AnimatedSprite2D and sprite.get_meta("npc_v2_visual", false):
+		if sprite.sprite_frames and sprite.sprite_frames.has_animation(anim_name):
+			if sprite.animation != anim_name:
+				sprite.play(anim_name)
+
+func _resolve_visual_texture_slot(production_path: String, fallback_path: String, slot_label: String) -> Dictionary:
+	if _visual_path_exists(production_path):
+		var production_texture = _load_visual_texture_path(production_path)
+		if production_texture:
+			return {"texture": production_texture, "path": production_path, "production": true}
+		push_warning("[AssetManager] Production art failed to load for %s at %s; using generated fallback %s." % [slot_label, production_path, fallback_path])
+	else:
+		_warn_missing_production_art(production_path, fallback_path, slot_label)
+	return {"texture": _load_visual_texture_path(fallback_path), "path": fallback_path, "production": false}
+
+func _visual_path_exists(path: String) -> bool:
+	return not path.is_empty() and (FileAccess.file_exists(path) or ResourceLoader.exists(path))
+
+func _load_visual_texture_path(path: String) -> Texture2D:
+	if not _visual_path_exists(path):
+		return null
+	var texture: Texture2D = null
+	if ResourceLoader.exists(path):
+		texture = load(path) as Texture2D
+	if texture:
+		return texture
+	var image = Image.load_from_file(ProjectSettings.globalize_path(path))
+	if image and not image.is_empty():
+		return ImageTexture.create_from_image(image)
+	return null
+
+func _warn_missing_production_art(production_path: String, fallback_path: String, slot_label: String) -> void:
+	if _missing_production_art_warned.has(production_path):
+		return
+	_missing_production_art_warned[production_path] = true
+	push_warning("[AssetManager] Production art slot missing for %s at %s; using generated fallback %s." % [slot_label, production_path, fallback_path])
+
+func get_oakhaven_tileset(time_state: String = OAKHAVEN_DEFAULT_TIME_STATE) -> Texture2D:
+	var slot = get_oakhaven_tileset_slot(time_state)
+	return slot.get("texture") as Texture2D
+
+func set_oakhaven_force_generated_fallback(enabled: bool) -> void:
+	_oakhaven_force_generated_fallback = enabled
+
+func is_oakhaven_force_generated_fallback() -> bool:
+	return _oakhaven_force_generated_fallback
+
+func get_oakhaven_tileset_slot(time_state: String = OAKHAVEN_DEFAULT_TIME_STATE) -> Dictionary:
+	var requested_time_state := str(time_state).strip_edges().to_lower()
+	if requested_time_state.is_empty():
+		requested_time_state = OAKHAVEN_DEFAULT_TIME_STATE
+	var resolved_time_state := _normalize_oakhaven_time_state(requested_time_state)
+	var invalid_time_state := requested_time_state != resolved_time_state
+	var fallback_path: String = V2_PROTOTYPE_TILESETS.get("oakhaven", "")
+	if _oakhaven_force_generated_fallback:
+		return _oakhaven_generated_fallback_slot(fallback_path, requested_time_state, resolved_time_state, "runtime fallback override enabled")
+	if not OAKHAVEN_PRODUCTION_TIME_OF_DAY_ENABLED:
+		return _oakhaven_generated_fallback_slot(fallback_path, requested_time_state, resolved_time_state, "production time-of-day loading disabled")
+
+	var production_path: String = OAKHAVEN_PRODUCTION_TIME_TILESETS.get(resolved_time_state, "")
+	var production_texture = _try_load_oakhaven_production_variant(production_path, requested_time_state, resolved_time_state)
+	if production_texture:
+		if invalid_time_state:
+			_warn_invalid_oakhaven_time_state(requested_time_state, resolved_time_state)
+		return {
+			"texture": production_texture,
+			"path": production_path,
+			"production": true,
+			"requested_time_state": requested_time_state,
+			"time_state": resolved_time_state,
+			"fallback_used": invalid_time_state,
+			"fallback_reason": "invalid time state normalized to default" if invalid_time_state else "",
+		}
+
+	if resolved_time_state != OAKHAVEN_DEFAULT_TIME_STATE:
+		var default_path: String = OAKHAVEN_PRODUCTION_TIME_TILESETS.get(OAKHAVEN_DEFAULT_TIME_STATE, "")
+		var default_texture = _try_load_oakhaven_production_variant(default_path, requested_time_state, OAKHAVEN_DEFAULT_TIME_STATE)
+		if default_texture:
+			_warn_oakhaven_variant_fallback(production_path, default_path, requested_time_state, OAKHAVEN_DEFAULT_TIME_STATE)
+			return {
+				"texture": default_texture,
+				"path": default_path,
+				"production": true,
+				"requested_time_state": requested_time_state,
+				"time_state": OAKHAVEN_DEFAULT_TIME_STATE,
+				"fallback_used": true,
+				"fallback_reason": "requested production variant missing or invalid",
+			}
+
+	return _oakhaven_generated_fallback_slot(fallback_path, requested_time_state, resolved_time_state, "production variant missing or invalid")
+
+func _normalize_oakhaven_time_state(time_state: String) -> String:
+	if OAKHAVEN_PRODUCTION_TIME_TILESETS.has(time_state):
+		return time_state
+	return OAKHAVEN_DEFAULT_TIME_STATE
+
+func _try_load_oakhaven_production_variant(production_path: String, requested_time_state: String, resolved_time_state: String) -> Texture2D:
+	if production_path.is_empty():
+		return null
+	if not _visual_path_exists(production_path):
+		_warn_missing_oakhaven_variant(production_path, requested_time_state, resolved_time_state)
+		return null
+	var texture = _load_visual_texture_path(production_path)
+	if texture:
+		return texture
+	push_warning("[AssetManager] Oakhaven %s production tileset failed to load at %s; requested=%s." % [resolved_time_state, production_path, requested_time_state])
+	return null
+
+func _oakhaven_generated_fallback_slot(fallback_path: String, requested_time_state: String, resolved_time_state: String, reason: String) -> Dictionary:
+	push_warning("[AssetManager] Oakhaven production tileset fallback: %s; requested=%s resolved=%s generated=%s." % [reason, requested_time_state, resolved_time_state, fallback_path])
+	return {
+		"texture": _load_visual_texture_path(fallback_path),
+		"path": fallback_path,
+		"production": false,
+		"requested_time_state": requested_time_state,
+		"time_state": resolved_time_state,
+		"fallback_used": true,
+		"fallback_reason": reason,
+	}
+
+func _warn_missing_oakhaven_variant(production_path: String, requested_time_state: String, resolved_time_state: String) -> void:
+	var warning_key := "oakhaven:%s:%s" % [resolved_time_state, production_path]
+	if _missing_production_art_warned.has(warning_key):
+		return
+	_missing_production_art_warned[warning_key] = true
+	push_warning("[AssetManager] Oakhaven %s production tileset missing at %s; requested=%s." % [resolved_time_state, production_path, requested_time_state])
+
+func _warn_oakhaven_variant_fallback(missing_path: String, fallback_path: String, requested_time_state: String, fallback_time_state: String) -> void:
+	var warning_key := "oakhaven_variant_fallback:%s:%s" % [requested_time_state, missing_path]
+	if _missing_production_art_warned.has(warning_key):
+		return
+	_missing_production_art_warned[warning_key] = true
+	push_warning("[AssetManager] Oakhaven requested production variant %s unavailable at %s; using %s production tileset %s." % [requested_time_state, missing_path, fallback_time_state, fallback_path])
+
+func _warn_invalid_oakhaven_time_state(requested_time_state: String, fallback_time_state: String) -> void:
+	var warning_key := "oakhaven_invalid_time_state:%s" % requested_time_state
+	if _missing_production_art_warned.has(warning_key):
+		return
+	_missing_production_art_warned[warning_key] = true
+	push_warning("[AssetManager] Invalid Oakhaven time state %s; using %s production tileset." % [requested_time_state, fallback_time_state])
+
+func get_ironhold_tileset() -> Texture2D:
+	var slot = get_ironhold_tileset_slot()
+	return slot.get("texture") as Texture2D
+
+func set_ironhold_force_generated_fallback(enabled: bool) -> void:
+	_ironhold_force_generated_fallback = enabled
+
+func is_ironhold_force_generated_fallback() -> bool:
+	return _ironhold_force_generated_fallback
+
+func get_ironhold_tileset_slot() -> Dictionary:
+	var fallback_path: String = V2_PROTOTYPE_TILESETS.get("ironhold", "")
+	var production_path: String = PRODUCTION_VISUAL_TILESETS.get("ironhold", IRONHOLD_PRODUCTION_TILESET)
+	if _ironhold_force_generated_fallback:
+		return _ironhold_generated_fallback_slot(fallback_path, "runtime fallback override enabled")
+
+	var production_texture = _try_load_ironhold_production_tileset(production_path)
+	if production_texture:
+		return {
+			"texture": production_texture,
+			"path": production_path,
+			"production": true,
+			"region_id": "ironhold",
+			"fallback_used": false,
+			"fallback_reason": "",
+		}
+
+	return _ironhold_generated_fallback_slot(fallback_path, "production tileset missing or invalid")
+
+func _try_load_ironhold_production_tileset(production_path: String) -> Texture2D:
+	var fallback_path: String = V2_PROTOTYPE_TILESETS.get("ironhold", "")
+	if production_path.is_empty():
+		_warn_missing_production_art(production_path, fallback_path, "ironhold production tileset")
+		return null
+	if not _visual_path_exists(production_path):
+		_warn_missing_production_art(production_path, fallback_path, "ironhold production tileset")
+		return null
+	var texture = _load_visual_texture_path(production_path)
+	if texture:
+		return texture
+	push_warning("[AssetManager] Ironhold production tileset failed to load at %s; using generated fallback %s." % [production_path, fallback_path])
+	return null
+
+func _ironhold_generated_fallback_slot(fallback_path: String, reason: String) -> Dictionary:
+	push_warning("[AssetManager] Ironhold production tileset fallback: %s; generated=%s." % [reason, fallback_path])
+	return {
+		"texture": _load_visual_texture_path(fallback_path),
+		"path": fallback_path,
+		"production": false,
+		"region_id": "ironhold",
+		"fallback_used": true,
+		"fallback_reason": reason,
+	}
+
+func get_fractured_wastes_tileset() -> Texture2D:
+	var slot = get_fractured_wastes_tileset_slot()
+	return slot.get("texture") as Texture2D
+
+func set_fractured_wastes_force_generated_fallback(enabled: bool) -> void:
+	_fractured_wastes_force_generated_fallback = enabled
+
+func is_fractured_wastes_force_generated_fallback() -> bool:
+	return _fractured_wastes_force_generated_fallback
+
+func get_fractured_wastes_tileset_slot() -> Dictionary:
+	var fallback_path: String = V2_PROTOTYPE_TILESETS.get("fractured_wastes", "")
+	var production_path: String = PRODUCTION_VISUAL_TILESETS.get("fractured_wastes", FRACTURED_WASTES_PRODUCTION_TILESET)
+	if _fractured_wastes_force_generated_fallback:
+		return _fractured_wastes_generated_fallback_slot(fallback_path, "runtime fallback override enabled")
+
+	var production_texture = _try_load_fractured_wastes_production_tileset(production_path)
+	if production_texture:
+		return {
+			"texture": production_texture,
+			"path": production_path,
+			"production": true,
+			"region_id": "fractured_wastes",
+			"fallback_used": false,
+			"fallback_reason": "",
+		}
+
+	return _fractured_wastes_generated_fallback_slot(fallback_path, "production tileset missing or invalid")
+
+func _try_load_fractured_wastes_production_tileset(production_path: String) -> Texture2D:
+	var fallback_path: String = V2_PROTOTYPE_TILESETS.get("fractured_wastes", "")
+	if production_path.is_empty():
+		_warn_missing_production_art(production_path, fallback_path, "Fractured Wastes production tileset")
+		return null
+	if not _visual_path_exists(production_path):
+		_warn_missing_production_art(production_path, fallback_path, "Fractured Wastes production tileset")
+		return null
+	var texture = _load_visual_texture_path(production_path)
+	if texture:
+		return texture
+	push_warning("[AssetManager] Fractured Wastes production tileset failed to load at %s; using generated fallback %s." % [production_path, fallback_path])
+	return null
+
+func _fractured_wastes_generated_fallback_slot(fallback_path: String, reason: String) -> Dictionary:
+	push_warning("[AssetManager] Fractured Wastes production tileset fallback: %s; generated=%s." % [reason, fallback_path])
+	return {
+		"texture": _load_visual_texture_path(fallback_path),
+		"path": fallback_path,
+		"production": false,
+		"region_id": "fractured_wastes",
+		"fallback_used": true,
+		"fallback_reason": reason,
+	}
+
+func try_create_v2_visual_tile_layer(tileset_id: String, area_size: Vector2, layer_name: String, layer_z_index: int, tile_choices: Array = [], time_state: String = OAKHAVEN_DEFAULT_TIME_STATE) -> TileMapLayer:
+	## Build a visual-only prototype tile layer; existing environment collisions stay authoritative.
+	var tileset_slot = _try_resolve_v2_prototype_tileset_slot(tileset_id, time_state)
+	var texture = tileset_slot.get("texture") as Texture2D
+	if not texture:
+		return null
+
+	var atlas_source = TileSetAtlasSource.new()
+	atlas_source.texture = texture
+	atlas_source.texture_region_size = V2_PROTOTYPE_TILE_SIZE
+	var atlas_size = Vector2i(
+		int(texture.get_width() / V2_PROTOTYPE_TILE_SIZE.x),
+		int(texture.get_height() / V2_PROTOTYPE_TILE_SIZE.y)
+	)
+	if atlas_size.x <= 0 or atlas_size.y <= 0:
+		push_warning("[AssetManager] V2 tileset geometry is invalid for %s; using existing environment fallback." % tileset_id)
+		return null
+	for atlas_y in range(atlas_size.y):
+		for atlas_x in range(atlas_size.x):
+			atlas_source.create_tile(Vector2i(atlas_x, atlas_y))
+
+	var tile_set = TileSet.new()
+	tile_set.tile_size = V2_PROTOTYPE_TILE_SIZE
+	var source_id = tile_set.add_source(atlas_source)
+	var visual_layer = TileMapLayer.new()
+	visual_layer.name = layer_name
+	visual_layer.tile_set = tile_set
+	visual_layer.z_index = layer_z_index
+	visual_layer.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	visual_layer.set_meta("v2_visual_tileset", tileset_id)
+	visual_layer.set_meta("visual_only", true)
+	visual_layer.set_meta("visual_tileset_path", tileset_slot.get("path", ""))
+	visual_layer.set_meta("visual_tileset_production", bool(tileset_slot.get("production", false)))
+	if tileset_id == "oakhaven":
+		visual_layer.set_meta("oakhaven_time_state", tileset_slot.get("time_state", OAKHAVEN_DEFAULT_TIME_STATE))
+		visual_layer.set_meta("oakhaven_requested_time_state", tileset_slot.get("requested_time_state", time_state))
+
+	var fill_choices: Array[Vector2i] = []
+	for tile_choice in tile_choices:
+		if tile_choice is Vector2i and _atlas_has_tile(atlas_size, tile_choice):
+			fill_choices.append(tile_choice)
+	if fill_choices.is_empty():
+		for atlas_y in range(atlas_size.y):
+			for atlas_x in range(atlas_size.x):
+				fill_choices.append(Vector2i(atlas_x, atlas_y))
+
+	var cell_columns = int(ceil(area_size.x / float(V2_PROTOTYPE_TILE_SIZE.x)))
+	var cell_rows = int(ceil(area_size.y / float(V2_PROTOTYPE_TILE_SIZE.y)))
+	for cell_y in range(cell_rows):
+		for cell_x in range(cell_columns):
+			var choice_index = posmod(cell_x * 17 + cell_y * 31 + cell_x * cell_y * 3, fill_choices.size())
+			visual_layer.set_cell(Vector2i(cell_x, cell_y), source_id, fill_choices[choice_index])
+	return visual_layer
+
+func try_create_v2_control_tileset_background(tileset_id: String, background_name: String, time_state: String = OAKHAVEN_DEFAULT_TIME_STATE) -> TextureRect:
+	## Repeat a prototype tileset sheet as a non-interactive Control background.
+	var tileset_slot = _try_resolve_v2_prototype_tileset_slot(tileset_id, time_state)
+	var texture = tileset_slot.get("texture") as Texture2D
+	if not texture:
+		return null
+	var background = TextureRect.new()
+	background.name = background_name
+	background.texture = texture
+	background.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	background.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+	background.stretch_mode = TextureRect.STRETCH_TILE
+	background.set_anchors_preset(Control.PRESET_FULL_RECT)
+	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	background.set_meta("v2_visual_tileset", tileset_id)
+	background.set_meta("visual_only", true)
+	background.set_meta("visual_tileset_path", tileset_slot.get("path", ""))
+	background.set_meta("visual_tileset_production", bool(tileset_slot.get("production", false)))
+	if tileset_id == "oakhaven":
+		background.set_meta("oakhaven_time_state", tileset_slot.get("time_state", OAKHAVEN_DEFAULT_TIME_STATE))
+		background.set_meta("oakhaven_requested_time_state", tileset_slot.get("requested_time_state", time_state))
+	return background
+
+func add_v3_environment_prop(parent: Node, prop_id: String, pos: Vector2, target_size: Vector2, node_name: String, layer_z_index: int, tint: Color = Color.WHITE) -> Sprite2D:
+	var prop = try_create_v3_environment_prop(prop_id, target_size, node_name, layer_z_index)
+	if not prop or not parent:
+		return null
+	prop.position = pos
+	prop.modulate = tint
+	parent.add_child(prop)
+	return prop
+
+func add_v3_environment_decal(parent: Node, decal_id: String, pos: Vector2, target_size: Vector2, node_name: String, layer_z_index: int, tint: Color = Color.WHITE) -> Sprite2D:
+	var decal = try_create_v3_environment_decal(decal_id, target_size, node_name, layer_z_index)
+	if not decal or not parent:
+		return null
+	decal.position = pos
+	decal.modulate = tint
+	parent.add_child(decal)
+	return decal
+
+func try_create_v3_environment_prop(prop_id: String, target_size: Vector2, node_name: String, layer_z_index: int) -> Sprite2D:
+	var atlas_slot = _resolve_visual_texture_slot(PRODUCTION_ENVIRONMENT_PROP_ATLAS, V3_ENVIRONMENT_PROP_ATLAS, "environment prop atlas")
+	return _try_create_v3_atlas_visual(
+		atlas_slot.get("path", V3_ENVIRONMENT_PROP_ATLAS),
+		V3_ENVIRONMENT_PROP_REGIONS,
+		prop_id,
+		target_size,
+		node_name,
+		layer_z_index
+	)
+
+func try_create_v3_environment_decal(decal_id: String, target_size: Vector2, node_name: String, layer_z_index: int) -> Sprite2D:
+	var atlas_slot = _resolve_visual_texture_slot(PRODUCTION_ENVIRONMENT_DECAL_ATLAS, V3_ENVIRONMENT_DECAL_ATLAS, "environment decal atlas")
+	return _try_create_v3_atlas_visual(
+		atlas_slot.get("path", V3_ENVIRONMENT_DECAL_ATLAS),
+		V3_ENVIRONMENT_DECAL_REGIONS,
+		decal_id,
+		target_size,
+		node_name,
+		layer_z_index
+	)
+
+func _try_create_v3_atlas_visual(atlas_path: String, regions: Dictionary, visual_id: String, target_size: Vector2, node_name: String, layer_z_index: int) -> Sprite2D:
+	if not regions.has(visual_id):
+		push_warning("[AssetManager] Unknown V3 environment visual: %s" % visual_id)
+		return null
+	if not FileAccess.file_exists(atlas_path):
+		push_warning("[AssetManager] V3 environment atlas missing: %s" % atlas_path)
+		return null
+	var atlas_cache_key = "phase10mm_atlas:%s" % atlas_path
+	var atlas_texture = loaded_assets.get(atlas_cache_key) as Texture2D
+	if not atlas_texture:
+		if ResourceLoader.exists(atlas_path):
+			atlas_texture = load(atlas_path) as Texture2D
+		if not atlas_texture:
+			var atlas_image = Image.load_from_file(ProjectSettings.globalize_path(atlas_path))
+			if atlas_image and not atlas_image.is_empty():
+				atlas_texture = ImageTexture.create_from_image(atlas_image)
+		if atlas_texture:
+			loaded_assets[atlas_cache_key] = atlas_texture
+	if not atlas_texture:
+		push_warning("[AssetManager] V3 environment atlas failed to load: %s" % atlas_path)
+		return null
+
+	var region: Rect2i = regions[visual_id]
+	var cropped_texture = AtlasTexture.new()
+	cropped_texture.atlas = atlas_texture
+	cropped_texture.region = Rect2(region.position, region.size)
+
+	var sprite = Sprite2D.new()
+	sprite.name = node_name
+	sprite.texture = cropped_texture
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite.z_index = layer_z_index
+	if target_size.x > 0.0 and target_size.y > 0.0:
+		sprite.scale = Vector2(target_size.x / float(region.size.x), target_size.y / float(region.size.y))
+	sprite.set_meta("phase10mm_v3_environment_visual", true)
+	sprite.set_meta("phase10mm_v3_visual_id", visual_id)
+	return sprite
+
+func _try_resolve_v2_prototype_tileset_slot(tileset_id: String, time_state: String = OAKHAVEN_DEFAULT_TIME_STATE) -> Dictionary:
+	if not V2_PROTOTYPE_TILESETS.has(tileset_id) and not PRODUCTION_VISUAL_TILESETS.has(tileset_id):
+		push_warning("[AssetManager] Unknown V2 tileset %s; using existing environment fallback." % tileset_id)
+		return {}
+	if tileset_id == "oakhaven":
+		return get_oakhaven_tileset_slot(time_state)
+	if tileset_id == "ironhold":
+		return get_ironhold_tileset_slot()
+	if tileset_id == "fractured_wastes":
+		return get_fractured_wastes_tileset_slot()
+	var generated_path: String = V2_PROTOTYPE_TILESETS.get(tileset_id, "")
+	var production_path: String = PRODUCTION_VISUAL_TILESETS.get(tileset_id, "")
+	var tileset_slot = _resolve_visual_texture_slot(production_path, generated_path, "%s visual tileset" % tileset_id)
+	var tileset_path: String = tileset_slot.get("path", generated_path)
+	var texture = tileset_slot.get("texture") as Texture2D
+	if not texture:
+		push_warning("[AssetManager] Visual tileset failed to load for %s at %s; using existing environment fallback." % [tileset_id, tileset_path])
+	return tileset_slot
+
+func _try_load_v2_prototype_tileset(tileset_id: String, time_state: String = OAKHAVEN_DEFAULT_TIME_STATE) -> Texture2D:
+	var tileset_slot = _try_resolve_v2_prototype_tileset_slot(tileset_id, time_state)
+	var texture = tileset_slot.get("texture") as Texture2D
+	return texture
+
+func _atlas_has_tile(atlas_size: Vector2i, atlas_coords: Vector2i) -> bool:
+	return atlas_coords.x >= 0 and atlas_coords.y >= 0 and atlas_coords.x < atlas_size.x and atlas_coords.y < atlas_size.y
 
 # Speaker name to portrait asset key mapping
 const PORTRAIT_MAP = {

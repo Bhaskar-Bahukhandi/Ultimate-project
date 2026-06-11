@@ -1,0 +1,18 @@
+{
+	"board_tiles": [
+		24,
+		18
+	],
+	"capture_method": "Godot headless Image composition from preview-only P8 atlases",
+	"contact_sheet": "res://assets/art_sources/comfyui_tests/oakhaven_p9_time_preview/contact_sheets/oakhaven_p9_time_of_day_contact_sheet.png",
+	"fallback_comparison_sheet": "res://assets/art_sources/comfyui_tests/oakhaven_p9_time_preview/contact_sheets/oakhaven_p9_fallback_vs_time_preview_contact_sheet.png",
+	"phase": "10M-P9",
+	"preview_only": true,
+	"production_art_changed": false,
+	"screenshots": {
+		"afternoon": "res://assets/art_sources/comfyui_tests/oakhaven_p9_time_preview/screenshots/oakhaven_p9_afternoon_preview.png",
+		"morning": "res://assets/art_sources/comfyui_tests/oakhaven_p9_time_preview/screenshots/oakhaven_p9_morning_preview.png",
+		"night": "res://assets/art_sources/comfyui_tests/oakhaven_p9_time_preview/screenshots/oakhaven_p9_night_preview.png"
+	},
+	"tile_size": 32
+}

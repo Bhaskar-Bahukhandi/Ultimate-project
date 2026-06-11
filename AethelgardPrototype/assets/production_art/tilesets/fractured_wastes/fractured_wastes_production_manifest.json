@@ -1,0 +1,24 @@
+{
+  "region_id": "fractured_wastes",
+  "status": "controlled import candidate",
+  "default_variant": "variant_b_textured",
+  "tile_size": 32,
+  "atlas_size": [512, 512],
+  "grid": "16x16",
+  "source_path": "assets/art_sources/comfyui_tests/fractured_wastes_r1/generated_tiles/fractured_wastes_r1_variant_b_textured.png",
+  "production_path": "assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png",
+  "fallback_path": "assets/generated_v2/tilesets/fractured_wastes_v2_prototype_tileset.png",
+  "lineage": {
+    "phase_10m_r1": "Controlled deterministic Fractured Wastes tileset grammar; Variant B textured selected as best candidate.",
+    "phase_10m_r2": "Preview-only Godot validation; Variant B scored 8.4 overall versus fallback 5.0.",
+    "phase_10m_r3": "Controlled production-art import candidate with fallback and rollback behavior preserved."
+  },
+  "import_date": "2026-06-11",
+  "notes": [
+    "Controlled deterministic generated art.",
+    "Not final release art.",
+    "Generated fallback must remain available.",
+    "Variant A clean and Variant C corrupt/dark remain reference only.",
+    "Variant B textured is the first Fractured Wastes production baseline candidate."
+  ]
+}

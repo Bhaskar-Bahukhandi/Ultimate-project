@@ -180,6 +180,121 @@ const ZONE_DATA: Dictionary = {
 	},
 }
 
+## Explicit repeatable farming access points. These reuse ordinary encounter
+## combat, but put a small resource-node loop and result summary around it.
+const FARMING_ZONE_DATA: Dictionary = {
+	"oakhaven_outskirts": {
+		"name": "Oakhaven Outskirts",
+		"difficulty_tier": "Beginner forage",
+		"resource_node": "Herb Patch",
+		"objective": "Gather a herb sample while clearing the pests drawn to the patch.",
+		"result_text": "The outskirts patch settles after the threat is cleared.",
+		"cooldown_msec": 12000,
+		"encounter_zone_id": "oakhaven_fields",
+		"encounter_table": [
+			{"enemy_type": "slime", "weight": 55, "count_min": 1, "count_max": 2},
+			{"enemy_type": "corrupted_rat", "weight": 35, "count_min": 1, "count_max": 2},
+			{"enemy_type": "glitch_wolf", "weight": 10, "count_min": 1, "count_max": 1},
+		],
+		"resource_rewards": [
+			{"item_id": "glitch_herb", "chance": 0.30},
+			{"item_id": "slime_core", "chance": 0.18},
+		],
+	},
+	"ironhold_training_yard": {
+		"name": "Ironhold Training Yard",
+		"difficulty_tier": "Midgame drill",
+		"resource_node": "Ore Drill",
+		"objective": "Prime the ore drill, then hold the yard while its noise draws patrols.",
+		"result_text": "The yard drill cools after the training run.",
+		"cooldown_msec": 18000,
+		"encounter_zone_id": "ironhold_outskirts",
+		"encounter_table": [
+			{"enemy_type": "data_sprite", "weight": 45, "count_min": 1, "count_max": 1},
+			{"enemy_type": "clockwork_soldier", "weight": 35, "count_min": 1, "count_max": 1},
+			{"enemy_type": "corrupted_guard", "weight": 20, "count_min": 1, "count_max": 1},
+		],
+		"resource_rewards": [
+			{"item_id": "data_ore", "chance": 0.34},
+		],
+	},
+	"fractured_wastes_shard_fields": {
+		"name": "Shard Fields",
+		"difficulty_tier": "Danger field",
+		"resource_node": "Shard Deposit",
+		"objective": "Disturb the shard deposit and survive the signatures it attracts.",
+		"result_text": "The shard field quiets, but only until the next surge.",
+		"cooldown_msec": 24000,
+		"encounter_zone_id": "fractured_wastes_outer",
+		"encounter_table": [
+			{"enemy_type": "data_sprite", "weight": 45, "count_min": 1, "count_max": 1},
+			{"enemy_type": "shadow_wraith", "weight": 45, "count_min": 1, "count_max": 1},
+			{"enemy_type": "clockwork_soldier", "weight": 10, "count_min": 1, "count_max": 1},
+		],
+		"resource_rewards": [
+			{"item_id": "memory_shard", "chance": 0.38},
+			{"item_id": "glitch_stabilizer", "chance": 0.06},
+		],
+	},
+	"forgotten_sectors_cleanup": {
+		"name": "Memory Fracture Cleanup",
+		"difficulty_tier": "Late archive cleanup",
+		"resource_node": "Null Archive Fracture",
+		"objective": "Seal a deleted-case fracture before its residue pulls hostile signatures into the buffer.",
+		"result_text": "The null archive closes for now. Nothing from the court route is rewritten.",
+		"cooldown_msec": 26000,
+		"encounter_zone_id": "fractured_wastes_outer",
+		"encounter_table": [
+			{"enemy_type": "data_sprite", "weight": 40, "count_min": 1, "count_max": 2},
+			{"enemy_type": "shadow_wraith", "weight": 34, "count_min": 1, "count_max": 1},
+			{"enemy_type": "phase_spider", "weight": 26, "count_min": 1, "count_max": 1},
+		],
+		"resource_rewards": [
+			{"item_id": "memory_shard", "chance": 0.30},
+			{"item_id": "data_ore", "chance": 0.16},
+			{"item_id": "glitch_herb", "chance": 0.10},
+		],
+	},
+	"cathedral_firewall_drill": {
+		"name": "Firewall Drill",
+		"difficulty_tier": "Late doctrine drill",
+		"resource_node": "Firewall Node",
+		"objective": "Trigger a controlled purge pulse and clear the admin pressure it calls into the nave buffer.",
+		"result_text": "The node cools without touching the Choir Core route.",
+		"cooldown_msec": 30000,
+		"encounter_zone_id": "fractured_wastes_core",
+		"encounter_table": [
+			{"enemy_type": "administrator_enforcer", "weight": 38, "count_min": 1, "count_max": 1},
+			{"enemy_type": "clockwork_soldier", "weight": 30, "count_min": 1, "count_max": 2},
+			{"enemy_type": "data_sprite", "weight": 20, "count_min": 1, "count_max": 2},
+			{"enemy_type": "shadow_wraith", "weight": 12, "count_min": 1, "count_max": 1},
+		],
+		"resource_rewards": [
+			{"item_id": "data_ore", "chance": 0.34},
+			{"item_id": "glitch_stabilizer", "chance": 0.08},
+		],
+	},
+	"memory_ocean_salvage_run": {
+		"name": "Backup Salvage Run",
+		"difficulty_tier": "Late tide salvage",
+		"resource_node": "Tide Fragment",
+		"objective": "Pull a backup fragment from the tide and survive the unstable histories that surface with it.",
+		"result_text": "The shoreline calms. The Archive Tide route remains untouched.",
+		"cooldown_msec": 34000,
+		"encounter_zone_id": "fractured_wastes_core",
+		"encounter_table": [
+			{"enemy_type": "shadow_wraith", "weight": 34, "count_min": 1, "count_max": 2},
+			{"enemy_type": "corruption_elemental", "weight": 32, "count_min": 1, "count_max": 1},
+			{"enemy_type": "data_sprite", "weight": 22, "count_min": 1, "count_max": 2},
+			{"enemy_type": "phase_spider", "weight": 12, "count_min": 1, "count_max": 1},
+		],
+		"resource_rewards": [
+			{"item_id": "memory_shard", "chance": 0.40},
+			{"item_id": "glitch_stabilizer", "chance": 0.10},
+		],
+	},
+}
+
 # ── Enemy Script Paths ────────────────────────────────────────────────────
 const ENEMY_SCRIPTS: Dictionary = {
 	"slime": "res://scripts/combat/enemies/slime.gd",
@@ -275,6 +390,9 @@ var _encounter_xp_total: int = 0
 var _encounter_gold_total: int = 0
 var _enemies_alive: int = 0
 var _encounter_enemy_count: int = 0  # Total enemies in this encounter (for combo scaling)
+var _pending_farming_zone: Dictionary = {}
+var _farming_cooldown_until_msec: Dictionary = {}
+const DEFAULT_FARMING_REENTRY_COOLDOWN_MSEC: int = 12000
 
 # ── Encounter Rate Modifiers ──────────────────────────────────────────────
 var encounter_rate_mult: float = 1.0  # Affected by charms/items
@@ -402,6 +520,63 @@ func _trigger_encounter() -> void:
 			_trigger_npc_encounter()
 
 
+## Start one deliberate repeatable farming encounter from a region marker.
+## The marker press is opt-in; this short cooldown only prevents immediate
+## retriggering after the player returns to the same region spot.
+func start_farming_encounter(
+	farming_zone_id: String,
+	return_position: Vector2,
+	return_scene: String = "",
+	run_context: Dictionary = {}
+) -> bool:
+	if _in_encounter or get_farming_cooldown_seconds(farming_zone_id) > 0:
+		return false
+	if not has_node("/root/GameManager"):
+		return false
+
+	var farming_zone: Dictionary = FARMING_ZONE_DATA.get(farming_zone_id, {})
+	if farming_zone.is_empty():
+		push_warning("[ENCOUNTER] Unknown farming zone: %s" % farming_zone_id)
+		return false
+
+	var encounter_zone_id: String = farming_zone.get("encounter_zone_id", "")
+	var zone: Dictionary = ZONE_DATA.get(encounter_zone_id, {})
+	var table: Array = farming_zone.get("encounter_table", [])
+	if encounter_zone_id.is_empty() or zone.is_empty() or table.is_empty():
+		push_warning("[ENCOUNTER] Farming zone is missing encounter data: %s" % farming_zone_id)
+		return false
+
+	set_zone(encounter_zone_id)
+	_in_encounter = true
+	steps_since_last_encounter = 0
+	_roll_next_encounter_distance()
+	_current_encounter_type = EncounterType.COMBAT
+	encounter_type_rolled.emit(_current_encounter_type)
+	_player_return_position = return_position
+	_player_return_scene = return_scene
+	if _player_return_scene.is_empty() and get_tree().current_scene:
+		_player_return_scene = get_tree().current_scene.scene_file_path
+	_pending_farming_zone = farming_zone.duplicate(true)
+	_pending_farming_zone["id"] = farming_zone_id
+	for context_key in ["run_label", "result_text", "resource_node"]:
+		if run_context.has(context_key):
+			_pending_farming_zone[context_key] = run_context[context_key]
+	var cooldown_msec: int = int(farming_zone.get("cooldown_msec", DEFAULT_FARMING_REENTRY_COOLDOWN_MSEC))
+	_farming_cooldown_until_msec[farming_zone_id] = Time.get_ticks_msec() + cooldown_msec
+	_trigger_combat_encounter(table, zone)
+	return true
+
+
+func get_farming_zone_data(farming_zone_id: String) -> Dictionary:
+	return FARMING_ZONE_DATA.get(farming_zone_id, {}).duplicate(true)
+
+
+func get_farming_cooldown_seconds(farming_zone_id: String) -> int:
+	var cooldown_until: int = int(_farming_cooldown_until_msec.get(farming_zone_id, 0))
+	var remaining_msec := maxi(0, cooldown_until - Time.get_ticks_msec())
+	return ceili(float(remaining_msec) / 1000.0)
+
+
 ## Roll which type of encounter happens
 func _roll_encounter_type() -> int:
 	var total_weight: int = 0
@@ -427,13 +602,18 @@ func _trigger_combat_encounter(table: Array, zone: Dictionary) -> void:
 
 	encounter_triggered.emit(current_zone_id, enemies_to_spawn)
 
-	GameManager.set_meta("pending_encounter", {
+	var pending_encounter := {
 		"zone_id": current_zone_id,
 		"enemies": enemies_to_spawn,
 		"return_scene": _player_return_scene,
 		"return_position": _player_return_position,
 		"encounter_type": "combat",
-	})
+	}
+	if not _pending_farming_zone.is_empty():
+		pending_encounter["encounter_type"] = "farming"
+		pending_encounter["farming_zone_id"] = _pending_farming_zone.get("id", "")
+		pending_encounter["farming_zone_name"] = _pending_farming_zone.get("name", "")
+	GameManager.set_meta("pending_encounter", pending_encounter)
 
 	if has_node("/root/SceneTransitions"):
 		GameManager.change_state(GameManager.GameState.COMBAT)
@@ -703,6 +883,8 @@ func _on_encounter_victory() -> void:
 		GameManager.add_xp(total_xp)
 		GameManager.add_gold(total_gold)
 		GameManager.stats["enemies_killed"] = GameManager.stats.get("enemies_killed", 0) + _encounter_enemy_count
+		var farming_materials: Array[Dictionary] = _award_farming_materials()
+		_record_farming_result(total_xp, total_gold, farming_materials)
 
 	# Show combo bonus if earned
 	if combo_bonus_xp > 0 and has_node("/root/VFXLibrary"):
@@ -750,12 +932,15 @@ func end_encounter(victory: bool) -> void:
 	_in_encounter = false
 	if victory:
 		encounter_won.emit()
+	else:
+		_pending_farming_zone.clear()
 	_return_to_exploration()
 
 
 ## Return player to overworld/region after combat
 func _return_to_exploration() -> void:
 	_in_encounter = false
+	_pending_farming_zone.clear()
 	GameManager.change_state(GameManager.GameState.EXPLORATION)
 
 	# Restore to return scene with position
@@ -833,7 +1018,136 @@ func reset() -> void:
 	_in_encounter = false
 	encounter_rate_mult = 1.0
 	_distance_accumulator = 0.0
+	_pending_farming_zone.clear()
+	_farming_cooldown_until_msec.clear()
 	_update_warning_hud(0.0)
+
+
+func _award_farming_materials() -> Array[Dictionary]:
+	if _pending_farming_zone.is_empty() or not has_node("/root/Inventory"):
+		return []
+
+	var awarded: Array[Dictionary] = []
+	for reward in _pending_farming_zone.get("resource_rewards", []):
+		var item_id: String = reward.get("item_id", "")
+		var chance: float = reward.get("chance", 0.0)
+		if item_id.is_empty() or randf() > chance:
+			continue
+		var amount := maxi(1, int(reward.get("amount", 1)))
+		if Inventory.add_item(item_id, amount):
+			awarded.append({
+				"item_id": item_id,
+				"amount": amount,
+				"name": _get_farming_item_name(item_id),
+			})
+
+	if awarded.is_empty() or not has_node("/root/VFXLibrary"):
+		return awarded
+
+	VFXLibrary.spawn_pickup_text(
+		"Resource find: %s" % _format_farming_materials(awarded),
+		Vector2(640, 315),
+		get_tree().current_scene,
+		Color(0.5, 1.0, 0.7)
+	)
+	return awarded
+
+
+func _record_farming_result(total_xp: int, total_gold: int, materials: Array[Dictionary]) -> void:
+	if _pending_farming_zone.is_empty() or not has_node("/root/GameManager"):
+		return
+	var zone_id: String = _pending_farming_zone.get("id", "")
+	GameManager.set_meta("farming_run_result", {
+		"zone_id": zone_id,
+		"zone_name": _pending_farming_zone.get("name", zone_id),
+		"difficulty_tier": _pending_farming_zone.get("difficulty_tier", "Farming run"),
+		"resource_node": _pending_farming_zone.get("resource_node", "Resource Node"),
+		"run_label": _pending_farming_zone.get("run_label", ""),
+		"result_text": _pending_farming_zone.get("result_text", "The route settles."),
+		"xp": total_xp,
+		"gold": total_gold,
+		"materials": materials,
+		"cooldown_seconds": get_farming_cooldown_seconds(zone_id),
+	})
+
+
+func show_pending_farming_result(expected_zone_id: String, host: Node) -> Dictionary:
+	if not has_node("/root/GameManager") or not GameManager.has_meta("farming_run_result"):
+		return {}
+	var result: Dictionary = GameManager.get_meta("farming_run_result", {})
+	if result.get("zone_id", "") != expected_zone_id:
+		return {}
+	GameManager.remove_meta("farming_run_result")
+	if host and host.is_inside_tree():
+		_spawn_farming_result_panel(host, result)
+	return result
+
+
+func _spawn_farming_result_panel(host: Node, result: Dictionary) -> void:
+	var layer := CanvasLayer.new()
+	layer.name = "FarmingRunResult"
+	layer.layer = 85
+	host.add_child(layer)
+
+	var panel := ColorRect.new()
+	panel.color = Color(0.08, 0.09, 0.12, 0.92)
+	panel.size = Vector2(430, 118)
+	panel.position = Vector2(24, 88)
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layer.add_child(panel)
+
+	var border := ColorRect.new()
+	border.color = Color(0.42, 0.75, 0.45, 0.9)
+	border.size = Vector2(430, 3)
+	border.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(border)
+
+	var text := Label.new()
+	var heading := "%s complete - %s" % [
+		result.get("zone_name", "Farming Run"),
+		result.get("resource_node", "Resource Node"),
+	]
+	var run_label: String = result.get("run_label", "")
+	if not run_label.is_empty():
+		heading += " [%s]" % run_label
+	text.text = "%s\n+%d XP   +%d Gold\nMaterials: %s\n%s  Re-entry: %ds" % [
+		heading,
+		int(result.get("xp", 0)),
+		int(result.get("gold", 0)),
+		_format_farming_materials(result.get("materials", [])),
+		result.get("result_text", "The route settles."),
+		int(result.get("cooldown_seconds", 0)),
+	]
+	text.add_theme_font_size_override("font_size", 10)
+	text.add_theme_color_override("font_color", Color(0.92, 0.98, 0.9))
+	text.position = Vector2(14, 12)
+	text.size = Vector2(400, 96)
+	text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	text.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(text)
+
+	var tween := layer.create_tween()
+	tween.tween_interval(4.5)
+	tween.tween_property(panel, "modulate:a", 0.0, 0.5)
+	tween.tween_callback(layer.queue_free)
+
+
+func _format_farming_materials(materials: Array) -> String:
+	if materials.is_empty():
+		return "none this run"
+	var parts: Array[String] = []
+	for material in materials:
+		parts.append("%s x%d" % [
+			material.get("name", _get_farming_item_name(material.get("item_id", ""))),
+			int(material.get("amount", 1)),
+		])
+	return ", ".join(parts)
+
+
+func _get_farming_item_name(item_id: String) -> String:
+	if has_node("/root/Inventory") and Inventory.ITEMS.has(item_id):
+		return Inventory.ITEMS[item_id].get("name", item_id.replace("_", " ").capitalize())
+	return item_id.replace("_", " ").capitalize()
 
 
 ## ═══════════════════════════════════════════════════════════════════════════

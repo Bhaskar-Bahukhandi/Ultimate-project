@@ -43,6 +43,7 @@ const MAP_BOUNDARY_MARGIN: float = 40.0
 
 func _ready() -> void:
 	GameManager.change_state(GameManager.GameState.EXPLORATION)
+	GameManager.current_region = "overworld"
 
 	_build_overworld_environment()
 	_spawn_player()
@@ -273,11 +274,12 @@ func _create_gate(gate_name: String, pos: Vector2, gate_size: Vector2, region_id
 	var gate = Area2D.new()
 	gate.name = gate_name
 	gate.global_position = pos
+	var unlocked := GameManager.is_region_unlocked_for_free_travel(region_id)
 
 	# Visual marker
 	var marker = ColorRect.new()
 	marker.name = "Marker"
-	marker.color = color
+	marker.color = color if unlocked else color.darkened(0.6)
 	marker.size = gate_size
 	marker.position = -gate_size / 2
 	gate.add_child(marker)
@@ -294,7 +296,7 @@ func _create_gate(gate_name: String, pos: Vector2, gate_size: Vector2, region_id
 	# Label
 	var label = Label.new()
 	label.name = "GateLabel"
-	label.text = label_text
+	label.text = label_text if unlocked else "%s\nLocked" % label_text.get_slice("\n", 0)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 10)
 	label.add_theme_color_override("font_color", Color.WHITE)
@@ -397,12 +399,21 @@ func _enter_region(region_id: String) -> void:
 	if not REGION_SCENES.has(region_id):
 		push_error("[OVERWORLD] Unknown region: %s" % region_id)
 		return
+	if not GameManager.is_region_unlocked_for_free_travel(region_id):
+		var lock_message := GameManager.get_free_travel_lock_message(region_id)
+		if has_node("/root/DialogueManager"):
+			await DialogueManager.say("SYSTEM", lock_message)
+		else:
+			push_warning("[OVERWORLD] %s" % lock_message)
+		return
 
 	# Save player overworld position before leaving
 	if _player and is_instance_valid(_player):
 		GameManager.player_overworld_position = _player.global_position
 
-	var scene_path = REGION_SCENES[region_id]
+	var scene_path := GameManager.get_free_travel_revisit_scene(region_id)
+	if scene_path.is_empty():
+		scene_path = REGION_SCENES[region_id]
 	if not ResourceLoader.exists(scene_path):
 		push_error("[OVERWORLD] Region scene not found: %s — aborting transition" % scene_path)
 		return
@@ -410,6 +421,7 @@ func _enter_region(region_id: String) -> void:
 	# Store where we came from so region can return us here
 	GameManager.set_meta("entered_from_overworld", true)
 	GameManager.set_meta("overworld_return_region", region_id)
+	GameManager.current_region = region_id
 
 	# Level warning for underleveled players
 	var rec_level = _get_recommended_level(region_id)

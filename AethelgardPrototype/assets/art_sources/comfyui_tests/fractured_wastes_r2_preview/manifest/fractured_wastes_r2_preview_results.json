@@ -1,0 +1,75 @@
+{
+  "phase": "10M-R2",
+  "production_art_changed": false,
+  "actual_scene_modified": false,
+  "fallback_path": "assets/generated_v2/tilesets/fractured_wastes_v2_prototype_tileset.png",
+  "r1_atlas_paths": {
+    "variant_a_clean": "assets/art_sources/comfyui_tests/fractured_wastes_r1/generated_tiles/fractured_wastes_r1_variant_a_clean.png",
+    "variant_b_textured": "assets/art_sources/comfyui_tests/fractured_wastes_r1/generated_tiles/fractured_wastes_r1_variant_b_textured.png",
+    "variant_c_corrupt_dark": "assets/art_sources/comfyui_tests/fractured_wastes_r1/generated_tiles/fractured_wastes_r1_variant_c_corrupt_dark.png"
+  },
+  "screenshots": {
+    "fallback_preview": "assets/art_sources/comfyui_tests/fractured_wastes_r2_preview/screenshots/fractured_wastes_r2_fallback_preview.png",
+    "variant_a_preview": "assets/art_sources/comfyui_tests/fractured_wastes_r2_preview/screenshots/fractured_wastes_r2_variant_a_preview.png",
+    "variant_b_preview": "assets/art_sources/comfyui_tests/fractured_wastes_r2_preview/screenshots/fractured_wastes_r2_variant_b_preview.png",
+    "variant_c_preview": "assets/art_sources/comfyui_tests/fractured_wastes_r2_preview/screenshots/fractured_wastes_r2_variant_c_preview.png",
+    "contact_sheet": "assets/art_sources/comfyui_tests/fractured_wastes_r2_preview/contact_sheets/fractured_wastes_r2_fallback_vs_variants_contact_sheet.png",
+    "actual_region_reference": "assets/art_sources/comfyui_tests/fractured_wastes_r2_preview/screenshots/fractured_wastes_r2_actual_region_reference.png",
+    "actual_region_spawn_reference": "assets/art_sources/comfyui_tests/fractured_wastes_r2_preview/screenshots/fractured_wastes_r2_actual_region_spawn_reference.png",
+    "actual_region_path_reference": "assets/art_sources/comfyui_tests/fractured_wastes_r2_preview/screenshots/fractured_wastes_r2_actual_region_path_reference.png",
+    "actual_region_farming_reference": "assets/art_sources/comfyui_tests/fractured_wastes_r2_preview/screenshots/fractured_wastes_r2_actual_region_farming_reference.png",
+    "actual_region_npc_reference": "assets/art_sources/comfyui_tests/fractured_wastes_r2_preview/screenshots/fractured_wastes_r2_actual_region_npc_reference.png",
+    "actual_region_contact_sheet": "assets/art_sources/comfyui_tests/fractured_wastes_r2_preview/contact_sheets/fractured_wastes_r2_actual_region_reference_contact_sheet.png"
+  },
+  "scores": {
+    "fallback": {
+      "terrain": 4.5,
+      "safe_path": 3.5,
+      "corruption_identity": 6.5,
+      "hazards_props": 4.5,
+      "player_npc_contrast": 6.2,
+      "label_readability": 6.0,
+      "overall": 5.0,
+      "verdict": "Functional but too repetitive; weak safe-path language."
+    },
+    "variant_a_clean": {
+      "terrain": 7.4,
+      "safe_path": 8.4,
+      "corruption_identity": 7.0,
+      "hazards_props": 7.2,
+      "player_npc_contrast": 8.3,
+      "label_readability": 8.1,
+      "overall": 7.8,
+      "verdict": "Safest readability option, but plainer than Variant B."
+    },
+    "variant_b_textured": {
+      "terrain": 8.3,
+      "safe_path": 8.5,
+      "corruption_identity": 8.4,
+      "hazards_props": 8.0,
+      "player_npc_contrast": 8.0,
+      "label_readability": 8.0,
+      "overall": 8.4,
+      "verdict": "Best default candidate; ready for controlled production-art import validation."
+    },
+    "variant_c_corrupt_dark": {
+      "terrain": 7.0,
+      "safe_path": 7.7,
+      "corruption_identity": 8.7,
+      "hazards_props": 7.8,
+      "player_npc_contrast": 7.0,
+      "label_readability": 6.9,
+      "overall": 7.4,
+      "verdict": "Strong mood reference, but too dark/magenta-heavy for default import."
+    }
+  },
+  "best_variant": "variant_b_textured",
+  "issues_found": [
+    "Current fallback repeats the same crack/stain tiles and has weak safe-path language.",
+    "Variant A is safest but visually plain.",
+    "Variant C is atmospheric but too dark and magenta-heavy for a default import candidate.",
+    "Variant B path geometry is still somewhat rectilinear and should be tested in the actual region before acceptance."
+  ],
+  "recommendation": "Proceed to a controlled Fractured Wastes production-art import pass with Variant B, preserving fallback and validating actual-region screenshots before acceptance.",
+  "decision": "Ready for Fractured Wastes controlled production-art import pass with Variant B"
+}

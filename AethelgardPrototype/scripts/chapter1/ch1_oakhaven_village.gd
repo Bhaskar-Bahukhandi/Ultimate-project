@@ -137,6 +137,7 @@ func _ready() -> void:
 	var player = get_node_or_null("Player")
 	if player:
 		AssetManager.replace_player_sprite(player, "exploration")
+	_setup_elara_v2_visual()
 	
 	# Give the player some starting gold (use add_gold to stay synced with Inventory)
 	var current_gold = GameManager.player_stats.get("gold", 0)
@@ -216,6 +217,20 @@ func _add_boundary(pos: Vector2, size: Vector2) -> void:
 	static_body.add_child(collision_shape)
 	add_child(static_body)
 
+func _setup_elara_v2_visual() -> void:
+	var elara_visual = get_node_or_null("NPCs/Elara/Sprite")
+	if not elara_visual or not (elara_visual is ColorRect):
+		return
+	var elara_v2 = AssetManager.try_build_v2_npc("Elara", 64.0)
+	if not elara_v2:
+		return
+	var parent = elara_visual.get_parent()
+	var idx = elara_visual.get_index()
+	parent.remove_child(elara_visual)
+	elara_visual.queue_free()
+	parent.add_child(elara_v2)
+	parent.move_child(elara_v2, idx)
+
 func _play_dialogue_array(dialogue_array: Array, post_callback: String = "") -> void:
 	## Play a dialogue array using DialogueManager with typewriter and Space-to-continue.
 	in_dialogue = true
@@ -226,7 +241,11 @@ func _play_dialogue_array(dialogue_array: Array, post_callback: String = "") -> 
 			break
 		var speaker = line.get("speaker", "")
 		var text = line.get("text", "")
+		if speaker == "Elara":
+			AssetManager.play_v2_npc_anim(get_node_or_null("NPCs/Elara"), "talk")
 		await DialogueManager.say(speaker, text)
+		if speaker == "Elara":
+			AssetManager.play_v2_npc_anim(get_node_or_null("NPCs/Elara"), "idle")
 		if not is_inside_tree(): return
 	DialogueManager.hide_dialogue()
 	

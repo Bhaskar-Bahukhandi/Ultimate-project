@@ -65,6 +65,7 @@ func _ready() -> void:
 	_place_lore_items()
 	_place_boss_gates()
 	_place_shops()
+	_place_farming_zone()
 	_place_arena_entrance()
 	_place_secrets()
 	_create_overworld_exit()
@@ -73,6 +74,8 @@ func _ready() -> void:
 	if GameManager.has_meta("return_position") and _player:
 		_player.global_position = GameManager.get_meta("return_position")
 		GameManager.remove_meta("return_position")
+	if has_node("/root/RandomEncounterSystem"):
+		RandomEncounterSystem.show_pending_farming_result("ironhold_training_yard", self)
 
 
 func _process(_delta: float) -> void:
@@ -94,6 +97,18 @@ func _build_environment() -> void:
 	bg.size = MAP_SIZE
 	bg.z_index = -20
 	add_child(bg)
+	if has_node("/root/AssetManager"):
+		var visual_tiles = AssetManager.try_create_v2_visual_tile_layer(
+			"ironhold",
+			MAP_SIZE,
+			"V2IronholdGroundTiles",
+			-17,
+			[Vector2i(0, 0), Vector2i(0, 0), Vector2i(1, 0), Vector2i(1, 1), Vector2i(3, 1)]
+		)
+		if visual_tiles:
+			visual_tiles.modulate = Color(0.92, 0.92, 0.90, 0.24)
+			add_child(visual_tiles)
+	_add_ironhold_walkway_composition()
 
 	# ── City Center ──
 	var city = ColorRect.new()
@@ -117,9 +132,9 @@ func _build_environment() -> void:
 		_create_building("Building_%d" % i, bpos, bsize, bcolor)
 
 	# Cobblestone streets
-	for i in range(50):
+	for i in range(24):
 		var stone = ColorRect.new()
-		stone.color = Color(0.28, 0.26, 0.24)
+		stone.color = Color(0.24, 0.23, 0.22, 0.58)
 		stone.size = Vector2(randi_range(12, 20), randi_range(12, 20))
 		stone.position = Vector2(randi_range(1010, 1950), randi_range(810, 1550))
 		stone.z_index = -17
@@ -219,9 +234,18 @@ func _build_environment() -> void:
 	_create_road(Vector2(1400, 1600), Vector2(1300, 1800), 20)
 	# City → Clock Tower
 	_create_road(Vector2(2000, 600), Vector2(2800, 500), 35)
+	_add_v3_ironhold_polish()
 
 
 func _create_building(bname: String, pos: Vector2, bsize: Vector2, color: Color) -> void:
+	var ground_shadow = ColorRect.new()
+	ground_shadow.name = "%sGroundShadow" % bname
+	ground_shadow.color = Color(0.04, 0.04, 0.04, 0.34)
+	ground_shadow.size = bsize + Vector2(16, 10)
+	ground_shadow.position = pos + Vector2(-8, bsize.y - 2)
+	ground_shadow.z_index = -13
+	add_child(ground_shadow)
+
 	var building = ColorRect.new()
 	building.name = bname
 	building.color = color
@@ -241,6 +265,11 @@ func _create_building(bname: String, pos: Vector2, bsize: Vector2, color: Color)
 	win.size = Vector2(8, 8)
 	win.position = Vector2(bsize.x / 2 - 4, 8)
 	building.add_child(win)
+	var sill = ColorRect.new()
+	sill.color = Color(0.18, 0.16, 0.14, 0.86)
+	sill.size = Vector2(bsize.x, 5)
+	sill.position = Vector2(0, bsize.y - 5)
+	building.add_child(sill)
 
 
 func _create_road(from: Vector2, to: Vector2, segments: int) -> void:
@@ -253,6 +282,65 @@ func _create_road(from: Vector2, to: Vector2, segments: int) -> void:
 		stone.position = pos + Vector2(randf_range(-6, 6), randf_range(-6, 6))
 		stone.z_index = -16
 		add_child(stone)
+
+
+func _add_ironhold_walkway_composition() -> void:
+	_add_ironhold_patch(
+		"MarketWalkwayWest",
+		PackedVector2Array([
+			Vector2(930, 982), Vector2(1114, 876), Vector2(1328, 950),
+			Vector2(1284, 1178), Vector2(1058, 1238), Vector2(894, 1118),
+		]),
+		Color(0.20, 0.19, 0.18, 0.62),
+		-16
+	)
+	_add_ironhold_patch(
+		"MarketWalkwayEast",
+		PackedVector2Array([
+			Vector2(1322, 914), Vector2(1592, 882), Vector2(1826, 1000),
+			Vector2(1766, 1240), Vector2(1500, 1306), Vector2(1278, 1168),
+		]),
+		Color(0.21, 0.20, 0.19, 0.56),
+		-16
+	)
+	_add_ironhold_patch(
+		"TrainingLaneApron",
+		PackedVector2Array([
+			Vector2(1996, 814), Vector2(2300, 628), Vector2(2540, 706),
+			Vector2(2392, 952), Vector2(2104, 1008),
+		]),
+		Color(0.18, 0.17, 0.16, 0.54),
+		-16
+	)
+	_add_ironhold_patch(
+		"ForgeHeatShoulder",
+		PackedVector2Array([
+			Vector2(2156, 760), Vector2(2394, 728), Vector2(2516, 862),
+			Vector2(2314, 1002), Vector2(2102, 944),
+		]),
+		Color(0.34, 0.24, 0.17, 0.22),
+		-15
+	)
+
+
+func _add_ironhold_patch(patch_name: String, points: PackedVector2Array, color: Color, layer: int) -> void:
+	var patch = Polygon2D.new()
+	patch.name = patch_name
+	patch.color = color
+	patch.polygon = points
+	patch.z_index = layer
+	add_child(patch)
+
+
+func _add_v3_ironhold_polish() -> void:
+	if not has_node("/root/AssetManager"):
+		return
+	AssetManager.add_v3_environment_decal(self, "ironhold_road", Vector2(1460, 1130), Vector2(930, 244), "V3CityRoadPlates", -15, Color(0.96, 0.94, 0.92, 0.84))
+	AssetManager.add_v3_environment_decal(self, "ironhold_road", Vector2(2300, 724), Vector2(610, 160), "V3TrainingRoadPlates", -15, Color(1.0, 0.92, 0.82, 0.80))
+	AssetManager.add_v3_environment_prop(self, "ironhold_pipes", Vector2(560, 606), Vector2(390, 122), "V3OutskirtsPipes", -11, Color(0.94, 0.92, 0.90, 0.94))
+	AssetManager.add_v3_environment_prop(self, "ironhold_forge", Vector2(2310, 640), Vector2(124, 148), "V3TrainingForge", -10)
+	AssetManager.add_v3_environment_prop(self, "crates", Vector2(1928, 1160), Vector2(340, 92), "V3ArenaCrates", -10, Color(0.98, 0.96, 0.94, 0.92))
+	AssetManager.add_v3_environment_prop(self, "ironhold_pipes", Vector2(3090, 546), Vector2(310, 98), "V3ClockTowerPipes", -11, Color(0.92, 0.90, 0.88, 0.88))
 
 
 ## ═══════════════════════════════════════════════════════════════════════════
@@ -310,15 +398,23 @@ func _create_interactable_npc(data: Dictionary) -> Area2D:
 	var npc = Area2D.new()
 	npc.name = data["name"].replace(" ", "")
 	npc.position = data["pos"]
-	var body = ColorRect.new()
-	body.color = data["color"]
-	body.size = Vector2(16, 22)
-	body.position = Vector2(-8, -22)
+	var body = null
+	if has_node("/root/AssetManager"):
+		body = AssetManager.create_topdown_npc_visual(data["name"], data["color"])
+	if not body:
+		body = ColorRect.new()
+		body.name = "Sprite"
+		body.color = data["color"]
+		body.size = Vector2(16, 22)
+		body.position = Vector2(-8, -22)
 	npc.add_child(body)
 	var name_label = Label.new()
 	name_label.text = data["name"]
 	name_label.add_theme_font_size_override("font_size", 8)
 	name_label.add_theme_color_override("font_color", Color.WHITE)
+	name_label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.98))
+	name_label.add_theme_constant_override("shadow_offset_x", 1)
+	name_label.add_theme_constant_override("shadow_offset_y", 1)
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.position = Vector2(-30, -34)
 	npc.add_child(name_label)
@@ -652,11 +748,13 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not event.is_action_pressed("interact"):
 		return
 
-	# Priority: boss > arena > npc > lore > shop
+	# Priority: boss > arena > farming > npc > lore > shop
 	if _current_interact.has("boss"):
 		_interact_boss(_current_interact["boss"])
 	elif _current_interact.has("arena"):
 		_interact_arena()
+	elif _current_interact.has("farm"):
+		_interact_farming_zone(_current_interact["farm"])
 	elif _current_interact.has("npc"):
 		_interact_npc(_current_interact["npc"])
 	elif _current_interact.has("lore"):
@@ -676,7 +774,11 @@ func _interact_npc(npc: Area2D) -> void:
 	if has_node("/root/DialogueManager"):
 		GameManager.change_state(GameManager.GameState.DIALOGUE)
 		var line = dialogue[idx % dialogue.size()]
+		if has_node("/root/AssetManager"):
+			AssetManager.play_v2_npc_anim(npc, "talk")
 		await DialogueManager.say(npc_name, line)
+		if has_node("/root/AssetManager"):
+			AssetManager.play_v2_npc_anim(npc, "idle")
 		npc.set_meta("dialogue_index", (idx + 1) % dialogue.size())
 		GameManager.change_state(GameManager.GameState.EXPLORATION)
 		if has_node("/root/LoreJournal"):
@@ -724,6 +826,101 @@ func _interact_shop(trigger: Area2D) -> void:
 	var shop_type: String = trigger.get_meta("shop_type", "general")
 	if has_node("/root/ShopSystem"):
 		ShopSystem.open_shop(shop_type)
+
+
+func _place_farming_zone() -> void:
+	var marker := Area2D.new()
+	marker.name = "IronholdTrainingYardFarming"
+	marker.position = Vector2(2260, 720)
+	marker.set_meta("farming_zone_id", "ironhold_training_yard")
+
+	var plate := ColorRect.new()
+	plate.color = Color(0.55, 0.34, 0.18, 0.88)
+	plate.size = Vector2(72, 44)
+	plate.position = Vector2(-36, -22)
+	marker.add_child(plate)
+
+	var stripe := ColorRect.new()
+	stripe.color = Color(0.85, 0.64, 0.25, 0.8)
+	stripe.size = Vector2(50, 4)
+	stripe.position = Vector2(-25, -2)
+	marker.add_child(stripe)
+
+	var ore_drill := ColorRect.new()
+	ore_drill.color = Color(0.28, 0.42, 0.48, 0.95)
+	ore_drill.size = Vector2(16, 28)
+	ore_drill.position = Vector2(-8, -30)
+	marker.add_child(ore_drill)
+
+	var ore_tip := ColorRect.new()
+	ore_tip.color = Color(0.48, 0.88, 1.0, 0.92)
+	ore_tip.size = Vector2(8, 8)
+	ore_tip.position = Vector2(4, -18)
+	ore_drill.add_child(ore_tip)
+
+	var drill_note := Label.new()
+	drill_note.text = "Ore drill"
+	drill_note.add_theme_font_size_override("font_size", 7)
+	drill_note.add_theme_color_override("font_color", Color(0.74, 0.9, 0.96))
+	drill_note.position = Vector2(-22, -34)
+	marker.add_child(drill_note)
+
+	var label := Label.new()
+	label.text = "Ironhold Training Yard"
+	label.add_theme_font_size_override("font_size", 9)
+	label.add_theme_color_override("font_color", Color(1.0, 0.86, 0.55))
+	label.position = Vector2(-58, -44)
+	marker.add_child(label)
+
+	var prompt := Label.new()
+	prompt.name = "Prompt"
+	prompt.text = "[F] Start drill run"
+	prompt.add_theme_font_size_override("font_size", 8)
+	prompt.add_theme_color_override("font_color", Color(1.0, 0.9, 0.52))
+	prompt.position = Vector2(-62, 24)
+	prompt.visible = false
+	marker.add_child(prompt)
+
+	var shape := CollisionShape2D.new()
+	var circle := CircleShape2D.new()
+	circle.radius = 60.0
+	shape.shape = circle
+	marker.add_child(shape)
+	marker.body_entered.connect(_on_interact_entered.bind(marker, "farm"))
+	marker.body_exited.connect(_on_interact_exited.bind(marker, "farm"))
+	add_child(marker)
+
+
+func _interact_farming_zone(marker: Area2D) -> void:
+	var zone_id: String = marker.get_meta("farming_zone_id", "")
+	var farming_data: Dictionary = {}
+	if has_node("/root/RandomEncounterSystem"):
+		farming_data = RandomEncounterSystem.get_farming_zone_data(zone_id)
+	var choice := 0
+	if has_node("/root/DialogueManager"):
+		GameManager.change_state(GameManager.GameState.DIALOGUE)
+		choice = await DialogueManager.show_choices(
+			"%s\n%s" % [
+				farming_data.get("difficulty_tier", "Midgame drill"),
+				farming_data.get("objective", "Run the yard drill."),
+			],
+			["Start training drill", "Leave yard"]
+		)
+		GameManager.change_state(GameManager.GameState.EXPLORATION)
+	if choice != 0 or not has_node("/root/RandomEncounterSystem"):
+		return
+
+	var started := RandomEncounterSystem.start_farming_encounter(
+		zone_id,
+		_player.global_position if _player else marker.global_position,
+		get_tree().current_scene.scene_file_path
+	)
+	if not started and has_node("/root/DialogueManager"):
+		var cooldown_seconds := RandomEncounterSystem.get_farming_cooldown_seconds(zone_id)
+		GameManager.change_state(GameManager.GameState.DIALOGUE)
+		await DialogueManager.say("SYSTEM", "The ore drill is cooling down. Re-entry opens in %d seconds." % cooldown_seconds)
+		GameManager.change_state(GameManager.GameState.EXPLORATION)
+
 
 func _interact_arena() -> void:
 	if not has_node("/root/DialogueManager"):

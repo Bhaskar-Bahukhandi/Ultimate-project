@@ -1,0 +1,35 @@
+{
+  "phase": "10M-Q1",
+  "atlas_size": "512x512",
+  "tile_size": "32x32",
+  "grid": "16x16",
+  "production_art_changed": false,
+  "variants": [
+    {
+      "variant": "A clean",
+      "atlas_path": "assets/art_sources/comfyui_tests/ironhold_q1/generated_tiles/ironhold_q1_variant_a_clean.png",
+      "preview_2x_path": "assets/art_sources/comfyui_tests/ironhold_q1/review/ironhold_q1_variant_a_clean_2x.png",
+      "mockup_path": "assets/art_sources/comfyui_tests/ironhold_q1/mockups/ironhold_q1_variant_a_mockup.png",
+      "mockup_2x_path": "assets/art_sources/comfyui_tests/ironhold_q1/mockups/ironhold_q1_variant_a_mockup_2x.png",
+      "noise_level": 3
+    },
+    {
+      "variant": "B textured",
+      "atlas_path": "assets/art_sources/comfyui_tests/ironhold_q1/generated_tiles/ironhold_q1_variant_b_textured.png",
+      "preview_2x_path": "assets/art_sources/comfyui_tests/ironhold_q1/review/ironhold_q1_variant_b_textured_2x.png",
+      "mockup_path": "assets/art_sources/comfyui_tests/ironhold_q1/mockups/ironhold_q1_variant_b_mockup.png",
+      "mockup_2x_path": "assets/art_sources/comfyui_tests/ironhold_q1/mockups/ironhold_q1_variant_b_mockup_2x.png",
+      "noise_level": 8
+    },
+    {
+      "variant": "C ember/dark",
+      "atlas_path": "assets/art_sources/comfyui_tests/ironhold_q1/generated_tiles/ironhold_q1_variant_c_ember_dark.png",
+      "preview_2x_path": "assets/art_sources/comfyui_tests/ironhold_q1/review/ironhold_q1_variant_c_ember_dark_2x.png",
+      "mockup_path": "assets/art_sources/comfyui_tests/ironhold_q1/mockups/ironhold_q1_variant_c_mockup.png",
+      "mockup_2x_path": "assets/art_sources/comfyui_tests/ironhold_q1/mockups/ironhold_q1_variant_c_mockup_2x.png",
+      "noise_level": 5
+    }
+  ],
+  "comparison_contact_sheet": "assets/art_sources/comfyui_tests/ironhold_q1/review/ironhold_q1_comparison_contact_sheet.png",
+  "layout_map": "assets/art_sources/comfyui_tests/ironhold_q1/manifest/ironhold_q1_tile_layout.md"
+}

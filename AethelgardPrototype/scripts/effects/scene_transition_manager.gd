@@ -470,14 +470,14 @@ func return_to_region(region_scene: String, return_position: Vector2 = Vector2.Z
 
 ## Enter a region from the overworld
 func enter_region(region_id: String) -> void:
-	var scene_map = {
-		"oakhaven": "res://scenes/regions/oakhaven_region.tscn",
-		"ironhold": "res://scenes/regions/ironhold_region.tscn",
-		"fractured_wastes": "res://scenes/regions/fractured_wastes_region.tscn",
-	}
-	var path = scene_map.get(region_id, "")
+	var path := ""
+	if has_node("/root/GameManager"):
+		if not GameManager.is_region_unlocked_for_free_travel(region_id):
+			push_warning("[SceneTransitions] Free travel region locked: %s" % region_id)
+			return
+		path = GameManager.get_free_travel_revisit_scene(region_id)
 	if path.is_empty():
-		push_error("[SceneTransitions] Unknown region: %s" % region_id)
+		push_warning("[SceneTransitions] No safe revisit scene for free travel region: %s" % region_id)
 		return
 	if has_node("/root/GameManager"):
 		GameManager.current_region = region_id

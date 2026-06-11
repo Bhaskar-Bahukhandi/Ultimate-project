@@ -1,0 +1,88 @@
+{
+	"checks": [
+		{
+			"actual": {
+				"fallback_reason": "",
+				"fallback_used": false,
+				"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_morning_tileset.png",
+				"production": true,
+				"requested_time_state": "morning",
+				"texture": "():<ImageTexture#-9223371922853590537>",
+				"time_state": "morning"
+			},
+			"expected": "morning production atlas loads",
+			"result": "Pass",
+			"scenario": "morning production present"
+		},
+		{
+			"actual": {
+				"fallback_reason": "",
+				"fallback_used": false,
+				"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+				"production": true,
+				"requested_time_state": "afternoon",
+				"texture": "():<ImageTexture#-9223371922719372807>",
+				"time_state": "afternoon"
+			},
+			"expected": "afternoon production atlas loads",
+			"result": "Pass",
+			"scenario": "afternoon production present"
+		},
+		{
+			"actual": {
+				"fallback_reason": "",
+				"fallback_used": false,
+				"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_night_tileset.png",
+				"production": true,
+				"requested_time_state": "night",
+				"texture": "():<ImageTexture#-9223371922585155077>",
+				"time_state": "night"
+			},
+			"expected": "night production atlas loads",
+			"result": "Pass",
+			"scenario": "night production present"
+		},
+		{
+			"actual": {
+				"fallback_reason": "invalid time state normalized to default",
+				"fallback_used": true,
+				"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+				"production": true,
+				"requested_time_state": "dusk",
+				"texture": "():<ImageTexture#-9223371922450937347>",
+				"time_state": "afternoon"
+			},
+			"expected": "invalid state resolves to afternoon production atlas",
+			"result": "Pass",
+			"scenario": "invalid time state"
+		},
+		{
+			"actual": {
+				"fallback_reason": "validation fallback probe",
+				"fallback_used": true,
+				"path": "res://assets/generated_v2/tilesets/oakhaven_v2_prototype_tileset.png",
+				"production": false,
+				"requested_time_state": "afternoon",
+				"texture": "(res://assets/generated_v2/tilesets/oakhaven_v2_prototype_tileset.png):<CompressedTexture2D#-9223371922232833537>",
+				"time_state": "afternoon"
+			},
+			"expected": "generated fallback texture loads",
+			"result": "Pass",
+			"scenario": "generated fallback available"
+		},
+		{
+			"actual": {
+				"afternoon_path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+				"afternoon_production": true,
+				"missing_probe_path": "res://assets/production_art/tilesets/oakhaven/__missing_night_probe_tileset.png",
+				"missing_texture_loaded": false
+			},
+			"expected": "missing variant load returns null and afternoon production remains available as safe fallback",
+			"result": "Pass",
+			"scenario": "controlled missing variant path"
+		}
+	],
+	"fallback_preserved": true,
+	"phase": "10M-P11",
+	"production_art_changed": true
+}

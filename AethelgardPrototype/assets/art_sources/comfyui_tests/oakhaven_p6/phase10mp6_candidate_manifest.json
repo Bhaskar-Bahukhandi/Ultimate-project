@@ -1,0 +1,150 @@
+{
+  "candidates": [
+    {
+      "source": "grass_terrain_attempt1_seed610001.png",
+      "box": [
+        256,
+        192,
+        320,
+        256
+      ],
+      "output": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\extracted_candidates\\grass_square_green.png",
+      "use": "grass terrain filler",
+      "quality": "medium"
+    },
+    {
+      "source": "grass_terrain_attempt2_seed610002.png",
+      "box": [
+        320,
+        96,
+        384,
+        160
+      ],
+      "output": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\extracted_candidates\\teal_floor_tile_block.png",
+      "use": "alternate floor/trim study",
+      "quality": "low"
+    },
+    {
+      "source": "dirt_path_attempt2_seed620002.png",
+      "box": [
+        64,
+        64,
+        128,
+        128
+      ],
+      "output": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\extracted_candidates\\stone_dirt_texture_cell.png",
+      "use": "rough path/floor texture",
+      "quality": "medium"
+    },
+    {
+      "source": "dirt_path_attempt2_seed620002.png",
+      "box": [
+        256,
+        64,
+        320,
+        128
+      ],
+      "output": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\extracted_candidates\\stone_dirt_alt_cell.png",
+      "use": "rough path/floor texture",
+      "quality": "medium"
+    },
+    {
+      "source": "path_transitions_attempt1_seed630001.png",
+      "box": [
+        0,
+        32,
+        64,
+        96
+      ],
+      "output": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\extracted_candidates\\grass_magenta_transition_strip.png",
+      "use": "path edge transition study",
+      "quality": "medium"
+    },
+    {
+      "source": "path_transitions_attempt2_seed630002.png",
+      "box": [
+        32,
+        224,
+        96,
+        288
+      ],
+      "output": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\extracted_candidates\\hedge_edge_tile.png",
+      "use": "hedge/path edge study",
+      "quality": "medium"
+    },
+    {
+      "source": "path_transitions_attempt2_seed630002.png",
+      "box": [
+        288,
+        64,
+        352,
+        128
+      ],
+      "output": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\extracted_candidates\\glow_marker_tile.png",
+      "use": "magic marker/prop study",
+      "quality": "low"
+    },
+    {
+      "source": "fence_hedge_attempt2_seed640002.png",
+      "box": [
+        160,
+        96,
+        224,
+        160
+      ],
+      "output": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\extracted_candidates\\bush_tile.png",
+      "use": "hedge/bush prop",
+      "quality": "medium"
+    },
+    {
+      "source": "fence_hedge_attempt2_seed640002.png",
+      "box": [
+        64,
+        288,
+        128,
+        352
+      ],
+      "output": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\extracted_candidates\\wood_crate_tile.png",
+      "use": "wood prop/fence support",
+      "quality": "medium"
+    },
+    {
+      "source": "fence_hedge_attempt2_seed640002.png",
+      "box": [
+        320,
+        288,
+        384,
+        352
+      ],
+      "output": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\extracted_candidates\\wood_roof_tile.png",
+      "use": "cottage/fence support",
+      "quality": "medium"
+    },
+    {
+      "source": "small_props_attempt1_seed660001.png",
+      "box": [
+        64,
+        192,
+        128,
+        256
+      ],
+      "output": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\extracted_candidates\\gold_block_prop.png",
+      "use": "village prop/source",
+      "quality": "low"
+    },
+    {
+      "source": "small_props_attempt1_seed660001.png",
+      "box": [
+        320,
+        96,
+        384,
+        160
+      ],
+      "output": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\extracted_candidates\\hedge_block_prop.png",
+      "use": "hedge/clutter source",
+      "quality": "medium"
+    }
+  ],
+  "draft_atlas": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\oakhaven_p6_draft_preview_atlas.png",
+  "candidate_contact_sheet": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\phase10mp6_candidate_contact_sheet.png"
+}

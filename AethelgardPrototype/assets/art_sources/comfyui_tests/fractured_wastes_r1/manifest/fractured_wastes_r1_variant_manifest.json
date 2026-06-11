@@ -1,0 +1,38 @@
+{
+  "phase": "10M-R1",
+  "atlas_size": "512x512",
+  "tile_size": 32,
+  "grid": "16x16",
+  "production_art_changed": false,
+  "source_method": "deterministic Python/Pillow controlled tile grammar",
+  "fallback_reference": "assets/generated_v2/tilesets/fractured_wastes_v2_prototype_tileset.png",
+  "scene_reference": "docs/visual_review/phase10mm3/fractured_wastes_after.png",
+  "variants": {
+    "a_clean": {
+      "label": "Variant A clean",
+      "atlas_path": "assets/art_sources/comfyui_tests/fractured_wastes_r1/generated_tiles/fractured_wastes_r1_variant_a_clean.png",
+      "preview_2x_path": "assets/art_sources/comfyui_tests/fractured_wastes_r1/review/fractured_wastes_r1_variant_a_clean_2x.png",
+      "mockup_path": "assets/art_sources/comfyui_tests/fractured_wastes_r1/mockups/fractured_wastes_r1_variant_a_mockup.png",
+      "mockup_2x_path": "assets/art_sources/comfyui_tests/fractured_wastes_r1/mockups/fractured_wastes_r1_variant_a_mockup_2x.png",
+      "overall_score": 7.6
+    },
+    "b_textured": {
+      "label": "Variant B textured",
+      "atlas_path": "assets/art_sources/comfyui_tests/fractured_wastes_r1/generated_tiles/fractured_wastes_r1_variant_b_textured.png",
+      "preview_2x_path": "assets/art_sources/comfyui_tests/fractured_wastes_r1/review/fractured_wastes_r1_variant_b_textured_2x.png",
+      "mockup_path": "assets/art_sources/comfyui_tests/fractured_wastes_r1/mockups/fractured_wastes_r1_variant_b_mockup.png",
+      "mockup_2x_path": "assets/art_sources/comfyui_tests/fractured_wastes_r1/mockups/fractured_wastes_r1_variant_b_mockup_2x.png",
+      "overall_score": 8.2
+    },
+    "c_corrupt_dark": {
+      "label": "Variant C corrupt/dark",
+      "atlas_path": "assets/art_sources/comfyui_tests/fractured_wastes_r1/generated_tiles/fractured_wastes_r1_variant_c_corrupt_dark.png",
+      "preview_2x_path": "assets/art_sources/comfyui_tests/fractured_wastes_r1/review/fractured_wastes_r1_variant_c_corrupt_dark_2x.png",
+      "mockup_path": "assets/art_sources/comfyui_tests/fractured_wastes_r1/mockups/fractured_wastes_r1_variant_c_mockup.png",
+      "mockup_2x_path": "assets/art_sources/comfyui_tests/fractured_wastes_r1/mockups/fractured_wastes_r1_variant_c_mockup_2x.png",
+      "overall_score": 7.4
+    }
+  },
+  "best_variant": "b_textured",
+  "decision": "Ready for Fractured Wastes preview-only Godot scene pass"
+}

@@ -1,0 +1,44 @@
+{
+	"checks": {
+		"afternoon": {
+			"atlas": "res://assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/tuned_atlases/oakhaven_p10_afternoon_tuned.png",
+			"atlas_size": [
+				512,
+				512
+			],
+			"screenshot": "res://assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/screenshots/oakhaven_p10_afternoon_preview.png",
+			"screenshot_size": [
+				768,
+				576
+			]
+		},
+		"morning": {
+			"atlas": "res://assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/tuned_atlases/oakhaven_p10_morning_tuned.png",
+			"atlas_size": [
+				512,
+				512
+			],
+			"screenshot": "res://assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/screenshots/oakhaven_p10_morning_preview.png",
+			"screenshot_size": [
+				768,
+				576
+			]
+		},
+		"night": {
+			"atlas": "res://assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/tuned_atlases/oakhaven_p10_night_tuned.png",
+			"atlas_size": [
+				512,
+				512
+			],
+			"screenshot": "res://assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/screenshots/oakhaven_p10_night_preview.png",
+			"screenshot_size": [
+				768,
+				576
+			]
+		}
+	},
+	"contact_sheet": "res://assets/art_sources/comfyui_tests/oakhaven_p10_palette_tuning/contact_sheets/oakhaven_p10_godot_preview_validation_contact_sheet.png",
+	"phase": "10M-P10",
+	"preview_only": true,
+	"production_art_changed": false
+}

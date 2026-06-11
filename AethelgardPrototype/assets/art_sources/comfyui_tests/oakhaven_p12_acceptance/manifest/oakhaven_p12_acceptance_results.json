@@ -1,0 +1,96 @@
+{
+	"phase": "10M-P12",
+	"title": "Oakhaven production-art baseline acceptance / real-scene visual QA pass",
+	"production_state": {
+		"accepted": true,
+		"default_time_state": "afternoon",
+		"production_afternoon_path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+		"production_morning_path": "res://assets/production_art/tilesets/oakhaven/oakhaven_morning_tileset.png",
+		"production_night_path": "res://assets/production_art/tilesets/oakhaven/oakhaven_night_tileset.png",
+		"generated_fallback_path": "res://assets/generated_v2/tilesets/oakhaven_v2_prototype_tileset.png",
+		"morning_night_staged_only": true,
+		"production_art_modified_in_p12": false,
+		"gameplay_scene_modified_in_p12": false,
+		"collision_modified_in_p12": false
+	},
+	"screenshot_paths": {
+		"fallback_center": "res://assets/art_sources/comfyui_tests/oakhaven_p12_acceptance/screenshots/oakhaven_p12_fallback_center.png",
+		"production_center": "res://assets/art_sources/comfyui_tests/oakhaven_p12_acceptance/screenshots/oakhaven_p12_production_center.png",
+		"production_spawn": "res://assets/art_sources/comfyui_tests/oakhaven_p12_acceptance/screenshots/oakhaven_p12_production_spawn.png",
+		"production_farming_area": "res://assets/art_sources/comfyui_tests/oakhaven_p12_acceptance/screenshots/oakhaven_p12_production_farming_area.png",
+		"production_exit_area": "res://assets/art_sources/comfyui_tests/oakhaven_p12_acceptance/screenshots/oakhaven_p12_production_exit_area.png",
+		"production_npc_area": "res://assets/art_sources/comfyui_tests/oakhaven_p12_acceptance/screenshots/oakhaven_p12_production_npc_area.png",
+		"contact_sheet": "res://assets/art_sources/comfyui_tests/oakhaven_p12_acceptance/contact_sheets/oakhaven_p12_fallback_vs_production_contact_sheet.png"
+	},
+	"qa_scores": {
+		"grass": {
+			"fallback_score": 6.2,
+			"production_afternoon_score": 7.4,
+			"verdict": "Production grass is calmer and less grid-noisy in the real scene."
+		},
+		"path": {
+			"fallback_score": 7.1,
+			"production_afternoon_score": 7.4,
+			"verdict": "Existing path decals remain readable and production ground does not fight them."
+		},
+		"buildings": {
+			"fallback_score": 7.2,
+			"production_afternoon_score": 7.5,
+			"verdict": "Cottage roofs and shadows remain readable against the new baseline."
+		},
+		"props": {
+			"fallback_score": 7.0,
+			"production_afternoon_score": 7.3,
+			"verdict": "V3 props and decals remain legible; production layer stays behind them."
+		},
+		"readability": {
+			"fallback_score": 7.0,
+			"production_afternoon_score": 7.7,
+			"verdict": "Player, NPCs, labels, farming marker, and exit marker remain readable."
+		},
+		"oakhaven_identity": {
+			"fallback_score": 6.5,
+			"production_afternoon_score": 7.6,
+			"verdict": "Production afternoon gives the village a more coherent meadow/settlement base."
+		},
+		"overall": {
+			"fallback_score": 6.8,
+			"production_afternoon_score": 7.6,
+			"verdict": "Accept as Oakhaven afternoon baseline, not final polished environment art."
+		}
+	},
+	"issues_found": [
+		{
+			"area": "open grass and exit field",
+			"severity": "minor",
+			"status": "accepted baseline",
+			"notes": "Large open areas still show square tiling, but the pattern is less distracting than the generated fallback and does not mislead collision."
+		},
+		{
+			"area": "scene completeness",
+			"severity": "minor",
+			"status": "future polish",
+			"notes": "Existing V3 props, decals, and player sprite still use generated fallback slots; this phase only accepts the Oakhaven ground tileset baseline."
+		}
+	],
+	"repair_actions": [],
+	"fallback_status": {
+		"production_default": "Pass",
+		"generated_fallback_override": "Pass",
+		"invalid_time_state": "Pass",
+		"controlled_missing_production_probe": "Pass",
+		"morning_night_loadable_but_not_default": "Pass"
+	},
+	"smoke_results": {
+		"godot_version": "4.6.3.stable.official.7d41c59c4",
+		"project_boot": "Pass",
+		"main_menu_load": "Pass",
+		"oakhaven_scene_load": "Pass",
+		"overworld_free_travel_surface_load": "Pass",
+		"asset_manager_acceptance_check": "Pass",
+		"actual_scene_capture": "Pass",
+		"save_load_smoke": "Skipped; no save schema or save data was changed in P12.",
+		"git_diff_check": "Pass with CRLF normalization warnings only"
+	},
+	"decision": "Accept Oakhaven afternoon production-art baseline and move to Ironhold"
+}

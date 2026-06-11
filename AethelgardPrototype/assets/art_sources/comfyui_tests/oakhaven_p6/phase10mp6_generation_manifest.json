@@ -1,0 +1,173 @@
+{
+  "outputs": [
+    {
+      "family": "grass_terrain",
+      "attempt": 1,
+      "seed": 610001,
+      "raw": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\raw\\grass_terrain_attempt1_seed610001.png",
+      "grid32": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\grass_terrain_attempt1_seed610001_grid32.png",
+      "grid64": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\grass_terrain_attempt1_seed610001_grid64.png",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 436503,
+      "sha256": "B53E4BB29B87C513DE6C959C3DF95A97E602659A0DE0D19359179FC9FEF69826"
+    },
+    {
+      "family": "grass_terrain",
+      "attempt": 2,
+      "seed": 610002,
+      "raw": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\raw\\grass_terrain_attempt2_seed610002.png",
+      "grid32": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\grass_terrain_attempt2_seed610002_grid32.png",
+      "grid64": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\grass_terrain_attempt2_seed610002_grid64.png",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 417317,
+      "sha256": "D7B603CD2B7A4AFCFC779A3A8029587784C733CBBE9FB9351509E3C0556B3049"
+    },
+    {
+      "family": "dirt_path",
+      "attempt": 1,
+      "seed": 620001,
+      "raw": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\raw\\dirt_path_attempt1_seed620001.png",
+      "grid32": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\dirt_path_attempt1_seed620001_grid32.png",
+      "grid64": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\dirt_path_attempt1_seed620001_grid64.png",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 615534,
+      "sha256": "498C970C91BEFF576CAD914044643CDF543C816D0C44EC0A489BC5DD7EE6C211"
+    },
+    {
+      "family": "dirt_path",
+      "attempt": 2,
+      "seed": 620002,
+      "raw": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\raw\\dirt_path_attempt2_seed620002.png",
+      "grid32": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\dirt_path_attempt2_seed620002_grid32.png",
+      "grid64": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\dirt_path_attempt2_seed620002_grid64.png",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 619633,
+      "sha256": "05D6ADA4B853E17D1CEEE960F3FA299C56196624A5ED23538AA3037E80573729"
+    },
+    {
+      "family": "path_transitions",
+      "attempt": 1,
+      "seed": 630001,
+      "raw": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\raw\\path_transitions_attempt1_seed630001.png",
+      "grid32": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\path_transitions_attempt1_seed630001_grid32.png",
+      "grid64": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\path_transitions_attempt1_seed630001_grid64.png",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 538096,
+      "sha256": "AAE71FC7B32A231C6530FBFDC984F0B19AB20AC415E66DC660C7797FF73C93BE"
+    },
+    {
+      "family": "path_transitions",
+      "attempt": 2,
+      "seed": 630002,
+      "raw": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\raw\\path_transitions_attempt2_seed630002.png",
+      "grid32": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\path_transitions_attempt2_seed630002_grid32.png",
+      "grid64": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\path_transitions_attempt2_seed630002_grid64.png",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 534403,
+      "sha256": "1E9F0124AD0BF939568AF82ECAC5D07B2702148E49D836F530A7BE942CA73F54"
+    },
+    {
+      "family": "fence_hedge",
+      "attempt": 1,
+      "seed": 640001,
+      "raw": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\raw\\fence_hedge_attempt1_seed640001.png",
+      "grid32": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\fence_hedge_attempt1_seed640001_grid32.png",
+      "grid64": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\fence_hedge_attempt1_seed640001_grid64.png",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 441583,
+      "sha256": "28C4D09A7444B40A2418335878184B3CBF31090015B81917BBD47212B3CA8F31"
+    },
+    {
+      "family": "fence_hedge",
+      "attempt": 2,
+      "seed": 640002,
+      "raw": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\raw\\fence_hedge_attempt2_seed640002.png",
+      "grid32": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\fence_hedge_attempt2_seed640002_grid32.png",
+      "grid64": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\fence_hedge_attempt2_seed640002_grid64.png",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 493128,
+      "sha256": "A2384F60BDFF367B71AF6C7EDA5ED9187C60C4DB158C13513D33E0E6805E0D20"
+    },
+    {
+      "family": "cottage_family",
+      "attempt": 1,
+      "seed": 650001,
+      "raw": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\raw\\cottage_family_attempt1_seed650001.png",
+      "grid32": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\cottage_family_attempt1_seed650001_grid32.png",
+      "grid64": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\cottage_family_attempt1_seed650001_grid64.png",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 476925,
+      "sha256": "5FF452ED8D55062215E4E090FA79870160D16B18A2037E069434A07C5CF77EBA"
+    },
+    {
+      "family": "cottage_family",
+      "attempt": 2,
+      "seed": 650002,
+      "raw": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\raw\\cottage_family_attempt2_seed650002.png",
+      "grid32": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\cottage_family_attempt2_seed650002_grid32.png",
+      "grid64": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\cottage_family_attempt2_seed650002_grid64.png",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 433199,
+      "sha256": "20F12F38864D5422ED6747489F42860DE59AB4E9FB4C9DC61EB45299AE565EEB"
+    },
+    {
+      "family": "small_props",
+      "attempt": 1,
+      "seed": 660001,
+      "raw": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\raw\\small_props_attempt1_seed660001.png",
+      "grid32": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\small_props_attempt1_seed660001_grid32.png",
+      "grid64": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\small_props_attempt1_seed660001_grid64.png",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 428280,
+      "sha256": "6939F2E63DB7403957E764FFC7FF2FB78283E3C0D479CD8B5736D498714CCEDF"
+    },
+    {
+      "family": "small_props",
+      "attempt": 2,
+      "seed": 660002,
+      "raw": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\raw\\small_props_attempt2_seed660002.png",
+      "grid32": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\small_props_attempt2_seed660002_grid32.png",
+      "grid64": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\small_props_attempt2_seed660002_grid64.png",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 424893,
+      "sha256": "E614A5D8D96C673093EDB905FF02C3216DD331AA46EA411D7FEE7C1872EB3947"
+    }
+  ],
+  "contact_sheet": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_p6\\review\\phase10mp6_all_outputs_contact_sheet.png"
+}

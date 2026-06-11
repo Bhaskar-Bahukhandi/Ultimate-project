@@ -1,0 +1,77 @@
+{
+  "records": [
+    {
+      "family": "grass_tile_family",
+      "seed": 110101,
+      "path": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_tile_families\\grass_tile_family_seed110101.png",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 569251,
+      "grid32": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_tile_families\\grass_tile_family_seed110101_grid32.png",
+      "grid64": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_tile_families\\grass_tile_family_seed110101_grid64.png"
+    },
+    {
+      "family": "dirt_path_tile_family",
+      "seed": 110202,
+      "path": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_tile_families\\dirt_path_tile_family_seed110202.png",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 551647,
+      "grid32": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_tile_families\\dirt_path_tile_family_seed110202_grid32.png",
+      "grid64": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_tile_families\\dirt_path_tile_family_seed110202_grid64.png"
+    },
+    {
+      "family": "path_edge_corner_transition_family",
+      "seed": 110303,
+      "path": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_tile_families\\path_edge_corner_transition_family_seed110303.png",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 567421,
+      "grid32": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_tile_families\\path_edge_corner_transition_family_seed110303_grid32.png",
+      "grid64": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_tile_families\\path_edge_corner_transition_family_seed110303_grid64.png"
+    },
+    {
+      "family": "wooden_fence_hedge_family",
+      "seed": 110404,
+      "path": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_tile_families\\wooden_fence_hedge_family_seed110404.png",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 463034,
+      "grid32": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_tile_families\\wooden_fence_hedge_family_seed110404_grid32.png",
+      "grid64": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_tile_families\\wooden_fence_hedge_family_seed110404_grid64.png"
+    },
+    {
+      "family": "cottage_wall_roof_base_family",
+      "seed": 110505,
+      "path": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_tile_families\\cottage_wall_roof_base_family_seed110505.png",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 527375,
+      "grid32": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_tile_families\\cottage_wall_roof_base_family_seed110505_grid32.png",
+      "grid64": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_tile_families\\cottage_wall_roof_base_family_seed110505_grid64.png"
+    },
+    {
+      "family": "flowers_herb_sign_shadow_props_family",
+      "seed": 110606,
+      "path": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_tile_families\\flowers_herb_sign_shadow_props_family_seed110606.png",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 428843,
+      "grid32": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_tile_families\\flowers_herb_sign_shadow_props_family_seed110606_grid32.png",
+      "grid64": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_tile_families\\flowers_herb_sign_shadow_props_family_seed110606_grid64.png"
+    }
+  ],
+  "contact_sheet": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\assets\\art_sources\\comfyui_tests\\oakhaven_tile_families\\phase10mp4_oakhaven_tile_families_contact_sheet.png"
+}

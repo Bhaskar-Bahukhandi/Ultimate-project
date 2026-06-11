@@ -1,0 +1,51 @@
+{
+	"actual_scene_modified": false,
+	"all_passed": true,
+	"checks": [
+		{
+			"check": "AssetManager production load",
+			"expected": "res://assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png",
+			"production": true,
+			"resolved_path": "res://assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png",
+			"result": "Pass",
+			"texture_size": "512x512"
+		},
+		{
+			"check": "Runtime fallback override",
+			"expected": "res://assets/generated_v2/tilesets/fractured_wastes_v2_prototype_tileset.png",
+			"fallback_reason": "runtime fallback override enabled",
+			"production": false,
+			"resolved_path": "res://assets/generated_v2/tilesets/fractured_wastes_v2_prototype_tileset.png",
+			"result": "Pass",
+			"texture_size": "128x64"
+		},
+		{
+			"check": "Missing production behavior",
+			"fallback_path": "res://assets/generated_v2/tilesets/fractured_wastes_v2_prototype_tileset.png",
+			"fallback_texture_loaded": true,
+			"missing_probe": "res://assets/production_art/tilesets/fractured_wastes/__missing_r3_probe__.png",
+			"missing_texture_null": true,
+			"result": "Pass"
+		},
+		{
+			"check": "Generated fallback still available",
+			"path": "res://assets/generated_v2/tilesets/fractured_wastes_v2_prototype_tileset.png",
+			"result": "Pass",
+			"texture_size": "128x64"
+		},
+		{
+			"check": "Oakhaven baseline preservation",
+			"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+			"production": true,
+			"result": "Pass"
+		},
+		{
+			"check": "Ironhold baseline preservation",
+			"path": "res://assets/production_art/tilesets/ironhold/ironhold_tileset.png",
+			"production": true,
+			"result": "Pass"
+		}
+	],
+	"phase": "10M-R3",
+	"production_art_changed": true
+}

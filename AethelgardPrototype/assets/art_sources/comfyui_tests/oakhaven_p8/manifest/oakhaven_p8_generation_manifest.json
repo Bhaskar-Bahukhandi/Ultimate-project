@@ -1,0 +1,1246 @@
+{
+  "phase": "10M-P8",
+  "method": "deterministic Python/Pillow pixel-art construction; no ComfyUI generation and no P6/P7 direct crop import",
+  "tile_size": [
+    32,
+    32
+  ],
+  "atlas_size": [
+    512,
+    512
+  ],
+  "grid": [
+    16,
+    16
+  ],
+  "production_art_changed": false,
+  "best_variant": "b_textured",
+  "variant_files": {
+    "a_clean": "assets/art_sources/comfyui_tests/oakhaven_p8/generated_tiles/oakhaven_p8_variant_a_clean.png",
+    "b_textured": "assets/art_sources/comfyui_tests/oakhaven_p8/generated_tiles/oakhaven_p8_variant_b_textured.png",
+    "c_dark_glitch": "assets/art_sources/comfyui_tests/oakhaven_p8/generated_tiles/oakhaven_p8_variant_c_dark_glitch.png"
+  },
+  "mockup_files": {
+    "a_clean": "assets/art_sources/comfyui_tests/oakhaven_p8/mockups/oakhaven_p8_variant_a_mockup.png",
+    "b_textured": "assets/art_sources/comfyui_tests/oakhaven_p8/mockups/oakhaven_p8_variant_b_mockup.png",
+    "c_dark_glitch": "assets/art_sources/comfyui_tests/oakhaven_p8/mockups/oakhaven_p8_variant_c_mockup.png"
+  },
+  "layout_map": "assets/art_sources/comfyui_tests/oakhaven_p8/manifest/oakhaven_p8_tile_layout.md",
+  "scores": {
+    "a_clean": {
+      "grass_readability": 8,
+      "path_readability": 8,
+      "transition_logic": 7,
+      "fence_hedge_usability": 7,
+      "building_support_usability": 7,
+      "prop_clarity": 7,
+      "style_consistency": 8,
+      "oakhaven_identity": 7,
+      "tile_grammar_correctness": 8,
+      "chance_of_improving_actual_game_visuals": 7,
+      "overall_score": 7.4,
+      "verdict": "good enough for preview-only Godot scene",
+      "notes": "Strongest simple readability; visually plain compared with final production art."
+    },
+    "b_textured": {
+      "grass_readability": 8,
+      "path_readability": 8,
+      "transition_logic": 7,
+      "fence_hedge_usability": 8,
+      "building_support_usability": 7,
+      "prop_clarity": 8,
+      "style_consistency": 8,
+      "oakhaven_identity": 8,
+      "tile_grammar_correctness": 8,
+      "chance_of_improving_actual_game_visuals": 8,
+      "overall_score": 7.8,
+      "verdict": "good enough to consider production import in a later phase after preview review",
+      "notes": "Best balance of tile grammar, readable texture, and Oakhaven village identity."
+    },
+    "c_dark_glitch": {
+      "grass_readability": 7,
+      "path_readability": 7,
+      "transition_logic": 7,
+      "fence_hedge_usability": 7,
+      "building_support_usability": 7,
+      "prop_clarity": 7,
+      "style_consistency": 8,
+      "oakhaven_identity": 8,
+      "tile_grammar_correctness": 8,
+      "chance_of_improving_actual_game_visuals": 7,
+      "overall_score": 7.3,
+      "verdict": "good enough for preview-only Godot scene",
+      "notes": "Moodiest variant; needs brightness check in actual scene context."
+    }
+  },
+  "layout": [
+    {
+      "x": 0,
+      "y": 0,
+      "name": "grass_base",
+      "category": "grass",
+      "intended_use": "base grass tile",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "name": "grass_darker",
+      "category": "grass",
+      "intended_use": "darker grass variation",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "name": "grass_lighter",
+      "category": "grass",
+      "intended_use": "lighter grass variation",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "name": "grass_patchy",
+      "category": "grass",
+      "intended_use": "patchy grass",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "name": "grass_sparse",
+      "category": "grass",
+      "intended_use": "sparse grass",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "name": "grass_flower_speckled",
+      "category": "grass",
+      "intended_use": "flower-speckled grass",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "name": "grass_worn",
+      "category": "grass",
+      "intended_use": "slightly worn grass",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "name": "grass_shadowed",
+      "category": "grass",
+      "intended_use": "shadowed grass",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "name": "grass_mossy",
+      "category": "grass",
+      "intended_use": "mossy grass",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "name": "grass_leaf_scatter",
+      "category": "grass",
+      "intended_use": "leaf-scattered grass",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "name": "grass_blue_flowers",
+      "category": "grass",
+      "intended_use": "blue flower grass",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "name": "grass_pink_flowers",
+      "category": "grass",
+      "intended_use": "pink flower grass",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "name": "grass_tiny_stones",
+      "category": "grass",
+      "intended_use": "tiny stone grass",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "name": "grass_clover",
+      "category": "grass",
+      "intended_use": "clover grass",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "name": "grass_faint_glitch_spark",
+      "category": "grass",
+      "intended_use": "tiny magical accent grass",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 15,
+      "y": 0,
+      "name": "grass_plain_backup",
+      "category": "grass",
+      "intended_use": "plain backup grass",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "name": "grass_dense_blades",
+      "category": "grass",
+      "intended_use": "dense blade grass",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "name": "grass_trampled",
+      "category": "grass",
+      "intended_use": "trampled grass",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "name": "grass_forest_floor",
+      "category": "grass",
+      "intended_use": "forest floor grass",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "name": "grass_dry_yellowed",
+      "category": "grass",
+      "intended_use": "dry yellowed grass",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "name": "grass_soft_shadow",
+      "category": "grass",
+      "intended_use": "soft shadow grass",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "name": "grass_village_lawn",
+      "category": "grass",
+      "intended_use": "village lawn fill",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "name": "grass_herb_hint",
+      "category": "grass",
+      "intended_use": "herb hint grass",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "name": "grass_low_noise",
+      "category": "grass",
+      "intended_use": "low-noise grass",
+      "notes": "Rows 0-2: grass terrain."
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "name": "dirt_center",
+      "category": "dirt path",
+      "intended_use": "dirt center",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "name": "dirt_variation",
+      "category": "dirt path",
+      "intended_use": "dirt variation",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "name": "path_worn_center",
+      "category": "dirt path",
+      "intended_use": "worn path center",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "name": "path_straight_horizontal",
+      "category": "dirt path",
+      "intended_use": "path straight horizontal",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "name": "path_straight_vertical",
+      "category": "dirt path",
+      "intended_use": "path straight vertical",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "name": "path_t_junction_up",
+      "category": "dirt path",
+      "intended_use": "path T-junction",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "name": "path_t_junction_down",
+      "category": "dirt path",
+      "intended_use": "path T-junction",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 7,
+      "y": 3,
+      "name": "path_t_junction_left",
+      "category": "dirt path",
+      "intended_use": "path T-junction",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 8,
+      "y": 3,
+      "name": "path_t_junction_right",
+      "category": "dirt path",
+      "intended_use": "path T-junction",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 9,
+      "y": 3,
+      "name": "path_cross",
+      "category": "dirt path",
+      "intended_use": "path cross",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 10,
+      "y": 3,
+      "name": "dirt_small_stone_embedded",
+      "category": "dirt path",
+      "intended_use": "small stone embedded dirt",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 11,
+      "y": 3,
+      "name": "path_turn_ne",
+      "category": "dirt path",
+      "intended_use": "path turn",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 12,
+      "y": 3,
+      "name": "path_turn_nw",
+      "category": "dirt path",
+      "intended_use": "path turn",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 13,
+      "y": 3,
+      "name": "path_turn_se",
+      "category": "dirt path",
+      "intended_use": "path turn",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 14,
+      "y": 3,
+      "name": "path_turn_sw",
+      "category": "dirt path",
+      "intended_use": "path turn",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 15,
+      "y": 3,
+      "name": "path_end_left",
+      "category": "dirt path",
+      "intended_use": "path end",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "name": "path_end_right",
+      "category": "dirt path",
+      "intended_use": "path end",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "name": "path_end_top",
+      "category": "dirt path",
+      "intended_use": "path end",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "name": "path_end_bottom",
+      "category": "dirt path",
+      "intended_use": "path end",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "name": "dirt_pebble_1",
+      "category": "dirt path",
+      "intended_use": "pebble dirt",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 4,
+      "y": 4,
+      "name": "dirt_pebble_2",
+      "category": "dirt path",
+      "intended_use": "pebble dirt alternate",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "name": "dirt_darker_mud",
+      "category": "dirt path",
+      "intended_use": "darker mud dirt",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "name": "dirt_dry_patch",
+      "category": "dirt path",
+      "intended_use": "dry dirt patch",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 7,
+      "y": 4,
+      "name": "dirt_track_marks",
+      "category": "dirt path",
+      "intended_use": "track-mark dirt",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 8,
+      "y": 4,
+      "name": "dirt_stepstone_center",
+      "category": "dirt path",
+      "intended_use": "stepping stone dirt",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 9,
+      "y": 4,
+      "name": "path_narrow_horizontal",
+      "category": "dirt path",
+      "intended_use": "narrow horizontal path",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 10,
+      "y": 4,
+      "name": "path_narrow_vertical",
+      "category": "dirt path",
+      "intended_use": "narrow vertical path",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 11,
+      "y": 4,
+      "name": "path_shadow_left",
+      "category": "dirt path",
+      "intended_use": "path left shadow",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 12,
+      "y": 4,
+      "name": "path_shadow_right",
+      "category": "dirt path",
+      "intended_use": "path right shadow",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 13,
+      "y": 4,
+      "name": "dirt_low_noise",
+      "category": "dirt path",
+      "intended_use": "low-noise dirt",
+      "notes": "Rows 3-5: path grammar."
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "name": "transition_top_edge",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "top edge",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "name": "transition_bottom_edge",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "bottom edge",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "name": "transition_left_edge",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "left edge",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "name": "transition_right_edge",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "right edge",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 4,
+      "y": 6,
+      "name": "transition_outer_tl",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "outer corner",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "name": "transition_outer_tr",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "outer corner",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 6,
+      "y": 6,
+      "name": "transition_outer_bl",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "outer corner",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 7,
+      "y": 6,
+      "name": "transition_outer_br",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "outer corner",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 8,
+      "y": 6,
+      "name": "transition_inner_tl",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "inner corner",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 9,
+      "y": 6,
+      "name": "transition_inner_tr",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "inner corner",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 10,
+      "y": 6,
+      "name": "transition_inner_bl",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "inner corner",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 11,
+      "y": 6,
+      "name": "transition_inner_br",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "inner corner",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 12,
+      "y": 6,
+      "name": "transition_diagonal_down",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "diagonal-ish rough edge",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 13,
+      "y": 6,
+      "name": "transition_diagonal_up",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "diagonal-ish rough edge",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 14,
+      "y": 6,
+      "name": "transition_soft_broken_top",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "soft broken edge",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 15,
+      "y": 6,
+      "name": "transition_soft_broken_bottom",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "soft broken edge",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "name": "transition_soft_broken_left",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "soft broken edge",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "name": "transition_soft_broken_right",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "soft broken edge",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "name": "transition_small_patch_dirt",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "small dirt patch",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "name": "transition_small_patch_grass",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "small grass patch",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 4,
+      "y": 7,
+      "name": "transition_stony_edge_left",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "stony edge",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 5,
+      "y": 7,
+      "name": "transition_stony_edge_right",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "stony edge",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 6,
+      "y": 7,
+      "name": "transition_flowery_edge_top",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "flowered edge",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 7,
+      "y": 7,
+      "name": "transition_flowery_edge_bottom",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "flowered edge",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 8,
+      "y": 7,
+      "name": "transition_dark_edge_top",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "dark edge",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 9,
+      "y": 7,
+      "name": "transition_dark_edge_bottom",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "dark edge",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 10,
+      "y": 7,
+      "name": "transition_dark_edge_left",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "dark edge",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 11,
+      "y": 7,
+      "name": "transition_dark_edge_right",
+      "category": "grass-to-dirt transitions",
+      "intended_use": "dark edge",
+      "notes": "Rows 6-8: edge/corner grammar."
+    },
+    {
+      "x": 0,
+      "y": 9,
+      "name": "fence_horizontal_middle",
+      "category": "fence/hedge",
+      "intended_use": "fence horizontal middle",
+      "notes": "Rows 9-10: boundary sprites."
+    },
+    {
+      "x": 1,
+      "y": 9,
+      "name": "fence_vertical_middle",
+      "category": "fence/hedge",
+      "intended_use": "fence vertical middle",
+      "notes": "Rows 9-10: boundary sprites."
+    },
+    {
+      "x": 2,
+      "y": 9,
+      "name": "fence_post",
+      "category": "fence/hedge",
+      "intended_use": "fence post",
+      "notes": "Rows 9-10: boundary sprites."
+    },
+    {
+      "x": 3,
+      "y": 9,
+      "name": "fence_end_left",
+      "category": "fence/hedge",
+      "intended_use": "fence end left",
+      "notes": "Rows 9-10: boundary sprites."
+    },
+    {
+      "x": 4,
+      "y": 9,
+      "name": "fence_end_right",
+      "category": "fence/hedge",
+      "intended_use": "fence end right",
+      "notes": "Rows 9-10: boundary sprites."
+    },
+    {
+      "x": 5,
+      "y": 9,
+      "name": "fence_end_top",
+      "category": "fence/hedge",
+      "intended_use": "fence end top",
+      "notes": "Rows 9-10: boundary sprites."
+    },
+    {
+      "x": 6,
+      "y": 9,
+      "name": "fence_end_bottom",
+      "category": "fence/hedge",
+      "intended_use": "fence end bottom",
+      "notes": "Rows 9-10: boundary sprites."
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "name": "hedge_block",
+      "category": "fence/hedge",
+      "intended_use": "hedge block",
+      "notes": "Rows 9-10: boundary sprites."
+    },
+    {
+      "x": 8,
+      "y": 9,
+      "name": "hedge_horizontal",
+      "category": "fence/hedge",
+      "intended_use": "hedge horizontal",
+      "notes": "Rows 9-10: boundary sprites."
+    },
+    {
+      "x": 9,
+      "y": 9,
+      "name": "hedge_vertical",
+      "category": "fence/hedge",
+      "intended_use": "hedge vertical",
+      "notes": "Rows 9-10: boundary sprites."
+    },
+    {
+      "x": 10,
+      "y": 9,
+      "name": "hedge_corner_tl",
+      "category": "fence/hedge",
+      "intended_use": "hedge corner",
+      "notes": "Rows 9-10: boundary sprites."
+    },
+    {
+      "x": 11,
+      "y": 9,
+      "name": "hedge_corner_tr",
+      "category": "fence/hedge",
+      "intended_use": "hedge corner",
+      "notes": "Rows 9-10: boundary sprites."
+    },
+    {
+      "x": 12,
+      "y": 9,
+      "name": "hedge_corner_bl",
+      "category": "fence/hedge",
+      "intended_use": "hedge corner",
+      "notes": "Rows 9-10: boundary sprites."
+    },
+    {
+      "x": 13,
+      "y": 9,
+      "name": "hedge_corner_br",
+      "category": "fence/hedge",
+      "intended_use": "hedge corner",
+      "notes": "Rows 9-10: boundary sprites."
+    },
+    {
+      "x": 14,
+      "y": 9,
+      "name": "hedge_broken_opening",
+      "category": "fence/hedge",
+      "intended_use": "broken hedge/opening",
+      "notes": "Rows 9-10: boundary sprites."
+    },
+    {
+      "x": 15,
+      "y": 9,
+      "name": "hedge_flower_block",
+      "category": "fence/hedge",
+      "intended_use": "hedge flower block",
+      "notes": "Rows 9-10: boundary sprites."
+    },
+    {
+      "x": 0,
+      "y": 10,
+      "name": "fence_gate_left",
+      "category": "fence/hedge",
+      "intended_use": "fence gate left",
+      "notes": "Rows 9-10: boundary sprites."
+    },
+    {
+      "x": 1,
+      "y": 10,
+      "name": "fence_gate_right",
+      "category": "fence/hedge",
+      "intended_use": "fence gate right",
+      "notes": "Rows 9-10: boundary sprites."
+    },
+    {
+      "x": 2,
+      "y": 10,
+      "name": "fence_broken_board",
+      "category": "fence/hedge",
+      "intended_use": "broken fence",
+      "notes": "Rows 9-10: boundary sprites."
+    },
+    {
+      "x": 3,
+      "y": 10,
+      "name": "fence_support_stake",
+      "category": "fence/hedge",
+      "intended_use": "fence support stake",
+      "notes": "Rows 9-10: boundary sprites."
+    },
+    {
+      "x": 0,
+      "y": 11,
+      "name": "cottage_wall_base",
+      "category": "cottage/building support",
+      "intended_use": "cottage wall base",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 1,
+      "y": 11,
+      "name": "cottage_wall_variation",
+      "category": "cottage/building support",
+      "intended_use": "cottage wall variation",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 2,
+      "y": 11,
+      "name": "wooden_wall_tile",
+      "category": "cottage/building support",
+      "intended_use": "wooden wall tile",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 3,
+      "y": 11,
+      "name": "roof_edge_tile",
+      "category": "cottage/building support",
+      "intended_use": "roof edge tile",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 4,
+      "y": 11,
+      "name": "roof_corner_tile",
+      "category": "cottage/building support",
+      "intended_use": "roof corner tile",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 5,
+      "y": 11,
+      "name": "roof_center_tile",
+      "category": "cottage/building support",
+      "intended_use": "roof center tile",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "name": "foundation_shadow",
+      "category": "cottage/building support",
+      "intended_use": "foundation shadow",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "name": "doorway_base",
+      "category": "cottage/building support",
+      "intended_use": "doorway base",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 8,
+      "y": 11,
+      "name": "window_wall_detail",
+      "category": "cottage/building support",
+      "intended_use": "window/wall detail",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 9,
+      "y": 11,
+      "name": "small_wooden_trim",
+      "category": "cottage/building support",
+      "intended_use": "small wooden trim",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 10,
+      "y": 11,
+      "name": "roof_edge_left",
+      "category": "cottage/building support",
+      "intended_use": "roof edge left",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 11,
+      "y": 11,
+      "name": "roof_edge_right",
+      "category": "cottage/building support",
+      "intended_use": "roof edge right",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 12,
+      "y": 11,
+      "name": "roof_edge_top",
+      "category": "cottage/building support",
+      "intended_use": "roof edge top",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 13,
+      "y": 11,
+      "name": "roof_edge_bottom",
+      "category": "cottage/building support",
+      "intended_use": "roof edge bottom",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 14,
+      "y": 11,
+      "name": "wall_shadow_left",
+      "category": "cottage/building support",
+      "intended_use": "wall shadow left",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 15,
+      "y": 11,
+      "name": "wall_shadow_right",
+      "category": "cottage/building support",
+      "intended_use": "wall shadow right",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 0,
+      "y": 12,
+      "name": "wood_beam_horizontal",
+      "category": "cottage/building support",
+      "intended_use": "wood beam horizontal",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 1,
+      "y": 12,
+      "name": "wood_beam_vertical",
+      "category": "cottage/building support",
+      "intended_use": "wood beam vertical",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 2,
+      "y": 12,
+      "name": "wall_moss_base",
+      "category": "cottage/building support",
+      "intended_use": "mossy wall base",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 3,
+      "y": 12,
+      "name": "roof_moss_patch",
+      "category": "cottage/building support",
+      "intended_use": "mossy roof patch",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 4,
+      "y": 12,
+      "name": "cottage_step",
+      "category": "cottage/building support",
+      "intended_use": "cottage step",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 5,
+      "y": 12,
+      "name": "window_lit_detail",
+      "category": "cottage/building support",
+      "intended_use": "lit window detail",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 6,
+      "y": 12,
+      "name": "porch_plank",
+      "category": "cottage/building support",
+      "intended_use": "porch plank",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 7,
+      "y": 12,
+      "name": "wall_tiny_glitch_crack",
+      "category": "cottage/building support",
+      "intended_use": "tiny glitch crack",
+      "notes": "Rows 11-13: village building support."
+    },
+    {
+      "x": 0,
+      "y": 14,
+      "name": "flower_patch",
+      "category": "props/utility",
+      "intended_use": "flower patch",
+      "notes": "Rows 14-15: decoration and utility."
+    },
+    {
+      "x": 1,
+      "y": 14,
+      "name": "herb_patch",
+      "category": "props/utility",
+      "intended_use": "herb patch",
+      "notes": "Rows 14-15: decoration and utility."
+    },
+    {
+      "x": 2,
+      "y": 14,
+      "name": "wooden_sign",
+      "category": "props/utility",
+      "intended_use": "wooden sign",
+      "notes": "Rows 14-15: decoration and utility."
+    },
+    {
+      "x": 3,
+      "y": 14,
+      "name": "small_stone",
+      "category": "props/utility",
+      "intended_use": "small stone",
+      "notes": "Rows 14-15: decoration and utility."
+    },
+    {
+      "x": 4,
+      "y": 14,
+      "name": "tree_stump",
+      "category": "props/utility",
+      "intended_use": "tree stump",
+      "notes": "Rows 14-15: decoration and utility."
+    },
+    {
+      "x": 5,
+      "y": 14,
+      "name": "crate_barrel_simple",
+      "category": "props/utility",
+      "intended_use": "crate/barrel simple prop",
+      "notes": "Rows 14-15: decoration and utility."
+    },
+    {
+      "x": 6,
+      "y": 14,
+      "name": "soft_shadow_blob",
+      "category": "props/utility",
+      "intended_use": "soft shadow blob",
+      "notes": "Rows 14-15: decoration and utility."
+    },
+    {
+      "x": 7,
+      "y": 14,
+      "name": "glitch_flower_rune_accent",
+      "category": "props/utility",
+      "intended_use": "tiny cyan-magenta glitch flower/rune accent",
+      "notes": "Rows 14-15: decoration and utility."
+    },
+    {
+      "x": 8,
+      "y": 14,
+      "name": "ground_leaf_scatter",
+      "category": "props/utility",
+      "intended_use": "ground leaf scatter",
+      "notes": "Rows 14-15: decoration and utility."
+    },
+    {
+      "x": 9,
+      "y": 14,
+      "name": "village_marker_tile",
+      "category": "props/utility",
+      "intended_use": "village marker tile",
+      "notes": "Rows 14-15: decoration and utility."
+    },
+    {
+      "x": 10,
+      "y": 14,
+      "name": "transparent_empty_tile",
+      "category": "props/utility",
+      "intended_use": "transparent empty tile",
+      "notes": "Rows 14-15: decoration and utility."
+    },
+    {
+      "x": 11,
+      "y": 14,
+      "name": "debug_safe_separator",
+      "category": "props/utility",
+      "intended_use": "debug-safe separator",
+      "notes": "Rows 14-15: decoration and utility."
+    },
+    {
+      "x": 12,
+      "y": 14,
+      "name": "shadow_only_tile",
+      "category": "props/utility",
+      "intended_use": "shadow-only tile",
+      "notes": "Rows 14-15: decoration and utility."
+    },
+    {
+      "x": 13,
+      "y": 14,
+      "name": "highlight_only_accent_tile",
+      "category": "props/utility",
+      "intended_use": "highlight-only accent tile",
+      "notes": "Rows 14-15: decoration and utility."
+    },
+    {
+      "x": 14,
+      "y": 14,
+      "name": "flower_patch_blue",
+      "category": "props/utility",
+      "intended_use": "blue flower patch",
+      "notes": "Rows 14-15: decoration and utility."
+    },
+    {
+      "x": 15,
+      "y": 14,
+      "name": "tiny_mushroom_cluster",
+      "category": "props/utility",
+      "intended_use": "tiny mushroom cluster",
+      "notes": "Rows 14-15: decoration and utility."
+    },
+    {
+      "x": 0,
+      "y": 15,
+      "name": "small_log",
+      "category": "props/utility",
+      "intended_use": "small log",
+      "notes": "Rows 14-15: decoration and utility."
+    },
+    {
+      "x": 1,
+      "y": 15,
+      "name": "barrel_only",
+      "category": "props/utility",
+      "intended_use": "barrel only",
+      "notes": "Rows 14-15: decoration and utility."
+    },
+    {
+      "x": 2,
+      "y": 15,
+      "name": "crate_only",
+      "category": "props/utility",
+      "intended_use": "crate only",
+      "notes": "Rows 14-15: decoration and utility."
+    },
+    {
+      "x": 3,
+      "y": 15,
+      "name": "tiny_cyan_spark",
+      "category": "props/utility",
+      "intended_use": "tiny cyan spark",
+      "notes": "Rows 14-15: decoration and utility."
+    }
+  ]
+}

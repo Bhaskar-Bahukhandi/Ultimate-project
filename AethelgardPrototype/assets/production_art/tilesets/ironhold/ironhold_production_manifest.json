@@ -1,0 +1,30 @@
+{
+  "region_id": "ironhold",
+  "status": "controlled import candidate",
+  "default_variant": "variant_b_textured",
+  "tile_size": 32,
+  "atlas_size": {
+    "width": 512,
+    "height": 512
+  },
+  "grid": {
+    "columns": 16,
+    "rows": 16
+  },
+  "source_path": "assets/art_sources/comfyui_tests/ironhold_q1/generated_tiles/ironhold_q1_variant_b_textured.png",
+  "production_path": "assets/production_art/tilesets/ironhold/ironhold_tileset.png",
+  "fallback_path": "assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png",
+  "lineage": {
+    "q1": "Controlled Ironhold deterministic tileset grammar pass; Variant B textured selected as best candidate.",
+    "q2": "Preview-only Godot validation; Variant B scored 8.3 overall and fallback scored 4.9 overall.",
+    "q3": "Controlled production-art import candidate copied into the Ironhold production-art slot."
+  },
+  "import_date": "2026-06-11",
+  "notes": [
+    "Controlled deterministic generated art, not direct ComfyUI production import.",
+    "Not final release art.",
+    "Generated fallback must remain available and load automatically if production art is missing or invalid.",
+    "Variant A clean and Variant C ember/dark remain reference only in this phase.",
+    "Variant B textured is the first Ironhold production baseline candidate."
+  ]
+}

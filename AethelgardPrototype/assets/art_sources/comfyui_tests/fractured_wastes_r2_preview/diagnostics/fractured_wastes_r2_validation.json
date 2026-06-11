@@ -1,0 +1,38 @@
+{
+	"all_passed": true,
+	"checks": [
+		{
+			"check": "AssetManager fallback",
+			"expected": "res://assets/generated_v2/tilesets/fractured_wastes_v2_prototype_tileset.png",
+			"production": false,
+			"production_slot_exists": false,
+			"resolved_path": "res://assets/generated_v2/tilesets/fractured_wastes_v2_prototype_tileset.png",
+			"result": "Pass"
+		},
+		{
+			"check": "Oakhaven baseline preservation",
+			"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+			"production": true,
+			"result": "Pass"
+		},
+		{
+			"check": "Ironhold baseline preservation",
+			"path": "res://assets/production_art/tilesets/ironhold/ironhold_tileset.png",
+			"production": true,
+			"result": "Pass"
+		},
+		{
+			"camera_found": true,
+			"check": "Fractured Wastes scene load",
+			"farming_marker_found": true,
+			"player_found": true,
+			"result": "Pass",
+			"scene": "res://scenes/regions/fractured_wastes_region.tscn",
+			"visual_layer_found": true,
+			"visual_layer_path": "res://assets/generated_v2/tilesets/fractured_wastes_v2_prototype_tileset.png",
+			"visual_layer_production": false
+		}
+	],
+	"phase": "10M-R2",
+	"production_art_changed": false
+}

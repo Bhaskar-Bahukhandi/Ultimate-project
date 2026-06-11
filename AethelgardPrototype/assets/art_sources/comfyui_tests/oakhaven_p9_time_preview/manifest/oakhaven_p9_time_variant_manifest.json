@@ -1,0 +1,36 @@
+{
+  "phase": "10M-P9",
+  "purpose": "Preview-only Oakhaven time-of-day tileset mapping using P8 deterministic atlas variants.",
+  "preview_only": true,
+  "production_art_changed": false,
+  "comfyui_generation_used": false,
+  "tile_size": [32, 32],
+  "atlas_size": [512, 512],
+  "shared_layout_source": "assets/art_sources/comfyui_tests/oakhaven_p8/manifest/oakhaven_p8_tile_layout.md",
+  "variants": {
+    "morning": {
+      "name": "Morning",
+      "variant": "P8 Variant A clean",
+      "atlas": "assets/art_sources/comfyui_tests/oakhaven_p8/generated_tiles/oakhaven_p8_variant_a_clean.png",
+      "intended_mood": "fresh, readable, early day",
+      "tint_overlay": "very light warm/neutral",
+      "warning": "Check whether the clean variant feels too plain."
+    },
+    "afternoon": {
+      "name": "Afternoon",
+      "variant": "P8 Variant B textured",
+      "atlas": "assets/art_sources/comfyui_tests/oakhaven_p8/generated_tiles/oakhaven_p8_variant_b_textured.png",
+      "intended_mood": "default Oakhaven daytime",
+      "tint_overlay": "neutral",
+      "warning": "Primary candidate for later single-variant import consideration."
+    },
+    "night": {
+      "name": "Night",
+      "variant": "P8 Variant C dark/glitch",
+      "atlas": "assets/art_sources/comfyui_tests/oakhaven_p8/generated_tiles/oakhaven_p8_variant_c_dark_glitch.png",
+      "intended_mood": "darker magical night",
+      "tint_overlay": "subtle cool/dim",
+      "warning": "Readability must be checked; paths and player marker must remain visible."
+    }
+  }
+}

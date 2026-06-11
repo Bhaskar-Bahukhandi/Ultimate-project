@@ -1,0 +1,42 @@
+{
+	"board_tiles": [
+		24,
+		18
+	],
+	"capture_method": "Godot headless Image composition using AssetManager Oakhaven production slots",
+	"contact_sheet": "res://assets/art_sources/comfyui_tests/oakhaven_p11_import_preview/contact_sheets/oakhaven_p11_fallback_vs_production_contact_sheet.png",
+	"fallback_path": "res://assets/generated_v2/tilesets/oakhaven_v2_prototype_tileset.png",
+	"phase": "10M-P11",
+	"preview_only": true,
+	"production_art_changed": true,
+	"screenshots": {
+		"afternoon": "res://assets/art_sources/comfyui_tests/oakhaven_p11_import_preview/screenshots/oakhaven_p11_afternoon_preview.png",
+		"fallback": "res://assets/art_sources/comfyui_tests/oakhaven_p11_import_preview/screenshots/oakhaven_p11_fallback_preview.png",
+		"morning": "res://assets/art_sources/comfyui_tests/oakhaven_p11_import_preview/screenshots/oakhaven_p11_morning_preview.png",
+		"night": "res://assets/art_sources/comfyui_tests/oakhaven_p11_import_preview/screenshots/oakhaven_p11_night_preview.png"
+	},
+	"slot_results": {
+		"afternoon": {
+			"fallback_used": false,
+			"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+			"production": true,
+			"requested_time_state": "afternoon",
+			"time_state": "afternoon"
+		},
+		"morning": {
+			"fallback_used": false,
+			"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_morning_tileset.png",
+			"production": true,
+			"requested_time_state": "morning",
+			"time_state": "morning"
+		},
+		"night": {
+			"fallback_used": false,
+			"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_night_tileset.png",
+			"production": true,
+			"requested_time_state": "night",
+			"time_state": "night"
+		}
+	},
+	"tile_size": 32
+}

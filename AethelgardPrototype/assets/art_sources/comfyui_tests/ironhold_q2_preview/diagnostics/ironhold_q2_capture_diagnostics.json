@@ -1,0 +1,61 @@
+{
+	"actual_arena_reference": {
+		"reason": "arena_district enters combat/quest UI flow during _ready",
+		"result": "Skipped"
+	},
+	"actual_city_reference": {
+		"reason": "chapter2 ironhold_city runs story/quest/dialogue side effects during _ready",
+		"result": "Skipped"
+	},
+	"actual_region_reference": {
+		"farming_marker_found": true,
+		"player_found": true,
+		"result": "Pass",
+		"scene": "res://scenes/regions/ironhold_region.tscn",
+		"screenshot": "res://assets/art_sources/comfyui_tests/ironhold_q2_preview/screenshots/ironhold_q2_actual_region_reference.png",
+		"visual_layer_found": true
+	},
+	"actual_scene_modified": false,
+	"captures": [
+		{
+			"id": "fallback",
+			"result": "Pass",
+			"screenshot": "res://assets/art_sources/comfyui_tests/ironhold_q2_preview/screenshots/ironhold_q2_fallback_preview.png",
+			"texture": "res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png",
+			"texture_size": "128x64",
+			"title": "Ironhold fallback reference"
+		},
+		{
+			"id": "variant_a",
+			"result": "Pass",
+			"screenshot": "res://assets/art_sources/comfyui_tests/ironhold_q2_preview/screenshots/ironhold_q2_variant_a_preview.png",
+			"texture": "res://assets/art_sources/comfyui_tests/ironhold_q1/generated_tiles/ironhold_q1_variant_a_clean.png",
+			"texture_size": "512x512",
+			"title": "Ironhold Q1 Variant A clean"
+		},
+		{
+			"id": "variant_b",
+			"result": "Pass",
+			"screenshot": "res://assets/art_sources/comfyui_tests/ironhold_q2_preview/screenshots/ironhold_q2_variant_b_preview.png",
+			"texture": "res://assets/art_sources/comfyui_tests/ironhold_q1/generated_tiles/ironhold_q1_variant_b_textured.png",
+			"texture_size": "512x512",
+			"title": "Ironhold Q1 Variant B textured"
+		},
+		{
+			"id": "variant_c",
+			"result": "Pass",
+			"screenshot": "res://assets/art_sources/comfyui_tests/ironhold_q2_preview/screenshots/ironhold_q2_variant_c_preview.png",
+			"texture": "res://assets/art_sources/comfyui_tests/ironhold_q1/generated_tiles/ironhold_q1_variant_c_ember_dark.png",
+			"texture_size": "512x512",
+			"title": "Ironhold Q1 Variant C ember/dark"
+		}
+	],
+	"contact_sheet": {
+		"columns": 2,
+		"path": "res://assets/art_sources/comfyui_tests/ironhold_q2_preview/contact_sheets/ironhold_q2_fallback_vs_variants_contact_sheet.png",
+		"result": "Pass",
+		"rows": 2
+	},
+	"phase": "10M-Q2",
+	"production_art_changed": false
+}

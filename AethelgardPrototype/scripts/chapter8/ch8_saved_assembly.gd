@@ -68,6 +68,12 @@ func _build_visuals() -> void:
 	hint.offset_bottom = 138
 	add_child(hint)
 
+	var runner := Node2D.new()
+	runner.name = "AssemblyRunnerVisual"
+	runner.position = Vector2(1040, 480)
+	runner.add_child(AssetManager.create_topdown_npc_visual("Assembly Runner", Color(0.36, 0.78, 0.96), Vector2(28, 40), 64.0))
+	add_child(runner)
+
 	fade_rect = ColorRect.new()
 	fade_rect.name = "Fade"
 	fade_rect.color = Color.BLACK

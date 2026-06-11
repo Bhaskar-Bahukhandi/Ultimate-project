@@ -1,0 +1,392 @@
+{
+  "phase": "10M-P7",
+  "purpose": "Oakhaven candidate extraction, cleanup, and review-only draft atlas preview pass",
+  "paths_relative_to_project_root": true,
+  "source_phase": "10M-P6",
+  "new_comfyui_generation_run": false,
+  "production_art_changed": false,
+  "candidate_count": 12,
+  "semi_usable_count": 7,
+  "draft_atlas_created": true,
+  "draft_atlas_path": "assets/art_sources/comfyui_tests/oakhaven_p7/oakhaven_p7_review_only_draft_atlas.png",
+  "draft_atlas_cells": [
+    {
+      "candidate_id": "grass_terrain_attempt1_crop",
+      "category": "grass/floor",
+      "cell": [
+        0,
+        0
+      ]
+    },
+    {
+      "candidate_id": "dirt_path_attempt2_crop_a",
+      "category": "path/floor",
+      "cell": [
+        0,
+        2
+      ]
+    },
+    {
+      "candidate_id": "dirt_path_attempt2_crop_b",
+      "category": "path/floor",
+      "cell": [
+        1,
+        2
+      ]
+    },
+    {
+      "candidate_id": "path_transitions_attempt1_crop",
+      "category": "transition studies",
+      "cell": [
+        0,
+        4
+      ]
+    },
+    {
+      "candidate_id": "path_transitions_attempt2_crop_a",
+      "category": "transition studies",
+      "cell": [
+        1,
+        4
+      ]
+    },
+    {
+      "candidate_id": "fence_hedge_attempt2_crop_a",
+      "category": "hedge/bush",
+      "cell": [
+        0,
+        6
+      ]
+    },
+    {
+      "candidate_id": "fence_hedge_attempt2_crop_b",
+      "category": "wood/fence",
+      "cell": [
+        0,
+        8
+      ]
+    },
+    {
+      "candidate_id": "fence_hedge_attempt2_crop_c",
+      "category": "cottage/support",
+      "cell": [
+        0,
+        10
+      ]
+    }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "grass_terrain_attempt1_crop",
+      "source_file": "grass_terrain_attempt1_seed610001.png",
+      "source_path": "assets/art_sources/comfyui_tests/oakhaven_p6/raw/grass_terrain_attempt1_seed610001.png",
+      "source_size": [
+        512,
+        512
+      ],
+      "crop_coordinates": [
+        256,
+        192,
+        320,
+        256
+      ],
+      "intended_use": "Grass terrain filler",
+      "p6_quality_note": "Medium",
+      "category": "grass/floor",
+      "extracted_raw_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_raw/grass_terrain_attempt1_crop_raw.png",
+      "cleaned_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_cleaned/grass_terrain_attempt1_crop_cleaned.png",
+      "downscale_32x32_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/grass_terrain_attempt1_crop_32x32.png",
+      "downscale_preview_64x64_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/grass_terrain_attempt1_crop_32x32_preview64.png",
+      "cleanup_applied": "Exact 64x64 crop preserved in extracted_raw; cleaned version applies light contrast normalization, saturation reduction, and dampening of harsh magenta/cyan into a muted review palette. No generative fill, repainting, blur, or production import.",
+      "usability_score": 2,
+      "usability_verdict": "usable only at 64x64",
+      "recommendation": "Keep as review/reference terrain source only. Do not import as a production grass tile."
+    },
+    {
+      "candidate_id": "grass_terrain_attempt2_crop",
+      "source_file": "grass_terrain_attempt2_seed610002.png",
+      "source_path": "assets/art_sources/comfyui_tests/oakhaven_p6/raw/grass_terrain_attempt2_seed610002.png",
+      "source_size": [
+        512,
+        512
+      ],
+      "crop_coordinates": [
+        320,
+        96,
+        384,
+        160
+      ],
+      "intended_use": "Alternate floor/trim study",
+      "p6_quality_note": "Low",
+      "category": "grass/floor",
+      "extracted_raw_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_raw/grass_terrain_attempt2_crop_raw.png",
+      "cleaned_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_cleaned/grass_terrain_attempt2_crop_cleaned.png",
+      "downscale_32x32_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/grass_terrain_attempt2_crop_32x32.png",
+      "downscale_preview_64x64_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/grass_terrain_attempt2_crop_32x32_preview64.png",
+      "cleanup_applied": "Exact 64x64 crop preserved in extracted_raw; cleaned version applies light contrast normalization, saturation reduction, and dampening of harsh magenta/cyan into a muted review palette. No generative fill, repainting, blur, or production import.",
+      "usability_score": 0,
+      "usability_verdict": "reject",
+      "recommendation": "Reject for Oakhaven; use only as evidence that this source family is unsuitable."
+    },
+    {
+      "candidate_id": "dirt_path_attempt2_crop_a",
+      "source_file": "dirt_path_attempt2_seed620002.png",
+      "source_path": "assets/art_sources/comfyui_tests/oakhaven_p6/raw/dirt_path_attempt2_seed620002.png",
+      "source_size": [
+        512,
+        512
+      ],
+      "crop_coordinates": [
+        64,
+        64,
+        128,
+        128
+      ],
+      "intended_use": "Rough path/floor texture",
+      "p6_quality_note": "Medium",
+      "category": "path/floor",
+      "extracted_raw_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_raw/dirt_path_attempt2_crop_a_raw.png",
+      "cleaned_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_cleaned/dirt_path_attempt2_crop_a_cleaned.png",
+      "downscale_32x32_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/dirt_path_attempt2_crop_a_32x32.png",
+      "downscale_preview_64x64_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/dirt_path_attempt2_crop_a_32x32_preview64.png",
+      "cleanup_applied": "Exact 64x64 crop preserved in extracted_raw; cleaned version applies light contrast normalization, saturation reduction, and dampening of harsh magenta/cyan into a muted review palette. No generative fill, repainting, blur, or production import.",
+      "usability_score": 2,
+      "usability_verdict": "usable only at 64x64",
+      "recommendation": "Keep as path texture reference. Not ready for import."
+    },
+    {
+      "candidate_id": "dirt_path_attempt2_crop_b",
+      "source_file": "dirt_path_attempt2_seed620002.png",
+      "source_path": "assets/art_sources/comfyui_tests/oakhaven_p6/raw/dirt_path_attempt2_seed620002.png",
+      "source_size": [
+        512,
+        512
+      ],
+      "crop_coordinates": [
+        256,
+        64,
+        320,
+        128
+      ],
+      "intended_use": "Rough path/floor texture",
+      "p6_quality_note": "Medium",
+      "category": "path/floor",
+      "extracted_raw_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_raw/dirt_path_attempt2_crop_b_raw.png",
+      "cleaned_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_cleaned/dirt_path_attempt2_crop_b_cleaned.png",
+      "downscale_32x32_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/dirt_path_attempt2_crop_b_32x32.png",
+      "downscale_preview_64x64_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/dirt_path_attempt2_crop_b_32x32_preview64.png",
+      "cleanup_applied": "Exact 64x64 crop preserved in extracted_raw; cleaned version applies light contrast normalization, saturation reduction, and dampening of harsh magenta/cyan into a muted review palette. No generative fill, repainting, blur, or production import.",
+      "usability_score": 2,
+      "usability_verdict": "usable only at 64x64",
+      "recommendation": "Keep as path/floor study. Not ready for import."
+    },
+    {
+      "candidate_id": "path_transitions_attempt1_crop",
+      "source_file": "path_transitions_attempt1_seed630001.png",
+      "source_path": "assets/art_sources/comfyui_tests/oakhaven_p6/raw/path_transitions_attempt1_seed630001.png",
+      "source_size": [
+        512,
+        512
+      ],
+      "crop_coordinates": [
+        0,
+        32,
+        64,
+        96
+      ],
+      "intended_use": "Path edge transition study",
+      "p6_quality_note": "Medium",
+      "category": "transition studies",
+      "extracted_raw_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_raw/path_transitions_attempt1_crop_raw.png",
+      "cleaned_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_cleaned/path_transitions_attempt1_crop_cleaned.png",
+      "downscale_32x32_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/path_transitions_attempt1_crop_32x32.png",
+      "downscale_preview_64x64_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/path_transitions_attempt1_crop_32x32_preview64.png",
+      "cleanup_applied": "Exact 64x64 crop preserved in extracted_raw; cleaned version applies light contrast normalization, saturation reduction, and dampening of harsh magenta/cyan into a muted review palette. No generative fill, repainting, blur, or production import.",
+      "usability_score": 1,
+      "usability_verdict": "reference only",
+      "recommendation": "Keep as a transition grammar reference only."
+    },
+    {
+      "candidate_id": "path_transitions_attempt2_crop_a",
+      "source_file": "path_transitions_attempt2_seed630002.png",
+      "source_path": "assets/art_sources/comfyui_tests/oakhaven_p6/raw/path_transitions_attempt2_seed630002.png",
+      "source_size": [
+        512,
+        512
+      ],
+      "crop_coordinates": [
+        32,
+        224,
+        96,
+        288
+      ],
+      "intended_use": "Hedge/path edge study",
+      "p6_quality_note": "Medium",
+      "category": "transition studies",
+      "extracted_raw_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_raw/path_transitions_attempt2_crop_a_raw.png",
+      "cleaned_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_cleaned/path_transitions_attempt2_crop_a_cleaned.png",
+      "downscale_32x32_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/path_transitions_attempt2_crop_a_32x32.png",
+      "downscale_preview_64x64_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/path_transitions_attempt2_crop_a_32x32_preview64.png",
+      "cleanup_applied": "Exact 64x64 crop preserved in extracted_raw; cleaned version applies light contrast normalization, saturation reduction, and dampening of harsh magenta/cyan into a muted review palette. No generative fill, repainting, blur, or production import.",
+      "usability_score": 2,
+      "usability_verdict": "usable only at 64x64",
+      "recommendation": "Keep for edge-study reference. Do not import as-is."
+    },
+    {
+      "candidate_id": "path_transitions_attempt2_crop_b",
+      "source_file": "path_transitions_attempt2_seed630002.png",
+      "source_path": "assets/art_sources/comfyui_tests/oakhaven_p6/raw/path_transitions_attempt2_seed630002.png",
+      "source_size": [
+        512,
+        512
+      ],
+      "crop_coordinates": [
+        288,
+        64,
+        352,
+        128
+      ],
+      "intended_use": "Magic marker/prop study",
+      "p6_quality_note": "Low",
+      "category": "small props/reference",
+      "extracted_raw_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_raw/path_transitions_attempt2_crop_b_raw.png",
+      "cleaned_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_cleaned/path_transitions_attempt2_crop_b_cleaned.png",
+      "downscale_32x32_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/path_transitions_attempt2_crop_b_32x32.png",
+      "downscale_preview_64x64_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/path_transitions_attempt2_crop_b_32x32_preview64.png",
+      "cleanup_applied": "Exact 64x64 crop preserved in extracted_raw; cleaned version applies light contrast normalization, saturation reduction, and dampening of harsh magenta/cyan into a muted review palette. No generative fill, repainting, blur, or production import.",
+      "usability_score": 1,
+      "usability_verdict": "reference only",
+      "recommendation": "Reference only for possible magic accent palette. Not an Oakhaven tile."
+    },
+    {
+      "candidate_id": "fence_hedge_attempt2_crop_a",
+      "source_file": "fence_hedge_attempt2_seed640002.png",
+      "source_path": "assets/art_sources/comfyui_tests/oakhaven_p6/raw/fence_hedge_attempt2_seed640002.png",
+      "source_size": [
+        512,
+        512
+      ],
+      "crop_coordinates": [
+        160,
+        96,
+        224,
+        160
+      ],
+      "intended_use": "Hedge/bush prop",
+      "p6_quality_note": "Medium",
+      "category": "hedge/bush",
+      "extracted_raw_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_raw/fence_hedge_attempt2_crop_a_raw.png",
+      "cleaned_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_cleaned/fence_hedge_attempt2_crop_a_cleaned.png",
+      "downscale_32x32_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/fence_hedge_attempt2_crop_a_32x32.png",
+      "downscale_preview_64x64_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/fence_hedge_attempt2_crop_a_32x32_preview64.png",
+      "cleanup_applied": "Exact 64x64 crop preserved in extracted_raw; cleaned version applies light contrast normalization, saturation reduction, and dampening of harsh magenta/cyan into a muted review palette. No generative fill, repainting, blur, or production import.",
+      "usability_score": 3,
+      "usability_verdict": "usable at 32x32",
+      "recommendation": "Best P7 candidate. Keep for review atlas only."
+    },
+    {
+      "candidate_id": "fence_hedge_attempt2_crop_b",
+      "source_file": "fence_hedge_attempt2_seed640002.png",
+      "source_path": "assets/art_sources/comfyui_tests/oakhaven_p6/raw/fence_hedge_attempt2_seed640002.png",
+      "source_size": [
+        512,
+        512
+      ],
+      "crop_coordinates": [
+        64,
+        288,
+        128,
+        352
+      ],
+      "intended_use": "Wood prop/fence support",
+      "p6_quality_note": "Medium",
+      "category": "wood/fence",
+      "extracted_raw_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_raw/fence_hedge_attempt2_crop_b_raw.png",
+      "cleaned_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_cleaned/fence_hedge_attempt2_crop_b_cleaned.png",
+      "downscale_32x32_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/fence_hedge_attempt2_crop_b_32x32.png",
+      "downscale_preview_64x64_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/fence_hedge_attempt2_crop_b_32x32_preview64.png",
+      "cleanup_applied": "Exact 64x64 crop preserved in extracted_raw; cleaned version applies light contrast normalization, saturation reduction, and dampening of harsh magenta/cyan into a muted review palette. No generative fill, repainting, blur, or production import.",
+      "usability_score": 3,
+      "usability_verdict": "usable at 32x32",
+      "recommendation": "Keep for review atlas only. Needs manual redraw before production."
+    },
+    {
+      "candidate_id": "fence_hedge_attempt2_crop_c",
+      "source_file": "fence_hedge_attempt2_seed640002.png",
+      "source_path": "assets/art_sources/comfyui_tests/oakhaven_p6/raw/fence_hedge_attempt2_seed640002.png",
+      "source_size": [
+        512,
+        512
+      ],
+      "crop_coordinates": [
+        320,
+        288,
+        384,
+        352
+      ],
+      "intended_use": "Cottage/fence support",
+      "p6_quality_note": "Medium",
+      "category": "cottage/support",
+      "extracted_raw_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_raw/fence_hedge_attempt2_crop_c_raw.png",
+      "cleaned_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_cleaned/fence_hedge_attempt2_crop_c_cleaned.png",
+      "downscale_32x32_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/fence_hedge_attempt2_crop_c_32x32.png",
+      "downscale_preview_64x64_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/fence_hedge_attempt2_crop_c_32x32_preview64.png",
+      "cleanup_applied": "Exact 64x64 crop preserved in extracted_raw; cleaned version applies light contrast normalization, saturation reduction, and dampening of harsh magenta/cyan into a muted review palette. No generative fill, repainting, blur, or production import.",
+      "usability_score": 2,
+      "usability_verdict": "usable only at 64x64",
+      "recommendation": "Reference only for cottage/support color and silhouette. Not a building tile."
+    },
+    {
+      "candidate_id": "small_props_attempt1_crop_a",
+      "source_file": "small_props_attempt1_seed660001.png",
+      "source_path": "assets/art_sources/comfyui_tests/oakhaven_p6/raw/small_props_attempt1_seed660001.png",
+      "source_size": [
+        512,
+        512
+      ],
+      "crop_coordinates": [
+        64,
+        192,
+        128,
+        256
+      ],
+      "intended_use": "Village prop/source",
+      "p6_quality_note": "Low",
+      "category": "small props/reference",
+      "extracted_raw_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_raw/small_props_attempt1_crop_a_raw.png",
+      "cleaned_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_cleaned/small_props_attempt1_crop_a_cleaned.png",
+      "downscale_32x32_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/small_props_attempt1_crop_a_32x32.png",
+      "downscale_preview_64x64_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/small_props_attempt1_crop_a_32x32_preview64.png",
+      "cleanup_applied": "Exact 64x64 crop preserved in extracted_raw; cleaned version applies light contrast normalization, saturation reduction, and dampening of harsh magenta/cyan into a muted review palette. No generative fill, repainting, blur, or production import.",
+      "usability_score": 0,
+      "usability_verdict": "reject",
+      "recommendation": "Reject for atlas use."
+    },
+    {
+      "candidate_id": "small_props_attempt1_crop_b",
+      "source_file": "small_props_attempt1_seed660001.png",
+      "source_path": "assets/art_sources/comfyui_tests/oakhaven_p6/raw/small_props_attempt1_seed660001.png",
+      "source_size": [
+        512,
+        512
+      ],
+      "crop_coordinates": [
+        320,
+        96,
+        384,
+        160
+      ],
+      "intended_use": "Hedge/clutter source",
+      "p6_quality_note": "Medium",
+      "category": "small props/reference",
+      "extracted_raw_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_raw/small_props_attempt1_crop_b_raw.png",
+      "cleaned_path": "assets/art_sources/comfyui_tests/oakhaven_p7/extracted_cleaned/small_props_attempt1_crop_b_cleaned.png",
+      "downscale_32x32_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/small_props_attempt1_crop_b_32x32.png",
+      "downscale_preview_64x64_path": "assets/art_sources/comfyui_tests/oakhaven_p7/downscale_tests/small_props_attempt1_crop_b_32x32_preview64.png",
+      "cleanup_applied": "Exact 64x64 crop preserved in extracted_raw; cleaned version applies light contrast normalization, saturation reduction, and dampening of harsh magenta/cyan into a muted review palette. No generative fill, repainting, blur, or production import.",
+      "usability_score": 1,
+      "usability_verdict": "reference only",
+      "recommendation": "Reference only. Not suitable for production import."
+    }
+  ]
+}

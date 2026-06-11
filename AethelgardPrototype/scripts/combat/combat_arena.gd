@@ -95,6 +95,7 @@ func _ready() -> void:
 	var legacy_hud = get_node_or_null("UI/CombatHUD")
 	if legacy_hud:
 		legacy_hud.visible = false
+	_build_phase10mm_arena_polish()
 
 	# Check for random encounter mode
 	if _has_gm() and GameManager.has_meta("pending_encounter"):
@@ -134,6 +135,35 @@ func _ready() -> void:
 func _exit_tree() -> void:
 	if has_node("/root/GameManager") and GameManager.glitch_meter_changed.is_connected(_on_glitch_meter_changed):
 		GameManager.glitch_meter_changed.disconnect(_on_glitch_meter_changed)
+
+
+func _build_phase10mm_arena_polish() -> void:
+	if not has_node("/root/AssetManager"):
+		return
+	var backplate = Polygon2D.new()
+	backplate.name = "Phase10MMCombatBackplate"
+	backplate.color = Color(0.08, 0.07, 0.14, 0.54)
+	backplate.polygon = PackedVector2Array([
+		Vector2(82, 592), Vector2(188, 330), Vector2(442, 254),
+		Vector2(824, 254), Vector2(1098, 332), Vector2(1198, 592),
+	])
+	backplate.z_index = -10
+	add_child(backplate)
+	for flank_data in [
+		{"name": "CombatFarWallLeft", "pos": Vector2(0, 282), "size": Vector2(154, 268)},
+		{"name": "CombatFarWallRight", "pos": Vector2(1126, 282), "size": Vector2(154, 268)},
+	]:
+		var flank = ColorRect.new()
+		flank.name = flank_data["name"]
+		flank.color = Color(0.02, 0.02, 0.05, 0.52)
+		flank.position = flank_data["pos"]
+		flank.size = flank_data["size"]
+		flank.z_index = -10
+		add_child(flank)
+	AssetManager.add_v3_environment_decal(self, "arena_border", Vector2(640, 466), Vector2(1180, 350), "V3CombatArenaBorder", -9, Color(0.98, 0.94, 1.0, 0.86))
+	AssetManager.add_v3_environment_decal(self, "cathedral_circuit", Vector2(640, 508), Vector2(720, 174), "V3CombatArenaCircuit", -8, Color(0.72, 0.82, 1.0, 0.34))
+	AssetManager.add_v3_environment_prop(self, "crates", Vector2(94, 430), Vector2(212, 58), "V3CombatArenaCratesLeft", -7, Color(0.92, 0.86, 0.94, 0.76))
+	AssetManager.add_v3_environment_prop(self, "crates", Vector2(1188, 430), Vector2(212, 58), "V3CombatArenaCratesRight", -7, Color(0.92, 0.86, 0.94, 0.76))
 
 
 # ═════════════════════════════════════════════════════════════════════════

@@ -493,7 +493,8 @@ func _update_hud_tracker() -> void:
 func _queue_notification(text: String, color: Color) -> void:
 	_notification_queue.append({"text": text, "color": color})
 	if not _processing_notification:
-		_process_notification_queue()
+		_processing_notification = true
+		call_deferred("_process_notification_queue")
 
 func _process_notification_queue() -> void:
 	if _notification_queue.is_empty():

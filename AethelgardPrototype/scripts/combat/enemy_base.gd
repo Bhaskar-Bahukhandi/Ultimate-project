@@ -198,6 +198,7 @@ func _ready() -> void:
 	if not loot_table:
 		_generate_default_loot_table()
 
+	_try_load_v2_animated_sprite()
 	_try_load_real_sprite()
 	_try_load_kenney_animated_sprite()
 	_enhance_placeholder_sprite()
@@ -1055,6 +1056,31 @@ func apply_hack(property_name: String, new_value: Variant) -> void:
 # AUTO-SPRITE LOADING
 # ══════════════════════════════════════════════════════════════════════════
 
+func _try_load_v2_animated_sprite() -> void:
+	var sprite_node = get_node_or_null("Sprite")
+	if not sprite_node or sprite_node is AnimatedSprite2D:
+		return
+	if not has_node("/root/AssetManager"):
+		return
+	var class_name_str: String = get_script().get_global_name() if get_script() else ""
+	if class_name_str == "":
+		return
+	var target_size := 72.0
+	if sprite_node is ColorRect:
+		target_size = maxf(sprite_node.size.x, sprite_node.size.y) * 1.5
+	var anim_sprite: AnimatedSprite2D = AssetManager.try_build_v2_enemy(class_name_str, target_size)
+	if not anim_sprite:
+		return
+	var parent_node = sprite_node.get_parent()
+	var idx = sprite_node.get_index()
+	parent_node.remove_child(sprite_node)
+	sprite_node.queue_free()
+	parent_node.add_child(anim_sprite)
+	parent_node.move_child(anim_sprite, idx)
+	if OS.is_debug_build():
+		print("[ENEMY] V2 animated sprite loaded for %s" % class_name_str)
+
+
 func _try_load_real_sprite() -> void:
 	var sprite_node = get_node_or_null("Sprite")
 	if not sprite_node:
@@ -1132,7 +1158,7 @@ func _try_load_kenney_animated_sprite() -> void:
 		print("[ENEMY] Kenney animated sprite loaded for %s" % class_name_str)
 
 func _sync_animation_to_state() -> void:
-	## Update the Kenney AnimatedSprite2D animation based on current AI state.
+	## Update AnimatedSprite2D visuals from the current AI state.
 	var sprite_node = get_node_or_null("Sprite")
 	if not sprite_node or not (sprite_node is AnimatedSprite2D):
 		return
@@ -1141,13 +1167,13 @@ func _sync_animation_to_state() -> void:
 		State.IDLE:
 			desired_anim = "idle"
 		State.PATROL, State.CHASE:
-			desired_anim = "walk"
+			desired_anim = "move" if sprite_node.sprite_frames.has_animation("move") else "walk"
 		State.TELEGRAPH, State.ATTACK:
-			desired_anim = "walk"  # reuse walk for attack telegraph
+			desired_anim = "attack" if sprite_node.sprite_frames.has_animation("attack") else "walk"
 		State.STUNNED:
-			desired_anim = "hit"
+			desired_anim = "hurt" if sprite_node.sprite_frames.has_animation("hurt") else "hit"
 		State.DEAD:
-			desired_anim = "dead"
+			desired_anim = "death" if sprite_node.sprite_frames.has_animation("death") else "dead"
 		State.RECOVER:
 			desired_anim = "idle"
 	if desired_anim != "" and sprite_node.sprite_frames.has_animation(desired_anim):

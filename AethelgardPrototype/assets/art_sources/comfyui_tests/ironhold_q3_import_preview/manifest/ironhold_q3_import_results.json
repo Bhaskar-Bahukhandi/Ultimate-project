@@ -1,0 +1,58 @@
+{
+  "phase": "10M-Q3",
+  "production_state": "controlled production-art import candidate active",
+  "source_path": "assets/art_sources/comfyui_tests/ironhold_q1/generated_tiles/ironhold_q1_variant_b_textured.png",
+  "production_path": "assets/production_art/tilesets/ironhold/ironhold_tileset.png",
+  "fallback_path": "assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png",
+  "asset_manager": {
+    "production_load": "Pass",
+    "runtime_fallback_override": "Pass",
+    "missing_production_behavior": "Pass",
+    "generated_fallback_available": "Pass",
+    "oakhaven_baseline_available": "Pass"
+  },
+  "screenshots": {
+    "fallback_preview": "assets/art_sources/comfyui_tests/ironhold_q3_import_preview/screenshots/ironhold_q3_fallback_preview.png",
+    "production_preview": "assets/art_sources/comfyui_tests/ironhold_q3_import_preview/screenshots/ironhold_q3_production_variant_b_preview.png",
+    "actual_region_fallback": "assets/art_sources/comfyui_tests/ironhold_q3_import_preview/screenshots/ironhold_q3_actual_region_fallback.png",
+    "actual_region_production": "assets/art_sources/comfyui_tests/ironhold_q3_import_preview/screenshots/ironhold_q3_actual_region_production.png",
+    "contact_sheet": "assets/art_sources/comfyui_tests/ironhold_q3_import_preview/contact_sheets/ironhold_q3_fallback_vs_production_contact_sheet.png"
+  },
+  "qa_scores": {
+    "generated_fallback": {
+      "floor": 4.0,
+      "walkway": 5.0,
+      "forge_identity": 5.0,
+      "props_obstacles": 4.0,
+      "player_npc_contrast": 6.0,
+      "label_readability": 6.0,
+      "overall": 4.9,
+      "verdict": "Fallback remains functional but noisy and repetitive."
+    },
+    "production_variant_b": {
+      "floor": 8.0,
+      "walkway": 8.0,
+      "forge_identity": 8.0,
+      "props_obstacles": 8.0,
+      "player_npc_contrast": 8.0,
+      "label_readability": 8.0,
+      "overall": 8.2,
+      "verdict": "Clearly better than fallback and safe as an Ironhold baseline candidate."
+    }
+  },
+  "issues_found": [
+    "Production layer is still baseline art, not final polish.",
+    "Some broad floor areas are deliberately subdued in the actual region because the existing region modulates the visual tile layer.",
+    "Unrelated production-art slots for player, NPC, props, and decals still fall back to generated assets."
+  ],
+  "repair_actions": [
+    "Updated AssetManager Ironhold production path to the controlled region folder.",
+    "Added explicit Ironhold runtime fallback override.",
+    "Validated missing production behavior without renaming or deleting real files.",
+    "Captured fallback and production preview-board screenshots.",
+    "Captured fallback and production actual-region screenshots."
+  ],
+  "fallback_status": "Generated Ironhold fallback remains present and loadable.",
+  "actual_region_integration": "Integrated safely through AssetManager; Ironhold region scene/script was not edited.",
+  "decision": "Ready to accept Ironhold production-art baseline with Variant B"
+}

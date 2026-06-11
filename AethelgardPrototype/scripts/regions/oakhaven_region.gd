@@ -26,6 +26,7 @@ var _stats_hud: Label = null
 var _lore_items_placed: Array[Node2D] = []
 var _npcs: Array[Node2D] = []
 var _near_boss_gate: bool = false
+var _near_farming_zone: Area2D = null
 
 # ── NPC Data ────────────────────────────────────────────────────────────
 const NPC_DATA: Array = [
@@ -70,6 +71,7 @@ func _ready() -> void:
 	_place_lore_items()
 	_place_boss_gate()
 	_place_shops()
+	_place_farming_zone()
 	_place_secrets()
 	_create_overworld_exit()
 	_create_ui()
@@ -78,6 +80,8 @@ func _ready() -> void:
 	if GameManager.has_meta("return_position") and _player:
 		_player.global_position = GameManager.get_meta("return_position")
 		GameManager.remove_meta("return_position")
+	if has_node("/root/RandomEncounterSystem"):
+		RandomEncounterSystem.show_pending_farming_result("oakhaven_outskirts", self)
 
 
 func _process(_delta: float) -> void:
@@ -99,6 +103,18 @@ func _build_region_environment() -> void:
 	bg.size = MAP_SIZE
 	bg.z_index = -20
 	add_child(bg)
+	if has_node("/root/AssetManager"):
+		var visual_tiles = AssetManager.try_create_v2_visual_tile_layer(
+			"oakhaven",
+			MAP_SIZE,
+			"V2OakhavenGroundTiles",
+			-17,
+			[Vector2i(0, 0), Vector2i(0, 0), Vector2i(3, 1), Vector2i(0, 1), Vector2i(1, 0)]
+		)
+		if visual_tiles:
+			visual_tiles.modulate = Color(1.0, 1.0, 1.0, 0.20)
+			add_child(visual_tiles)
+	_add_oakhaven_ground_composition()
 
 	# ── Glitch Crater (NW corner) ──
 	var crater = ColorRect.new()
@@ -209,9 +225,26 @@ func _build_region_environment() -> void:
 	_create_path(Vector2(2200, 750), Vector2(2250, 700), 20, Color(0.32, 0.25, 0.18))
 	# Village → South
 	_create_path(Vector2(1050, 1300), Vector2(900, 1400), 20, Color(0.35, 0.28, 0.2))
+	_add_v3_oakhaven_polish()
 
 
 func _create_building(bname: String, pos: Vector2, bsize: Vector2, color: Color) -> void:
+	var base_shadow = ColorRect.new()
+	base_shadow.name = "%sGroundShadow" % bname.replace(" ", "").replace("'", "")
+	base_shadow.color = Color(0.08, 0.06, 0.04, 0.36)
+	base_shadow.size = bsize + Vector2(18, 14)
+	base_shadow.position = pos + Vector2(-9, bsize.y - 4)
+	base_shadow.z_index = -13
+	add_child(base_shadow)
+
+	var foundation = ColorRect.new()
+	foundation.name = "%sPackedEarthBase" % bname.replace(" ", "").replace("'", "")
+	foundation.color = Color(0.28, 0.22, 0.14, 0.74)
+	foundation.size = bsize + Vector2(14, 10)
+	foundation.position = pos + Vector2(-7, 3)
+	foundation.z_index = -13
+	add_child(foundation)
+
 	var building = ColorRect.new()
 	building.name = bname.replace(" ", "").replace("'", "")
 	building.color = color
@@ -219,6 +252,12 @@ func _create_building(bname: String, pos: Vector2, bsize: Vector2, color: Color)
 	building.position = pos
 	building.z_index = -12
 	add_child(building)
+	var wall_skirt = ColorRect.new()
+	wall_skirt.name = "WallSkirt"
+	wall_skirt.color = Color(color.r * 0.68, color.g * 0.62, color.b * 0.54, 0.94)
+	wall_skirt.size = Vector2(bsize.x, 8)
+	wall_skirt.position = Vector2(0, bsize.y - 8)
+	building.add_child(wall_skirt)
 	# Roof
 	var roof = ColorRect.new()
 	roof.color = Color(color.r * 0.7, color.g * 0.6, color.b * 0.5)
@@ -231,6 +270,16 @@ func _create_building(bname: String, pos: Vector2, bsize: Vector2, color: Color)
 	door.size = Vector2(10, 14)
 	door.position = Vector2(bsize.x / 2 - 5, bsize.y - 14)
 	building.add_child(door)
+	if has_node("/root/AssetManager"):
+		AssetManager.add_v3_environment_prop(
+			building,
+			"oakhaven_roof",
+			Vector2(bsize.x * 0.5, bsize.y * 0.36),
+			Vector2(bsize.x + 34.0, bsize.y + 40.0),
+			"V3Roof",
+			2,
+			Color(1.0, 1.0, 1.0, 0.94)
+		)
 
 
 func _create_path(from: Vector2, to: Vector2, segments: int, color: Color) -> void:
@@ -243,6 +292,79 @@ func _create_path(from: Vector2, to: Vector2, segments: int, color: Color) -> vo
 		stone.position = pos + Vector2(randf_range(-5, 5), randf_range(-5, 5))
 		stone.z_index = -14
 		add_child(stone)
+
+
+func _add_oakhaven_ground_composition() -> void:
+	_add_oakhaven_patch(
+		"VillageLaneShoulderWest",
+		PackedVector2Array([
+			Vector2(758, 932), Vector2(906, 852), Vector2(1060, 898),
+			Vector2(1036, 1072), Vector2(846, 1112), Vector2(722, 1030),
+		]),
+		Color(0.34, 0.28, 0.18, 0.66),
+		-16
+	)
+	_add_oakhaven_patch(
+		"VillageLaneShoulderEast",
+		PackedVector2Array([
+			Vector2(1066, 892), Vector2(1258, 856), Vector2(1408, 980),
+			Vector2(1376, 1162), Vector2(1212, 1230), Vector2(1058, 1112),
+		]),
+		Color(0.32, 0.26, 0.17, 0.58),
+		-16
+	)
+	_add_oakhaven_patch(
+		"OutskirtsHerbMeadow",
+		PackedVector2Array([
+			Vector2(252, 762), Vector2(408, 684), Vector2(568, 756),
+			Vector2(544, 948), Vector2(342, 988), Vector2(216, 892),
+		]),
+		Color(0.22, 0.40, 0.14, 0.46),
+		-16
+	)
+	_add_oakhaven_patch(
+		"FieldPathShoulderNorth",
+		PackedVector2Array([
+			Vector2(388, 746), Vector2(566, 694), Vector2(706, 786),
+			Vector2(654, 880), Vector2(470, 866),
+		]),
+		Color(0.37, 0.29, 0.17, 0.54),
+		-15
+	)
+	_add_oakhaven_patch(
+		"SouthGrassPocket",
+		PackedVector2Array([
+			Vector2(736, 1166), Vector2(914, 1088), Vector2(1044, 1186),
+			Vector2(978, 1342), Vector2(794, 1330), Vector2(692, 1246),
+		]),
+		Color(0.23, 0.40, 0.14, 0.38),
+		-15
+	)
+
+
+func _add_oakhaven_patch(patch_name: String, points: PackedVector2Array, color: Color, layer: int) -> void:
+	var patch = Polygon2D.new()
+	patch.name = patch_name
+	patch.color = color
+	patch.polygon = points
+	patch.z_index = layer
+	add_child(patch)
+
+
+func _add_v3_oakhaven_polish() -> void:
+	if not has_node("/root/AssetManager"):
+		return
+	AssetManager.add_v3_environment_decal(self, "oakhaven_path", Vector2(1086, 1040), Vector2(780, 242), "V3VillagePathEdge", -15, Color(1.0, 1.0, 1.0, 0.90))
+	AssetManager.add_v3_environment_decal(self, "oakhaven_stones", Vector2(466, 1010), Vector2(560, 116), "V3OutskirtsSteppingStones", -15, Color(0.96, 1.0, 0.94, 0.84))
+	AssetManager.add_v3_environment_prop(self, "oakhaven_flowers", Vector2(808, 1130), Vector2(260, 64), "V3VillageFlowers", -11, Color(1.0, 1.0, 1.0, 0.96))
+	AssetManager.add_v3_environment_prop(self, "oakhaven_flowers", Vector2(524, 822), Vector2(210, 52), "V3FieldFlowers", -11, Color(1.0, 1.0, 1.0, 0.88))
+	AssetManager.add_v3_environment_prop(self, "oakhaven_herb_sign", Vector2(408, 930), Vector2(76, 76), "V3OutskirtsHerbSign", -10)
+	var west_hedge = AssetManager.add_v3_environment_prop(self, "oakhaven_hedge_corner", Vector2(784, 834), Vector2(250, 112), "V3VillageWestHedge", -11, Color(0.96, 1.0, 0.94, 0.93))
+	if west_hedge:
+		west_hedge.rotation = -0.06
+	var east_hedge = AssetManager.add_v3_environment_prop(self, "oakhaven_hedge_corner", Vector2(1402, 1126), Vector2(250, 112), "V3VillageEastHedge", -11, Color(0.96, 1.0, 0.94, 0.90))
+	if east_hedge:
+		east_hedge.flip_h = true
 
 
 ## ═══════════════════════════════════════════════════════════════════════════
@@ -317,6 +439,9 @@ func _create_npc(data: Dictionary) -> Node2D:
 	name_label.text = data["name"]
 	name_label.add_theme_font_size_override("font_size", 8)
 	name_label.add_theme_color_override("font_color", Color.WHITE)
+	name_label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.98))
+	name_label.add_theme_constant_override("shadow_offset_x", 1)
+	name_label.add_theme_constant_override("shadow_offset_y", 1)
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.position = Vector2(-30, -34)
 	npc.add_child(name_label)
@@ -771,6 +896,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		_interact_with_shop(_near_shop)
 		return
 
+	# Optional farming access
+	if _near_farming_zone and is_instance_valid(_near_farming_zone):
+		_interact_with_farming_zone(_near_farming_zone)
+		return
+
 	# Hidden secret
 	if _near_secret and is_instance_valid(_near_secret):
 		_collect_secret(_near_secret)
@@ -846,6 +976,106 @@ func _interact_with_shop(trigger: Area2D) -> void:
 	var shop_type: String = trigger.get_meta("shop_type", "general")
 	if has_node("/root/ShopSystem"):
 		ShopSystem.open_shop(shop_type)
+
+
+func _place_farming_zone() -> void:
+	var marker := Area2D.new()
+	marker.name = "OakhavenOutskirtsFarming"
+	marker.position = Vector2(430, 980)
+	marker.set_meta("farming_zone_id", "oakhaven_outskirts")
+
+	var patch := ColorRect.new()
+	patch.color = Color(0.48, 0.64, 0.2, 0.85)
+	patch.size = Vector2(68, 42)
+	patch.position = Vector2(-34, -21)
+	marker.add_child(patch)
+
+	for herb_pos in [Vector2(-22, -10), Vector2(-5, -15), Vector2(15, -7)]:
+		var herb := ColorRect.new()
+		herb.color = Color(0.36, 0.92, 0.32, 0.92)
+		herb.size = Vector2(8, 18)
+		herb.position = herb_pos
+		herb.rotation = randf_range(-0.22, 0.22)
+		marker.add_child(herb)
+
+	var field_note := Label.new()
+	field_note.text = "Beginner herb patch"
+	field_note.add_theme_font_size_override("font_size", 7)
+	field_note.add_theme_color_override("font_color", Color(0.74, 0.92, 0.58))
+	field_note.position = Vector2(-45, -29)
+	marker.add_child(field_note)
+
+	var label := Label.new()
+	label.text = "Oakhaven Outskirts"
+	label.add_theme_font_size_override("font_size", 9)
+	label.add_theme_color_override("font_color", Color(0.9, 1.0, 0.72))
+	label.position = Vector2(-48, -42)
+	marker.add_child(label)
+
+	var prompt := Label.new()
+	prompt.name = "Prompt"
+	prompt.text = "[F] Forage herb patch"
+	prompt.add_theme_font_size_override("font_size", 8)
+	prompt.add_theme_color_override("font_color", Color(1.0, 0.95, 0.55))
+	prompt.position = Vector2(-62, 22)
+	prompt.visible = false
+	marker.add_child(prompt)
+
+	var shape := CollisionShape2D.new()
+	var circle := CircleShape2D.new()
+	circle.radius = 58.0
+	shape.shape = circle
+	marker.add_child(shape)
+	marker.body_entered.connect(_on_farming_zone_entered.bind(marker))
+	marker.body_exited.connect(_on_farming_zone_exited.bind(marker))
+	add_child(marker)
+
+
+func _on_farming_zone_entered(body: Node2D, marker: Area2D) -> void:
+	if body.is_in_group("player"):
+		_near_farming_zone = marker
+		var prompt = marker.get_node_or_null("Prompt")
+		if prompt:
+			prompt.visible = true
+
+
+func _on_farming_zone_exited(body: Node2D, marker: Area2D) -> void:
+	if body.is_in_group("player") and _near_farming_zone == marker:
+		_near_farming_zone = null
+		var prompt = marker.get_node_or_null("Prompt")
+		if prompt:
+			prompt.visible = false
+
+
+func _interact_with_farming_zone(marker: Area2D) -> void:
+	var zone_id: String = marker.get_meta("farming_zone_id", "")
+	var farming_data: Dictionary = {}
+	if has_node("/root/RandomEncounterSystem"):
+		farming_data = RandomEncounterSystem.get_farming_zone_data(zone_id)
+	var choice := 0
+	if has_node("/root/DialogueManager"):
+		GameManager.change_state(GameManager.GameState.DIALOGUE)
+		choice = await DialogueManager.show_choices(
+			"%s\n%s" % [
+				farming_data.get("difficulty_tier", "Beginner forage"),
+				farming_data.get("objective", "Forage the outskirts patch."),
+			],
+			["Forage the herb patch", "Leave area"]
+		)
+		GameManager.change_state(GameManager.GameState.EXPLORATION)
+	if choice != 0 or not has_node("/root/RandomEncounterSystem"):
+		return
+
+	var started := RandomEncounterSystem.start_farming_encounter(
+		zone_id,
+		_player.global_position if _player else marker.global_position,
+		get_tree().current_scene.scene_file_path
+	)
+	if not started and has_node("/root/DialogueManager"):
+		var cooldown_seconds := RandomEncounterSystem.get_farming_cooldown_seconds(zone_id)
+		GameManager.change_state(GameManager.GameState.DIALOGUE)
+		await DialogueManager.say("SYSTEM", "The herb patch is settling. Re-entry opens in %d seconds." % cooldown_seconds)
+		GameManager.change_state(GameManager.GameState.EXPLORATION)
 
 
 func _enter_boss_arena() -> void:

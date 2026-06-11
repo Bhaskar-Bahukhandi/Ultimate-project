@@ -68,6 +68,155 @@ const CHARM_VALUES: Dictionary = {
 	"null_cloak": 2.0,  # Encounter rate multiplier (2x steps needed = half encounters)
 }
 
+const FREE_TRAVEL_REGION_ORDER: Array[String] = [
+	"oakhaven",
+	"ironhold",
+	"fractured_wastes",
+	"forgotten_sectors",
+	"mirror_city",
+	"cathedral_server",
+	"memory_ocean",
+	"saved_assembly",
+	"human_patch_lab",
+	"root_of_heaven",
+]
+
+const FREE_TRAVEL_REGIONS: Dictionary = {
+	"oakhaven": {
+		"name": "Oakhaven",
+		"unlock_chapter": 1,
+		"unlock_flag": "",
+		"unlock_hint": "Chapter 1",
+		"revisit_scene": "res://scenes/regions/oakhaven_region.tscn",
+		"spawn_point": Vector2(400, 500),
+		"story_scene": "res://scenes/regions/oakhaven_region.tscn",
+		"is_revisit_safe": true,
+		"return_scene": "res://scenes/overworld/overworld.tscn",
+		"story_resume_behavior": "region_or_resume_story",
+	},
+	"ironhold": {
+		"name": "Ironhold",
+		"unlock_chapter": 2,
+		"unlock_flag": "ch2_ironhold_entered",
+		"unlock_hint": "Chapter 2",
+		"revisit_scene": "res://scenes/regions/ironhold_region.tscn",
+		"spawn_point": Vector2(2200, 400),
+		"story_scene": "res://scenes/regions/ironhold_region.tscn",
+		"is_revisit_safe": true,
+		"return_scene": "res://scenes/overworld/overworld.tscn",
+		"story_resume_behavior": "region_or_resume_story",
+	},
+	"fractured_wastes": {
+		"name": "Fractured Wastes",
+		"unlock_chapter": 3,
+		"unlock_flag": "ch3_fractured_wastes_entered",
+		"unlock_hint": "Chapter 3",
+		"revisit_scene": "res://scenes/regions/fractured_wastes_region.tscn",
+		"spawn_point": Vector2(1300, 1600),
+		"story_scene": "res://scenes/regions/fractured_wastes_region.tscn",
+		"is_revisit_safe": true,
+		"return_scene": "res://scenes/overworld/overworld.tscn",
+		"story_resume_behavior": "region_or_resume_story",
+	},
+	"forgotten_sectors": {
+		"name": "Forgotten Sectors",
+		"unlock_chapter": 4,
+		"unlock_flag": "ch4_unlocked",
+		"unlock_hint": "Chapter 4 start",
+		"revisit_scene": "res://scenes/regions/forgotten_sectors_revisit_hub.tscn",
+		"spawn_point": Vector2(640, 430),
+		"story_scene": "res://scenes/chapter4/ch4_forgotten_sectors_intro.tscn",
+		"is_revisit_safe": true,
+		"return_scene": "res://scenes/overworld/overworld.tscn",
+		"story_resume_behavior": "resume_story_only",
+	},
+	"mirror_city": {
+		"name": "Mirror City",
+		"unlock_chapter": 5,
+		"unlock_flag": "ch5_unlocked",
+		"unlock_hint": "Chapter 5 start",
+		"revisit_scene": "res://scenes/regions/mirror_city_revisit_hub.tscn",
+		"spawn_point": Vector2(640, 430),
+		"story_scene": "res://scenes/chapter5/ch5_mirror_city_intro.tscn",
+		"is_revisit_safe": true,
+		"return_scene": "res://scenes/overworld/overworld.tscn",
+		"story_resume_behavior": "resume_story_only",
+	},
+	"cathedral_server": {
+		"name": "Cathedral Server",
+		"unlock_chapter": 6,
+		"unlock_flag": "ch6_unlocked",
+		"unlock_hint": "Chapter 6 start",
+		"revisit_scene": "res://scenes/regions/cathedral_server_revisit_hub.tscn",
+		"spawn_point": Vector2(640, 430),
+		"story_scene": "res://scenes/chapter6/ch6_cathedral_intro.tscn",
+		"is_revisit_safe": true,
+		"return_scene": "res://scenes/overworld/overworld.tscn",
+		"story_resume_behavior": "resume_story_only",
+	},
+	"memory_ocean": {
+		"name": "Memory Ocean",
+		"unlock_chapter": 7,
+		"unlock_flag": "ch7_unlocked",
+		"unlock_hint": "Chapter 7 start",
+		"revisit_scene": "res://scenes/regions/memory_ocean_revisit_hub.tscn",
+		"spawn_point": Vector2(640, 430),
+		"story_scene": "res://scenes/chapter7/ch7_deep_backup_intro.tscn",
+		"is_revisit_safe": true,
+		"return_scene": "res://scenes/overworld/overworld.tscn",
+		"story_resume_behavior": "resume_story_only",
+	},
+	"saved_assembly": {
+		"name": "Saved Assembly",
+		"unlock_chapter": 8,
+		"unlock_flag": "ch8_unlocked",
+		"unlock_hint": "Chapter 8 start",
+		"revisit_scene": "res://scenes/regions/saved_assembly_revisit_hub.tscn",
+		"spawn_point": Vector2(640, 430),
+		"story_scene": "res://scenes/chapter8/ch8_revolt_intro.tscn",
+		"is_revisit_safe": true,
+		"return_scene": "res://scenes/overworld/overworld.tscn",
+		"story_resume_behavior": "resume_story_only",
+	},
+	"human_patch_lab": {
+		"name": "Human Patch Lab",
+		"unlock_chapter": 9,
+		"unlock_flag": "ch9_unlocked",
+		"unlock_hint": "Chapter 9 start",
+		"revisit_scene": "res://scenes/regions/human_patch_lab_revisit_hub.tscn",
+		"spawn_point": Vector2(640, 430),
+		"story_scene": "res://scenes/chapter9/ch9_human_patch_intro.tscn",
+		"is_revisit_safe": true,
+		"return_scene": "res://scenes/overworld/overworld.tscn",
+		"story_resume_behavior": "resume_story_only",
+	},
+	"root_of_heaven": {
+		"name": "Root of Heaven",
+		"unlock_chapter": 10,
+		"unlock_flag": "ch10_unlocked",
+		"unlock_hint": "Chapter 10 start",
+		"revisit_scene": "res://scenes/regions/root_of_heaven_prep_hub.tscn",
+		"spawn_point": Vector2(640, 430),
+		"story_scene": "res://scenes/chapter10/ch10_root_intro.tscn",
+		"is_revisit_safe": true,
+		"return_scene": "res://scenes/overworld/overworld.tscn",
+		"story_resume_behavior": "resume_story_only",
+	},
+}
+
+const FREE_TRAVEL_STORY_FALLBACK_SCENES: Dictionary = {
+	1: "res://scenes/regions/oakhaven_region.tscn",
+	2: "res://scenes/regions/ironhold_region.tscn",
+	3: "res://scenes/regions/fractured_wastes_region.tscn",
+	4: "res://scenes/chapter4/ch4_forgotten_sectors_intro.tscn",
+	5: "res://scenes/chapter5/ch5_mirror_city_intro.tscn",
+	6: "res://scenes/chapter6/ch6_cathedral_intro.tscn",
+	7: "res://scenes/chapter7/ch7_deep_backup_intro.tscn",
+	8: "res://scenes/chapter8/ch8_revolt_intro.tscn",
+	9: "res://scenes/chapter9/ch9_human_patch_intro.tscn",
+	10: "res://scenes/chapter10/ch10_root_intro.tscn",
+}
+
 const DEFAULT_PLAYER_STATS: Dictionary = {
 	"name": "Kaelen", "class_fake": "Systems Architect", "class_true": "ROOT_ACCESS",
 	"level": 1, "hp": 100, "max_hp": 100, "mp": 50, "max_mp": 50,
@@ -312,6 +461,7 @@ var speedrun_active: bool = false
 ## Region tracking for open-world travel
 var current_region: String = ""  # "oakhaven", "ironhold", "fractured_wastes", "overworld"
 var player_overworld_position: Vector2 = Vector2(1500, 1100)  # Default overworld spawn
+var free_travel_story_scene: String = ""
 
 var player_stats: Dictionary = DEFAULT_PLAYER_STATS.duplicate(true)
 var relationships: Dictionary = DEFAULT_RELATIONSHIPS.duplicate(true)
@@ -1118,6 +1268,73 @@ func get_revival_scene() -> String:
 		return "res://scenes/overworld/overworld.tscn"
 	return "res://scenes/chapter1/glitch_crater_awakening.tscn"
 
+func get_free_travel_region_ids() -> Array[String]:
+	return FREE_TRAVEL_REGION_ORDER.duplicate()
+
+func get_free_travel_region_data(region_id: String) -> Dictionary:
+	return FREE_TRAVEL_REGIONS.get(region_id, {}).duplicate(true)
+
+func is_region_unlocked_for_free_travel(region_id: String) -> bool:
+	var region_data: Dictionary = FREE_TRAVEL_REGIONS.get(region_id, {})
+	if region_data.is_empty():
+		return false
+	var unlock_chapter: int = int(region_data.get("unlock_chapter", 99))
+	if current_chapter >= unlock_chapter:
+		return true
+	var unlock_flag: String = region_data.get("unlock_flag", "")
+	return not unlock_flag.is_empty() and get_flag(unlock_flag)
+
+func get_free_travel_revisit_scene(region_id: String) -> String:
+	var region_data: Dictionary = FREE_TRAVEL_REGIONS.get(region_id, {})
+	return region_data.get("revisit_scene", "")
+
+func get_free_travel_spawn_point(region_id: String) -> Vector2:
+	var region_data: Dictionary = FREE_TRAVEL_REGIONS.get(region_id, {})
+	return region_data.get("spawn_point", Vector2.ZERO)
+
+func get_free_travel_lock_message(region_id: String) -> String:
+	var region_data: Dictionary = FREE_TRAVEL_REGIONS.get(region_id, {})
+	if region_data.is_empty():
+		return "This region is not registered for free travel."
+	if not is_region_unlocked_for_free_travel(region_id):
+		return "%s is locked until %s." % [region_data.get("name", "This region"), region_data.get("unlock_hint", "later story progress")]
+	if get_free_travel_revisit_scene(region_id).is_empty():
+		return "%s is unlocked on the story route, but it has no safe revisit hub yet. Use Resume Story." % region_data.get("name", "This region")
+	return ""
+
+func get_free_travel_region_id_for_scene(scene_path: String) -> String:
+	for region_id in FREE_TRAVEL_REGION_ORDER:
+		if get_free_travel_revisit_scene(region_id) == scene_path:
+			return region_id
+	return ""
+
+func is_free_travel_scene(scene_path: String) -> bool:
+	if scene_path == "res://scenes/overworld/overworld.tscn":
+		return true
+	return not get_free_travel_region_id_for_scene(scene_path).is_empty()
+
+func remember_story_return_from_current_scene() -> void:
+	var current_scene_node = get_tree().current_scene
+	if not is_instance_valid(current_scene_node):
+		return
+	var scene_path: String = current_scene_node.scene_file_path
+	if scene_path.is_empty() or is_free_travel_scene(scene_path):
+		return
+	free_travel_story_scene = scene_path
+
+func get_free_travel_story_scene() -> String:
+	if not free_travel_story_scene.is_empty() and ResourceLoader.exists(free_travel_story_scene):
+		return free_travel_story_scene
+	return FREE_TRAVEL_STORY_FALLBACK_SCENES.get(clampi(current_chapter, 1, 10), "")
+
+func _sanitize_free_travel_loaded_scene(scene_path: String) -> String:
+	var region_id := get_free_travel_region_id_for_scene(scene_path)
+	if region_id.is_empty() or is_region_unlocked_for_free_travel(region_id):
+		return scene_path
+	push_warning("[LOAD] Locked free-travel region '%s' in save. Falling back to overworld." % region_id)
+	current_region = "overworld"
+	return "res://scenes/overworld/overworld.tscn"
+
 
 # ══════════════════════════════════════════════════════════════════════════
 # SAVE / LOAD
@@ -1167,6 +1384,7 @@ func save_game(slot: int = 0) -> bool:
 		"dda_recent_kills": _dda_recent_kills,
 		"current_region": current_region,
 		"player_overworld_position": {"x": player_overworld_position.x, "y": player_overworld_position.y},
+		"free_travel_story_scene": free_travel_story_scene,
 		"ng_plus_cycle": ng_plus_cycle,
 		"boss_checkpoints": boss_checkpoints.duplicate(true),
 		"titles_earned": titles_earned.duplicate(),
@@ -1296,6 +1514,7 @@ func load_game(slot: int = 0) -> bool:
 	_admin_spawn_cooldown = 0.0
 	# Restore region/overworld data
 	current_region = data.get("current_region", "")
+	free_travel_story_scene = data.get("free_travel_story_scene", "")
 	ng_plus_cycle = int(data.get("ng_plus_cycle", 0))
 	ng_plus_available = story_flags.get("ch10_complete", false)
 	var saved_ow_pos = data.get("player_overworld_position", {})
@@ -1379,7 +1598,7 @@ func load_game(slot: int = 0) -> bool:
 	_apply_corruption_effects()
 	glitch_meter_changed.emit(glitch_meter)
 	corruption_level_changed.emit(corruption_level)
-	var saved_scene: String = data.get("current_scene", "")
+	var saved_scene: String = _sanitize_free_travel_loaded_scene(data.get("current_scene", ""))
 	if saved_scene and ResourceLoader.exists(saved_scene):
 		if has_node("/root/SceneTransitions"):
 			await SceneTransitions.change_scene(saved_scene)
@@ -1488,6 +1707,9 @@ func reset_game() -> void:
 	playtime_seconds = 0.0
 	source_key_count = 0
 	speedrun_active = false
+	current_region = ""
+	player_overworld_position = Vector2(1500, 1100)
+	free_travel_story_scene = ""
 	_dda_performance_score = 50.0
 	_dda_recent_deaths = 0.0
 	_dda_recent_kills = 0

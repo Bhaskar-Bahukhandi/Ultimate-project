@@ -1,0 +1,79 @@
+{
+  "phase": "10M-P9",
+  "preview_only": true,
+  "production_art_changed": false,
+  "comfyui_generation_used": false,
+  "board_tiles": [24, 18],
+  "tile_size": [32, 32],
+  "contact_sheet": "assets/art_sources/comfyui_tests/oakhaven_p9_time_preview/contact_sheets/oakhaven_p9_time_of_day_contact_sheet.png",
+  "fallback_comparison_sheet": "assets/art_sources/comfyui_tests/oakhaven_p9_time_preview/contact_sheets/oakhaven_p9_fallback_vs_time_preview_contact_sheet.png",
+  "results": [
+    {
+      "variant_key": "morning",
+      "variant_name": "Morning",
+      "source_variant": "P8 Variant A clean",
+      "atlas_path": "assets/art_sources/comfyui_tests/oakhaven_p8/generated_tiles/oakhaven_p8_variant_a_clean.png",
+      "screenshot_path": "assets/art_sources/comfyui_tests/oakhaven_p9_time_preview/screenshots/oakhaven_p9_morning_preview.png",
+      "scores": {
+        "tile_readability": 8,
+        "path_readability": 8,
+        "cottage_building_readability": 7,
+        "fence_hedge_readability": 7,
+        "prop_readability": 7,
+        "player_npc_contrast": 8,
+        "atmosphere": 7,
+        "oakhaven_identity": 7,
+        "visual_cohesion": 8,
+        "likely_improvement_over_fallback": 7
+      },
+      "overall_score": 7.4,
+      "verdict": "Readable and safe for preview, but plainer than the strongest daytime option.",
+      "recommendation": "Keep as a morning candidate after palette/detail tuning; do not import yet."
+    },
+    {
+      "variant_key": "afternoon",
+      "variant_name": "Afternoon",
+      "source_variant": "P8 Variant B textured",
+      "atlas_path": "assets/art_sources/comfyui_tests/oakhaven_p8/generated_tiles/oakhaven_p8_variant_b_textured.png",
+      "screenshot_path": "assets/art_sources/comfyui_tests/oakhaven_p9_time_preview/screenshots/oakhaven_p9_afternoon_preview.png",
+      "scores": {
+        "tile_readability": 8,
+        "path_readability": 8,
+        "cottage_building_readability": 8,
+        "fence_hedge_readability": 8,
+        "prop_readability": 8,
+        "player_npc_contrast": 8,
+        "atmosphere": 8,
+        "oakhaven_identity": 8,
+        "visual_cohesion": 8,
+        "likely_improvement_over_fallback": 8
+      },
+      "overall_score": 8.0,
+      "verdict": "Best default Oakhaven preview; more complete and coherent than the generated fallback.",
+      "recommendation": "Use as the primary candidate for a later tuning/import review, not direct production import in this phase."
+    },
+    {
+      "variant_key": "night",
+      "variant_name": "Night",
+      "source_variant": "P8 Variant C dark/glitch",
+      "atlas_path": "assets/art_sources/comfyui_tests/oakhaven_p8/generated_tiles/oakhaven_p8_variant_c_dark_glitch.png",
+      "screenshot_path": "assets/art_sources/comfyui_tests/oakhaven_p9_time_preview/screenshots/oakhaven_p9_night_preview.png",
+      "scores": {
+        "tile_readability": 7,
+        "path_readability": 7,
+        "cottage_building_readability": 7,
+        "fence_hedge_readability": 7,
+        "prop_readability": 7,
+        "player_npc_contrast": 8,
+        "atmosphere": 8,
+        "oakhaven_identity": 8,
+        "visual_cohesion": 7,
+        "likely_improvement_over_fallback": 7
+      },
+      "overall_score": 7.3,
+      "verdict": "Atmospheric and readable in preview, but dark enough to require brightness and contrast tuning.",
+      "recommendation": "Keep as a night concept candidate; tune before any production import decision."
+    }
+  ],
+  "overall_recommendation": "Needs brightness/palette tuning before import."
+}

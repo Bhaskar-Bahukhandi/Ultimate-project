@@ -1,0 +1,60 @@
+{
+  "3": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": 1001001,
+      "steps": 22,
+      "cfg": 6.0,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 1.0,
+      "model": ["4", 0],
+      "positive": ["6", 0],
+      "negative": ["7", 0],
+      "latent_image": ["5", 0]
+    }
+  },
+  "4": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "__REPLACE_WITH_APPROVED_LOCAL_CHECKPOINT__"
+    }
+  },
+  "5": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 512,
+      "height": 512,
+      "batch_size": 1
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "Original 2D top-down RPG pixel-art tileset sheet for Oakhaven, a warm dark-fantasy village touched by subtle digital-glitch corruption. 512x512 PNG, exact 32x32 tile grid, reusable tiles only, no preview map. Include low-noise meadow grass variants, dirt path centers and edges, natural path turns, wood porch tiles, cottage wall-base and roof-shadow support tiles, fence bases, hedges, flower clusters, herb patch support, small sign footing, cart footing, soft ground shadows, and a few restrained glitch-corruption accent tiles. Cohesive palette, readable at Godot top-down scale, clear terrain transitions, no text, no labels, no characters, no UI, no watermark, no copyrighted or named-game style imitation.",
+      "clip": ["4", 1]
+    }
+  },
+  "7": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "copyrighted game style, named franchise, pokemon, hollow knight, swordigo, zelda, commercial game screenshot, isometric map, side-view platformer, scene preview, labels, text, watermark, logo, characters, monsters, UI, dialogue box, collision markers, grid numbers, noisy grass, repeated checkerboard, photorealistic, 3d render, blurry, muddy, giant single illustration, opaque props that are not tiles",
+      "clip": ["4", 1]
+    }
+  },
+  "8": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": ["3", 0],
+      "vae": ["4", 2]
+    }
+  },
+  "9": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "filename_prefix": "phase10mp_oakhaven_test",
+      "images": ["8", 0]
+    }
+  }
+}
+

@@ -1,0 +1,69 @@
+{
+	"actual_region": {
+		"fallback": {
+			"camera_found": true,
+			"farming_marker_found": true,
+			"force_fallback": true,
+			"player_found": true,
+			"result": "Pass",
+			"scene": "res://scenes/regions/ironhold_region.tscn",
+			"screenshot": "res://assets/art_sources/comfyui_tests/ironhold_q3_import_preview/screenshots/ironhold_q3_actual_region_fallback.png",
+			"visual_layer_found": true,
+			"visual_layer_path": "res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png",
+			"visual_layer_production": false
+		},
+		"production": {
+			"camera_found": true,
+			"farming_marker_found": true,
+			"force_fallback": false,
+			"player_found": true,
+			"result": "Pass",
+			"scene": "res://scenes/regions/ironhold_region.tscn",
+			"screenshot": "res://assets/art_sources/comfyui_tests/ironhold_q3_import_preview/screenshots/ironhold_q3_actual_region_production.png",
+			"visual_layer_found": true,
+			"visual_layer_path": "res://assets/production_art/tilesets/ironhold/ironhold_tileset.png",
+			"visual_layer_production": true
+		}
+	},
+	"actual_scene_modified": false,
+	"arena_district_capture": {
+		"reason": "arena_district can enter combat/quest UI flow during _ready",
+		"result": "Skipped"
+	},
+	"chapter2_ironhold_city_capture": {
+		"reason": "chapter2 ironhold_city can run story/quest/dialogue side effects during _ready",
+		"result": "Skipped"
+	},
+	"contact_sheet": {
+		"columns": 2,
+		"path": "res://assets/art_sources/comfyui_tests/ironhold_q3_import_preview/contact_sheets/ironhold_q3_fallback_vs_production_contact_sheet.png",
+		"result": "Pass",
+		"rows": 2
+	},
+	"phase": "10M-Q3",
+	"previews": [
+		{
+			"fallback_reason": "runtime fallback override enabled",
+			"fallback_used": true,
+			"id": "fallback_preview",
+			"production": false,
+			"resolved_path": "res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png",
+			"result": "Pass",
+			"screenshot": "res://assets/art_sources/comfyui_tests/ironhold_q3_import_preview/screenshots/ironhold_q3_fallback_preview.png",
+			"texture_size": "128x64",
+			"title": "Ironhold generated fallback"
+		},
+		{
+			"fallback_reason": "",
+			"fallback_used": false,
+			"id": "production_variant_b_preview",
+			"production": true,
+			"resolved_path": "res://assets/production_art/tilesets/ironhold/ironhold_tileset.png",
+			"result": "Pass",
+			"screenshot": "res://assets/art_sources/comfyui_tests/ironhold_q3_import_preview/screenshots/ironhold_q3_production_variant_b_preview.png",
+			"texture_size": "512x512",
+			"title": "Ironhold production Variant B"
+		}
+	],
+	"production_art_changed": true
+}

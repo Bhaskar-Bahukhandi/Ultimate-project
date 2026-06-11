@@ -79,6 +79,7 @@ func _ready() -> void:
 	_place_lore_items()
 	_place_boss_gate()
 	_place_shops()
+	_place_farming_zone()
 	_place_secrets()
 	_create_overworld_exit()
 	_create_ui()
@@ -88,6 +89,8 @@ func _ready() -> void:
 	if GameManager.has_meta("return_position") and _player:
 		_player.global_position = GameManager.get_meta("return_position")
 		GameManager.remove_meta("return_position")
+	if has_node("/root/RandomEncounterSystem"):
+		RandomEncounterSystem.show_pending_farming_result("fractured_wastes_shard_fields", self)
 
 
 func _process(delta: float) -> void:
@@ -111,6 +114,18 @@ func _build_environment() -> void:
 	bg.size = MAP_SIZE
 	bg.z_index = -20
 	add_child(bg)
+	if has_node("/root/AssetManager"):
+		var visual_tiles = AssetManager.try_create_v2_visual_tile_layer(
+			"fractured_wastes",
+			MAP_SIZE,
+			"V2WastesGroundTiles",
+			-17,
+			[Vector2i(1, 1), Vector2i(1, 1), Vector2i(0, 0), Vector2i(1, 0), Vector2i(3, 1)]
+		)
+		if visual_tiles:
+			visual_tiles.modulate = Color(0.96, 0.92, 1.0, 0.24)
+			add_child(visual_tiles)
+	_add_wastes_terrain_composition()
 
 	# ── Outer Wastes — cracked ground, floating debris ──
 	# Cracks
@@ -199,6 +214,7 @@ func _build_environment() -> void:
 	# ── Connecting paths ──
 	_create_path(Vector2(1400, 1300), Vector2(1400, 1800), 20)  # Core → Shelter
 	_create_path(Vector2(600, 700), Vector2(600, 1300), 25)      # North → Core west
+	_add_v3_wastes_polish()
 
 
 func _create_ruin(pos: Vector2) -> void:
@@ -226,6 +242,63 @@ func _create_path(from: Vector2, to: Vector2, segments: int) -> void:
 		stone.position = pos + Vector2(randf_range(-5, 5), randf_range(-5, 5))
 		stone.z_index = -17
 		add_child(stone)
+
+
+func _add_wastes_terrain_composition() -> void:
+	_add_wastes_patch(
+		"CoreScarWest",
+		PackedVector2Array([
+			Vector2(566, 1268), Vector2(982, 1156), Vector2(1290, 1296),
+			Vector2(1232, 1582), Vector2(884, 1692), Vector2(572, 1534),
+		]),
+		Color(0.13, 0.07, 0.15, 0.58),
+		-16
+	)
+	_add_wastes_patch(
+		"CoreScarEast",
+		PackedVector2Array([
+			Vector2(1336, 1270), Vector2(1792, 1214), Vector2(2188, 1430),
+			Vector2(2130, 1694), Vector2(1674, 1772), Vector2(1382, 1576),
+		]),
+		Color(0.13, 0.07, 0.15, 0.52),
+		-16
+	)
+	_add_wastes_patch(
+		"ShelterDustPocket",
+		PackedVector2Array([
+			Vector2(1126, 1744), Vector2(1540, 1682), Vector2(1768, 1856),
+			Vector2(1634, 2094), Vector2(1228, 2088), Vector2(1020, 1922),
+		]),
+		Color(0.22, 0.16, 0.16, 0.48),
+		-16
+	)
+	_add_wastes_patch(
+		"ShardFieldPocket",
+		PackedVector2Array([
+			Vector2(1834, 544), Vector2(2194, 474), Vector2(2422, 702),
+			Vector2(2302, 980), Vector2(1896, 922), Vector2(1718, 746),
+		]),
+		Color(0.19, 0.08, 0.22, 0.42),
+		-15
+	)
+
+
+func _add_wastes_patch(patch_name: String, points: PackedVector2Array, color: Color, layer: int) -> void:
+	var patch = Polygon2D.new()
+	patch.name = patch_name
+	patch.color = color
+	patch.polygon = points
+	patch.z_index = layer
+	add_child(patch)
+
+
+func _add_v3_wastes_polish() -> void:
+	if not has_node("/root/AssetManager"):
+		return
+	AssetManager.add_v3_environment_decal(self, "fracture_field", Vector2(1500, 1548), Vector2(1280, 720), "V3CoreFractureField", -15, Color(1.0, 0.90, 1.0, 0.80))
+	AssetManager.add_v3_environment_decal(self, "shard_spill", Vector2(2040, 760), Vector2(340, 410), "V3ShardFieldsSpill", -12, Color(1.0, 0.94, 1.0, 0.94))
+	AssetManager.add_v3_environment_decal(self, "fracture_field", Vector2(1360, 1900), Vector2(520, 300), "V3ShelterThresholdCracks", -15, Color(0.92, 0.86, 1.0, 0.62))
+	AssetManager.add_v3_environment_decal(self, "shard_spill", Vector2(680, 616), Vector2(260, 316), "V3OuterShardSpill", -13, Color(0.94, 0.88, 1.0, 0.82))
 
 
 ## ═══════════════════════════════════════════════════════════════════════════
@@ -349,15 +422,23 @@ func _create_interactable_npc(data: Dictionary) -> Area2D:
 	var npc = Area2D.new()
 	npc.name = data["name"].replace(" ", "").replace("(", "").replace(")", "")
 	npc.position = data["pos"]
-	var body = ColorRect.new()
-	body.color = data["color"]
-	body.size = Vector2(16, 22)
-	body.position = Vector2(-8, -22)
+	var body = null
+	if has_node("/root/AssetManager"):
+		body = AssetManager.create_topdown_npc_visual(data["name"], data["color"])
+	if not body:
+		body = ColorRect.new()
+		body.name = "Sprite"
+		body.color = data["color"]
+		body.size = Vector2(16, 22)
+		body.position = Vector2(-8, -22)
 	npc.add_child(body)
 	var name_label = Label.new()
 	name_label.text = data["name"]
 	name_label.add_theme_font_size_override("font_size", 8)
 	name_label.add_theme_color_override("font_color", Color.WHITE)
+	name_label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.98))
+	name_label.add_theme_constant_override("shadow_offset_x", 1)
+	name_label.add_theme_constant_override("shadow_offset_y", 1)
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.position = Vector2(-30, -34)
 	npc.add_child(name_label)
@@ -682,6 +763,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if _current_interact.has("boss"):
 		_interact_boss(_current_interact["boss"])
+	elif _current_interact.has("farm"):
+		_interact_farming_zone(_current_interact["farm"])
 	elif _current_interact.has("npc"):
 		_interact_npc(_current_interact["npc"])
 	elif _current_interact.has("lore"):
@@ -700,7 +783,11 @@ func _interact_npc(npc: Area2D) -> void:
 		return
 	if has_node("/root/DialogueManager"):
 		GameManager.change_state(GameManager.GameState.DIALOGUE)
+		if has_node("/root/AssetManager"):
+			AssetManager.play_v2_npc_anim(npc, "talk")
 		await DialogueManager.say(npc_name, dialogue[idx % dialogue.size()])
+		if has_node("/root/AssetManager"):
+			AssetManager.play_v2_npc_anim(npc, "idle")
 		npc.set_meta("dialogue_index", (idx + 1) % dialogue.size())
 		# Lyra recruitment at end of dialogue
 		if npc.get_meta("is_recruitable", false) and idx >= dialogue.size() - 1:
@@ -725,6 +812,103 @@ func _interact_shop(trigger: Area2D) -> void:
 	var shop_type: String = trigger.get_meta("shop_type", "general")
 	if has_node("/root/ShopSystem"):
 		ShopSystem.open_shop(shop_type)
+
+
+func _place_farming_zone() -> void:
+	var marker := Area2D.new()
+	marker.name = "ShardFieldsFarming"
+	marker.position = Vector2(2040, 760)
+	marker.set_meta("farming_zone_id", "fractured_wastes_shard_fields")
+
+	var shard_field := ColorRect.new()
+	shard_field.color = Color(0.42, 0.14, 0.62, 0.86)
+	shard_field.size = Vector2(72, 48)
+	shard_field.position = Vector2(-36, -24)
+	marker.add_child(shard_field)
+
+	var shard := ColorRect.new()
+	shard.color = Color(0.72, 0.46, 1.0, 0.9)
+	shard.size = Vector2(10, 24)
+	shard.position = Vector2(-5, -18)
+	shard.rotation = 0.25
+	marker.add_child(shard)
+
+	var warning_bar := ColorRect.new()
+	warning_bar.color = Color(1.0, 0.28, 0.48, 0.72)
+	warning_bar.size = Vector2(64, 4)
+	warning_bar.position = Vector2(-32, 18)
+	marker.add_child(warning_bar)
+
+	var shard_echo := ColorRect.new()
+	shard_echo.color = Color(0.42, 0.9, 1.0, 0.8)
+	shard_echo.size = Vector2(7, 18)
+	shard_echo.position = Vector2(16, -11)
+	shard_echo.rotation = -0.18
+	marker.add_child(shard_echo)
+
+	var danger_note := Label.new()
+	danger_note.text = "Danger deposit"
+	danger_note.add_theme_font_size_override("font_size", 7)
+	danger_note.add_theme_color_override("font_color", Color(1.0, 0.54, 0.72))
+	danger_note.position = Vector2(-38, -33)
+	marker.add_child(danger_note)
+
+	var label := Label.new()
+	label.text = "Shard Fields"
+	label.add_theme_font_size_override("font_size", 9)
+	label.add_theme_color_override("font_color", Color(0.94, 0.72, 1.0))
+	label.position = Vector2(-35, -45)
+	marker.add_child(label)
+
+	var prompt := Label.new()
+	prompt.name = "Prompt"
+	prompt.text = "[F] Disturb shard deposit"
+	prompt.add_theme_font_size_override("font_size", 8)
+	prompt.add_theme_color_override("font_color", Color(1.0, 0.9, 0.6))
+	prompt.position = Vector2(-62, 28)
+	prompt.visible = false
+	marker.add_child(prompt)
+
+	var shape := CollisionShape2D.new()
+	var circle := CircleShape2D.new()
+	circle.radius = 62.0
+	shape.shape = circle
+	marker.add_child(shape)
+	marker.body_entered.connect(_on_interact_entered.bind(marker, "farm"))
+	marker.body_exited.connect(_on_interact_exited.bind(marker, "farm"))
+	add_child(marker)
+
+
+func _interact_farming_zone(marker: Area2D) -> void:
+	var zone_id: String = marker.get_meta("farming_zone_id", "")
+	var farming_data: Dictionary = {}
+	if has_node("/root/RandomEncounterSystem"):
+		farming_data = RandomEncounterSystem.get_farming_zone_data(zone_id)
+	var choice := 0
+	if has_node("/root/DialogueManager"):
+		GameManager.change_state(GameManager.GameState.DIALOGUE)
+		choice = await DialogueManager.show_choices(
+			"%s\n%s" % [
+				farming_data.get("difficulty_tier", "Danger field"),
+				farming_data.get("objective", "Disturb the shard deposit."),
+			],
+			["Disturb shard deposit", "Back away"]
+		)
+		GameManager.change_state(GameManager.GameState.EXPLORATION)
+	if choice != 0 or not has_node("/root/RandomEncounterSystem"):
+		return
+
+	var started := RandomEncounterSystem.start_farming_encounter(
+		zone_id,
+		_player.global_position if _player else marker.global_position,
+		get_tree().current_scene.scene_file_path
+	)
+	if not started and has_node("/root/DialogueManager"):
+		var cooldown_seconds := RandomEncounterSystem.get_farming_cooldown_seconds(zone_id)
+		GameManager.change_state(GameManager.GameState.DIALOGUE)
+		await DialogueManager.say("SYSTEM", "The shard deposit is unstable. Re-entry opens in %d seconds." % cooldown_seconds)
+		GameManager.change_state(GameManager.GameState.EXPLORATION)
+
 
 func _interact_boss(gate: Area2D) -> void:
 	var boss_id: String = gate.get_meta("boss_id", "")

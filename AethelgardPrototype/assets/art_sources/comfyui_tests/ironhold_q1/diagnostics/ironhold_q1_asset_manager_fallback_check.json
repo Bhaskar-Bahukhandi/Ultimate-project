@@ -1,0 +1,12 @@
+{
+	"expected_fallback": "res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png",
+	"fallback_exists": true,
+	"phase": "10M-Q1",
+	"production_slot": "res://assets/production_art/tilesets/ironhold_tileset.png",
+	"production_slot_exists": false,
+	"resolved_path": "res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png",
+	"result": "Pass",
+	"scenario": "Ironhold AssetManager fallback check",
+	"texture_loaded": true,
+	"visual_tileset_production": false
+}

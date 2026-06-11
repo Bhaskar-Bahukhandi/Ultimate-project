@@ -77,6 +77,12 @@ func _build_visuals() -> void:
 	hint.offset_bottom = 132
 	add_child(hint)
 
+	var clerk := Node2D.new()
+	clerk.name = "NullClerkVisual"
+	clerk.position = Vector2(1024, 500)
+	clerk.add_child(AssetManager.create_topdown_npc_visual("Null Clerk", Color(0.36, 0.56, 0.76), Vector2(28, 40), 64.0))
+	add_child(clerk)
+
 	fade_rect = ColorRect.new()
 	fade_rect.name = "Fade"
 	fade_rect.color = Color.BLACK

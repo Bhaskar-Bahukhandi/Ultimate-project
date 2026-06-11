@@ -128,7 +128,15 @@ func setup_sprites() -> void:
 	# Setup NPC sprites
 	var elara = get_node_or_null("NPCs/Elara/Sprite")
 	if elara and elara is ColorRect:
-		if AssetManager.is_asset_available("char_elara"):
+		var elara_v2 = AssetManager.try_build_v2_npc("Elara", 64.0)
+		if elara_v2:
+			var elara_parent = elara.get_parent()
+			var elara_idx = elara.get_index()
+			elara_parent.remove_child(elara)
+			elara.queue_free()
+			elara_parent.add_child(elara_v2)
+			elara_parent.move_child(elara_v2, elara_idx)
+		elif AssetManager.is_asset_available("char_elara"):
 			var elara_parent = elara.get_parent()
 			var elara_idx = elara.get_index()
 			var elara_sprite = Sprite2D.new()
@@ -179,7 +187,11 @@ func _play_dialogue_sequence(dialogue_array: Array) -> void:
 		var speaker = line.get("speaker", "")
 		var text = line.get("text", "")
 		var color = Color(1, 0.3, 0.3) if speaker == "System" else Color.WHITE
+		if speaker == "Elara":
+			AssetManager.play_v2_npc_anim(get_node_or_null("NPCs/Elara"), "talk")
 		await DialogueManager.say(speaker, text, color)
+		if speaker == "Elara":
+			AssetManager.play_v2_npc_anim(get_node_or_null("NPCs/Elara"), "idle")
 		if DialogueManager.is_skip_requested():
 			break
 	DialogueManager.hide_dialogue()

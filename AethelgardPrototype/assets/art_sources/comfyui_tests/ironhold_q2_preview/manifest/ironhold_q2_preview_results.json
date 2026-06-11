@@ -1,0 +1,95 @@
+{
+	"phase": "10M-Q2",
+	"title": "Ironhold preview-only Godot scene validation pass",
+	"fallback_path": "res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png",
+	"q1_atlas_paths": {
+		"variant_a_clean": "res://assets/art_sources/comfyui_tests/ironhold_q1/generated_tiles/ironhold_q1_variant_a_clean.png",
+		"variant_b_textured": "res://assets/art_sources/comfyui_tests/ironhold_q1/generated_tiles/ironhold_q1_variant_b_textured.png",
+		"variant_c_ember_dark": "res://assets/art_sources/comfyui_tests/ironhold_q1/generated_tiles/ironhold_q1_variant_c_ember_dark.png"
+	},
+	"screenshot_paths": {
+		"fallback": "res://assets/art_sources/comfyui_tests/ironhold_q2_preview/screenshots/ironhold_q2_fallback_preview.png",
+		"variant_a": "res://assets/art_sources/comfyui_tests/ironhold_q2_preview/screenshots/ironhold_q2_variant_a_preview.png",
+		"variant_b": "res://assets/art_sources/comfyui_tests/ironhold_q2_preview/screenshots/ironhold_q2_variant_b_preview.png",
+		"variant_c": "res://assets/art_sources/comfyui_tests/ironhold_q2_preview/screenshots/ironhold_q2_variant_c_preview.png",
+		"actual_region_reference": "res://assets/art_sources/comfyui_tests/ironhold_q2_preview/screenshots/ironhold_q2_actual_region_reference.png",
+		"contact_sheet": "res://assets/art_sources/comfyui_tests/ironhold_q2_preview/contact_sheets/ironhold_q2_fallback_vs_variants_contact_sheet.png"
+	},
+	"scores": {
+		"fallback": {
+			"floor": 4.8,
+			"walkway": 4.6,
+			"transition_clarity": 4.2,
+			"forge_identity": 5.4,
+			"wall_architecture": 4.4,
+			"props_obstacles": 4.5,
+			"player_npc_contrast": 5.6,
+			"label_readability": 5.2,
+			"ironhold_identity": 5.6,
+			"visual_cohesion": 4.5,
+			"likely_improvement": 4.0,
+			"overall": 4.9
+		},
+		"variant_a_clean": {
+			"floor": 8.4,
+			"walkway": 8.6,
+			"transition_clarity": 7.5,
+			"forge_identity": 7.3,
+			"wall_architecture": 7.4,
+			"props_obstacles": 7.5,
+			"player_npc_contrast": 8.8,
+			"label_readability": 8.8,
+			"ironhold_identity": 7.4,
+			"visual_cohesion": 8.2,
+			"likely_improvement": 8.0,
+			"overall": 8.0
+		},
+		"variant_b_textured": {
+			"floor": 8.0,
+			"walkway": 8.6,
+			"transition_clarity": 7.7,
+			"forge_identity": 8.3,
+			"wall_architecture": 7.6,
+			"props_obstacles": 8.0,
+			"player_npc_contrast": 8.4,
+			"label_readability": 8.3,
+			"ironhold_identity": 8.4,
+			"visual_cohesion": 8.3,
+			"likely_improvement": 8.4,
+			"overall": 8.3
+		},
+		"variant_c_ember_dark": {
+			"floor": 7.2,
+			"walkway": 8.0,
+			"transition_clarity": 7.3,
+			"forge_identity": 8.1,
+			"wall_architecture": 7.2,
+			"props_obstacles": 7.4,
+			"player_npc_contrast": 7.6,
+			"label_readability": 7.5,
+			"ironhold_identity": 8.0,
+			"visual_cohesion": 7.6,
+			"likely_improvement": 7.5,
+			"overall": 7.6
+		}
+	},
+	"best_variant": "Variant B textured",
+	"issues_found": [
+		{
+			"variant": "fallback",
+			"issue": "Very repetitive, high-contrast tiny tile pattern behind labels and markers."
+		},
+		{
+			"variant": "variant_b_textured",
+			"issue": "Slight speckle in broad floor areas, but it does not block labels in the preview board."
+		},
+		{
+			"variant": "variant_c_ember_dark",
+			"issue": "Moodier and readable in the board, but too dark to choose as default without a dedicated pass."
+		}
+	],
+	"recommendation": "Use Variant B textured for the next controlled production-art import pass. Keep Variant A as the safer fallback reference and Variant C as mood/reference only.",
+	"production_art_changed": false,
+	"actual_scene_modified": false,
+	"decision": "Ready for Ironhold controlled production-art import pass with Variant B"
+}

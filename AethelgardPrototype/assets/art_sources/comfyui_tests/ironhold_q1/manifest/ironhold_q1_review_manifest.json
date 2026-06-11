@@ -1,0 +1,83 @@
+{
+	"phase": "10M-Q1",
+	"title": "Ironhold controlled tileset / environment sprite grammar builder pass",
+	"production_art_changed": false,
+	"real_ironhold_scene_modified": false,
+	"comfyui_used": false,
+	"ai_images_generated": false,
+	"best_variant": "B textured",
+	"decision": "Ready for Ironhold preview-only Godot scene pass",
+	"variants": [
+		{
+			"variant": "A clean",
+			"atlas_path": "assets/art_sources/comfyui_tests/ironhold_q1/generated_tiles/ironhold_q1_variant_a_clean.png",
+			"mockup_path": "assets/art_sources/comfyui_tests/ironhold_q1/mockups/ironhold_q1_variant_a_mockup.png",
+			"overall_score": 7.8,
+			"verdict": "Good enough for preview-only Godot scene testing; strongest readability but slightly plain."
+		},
+		{
+			"variant": "B textured",
+			"atlas_path": "assets/art_sources/comfyui_tests/ironhold_q1/generated_tiles/ironhold_q1_variant_b_textured.png",
+			"mockup_path": "assets/art_sources/comfyui_tests/ironhold_q1/mockups/ironhold_q1_variant_b_mockup.png",
+			"overall_score": 8.0,
+			"verdict": "Best Q1 default candidate; richer Ironhold identity while still readable."
+		},
+		{
+			"variant": "C ember/dark",
+			"atlas_path": "assets/art_sources/comfyui_tests/ironhold_q1/generated_tiles/ironhold_q1_variant_c_ember_dark.png",
+			"mockup_path": "assets/art_sources/comfyui_tests/ironhold_q1/mockups/ironhold_q1_variant_c_mockup.png",
+			"overall_score": 7.5,
+			"verdict": "Useful mood/reference variant; darker and less safe than A/B for default gameplay."
+		}
+	],
+	"detailed_scores": {
+		"A clean": {
+			"floor_readability": 8.4,
+			"walkway_readability": 8.6,
+			"transition_logic": 7.6,
+			"forge_furnace_identity": 7.2,
+			"wall_architecture_usability": 7.4,
+			"pipe_machinery_prop_clarity": 7.5,
+			"boundary_obstacle_readability": 7.6,
+			"player_npc_contrast": 8.7,
+			"ironhold_identity": 7.5,
+			"tile_grammar_correctness": 8.4,
+			"likely_chance_to_improve_actual_visuals": 7.8
+		},
+		"B textured": {
+			"floor_readability": 7.8,
+			"walkway_readability": 8.5,
+			"transition_logic": 7.7,
+			"forge_furnace_identity": 8.1,
+			"wall_architecture_usability": 7.6,
+			"pipe_machinery_prop_clarity": 8.0,
+			"boundary_obstacle_readability": 7.6,
+			"player_npc_contrast": 8.0,
+			"ironhold_identity": 8.3,
+			"tile_grammar_correctness": 8.4,
+			"likely_chance_to_improve_actual_visuals": 8.0
+		},
+		"C ember/dark": {
+			"floor_readability": 7.2,
+			"walkway_readability": 8.0,
+			"transition_logic": 7.4,
+			"forge_furnace_identity": 8.0,
+			"wall_architecture_usability": 7.2,
+			"pipe_machinery_prop_clarity": 7.4,
+			"boundary_obstacle_readability": 7.2,
+			"player_npc_contrast": 7.5,
+			"ironhold_identity": 8.0,
+			"tile_grammar_correctness": 8.0,
+			"likely_chance_to_improve_actual_visuals": 7.4
+		}
+	},
+	"validation": {
+		"godot_path": "C:/Godot/Godot_v4.6.3-stable_win64_console.exe",
+		"godot_version": "4.6.3.stable.official.7d41c59c4",
+		"project_boot": "Pass",
+		"ironhold_scene_load": "Pass",
+		"asset_manager_fallback_check": "Pass",
+		"production_art_overwrite_check": "Pass",
+		"git_diff_check": "Pass with CRLF normalization warnings only"
+	}
+}
