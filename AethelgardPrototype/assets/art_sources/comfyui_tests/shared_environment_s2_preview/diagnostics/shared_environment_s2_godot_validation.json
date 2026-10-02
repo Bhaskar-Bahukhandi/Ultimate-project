@@ -1,0 +1,118 @@
+{
+	"actual_gameplay_scenes_modified": false,
+	"all_passed": true,
+	"checks": [
+		{
+			"check": "current V3 prop atlas",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png",
+			"result": "Pass",
+			"size": "(1536, 1024)"
+		},
+		{
+			"check": "current V3 decal atlas",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png",
+			"result": "Pass",
+			"size": "(1536, 1024)"
+		},
+		{
+			"check": "S1 prop candidate",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/art_sources/comfyui_tests/shared_environment_s1/generated_props/shared_environment_props_s1_variant_b.png",
+			"result": "Pass",
+			"size": "(1536, 1024)"
+		},
+		{
+			"check": "S1 decal candidate",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/art_sources/comfyui_tests/shared_environment_s1/generated_decals/shared_environment_decals_s1_variant_b.png",
+			"result": "Pass",
+			"size": "(1536, 1024)"
+		},
+		{
+			"check": "production prop slot absent",
+			"exists": false,
+			"loaded": false,
+			"path": "res://assets/production_art/props/environment_prop_atlas.png",
+			"result": "Pass",
+			"size": "(0, 0)"
+		},
+		{
+			"check": "production decal slot absent",
+			"exists": false,
+			"loaded": false,
+			"path": "res://assets/production_art/backgrounds/environment_decal_atlas.png",
+			"result": "Pass",
+			"size": "(0, 0)"
+		},
+		{
+			"check": "Oakhaven baseline preservation",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+			"result": "Pass",
+			"size": "(512, 512)"
+		},
+		{
+			"check": "Ironhold baseline preservation",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/production_art/tilesets/ironhold/ironhold_tileset.png",
+			"result": "Pass",
+			"size": "(512, 512)"
+		},
+		{
+			"check": "Fractured Wastes baseline preservation",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png",
+			"result": "Pass",
+			"size": "(512, 512)"
+		},
+		{
+			"check": "AssetManager current V3 fallback prop/decal check",
+			"decal_ok": true,
+			"prop_ok": true,
+			"result": "Pass"
+		},
+		{
+			"candidate_sprites_created": true,
+			"check": "candidate prop/decal same-Rect2i contract",
+			"rects_valid": true,
+			"result": "Pass"
+		},
+		{
+			"check": "main menu",
+			"path": "res://scenes/main_menu.tscn",
+			"result": "Pass"
+		},
+		{
+			"check": "Oakhaven scene",
+			"path": "res://scenes/regions/oakhaven_region.tscn",
+			"result": "Pass"
+		},
+		{
+			"check": "Ironhold scene",
+			"path": "res://scenes/regions/ironhold_region.tscn",
+			"result": "Pass"
+		},
+		{
+			"check": "Fractured Wastes scene",
+			"path": "res://scenes/regions/fractured_wastes_region.tscn",
+			"result": "Pass"
+		},
+		{
+			"check": "Godot crop probe capture",
+			"path": "res://assets/art_sources/comfyui_tests/shared_environment_s2_preview/crop_checks/shared_env_s2_godot_runtime_crop_probe.png",
+			"result": "Pass"
+		}
+	],
+	"generated_v3_overwritten": false,
+	"phase": "10M-S2",
+	"production_art_changed": false
+}

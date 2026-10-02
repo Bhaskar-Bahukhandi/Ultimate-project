@@ -1,0 +1,15 @@
+{
+  "evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+  "flag_danger_seen": true,
+  "method_used": "scene._on_glitch_pulse_body_entered(Player)",
+  "notes": "glitch pulse armed and danger handler invoked",
+  "phase": "10N-A2.4",
+  "player_exists": true,
+  "probe": "probe_06_glitch_pulse",
+  "pulse_exists": true,
+  "pulse_monitoring_after_signal": true,
+  "pulse_visible_after_signal": true,
+  "signal_exists": true,
+  "start_marker_printed": true,
+  "status": "pass"
+}

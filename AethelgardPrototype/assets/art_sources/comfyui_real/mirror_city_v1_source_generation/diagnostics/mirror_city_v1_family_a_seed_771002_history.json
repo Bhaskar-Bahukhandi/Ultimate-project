@@ -1,0 +1,170 @@
+{
+  "2bbf0a5f-5f7e-4255-9f3b-134dde813399": {
+    "prompt": [
+      1,
+      "2bbf0a5f-5f7e-4255-9f3b-134dde813399",
+      {
+        "1": {
+          "class_type": "CheckpointLoaderSimple",
+          "inputs": {
+            "ckpt_name": "v1-5-pruned-emaonly.safetensors"
+          }
+        },
+        "2": {
+          "class_type": "LoraLoader",
+          "inputs": {
+            "model": [
+              "1",
+              0
+            ],
+            "clip": [
+              "1",
+              1
+            ],
+            "lora_name": "sedatal_pixel_art_lora.safetensors",
+            "strength_model": 0.85,
+            "strength_clip": 0.85
+          }
+        },
+        "3": {
+          "class_type": "CLIPTextEncode",
+          "inputs": {
+            "text": "pixel art top-down 2D RPG tileset atlas, Mirror City floor tiles, dark reflective mirror plates, glass civic plaza tiles, symmetrical route tiles, straight path corners T junction crossroad tiles, fractured mirror accent cells, cyan and magenta highlights used sparingly, dark label-safe floor variants, clean grid-compatible tile cells, readable 32x32 tile grammar, no characters, no text, no logo, transparent-looking background style, crisp pixel edges, game asset sheet",
+            "clip": [
+              "2",
+              1
+            ]
+          }
+        },
+        "4": {
+          "class_type": "CLIPTextEncode",
+          "inputs": {
+            "text": "photorealistic, 3d render, isometric, side view, first person, character, portrait, text, letters, logo, watermark, signature, blurry, painterly, overbright neon, messy noise, random abstract pattern, cyberpunk city skyline, perspective scene, cluttered illustration, UI screenshot, duplicate text, realistic reflection glare",
+            "clip": [
+              "2",
+              1
+            ]
+          }
+        },
+        "5": {
+          "class_type": "EmptyLatentImage",
+          "inputs": {
+            "width": 512,
+            "height": 512,
+            "batch_size": 1
+          }
+        },
+        "6": {
+          "class_type": "KSampler",
+          "inputs": {
+            "seed": 771002,
+            "steps": 22,
+            "cfg": 6.2,
+            "sampler_name": "euler",
+            "scheduler": "normal",
+            "denoise": 1.0,
+            "model": [
+              "2",
+              0
+            ],
+            "positive": [
+              "3",
+              0
+            ],
+            "negative": [
+              "4",
+              0
+            ],
+            "latent_image": [
+              "5",
+              0
+            ]
+          }
+        },
+        "7": {
+          "class_type": "VAEDecode",
+          "inputs": {
+            "samples": [
+              "6",
+              0
+            ],
+            "vae": [
+              "1",
+              2
+            ]
+          }
+        },
+        "8": {
+          "class_type": "SaveImage",
+          "inputs": {
+            "filename_prefix": "mirror_city_v1/family_a_seed_771002",
+            "images": [
+              "7",
+              0
+            ]
+          }
+        }
+      },
+      {
+        "client_id": "codex-mirror-city-v1-44da0cb3-948b-417c-9cad-02ec3308c3ef",
+        "create_time": 1781441749915
+      },
+      [
+        "8"
+      ]
+    ],
+    "outputs": {
+      "8": {
+        "images": [
+          {
+            "filename": "family_a_seed_771002_00001_.png",
+            "subfolder": "mirror_city_v1",
+            "type": "output"
+          }
+        ]
+      }
+    },
+    "status": {
+      "status_str": "success",
+      "completed": true,
+      "messages": [
+        [
+          "execution_start",
+          {
+            "prompt_id": "2bbf0a5f-5f7e-4255-9f3b-134dde813399",
+            "timestamp": 1781441749919
+          }
+        ],
+        [
+          "execution_cached",
+          {
+            "nodes": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ],
+            "prompt_id": "2bbf0a5f-5f7e-4255-9f3b-134dde813399",
+            "timestamp": 1781441749922
+          }
+        ],
+        [
+          "execution_success",
+          {
+            "prompt_id": "2bbf0a5f-5f7e-4255-9f3b-134dde813399",
+            "timestamp": 1781441758785
+          }
+        ]
+      ]
+    },
+    "meta": {
+      "8": {
+        "node_id": "8",
+        "display_node": "8",
+        "parent_node": null,
+        "real_node_id": "8"
+      }
+    }
+  }
+}

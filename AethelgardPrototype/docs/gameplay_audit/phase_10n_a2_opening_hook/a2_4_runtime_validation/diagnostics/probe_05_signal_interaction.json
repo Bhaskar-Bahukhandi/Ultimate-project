@@ -1,0 +1,18 @@
+{
+  "evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+  "flag_signal_found": true,
+  "method_used": "Player._interact_with(SignalFragment)",
+  "notes": "signal interaction path invoked",
+  "objective_text": "OBJECTIVE: Follow the Oakhaven signal.",
+  "phase": "10N-A2.4",
+  "player_exists": true,
+  "player_has_interact_method": true,
+  "probe": "probe_05_signal_interaction",
+  "pulse_monitoring_after_signal": true,
+  "pulse_visible_after_signal": true,
+  "scene_handler_exists": true,
+  "signal_exists": true,
+  "signal_in_interactable_group": true,
+  "start_marker_printed": true,
+  "status": "pass"
+}

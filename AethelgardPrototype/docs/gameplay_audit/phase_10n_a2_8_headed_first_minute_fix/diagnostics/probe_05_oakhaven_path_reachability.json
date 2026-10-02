@@ -1,0 +1,15 @@
+{
+	"checks": {
+		"ch1_awakening_complete": true,
+		"ch1_glitch_crater_complete": true,
+		"ch1_opening_hook_complete": true,
+		"legacy_route_exists": true,
+		"plane_crash_completed": true,
+		"pre_complete_flags_false": true
+	},
+	"errors": [],
+	"evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+	"pass": true,
+	"probe": "probe_05_oakhaven_path_reachability",
+	"timestamp": "2026-06-21T18:33:34"
+}

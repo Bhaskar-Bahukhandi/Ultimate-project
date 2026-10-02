@@ -1,0 +1,15 @@
+{
+  "autoloads": {
+    "AssetManager": true,
+    "GameManager": true,
+    "Inventory": true,
+    "ProgressionBreadcrumb": true,
+    "SceneTransitions": true
+  },
+  "evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+  "notes": "autoload boot check complete",
+  "phase": "10N-A2.4",
+  "probe": "probe_00_project_boot_corrected",
+  "start_marker_printed": true,
+  "status": "pass"
+}

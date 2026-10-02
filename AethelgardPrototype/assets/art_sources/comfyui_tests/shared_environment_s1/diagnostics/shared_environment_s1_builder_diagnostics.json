@@ -1,0 +1,21 @@
+{
+  "phase": "10M-S1",
+  "generated_files": [
+    "assets\\art_sources\\comfyui_tests\\shared_environment_s1\\generated_props\\shared_environment_props_s1_variant_a_clean.png",
+    "assets\\art_sources\\comfyui_tests\\shared_environment_s1\\generated_props\\shared_environment_props_s1_variant_b.png",
+    "assets\\art_sources\\comfyui_tests\\shared_environment_s1\\generated_props\\shared_environment_props_s1_variant_c_moody.png",
+    "assets\\art_sources\\comfyui_tests\\shared_environment_s1\\generated_decals\\shared_environment_decals_s1_variant_a_clean.png",
+    "assets\\art_sources\\comfyui_tests\\shared_environment_s1\\generated_decals\\shared_environment_decals_s1_variant_b.png",
+    "assets\\art_sources\\comfyui_tests\\shared_environment_s1\\generated_decals\\shared_environment_decals_s1_variant_c_moody.png",
+    "assets\\art_sources\\comfyui_tests\\shared_environment_s1\\mockups\\shared_env_s1_oakhaven_mockup.png",
+    "assets\\art_sources\\comfyui_tests\\shared_environment_s1\\mockups\\shared_env_s1_ironhold_mockup.png",
+    "assets\\art_sources\\comfyui_tests\\shared_environment_s1\\mockups\\shared_env_s1_fractured_wastes_mockup.png",
+    "assets\\art_sources\\comfyui_tests\\shared_environment_s1\\mockups\\shared_env_s1_arena_mockup.png",
+    "assets\\art_sources\\comfyui_tests\\shared_environment_s1\\contact_sheets\\shared_env_s1_prop_atlas_comparison.png",
+    "assets\\art_sources\\comfyui_tests\\shared_environment_s1\\contact_sheets\\shared_env_s1_decal_atlas_comparison.png",
+    "assets\\art_sources\\comfyui_tests\\shared_environment_s1\\contact_sheets\\shared_env_s1_region_mockup_contact_sheet.png",
+    "assets\\art_sources\\comfyui_tests\\shared_environment_s1\\contact_sheets\\shared_env_s1_full_review_contact_sheet.png"
+  ],
+  "production_art_changed": false,
+  "generated_v3_overwritten": false
+}

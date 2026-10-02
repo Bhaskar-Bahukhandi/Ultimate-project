@@ -5,11 +5,15 @@ var buttons_container: Node = null
 var options_panel: PanelContainer = null
 var _options_visible: bool = false
 
+const OPENING_HOOK_SCENE := "res://scenes/chapter1/opening_crash_site_hook.tscn"
+const LEGACY_PROLOGUE_SCENE := "res://scenes/prologue/flight_707.tscn"
+
 func _ready() -> void:
 	_chapter_launching = false  # Reset so chapter select works if player returns to menu
 	GameManager.change_state(GameManager.GameState.MENU)
 	_load_key_bindings()
 	_check_ng_plus_availability()
+	_configure_public_menu_surface()
 	_animate_intro()
 	# Play main menu music
 	if has_node("/root/MusicManager"):
@@ -106,14 +110,55 @@ func _check_ng_plus_availability() -> void:
 func _on_ng_plus_pressed() -> void:
 	SFXManager.play("ui_confirm")
 	GameManager.start_new_game_plus()
-	SceneTransitions.change_scene("res://scenes/prologue/flight_707.tscn")
+	SceneTransitions.change_scene(LEGACY_PROLOGUE_SCENE)
 
 func _on_new_game_pressed() -> void:
 	SFXManager.play("ui_confirm")
 	# Reset game state to ensure a clean start
 	GameManager.reset_game()
+	# 10N-A2: New Game now starts with immediate player control.
+	var target_scene := OPENING_HOOK_SCENE
+	if not ResourceLoader.exists(target_scene):
+		push_warning("[10N-A2] Opening hook missing; falling back to legacy cinematic prologue.")
+		target_scene = LEGACY_PROLOGUE_SCENE
 	# SceneTransitions handles the fade
-	SceneTransitions.change_scene("res://scenes/prologue/flight_707.tscn")
+	SceneTransitions.change_scene(target_scene)
+
+func _start_legacy_cinematic_prologue() -> void:
+	SFXManager.play("ui_confirm")
+	GameManager.reset_game()
+	SceneTransitions.change_scene(LEGACY_PROLOGUE_SCENE)
+
+func _add_legacy_prologue_debug_button() -> void:
+	if not OS.is_debug_build():
+		return
+	var vbox = get_node_or_null("VBoxContainer")
+	if not vbox or vbox.has_node("LegacyPrologueButton"):
+		return
+	var legacy_btn := Button.new()
+	legacy_btn.name = "LegacyPrologueButton"
+	legacy_btn.text = "DEBUG: LEGACY CINEMATIC START"
+	legacy_btn.layout_mode = 2
+	legacy_btn.pressed.connect(_start_legacy_cinematic_prologue)
+	var insert_index := vbox.get_child_count()
+	var new_game_btn = vbox.get_node_or_null("NewGameButton")
+	if new_game_btn:
+		insert_index = new_game_btn.get_index() + 1
+	vbox.add_child(legacy_btn)
+	vbox.move_child(legacy_btn, insert_index)
+
+
+func _configure_public_menu_surface() -> void:
+	# 10N-A2.8: keep developer routes callable, but remove them from the fresh-player menu surface.
+	var vbox = get_node_or_null("VBoxContainer")
+	if not vbox:
+		return
+	for button_name in ["SkipPrologueButton", "ChapterSelectButton", "CompletionButton", "LegacyPrologueButton"]:
+		var button := vbox.get_node_or_null(button_name) as Button
+		if button:
+			button.visible = false
+			button.disabled = true
+			button.focus_mode = Control.FOCUS_NONE
 
 func _on_skip_prologue_pressed() -> void:
 	## Skip the prologue and start directly in the Open World.

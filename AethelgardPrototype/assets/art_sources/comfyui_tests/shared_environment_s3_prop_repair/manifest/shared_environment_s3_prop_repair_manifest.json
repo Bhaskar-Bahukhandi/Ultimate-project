@@ -1,0 +1,179 @@
+{
+  "phase": "10M-S3",
+  "source_method": "deterministic Python/Pillow controlled prop atlas repair",
+  "no_comfyui": true,
+  "no_ai_image_generation": true,
+  "production_art_changed": false,
+  "generated_v3_overwritten": false,
+  "actual_gameplay_scenes_modified": false,
+  "expected_atlas_dimensions": [
+    1536,
+    1024
+  ],
+  "prop_regions_preserved": {
+    "oakhaven_roof": [
+      32,
+      22,
+      248,
+      190
+    ],
+    "oakhaven_hedge_corner": [
+      760,
+      52,
+      390,
+      176
+    ],
+    "oakhaven_flowers": [
+      30,
+      264,
+      418,
+      82
+    ],
+    "oakhaven_herb_sign": [
+      478,
+      238,
+      128,
+      126
+    ],
+    "ironhold_pipes": [
+      616,
+      238,
+      544,
+      170
+    ],
+    "ironhold_forge": [
+      1320,
+      226,
+      164,
+      194
+    ],
+    "crates": [
+      40,
+      434,
+      540,
+      144
+    ],
+    "archive_shelves": [
+      620,
+      370,
+      356,
+      218
+    ],
+    "dossier_stack": [
+      988,
+      440,
+      94,
+      128
+    ],
+    "null_seal": [
+      1092,
+      432,
+      156,
+      176
+    ],
+    "mirror_plinth": [
+      1280,
+      430,
+      202,
+      192
+    ],
+    "server_console": [
+      36,
+      612,
+      376,
+      194
+    ],
+    "firewall_panel": [
+      430,
+      612,
+      358,
+      194
+    ],
+    "tide_buoy": [
+      824,
+      610,
+      120,
+      182
+    ],
+    "salvage_shelf": [
+      974,
+      610,
+      290,
+      198
+    ],
+    "ocean_cache": [
+      1268,
+      610,
+      236,
+      198
+    ],
+    "lab_console": [
+      34,
+      818,
+      248,
+      178
+    ],
+    "memory_tank": [
+      292,
+      814,
+      170,
+      186
+    ],
+    "root_circuit_rail": [
+      628,
+      816,
+      844,
+      190
+    ]
+  },
+  "input_paths": {
+    "current_v3_prop": "assets/generated_v3/props/phase10mm_environment_prop_atlas.png",
+    "s1_prop": "assets/art_sources/comfyui_tests/shared_environment_s1/generated_props/shared_environment_props_s1_variant_b.png",
+    "s1_decal_unchanged": "assets/art_sources/comfyui_tests/shared_environment_s1/generated_decals/shared_environment_decals_s1_variant_b.png",
+    "s2_contract": "assets/art_sources/comfyui_tests/shared_environment_s2_preview/manifest/shared_environment_s2_region_contract.json"
+  },
+  "variant_paths": {
+    "a": "assets/art_sources/comfyui_tests/shared_environment_s3_prop_repair/generated_props/shared_environment_props_s3_variant_a_conservative.png",
+    "b": "assets/art_sources/comfyui_tests/shared_environment_s3_prop_repair/generated_props/shared_environment_props_s3_variant_b_rich.png",
+    "c": "assets/art_sources/comfyui_tests/shared_environment_s3_prop_repair/generated_props/shared_environment_props_s3_variant_c_dense.png"
+  },
+  "crop_check_paths": {
+    "a": "assets/art_sources/comfyui_tests/shared_environment_s3_prop_repair/crop_checks/shared_env_s3_variant_a_prop_crop_check.png",
+    "b": "assets/art_sources/comfyui_tests/shared_environment_s3_prop_repair/crop_checks/shared_env_s3_variant_b_prop_crop_check.png",
+    "c": "assets/art_sources/comfyui_tests/shared_environment_s3_prop_repair/crop_checks/shared_env_s3_variant_c_prop_crop_check.png"
+  },
+  "comparison_paths": {
+    "atlas_comparison": "assets/art_sources/comfyui_tests/shared_environment_s3_prop_repair/contact_sheets/shared_env_s3_prop_atlas_comparison.png",
+    "best_crop_comparison": "assets/art_sources/comfyui_tests/shared_environment_s3_prop_repair/contact_sheets/shared_env_s3_prop_crop_comparison_sheet.png",
+    "variant_mockup_comparison": "assets/art_sources/comfyui_tests/shared_environment_s3_prop_repair/mockups/shared_env_s3_variant_comparison_mockup.png"
+  },
+  "mockup_paths": {
+    "oakhaven": "assets/art_sources/comfyui_tests/shared_environment_s3_prop_repair/mockups/shared_env_s3_oakhaven_variant_b_mockup.png",
+    "ironhold": "assets/art_sources/comfyui_tests/shared_environment_s3_prop_repair/mockups/shared_env_s3_ironhold_variant_b_mockup.png",
+    "fractured_wastes": "assets/art_sources/comfyui_tests/shared_environment_s3_prop_repair/mockups/shared_env_s3_fractured_wastes_variant_b_mockup.png",
+    "arena": "assets/art_sources/comfyui_tests/shared_environment_s3_prop_repair/mockups/shared_env_s3_arena_variant_b_mockup.png"
+  },
+  "best_variant": "S3 Variant B rich",
+  "decision": "Ready for shared props repaired candidate preview-only Godot validation pass",
+  "godot_validation": {
+    "discovered_godot_path": "C:\\Godot\\Godot_v4.6.3-stable_win64_console.exe",
+    "godot_version": "4.6.3.stable.official.7d41c59c4",
+    "project_boot": "Pass",
+    "s3_validation_script": "Pass",
+    "diagnostics_path": "assets/art_sources/comfyui_tests/shared_environment_s3_prop_repair/diagnostics/shared_environment_s3_godot_validation.json",
+    "runtime_crop_probe": "assets/art_sources/comfyui_tests/shared_environment_s3_prop_repair/crop_checks/shared_env_s3_godot_runtime_crop_probe.png",
+    "all_passed": true
+  },
+  "project_safety_validation": {
+    "godot_version_check": "Pass",
+    "project_boot": "Pass",
+    "main_menu": "Pass",
+    "oakhaven_baseline_preservation": "Pass",
+    "ironhold_baseline_preservation": "Pass",
+    "fractured_wastes_baseline_preservation": "Pass",
+    "no_production_art_overwrite": "Pass",
+    "no_generated_v3_overwrite": "Pass",
+    "no_gameplay_scene_script_modification": "Pass",
+    "git_diff_check": "Pass"
+  }
+}

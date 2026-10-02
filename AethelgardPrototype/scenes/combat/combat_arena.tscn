@@ -152,6 +152,7 @@ layout_mode = 2
 text = "J - Attack | E - Root Access | X - Perfect Delete"
 
 [node name="RootAccessPanel" type="PanelContainer" parent="UI"]
+process_mode = 3
 visible = false
 layout_mode = 1
 anchors_preset = 8

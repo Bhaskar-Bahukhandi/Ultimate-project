@@ -1,0 +1,16 @@
+{
+  "camera_current": true,
+  "camera_exists": true,
+  "delta": "(28.586, 0.000)",
+  "evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+  "final_position": "(278.586, 420.000)",
+  "initial_position": "(250.000, 420.000)",
+  "move_right_action_exists": true,
+  "movement_changed_position": true,
+  "notes": "movement input simulated with Input.action_press('move_right')",
+  "phase": "10N-A2.4",
+  "player_exists": true,
+  "probe": "probe_04_player_movement",
+  "start_marker_printed": true,
+  "status": "pass"
+}

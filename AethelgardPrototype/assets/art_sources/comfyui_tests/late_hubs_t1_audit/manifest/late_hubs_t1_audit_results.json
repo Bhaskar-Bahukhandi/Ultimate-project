@@ -1,0 +1,414 @@
+{
+  "phase": "10M-T1",
+  "created_at": "2026-06-12T16:58:34",
+  "agents_md_read": true,
+  "production_art_changed": false,
+  "generated_v2_overwritten": false,
+  "generated_v3_overwritten": false,
+  "gameplay_scenes_or_scripts_modified": false,
+  "late_hub_scenes_found": 7,
+  "static_chapter_scenes_found": 6,
+  "generated_late_hub_tilesets_found": 5,
+  "missing_dedicated_tileset_hubs": [
+    "Saved Assembly",
+    "Human Patch Lab"
+  ],
+  "screenshots": {
+    "forgotten_sectors": {
+      "source": "docs/visual_review/phase10mm3/forgotten_sectors_after.png",
+      "copied_to": "assets/art_sources/comfyui_tests/late_hubs_t1_audit/screenshots/forgotten_sectors_reference_existing.png",
+      "status": "Copied existing visual-review screenshot as audit evidence"
+    },
+    "cathedral_server": {
+      "source": "docs/visual_review/phase10mm3/cathedral_server_after.png",
+      "copied_to": "assets/art_sources/comfyui_tests/late_hubs_t1_audit/screenshots/cathedral_server_reference_existing.png",
+      "status": "Copied existing visual-review screenshot as audit evidence"
+    },
+    "memory_ocean": {
+      "source": "docs/visual_review/phase10mm3/memory_ocean_after.png",
+      "copied_to": "assets/art_sources/comfyui_tests/late_hubs_t1_audit/screenshots/memory_ocean_reference_existing.png",
+      "status": "Copied existing visual-review screenshot as audit evidence"
+    },
+    "root_of_heaven": {
+      "source": "docs/visual_review/phase10mm3/root_of_heaven_prep_after.png",
+      "copied_to": "assets/art_sources/comfyui_tests/late_hubs_t1_audit/screenshots/root_of_heaven_reference_existing.png",
+      "status": "Copied existing visual-review screenshot as audit evidence"
+    }
+  },
+  "contact_sheet": "assets/art_sources/comfyui_tests/late_hubs_t1_audit/contact_sheets/late_hubs_t1_reference_contact_sheet.png",
+  "visual_scores": {
+    "forgotten_sectors": [
+      6.0,
+      6.2,
+      5.0,
+      5.8,
+      4.8,
+      6.8,
+      5.8
+    ],
+    "mirror_city": [
+      5.7,
+      5.8,
+      5.0,
+      5.8,
+      4.6,
+      6.4,
+      5.5
+    ],
+    "cathedral_server": [
+      6.0,
+      6.4,
+      4.8,
+      6.2,
+      4.8,
+      6.7,
+      5.8
+    ],
+    "memory_ocean": [
+      6.4,
+      6.8,
+      5.5,
+      6.8,
+      5.2,
+      6.2,
+      6.1
+    ],
+    "root_of_heaven": [
+      6.2,
+      6.9,
+      5.3,
+      7.0,
+      5.1,
+      6.5,
+      6.1
+    ],
+    "saved_assembly": [
+      5.0,
+      4.8,
+      4.5,
+      4.8,
+      3.8,
+      7.6,
+      4.8
+    ],
+    "human_patch_lab": [
+      5.1,
+      5.0,
+      4.5,
+      5.0,
+      3.8,
+      7.5,
+      4.9
+    ]
+  },
+  "risk_scores": {
+    "forgotten_sectors": [
+      3,
+      2,
+      1,
+      5,
+      5,
+      "Shared hub load is relatively safe; full scene art swap would need fallback routing."
+    ],
+    "mirror_city": [
+      3,
+      3,
+      1,
+      5,
+      5,
+      "Mirror-specific story scenes should stay static-audit only until a preview phase."
+    ],
+    "cathedral_server": [
+      3,
+      4,
+      4,
+      5,
+      6,
+      "Combat/trial chapter scenes are risky; revisit hub is safer."
+    ],
+    "memory_ocean": [
+      3,
+      3,
+      1,
+      5,
+      6,
+      "Ocean visuals need careful readability against labels and route markers."
+    ],
+    "root_of_heaven": [
+      4,
+      6,
+      3,
+      7,
+      7,
+      "Final-route importance raises replacement risk even when prep hub loads."
+    ],
+    "saved_assembly": [
+      3,
+      4,
+      2,
+      6,
+      6,
+      "No dedicated tileset means a new controlled grammar is needed before import."
+    ],
+    "human_patch_lab": [
+      3,
+      5,
+      3,
+      6,
+      6,
+      "No dedicated tileset and story/trial adjacency raise audit caution."
+    ]
+  },
+  "priority_ranking": [
+    {
+      "rank": "1",
+      "hub_area": "Shared late-hub tileset family",
+      "why": "Most late hubs share the same revisit-hub wrapper and prototype floor language; one controlled family can improve multiple weak areas without touching accepted early-region baselines.",
+      "recommended_next_action": "Start shared late-hub tileset family builder pass"
+    },
+    {
+      "rank": "2",
+      "hub_area": "Saved Assembly",
+      "why": "Weakest single area by asset coverage because no dedicated generated_v2 tileset was found.",
+      "recommended_next_action": "If the family pass is rejected, start Saved Assembly dedicated builder"
+    },
+    {
+      "rank": "3",
+      "hub_area": "Human Patch Lab",
+      "why": "Also lacks a dedicated generated_v2 tileset and likely needs lab-specific grammar.",
+      "recommended_next_action": "Use as second dedicated late-hub target"
+    },
+    {
+      "rank": "4",
+      "hub_area": "Cathedral Server",
+      "why": "Identity is present but architecture/floor support remain visibly prototype-like.",
+      "recommended_next_action": "Revisit after shared family defines server/digital grammar"
+    },
+    {
+      "rank": "5",
+      "hub_area": "Forgotten Sectors",
+      "why": "Readable enough through V3 props but still benefits from archive-sector floor/path cleanup.",
+      "recommended_next_action": "Lower urgency than missing-dedicated-tileset hubs"
+    },
+    {
+      "rank": "6",
+      "hub_area": "Root of Heaven Prep",
+      "why": "Important final-route visuals, but higher story/art risk makes it poor as the first new experiment.",
+      "recommended_next_action": "Defer until a safer late-hub grammar is proven"
+    },
+    {
+      "rank": "7",
+      "hub_area": "Memory Ocean",
+      "why": "Best current mood among audited late hubs.",
+      "recommended_next_action": "Lower immediate priority"
+    },
+    {
+      "rank": "8",
+      "hub_area": "Mirror City",
+      "why": "Needs more direct screenshot proof before ranking above missing-dedicated-tileset hubs.",
+      "recommended_next_action": "Static audit and later preview capture first"
+    }
+  ],
+  "next_recommended_target": "Shared late-hub tileset family",
+  "next_recommended_phase_name": "Late hub shared tileset family controlled grammar builder pass",
+  "decision": "Ready for shared late-hub tileset family builder pass",
+  "skipped_scene_load_notes": "Chapter story/trial scenes are skipped in T1 to avoid story/combat/quest side effects.",
+  "files_changed_outside_docs_art_sources": false,
+  "pil_error": null,
+  "godot_validation": {
+    "chapter_story_scenes_skipped": true,
+    "late_hub_scene_loads": [
+      {
+        "camera_found": true,
+        "exists": true,
+        "instantiate_ok": true,
+        "label_like_node_found": true,
+        "load_ok": true,
+        "path": "res://scenes/regions/forgotten_sectors_revisit_hub.tscn",
+        "player_found": true,
+        "visual_node_found": true
+      },
+      {
+        "camera_found": true,
+        "exists": true,
+        "instantiate_ok": true,
+        "label_like_node_found": true,
+        "load_ok": true,
+        "path": "res://scenes/regions/mirror_city_revisit_hub.tscn",
+        "player_found": true,
+        "visual_node_found": true
+      },
+      {
+        "camera_found": true,
+        "exists": true,
+        "instantiate_ok": true,
+        "label_like_node_found": true,
+        "load_ok": true,
+        "path": "res://scenes/regions/cathedral_server_revisit_hub.tscn",
+        "player_found": true,
+        "visual_node_found": true
+      },
+      {
+        "camera_found": true,
+        "exists": true,
+        "instantiate_ok": true,
+        "label_like_node_found": true,
+        "load_ok": true,
+        "path": "res://scenes/regions/memory_ocean_revisit_hub.tscn",
+        "player_found": true,
+        "visual_node_found": true
+      },
+      {
+        "camera_found": true,
+        "exists": true,
+        "instantiate_ok": true,
+        "label_like_node_found": true,
+        "load_ok": true,
+        "path": "res://scenes/regions/root_of_heaven_prep_hub.tscn",
+        "player_found": true,
+        "visual_node_found": true
+      },
+      {
+        "camera_found": true,
+        "exists": true,
+        "instantiate_ok": true,
+        "label_like_node_found": true,
+        "load_ok": true,
+        "path": "res://scenes/regions/saved_assembly_revisit_hub.tscn",
+        "player_found": true,
+        "visual_node_found": true
+      },
+      {
+        "camera_found": true,
+        "exists": true,
+        "instantiate_ok": true,
+        "label_like_node_found": true,
+        "load_ok": true,
+        "path": "res://scenes/regions/human_patch_lab_revisit_hub.tscn",
+        "player_found": true,
+        "visual_node_found": true
+      }
+    ],
+    "main_menu": {
+      "found": true,
+      "instantiate_ok": true,
+      "load_ok": true,
+      "path": "res://scenes/main_menu.tscn"
+    },
+    "notes": [
+      "This is a preview/read-only validation script.",
+      "It does not change production_art, generated assets, scenes, scripts, saves, or gameplay state.",
+      "Chapter story/trial scenes are not instantiated in this phase."
+    ],
+    "phase": "10M-T1",
+    "project_boot": true,
+    "textures": [
+      {
+        "dimensions": [
+          512,
+          512
+        ],
+        "exists": true,
+        "image_load_ok": true,
+        "path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png"
+      },
+      {
+        "dimensions": [
+          512,
+          512
+        ],
+        "exists": true,
+        "image_load_ok": true,
+        "path": "res://assets/production_art/tilesets/ironhold/ironhold_tileset.png"
+      },
+      {
+        "dimensions": [
+          512,
+          512
+        ],
+        "exists": true,
+        "image_load_ok": true,
+        "path": "res://assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png"
+      },
+      {
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "exists": true,
+        "image_load_ok": true,
+        "path": "res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png"
+      },
+      {
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "exists": true,
+        "image_load_ok": true,
+        "path": "res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png"
+      },
+      {
+        "dimensions": [
+          128,
+          64
+        ],
+        "exists": true,
+        "image_load_ok": true,
+        "path": "res://assets/generated_v2/tilesets/forgotten_sectors_v2_prototype_tileset.png"
+      },
+      {
+        "dimensions": [
+          128,
+          64
+        ],
+        "exists": true,
+        "image_load_ok": true,
+        "path": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png"
+      },
+      {
+        "dimensions": [
+          128,
+          64
+        ],
+        "exists": true,
+        "image_load_ok": true,
+        "path": "res://assets/generated_v2/tilesets/cathedral_server_v2_prototype_tileset.png"
+      },
+      {
+        "dimensions": [
+          128,
+          64
+        ],
+        "exists": true,
+        "image_load_ok": true,
+        "path": "res://assets/generated_v2/tilesets/memory_ocean_v2_prototype_tileset.png"
+      },
+      {
+        "dimensions": [
+          128,
+          64
+        ],
+        "exists": true,
+        "image_load_ok": true,
+        "path": "res://assets/generated_v2/tilesets/root_of_heaven_v2_prototype_tileset.png"
+      }
+    ]
+  },
+  "project_safety_validation": {
+    "discovered_godot_path": "C:\\Godot\\Godot_v4.6.3-stable_win64_console.exe",
+    "godot_version": "4.6.3.stable.official.7d41c59c4",
+    "project_boot": "Passed",
+    "main_menu_load": "Passed",
+    "late_hub_scene_loads": "Passed",
+    "baseline_image_loads": "Passed",
+    "chapter_story_scenes_skipped": true,
+    "no_production_art_overwrite": "Passed",
+    "no_generated_v2_overwrite": "Passed",
+    "no_generated_v3_overwrite": "Passed",
+    "no_gameplay_scene_script_modification": "Passed",
+    "git_diff_check": "Passed",
+    "git_diff_check_notes": "Only CRLF/LF warning reported for existing docs/art_pipeline/art_replacement_manifest.md working copy.",
+    "diagnostics_path": "assets/art_sources/comfyui_tests/late_hubs_t1_audit/diagnostics/late_hubs_t1_godot_validation.json"
+  }
+}

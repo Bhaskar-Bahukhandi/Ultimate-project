@@ -1,0 +1,102 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "v1-5-pruned-emaonly.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "LoraLoader",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "clip": [
+        "1",
+        1
+      ],
+      "lora_name": "sedatal_pixel_art_lora.safetensors",
+      "strength_model": 0.85,
+      "strength_clip": 0.85
+    }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "pixel art top-down 2D RPG tileset atlas, Mirror City floor tiles, dark reflective mirror plates, glass civic plaza tiles, symmetrical route tiles, straight path corners T junction crossroad tiles, fractured mirror accent cells, cyan and magenta highlights used sparingly, dark label-safe floor variants, clean grid-compatible tile cells, readable 32x32 tile grammar, no characters, no text, no logo, transparent-looking background style, crisp pixel edges, game asset sheet",
+      "clip": [
+        "2",
+        1
+      ]
+    }
+  },
+  "4": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "photorealistic, 3d render, isometric, side view, first person, character, portrait, text, letters, logo, watermark, signature, blurry, painterly, overbright neon, messy noise, random abstract pattern, cyberpunk city skyline, perspective scene, cluttered illustration, UI screenshot, duplicate text, realistic reflection glare",
+      "clip": [
+        "2",
+        1
+      ]
+    }
+  },
+  "5": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 512,
+      "height": 512,
+      "batch_size": 1
+    }
+  },
+  "6": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": 771003,
+      "steps": 22,
+      "cfg": 6.2,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 1.0,
+      "model": [
+        "2",
+        0
+      ],
+      "positive": [
+        "3",
+        0
+      ],
+      "negative": [
+        "4",
+        0
+      ],
+      "latent_image": [
+        "5",
+        0
+      ]
+    }
+  },
+  "7": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "6",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "8": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "filename_prefix": "mirror_city_v1/family_a_seed_771003",
+      "images": [
+        "7",
+        0
+      ]
+    }
+  }
+}

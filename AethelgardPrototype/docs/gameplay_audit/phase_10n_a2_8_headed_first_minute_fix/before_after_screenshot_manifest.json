@@ -1,0 +1,64 @@
+{
+  "phase": "10N-A2.8",
+  "note": "No A2.8 headed screenshots were captured because Computer Use failed at bootstrap. A2.7 before screenshots remain referenced only as prior evidence.",
+  "computer_use_viewport_control": false,
+  "before_evidence": [
+    {
+      "path": "docs/gameplay_audit/phase_10n_a2_7_computer_use_headed_playtest/screenshots/01_main_menu.png",
+      "status": "existing A2.7 screenshot",
+      "shows": "debug/dev menu exposure before A2.8"
+    },
+    {
+      "path": "docs/gameplay_audit/phase_10n_a2_7_computer_use_headed_playtest/screenshots/06e_after_corrected_sendinput_f.png",
+      "status": "existing A2.7 screenshot",
+      "shows": "signal interaction did not visibly advance before A2.8"
+    }
+  ],
+  "required_after_screenshots": [
+    {
+      "path": "screenshots/01_menu_after_cleanup.png",
+      "status": "not captured",
+      "reason": "Computer Use viewport control unavailable"
+    },
+    {
+      "path": "screenshots/02_first_playable_after_fix.png",
+      "status": "not captured",
+      "reason": "Computer Use viewport control unavailable"
+    },
+    {
+      "path": "screenshots/03_signal_prompt_range.png",
+      "status": "not captured",
+      "reason": "Computer Use viewport control unavailable"
+    },
+    {
+      "path": "screenshots/04_after_signal_success.png",
+      "status": "not captured",
+      "reason": "Computer Use viewport control unavailable"
+    },
+    {
+      "path": "screenshots/05_glitch_pulse_visible.png",
+      "status": "not captured",
+      "reason": "Computer Use viewport control unavailable"
+    },
+    {
+      "path": "screenshots/06_glitch_pulse_feedback.png",
+      "status": "not captured",
+      "reason": "Computer Use viewport control unavailable"
+    },
+    {
+      "path": "screenshots/07_oakhaven_path_marker.png",
+      "status": "not captured",
+      "reason": "Computer Use viewport control unavailable"
+    },
+    {
+      "path": "screenshots/08_transition_or_arrival.png",
+      "status": "not captured",
+      "reason": "Computer Use viewport control unavailable"
+    },
+    {
+      "path": "screenshots/09_worst_remaining_visual_issue.png",
+      "status": "not captured",
+      "reason": "Computer Use viewport control unavailable"
+    }
+  ]
+}

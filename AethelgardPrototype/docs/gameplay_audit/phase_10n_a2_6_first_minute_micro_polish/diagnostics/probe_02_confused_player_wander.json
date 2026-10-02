@@ -1,0 +1,31 @@
+{
+	"can_reach_signal": true,
+	"distance_to_signal": 50.0224952697754,
+	"errors": [],
+	"evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+	"pass": true,
+	"positions": {
+		"after_down_wander": {
+			"x": 250.0,
+			"y": 519.996
+		},
+		"after_left_wander": {
+			"x": 157.004,
+			"y": 420.0
+		},
+		"after_signal_approach": {
+			"x": 546.5,
+			"y": 420.0
+		},
+		"after_up_wander": {
+			"x": 250.0,
+			"y": 303.004
+		},
+		"spawn": {
+			"x": 250.0,
+			"y": 420.0
+		}
+	},
+	"probe": "probe_02_confused_player_wander",
+	"timestamp": "2026-06-21T13:42:08"
+}

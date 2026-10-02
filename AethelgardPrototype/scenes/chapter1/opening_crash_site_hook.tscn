@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://phase10n_a2_opening_hook"]
+
+[ext_resource type="Script" path="res://scripts/chapter1/ch1_opening_crash_site_hook.gd" id="1"]
+
+[node name="OpeningCrashSiteHook" type="Node2D"]
+script = ExtResource("1")
+

@@ -1,0 +1,13 @@
+{
+	"checks": {
+		"danger_flag": true,
+		"feedback_marker": true,
+		"hp_unchanged": true,
+		"knockback_delta": true
+	},
+	"errors": [],
+	"evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+	"pass": true,
+	"probe": "probe_04_glitch_pulse_feedback",
+	"timestamp": "2026-06-21T18:33:30"
+}

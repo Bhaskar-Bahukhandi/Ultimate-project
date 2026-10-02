@@ -1,0 +1,151 @@
+{
+    "phase":  "10N-A2.5",
+    "headed_play_happened":  false,
+    "exact_statement":  "No headed viewport play happened in A2.5",
+    "full_new_game_path_tested":  false,
+    "run_current_scene_only":  false,
+    "visible_startup_attempted":  true,
+    "visible_startup_log":  "docs/gameplay_audit/phase_10n_a2_5_headed_vector_review/logs/visible_startup_quoted_quit_after.log",
+    "timeline":  [
+                     {
+                         "event":  "game_launch",
+                         "timestamp_relative_seconds":  0,
+                         "happened":  true,
+                         "evidence_type":  "LOG EVIDENCE",
+                         "what_happened":  "Corrected visible startup command launched Godot with Vulkan and project autoloads.",
+                         "expected_player_action":  "None",
+                         "expectation_clear":  "Not applicable",
+                         "notes":  "This was not manual headed play."
+                     },
+                     {
+                         "event":  "menu_visible",
+                         "timestamp_relative_seconds":  null,
+                         "happened":  false,
+                         "evidence_type":  "NOT VALIDATED",
+                         "what_happened":  "Not observed by Codex. Static code says splash transitions to main menu after 3 seconds or any key press.",
+                         "expected_player_action":  "Click New Game",
+                         "expectation_clear":  "Not validated",
+                         "notes":  "No viewport control or screenshot capture available."
+                     },
+                     {
+                         "event":  "new_game_clicked",
+                         "timestamp_relative_seconds":  null,
+                         "happened":  false,
+                         "evidence_type":  "NOT VALIDATED",
+                         "what_happened":  "New Game was not clicked in a headed viewport.",
+                         "expected_player_action":  "Start fresh game",
+                         "expectation_clear":  "Not validated",
+                         "notes":  "A2.4 statically validated route target."
+                     },
+                     {
+                         "event":  "first_visible_scene_after_new_game",
+                         "timestamp_relative_seconds":  null,
+                         "happened":  false,
+                         "evidence_type":  "CORRECTED HEADLESS RUNTIME EVIDENCE",
+                         "what_happened":  "Opening hook scene loads and instantiates headlessly.",
+                         "expected_player_action":  "Observe crash site",
+                         "expectation_clear":  "Not visually validated",
+                         "notes":  "No headed viewport evidence."
+                     },
+                     {
+                         "event":  "first_player_control",
+                         "timestamp_relative_seconds":  null,
+                         "happened":  false,
+                         "evidence_type":  "CORRECTED HEADLESS RUNTIME EVIDENCE",
+                         "what_happened":  "Simulated move_right changed player position in A2.4.",
+                         "expected_player_action":  "Move with WASD",
+                         "expectation_clear":  "Static objective says Move with WASD",
+                         "notes":  "No human feel evidence."
+                     },
+                     {
+                         "event":  "first_objective_visible",
+                         "timestamp_relative_seconds":  null,
+                         "happened":  false,
+                         "evidence_type":  "STATIC CODE EVIDENCE",
+                         "what_happened":  "Objective text exists in local HUD and breadcrumb code.",
+                         "expected_player_action":  "Find signal",
+                         "expectation_clear":  "Likely clear but not headed-validated",
+                         "notes":  "Potential duplicate objective surfaces."
+                     },
+                     {
+                         "event":  "first_interactable_seen",
+                         "timestamp_relative_seconds":  null,
+                         "happened":  false,
+                         "evidence_type":  "STATIC CODE EVIDENCE",
+                         "what_happened":  "SignalFragment exists as a 36x36 cyan ColorRect and world label.",
+                         "expected_player_action":  "Press F/E near fragment",
+                         "expectation_clear":  "Risky due duplicate/mismatched prompt wording",
+                         "notes":  "No screenshot."
+                     },
+                     {
+                         "event":  "first_signal_interaction",
+                         "timestamp_relative_seconds":  null,
+                         "happened":  false,
+                         "evidence_type":  "CORRECTED HEADLESS RUNTIME EVIDENCE",
+                         "what_happened":  "A2.4 validated Player._interact_with(SignalFragment), flag set, objective updated.",
+                         "expected_player_action":  "Inspect signal",
+                         "expectation_clear":  "Headless only",
+                         "notes":  "No manual input."
+                     },
+                     {
+                         "event":  "first_glitch_pulse_danger",
+                         "timestamp_relative_seconds":  null,
+                         "happened":  false,
+                         "evidence_type":  "CORRECTED HEADLESS RUNTIME EVIDENCE + STATIC CODE EVIDENCE",
+                         "what_happened":  "Pulse arms and danger flag can be set, but effect is message/camera shake only.",
+                         "expected_player_action":  "Avoid pulse",
+                         "expectation_clear":  "Not visually validated",
+                         "notes":  "Danger may feel fake."
+                     },
+                     {
+                         "event":  "oakhaven_path_transition",
+                         "timestamp_relative_seconds":  null,
+                         "happened":  false,
+                         "evidence_type":  "CORRECTED HEADLESS RUNTIME EVIDENCE",
+                         "what_happened":  "Completion flags can be set before timer transition. Full headed transition not observed.",
+                         "expected_player_action":  "Move east",
+                         "expectation_clear":  "Static objective says move east",
+                         "notes":  "No transition feel evidence."
+                     },
+                     {
+                         "event":  "first_confusion",
+                         "timestamp_relative_seconds":  null,
+                         "happened":  false,
+                         "evidence_type":  "INFERENCE",
+                         "what_happened":  "Likely confusion point is duplicated objective/prompt UI or wandering off intended route due missing boundaries.",
+                         "expected_player_action":  "Find signal/route",
+                         "expectation_clear":  "Unproven",
+                         "notes":  "Based on code, not play."
+                     },
+                     {
+                         "event":  "first_boredom",
+                         "timestamp_relative_seconds":  null,
+                         "happened":  false,
+                         "evidence_type":  "INFERENCE",
+                         "what_happened":  "Likely boredom point is after discovering the pulse has no real mechanical consequence.",
+                         "expected_player_action":  "Continue east",
+                         "expectation_clear":  "Unproven",
+                         "notes":  "Based on code, not play."
+                     },
+                     {
+                         "event":  "first_curiosity",
+                         "timestamp_relative_seconds":  null,
+                         "happened":  false,
+                         "evidence_type":  "STATIC CODE EVIDENCE",
+                         "what_happened":  "Curiosity line about Oakhaven death loop and Elara marker exists.",
+                         "expected_player_action":  "Want to go to Oakhaven",
+                         "expectation_clear":  "Unproven",
+                         "notes":  "Potentially strong but fleeting."
+                     },
+                     {
+                         "event":  "first_likely_quit_moment",
+                         "timestamp_relative_seconds":  null,
+                         "happened":  false,
+                         "evidence_type":  "INFERENCE",
+                         "what_happened":  "Likely quit risk is seeing a primitive debug-looking scene with duplicated UI and a harmless danger pulse.",
+                         "expected_player_action":  "Continue anyway",
+                         "expectation_clear":  "Unproven",
+                         "notes":  "No headed evidence, so this is not a validated quit moment."
+                     }
+                 ]
+}

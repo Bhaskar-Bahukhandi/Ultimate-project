@@ -1,0 +1,188 @@
+{
+  "phase": "10M-S4",
+  "current_v3_status": "Active baseline; keep unchanged.",
+  "s3_status": "Rejected for full prop-atlas replacement; keep as reference only.",
+  "full_replacement_rejected": true,
+  "targeted_repair_needed": false,
+  "weak_regions": [],
+  "per_region_decisions": {
+    "oakhaven_roof": {
+      "current_v3_score": 8.8,
+      "s3_b_score": 7.8,
+      "decision": "Keep V3 unchanged",
+      "reason": "V3 roof is more detailed and production-like; S3 remains symbolic.",
+      "usage_priority": "High"
+    },
+    "oakhaven_hedge_corner": {
+      "current_v3_score": 8.5,
+      "s3_b_score": 7.9,
+      "decision": "Keep V3 unchanged",
+      "reason": "V3 foliage has better organic texture and shape language.",
+      "usage_priority": "High"
+    },
+    "oakhaven_flowers": {
+      "current_v3_score": 8.7,
+      "s3_b_score": 7.7,
+      "decision": "Keep V3 unchanged",
+      "reason": "V3 flowers read as distinct plants; S3 is a cleaner scatter but less refined.",
+      "usage_priority": "High"
+    },
+    "oakhaven_herb_sign": {
+      "current_v3_score": 8.6,
+      "s3_b_score": 7.4,
+      "decision": "Keep V3 unchanged",
+      "reason": "V3 sign has stronger material and garden detail.",
+      "usage_priority": "Medium"
+    },
+    "ironhold_pipes": {
+      "current_v3_score": 8.5,
+      "s3_b_score": 8.0,
+      "decision": "Keep V3 unchanged",
+      "reason": "S3 is cleaner, but V3 pipe forms remain more dimensional.",
+      "usage_priority": "High"
+    },
+    "ironhold_forge": {
+      "current_v3_score": 8.9,
+      "s3_b_score": 7.6,
+      "decision": "Keep V3 unchanged",
+      "reason": "V3 forge is clearly more production-like.",
+      "usage_priority": "High"
+    },
+    "crates": {
+      "current_v3_score": 8.4,
+      "s3_b_score": 7.9,
+      "decision": "Keep V3 unchanged",
+      "reason": "V3 shared crate plate is more polished and varied.",
+      "usage_priority": "High"
+    },
+    "archive_shelves": {
+      "current_v3_score": 8.6,
+      "s3_b_score": 8.0,
+      "decision": "Keep V3 unchanged",
+      "reason": "S3 is cleaner, but V3 shelves carry stronger prop detail.",
+      "usage_priority": "Medium"
+    },
+    "dossier_stack": {
+      "current_v3_score": 8.5,
+      "s3_b_score": 7.7,
+      "decision": "Keep V3 unchanged",
+      "reason": "V3 stack has better material specificity.",
+      "usage_priority": "Medium"
+    },
+    "null_seal": {
+      "current_v3_score": 8.4,
+      "s3_b_score": 7.9,
+      "decision": "Keep V3 unchanged",
+      "reason": "V3 seal has stronger engraved surface detail.",
+      "usage_priority": "Medium"
+    },
+    "mirror_plinth": {
+      "current_v3_score": 8.7,
+      "s3_b_score": 7.9,
+      "decision": "Keep V3 unchanged",
+      "reason": "V3 plinth reads as a finished prop; S3 is placeholder-like.",
+      "usage_priority": "Medium"
+    },
+    "server_console": {
+      "current_v3_score": 8.6,
+      "s3_b_score": 8.0,
+      "decision": "Keep V3 unchanged",
+      "reason": "S3 is readable, but V3 console bank has stronger screen/body detail.",
+      "usage_priority": "High"
+    },
+    "firewall_panel": {
+      "current_v3_score": 8.5,
+      "s3_b_score": 8.0,
+      "decision": "Keep V3 unchanged",
+      "reason": "V3 panel detail remains more refined.",
+      "usage_priority": "High"
+    },
+    "tide_buoy": {
+      "current_v3_score": 8.4,
+      "s3_b_score": 7.8,
+      "decision": "Keep V3 unchanged",
+      "reason": "V3 buoy has a more finished silhouette.",
+      "usage_priority": "Medium"
+    },
+    "salvage_shelf": {
+      "current_v3_score": 8.6,
+      "s3_b_score": 8.0,
+      "decision": "Keep V3 unchanged",
+      "reason": "V3 salvage cluster is richer and more region-specific.",
+      "usage_priority": "Medium"
+    },
+    "ocean_cache": {
+      "current_v3_score": 8.5,
+      "s3_b_score": 7.8,
+      "decision": "Keep V3 unchanged",
+      "reason": "V3 cache has stronger natural/storage identity.",
+      "usage_priority": "Medium"
+    },
+    "lab_console": {
+      "current_v3_score": 8.6,
+      "s3_b_score": 7.9,
+      "decision": "Keep V3 unchanged",
+      "reason": "V3 lab console has stronger appliance silhouette.",
+      "usage_priority": "High"
+    },
+    "memory_tank": {
+      "current_v3_score": 8.8,
+      "s3_b_score": 8.0,
+      "decision": "Keep V3 unchanged",
+      "reason": "V3 tank is more dimensional and polished.",
+      "usage_priority": "High"
+    },
+    "root_circuit_rail": {
+      "current_v3_score": 8.7,
+      "s3_b_score": 8.0,
+      "decision": "Keep V3 unchanged",
+      "reason": "V3 rail is busier, but it is more visually complete and thematic.",
+      "usage_priority": "High"
+    }
+  },
+  "recommended_next_phase": "Shared decal validation/import path using S1 decal candidate, with current V3 props unchanged.",
+  "decal_path": "Continue decals separately with S1 decal candidate preview/import path; current V3 decals remain active until validated.",
+  "production_art_changed": false,
+  "generated_v3_overwritten": false,
+  "actual_gameplay_scenes_modified": false,
+  "artifact_paths": {
+    "all_crop": "assets/art_sources/comfyui_tests/shared_environment_s4_v3_prop_audit/crop_reviews/shared_env_s4_all_prop_region_comparison.png",
+    "focus": "assets/art_sources/comfyui_tests/shared_environment_s4_v3_prop_audit/crop_reviews/shared_env_s4_weak_region_focus_sheet.png",
+    "oakhaven": "assets/art_sources/comfyui_tests/shared_environment_s4_v3_prop_audit/contact_sheets/shared_env_s4_oakhaven_v3_vs_s3b.png",
+    "ironhold": "assets/art_sources/comfyui_tests/shared_environment_s4_v3_prop_audit/contact_sheets/shared_env_s4_ironhold_v3_vs_s3b.png",
+    "fractured_wastes": "assets/art_sources/comfyui_tests/shared_environment_s4_v3_prop_audit/contact_sheets/shared_env_s4_fractured_wastes_v3_vs_s3b.png",
+    "late_hub": "assets/art_sources/comfyui_tests/shared_environment_s4_v3_prop_audit/contact_sheets/shared_env_s4_late_hub_v3_vs_s3b.png",
+    "arena": "assets/art_sources/comfyui_tests/shared_environment_s4_v3_prop_audit/contact_sheets/shared_env_s4_arena_v3_vs_s3b.png",
+    "full": "assets/art_sources/comfyui_tests/shared_environment_s4_v3_prop_audit/contact_sheets/shared_env_s4_full_review_contact_sheet.png",
+    "usage": "assets/art_sources/comfyui_tests/shared_environment_s4_v3_prop_audit/manifest/shared_env_s4_prop_usage_audit.json",
+    "validation_script": "docs/art_pipeline/shared_environment_s4_v3_prop_audit/shared_environment_s4_v3_prop_audit_validation.gd"
+  },
+  "godot_validation": {
+    "discovered_godot_path": "C:\\Godot\\Godot_v4.6.3-stable_win64_console.exe",
+    "godot_version": "4.6.3.stable.official.7d41c59c4",
+    "project_boot": "Pass",
+    "s4_validation_script": "Pass",
+    "diagnostics_path": "assets/art_sources/comfyui_tests/shared_environment_s4_v3_prop_audit/diagnostics/shared_env_s4_godot_validation.json",
+    "all_passed": true,
+    "scene_reference_status": {
+      "oakhaven": "scene load pass; screenshot skipped under headless dummy renderer",
+      "ironhold": "scene load pass; screenshot skipped under headless dummy renderer",
+      "fractured_wastes": "scene load pass; screenshot skipped under headless dummy renderer",
+      "late_hub": "skipped; scene path not found",
+      "arena": "scene load pass; screenshot skipped under headless dummy renderer"
+    }
+  },
+  "project_safety_validation": {
+    "godot_version_check": "Pass",
+    "project_boot": "Pass",
+    "main_menu": "Pass",
+    "oakhaven_baseline_preservation": "Pass",
+    "ironhold_baseline_preservation": "Pass",
+    "fractured_wastes_baseline_preservation": "Pass",
+    "asset_manager_v3_prop_decal_fallback": "Pass",
+    "no_production_art_overwrite": "Pass",
+    "no_generated_v3_overwrite": "Pass",
+    "no_gameplay_scene_script_modification": "Pass",
+    "git_diff_check": "Pass"
+  }
+}

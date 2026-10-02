@@ -1,0 +1,15 @@
+{
+	"checks": {
+		"far_does_not_set_flag": true,
+		"far_prompt_hidden": true,
+		"interact_near_prompt_visible": true,
+		"interact_near_sets_flag": true,
+		"root_access_near_prompt_visible": true,
+		"root_access_near_sets_flag": true
+	},
+	"errors": [],
+	"evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+	"pass": true,
+	"probe": "probe_02_signal_interaction_range",
+	"timestamp": "2026-06-21T18:32:27"
+}

@@ -219,6 +219,11 @@ var air_attack_count: int = 0
 # Cancel system
 var can_cancel_attack: bool = false
 var attack_recovery_timer: float = 0.0
+## Monotonic attack id. Every attack coroutine captures the value at its start and
+## bails after each await if it no longer matches. take_damage() (and anything else
+## that cancels an attack) bumps this, which stops an interrupted swing from still
+## resolving its hitbox and from writing its recovery state over the NEXT attack.
+var _attack_token: int = 0
 
 # Input buffers
 var attack_buffer_timer: float = 0.0
@@ -288,18 +293,16 @@ func _ready() -> void:
 	# Cache the Sprite child node for performance (avoids repeated get_node calls)
 	_sprite = get_node_or_null("Sprite")
 
+	# Choice-consequence stat mods are owned by ChoiceConsequences.apply_choice_buff(),
+	# which bakes them into GameManager.player_stats once, at the moment the choice is
+	# made. Do NOT re-apply get_total_stat_mods() here: _ready() runs on every combat
+	# scene load, so adding them again compounds max_hp permanently (+15 or +10 per
+	# scene entry) and silently destroys the balance curve. Read player_stats only.
 	max_health = float(GameManager.player_stats.get("max_hp", 100))
-	current_health = float(GameManager.player_stats.get("hp", max_health))
+	current_health = min(float(GameManager.player_stats.get("hp", max_health)), max_health)
 	attack_damage = float(GameManager.player_stats.get("attack", 15))
 	current_soul = float(GameManager.player_stats.get("soul", 0))
-	# Apply choice consequence stat modifiers
-	if has_node("/root/ChoiceConsequences"):
-		var mods = ChoiceConsequences.get_total_stat_mods()
-		max_health += mods.get("max_hp", 0)
-		attack_damage += mods.get("atk", 0)
-		current_health = min(current_health, max_health)
 	GameManager.player_stats["hp"] = int(current_health)
-	GameManager.player_stats["max_hp"] = int(max_health)
 	add_to_group("player")
 	health_changed.emit(current_health, max_health)
 	soul_changed.emit(current_soul, MAX_SOUL)
@@ -315,8 +318,13 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
-	# Pass 55 L-05: Release all actions to prevent phantom input on death/scene change
-	for action in ["attack", "dash", "jump", "spell", "heal", "parry", "interact", "ui_accept"]:
+	# Pass 55 L-05: Release all actions to prevent phantom input on death/scene change.
+	# These must be the real action names from project.godot. "dash" and "parry" do not
+	# exist (they are "sprint" and "defend"), so a held sprint or block was never released
+	# and leaked into the next scene as stuck input.
+	for action in ["attack", "sprint", "jump", "spell", "heal", "defend", "interact",
+			"ui_accept", "move_left", "move_right", "move_up", "move_down",
+			"root_access", "perfect_delete", "data_vision"]:
 		if InputMap.has_action(action) and Input.is_action_pressed(action):
 			Input.action_release(action)
 	# Pass 59: Disconnect autoload signals to prevent dangling references
@@ -827,6 +835,8 @@ func _perform_combo_attack() -> void:
 	if attack_cooldown > 0.0 or is_attacking:
 		return
 
+	_attack_token += 1
+	var my_token: int = _attack_token
 	is_attacking = true
 	combo_step += 1
 	if combo_step > 3:
@@ -882,6 +892,9 @@ func _perform_combo_attack() -> void:
 	var slash_offset = Vector2(45.0 * facing, -10.0)
 	_vfx("vfx_slash_arc", global_position + slash_offset)
 	await get_tree().create_timer(startup).timeout
+	# Interrupted (e.g. by take_damage) — do not resolve this attack any further.
+	if _attack_token != my_token:
+		return
 	if not is_inside_tree() or is_dead:
 		return
 
@@ -939,11 +952,17 @@ func _perform_combo_attack() -> void:
 			parry_counter_active = false
 
 	await get_tree().create_timer(active_window).timeout
+	# Interrupted (e.g. by take_damage) — do not resolve this attack any further.
+	if _attack_token != my_token:
+		return
 	if not is_inside_tree():
 		return
 	can_cancel_attack = true
 	attack_recovery_timer = recovery
 	await get_tree().create_timer(recovery).timeout
+	# Interrupted (e.g. by take_damage) — do not resolve this attack any further.
+	if _attack_token != my_token:
+		return
 	if not is_inside_tree():
 		return
 	can_cancel_attack = false
@@ -956,6 +975,8 @@ func _handle_charged_attack() -> void:
 
 
 func _perform_charged_attack() -> void:
+	_attack_token += 1
+	var my_token: int = _attack_token
 	is_attacking = true
 	attack_cooldown = CHARGED_ATTACK_STARTUP + CHARGED_ATTACK_ACTIVE + CHARGED_ATTACK_RECOVERY
 	combo_step = 0
@@ -981,6 +1002,9 @@ func _perform_charged_attack() -> void:
 
 	velocity.x = facing * 90.0
 	await get_tree().create_timer(CHARGED_ATTACK_STARTUP).timeout
+	# Interrupted (e.g. by take_damage) — do not resolve this attack any further.
+	if _attack_token != my_token:
+		return
 	if not is_inside_tree() or is_dead:
 		return
 
@@ -1016,11 +1040,17 @@ func _perform_charged_attack() -> void:
 		_screen_shake(18.0, 0.3)
 
 	await get_tree().create_timer(CHARGED_ATTACK_ACTIVE).timeout
+	# Interrupted (e.g. by take_damage) — do not resolve this attack any further.
+	if _attack_token != my_token:
+		return
 	if not is_inside_tree():
 		return
 	can_cancel_attack = true
 	attack_recovery_timer = CHARGED_ATTACK_RECOVERY
 	await get_tree().create_timer(CHARGED_ATTACK_RECOVERY).timeout
+	# Interrupted (e.g. by take_damage) — do not resolve this attack any further.
+	if _attack_token != my_token:
+		return
 	if not is_inside_tree():
 		return
 	can_cancel_attack = false
@@ -1598,6 +1628,8 @@ func _perform_upslash() -> void:
 	if attack_cooldown > 0.0 or is_attacking:
 		return
 
+	_attack_token += 1
+	var my_token: int = _attack_token
 	is_attacking = true
 	attack_cooldown = UPSLASH_STARTUP + UPSLASH_ACTIVE + UPSLASH_RECOVERY
 	_sfx("sword_swing", 0.1)
@@ -1613,6 +1645,9 @@ func _perform_upslash() -> void:
 	_vfx("vfx_slash_arc", global_position + Vector2(0, -50))
 	_metric_attack_window("upslash", UPSLASH_STARTUP, UPSLASH_ACTIVE, UPSLASH_RECOVERY, UPSLASH_STARTUP + UPSLASH_ACTIVE)
 	await get_tree().create_timer(UPSLASH_STARTUP).timeout
+	# Interrupted (e.g. by take_damage) — do not resolve this attack any further.
+	if _attack_token != my_token:
+		return
 	if not is_inside_tree() or is_dead:
 		return
 
@@ -1640,11 +1675,17 @@ func _perform_upslash() -> void:
 			CombatFX.apply_hitstop(0.06)
 
 	await get_tree().create_timer(UPSLASH_ACTIVE).timeout
+	# Interrupted (e.g. by take_damage) — do not resolve this attack any further.
+	if _attack_token != my_token:
+		return
 	if not is_inside_tree():
 		return
 	can_cancel_attack = true
 	attack_recovery_timer = UPSLASH_RECOVERY
 	await get_tree().create_timer(UPSLASH_RECOVERY).timeout
+	# Interrupted (e.g. by take_damage) — do not resolve this attack any further.
+	if _attack_token != my_token:
+		return
 	if not is_inside_tree():
 		return
 	can_cancel_attack = false
@@ -1733,8 +1774,13 @@ func take_damage(amount: float, source_position: Vector2 = Vector2.ZERO, source_
 	if is_healing:
 		_cancel_heal()
 
-	# Reset attack state — prevents getting stuck in attack after being hit
+	# Reset attack state — prevents getting stuck in attack after being hit.
+	# Bumping the token also invalidates any attack coroutine still parked on an
+	# await, so it cannot land a hit or clobber the next attack's state.
+	_attack_token += 1
 	is_attacking = false
+	can_cancel_attack = false
+	attack_recovery_timer = 0.0
 	combo_step = 0
 	combo_timer = 0.0
 	attack_cooldown = 0.0

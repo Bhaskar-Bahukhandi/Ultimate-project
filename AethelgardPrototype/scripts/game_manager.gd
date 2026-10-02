@@ -49,6 +49,9 @@ const TIER_ORDER: Array[String] = ["bronze", "silver", "gold", "platinum"]
 const DDA_WINDOW_SECONDS = 120.0
 const DDA_SCORE_FLOOR = 20.0
 const DDA_SCORE_CEILING = 85.0
+## Starting/neutral performance score. Must match the initial value of
+## _dda_performance_score — assistance ramps only below this point.
+const DDA_SCORE_NEUTRAL = 50.0
 const ADMIN_SPAWN_COOLDOWN = 60.0
 const ADMIN_SPAWN_COUNT = 2
 
@@ -231,6 +234,8 @@ const DEFAULT_RELATIONSHIPS: Dictionary = {
 
 const DEFAULT_STORY_FLAGS: Dictionary = {
 	"plane_crash_completed": false, "tutorial_completed": false,
+	"ch1_opening_hook_started": false, "ch1_opening_hook_signal_found": false,
+	"ch1_opening_hook_danger_seen": false, "ch1_opening_hook_complete": false,
 	"first_slime_defeated": false, "root_access_unlocked": false, "elara_met": false,
 	"prologue_consent_card_found": false, "prologue_aethercorp_manifest_found": false,
 	"prologue_human_patch_note_found": false,
@@ -910,7 +915,9 @@ func _check_level_up() -> void:
 	var current_level: int = player_stats.get("level", 1)
 	if current_level >= XP_THRESHOLDS.size():
 		return
-	while current_level < XP_THRESHOLDS.size() - 1 and player_stats["xp"] >= XP_THRESHOLDS[current_level]:
+	# XP_THRESHOLDS[i] is the XP required to reach level i+1, so the last
+	# reachable level is XP_THRESHOLDS.size() (20), not size() - 1.
+	while current_level < XP_THRESHOLDS.size() and player_stats["xp"] >= XP_THRESHOLDS[current_level]:
 		current_level += 1
 		_apply_level_up(current_level)
 
@@ -929,6 +936,10 @@ func _apply_level_up(new_level: int) -> void:
 	player_stats["mp"] = player_stats["max_mp"]
 	player_stats["base_attack"] += atk_gain
 	player_stats["attack"] = player_stats["base_attack"]
+	# Write to base_defense, not defense. Inventory._apply_equipment_bonuses() and
+	# _apply_corruption_effects() both recompute defense from base_defense, so a
+	# level gain written only to "defense" is erased on the next recompute or load.
+	player_stats["base_defense"] = player_stats.get("base_defense", 0) + DEF_PER_LEVEL
 	player_stats["defense"] = player_stats.get("defense", 0) + DEF_PER_LEVEL
 	if has_node("/root/Inventory"):
 		Inventory._apply_equipment_bonuses()
@@ -938,13 +949,13 @@ func _apply_level_up(new_level: int) -> void:
 
 func get_xp_for_next_level() -> int:
 	var level: int = player_stats.get("level", 1)
-	if level >= XP_THRESHOLDS.size() - 1:
+	if level >= XP_THRESHOLDS.size():
 		return -1
 	return XP_THRESHOLDS[level]
 
 func get_xp_progress() -> float:
 	var level: int = player_stats.get("level", 1)
-	if level >= XP_THRESHOLDS.size() - 1:
+	if level >= XP_THRESHOLDS.size():
 		return 1.0
 	var prev = XP_THRESHOLDS[level - 1] if level > 1 else 0
 	var next = XP_THRESHOLDS[level]
@@ -996,10 +1007,14 @@ func get_difficulty_multiplier() -> float:
 
 func get_player_dda_bonus() -> float:
 	## Returns a bonus multiplier for player damage/soul/heal when struggling.
-	## High performance → 1.0 (no bonus), low performance → up to 1.25.
-	if _dda_performance_score >= 60.0:
+	## Neutral or better performance → 1.0 (no bonus); worst case → 1.25.
+	## Previously this ramped from a threshold of 60 to a ceiling of 1.35, so the
+	## NEUTRAL starting score of 50 already handed out a silent +8.75% to every
+	## damage, soul and heal value — contradicting both the docstring and the
+	## intent that assistance only appears once the player is actually struggling.
+	if _dda_performance_score >= DDA_SCORE_NEUTRAL:
 		return 1.0
-	return remap(_dda_performance_score, DDA_SCORE_FLOOR, 60.0, 1.35, 1.0)
+	return remap(_dda_performance_score, DDA_SCORE_FLOOR, DDA_SCORE_NEUTRAL, 1.25, 1.0)
 
 func get_dda_score() -> float:
 	return _dda_performance_score
@@ -1607,9 +1622,16 @@ func load_game(slot: int = 0) -> bool:
 		var saved_pos = data.get("player_position", {})
 		if saved_pos is Dictionary and not saved_pos.is_empty():
 			await get_tree().process_frame
-			if not is_inside_tree(): return true
+			# These early returns must clear the lock. Returning with
+			# _load_in_progress still true makes every later load_game()
+			# bail at the guard in load_game() for the rest of the session.
+			if not is_inside_tree():
+				_load_in_progress = false
+				return true
 			await get_tree().process_frame
-			if not is_inside_tree(): return true
+			if not is_inside_tree():
+				_load_in_progress = false
+				return true
 			var restore_players = get_tree().get_nodes_in_group("player")
 			if not restore_players.is_empty():
 				restore_players[0].global_position = Vector2(saved_pos.get("x", 0.0), saved_pos.get("y", 0.0))
@@ -1731,8 +1753,16 @@ func reset_game() -> void:
 		Inventory.gold = 0
 		if Inventory.has_method("add_starting_items"):
 			Inventory.add_starting_items()
+	boss_checkpoints.clear()
 	if has_node("/root/SideQuestManager"):
 		SideQuestManager.reset()
+	# These three kept state across a "New Game": boss mercy-HP checkpoints, the
+	# choice buffs and party roster from the finished run, and the encounter
+	# zone/rate. RandomEncounterSystem.reset() existed but had no callers at all.
+	if has_node("/root/ChoiceConsequences"):
+		ChoiceConsequences.reset()
+	if has_node("/root/RandomEncounterSystem"):
+		RandomEncounterSystem.reset()
 	if has_node("/root/PauseScreen"):
 		PauseScreen.set_meta("cutscene_blocked", false)
 		if PauseScreen.is_paused:

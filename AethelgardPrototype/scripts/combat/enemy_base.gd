@@ -180,6 +180,15 @@ func _ready() -> void:
 	add_to_group("enemies")
 	add_to_group("hackable")
 
+	# Physics layers (project convention: 1 = world/terrain, 2 = player, 4 = enemy).
+	# EnemyBase never set these, so enemies placed directly in a .tscn stayed on the
+	# default layer 1 and read as terrain: player projectiles (collision_mask = 4)
+	# could never hit them, and _on_body_entered's `body.collision_layer & 1` terrain
+	# test matched other enemies. Code-spawned enemies were assigned layer 4 by
+	# combat_arena.gd, which is why only scene-placed ones were affected.
+	collision_layer = 4
+	collision_mask = 1
+
 	set_meta("original_movement_speed", movement_speed)
 	set_meta("original_gravity_scale", gravity_scale)
 	set_meta("original_elasticity", elasticity)
@@ -1378,6 +1387,19 @@ func _on_screen_exited() -> void:
 # ══════════════════════════════════════════════════════════════════════════
 
 func _on_difficulty_adjusted(_new_mult: float) -> void:
+	## Re-tune to the new difficulty — but never mid-fight.
+	## _apply_level_scaling() rewrites max_health and contact_damage, so reacting to
+	## this signal while engaged made surviving enemies visibly gain HP and damage the
+	## moment their packmates died (clearing 3 of a pack moves the DDA score enough to
+	## emit, giving the rest ~7% more of both, with health bars jumping). Only enemies
+	## that are untouched and unaware re-scale; everyone else keeps the numbers they
+	## were spawned with.
+	if current_state == State.DEAD:
+		return
+	if current_state in [State.CHASE, State.ATTACK, State.TELEGRAPH, State.RECOVER, State.STUNNED]:
+		return
+	if current_health < max_health:
+		return
 	_apply_level_scaling()
 
 

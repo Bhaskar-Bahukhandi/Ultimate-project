@@ -1,0 +1,322 @@
+{
+  "phase": "10M-U2.1",
+  "audit_only": true,
+  "agents_md_read": true,
+  "generation_performed": false,
+  "prompt_called": false,
+  "import_performed": false,
+  "e_drive_checked": true,
+  "comfyui_install_found": true,
+  "comfyui_process_running": false,
+  "api_reachable": false,
+  "models_found": true,
+  "real_generation_readiness": "not_ready_until_launched_and_api_verified",
+  "final_verdict": "ComfyUI installed but not running",
+  "explicit_paths": [
+    {
+      "path": "E:\\Comfy",
+      "exists": true,
+      "comfyui_indicator_found": "No",
+      "notes": "Root exists; appears to be a ComfyUI Desktop install root."
+    },
+    {
+      "path": "E:\\Comfy\\ComfyUI",
+      "exists": true,
+      "comfyui_indicator_found": "Yes",
+      "notes": "Contains ComfyUI.exe and resources."
+    },
+    {
+      "path": "E:\\Comfy\\ComfyUI_windows_portable",
+      "exists": false,
+      "comfyui_indicator_found": "No",
+      "notes": "Portable folder not present."
+    },
+    {
+      "path": "E:\\Comfy\\models",
+      "exists": true,
+      "comfyui_indicator_found": "Yes",
+      "notes": "Model root exists."
+    },
+    {
+      "path": "E:\\Comfy\\models\\checkpoints",
+      "exists": true,
+      "comfyui_indicator_found": "Yes",
+      "notes": "Checkpoint folder exists; expected checkpoint found."
+    },
+    {
+      "path": "E:\\Comfy\\models\\loras",
+      "exists": true,
+      "comfyui_indicator_found": "Yes",
+      "notes": "LoRA folder exists; expected pixel-art LoRA found."
+    },
+    {
+      "path": "E:\\Comfy\\output",
+      "exists": true,
+      "comfyui_indicator_found": "Yes",
+      "notes": "Output folder exists; not used in this audit."
+    },
+    {
+      "path": "E:\\Comfy\\custom_nodes",
+      "exists": true,
+      "comfyui_indicator_found": "Yes",
+      "notes": "Folder exists; child count was 0 in targeted check."
+    },
+    {
+      "path": "E:\\Comfy\\user",
+      "exists": true,
+      "comfyui_indicator_found": "Yes",
+      "notes": "User folder exists."
+    },
+    {
+      "path": "E:\\Comfy\\ComfyUI\\models",
+      "exists": false,
+      "comfyui_indicator_found": "No",
+      "notes": "Models are at E:\\Comfy\\models instead."
+    },
+    {
+      "path": "E:\\Comfy\\ComfyUI\\models\\checkpoints",
+      "exists": false,
+      "comfyui_indicator_found": "No",
+      "notes": "Models are at E:\\Comfy\\models\\checkpoints instead."
+    },
+    {
+      "path": "E:\\Comfy\\ComfyUI\\models\\loras",
+      "exists": false,
+      "comfyui_indicator_found": "No",
+      "notes": "Models are at E:\\Comfy\\models\\loras instead."
+    },
+    {
+      "path": "E:\\Comfy\\ComfyUI\\output",
+      "exists": false,
+      "comfyui_indicator_found": "No",
+      "notes": "Output is at E:\\Comfy\\output instead."
+    },
+    {
+      "path": "E:\\Comfy\\ComfyUI\\custom_nodes",
+      "exists": false,
+      "comfyui_indicator_found": "No",
+      "notes": "Custom nodes are at E:\\Comfy\\custom_nodes instead."
+    }
+  ],
+  "launch_candidates": [
+    {
+      "candidate": "ComfyUI Desktop executable",
+      "path": "E:\\Comfy\\ComfyUI\\ComfyUI.exe",
+      "exists": true,
+      "command": "& \"E:\\Comfy\\ComfyUI\\ComfyUI.exe\"",
+      "notes": "Preferred manual launch for this Desktop-style install. Not launched by Codex."
+    },
+    {
+      "candidate": "ComfyUI main.py through detected venv",
+      "path": "E:\\Comfy\\ComfyUI\\resources\\ComfyUI\\main.py",
+      "exists": true,
+      "command": "Set-Location \"E:\\Comfy\\ComfyUI\\resources\\ComfyUI\"; & \"E:\\Comfy\\.venv\\Scripts\\python.exe\" \"main.py\" --listen 127.0.0.1 --port 8000",
+      "notes": "Manual CLI candidate. Model-path behavior was not validated because the server was not launched."
+    },
+    {
+      "candidate": "Detected virtualenv Python",
+      "path": "E:\\Comfy\\.venv\\Scripts\\python.exe",
+      "exists": true,
+      "command": "Used by the manual main.py command above.",
+      "notes": "Python executable exists and is readable."
+    },
+    {
+      "candidate": "run_nvidia_gpu.bat",
+      "path": "E:\\Comfy\\run_nvidia_gpu.bat",
+      "exists": false,
+      "command": "",
+      "notes": "No batch launcher at this path."
+    },
+    {
+      "candidate": "run_cpu.bat",
+      "path": "E:\\Comfy\\run_cpu.bat",
+      "exists": false,
+      "command": "",
+      "notes": "No batch launcher at this path."
+    },
+    {
+      "candidate": "portable run_nvidia_gpu.bat",
+      "path": "E:\\Comfy\\ComfyUI_windows_portable\\run_nvidia_gpu.bat",
+      "exists": false,
+      "command": "",
+      "notes": "Portable folder not present."
+    }
+  ],
+  "models": [
+    {
+      "type": "Checkpoint",
+      "file": "v1-5-pruned-emaonly.safetensors",
+      "path": "E:\\Comfy\\models\\checkpoints\\v1-5-pruned-emaonly.safetensors",
+      "size": "4,265,146,304 bytes / 4067.56 MiB",
+      "likely_usable": "Yes",
+      "notes": "Expected SD 1.5 checkpoint from historical Oakhaven P6 lineage; readable."
+    },
+    {
+      "type": "LoRA",
+      "file": "sedatal_pixel_art_lora.safetensors",
+      "path": "E:\\Comfy\\models\\loras\\sedatal_pixel_art_lora.safetensors",
+      "size": "3,226,184 bytes / 3.08 MiB",
+      "likely_usable": "Likely",
+      "notes": "Expected pixel-art LoRA from historical Oakhaven P6 lineage; readable. Actual compatibility still requires API/model-load validation after launch."
+    }
+  ],
+  "api_process_checks": [
+    {
+      "check": "Process check",
+      "result": "Not running",
+      "notes": "No Python/ComfyUI/conda/uv process related to ComfyUI was listed."
+    },
+    {
+      "check": "Port 8188",
+      "result": "No listener",
+      "notes": "`netstat` found no listener on port 8188."
+    },
+    {
+      "check": "Port 8000",
+      "result": "No listener",
+      "notes": "`netstat` found no listener on port 8000."
+    },
+    {
+      "check": "http://127.0.0.1:8188/system_stats",
+      "result": "Unreachable",
+      "notes": "Unable to connect to the remote server."
+    },
+    {
+      "check": "http://127.0.0.1:8188/object_info",
+      "result": "Unreachable",
+      "notes": "Unable to connect to the remote server."
+    },
+    {
+      "check": "http://127.0.0.1:8188/history",
+      "result": "Unreachable",
+      "notes": "Unable to connect to the remote server."
+    },
+    {
+      "check": "http://127.0.0.1:8000/system_stats",
+      "result": "Unreachable",
+      "notes": "Unable to connect to the remote server."
+    },
+    {
+      "check": "http://127.0.0.1:8000/object_info",
+      "result": "Unreachable",
+      "notes": "Unable to connect to the remote server."
+    },
+    {
+      "check": "http://127.0.0.1:8000/history",
+      "result": "Unreachable",
+      "notes": "Unable to connect to the remote server."
+    },
+    {
+      "check": "/prompt",
+      "result": "Not called",
+      "notes": "No generation prompt was queued."
+    }
+  ],
+  "evidence_bundle_audit": [
+    {
+      "evidence_item": "workflow_api.json",
+      "status": "Missing",
+      "notes": "No submitted `workflow_api.json` found in Oakhaven P6 or workflow folders."
+    },
+    {
+      "evidence_item": "prompt JSON",
+      "status": "Template only / partial historical",
+      "notes": "`docs/art_pipeline/comfyui_workflows/oakhaven_tileset_512_test_workflow.json.template` contains prompt text but is not a submitted prompt JSON/evidence bundle."
+    },
+    {
+      "evidence_item": "checkpoint/model/LoRA/VAE",
+      "status": "Partially verified",
+      "notes": "Checkpoint and LoRA exist at `E:\\Comfy\\models`; VAE not specifically proven; API model-load not validated because server is not running."
+    },
+    {
+      "evidence_item": "seed",
+      "status": "Partial historical",
+      "notes": "Oakhaven P6 source records and manifests include seeds such as `610001` through `660002`."
+    },
+    {
+      "evidence_item": "prompt_id",
+      "status": "Missing",
+      "notes": "No `prompt_id` evidence found for Oakhaven P6."
+    },
+    {
+      "evidence_item": "history JSON",
+      "status": "Missing",
+      "notes": "No `/history` result JSON found; API history endpoint unreachable."
+    },
+    {
+      "evidence_item": "original ComfyUI output path",
+      "status": "Missing/incomplete",
+      "notes": "Oakhaven P6 records raw project paths, not a proven original external ComfyUI output path."
+    },
+    {
+      "evidence_item": "selected output path",
+      "status": "Partial historical",
+      "notes": "`assets/art_sources/comfyui_tests/oakhaven_p6/phase10mp6_candidate_manifest.json` lists selected crop outputs."
+    },
+    {
+      "evidence_item": "copied project path",
+      "status": "Partial historical",
+      "notes": "Oakhaven P6 raw/review/candidate paths exist under `assets/art_sources/comfyui_tests/oakhaven_p6/`."
+    },
+    {
+      "evidence_item": "before/after contact sheet",
+      "status": "Partial historical",
+      "notes": "P6 has `phase10mp6_all_outputs_contact_sheet.png` and `phase10mp6_candidate_contact_sheet.png`."
+    },
+    {
+      "evidence_item": "manual edit statement",
+      "status": "Partial historical",
+      "notes": "P7 states extraction and light cleanup were used; P8 states deterministic construction. No complete real-ComfyUI manual edit bundle exists."
+    }
+  ],
+  "project_lineage_truth_update": [
+    {
+      "family": "Oakhaven",
+      "previous_u2_classification": "Partial historical ComfyUI lineage; current path unavailable in U2.",
+      "u2_1_update": "E:\\Comfy install and expected models now found, but API is not running and evidence bundle remains incomplete.",
+      "action": "Launch ComfyUI manually, rerun audit, then use a separate real source-generation prompt if API passes."
+    },
+    {
+      "family": "Ironhold",
+      "previous_u2_classification": "No sufficient real ComfyUI evidence; controlled procedural production baseline.",
+      "u2_1_update": "Unchanged. E:\\Comfy does not retroactively prove Ironhold was ComfyUI-generated.",
+      "action": "Do not relabel. Replace only in later evidence-backed phase."
+    },
+    {
+      "family": "Fractured Wastes",
+      "previous_u2_classification": "No sufficient real ComfyUI evidence; controlled procedural production baseline.",
+      "u2_1_update": "Unchanged. E:\\Comfy does not retroactively prove Fractured Wastes was ComfyUI-generated.",
+      "action": "Do not relabel. Replace only in later evidence-backed phase."
+    },
+    {
+      "family": "Mirror City T4-T7",
+      "previous_u2_classification": "No real ComfyUI evidence; T7 is controlled deterministic/procedural baseline.",
+      "u2_1_update": "Unchanged. E:\\Comfy presence does not change T4-T7 source truth.",
+      "action": "Future Mirror City real-art pass requires new ComfyUI generation with evidence."
+    },
+    {
+      "family": "late hubs T1-T3",
+      "previous_u2_classification": "Review-only/procedural/validation artifacts.",
+      "u2_1_update": "Unchanged. No late-hub ComfyUI evidence bundle found.",
+      "action": "Do not promote or relabel."
+    },
+    {
+      "family": "shared V3 props/decals",
+      "previous_u2_classification": "Active generated_v3 baseline; no real ComfyUI evidence.",
+      "u2_1_update": "Unchanged. V3 remains locked active baseline unless targeted repair is justified.",
+      "action": "Do not touch unless specific visible issue is proven."
+    }
+  ],
+  "protected_paths_changed_by_u2_1": false,
+  "u2_1_files_written": [
+    "docs/art_pipeline/comfyui_u2_1_e_drive_audit.md",
+    "docs/art_pipeline/comfyui_u2_1_e_drive_audit.json"
+  ],
+  "manual_next_action": "& \"E:\\Comfy\\ComfyUI\\ComfyUI.exe\"",
+  "notes": [
+    "No art was generated.",
+    "No /prompt call was made.",
+    "ComfyUI appears installed but not running.",
+    "Future real ComfyUI generation still requires API reachability and a complete evidence bundle."
+  ]
+}

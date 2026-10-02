@@ -64,6 +64,7 @@ func _ready() -> void:
 	_place_npcs()
 	_place_lore_items()
 	_place_boss_gates()
+	_place_story_gates()
 	_place_shops()
 	_place_farming_zone()
 	_place_arena_entrance()
@@ -499,10 +500,12 @@ func _create_shop(shop_name: String, pos: Vector2, shop_type: String) -> void:
 
 
 func _place_boss_gates() -> void:
-	# Clockwork Automaton — Clock Tower
-	_create_boss_gate("ClockworkBossGate", Vector2(3050, 550),
-		"clockwork_automaton", 9, "Clockwork Automaton\n[F] Challenge\nRec. Lv 9",
-		"res://scenes/combat/combat_arena.tscn")
+	# Clockwork Automaton — generic arena fallback. Suppressed once the authored
+	# Clock Tower scene has been cleared, so the same boss isn't fought twice.
+	if not GameManager.has_flag("ch2_clockwork_automaton_defeated"):
+		_create_boss_gate("ClockworkBossGate", Vector2(3050, 550),
+			"clockwork_automaton", 9, "Clockwork Automaton\n[F] Challenge\nRec. Lv 9",
+			"res://scenes/combat/combat_arena.tscn")
 	# Administrator Proxy — Underground
 	_create_boss_gate("AdminBossGate", Vector2(1300, 2100),
 		"administrator_proxy", 11, "Administrator Proxy\n[F] Challenge\nRec. Lv 11",
@@ -542,6 +545,91 @@ func _create_boss_gate(gate_name: String, pos: Vector2, boss_id: String,
 	gate.body_entered.connect(func(b): _on_interact_entered(b, gate, "boss"))
 	gate.body_exited.connect(func(b): _on_interact_exited(b, gate, "boss"))
 	add_child(gate)
+
+
+## ═══════════════════════════════════════════════════════════════════════════
+## STORY SCENE GATES
+## These authored Chapter 2 scenes each return to this region on completion,
+## but had no entry point, leaving them unreachable. Each gate hides itself
+## once its completion flag is set, and appears only once its unlock flag is.
+## ═══════════════════════════════════════════════════════════════════════════
+
+func _place_story_gates() -> void:
+	# Seraphina — the Chapter 2 introduction. Sets ch2_seraphina_met and
+	# ch2_underground_unlocked, which the Underground gate below depends on,
+	# and which ch2_seraphina_choice.tscn assumes has already happened.
+	_create_story_gate("SeraphinaEncounterGate", Vector2(1650, 1150),
+		"res://scenes/chapter2/seraphina_encounter.tscn",
+		"Seraphina\n[F] Approach",
+		"", "ch2_seraphina_met", Color(0.85, 0.75, 0.35))
+	# Underground Network — carries the ch2_data_wraith_* branch that
+	# Chapters 4, 5 and 10 read.
+	_create_story_gate("UndergroundGate", Vector2(1150, 1950),
+		"res://scenes/chapter2/underground_network.tscn",
+		"Underground Network\n[F] Descend",
+		"ch2_underground_unlocked", "ch2_underground_complete", Color(0.35, 0.55, 0.8))
+	# Clock Tower — the authored multi-floor version of the Clockwork Automaton
+	# fight. Clearing it sets ch2_clockwork_automaton_defeated, which suppresses
+	# the generic arena boss gate in _place_boss_gates() so the fight can't be
+	# taken twice.
+	_create_story_gate("ClockTowerGate", Vector2(2950, 620),
+		"res://scenes/chapter2/clock_tower.tscn",
+		"Clock Tower\n[F] Ascend",
+		"", "ch2_clock_tower_complete", Color(0.75, 0.55, 0.25))
+
+
+func _create_story_gate(gate_name: String, pos: Vector2, scene_path: String,
+		label_text: String, requires_flag: String, completed_flag: String,
+		marker_color: Color) -> void:
+	# Already done — don't place it at all.
+	if completed_flag != "" and GameManager.has_flag(completed_flag):
+		return
+	# Not unlocked yet — don't place it at all.
+	if requires_flag != "" and not GameManager.has_flag(requires_flag):
+		return
+
+	var gate = Area2D.new()
+	gate.name = gate_name
+	gate.position = pos
+	var marker = ColorRect.new()
+	marker.color = marker_color
+	marker.size = Vector2(44, 44)
+	marker.position = Vector2(-22, -22)
+	gate.add_child(marker)
+	var label = Label.new()
+	label.text = label_text
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 9)
+	label.add_theme_color_override("font_color", Color(0.95, 0.95, 0.8))
+	label.position = Vector2(-50, -46)
+	gate.add_child(label)
+	var shape = CollisionShape2D.new()
+	var rect = RectangleShape2D.new()
+	rect.size = Vector2(56, 56)
+	shape.shape = rect
+	gate.add_child(shape)
+	gate.set_meta("scene_path", scene_path)
+	gate.body_entered.connect(func(b): _on_interact_entered(b, gate, "story"))
+	gate.body_exited.connect(func(b): _on_interact_exited(b, gate, "story"))
+	add_child(gate)
+
+
+func _interact_story(gate: Area2D) -> void:
+	var scene_path: String = gate.get_meta("scene_path", "")
+	if scene_path.is_empty():
+		return
+	# Story scenes return here themselves; record the position so the player
+	# comes back where they left.
+	GameManager.set_meta("return_position", _player.global_position if _player else Vector2(1400, 1100))
+	# These are not arena boss fights — make sure no stale boss context leaks in
+	# (a lingering boss_fight_id disables fleeing from later encounters).
+	if GameManager.has_meta("boss_fight_id"):
+		GameManager.remove_meta("boss_fight_id")
+	if has_node("/root/SceneTransitions"):
+		SceneTransitions.change_scene(scene_path)
+	else:
+		get_tree().change_scene_to_file(scene_path)
+
 
 func _place_arena_entrance() -> void:
 	var arena_gate = Area2D.new()
@@ -748,8 +836,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not event.is_action_pressed("interact"):
 		return
 
-	# Priority: boss > arena > farming > npc > lore > shop
-	if _current_interact.has("boss"):
+	# Priority: story > boss > arena > farming > npc > lore > shop
+	if _current_interact.has("story"):
+		_interact_story(_current_interact["story"])
+	elif _current_interact.has("boss"):
 		_interact_boss(_current_interact["boss"])
 	elif _current_interact.has("arena"):
 		_interact_arena()

@@ -1,0 +1,19 @@
+{
+  "evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+  "nodes": {
+    "camera": true,
+    "glitch_pulse": true,
+    "hud": true,
+    "oakhaven_path": true,
+    "objective_label": true,
+    "player": true,
+    "signal_fragment": true
+  },
+  "notes": "scene instantiated and runtime-created nodes inspected",
+  "objective_text": "OBJECTIVE: Stand up. Find a signal.",
+  "phase": "10N-A2.4",
+  "probe": "probe_03_instantiate_opening_scene",
+  "root_node_name": "OpeningCrashSiteHook",
+  "start_marker_printed": true,
+  "status": "pass"
+}

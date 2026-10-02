@@ -1,0 +1,21 @@
+{
+	"errors": [],
+	"evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+	"legacy_route_preserved": true,
+	"pass": true,
+	"path_prompt": "[F/E] Follow signal",
+	"post_completion_flags": {
+		"ch1_awakening_complete": true,
+		"ch1_glitch_crater_complete": true,
+		"ch1_opening_hook_complete": true,
+		"plane_crash_completed": true
+	},
+	"pre_completion_flags": {
+		"ch1_awakening_complete": false,
+		"ch1_glitch_crater_complete": false,
+		"ch1_opening_hook_complete": false,
+		"plane_crash_completed": false
+	},
+	"probe": "probe_05_oakhaven_path_completion",
+	"timestamp": "2026-06-21T13:42:14"
+}

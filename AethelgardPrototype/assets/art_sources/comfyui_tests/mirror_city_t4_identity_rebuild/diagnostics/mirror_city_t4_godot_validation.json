@@ -1,0 +1,64 @@
+{
+  "main_menu": {
+    "exists": true,
+    "instantiate_ok": true,
+    "load_ok": true,
+    "path": "res://scenes/main_menu.tscn"
+  },
+  "notes": [
+    "Read-only T4 safety validation.",
+    "No production art, generated_v2, generated_v3, scenes, scripts, or AssetManager files are modified by this script."
+  ],
+  "phase": "10M-T4",
+  "project_boot": true,
+  "textures": [
+    {
+      "exists": true,
+      "label": "Oakhaven baseline preservation",
+      "loaded": true,
+      "path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+      "result": "Pass",
+      "size": "(512, 512)"
+    },
+    {
+      "exists": true,
+      "label": "Ironhold baseline preservation",
+      "loaded": true,
+      "path": "res://assets/production_art/tilesets/ironhold/ironhold_tileset.png",
+      "result": "Pass",
+      "size": "(512, 512)"
+    },
+    {
+      "exists": true,
+      "label": "Fractured Wastes baseline preservation",
+      "loaded": true,
+      "path": "res://assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png",
+      "result": "Pass",
+      "size": "(512, 512)"
+    },
+    {
+      "exists": true,
+      "label": "shared V3 props preservation",
+      "loaded": true,
+      "path": "res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png",
+      "result": "Pass",
+      "size": "(1536, 1024)"
+    },
+    {
+      "exists": true,
+      "label": "shared V3 decals preservation",
+      "loaded": true,
+      "path": "res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png",
+      "result": "Pass",
+      "size": "(1536, 1024)"
+    },
+    {
+      "exists": true,
+      "label": "Mirror City generated_v2 fallback preservation",
+      "loaded": true,
+      "path": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+      "result": "Pass",
+      "size": "(128, 64)"
+    }
+  ]
+}

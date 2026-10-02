@@ -1,0 +1,129 @@
+[
+  {
+    "hub_id": "forgotten_sectors",
+    "hub_area": "Forgotten Sectors",
+    "tileset_path": "assets/generated_v2/tilesets/forgotten_sectors_v2_prototype_tileset.png",
+    "file_exists": true,
+    "dimensions": [
+      128,
+      64
+    ],
+    "mode": "RGBA",
+    "has_alpha": true,
+    "size_bytes": 2116,
+    "visual_category": "Late revisit hub / archive sector support",
+    "production_slot": "assets/production_art/tilesets/forgotten_sectors_tileset.png",
+    "production_slot_exists": false,
+    "current_quality": "Prototype fallback, not accepted production baseline",
+    "manifest_priority": "P1 from art_replacement_manifest when listed",
+    "notes": "Readable archive identity from V3 props, but floor and route scaffold still look prototype-like."
+  },
+  {
+    "hub_id": "mirror_city",
+    "hub_area": "Mirror City",
+    "tileset_path": "assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+    "file_exists": true,
+    "dimensions": [
+      128,
+      64
+    ],
+    "mode": "RGBA",
+    "has_alpha": true,
+    "size_bytes": 2152,
+    "visual_category": "Late revisit hub / mirror route support",
+    "production_slot": "assets/production_art/tilesets/mirror_city_tileset.png",
+    "production_slot_exists": false,
+    "current_quality": "Prototype fallback, not accepted production baseline",
+    "manifest_priority": "P1 from art_replacement_manifest when listed",
+    "notes": "Dedicated prototype tileset exists, but no accepted baseline or recent proof screenshot was found in the known visual review set."
+  },
+  {
+    "hub_id": "cathedral_server",
+    "hub_area": "Cathedral Server",
+    "tileset_path": "assets/generated_v2/tilesets/cathedral_server_v2_prototype_tileset.png",
+    "file_exists": true,
+    "dimensions": [
+      128,
+      64
+    ],
+    "mode": "RGBA",
+    "has_alpha": true,
+    "size_bytes": 2060,
+    "visual_category": "Late revisit hub / Chapter 6 server cathedral support",
+    "production_slot": "assets/production_art/tilesets/cathedral_server_tileset.png",
+    "production_slot_exists": false,
+    "current_quality": "Prototype fallback, not accepted production baseline",
+    "manifest_priority": "P1 from art_replacement_manifest when listed",
+    "notes": "Server identity is present through props, but architecture and drill-board floor remain limited."
+  },
+  {
+    "hub_id": "memory_ocean",
+    "hub_area": "Memory Ocean",
+    "tileset_path": "assets/generated_v2/tilesets/memory_ocean_v2_prototype_tileset.png",
+    "file_exists": true,
+    "dimensions": [
+      128,
+      64
+    ],
+    "mode": "RGBA",
+    "has_alpha": true,
+    "size_bytes": 2390,
+    "visual_category": "Late revisit hub / Chapter 7 ocean-memory support",
+    "production_slot": "assets/production_art/tilesets/memory_ocean_tileset.png",
+    "production_slot_exists": false,
+    "current_quality": "Prototype fallback with stronger mood than most late hubs, still not production baseline",
+    "manifest_priority": "P1 from art_replacement_manifest when listed",
+    "notes": "Strongest current late-hub mood from existing review evidence, but still lacks a coherent island/water tile family."
+  },
+  {
+    "hub_id": "root_of_heaven",
+    "hub_area": "Root of Heaven Prep",
+    "tileset_path": "assets/generated_v2/tilesets/root_of_heaven_v2_prototype_tileset.png",
+    "file_exists": true,
+    "dimensions": [
+      128,
+      64
+    ],
+    "mode": "RGBA",
+    "has_alpha": true,
+    "size_bytes": 2216,
+    "visual_category": "Final-route preparation hub",
+    "production_slot": "assets/production_art/tilesets/root_of_heaven_tileset.png",
+    "production_slot_exists": false,
+    "current_quality": "Prototype fallback with stronger mood than most late hubs, still not production baseline",
+    "manifest_priority": "P1 from art_replacement_manifest when listed",
+    "notes": "Final-threshold identity is visible, but the hub floor/prep marker still feels simplified against the route importance."
+  },
+  {
+    "hub_id": "saved_assembly",
+    "hub_area": "Saved Assembly",
+    "tileset_path": null,
+    "file_exists": false,
+    "dimensions": null,
+    "mode": null,
+    "has_alpha": null,
+    "size_bytes": 0,
+    "visual_category": "Chapter 8 / late revisit support",
+    "production_slot": "assets/production_art/tilesets/saved_assembly_tileset.png",
+    "production_slot_exists": false,
+    "current_quality": "Missing dedicated generated tileset",
+    "manifest_priority": "P1 from art_replacement_manifest when listed",
+    "notes": "No dedicated generated_v2 tileset found; likely relies on shared/prototype visuals."
+  },
+  {
+    "hub_id": "human_patch_lab",
+    "hub_area": "Human Patch Lab",
+    "tileset_path": null,
+    "file_exists": false,
+    "dimensions": null,
+    "mode": null,
+    "has_alpha": null,
+    "size_bytes": 0,
+    "visual_category": "Chapter 9 / late revisit laboratory support",
+    "production_slot": "assets/production_art/tilesets/human_patch_lab_tileset.png",
+    "production_slot_exists": false,
+    "current_quality": "Missing dedicated generated tileset",
+    "manifest_priority": "P1 from art_replacement_manifest when listed",
+    "notes": "No dedicated generated_v2 tileset found; likely relies on shared/prototype visuals."
+  }
+]

@@ -1,0 +1,24 @@
+{
+	"danger_flag": true,
+	"errors": [],
+	"evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+	"feedback_triggered": true,
+	"hp_after": 100,
+	"hp_before": 100,
+	"knockback_delta": {
+		"x": -58.0,
+		"y": 0.0
+	},
+	"pass": true,
+	"position_after_pulse": {
+		"x": 688.0,
+		"y": 370.0
+	},
+	"position_before_pulse": {
+		"x": 746.0,
+		"y": 370.0
+	},
+	"probe": "probe_04_glitch_pulse_consequence",
+	"pulse_visible_after_signal": true,
+	"timestamp": "2026-06-21T13:42:12"
+}

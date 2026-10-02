@@ -1,0 +1,69 @@
+{
+	"all_passed": true,
+	"checks": [
+		{
+			"check": "main menu",
+			"result": "Pass",
+			"root_name": "",
+			"scene": "res://scenes/main_menu.tscn"
+		},
+		{
+			"check": "Oakhaven baseline preservation",
+			"exists": true,
+			"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+			"result": "Pass",
+			"texture_loaded": true
+		},
+		{
+			"check": "Ironhold baseline preservation",
+			"exists": true,
+			"path": "res://assets/production_art/tilesets/ironhold/ironhold_tileset.png",
+			"result": "Pass",
+			"texture_loaded": true
+		},
+		{
+			"check": "Fractured Wastes baseline preservation",
+			"exists": true,
+			"path": "res://assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png",
+			"result": "Pass",
+			"texture_loaded": true
+		},
+		{
+			"check": "generated V3 prop atlas",
+			"exists": true,
+			"path": "res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png",
+			"result": "Pass",
+			"texture_loaded": true
+		},
+		{
+			"check": "generated V3 decal atlas",
+			"exists": true,
+			"path": "res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png",
+			"result": "Pass",
+			"texture_loaded": true
+		},
+		{
+			"check": "production prop slot absent",
+			"exists": false,
+			"path": "res://assets/production_art/props/environment_prop_atlas.png",
+			"result": "Pass",
+			"texture_loaded": false
+		},
+		{
+			"check": "production decal slot absent",
+			"exists": false,
+			"path": "res://assets/production_art/backgrounds/environment_decal_atlas.png",
+			"result": "Pass",
+			"texture_loaded": false
+		},
+		{
+			"check": "AssetManager V3 fallback",
+			"decal_ok": true,
+			"prop_ok": true,
+			"result": "Pass"
+		}
+	],
+	"generated_v3_overwritten": false,
+	"phase": "10M-S1",
+	"production_art_changed": false
+}

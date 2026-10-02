@@ -1,0 +1,11 @@
+{
+  "phase": "10N-A2.8",
+  "computer_use_required": true,
+  "computer_use_bootstrap_attempted": true,
+  "computer_use_available": false,
+  "error": "node_repl/js failed: codex/sandbox-state-meta missing field sandboxPolicy",
+  "required_phrase": "Computer Use viewport control unavailable ? A2.8 headed validation incomplete",
+  "art_generation_happened": false,
+  "headed_screenshots_captured": false,
+  "timestamp": "2026-06-21T18:36:28"
+}

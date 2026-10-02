@@ -1,0 +1,11 @@
+{
+  "evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+  "is_packed_scene": true,
+  "loaded": true,
+  "notes": "PackedScene load check only; not instantiated",
+  "phase": "10N-A2.4",
+  "probe": "probe_02_load_opening_scene",
+  "resource_exists": true,
+  "start_marker_printed": true,
+  "status": "pass"
+}

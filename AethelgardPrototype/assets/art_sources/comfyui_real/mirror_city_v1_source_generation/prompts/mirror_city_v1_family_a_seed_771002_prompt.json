@@ -1,0 +1,21 @@
+{
+  "phase": "10M-V1",
+  "run": "mirror_city_v1_family_a_seed_771002",
+  "family_id": "A",
+  "family_name": "Mirror City tileset atlas",
+  "seed": 771002,
+  "positive_prompt": "pixel art top-down 2D RPG tileset atlas, Mirror City floor tiles, dark reflective mirror plates, glass civic plaza tiles, symmetrical route tiles, straight path corners T junction crossroad tiles, fractured mirror accent cells, cyan and magenta highlights used sparingly, dark label-safe floor variants, clean grid-compatible tile cells, readable 32x32 tile grammar, no characters, no text, no logo, transparent-looking background style, crisp pixel edges, game asset sheet",
+  "negative_prompt": "photorealistic, 3d render, isometric, side view, first person, character, portrait, text, letters, logo, watermark, signature, blurry, painterly, overbright neon, messy noise, random abstract pattern, cyberpunk city skyline, perspective scene, cluttered illustration, UI screenshot, duplicate text, realistic reflection glare",
+  "checkpoint_model": "v1-5-pruned-emaonly.safetensors",
+  "lora": "sedatal_pixel_art_lora.safetensors",
+  "lora_strength_model": 0.85,
+  "lora_strength_clip": 0.85,
+  "sampler": "euler",
+  "scheduler": "normal",
+  "steps": 22,
+  "cfg": 6.2,
+  "width": 512,
+  "height": 512,
+  "batch_size": 1,
+  "submitted_workflow_api_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/workflow/mirror_city_v1_family_a_seed_771002_workflow_api.json"
+}

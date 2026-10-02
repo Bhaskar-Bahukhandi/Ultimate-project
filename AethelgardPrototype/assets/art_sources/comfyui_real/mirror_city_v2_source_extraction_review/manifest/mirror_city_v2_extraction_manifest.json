@@ -1,0 +1,1028 @@
+{
+  "phase": "10M-V2",
+  "classification": "real_comfyui_source_extraction_review",
+  "created_utc": "2026-06-19T13:54:02.305751+00:00",
+  "comfyui_used_this_phase": false,
+  "prompt_called_this_phase": false,
+  "source_images": {
+    "A_771003": {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "role": "primary mirror/glass source",
+      "source_truth": "real_comfyui_v1"
+    },
+    "B_772002": {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_b_seed_772002.png",
+      "role": "dark mirror-plate base source",
+      "source_truth": "real_comfyui_v1"
+    },
+    "C_773001": {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_c_seed_773001.png",
+      "role": "route/plaza layout reference only",
+      "source_truth": "real_comfyui_v1"
+    },
+    "D_774002": {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_d_seed_774002.png",
+      "role": "symmetry reference only, glyph-risk rejected",
+      "source_truth": "real_comfyui_v1"
+    }
+  },
+  "evidence_checks": [
+    {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/manifest/mirror_city_v1_comfyui_manifest.json",
+      "exists": true,
+      "kind": "phase evidence"
+    },
+    {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/diagnostics/mirror_city_v1_generation_diagnostics.json",
+      "exists": true,
+      "kind": "phase evidence"
+    },
+    {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/workflow/mirror_city_v1_family_a_seed_771003_workflow_api.json",
+      "exists": true,
+      "kind": "workflow_api_json",
+      "run": "mirror_city_v1_family_a_seed_771003"
+    },
+    {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/prompts/mirror_city_v1_family_a_seed_771003_prompt.json",
+      "exists": true,
+      "kind": "prompt_json",
+      "run": "mirror_city_v1_family_a_seed_771003"
+    },
+    {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/diagnostics/mirror_city_v1_family_a_seed_771003_history.json",
+      "exists": true,
+      "kind": "history_json",
+      "run": "mirror_city_v1_family_a_seed_771003"
+    },
+    {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "exists": true,
+      "kind": "raw_comfyui_output",
+      "run": "mirror_city_v1_family_a_seed_771003",
+      "width": 512,
+      "height": 512,
+      "mode": "RGB",
+      "bytes": 400119
+    },
+    {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/workflow/mirror_city_v1_family_b_seed_772002_workflow_api.json",
+      "exists": true,
+      "kind": "workflow_api_json",
+      "run": "mirror_city_v1_family_b_seed_772002"
+    },
+    {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/prompts/mirror_city_v1_family_b_seed_772002_prompt.json",
+      "exists": true,
+      "kind": "prompt_json",
+      "run": "mirror_city_v1_family_b_seed_772002"
+    },
+    {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/diagnostics/mirror_city_v1_family_b_seed_772002_history.json",
+      "exists": true,
+      "kind": "history_json",
+      "run": "mirror_city_v1_family_b_seed_772002"
+    },
+    {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_b_seed_772002.png",
+      "exists": true,
+      "kind": "raw_comfyui_output",
+      "run": "mirror_city_v1_family_b_seed_772002",
+      "width": 512,
+      "height": 512,
+      "mode": "RGB",
+      "bytes": 493474
+    },
+    {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/workflow/mirror_city_v1_family_c_seed_773001_workflow_api.json",
+      "exists": true,
+      "kind": "workflow_api_json",
+      "run": "mirror_city_v1_family_c_seed_773001"
+    },
+    {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/prompts/mirror_city_v1_family_c_seed_773001_prompt.json",
+      "exists": true,
+      "kind": "prompt_json",
+      "run": "mirror_city_v1_family_c_seed_773001"
+    },
+    {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/diagnostics/mirror_city_v1_family_c_seed_773001_history.json",
+      "exists": true,
+      "kind": "history_json",
+      "run": "mirror_city_v1_family_c_seed_773001"
+    },
+    {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_c_seed_773001.png",
+      "exists": true,
+      "kind": "raw_comfyui_output",
+      "run": "mirror_city_v1_family_c_seed_773001",
+      "width": 512,
+      "height": 512,
+      "mode": "RGB",
+      "bytes": 494930
+    },
+    {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/workflow/mirror_city_v1_family_d_seed_774002_workflow_api.json",
+      "exists": true,
+      "kind": "workflow_api_json",
+      "run": "mirror_city_v1_family_d_seed_774002"
+    },
+    {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/prompts/mirror_city_v1_family_d_seed_774002_prompt.json",
+      "exists": true,
+      "kind": "prompt_json",
+      "run": "mirror_city_v1_family_d_seed_774002"
+    },
+    {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/diagnostics/mirror_city_v1_family_d_seed_774002_history.json",
+      "exists": true,
+      "kind": "history_json",
+      "run": "mirror_city_v1_family_d_seed_774002"
+    },
+    {
+      "path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_d_seed_774002.png",
+      "exists": true,
+      "kind": "raw_comfyui_output",
+      "run": "mirror_city_v1_family_d_seed_774002",
+      "width": 512,
+      "height": 512,
+      "mode": "RGB",
+      "bytes": 475049
+    }
+  ],
+  "extracted_cells": [
+    {
+      "cell_id": "a64_glass_panel_upper_left_64",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        64,
+        64,
+        128,
+        128
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a64_glass_panel_upper_left_64.png",
+      "output_size": [
+        64,
+        64
+      ],
+      "processing": "crop (64, 64, 128, 128); direct crop",
+      "intended_use": "mirror/glass floor plate",
+      "mean_luma": 129.86,
+      "contrast": 57.94
+    },
+    {
+      "cell_id": "a64_glass_panel_upper_left_32",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        64,
+        64,
+        128,
+        128
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a64_glass_panel_upper_left_32.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (64, 64, 128, 128); downscaled/resized to 32x32",
+      "intended_use": "mirror/glass floor plate",
+      "mean_luma": 129.83,
+      "contrast": 55.76
+    },
+    {
+      "cell_id": "a64_mirror_plate_mid_left_64",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        128,
+        96,
+        192,
+        160
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a64_mirror_plate_mid_left_64.png",
+      "output_size": [
+        64,
+        64
+      ],
+      "processing": "crop (128, 96, 192, 160); direct crop",
+      "intended_use": "mirror plate material",
+      "mean_luma": 122.67,
+      "contrast": 56.25
+    },
+    {
+      "cell_id": "a64_mirror_plate_mid_left_32",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        128,
+        96,
+        192,
+        160
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a64_mirror_plate_mid_left_32.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (128, 96, 192, 160); downscaled/resized to 32x32",
+      "intended_use": "mirror plate material",
+      "mean_luma": 122.71,
+      "contrast": 54.85
+    },
+    {
+      "cell_id": "a64_dark_label_sw_64",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        96,
+        352,
+        160,
+        416
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a64_dark_label_sw_64.png",
+      "output_size": [
+        64,
+        64
+      ],
+      "processing": "crop (96, 352, 160, 416); direct crop",
+      "intended_use": "dark label-safe tile",
+      "mean_luma": 125.64,
+      "contrast": 61.32
+    },
+    {
+      "cell_id": "a64_dark_label_sw_32",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        96,
+        352,
+        160,
+        416
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a64_dark_label_sw_32.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (96, 352, 160, 416); downscaled/resized to 32x32",
+      "intended_use": "dark label-safe tile",
+      "mean_luma": 125.68,
+      "contrast": 59.47
+    },
+    {
+      "cell_id": "a64_central_reflection_knot_64",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        224,
+        224,
+        288,
+        288
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a64_central_reflection_knot_64.png",
+      "output_size": [
+        64,
+        64
+      ],
+      "processing": "crop (224, 224, 288, 288); direct crop",
+      "intended_use": "central reflection knot",
+      "mean_luma": 115.31,
+      "contrast": 67.86
+    },
+    {
+      "cell_id": "a64_central_reflection_knot_32",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        224,
+        224,
+        288,
+        288
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a64_central_reflection_knot_32.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (224, 224, 288, 288); downscaled/resized to 32x32",
+      "intended_use": "central reflection knot",
+      "mean_luma": 115.34,
+      "contrast": 66.29
+    },
+    {
+      "cell_id": "a64_diagonal_route_nw_64",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        160,
+        160,
+        224,
+        224
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a64_diagonal_route_nw_64.png",
+      "output_size": [
+        64,
+        64
+      ],
+      "processing": "crop (160, 160, 224, 224); direct crop",
+      "intended_use": "route-like diagonal segment",
+      "mean_luma": 111.44,
+      "contrast": 61.43
+    },
+    {
+      "cell_id": "a64_diagonal_route_nw_32",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        160,
+        160,
+        224,
+        224
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a64_diagonal_route_nw_32.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (160, 160, 224, 224); downscaled/resized to 32x32",
+      "intended_use": "route-like diagonal segment",
+      "mean_luma": 111.48,
+      "contrast": 60.13
+    },
+    {
+      "cell_id": "a64_diagonal_route_se_64",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        288,
+        288,
+        352,
+        352
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a64_diagonal_route_se_64.png",
+      "output_size": [
+        64,
+        64
+      ],
+      "processing": "crop (288, 288, 352, 352); direct crop",
+      "intended_use": "route-like diagonal segment",
+      "mean_luma": 111.39,
+      "contrast": 63.23
+    },
+    {
+      "cell_id": "a64_diagonal_route_se_32",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        288,
+        288,
+        352,
+        352
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a64_diagonal_route_se_32.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (288, 288, 352, 352); downscaled/resized to 32x32",
+      "intended_use": "route-like diagonal segment",
+      "mean_luma": 111.4,
+      "contrast": 62.04
+    },
+    {
+      "cell_id": "a64_pale_vertical_panel_64",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        224,
+        128,
+        288,
+        192
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a64_pale_vertical_panel_64.png",
+      "output_size": [
+        64,
+        64
+      ],
+      "processing": "crop (224, 128, 288, 192); direct crop",
+      "intended_use": "pale glass panel",
+      "mean_luma": 133.64,
+      "contrast": 68.66
+    },
+    {
+      "cell_id": "a64_pale_vertical_panel_32",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        224,
+        128,
+        288,
+        192
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a64_pale_vertical_panel_32.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (224, 128, 288, 192); downscaled/resized to 32x32",
+      "intended_use": "pale glass panel",
+      "mean_luma": 133.68,
+      "contrast": 67.13
+    },
+    {
+      "cell_id": "a64_fragment_corner_ne_64",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        352,
+        96,
+        416,
+        160
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a64_fragment_corner_ne_64.png",
+      "output_size": [
+        64,
+        64
+      ],
+      "processing": "crop (352, 96, 416, 160); direct crop",
+      "intended_use": "fractured reflection accent",
+      "mean_luma": 123.58,
+      "contrast": 56.13
+    },
+    {
+      "cell_id": "a64_fragment_corner_ne_32",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        352,
+        96,
+        416,
+        160
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a64_fragment_corner_ne_32.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (352, 96, 416, 160); downscaled/resized to 32x32",
+      "intended_use": "fractured reflection accent",
+      "mean_luma": 123.66,
+      "contrast": 54.45
+    },
+    {
+      "cell_id": "a64_wall_edge_left_64",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        48,
+        192,
+        112,
+        256
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a64_wall_edge_left_64.png",
+      "output_size": [
+        64,
+        64
+      ],
+      "processing": "crop (48, 192, 112, 256); direct crop",
+      "intended_use": "mirror edge/wall hint",
+      "mean_luma": 118.55,
+      "contrast": 55.7
+    },
+    {
+      "cell_id": "a64_wall_edge_left_32",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        48,
+        192,
+        112,
+        256
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a64_wall_edge_left_32.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (48, 192, 112, 256); downscaled/resized to 32x32",
+      "intended_use": "mirror edge/wall hint",
+      "mean_luma": 118.58,
+      "contrast": 54.03
+    },
+    {
+      "cell_id": "a64_symmetric_floor_center_64",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        192,
+        320,
+        256,
+        384
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a64_symmetric_floor_center_64.png",
+      "output_size": [
+        64,
+        64
+      ],
+      "processing": "crop (192, 320, 256, 384); direct crop",
+      "intended_use": "symmetric floor material",
+      "mean_luma": 129.85,
+      "contrast": 66.14
+    },
+    {
+      "cell_id": "a64_symmetric_floor_center_32",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        192,
+        320,
+        256,
+        384
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a64_symmetric_floor_center_32.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (192, 320, 256, 384); downscaled/resized to 32x32",
+      "intended_use": "symmetric floor material",
+      "mean_luma": 129.82,
+      "contrast": 64.49
+    },
+    {
+      "cell_id": "b64_base_plate_01_64",
+      "source_key": "B_772002",
+      "source_run": "mirror_city_v1_family_b_seed_772002",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_b_seed_772002.png",
+      "crop_box": [
+        32,
+        32,
+        96,
+        96
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/b64_base_plate_01_64.png",
+      "output_size": [
+        64,
+        64
+      ],
+      "processing": "crop (32, 32, 96, 96); direct crop",
+      "intended_use": "dark mirror base tile",
+      "mean_luma": 116.12,
+      "contrast": 54.31
+    },
+    {
+      "cell_id": "b64_base_plate_01_32",
+      "source_key": "B_772002",
+      "source_run": "mirror_city_v1_family_b_seed_772002",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_b_seed_772002.png",
+      "crop_box": [
+        32,
+        32,
+        96,
+        96
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/b64_base_plate_01_32.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (32, 32, 96, 96); downscaled/resized to 32x32",
+      "intended_use": "dark mirror base tile",
+      "mean_luma": 116.29,
+      "contrast": 48.56
+    },
+    {
+      "cell_id": "b64_base_plate_02_64",
+      "source_key": "B_772002",
+      "source_run": "mirror_city_v1_family_b_seed_772002",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_b_seed_772002.png",
+      "crop_box": [
+        96,
+        32,
+        160,
+        96
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/b64_base_plate_02_64.png",
+      "output_size": [
+        64,
+        64
+      ],
+      "processing": "crop (96, 32, 160, 96); direct crop",
+      "intended_use": "dark mirror base tile",
+      "mean_luma": 115.46,
+      "contrast": 57.69
+    },
+    {
+      "cell_id": "b64_base_plate_02_32",
+      "source_key": "B_772002",
+      "source_run": "mirror_city_v1_family_b_seed_772002",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_b_seed_772002.png",
+      "crop_box": [
+        96,
+        32,
+        160,
+        96
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/b64_base_plate_02_32.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (96, 32, 160, 96); downscaled/resized to 32x32",
+      "intended_use": "dark mirror base tile",
+      "mean_luma": 115.57,
+      "contrast": 52.15
+    },
+    {
+      "cell_id": "b64_base_plate_03_64",
+      "source_key": "B_772002",
+      "source_run": "mirror_city_v1_family_b_seed_772002",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_b_seed_772002.png",
+      "crop_box": [
+        160,
+        96,
+        224,
+        160
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/b64_base_plate_03_64.png",
+      "output_size": [
+        64,
+        64
+      ],
+      "processing": "crop (160, 96, 224, 160); direct crop",
+      "intended_use": "dark mirror base tile",
+      "mean_luma": 108.06,
+      "contrast": 61.35
+    },
+    {
+      "cell_id": "b64_base_plate_03_32",
+      "source_key": "B_772002",
+      "source_run": "mirror_city_v1_family_b_seed_772002",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_b_seed_772002.png",
+      "crop_box": [
+        160,
+        96,
+        224,
+        160
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/b64_base_plate_03_32.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (160, 96, 224, 160); downscaled/resized to 32x32",
+      "intended_use": "dark mirror base tile",
+      "mean_luma": 108.22,
+      "contrast": 54.61
+    },
+    {
+      "cell_id": "b64_base_plate_04_64",
+      "source_key": "B_772002",
+      "source_run": "mirror_city_v1_family_b_seed_772002",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_b_seed_772002.png",
+      "crop_box": [
+        224,
+        160,
+        288,
+        224
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/b64_base_plate_04_64.png",
+      "output_size": [
+        64,
+        64
+      ],
+      "processing": "crop (224, 160, 288, 224); direct crop",
+      "intended_use": "dark mirror base tile",
+      "mean_luma": 98.2,
+      "contrast": 66.12
+    },
+    {
+      "cell_id": "b64_base_plate_04_32",
+      "source_key": "B_772002",
+      "source_run": "mirror_city_v1_family_b_seed_772002",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_b_seed_772002.png",
+      "crop_box": [
+        224,
+        160,
+        288,
+        224
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/b64_base_plate_04_32.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (224, 160, 288, 224); downscaled/resized to 32x32",
+      "intended_use": "dark mirror base tile",
+      "mean_luma": 98.96,
+      "contrast": 58.82
+    },
+    {
+      "cell_id": "b64_base_plate_05_64",
+      "source_key": "B_772002",
+      "source_run": "mirror_city_v1_family_b_seed_772002",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_b_seed_772002.png",
+      "crop_box": [
+        288,
+        224,
+        352,
+        288
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/b64_base_plate_05_64.png",
+      "output_size": [
+        64,
+        64
+      ],
+      "processing": "crop (288, 224, 352, 288); direct crop",
+      "intended_use": "dark mirror base tile",
+      "mean_luma": 99.97,
+      "contrast": 60.14
+    },
+    {
+      "cell_id": "b64_base_plate_05_32",
+      "source_key": "B_772002",
+      "source_run": "mirror_city_v1_family_b_seed_772002",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_b_seed_772002.png",
+      "crop_box": [
+        288,
+        224,
+        352,
+        288
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/b64_base_plate_05_32.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (288, 224, 352, 288); downscaled/resized to 32x32",
+      "intended_use": "dark mirror base tile",
+      "mean_luma": 100.58,
+      "contrast": 54.66
+    },
+    {
+      "cell_id": "b64_base_plate_06_64",
+      "source_key": "B_772002",
+      "source_run": "mirror_city_v1_family_b_seed_772002",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_b_seed_772002.png",
+      "crop_box": [
+        352,
+        288,
+        416,
+        352
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/b64_base_plate_06_64.png",
+      "output_size": [
+        64,
+        64
+      ],
+      "processing": "crop (352, 288, 416, 352); direct crop",
+      "intended_use": "dark mirror base tile",
+      "mean_luma": 105.64,
+      "contrast": 55.23
+    },
+    {
+      "cell_id": "b64_base_plate_06_32",
+      "source_key": "B_772002",
+      "source_run": "mirror_city_v1_family_b_seed_772002",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_b_seed_772002.png",
+      "crop_box": [
+        352,
+        288,
+        416,
+        352
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/b64_base_plate_06_32.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (352, 288, 416, 352); downscaled/resized to 32x32",
+      "intended_use": "dark mirror base tile",
+      "mean_luma": 105.91,
+      "contrast": 49.94
+    },
+    {
+      "cell_id": "a32_direct_center_knot",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        240,
+        240,
+        272,
+        272
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a32_direct_center_knot.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (240, 240, 272, 272); direct crop",
+      "intended_use": "direct 32px center reflection probe",
+      "mean_luma": 125.09,
+      "contrast": 77.21
+    },
+    {
+      "cell_id": "a32_direct_dark_tile",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        96,
+        384,
+        128,
+        416
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a32_direct_dark_tile.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (96, 384, 128, 416); direct crop",
+      "intended_use": "direct 32px dark tile probe",
+      "mean_luma": 132.67,
+      "contrast": 65.27
+    },
+    {
+      "cell_id": "a32_direct_edge",
+      "source_key": "A_771003",
+      "source_run": "mirror_city_v1_family_a_seed_771003",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_a_seed_771003.png",
+      "crop_box": [
+        48,
+        224,
+        80,
+        256
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/a32_direct_edge.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (48, 224, 80, 256); direct crop",
+      "intended_use": "direct 32px edge probe",
+      "mean_luma": 93.84,
+      "contrast": 53.17
+    },
+    {
+      "cell_id": "b32_direct_plate_01",
+      "source_key": "B_772002",
+      "source_run": "mirror_city_v1_family_b_seed_772002",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_b_seed_772002.png",
+      "crop_box": [
+        48,
+        48,
+        80,
+        80
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/b32_direct_plate_01.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (48, 48, 80, 80); direct crop",
+      "intended_use": "direct 32px base plate probe",
+      "mean_luma": 112.7,
+      "contrast": 54.96
+    },
+    {
+      "cell_id": "b32_direct_plate_02",
+      "source_key": "B_772002",
+      "source_run": "mirror_city_v1_family_b_seed_772002",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_b_seed_772002.png",
+      "crop_box": [
+        208,
+        208,
+        240,
+        240
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/b32_direct_plate_02.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (208, 208, 240, 240); direct crop",
+      "intended_use": "direct 32px base plate probe",
+      "mean_luma": 106.84,
+      "contrast": 59.05
+    },
+    {
+      "cell_id": "b32_direct_plate_03",
+      "source_key": "B_772002",
+      "source_run": "mirror_city_v1_family_b_seed_772002",
+      "source_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/outputs_raw/mirror_city_v1_family_b_seed_772002.png",
+      "crop_box": [
+        336,
+        336,
+        368,
+        368
+      ],
+      "output_path": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/extracted_cells/b32_direct_plate_03.png",
+      "output_size": [
+        32,
+        32
+      ],
+      "processing": "crop (336, 336, 368, 368); direct crop",
+      "intended_use": "direct 32px base plate probe",
+      "mean_luma": 98.89,
+      "contrast": 60.89
+    }
+  ],
+  "candidate_atlases": {
+    "candidate_a": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/candidate_atlases/mirror_city_v2_candidate_a_pure_a_seed_extraction_atlas.png",
+    "candidate_b": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/candidate_atlases/mirror_city_v2_candidate_b_a_b_hybrid_extraction_atlas.png"
+  },
+  "mockups": {
+    "candidate_a": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/mockups/mirror_city_v2_candidate_a_game_scale_mockup.png",
+    "candidate_b": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/mockups/mirror_city_v2_candidate_b_game_scale_mockup.png"
+  },
+  "contact_sheets": {
+    "source_candidates": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/contact_sheets/mirror_city_v2_v1_source_candidates_contact_sheet.png",
+    "extracted_cells": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/contact_sheets/mirror_city_v2_extracted_cells_contact_sheet.png",
+    "candidate_atlas_mockup": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/contact_sheets/mirror_city_v2_candidate_atlas_mockup_contact_sheet.png",
+    "baseline_comparison": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/contact_sheets/mirror_city_v2_baseline_vs_extraction_comparison.png",
+    "full_review": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/contact_sheets/mirror_city_v2_full_extraction_review_contact_sheet.png"
+  },
+  "diagnostics": {
+    "d_rejected_regions": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/diagnostics/mirror_city_v2_d_seed_774002_rejected_glyph_regions.png",
+    "v3_prop_sample": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/diagnostics/v3_prop_sample.png",
+    "v3_decal_sample": "assets/art_sources/comfyui_real/mirror_city_v2_source_extraction_review/diagnostics/v3_decal_sample.png"
+  },
+  "manual_processing": "Python/Pillow crop, direct crop, downscale/resizing, contact-sheet assembly, diagnostic annotation, and game-scale review mockup assembly only.",
+  "manual_art_reconstruction_used": false,
+  "accepted_for_production_import": false,
+  "candidate_scores": {
+    "current_generated_v2_fallback": {
+      "mirror_glass_identity": 5,
+      "tile_readability": 7,
+      "32x32_usability": 7,
+      "repetition_safety": 6,
+      "label_readability": 6,
+      "route_path_clarity": 6,
+      "v3_compatibility": 7,
+      "improvement_over_t7": 1,
+      "production_import_readiness": 0,
+      "verdict": "preserved fallback, not the target winner"
+    },
+    "current_t7_procedural_baseline": {
+      "mirror_glass_identity": 9,
+      "tile_readability": 8,
+      "32x32_usability": 8,
+      "repetition_safety": 7,
+      "label_readability": 8,
+      "route_path_clarity": 8,
+      "v3_compatibility": 8,
+      "improvement_over_t7": 10,
+      "production_import_readiness": 8,
+      "verdict": "keep active baseline"
+    },
+    "v2_candidate_a_pure_a_seed": {
+      "mirror_glass_identity": 7,
+      "tile_readability": 4,
+      "32x32_usability": 4,
+      "repetition_safety": 4,
+      "label_readability": 5,
+      "route_path_clarity": 4,
+      "v3_compatibility": 5,
+      "improvement_over_t7": 3,
+      "production_import_readiness": 2,
+      "verdict": "interesting source, not tile-safe enough"
+    },
+    "v2_candidate_b_a_b_hybrid": {
+      "mirror_glass_identity": 6,
+      "tile_readability": 5,
+      "32x32_usability": 5,
+      "repetition_safety": 5,
+      "label_readability": 6,
+      "route_path_clarity": 4,
+      "v3_compatibility": 6,
+      "improvement_over_t7": 3,
+      "production_import_readiness": 2,
+      "verdict": "best V2 extraction attempt, still weaker than T7"
+    }
+  },
+  "final_decision": "V2 source useful only as reference: keep current Mirror City baseline",
+  "protected_paths_changed_by_v2": false
+}

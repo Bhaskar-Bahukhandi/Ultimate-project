@@ -1,0 +1,55 @@
+{
+  "phase": "10N-A2.2",
+  "godot_executable": "C:\\Godot\\Godot_v4.6.3-stable_win64_console.exe",
+  "existing_godot_processes_before_probes": [
+    {
+      "id": 10284,
+      "process_name": "Godot_v4.6.3-stable_win64",
+      "main_window_title": "",
+      "start_time": "2026-06-19 23:13:31",
+      "path": "C:\\Godot\\Godot_v4.6.3-stable_win64.exe",
+      "command_line_available": false,
+      "killed": false
+    }
+  ],
+  "commands": [
+    {
+      "name": "version",
+      "command": "C:\\Godot\\Godot_v4.6.3-stable_win64_console.exe --version",
+      "exit_code": 0,
+      "signal_11": false,
+      "json_produced": false,
+      "last_marker": "",
+      "stdout_tail": "4.6.3.stable.official.7d41c59c4",
+      "classification": "Godot executable can run version command"
+    },
+    {
+      "name": "probe_00_project_context",
+      "command": "C:\\Godot\\Godot_v4.6.3-stable_win64_console.exe --path C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype --headless --script res://docs/gameplay_audit/phase_10n_a2_opening_hook/a2_2_crash_isolation/tools/probe_00_quit_only.gd",
+      "exit_code": 124,
+      "signal_11": true,
+      "json_produced": false,
+      "last_marker": "",
+      "stdout_tail": "command timed out after 60821 milliseconds; CrashHandlerException: Program crashed with signal 11; no probe marker printed",
+      "classification": "smallest failing project-context command; failure before script body marker"
+    },
+    {
+      "name": "probe_00_no_project_control",
+      "command": "C:\\Godot\\Godot_v4.6.3-stable_win64_console.exe --headless --script C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_2_crash_isolation\\tools\\probe_00_quit_only.gd",
+      "working_directory": "C:\\tmp",
+      "exit_code": 0,
+      "signal_11": false,
+      "json_produced": false,
+      "last_marker": "A2_2_PROBE_00_BEFORE_QUIT",
+      "stdout_tail": "A2_2_PROBE_00_START; A2_2_PROBE_00_BEFORE_QUIT; editor settings path warnings due no project context",
+      "classification": "plain --script works outside project context"
+    }
+  ],
+  "smallest_failing_probe": "probe_00_quit_only.gd in project context",
+  "crash_category": "Project boot/autoload issue",
+  "opening_hook_scene_proven_broken": "Unproven",
+  "validation_script_proven_broken": "No",
+  "project_boot_proven_stable": "No",
+  "final_decision": "Crash isolated \u2014 project boot/autoload issue"
+}
+

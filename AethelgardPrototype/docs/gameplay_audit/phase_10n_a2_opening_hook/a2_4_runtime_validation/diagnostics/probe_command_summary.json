@@ -1,0 +1,136 @@
+﻿{
+    "phase":  "10N-A2.4",
+    "corrected_command_mode_used":  true,
+    "headed_viewport_play":  false,
+    "probes":  [
+                   {
+                       "probe":  "probe_00_project_boot_corrected",
+                       "purpose":  "corrected project boot/autoload check",
+                       "command":  "\u0026 \"C:\\Godot\\Godot_v4.6.3-stable_win64_console.exe\" --path \"C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\" --headless --script \"res://docs/gameplay_audit/phase_10n_a2_opening_hook/a2_4_runtime_validation/tools/probe_00_project_boot_corrected.gd\" --log-file \"C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_00_project_boot_corrected.log\"",
+                       "log_file":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_00_project_boot_corrected.log",
+                       "json_file":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_00_project_boot_corrected.json",
+                       "exit_code":  0,
+                       "timeout":  false,
+                       "signal_11":  false,
+                       "start_marker_printed":  true,
+                       "status":  "pass",
+                       "notes":  "Passed after has_node validation-script repair"
+                   },
+                   {
+                       "probe":  "probe_01_new_game_route",
+                       "purpose":  "New Game route and legacy route inspection",
+                       "command":  "\u0026 \"C:\\Godot\\Godot_v4.6.3-stable_win64_console.exe\" --path \"C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\" --headless --script \"res://docs/gameplay_audit/phase_10n_a2_opening_hook/a2_4_runtime_validation/tools/probe_01_new_game_route.gd\" --log-file \"C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_01_new_game_route.log\"",
+                       "log_file":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_01_new_game_route.log",
+                       "json_file":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_01_new_game_route.json",
+                       "exit_code":  0,
+                       "timeout":  false,
+                       "signal_11":  false,
+                       "start_marker_printed":  true,
+                       "status":  "pass",
+                       "notes":  "Passed after explicit bool validation-script repair"
+                   },
+                   {
+                       "probe":  "probe_02_load_opening_scene",
+                       "purpose":  "load opening scene as PackedScene",
+                       "command":  "\u0026 \"C:\\Godot\\Godot_v4.6.3-stable_win64_console.exe\" --path \"C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\" --headless --script \"res://docs/gameplay_audit/phase_10n_a2_opening_hook/a2_4_runtime_validation/tools/probe_02_load_opening_scene.gd\" --log-file \"C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_02_load_opening_scene.log\"",
+                       "log_file":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_02_load_opening_scene.log",
+                       "json_file":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_02_load_opening_scene.json",
+                       "exit_code":  0,
+                       "timeout":  false,
+                       "signal_11":  false,
+                       "start_marker_printed":  true,
+                       "status":  "pass",
+                       "notes":  "Passed"
+                   },
+                   {
+                       "probe":  "probe_03_instantiate_opening_scene",
+                       "purpose":  "instantiate opening scene and inspect nodes",
+                       "command":  "\u0026 \"C:\\Godot\\Godot_v4.6.3-stable_win64_console.exe\" --path \"C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\" --headless --script \"res://docs/gameplay_audit/phase_10n_a2_opening_hook/a2_4_runtime_validation/tools/probe_03_instantiate_opening_scene.gd\" --log-file \"C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_03_instantiate_opening_scene.log\"",
+                       "log_file":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_03_instantiate_opening_scene.log",
+                       "json_file":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_03_instantiate_opening_scene.json",
+                       "exit_code":  0,
+                       "timeout":  false,
+                       "signal_11":  false,
+                       "start_marker_printed":  true,
+                       "status":  "pass",
+                       "notes":  "Passed; existing player-art fallback warning"
+                   },
+                   {
+                       "probe":  "probe_04_player_movement",
+                       "purpose":  "simulate move_right input",
+                       "command":  "\u0026 \"C:\\Godot\\Godot_v4.6.3-stable_win64_console.exe\" --path \"C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\" --headless --script \"res://docs/gameplay_audit/phase_10n_a2_opening_hook/a2_4_runtime_validation/tools/probe_04_player_movement.gd\" --log-file \"C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_04_player_movement.log\"",
+                       "log_file":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_04_player_movement.log",
+                       "json_file":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_04_player_movement.json",
+                       "exit_code":  0,
+                       "timeout":  false,
+                       "signal_11":  false,
+                       "start_marker_printed":  true,
+                       "status":  "pass",
+                       "notes":  "Passed; movement delta x=28.586"
+                   },
+                   {
+                       "probe":  "probe_05_signal_interaction",
+                       "purpose":  "invoke Player._interact_with(SignalFragment)",
+                       "command":  "\u0026 \"C:\\Godot\\Godot_v4.6.3-stable_win64_console.exe\" --path \"C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\" --headless --script \"res://docs/gameplay_audit/phase_10n_a2_opening_hook/a2_4_runtime_validation/tools/probe_05_signal_interaction.gd\" --log-file \"C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_05_signal_interaction.log\"",
+                       "log_file":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_05_signal_interaction.log",
+                       "json_file":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_05_signal_interaction.json",
+                       "exit_code":  0,
+                       "timeout":  false,
+                       "signal_11":  false,
+                       "start_marker_printed":  true,
+                       "status":  "pass",
+                       "notes":  "Passed after singleton lookup/reset helper/indent harness repairs"
+                   },
+                   {
+                       "probe":  "probe_06_glitch_pulse",
+                       "purpose":  "arm and trigger GlitchPulse danger flag",
+                       "command":  "\u0026 \"C:\\Godot\\Godot_v4.6.3-stable_win64_console.exe\" --path \"C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\" --headless --script \"res://docs/gameplay_audit/phase_10n_a2_opening_hook/a2_4_runtime_validation/tools/probe_06_glitch_pulse.gd\" --log-file \"C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_06_glitch_pulse.log\"",
+                       "log_file":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_06_glitch_pulse.log",
+                       "json_file":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_06_glitch_pulse.json",
+                       "exit_code":  0,
+                       "timeout":  false,
+                       "signal_11":  false,
+                       "start_marker_printed":  true,
+                       "status":  "pass",
+                       "notes":  "Passed after reset helper indentation harness repair"
+                   },
+                   {
+                       "probe":  "probe_07_oakhaven_path_completion",
+                       "purpose":  "validate completion compatibility flags before transition timer",
+                       "command":  "\u0026 \"C:\\Godot\\Godot_v4.6.3-stable_win64_console.exe\" --path \"C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\" --headless --script \"res://docs/gameplay_audit/phase_10n_a2_opening_hook/a2_4_runtime_validation/tools/probe_07_oakhaven_path_completion.gd\" --log-file \"C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_07_oakhaven_path_completion.log\"",
+                       "log_file":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_07_oakhaven_path_completion.log",
+                       "json_file":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_07_oakhaven_path_completion.json",
+                       "exit_code":  0,
+                       "timeout":  false,
+                       "signal_11":  false,
+                       "start_marker_printed":  true,
+                       "status":  "pass",
+                       "notes":  "Passed; ObjectDB leak warning from quitting before async transition/tweens completed"
+                   },
+                   {
+                       "probe":  "probe_08_full_first_minute_smoke",
+                       "purpose":  "short automated smoke path",
+                       "command":  "\u0026 \"C:\\Godot\\Godot_v4.6.3-stable_win64_console.exe\" --path \"C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\" --headless --script \"res://docs/gameplay_audit/phase_10n_a2_opening_hook/a2_4_runtime_validation/tools/probe_08_full_first_minute_smoke.gd\" --log-file \"C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_08_full_first_minute_smoke.log\"",
+                       "log_file":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_08_full_first_minute_smoke.log",
+                       "json_file":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_opening_hook\\a2_4_runtime_validation\\diagnostics\\probe_08_full_first_minute_smoke.json",
+                       "exit_code":  0,
+                       "timeout":  false,
+                       "signal_11":  false,
+                       "start_marker_printed":  true,
+                       "status":  "pass",
+                       "notes":  "Passed after explicit type validation-script repair; ObjectDB leak warning from early quit"
+                   }
+               ],
+    "validation_harness_repairs":  [
+                                       "Replaced SceneTree has_node() calls with root.get_node_or_null() checks.",
+                                       "Added explicit bool/Vector2 typing where GDScript could not infer dictionary-backed values.",
+                                       "Replaced compile-time GameManager singleton references in probes with root autoload lookup and dynamic calls.",
+                                       "Replaced full GameManager.reset_game() setup with targeted in-memory story-flag clearing to avoid harness-side absolute path errors.",
+                                       "Normalized tab indentation in probes 05-08."
+                                   ],
+    "runtime_code_changes":  [
+
+                             ],
+    "protected_paths_changed_by_a2_4":  false,
+    "final_decision":  "A2 runtime validated — ready for manual headed playtest"
+}

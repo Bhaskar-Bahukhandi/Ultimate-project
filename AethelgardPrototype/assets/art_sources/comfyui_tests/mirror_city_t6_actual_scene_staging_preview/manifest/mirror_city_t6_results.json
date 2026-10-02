@@ -1,0 +1,43 @@
+{
+  "phase": "10M-T6",
+  "scene_used": "scenes/regions/mirror_city_revisit_hub.tscn",
+  "preview_only": true,
+  "winner": "T4 Variant D - Hybrid Best",
+  "backup_candidate": "T4 Variant C - Inverted Route",
+  "screenshot_paths": {
+    "current_generated_v2": {
+      "screenshot": "",
+      "screenshot_status": "FallbackBoardOnly",
+      "composition_board": "res://assets/art_sources/comfyui_tests/mirror_city_t6_actual_scene_staging_preview/preview_boards/mirror_city_t6_current_generated_v2_scene_composition_board.png"
+    },
+    "variant_d_primary": {
+      "screenshot": "",
+      "screenshot_status": "FallbackBoardOnly",
+      "composition_board": "res://assets/art_sources/comfyui_tests/mirror_city_t6_actual_scene_staging_preview/preview_boards/mirror_city_t6_variant_d_scene_composition_board.png"
+    },
+    "variant_c_backup": {
+      "screenshot": "",
+      "screenshot_status": "FallbackBoardOnly",
+      "composition_board": "res://assets/art_sources/comfyui_tests/mirror_city_t6_actual_scene_staging_preview/preview_boards/mirror_city_t6_variant_c_scene_composition_board.png"
+    }
+  },
+  "contact_sheet_paths": {
+    "d_vs_c": "assets/art_sources/comfyui_tests/mirror_city_t6_actual_scene_staging_preview/contact_sheets/mirror_city_t6_d_vs_c_actual_scene_contact_sheet.png",
+    "fallback_vs_d": "assets/art_sources/comfyui_tests/mirror_city_t6_actual_scene_staging_preview/contact_sheets/mirror_city_t6_fallback_vs_d_actual_scene_contact_sheet.png",
+    "full": "assets/art_sources/comfyui_tests/mirror_city_t6_actual_scene_staging_preview/contact_sheets/mirror_city_t6_full_actual_scene_contact_sheet.png"
+  },
+  "protected_paths_changed": false,
+  "safety_checks": {
+    "production_art_changed": false,
+    "generated_v2_overwritten": false,
+    "generated_v3_overwritten": false,
+    "scenes_changed": false,
+    "scripts_changed": false,
+    "asset_manager_changed": false,
+    "collision_changed": false,
+    "story_or_save_changed": false,
+    "t6_only_review_outputs": true
+  },
+  "final_decision": "Ready for controlled Mirror City production import",
+  "rollback_note": "Delete assets/art_sources/comfyui_tests/mirror_city_t6_actual_scene_staging_preview, docs/art_pipeline/mirror_city_t6_actual_scene_staging_preview, and docs/art_pipeline/mirror_city_t6_actual_scene_staging_preview_review.md. No runtime path depends on these review-only outputs."
+}

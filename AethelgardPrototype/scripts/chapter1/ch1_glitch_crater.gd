@@ -1114,11 +1114,14 @@ func typewrite_text(label: Label, text: String, color: Color, speed: float = 0.0
 		if not is_inside_tree(): return
 
 func transition_to_elara_meeting() -> void:
-	## After awakening, transition to the open-world overworld near Oakhaven
+	## After awakening, hand off to the Elara meeting, which chains:
+	##   elara_meeting -> path_to_oakhaven -> oakhaven_village -> oakhaven_region -> overworld
+	## The overworld pre-seed below (region/position) is consumed when the player
+	## first reaches it from oakhaven_region.gd:868.
 	if _is_transitioning:
 		return
 	_is_transitioning = true
-	print("[CH1] Transitioning to Open World")
+	print("[CH1] Transitioning to Elara meeting")
 
 	DialogueManager.hide_dialogue()
 	camera.disable_letterbox(0.4)
@@ -1134,7 +1137,7 @@ func transition_to_elara_meeting() -> void:
 	await get_tree().create_timer(0.3).timeout
 	if not is_inside_tree(): return
 	
-	SceneTransitions.change_scene("res://scenes/overworld/overworld.tscn")
+	SceneTransitions.change_scene("res://scenes/chapter1/elara_meeting.tscn")
 
 func _on_custom_effect(effect_name: String, parameters: Dictionary) -> void:
 	## Handle custom cutscene effects

@@ -1,0 +1,545 @@
+{
+  "phase": "10M-S2",
+  "regions": [
+    {
+      "atlas": "prop",
+      "region_id": "oakhaven_roof",
+      "rect2i": [
+        32,
+        22,
+        248,
+        190
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.5361,
+      "visual_alignment_verdict": "aligned",
+      "risk": "low",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "prop",
+      "region_id": "oakhaven_hedge_corner",
+      "rect2i": [
+        760,
+        52,
+        390,
+        176
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.6299,
+      "visual_alignment_verdict": "aligned",
+      "risk": "low",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "prop",
+      "region_id": "oakhaven_flowers",
+      "rect2i": [
+        30,
+        264,
+        418,
+        82
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.1149,
+      "visual_alignment_verdict": "aligned",
+      "risk": "medium",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "prop",
+      "region_id": "oakhaven_herb_sign",
+      "rect2i": [
+        478,
+        238,
+        128,
+        126
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.3686,
+      "visual_alignment_verdict": "aligned",
+      "risk": "low",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "prop",
+      "region_id": "ironhold_pipes",
+      "rect2i": [
+        616,
+        238,
+        544,
+        170
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.2115,
+      "visual_alignment_verdict": "aligned",
+      "risk": "low",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "prop",
+      "region_id": "ironhold_forge",
+      "rect2i": [
+        1320,
+        226,
+        164,
+        194
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.2242,
+      "visual_alignment_verdict": "aligned",
+      "risk": "low",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "prop",
+      "region_id": "crates",
+      "rect2i": [
+        40,
+        434,
+        540,
+        144
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.2488,
+      "visual_alignment_verdict": "aligned",
+      "risk": "low",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "prop",
+      "region_id": "archive_shelves",
+      "rect2i": [
+        620,
+        370,
+        356,
+        218
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.6536,
+      "visual_alignment_verdict": "aligned",
+      "risk": "medium",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "prop",
+      "region_id": "dossier_stack",
+      "rect2i": [
+        988,
+        440,
+        94,
+        128
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.4855,
+      "visual_alignment_verdict": "aligned",
+      "risk": "medium",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "prop",
+      "region_id": "null_seal",
+      "rect2i": [
+        1092,
+        432,
+        156,
+        176
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.291,
+      "visual_alignment_verdict": "aligned",
+      "risk": "low",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "prop",
+      "region_id": "mirror_plinth",
+      "rect2i": [
+        1280,
+        430,
+        202,
+        192
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.2402,
+      "visual_alignment_verdict": "aligned",
+      "risk": "low",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "prop",
+      "region_id": "server_console",
+      "rect2i": [
+        36,
+        612,
+        376,
+        194
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.3944,
+      "visual_alignment_verdict": "aligned",
+      "risk": "low",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "prop",
+      "region_id": "firewall_panel",
+      "rect2i": [
+        430,
+        612,
+        358,
+        194
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.4023,
+      "visual_alignment_verdict": "aligned",
+      "risk": "low",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "prop",
+      "region_id": "tide_buoy",
+      "rect2i": [
+        824,
+        610,
+        120,
+        182
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.201,
+      "visual_alignment_verdict": "aligned",
+      "risk": "low",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "prop",
+      "region_id": "salvage_shelf",
+      "rect2i": [
+        974,
+        610,
+        290,
+        198
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.5621,
+      "visual_alignment_verdict": "aligned",
+      "risk": "low",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "prop",
+      "region_id": "ocean_cache",
+      "rect2i": [
+        1268,
+        610,
+        236,
+        198
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.1712,
+      "visual_alignment_verdict": "aligned",
+      "risk": "low",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "prop",
+      "region_id": "lab_console",
+      "rect2i": [
+        34,
+        818,
+        248,
+        178
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.4222,
+      "visual_alignment_verdict": "aligned",
+      "risk": "low",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "prop",
+      "region_id": "memory_tank",
+      "rect2i": [
+        292,
+        814,
+        170,
+        186
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.3223,
+      "visual_alignment_verdict": "aligned",
+      "risk": "low",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "prop",
+      "region_id": "root_circuit_rail",
+      "rect2i": [
+        628,
+        816,
+        844,
+        190
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.0766,
+      "visual_alignment_verdict": "aligned",
+      "risk": "low",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "decal",
+      "region_id": "oakhaven_path",
+      "rect2i": [
+        18,
+        10,
+        630,
+        198
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.312,
+      "visual_alignment_verdict": "aligned",
+      "risk": "medium",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "decal",
+      "region_id": "oakhaven_stones",
+      "rect2i": [
+        22,
+        228,
+        650,
+        128
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.2328,
+      "visual_alignment_verdict": "aligned",
+      "risk": "medium",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "decal",
+      "region_id": "ironhold_road",
+      "rect2i": [
+        676,
+        16,
+        820,
+        224
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.6636,
+      "visual_alignment_verdict": "aligned",
+      "risk": "medium",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "decal",
+      "region_id": "fracture_field",
+      "rect2i": [
+        18,
+        360,
+        500,
+        294
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.1767,
+      "visual_alignment_verdict": "aligned",
+      "risk": "medium",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "decal",
+      "region_id": "shard_spill",
+      "rect2i": [
+        270,
+        350,
+        246,
+        298
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.2906,
+      "visual_alignment_verdict": "aligned",
+      "risk": "medium",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "decal",
+      "region_id": "archive_seals",
+      "rect2i": [
+        520,
+        362,
+        382,
+        292
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.0606,
+      "visual_alignment_verdict": "aligned",
+      "risk": "medium",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "decal",
+      "region_id": "mirror_ripples",
+      "rect2i": [
+        900,
+        246,
+        602,
+        280
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.0759,
+      "visual_alignment_verdict": "aligned",
+      "risk": "medium",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "decal",
+      "region_id": "cathedral_circuit",
+      "rect2i": [
+        900,
+        510,
+        600,
+        240
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.0598,
+      "visual_alignment_verdict": "aligned",
+      "risk": "medium",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "decal",
+      "region_id": "memory_tide",
+      "rect2i": [
+        14,
+        674,
+        476,
+        326
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.0481,
+      "visual_alignment_verdict": "aligned",
+      "risk": "medium",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "decal",
+      "region_id": "root_veins",
+      "rect2i": [
+        492,
+        680,
+        406,
+        320
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.0228,
+      "visual_alignment_verdict": "aligned",
+      "risk": "medium",
+      "verdict": "safe for preview"
+    },
+    {
+      "atlas": "decal",
+      "region_id": "arena_border",
+      "rect2i": [
+        898,
+        754,
+        620,
+        252
+      ],
+      "crop_bounds_valid": true,
+      "current_crop_nonblank": true,
+      "candidate_crop_nonblank": true,
+      "candidate_alpha_present": true,
+      "candidate_alpha_ratio": 0.1595,
+      "visual_alignment_verdict": "aligned",
+      "risk": "low",
+      "verdict": "safe for preview"
+    }
+  ]
+}

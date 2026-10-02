@@ -1,0 +1,12 @@
+{
+    "phase":  "10N-A2.5",
+    "attempted_headed_launch":  true,
+    "launch_mode":  "visible Godot process, no headless flag",
+    "pid":  26428,
+    "start_time":  "2026-06-20T22:53:38.2668443+05:30",
+    "process_running_after_10s":  false,
+    "codex_had_os_level_control":  false,
+    "codex_captured_viewport_screenshot":  false,
+    "headed_manual_play_happened":  false,
+    "log_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_5_headed_vector_review\\logs\\headed_launch_attempt.log"
+}

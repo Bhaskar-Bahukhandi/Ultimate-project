@@ -1,0 +1,162 @@
+{
+	"boards": {
+		"current_fallback": "res://assets/art_sources/comfyui_tests/mirror_city_t7_controlled_import/preview_boards/mirror_city_t7_current_fallback_board.png",
+		"force_fallback": "res://assets/art_sources/comfyui_tests/mirror_city_t7_controlled_import/preview_boards/mirror_city_t7_force_fallback_board.png",
+		"production_variant_d": "res://assets/art_sources/comfyui_tests/mirror_city_t7_controlled_import/preview_boards/mirror_city_t7_production_variant_d_board.png"
+	},
+	"checks": {
+		"asset_manager_available": true,
+		"force_fallback_slot": {
+			"fallback_reason": "runtime fallback override enabled",
+			"fallback_used": true,
+			"force_fallback": true,
+			"height": 64,
+			"label": "force_fallback",
+			"loaded": true,
+			"path": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+			"production": false,
+			"width": 128
+		},
+		"fractured_wastes_baseline_load": {
+			"height": 512,
+			"loaded": true,
+			"path": "res://assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png",
+			"width": 512
+		},
+		"ironhold_baseline_load": {
+			"height": 512,
+			"loaded": true,
+			"path": "res://assets/production_art/tilesets/ironhold/ironhold_tileset.png",
+			"width": 512
+		},
+		"main_menu": {
+			"loaded": true,
+			"path": "res://scenes/main_menu.tscn"
+		},
+		"mirror_generated_v2_fallback_load": {
+			"height": 64,
+			"loaded": true,
+			"path": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+			"width": 128
+		},
+		"mirror_production_load": {
+			"height": 512,
+			"loaded": true,
+			"path": "res://assets/production_art/tilesets/mirror_city/mirror_city_tileset.png",
+			"width": 512
+		},
+		"mirror_scene_fallback_board": {
+			"board_path": "res://assets/art_sources/comfyui_tests/mirror_city_t7_controlled_import/preview_boards/mirror_city_t7_current_fallback_board.png",
+			"saved": true,
+			"source": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png"
+		},
+		"mirror_scene_force_fallback": {
+			"board_path": "res://assets/art_sources/comfyui_tests/mirror_city_t7_controlled_import/preview_boards/mirror_city_t7_force_fallback_board.png",
+			"board_saved": true,
+			"camera_found": true,
+			"fallback_reason": "runtime fallback override enabled",
+			"fallback_used": true,
+			"force_fallback": true,
+			"labels_prompts_found": true,
+			"loaded": true,
+			"player_found": true,
+			"v3_mirror_nodes_found": true,
+			"visual_layer_found": true,
+			"visual_layer_path": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+			"visual_layer_production": false
+		},
+		"mirror_scene_production": {
+			"board_path": "res://assets/art_sources/comfyui_tests/mirror_city_t7_controlled_import/preview_boards/mirror_city_t7_production_variant_d_board.png",
+			"board_saved": true,
+			"camera_found": true,
+			"fallback_reason": "",
+			"fallback_used": false,
+			"force_fallback": false,
+			"labels_prompts_found": true,
+			"loaded": true,
+			"player_found": true,
+			"v3_mirror_nodes_found": true,
+			"visual_layer_found": true,
+			"visual_layer_path": "res://assets/production_art/tilesets/mirror_city/mirror_city_tileset.png",
+			"visual_layer_production": true
+		},
+		"missing_production_probe": {
+			"fallback_reason": "production tileset missing or invalid",
+			"fallback_used": true,
+			"height": 64,
+			"loaded": true,
+			"path": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+			"production": false,
+			"width": 128
+		},
+		"oakhaven_baseline_load": {
+			"height": 512,
+			"loaded": true,
+			"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+			"width": 512
+		},
+		"production_slot_default": {
+			"fallback_reason": "",
+			"fallback_used": false,
+			"force_fallback": false,
+			"height": 512,
+			"label": "production_default",
+			"loaded": true,
+			"path": "res://assets/production_art/tilesets/mirror_city/mirror_city_tileset.png",
+			"production": true,
+			"width": 512
+		},
+		"v3_decals_load": {
+			"height": 1024,
+			"loaded": true,
+			"path": "res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png",
+			"width": 1536
+		},
+		"v3_props_load": {
+			"height": 1024,
+			"loaded": true,
+			"path": "res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png",
+			"width": 1536
+		}
+	},
+	"contact_sheets": {
+
+	},
+	"evidence_mode": "deterministic runtime-composition boards",
+	"live_viewport_screenshots": false,
+	"phase": "10M-T7",
+	"preview_only": false,
+	"safety_notes": [],
+	"scene": {
+		"force_fallback": {
+			"board_path": "res://assets/art_sources/comfyui_tests/mirror_city_t7_controlled_import/preview_boards/mirror_city_t7_force_fallback_board.png",
+			"board_saved": true,
+			"camera_found": true,
+			"fallback_reason": "runtime fallback override enabled",
+			"fallback_used": true,
+			"force_fallback": true,
+			"labels_prompts_found": true,
+			"loaded": true,
+			"player_found": true,
+			"v3_mirror_nodes_found": true,
+			"visual_layer_found": true,
+			"visual_layer_path": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+			"visual_layer_production": false
+		},
+		"production_variant_d": {
+			"board_path": "res://assets/art_sources/comfyui_tests/mirror_city_t7_controlled_import/preview_boards/mirror_city_t7_production_variant_d_board.png",
+			"board_saved": true,
+			"camera_found": true,
+			"fallback_reason": "",
+			"fallback_used": false,
+			"force_fallback": false,
+			"labels_prompts_found": true,
+			"loaded": true,
+			"player_found": true,
+			"v3_mirror_nodes_found": true,
+			"visual_layer_found": true,
+			"visual_layer_path": "res://assets/production_art/tilesets/mirror_city/mirror_city_tileset.png",
+			"visual_layer_production": true
+		}
+	}
+}

@@ -1,0 +1,74 @@
+{
+  "phase": "10M-U2.2",
+  "readiness_only": true,
+  "agents_md_read": true,
+  "launch_attempted": true,
+  "launch_command_used": "Start-Process -FilePath \"E:\\Comfy\\ComfyUI\\ComfyUI.exe\" -WorkingDirectory \"E:\\Comfy\\ComfyUI\" -WindowStyle Hidden -PassThru",
+  "desktop_launch_result": "started",
+  "desktop_initial_pid": 31372,
+  "cli_fallback_attempted": false,
+  "process_running": true,
+  "api_reachable": true,
+  "successful_endpoint": "http://127.0.0.1:8000",
+  "system_stats": {
+    "reachable": true,
+    "status": 200,
+    "bytes": 1463,
+    "comfyui_version": "0.22.2"
+  },
+  "object_info": {
+    "reachable": true,
+    "status": 200,
+    "bytes": 1179418
+  },
+  "history": {
+    "reachable": true,
+    "status": 200,
+    "bytes": 2,
+    "summary": "{}"
+  },
+  "required_nodes": {
+    "CheckpointLoaderSimple": {
+      "visible": true,
+      "notes": "Visible in `/object_info`."
+    },
+    "LoraLoader": {
+      "visible": true,
+      "notes": "Visible in `/object_info`."
+    },
+    "KSampler": {
+      "visible": true,
+      "notes": "Visible in `/object_info`."
+    },
+    "VAEDecode": {
+      "visible": true,
+      "notes": "Visible in `/object_info`."
+    },
+    "SaveImage": {
+      "visible": true,
+      "notes": "Visible in `/object_info`."
+    }
+  },
+  "model_visibility": {
+    "v1-5-pruned-emaonly.safetensors": {
+      "visible": true,
+      "local_path": "E:\\Comfy\\models\\checkpoints\\v1-5-pruned-emaonly.safetensors",
+      "visibility_source": "object_info exact filename search"
+    },
+    "sedatal_pixel_art_lora.safetensors": {
+      "visible": true,
+      "local_path": "E:\\Comfy\\models\\loras\\sedatal_pixel_art_lora.safetensors",
+      "visibility_source": "object_info exact filename search"
+    }
+  },
+  "prompt_called": false,
+  "art_generated": false,
+  "import_performed": false,
+  "protected_paths_changed_by_u2_2": false,
+  "final_verdict": "ComfyUI environment verified for future source-generation phase",
+  "u2_2_files_written": [
+    "docs/art_pipeline/comfyui_u2_2_launch_readiness_report.md",
+    "docs/art_pipeline/comfyui_u2_2_launch_readiness_report.json"
+  ],
+  "next_recommended_prompt_type": "separate real ComfyUI source-generation phase; no production import"
+}

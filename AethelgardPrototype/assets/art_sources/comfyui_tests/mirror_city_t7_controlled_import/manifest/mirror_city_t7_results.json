@@ -1,0 +1,151 @@
+{
+  "phase": "10M-T7",
+  "created_utc": "2026-06-13T11:05:24.993928+00:00",
+  "production_import_performed": true,
+  "runtime_hook_required": true,
+  "variant_d_imported": true,
+  "variant_c_imported": false,
+  "scene_used": "scenes/regions/mirror_city_revisit_hub.tscn",
+  "production_path": "assets/production_art/tilesets/mirror_city/mirror_city_tileset.png",
+  "fallback_path": "assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+  "backup_candidate": "assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild/generated_tiles/mirror_city_t4_variant_c_inverted_route.png",
+  "comfyui_used_for_mirror_city": false,
+  "comfyui_truth_audit": {
+    "mirror_city_t4_manifest": "generation_method deterministic Python/Pillow procedural drawing; comfyui_used false",
+    "mirror_city_t4_t6_workflow_evidence": "No workflow_api.json, prompt JSON, prompt_id, /prompt, /history, checkpoint, seed metadata, or ComfyUI log evidence found for Mirror City T4-T6.",
+    "historical_project_note": "Historical Oakhaven P6 docs record real local ComfyUI outputs; the comfyui_tests folder name alone is not proof of ComfyUI usage."
+  },
+  "diagnostics_path": "assets/art_sources/comfyui_tests/mirror_city_t7_controlled_import/diagnostics/mirror_city_t7_validation_diagnostics.json",
+  "preview_boards": {
+    "current_fallback": "assets/art_sources/comfyui_tests/mirror_city_t7_controlled_import/preview_boards/mirror_city_t7_current_fallback_board.png",
+    "production_variant_d": "assets/art_sources/comfyui_tests/mirror_city_t7_controlled_import/preview_boards/mirror_city_t7_production_variant_d_board.png",
+    "force_fallback": "assets/art_sources/comfyui_tests/mirror_city_t7_controlled_import/preview_boards/mirror_city_t7_force_fallback_board.png"
+  },
+  "contact_sheets": {
+    "fallback_vs_production": "assets/art_sources/comfyui_tests/mirror_city_t7_controlled_import/contact_sheets/mirror_city_t7_fallback_vs_production_contact_sheet.png",
+    "label_prompt_readability": "assets/art_sources/comfyui_tests/mirror_city_t7_controlled_import/contact_sheets/mirror_city_t7_label_prompt_readability_sheet.png",
+    "v3_compatibility": "assets/art_sources/comfyui_tests/mirror_city_t7_controlled_import/contact_sheets/mirror_city_t7_v3_compatibility_sheet.png",
+    "full_validation": "assets/art_sources/comfyui_tests/mirror_city_t7_controlled_import/contact_sheets/mirror_city_t7_full_validation_sheet.png"
+  },
+  "runtime_validation": {
+    "asset_manager_available": true,
+    "force_fallback_slot": {
+      "fallback_reason": "runtime fallback override enabled",
+      "fallback_used": true,
+      "force_fallback": true,
+      "height": 64,
+      "label": "force_fallback",
+      "loaded": true,
+      "path": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+      "production": false,
+      "width": 128
+    },
+    "fractured_wastes_baseline_load": {
+      "height": 512,
+      "loaded": true,
+      "path": "res://assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png",
+      "width": 512
+    },
+    "ironhold_baseline_load": {
+      "height": 512,
+      "loaded": true,
+      "path": "res://assets/production_art/tilesets/ironhold/ironhold_tileset.png",
+      "width": 512
+    },
+    "main_menu": {
+      "loaded": true,
+      "path": "res://scenes/main_menu.tscn"
+    },
+    "mirror_generated_v2_fallback_load": {
+      "height": 64,
+      "loaded": true,
+      "path": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+      "width": 128
+    },
+    "mirror_production_load": {
+      "height": 512,
+      "loaded": true,
+      "path": "res://assets/production_art/tilesets/mirror_city/mirror_city_tileset.png",
+      "width": 512
+    },
+    "mirror_scene_fallback_board": {
+      "board_path": "res://assets/art_sources/comfyui_tests/mirror_city_t7_controlled_import/preview_boards/mirror_city_t7_current_fallback_board.png",
+      "saved": true,
+      "source": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png"
+    },
+    "mirror_scene_force_fallback": {
+      "board_path": "res://assets/art_sources/comfyui_tests/mirror_city_t7_controlled_import/preview_boards/mirror_city_t7_force_fallback_board.png",
+      "board_saved": true,
+      "camera_found": true,
+      "fallback_reason": "runtime fallback override enabled",
+      "fallback_used": true,
+      "force_fallback": true,
+      "labels_prompts_found": true,
+      "loaded": true,
+      "player_found": true,
+      "v3_mirror_nodes_found": true,
+      "visual_layer_found": true,
+      "visual_layer_path": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+      "visual_layer_production": false
+    },
+    "mirror_scene_production": {
+      "board_path": "res://assets/art_sources/comfyui_tests/mirror_city_t7_controlled_import/preview_boards/mirror_city_t7_production_variant_d_board.png",
+      "board_saved": true,
+      "camera_found": true,
+      "fallback_reason": "",
+      "fallback_used": false,
+      "force_fallback": false,
+      "labels_prompts_found": true,
+      "loaded": true,
+      "player_found": true,
+      "v3_mirror_nodes_found": true,
+      "visual_layer_found": true,
+      "visual_layer_path": "res://assets/production_art/tilesets/mirror_city/mirror_city_tileset.png",
+      "visual_layer_production": true
+    },
+    "missing_production_probe": {
+      "fallback_reason": "production tileset missing or invalid",
+      "fallback_used": true,
+      "height": 64,
+      "loaded": true,
+      "path": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+      "production": false,
+      "width": 128
+    },
+    "oakhaven_baseline_load": {
+      "height": 512,
+      "loaded": true,
+      "path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+      "width": 512
+    },
+    "production_slot_default": {
+      "fallback_reason": "",
+      "fallback_used": false,
+      "force_fallback": false,
+      "height": 512,
+      "label": "production_default",
+      "loaded": true,
+      "path": "res://assets/production_art/tilesets/mirror_city/mirror_city_tileset.png",
+      "production": true,
+      "width": 512
+    },
+    "v3_decals_load": {
+      "height": 1024,
+      "loaded": true,
+      "path": "res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png",
+      "width": 1536
+    },
+    "v3_props_load": {
+      "height": 1024,
+      "loaded": true,
+      "path": "res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png",
+      "width": 1536
+    }
+  },
+  "protected_paths_changed": false,
+  "accepted_baselines_changed": false,
+  "generated_v2_changed": false,
+  "generated_v3_changed": false,
+  "final_decision": "Accept Mirror City Variant D production baseline.",
+  "rollback_note": "Use AssetManager.set_mirror_city_force_generated_fallback(true), or remove/rename the Mirror City production PNG. Runtime falls back to assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png without save-data impact."
+}

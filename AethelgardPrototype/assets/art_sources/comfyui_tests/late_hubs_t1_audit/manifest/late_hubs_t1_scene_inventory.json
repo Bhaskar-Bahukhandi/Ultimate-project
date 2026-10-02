@@ -1,0 +1,352 @@
+[
+  {
+    "hub_id": "forgotten_sectors",
+    "hub_area": "Forgotten Sectors",
+    "scene_path": "scenes/regions/forgotten_sectors_revisit_hub.tscn",
+    "scene_exists": true,
+    "script_path": "scripts/regions/late_revisit_hub.gd",
+    "scene_declared_scripts": [
+      "scripts/regions/late_revisit_hub.gd"
+    ],
+    "script_exists": true,
+    "script_risk_terms": [
+      "change_scene",
+      "save",
+      "story",
+      "quest",
+      "dialogue"
+    ],
+    "role": "Late revisit hub / archive sector support",
+    "generated_tileset": "assets/generated_v2/tilesets/forgotten_sectors_v2_prototype_tileset.png",
+    "generated_tileset_exists": true,
+    "production_slot": "assets/production_art/tilesets/forgotten_sectors_tileset.png",
+    "production_slot_exists": false,
+    "dedicated_tileset_exists": true,
+    "side_effect_risk": "Low-medium for shared revisit hub; chapter story/trial scenes skipped",
+    "safe_headless_load_status": "Candidate for safe read-only scene-load validation",
+    "notes": "Readable archive identity from V3 props, but floor and route scaffold still look prototype-like."
+  },
+  {
+    "hub_id": "mirror_city",
+    "hub_area": "Mirror City",
+    "scene_path": "scenes/regions/mirror_city_revisit_hub.tscn",
+    "scene_exists": true,
+    "script_path": "scripts/regions/late_revisit_hub.gd",
+    "scene_declared_scripts": [
+      "scripts/regions/late_revisit_hub.gd"
+    ],
+    "script_exists": true,
+    "script_risk_terms": [
+      "change_scene",
+      "save",
+      "story",
+      "quest",
+      "dialogue"
+    ],
+    "role": "Late revisit hub / mirror route support",
+    "generated_tileset": "assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+    "generated_tileset_exists": true,
+    "production_slot": "assets/production_art/tilesets/mirror_city_tileset.png",
+    "production_slot_exists": false,
+    "dedicated_tileset_exists": true,
+    "side_effect_risk": "Low-medium for shared revisit hub; chapter story/trial scenes skipped",
+    "safe_headless_load_status": "Candidate for safe read-only scene-load validation",
+    "notes": "Dedicated prototype tileset exists, but no accepted baseline or recent proof screenshot was found in the known visual review set."
+  },
+  {
+    "hub_id": "cathedral_server",
+    "hub_area": "Cathedral Server",
+    "scene_path": "scenes/regions/cathedral_server_revisit_hub.tscn",
+    "scene_exists": true,
+    "script_path": "scripts/regions/late_revisit_hub.gd",
+    "scene_declared_scripts": [
+      "scripts/regions/late_revisit_hub.gd"
+    ],
+    "script_exists": true,
+    "script_risk_terms": [
+      "change_scene",
+      "save",
+      "story",
+      "quest",
+      "dialogue"
+    ],
+    "role": "Late revisit hub / Chapter 6 server cathedral support",
+    "generated_tileset": "assets/generated_v2/tilesets/cathedral_server_v2_prototype_tileset.png",
+    "generated_tileset_exists": true,
+    "production_slot": "assets/production_art/tilesets/cathedral_server_tileset.png",
+    "production_slot_exists": false,
+    "dedicated_tileset_exists": true,
+    "side_effect_risk": "Low-medium for shared revisit hub; chapter story/trial scenes skipped",
+    "safe_headless_load_status": "Candidate for safe read-only scene-load validation",
+    "notes": "Server identity is present through props, but architecture and drill-board floor remain limited."
+  },
+  {
+    "hub_id": "memory_ocean",
+    "hub_area": "Memory Ocean",
+    "scene_path": "scenes/regions/memory_ocean_revisit_hub.tscn",
+    "scene_exists": true,
+    "script_path": "scripts/regions/late_revisit_hub.gd",
+    "scene_declared_scripts": [
+      "scripts/regions/late_revisit_hub.gd"
+    ],
+    "script_exists": true,
+    "script_risk_terms": [
+      "change_scene",
+      "save",
+      "story",
+      "quest",
+      "dialogue"
+    ],
+    "role": "Late revisit hub / Chapter 7 ocean-memory support",
+    "generated_tileset": "assets/generated_v2/tilesets/memory_ocean_v2_prototype_tileset.png",
+    "generated_tileset_exists": true,
+    "production_slot": "assets/production_art/tilesets/memory_ocean_tileset.png",
+    "production_slot_exists": false,
+    "dedicated_tileset_exists": true,
+    "side_effect_risk": "Low-medium for shared revisit hub; chapter story/trial scenes skipped",
+    "safe_headless_load_status": "Candidate for safe read-only scene-load validation",
+    "notes": "Strongest current late-hub mood from existing review evidence, but still lacks a coherent island/water tile family."
+  },
+  {
+    "hub_id": "root_of_heaven",
+    "hub_area": "Root of Heaven Prep",
+    "scene_path": "scenes/regions/root_of_heaven_prep_hub.tscn",
+    "scene_exists": true,
+    "script_path": "scripts/regions/late_revisit_hub.gd",
+    "scene_declared_scripts": [
+      "scripts/regions/late_revisit_hub.gd"
+    ],
+    "script_exists": true,
+    "script_risk_terms": [
+      "change_scene",
+      "save",
+      "story",
+      "quest",
+      "dialogue"
+    ],
+    "role": "Final-route preparation hub",
+    "generated_tileset": "assets/generated_v2/tilesets/root_of_heaven_v2_prototype_tileset.png",
+    "generated_tileset_exists": true,
+    "production_slot": "assets/production_art/tilesets/root_of_heaven_tileset.png",
+    "production_slot_exists": false,
+    "dedicated_tileset_exists": true,
+    "side_effect_risk": "Low-medium for shared revisit hub; chapter story/trial scenes skipped",
+    "safe_headless_load_status": "Candidate for safe read-only scene-load validation",
+    "notes": "Final-threshold identity is visible, but the hub floor/prep marker still feels simplified against the route importance."
+  },
+  {
+    "hub_id": "saved_assembly",
+    "hub_area": "Saved Assembly",
+    "scene_path": "scenes/regions/saved_assembly_revisit_hub.tscn",
+    "scene_exists": true,
+    "script_path": "scripts/regions/late_revisit_hub.gd",
+    "scene_declared_scripts": [
+      "scripts/regions/late_revisit_hub.gd"
+    ],
+    "script_exists": true,
+    "script_risk_terms": [
+      "change_scene",
+      "save",
+      "story",
+      "quest",
+      "dialogue"
+    ],
+    "role": "Chapter 8 / late revisit support",
+    "generated_tileset": null,
+    "generated_tileset_exists": false,
+    "production_slot": "assets/production_art/tilesets/saved_assembly_tileset.png",
+    "production_slot_exists": false,
+    "dedicated_tileset_exists": false,
+    "side_effect_risk": "Low-medium for shared revisit hub; chapter story/trial scenes skipped",
+    "safe_headless_load_status": "Candidate for safe read-only scene-load validation",
+    "notes": "No dedicated generated_v2 tileset found; likely relies on shared/prototype visuals."
+  },
+  {
+    "hub_id": "human_patch_lab",
+    "hub_area": "Human Patch Lab",
+    "scene_path": "scenes/regions/human_patch_lab_revisit_hub.tscn",
+    "scene_exists": true,
+    "script_path": "scripts/regions/late_revisit_hub.gd",
+    "scene_declared_scripts": [
+      "scripts/regions/late_revisit_hub.gd"
+    ],
+    "script_exists": true,
+    "script_risk_terms": [
+      "change_scene",
+      "save",
+      "story",
+      "quest",
+      "dialogue"
+    ],
+    "role": "Chapter 9 / late revisit laboratory support",
+    "generated_tileset": null,
+    "generated_tileset_exists": false,
+    "production_slot": "assets/production_art/tilesets/human_patch_lab_tileset.png",
+    "production_slot_exists": false,
+    "dedicated_tileset_exists": false,
+    "side_effect_risk": "Low-medium for shared revisit hub; chapter story/trial scenes skipped",
+    "safe_headless_load_status": "Candidate for safe read-only scene-load validation",
+    "notes": "No dedicated generated_v2 tileset found; likely relies on shared/prototype visuals."
+  },
+  {
+    "hub_id": "chapter_6_cathedral_nave",
+    "hub_area": "Chapter 6 Cathedral Nave",
+    "scene_path": "scenes/chapter6/ch6_cathedral_nave.tscn",
+    "scene_exists": true,
+    "script_path": "scripts/chapter6/ch6_cathedral_nave.gd",
+    "scene_declared_scripts": [
+      "scripts/chapter6/ch6_cathedral_nave.gd"
+    ],
+    "script_exists": true,
+    "script_risk_terms": [
+      "change_scene",
+      "dialogue",
+      "save",
+      "story"
+    ],
+    "role": "Chapter-specific support scene",
+    "generated_tileset": null,
+    "generated_tileset_exists": null,
+    "production_slot": null,
+    "production_slot_exists": null,
+    "dedicated_tileset_exists": null,
+    "side_effect_risk": "Static audit only; chapter story/combat side effects possible",
+    "safe_headless_load_status": "Skipped for T1 load validation",
+    "notes": "Included for inventory, not loaded in this audit pass."
+  },
+  {
+    "hub_id": "chapter_6_choir_core",
+    "hub_area": "Chapter 6 Choir Core",
+    "scene_path": "scenes/chapter6/ch6_choir_core.tscn",
+    "scene_exists": true,
+    "script_path": "scripts/chapter6/ch6_choir_core.gd",
+    "scene_declared_scripts": [
+      "scripts/chapter6/ch6_choir_core.gd"
+    ],
+    "script_exists": true,
+    "script_risk_terms": [
+      "change_scene",
+      "combat",
+      "dialogue",
+      "save",
+      "story"
+    ],
+    "role": "Chapter-specific support scene",
+    "generated_tileset": null,
+    "generated_tileset_exists": null,
+    "production_slot": null,
+    "production_slot_exists": null,
+    "dedicated_tileset_exists": null,
+    "side_effect_risk": "Static audit only; chapter story/combat side effects possible",
+    "safe_headless_load_status": "Skipped for T1 load validation",
+    "notes": "Included for inventory, not loaded in this audit pass."
+  },
+  {
+    "hub_id": "chapter_7_memory_ocean_hub",
+    "hub_area": "Chapter 7 Memory Ocean Hub",
+    "scene_path": "scenes/chapter7/ch7_memory_ocean_hub.tscn",
+    "scene_exists": true,
+    "script_path": "scripts/chapter7/ch7_memory_ocean_hub.gd",
+    "scene_declared_scripts": [
+      "scripts/chapter7/ch7_memory_ocean_hub.gd"
+    ],
+    "script_exists": true,
+    "script_risk_terms": [
+      "change_scene",
+      "dialogue",
+      "quest",
+      "save",
+      "story"
+    ],
+    "role": "Chapter-specific support scene",
+    "generated_tileset": null,
+    "generated_tileset_exists": null,
+    "production_slot": null,
+    "production_slot_exists": null,
+    "dedicated_tileset_exists": null,
+    "side_effect_risk": "Static audit only; chapter story/combat side effects possible",
+    "safe_headless_load_status": "Skipped for T1 load validation",
+    "notes": "Included for inventory, not loaded in this audit pass."
+  },
+  {
+    "hub_id": "chapter_8_saved_assembly",
+    "hub_area": "Chapter 8 Saved Assembly",
+    "scene_path": "scenes/chapter8/ch8_saved_assembly.tscn",
+    "scene_exists": true,
+    "script_path": "scripts/chapter8/ch8_saved_assembly.gd",
+    "scene_declared_scripts": [
+      "scripts/chapter8/ch8_saved_assembly.gd"
+    ],
+    "script_exists": true,
+    "script_risk_terms": [
+      "change_scene",
+      "dialogue",
+      "quest",
+      "save",
+      "story"
+    ],
+    "role": "Chapter-specific support scene",
+    "generated_tileset": null,
+    "generated_tileset_exists": null,
+    "production_slot": null,
+    "production_slot_exists": null,
+    "dedicated_tileset_exists": null,
+    "side_effect_risk": "Static audit only; chapter story/combat side effects possible",
+    "safe_headless_load_status": "Skipped for T1 load validation",
+    "notes": "Included for inventory, not loaded in this audit pass."
+  },
+  {
+    "hub_id": "chapter_9_memory_lab",
+    "hub_area": "Chapter 9 Memory Lab",
+    "scene_path": "scenes/chapter9/ch9_memory_lab.tscn",
+    "scene_exists": true,
+    "script_path": "scripts/chapter9/ch9_memory_lab.gd",
+    "scene_declared_scripts": [
+      "scripts/chapter9/ch9_memory_lab.gd"
+    ],
+    "script_exists": true,
+    "script_risk_terms": [
+      "change_scene",
+      "dialogue",
+      "quest",
+      "save",
+      "story"
+    ],
+    "role": "Chapter-specific support scene",
+    "generated_tileset": null,
+    "generated_tileset_exists": null,
+    "production_slot": null,
+    "production_slot_exists": null,
+    "dedicated_tileset_exists": null,
+    "side_effect_risk": "Static audit only; chapter story/combat side effects possible",
+    "safe_headless_load_status": "Skipped for T1 load validation",
+    "notes": "Included for inventory, not loaded in this audit pass."
+  },
+  {
+    "hub_id": "chapter_10_witness_chamber",
+    "hub_area": "Chapter 10 Witness Chamber",
+    "scene_path": "scenes/chapter10/ch10_witness_chamber.tscn",
+    "scene_exists": true,
+    "script_path": "scripts/chapter10/ch10_witness_chamber.gd",
+    "scene_declared_scripts": [
+      "scripts/chapter10/ch10_witness_chamber.gd"
+    ],
+    "script_exists": true,
+    "script_risk_terms": [
+      "change_scene",
+      "dialogue",
+      "quest",
+      "save",
+      "story"
+    ],
+    "role": "Chapter-specific support scene",
+    "generated_tileset": null,
+    "generated_tileset_exists": null,
+    "production_slot": null,
+    "production_slot_exists": null,
+    "dedicated_tileset_exists": null,
+    "side_effect_risk": "Static audit only; chapter story/combat side effects possible",
+    "safe_headless_load_status": "Skipped for T1 load validation",
+    "notes": "Included for inventory, not loaded in this audit pass."
+  }
+]

@@ -1,0 +1,14 @@
+{
+	"autoloads": {
+		"GameManager": true,
+		"ProgressionBreadcrumb": true,
+		"SceneTransitions": true
+	},
+	"completed": true,
+	"errors": [],
+	"evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+	"pass": true,
+	"probe": "probe_00_boot_corrected",
+	"started": true,
+	"timestamp": "2026-06-21T13:41:58"
+}

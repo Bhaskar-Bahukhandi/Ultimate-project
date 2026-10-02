@@ -27,6 +27,32 @@ var _visible: bool = true
 # Each entry: {flag_required (must be true), flag_blocker (if true, skip),
 #              text, hint, target_pos (in current region)}
 const OBJECTIVES: Array = [
+	# 10N-A2 first-minute opening hook objectives.
+	{
+		"blocker": "ch1_opening_hook_signal_found",
+		"required": "ch1_opening_hook_started",
+		"text": "Stand up. Find a signal.",
+		"hint": "Move, then inspect the broken signal fragment near the crater.",
+		"region": "opening_crash_site",
+		"target": Vector2(545, 370),
+	},
+	{
+		"blocker": "ch1_opening_hook_complete",
+		"required": "ch1_opening_hook_signal_found",
+		"text": "Follow the Oakhaven signal.",
+		"hint": "Avoid the unstable pulse and head east through the safe gap.",
+		"region": "opening_crash_site",
+		"target": Vector2(1030, 370),
+	},
+	{
+		"blocker": "ch1_oakhaven_entered",
+		"required": "ch1_opening_hook_complete",
+		"text": "Reach Oakhaven.",
+		"hint": "The signal points to a village that should not know your name.",
+		"region": "overworld",
+		"target": Vector2(350, 480),
+	},
+
 	# ── Chapter 1 ──
 	{
 		"blocker": "tutorial_completed",

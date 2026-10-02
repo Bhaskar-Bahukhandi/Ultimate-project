@@ -1,0 +1,55 @@
+{
+  "phase": "10N-A2.8",
+  "evidence_boundary": "Headless runtime validated; headed viewport timeline not available.",
+  "events": [
+    {
+      "event": "menu_visible",
+      "time": null,
+      "evidence_type": "NOT VALIDATED",
+      "notes": "A2.8 headed menu screenshot not captured."
+    },
+    {
+      "event": "new_game_clicked",
+      "time": null,
+      "evidence_type": "NOT VALIDATED",
+      "notes": "Computer Use failed before viewport control."
+    },
+    {
+      "event": "first_control",
+      "time": null,
+      "evidence_type": "NOT VALIDATED",
+      "notes": "A2.8 headed first control not observed."
+    },
+    {
+      "event": "signal_prompt",
+      "time": null,
+      "evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+      "notes": "probe_02 validated prompt/action range after probe timing repair."
+    },
+    {
+      "event": "signal_success",
+      "time": null,
+      "evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+      "notes": "probe_03 validated objective/visual/pulse/path marker after success label naming fix."
+    },
+    {
+      "event": "glitch_pulse",
+      "time": null,
+      "evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+      "notes": "probe_04 validated pulse feedback, danger flag, knockback marker, and unchanged HP."
+    },
+    {
+      "event": "oakhaven_path",
+      "time": null,
+      "evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+      "notes": "probe_05 validated reachability/completion flags and legacy route existence."
+    },
+    {
+      "event": "transition_or_arrival",
+      "time": null,
+      "evidence_type": "NOT VALIDATED",
+      "notes": "A2.8 headed transition/arrival not observed."
+    }
+  ],
+  "required_phrase": "Computer Use viewport control unavailable ? A2.8 headed validation incomplete"
+}

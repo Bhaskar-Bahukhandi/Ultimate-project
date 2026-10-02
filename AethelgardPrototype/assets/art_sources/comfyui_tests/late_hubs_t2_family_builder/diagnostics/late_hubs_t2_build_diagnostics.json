@@ -1,0 +1,219 @@
+{
+  "phase": "10M-T2",
+  "input_verification": [
+    {
+      "input": "T1 review",
+      "path": "docs/art_pipeline/late_hubs_t1_visual_baseline_audit.md",
+      "status": "Present",
+      "notes": "Inspected for T2 input verification."
+    },
+    {
+      "input": "T1 scene inventory",
+      "path": "assets/art_sources/comfyui_tests/late_hubs_t1_audit/manifest/late_hubs_t1_scene_inventory.json",
+      "status": "Present",
+      "notes": "Inspected for T2 input verification."
+    },
+    {
+      "input": "T1 tileset inventory",
+      "path": "assets/art_sources/comfyui_tests/late_hubs_t1_audit/manifest/late_hubs_t1_tileset_inventory.json",
+      "status": "Present",
+      "notes": "Inspected for T2 input verification."
+    },
+    {
+      "input": "T1 audit results",
+      "path": "assets/art_sources/comfyui_tests/late_hubs_t1_audit/manifest/late_hubs_t1_audit_results.json",
+      "status": "Present",
+      "notes": "Inspected for T2 input verification."
+    },
+    {
+      "input": "Forgotten Sectors generated_v2",
+      "path": "assets/generated_v2/tilesets/forgotten_sectors_v2_prototype_tileset.png",
+      "status": "Present",
+      "notes": "Inspected for T2 input verification."
+    },
+    {
+      "input": "Mirror City generated_v2",
+      "path": "assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+      "status": "Present",
+      "notes": "Inspected for T2 input verification."
+    },
+    {
+      "input": "Cathedral Server generated_v2",
+      "path": "assets/generated_v2/tilesets/cathedral_server_v2_prototype_tileset.png",
+      "status": "Present",
+      "notes": "Inspected for T2 input verification."
+    },
+    {
+      "input": "Memory Ocean generated_v2",
+      "path": "assets/generated_v2/tilesets/memory_ocean_v2_prototype_tileset.png",
+      "status": "Present",
+      "notes": "Inspected for T2 input verification."
+    },
+    {
+      "input": "Root of Heaven generated_v2",
+      "path": "assets/generated_v2/tilesets/root_of_heaven_v2_prototype_tileset.png",
+      "status": "Present",
+      "notes": "Inspected for T2 input verification."
+    },
+    {
+      "input": "Saved Assembly generated_v2",
+      "path": "assets/generated_v2/tilesets/saved_assembly_v2_prototype_tileset.png",
+      "status": "Missing as expected from T1",
+      "notes": "No dedicated generated_v2 tileset found."
+    },
+    {
+      "input": "Human Patch Lab generated_v2",
+      "path": "assets/generated_v2/tilesets/human_patch_lab_v2_prototype_tileset.png",
+      "status": "Missing as expected from T1",
+      "notes": "No dedicated generated_v2 tileset found."
+    },
+    {
+      "input": "Oakhaven production baseline",
+      "path": "assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+      "status": "Present",
+      "notes": "Inspected for T2 input verification."
+    },
+    {
+      "input": "Ironhold production baseline",
+      "path": "assets/production_art/tilesets/ironhold/ironhold_tileset.png",
+      "status": "Present",
+      "notes": "Inspected for T2 input verification."
+    },
+    {
+      "input": "Fractured Wastes production baseline",
+      "path": "assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png",
+      "status": "Present",
+      "notes": "Inspected for T2 input verification."
+    },
+    {
+      "input": "Shared V3 props",
+      "path": "assets/generated_v3/props/phase10mm_environment_prop_atlas.png",
+      "status": "Present",
+      "notes": "Inspected for T2 input verification."
+    },
+    {
+      "input": "Shared V3 decals",
+      "path": "assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png",
+      "status": "Present",
+      "notes": "Inspected for T2 input verification."
+    }
+  ],
+  "protected_assets": [
+    {
+      "path": "assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+      "exists": true,
+      "sha256": "4cdccf5f9f45473d8917648d4062bae15bb07196d1cb7df5f8003e9b21da6931",
+      "size_bytes": 20130,
+      "dimensions": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "assets/production_art/tilesets/ironhold/ironhold_tileset.png",
+      "exists": true,
+      "sha256": "69ff14324073a5f7cbd7dc38de7647f34e6f87534d8ade45d0d9a08b757ca809",
+      "size_bytes": 15709,
+      "dimensions": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png",
+      "exists": true,
+      "sha256": "6a595898d2159a7cc260b902ae9c8c2ea880ed8aacdff9aaa1cc60afc2e38770",
+      "size_bytes": 21908,
+      "dimensions": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "assets/generated_v3/props/phase10mm_environment_prop_atlas.png",
+      "exists": true,
+      "sha256": "f75f9017fc30f26fc7945f960d5d4d178e00965f70b334feb1625a6d2fb2f74d",
+      "size_bytes": 1888290,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png",
+      "exists": true,
+      "sha256": "2cfe76fd9e0930e83012bebca5d73cc1fa76aadf117f3c16321c70a86e4e43a8",
+      "size_bytes": 2067112,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "assets/generated_v2/tilesets/forgotten_sectors_v2_prototype_tileset.png",
+      "exists": true,
+      "sha256": "348952cd87a82e47a14650875c024c7bbfc900247254400c9a4453fb0f745f87",
+      "size_bytes": 2116,
+      "dimensions": [
+        128,
+        64
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+      "exists": true,
+      "sha256": "1bc3becfbdd87a9f56df2717d616c727960d9ddcde910bba4b19536c48e2d199",
+      "size_bytes": 2152,
+      "dimensions": [
+        128,
+        64
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "assets/generated_v2/tilesets/cathedral_server_v2_prototype_tileset.png",
+      "exists": true,
+      "sha256": "2594cb69707b9398b9b6a789667fe70c833c1d74b1bd1c760176734de6b9b8d8",
+      "size_bytes": 2060,
+      "dimensions": [
+        128,
+        64
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "assets/generated_v2/tilesets/memory_ocean_v2_prototype_tileset.png",
+      "exists": true,
+      "sha256": "e7f39154c9c4f5e2038f78801966e15c9c3b0fdaa4f61c45dee42d099c7403d5",
+      "size_bytes": 2390,
+      "dimensions": [
+        128,
+        64
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "assets/generated_v2/tilesets/root_of_heaven_v2_prototype_tileset.png",
+      "exists": true,
+      "sha256": "583f8b6f10a324aadc81150322fefa0bc6732335131ed3099bff9b62e67dffd4",
+      "size_bytes": 2216,
+      "dimensions": [
+        128,
+        64
+      ],
+      "mode": "RGBA"
+    }
+  ],
+  "outputs_root": "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder",
+  "no_production_art_writes": true,
+  "no_generated_v2_overwrite": true,
+  "no_generated_v3_overwrite": true,
+  "no_gameplay_scene_script_modification": true,
+  "builder": "work/late_hubs_t2_builder.py"
+}

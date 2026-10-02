@@ -1,0 +1,26 @@
+{
+  "batch": "kaelen_v1",
+  "generated_utc": "2026-09-29",
+  "provider": "spritefusion",
+  "operation": "generate",
+  "size": 64,
+  "credits_spent": 15,
+  "outputs": 12,
+  "prompt": "A lean, tired man in his late twenties standing idle in side view facing right, full body. Dark messy hair covering his ears, rectangular glasses, pale skin, dark circles under his eyes, slightly hunched desk-worker posture, narrow shoulders. He wears an open dark charcoal hoodie over a black t-shirt, dark jeans and worn sneakers, with a laptop bag strap across his chest. Thin electric cyan fracture lines flicker along the edges of his clothing like corrupted data. Muted charcoal and dark grey palette with cyan accents.",
+  "source_spec": "Character_design_refrence.md - PROTAGONIST: KAELEN \"REN\" VANCE",
+  "note": "All 12 outputs remain retrievable from the Sprite Fusion account via GET /api/v1/assets.",
+  "assets": [
+    {"n": 1,  "id": "70a3cf7d-5a49-4c3c-aa7c-9f4e39ec26d6", "w": 73, "h": 73, "local": "outputs_raw/01_70a3cf7d.png"},
+    {"n": 2,  "id": "5fc569d7-a1c2-41e5-82fc-454f148a858d", "w": 64, "h": 64},
+    {"n": 3,  "id": "09a29446-a145-41e5-bd0f-cf3c743e9682", "w": 64, "h": 64},
+    {"n": 4,  "id": "54cd677e-8529-43fd-8962-2aa76a77b44b", "w": 64, "h": 64},
+    {"n": 5,  "id": "7dc209e5-2de5-4235-aa8a-9c9122d72182", "w": 74, "h": 74},
+    {"n": 6,  "id": "4a9b6c42-fb0a-46ec-9437-94a5d1bcfa98", "w": 75, "h": 75},
+    {"n": 7,  "id": "36c49299-50a0-4fbc-aaca-9cabf7516211", "w": 76, "h": 76},
+    {"n": 8,  "id": "f260ecda-f42b-4fed-962e-243fcaed02ef", "w": 76, "h": 76},
+    {"n": 9,  "id": "fdd155cc-bc5a-4815-b211-222edbd55f3f", "w": 77, "h": 77},
+    {"n": 10, "id": "e0558287-bea8-4e3e-9f1c-64bc8715e983", "w": 77, "h": 77},
+    {"n": 11, "id": "2450ba5e-1d53-4361-b64c-0c0a000b67e3", "w": 77, "h": 77},
+    {"n": 12, "id": "d8c98822-c76b-40ec-846c-7c1d40fff760", "w": 77, "h": 77}
+  ]
+}

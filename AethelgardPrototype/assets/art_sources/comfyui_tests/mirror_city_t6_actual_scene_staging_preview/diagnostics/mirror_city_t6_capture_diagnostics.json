@@ -1,0 +1,410 @@
+{
+	"captures": [
+		{
+			"camera_found": true,
+			"composition_board": "res://assets/art_sources/comfyui_tests/mirror_city_t6_actual_scene_staging_preview/preview_boards/mirror_city_t6_current_generated_v2_scene_composition_board.png",
+			"composition_board_status": "Pass",
+			"id": "current_generated_v2",
+			"label": "Current generated_v2 fallback",
+			"label_count": 9,
+			"player_found": true,
+			"prompt_count": 2,
+			"runtime_files_modified": false,
+			"screenshot": "",
+			"screenshot_note": "Headless dummy renderer detected; deterministic scene-composition board is the evidence.",
+			"screenshot_status": "FallbackBoardOnly",
+			"source_texture": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+			"temporary_layer_name": "T6TemporaryTilesetPreviewLayer",
+			"temporary_layer_z_index": -23,
+			"v3_nodes_found": [
+				"V3MirrorRipples",
+				"V3MirrorPlinth",
+				"V3MirrorShardWest"
+			],
+			"visual_layer_found": true
+		},
+		{
+			"camera_found": true,
+			"composition_board": "res://assets/art_sources/comfyui_tests/mirror_city_t6_actual_scene_staging_preview/preview_boards/mirror_city_t6_variant_d_scene_composition_board.png",
+			"composition_board_status": "Pass",
+			"id": "variant_d_primary",
+			"label": "T4 Variant D primary",
+			"label_count": 9,
+			"player_found": true,
+			"prompt_count": 2,
+			"runtime_files_modified": false,
+			"screenshot": "",
+			"screenshot_note": "Headless dummy renderer detected; deterministic scene-composition board is the evidence.",
+			"screenshot_status": "FallbackBoardOnly",
+			"source_texture": "res://assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild/generated_tiles/mirror_city_t4_variant_d_hybrid_best.png",
+			"temporary_layer_name": "T6TemporaryTilesetPreviewLayer",
+			"temporary_layer_z_index": -23,
+			"v3_nodes_found": [
+				"V3MirrorRipples",
+				"V3MirrorPlinth",
+				"V3MirrorShardWest"
+			],
+			"visual_layer_found": true
+		},
+		{
+			"camera_found": true,
+			"composition_board": "res://assets/art_sources/comfyui_tests/mirror_city_t6_actual_scene_staging_preview/preview_boards/mirror_city_t6_variant_c_scene_composition_board.png",
+			"composition_board_status": "Pass",
+			"id": "variant_c_backup",
+			"label": "T4 Variant C backup",
+			"label_count": 9,
+			"player_found": true,
+			"prompt_count": 2,
+			"runtime_files_modified": false,
+			"screenshot": "",
+			"screenshot_note": "Headless dummy renderer detected; deterministic scene-composition board is the evidence.",
+			"screenshot_status": "FallbackBoardOnly",
+			"source_texture": "res://assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild/generated_tiles/mirror_city_t4_variant_c_inverted_route.png",
+			"temporary_layer_name": "T6TemporaryTilesetPreviewLayer",
+			"temporary_layer_z_index": -23,
+			"v3_nodes_found": [
+				"V3MirrorRipples",
+				"V3MirrorPlinth",
+				"V3MirrorShardWest"
+			],
+			"visual_layer_found": true
+		}
+	],
+	"input_checks": [
+		{
+			"check": "T5 review",
+			"exists": true,
+			"loaded": true,
+			"path": "res://docs/art_pipeline/mirror_city_t5_preview_validation_review.md",
+			"result": "Pass",
+			"size": [
+				0,
+				0
+			]
+		},
+		{
+			"check": "current generated_v2 Mirror City fallback",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+			"result": "Pass",
+			"size": [
+				128,
+				64
+			]
+		},
+		{
+			"check": "T4 Variant D primary",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild/generated_tiles/mirror_city_t4_variant_d_hybrid_best.png",
+			"result": "Pass",
+			"size": [
+				512,
+				512
+			]
+		},
+		{
+			"check": "T4 Variant C backup",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild/generated_tiles/mirror_city_t4_variant_c_inverted_route.png",
+			"result": "Pass",
+			"size": [
+				512,
+				512
+			]
+		},
+		{
+			"check": "old T2 Mirror City reference",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/generated_tiles/late_hub_t2_mirror_city_family.png",
+			"result": "Pass",
+			"size": [
+				512,
+				512
+			]
+		},
+		{
+			"check": "V3 props",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png",
+			"result": "Pass",
+			"size": [
+				1536,
+				1024
+			]
+		},
+		{
+			"check": "V3 decals",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png",
+			"result": "Pass",
+			"size": [
+				1536,
+				1024
+			]
+		}
+	],
+	"phase": "10M-T6",
+	"preview_only": true,
+	"risky_story_scenes_skipped": [
+		"res://scenes/chapter5/ch5_mirror_city_intro.tscn",
+		"res://scenes/chapter5/ch5_mirror_plaza.tscn",
+		"res://scenes/chapter5/ch5_mirror_kaelen_confrontation.tscn"
+	],
+	"safety_checks": [
+		{
+			"check": "Oakhaven baseline preservation",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+			"result": "Pass",
+			"size": [
+				512,
+				512
+			]
+		},
+		{
+			"check": "Ironhold baseline preservation",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/production_art/tilesets/ironhold/ironhold_tileset.png",
+			"result": "Pass",
+			"size": [
+				512,
+				512
+			]
+		},
+		{
+			"check": "Fractured Wastes baseline preservation",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png",
+			"result": "Pass",
+			"size": [
+				512,
+				512
+			]
+		},
+		{
+			"check": "shared V3 props preservation",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png",
+			"result": "Pass",
+			"size": [
+				1536,
+				1024
+			]
+		},
+		{
+			"check": "shared V3 decals preservation",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png",
+			"result": "Pass",
+			"size": [
+				1536,
+				1024
+			]
+		},
+		{
+			"check": "Mirror City generated_v2 fallback preservation",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+			"result": "Pass",
+			"size": [
+				128,
+				64
+			]
+		}
+	],
+	"scene_reference": {
+		"safe_reason": "Free-travel revisit wrapper; Chapter 5 story scenes are skipped.",
+		"scan": {
+			"camera_found": true,
+			"label_count": 9,
+			"player_found": true,
+			"prompt_count": 2,
+			"v3_nodes_found": [
+				"V3MirrorRipples",
+				"V3MirrorPlinth",
+				"V3MirrorShardWest"
+			],
+			"visual_layer_found": true,
+			"visual_nodes": [
+				{
+					"name": "Background",
+					"type": "ColorRect",
+					"z_index": -30
+				},
+				{
+					"name": "TransitFloor",
+					"type": "Polygon2D",
+					"z_index": -24
+				},
+				{
+					"name": "TransitSpine",
+					"type": "ColorRect",
+					"z_index": -20
+				},
+				{
+					"name": "@ColorRect@332",
+					"type": "ColorRect",
+					"z_index": -16
+				},
+				{
+					"name": "@ColorRect@333",
+					"type": "ColorRect",
+					"z_index": 0
+				},
+				{
+					"name": "@ColorRect@334",
+					"type": "ColorRect",
+					"z_index": -16
+				},
+				{
+					"name": "@ColorRect@335",
+					"type": "ColorRect",
+					"z_index": 0
+				},
+				{
+					"name": "@ColorRect@336",
+					"type": "ColorRect",
+					"z_index": -16
+				},
+				{
+					"name": "@ColorRect@337",
+					"type": "ColorRect",
+					"z_index": 0
+				},
+				{
+					"name": "@ColorRect@338",
+					"type": "ColorRect",
+					"z_index": -16
+				},
+				{
+					"name": "@ColorRect@339",
+					"type": "ColorRect",
+					"z_index": 0
+				},
+				{
+					"name": "@ColorRect@340",
+					"type": "ColorRect",
+					"z_index": -16
+				},
+				{
+					"name": "@ColorRect@341",
+					"type": "ColorRect",
+					"z_index": 0
+				},
+				{
+					"name": "@ColorRect@342",
+					"type": "ColorRect",
+					"z_index": -16
+				},
+				{
+					"name": "@ColorRect@343",
+					"type": "ColorRect",
+					"z_index": 0
+				},
+				{
+					"name": "BufferBand0",
+					"type": "ColorRect",
+					"z_index": -18
+				},
+				{
+					"name": "BufferBand1",
+					"type": "ColorRect",
+					"z_index": -18
+				},
+				{
+					"name": "BufferBand2",
+					"type": "ColorRect",
+					"z_index": -18
+				},
+				{
+					"name": "MirrorLaneWest",
+					"type": "ColorRect",
+					"z_index": -14
+				},
+				{
+					"name": "Edge",
+					"type": "ColorRect",
+					"z_index": 0
+				},
+				{
+					"name": "MirrorLaneEast",
+					"type": "ColorRect",
+					"z_index": -14
+				},
+				{
+					"name": "Edge",
+					"type": "ColorRect",
+					"z_index": 0
+				},
+				{
+					"name": "WitnessPlinth",
+					"type": "ColorRect",
+					"z_index": -14
+				},
+				{
+					"name": "Edge",
+					"type": "ColorRect",
+					"z_index": 0
+				},
+				{
+					"name": "V3MirrorRipples",
+					"type": "Sprite2D",
+					"z_index": -17
+				},
+				{
+					"name": "V3MirrorPlinth",
+					"type": "Sprite2D",
+					"z_index": -9
+				},
+				{
+					"name": "V3MirrorShardWest",
+					"type": "Sprite2D",
+					"z_index": -11
+				},
+				{
+					"name": "DirectionIndicator",
+					"type": "ColorRect",
+					"z_index": 0
+				},
+				{
+					"name": "OverlayTint",
+					"type": "ColorRect",
+					"z_index": 0
+				},
+				{
+					"name": "@ColorRect@346",
+					"type": "ColorRect",
+					"z_index": 0
+				},
+				{
+					"name": "FutureRoutesMarker",
+					"type": "ColorRect",
+					"z_index": 0
+				},
+				{
+					"name": "@Polygon2D@350",
+					"type": "Polygon2D",
+					"z_index": 0
+				}
+			]
+		},
+		"scene": "res://scenes/regions/mirror_city_revisit_hub.tscn",
+		"scene_load": "Pass",
+		"visual_strategy": "Existing scene has procedural ColorRect/Polygon2D visual nodes, V3 overlays, player camera, and UI. No saved TileMap or generated_v2 visual layer is present."
+	},
+	"scene_used": "res://scenes/regions/mirror_city_revisit_hub.tscn",
+	"script": "docs/art_pipeline/mirror_city_t6_actual_scene_staging_preview/mirror_city_t6_actual_scene_staging_preview.gd",
+	"staging_method": "In-memory temporary Sprite2D visual layer added after scene load; scene and scripts are never saved."
+}

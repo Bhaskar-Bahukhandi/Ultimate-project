@@ -1,0 +1,15 @@
+{
+	"checks": {
+		"connected_visible": true,
+		"objective_changed": true,
+		"path_label_visible": true,
+		"pulse_armed": true,
+		"signal_flag": true,
+		"signal_visual_green": true
+	},
+	"errors": [],
+	"evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+	"pass": true,
+	"probe": "probe_03_signal_success_feedback",
+	"timestamp": "2026-06-21T18:33:27"
+}

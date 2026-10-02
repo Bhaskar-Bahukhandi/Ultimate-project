@@ -1,0 +1,118 @@
+{
+  "phase": "10M-T4",
+  "dimensions": [
+    512,
+    512
+  ],
+  "cell_size": [
+    32,
+    32
+  ],
+  "generation_method": "deterministic Python/Pillow procedural drawing",
+  "ai_generation": false,
+  "comfyui_used": false,
+  "production_art_writes": false,
+  "generated_v2_overwrite": false,
+  "generated_v3_overwrite": false,
+  "variants": [
+    {
+      "variant": "Variant A - Glass Civic",
+      "atlas_path": "assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild/generated_tiles/mirror_city_t4_variant_a_glass_civic.png",
+      "mockup_path": "assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild/mockups/mirror_city_t4_variant_a_glass_civic_mockup.png",
+      "identity": "Clean mirror city plaza, reflective civic floor, subtle symmetry, readable paths.",
+      "scores": {
+        "readability": 7.6,
+        "identity": 7.4,
+        "reflection": 7.4,
+        "path": 7.5,
+        "repetition": 7.4,
+        "v3_prop": 7.6,
+        "v3_decal": 7.5,
+        "player": 7.8,
+        "label": 8.0,
+        "glow": 7.8,
+        "atmosphere": 7.2,
+        "over_t2": 7.2,
+        "over_fallback": 7.4,
+        "preview": 7.5,
+        "overall": 7.5
+      },
+      "verdict": "Strong readable civic mirror floor; less uncanny than B/C/D."
+    },
+    {
+      "variant": "Variant B - Fractured Reflection",
+      "atlas_path": "assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild/generated_tiles/mirror_city_t4_variant_b_fractured_reflection.png",
+      "mockup_path": "assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild/mockups/mirror_city_t4_variant_b_fractured_reflection_mockup.png",
+      "identity": "Broken mirror district, fractured self-reflection, shard paths, still readable.",
+      "scores": {
+        "readability": 7.2,
+        "identity": 8.0,
+        "reflection": 8.2,
+        "path": 7.3,
+        "repetition": 7.0,
+        "v3_prop": 7.3,
+        "v3_decal": 7.4,
+        "player": 7.5,
+        "label": 7.7,
+        "glow": 7.4,
+        "atmosphere": 8.0,
+        "over_t2": 8.0,
+        "over_fallback": 7.8,
+        "preview": 7.7,
+        "overall": 7.8
+      },
+      "verdict": "Most distinct fractured mirror identity; needs repetition check in live preview."
+    },
+    {
+      "variant": "Variant C - Inverted Route",
+      "atlas_path": "assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild/generated_tiles/mirror_city_t4_variant_c_inverted_route.png",
+      "mockup_path": "assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild/mockups/mirror_city_t4_variant_c_inverted_route_mockup.png",
+      "identity": "Symmetrical/inverted path system, route arrows, mirrored navigation, reflected city logic.",
+      "scores": {
+        "readability": 7.5,
+        "identity": 8.1,
+        "reflection": 7.9,
+        "path": 8.0,
+        "repetition": 7.2,
+        "v3_prop": 7.5,
+        "v3_decal": 7.4,
+        "player": 7.8,
+        "label": 7.9,
+        "glow": 7.5,
+        "atmosphere": 7.7,
+        "over_t2": 8.1,
+        "over_fallback": 7.9,
+        "preview": 8.0,
+        "overall": 7.9
+      },
+      "verdict": "Best route grammar and strongest answer to the T3 identity problem."
+    },
+    {
+      "variant": "Variant D - Hybrid Best",
+      "atlas_path": "assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild/generated_tiles/mirror_city_t4_variant_d_hybrid_best.png",
+      "mockup_path": "assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild/mockups/mirror_city_t4_variant_d_hybrid_best_mockup.png",
+      "identity": "Practical combined Mirror City candidate using civic plates, fractures, and mirrored routes.",
+      "scores": {
+        "readability": 7.8,
+        "identity": 8.3,
+        "reflection": 8.2,
+        "path": 8.0,
+        "repetition": 7.5,
+        "v3_prop": 7.7,
+        "v3_decal": 7.7,
+        "player": 8.0,
+        "label": 8.1,
+        "glow": 7.8,
+        "atmosphere": 8.0,
+        "over_t2": 8.4,
+        "over_fallback": 8.2,
+        "preview": 8.2,
+        "overall": 8.1
+      },
+      "verdict": "Strongest practical candidate; distinct enough for preview-only Godot validation."
+    }
+  ],
+  "best_candidate_recommendation": "Variant D - Hybrid Best is the strongest practical candidate; Variant C is the strongest route-grammar backup.",
+  "rollback_note": "Delete assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild and docs/art_pipeline/mirror_city_t4_identity_rebuild_review.md. No runtime path depends on these review-only outputs.",
+  "final_decision": "Ready for Mirror City T4 preview-only Godot validation pass"
+}

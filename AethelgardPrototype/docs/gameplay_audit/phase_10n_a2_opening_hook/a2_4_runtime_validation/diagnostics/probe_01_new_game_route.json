@@ -1,0 +1,17 @@
+{
+  "evidence_type": "STATIC CODE EVIDENCE / CORRECTED HEADLESS RUNTIME EVIDENCE",
+  "fallback_to_legacy_present": true,
+  "legacy_const_found": true,
+  "legacy_function_present": true,
+  "legacy_resource_exists": true,
+  "main_menu_script_read": true,
+  "new_game_calls_reset": true,
+  "new_game_uses_opening_target": true,
+  "notes": "main menu route inspected without pressing UI",
+  "opening_hook_const_found": true,
+  "opening_hook_resource_exists": true,
+  "phase": "10N-A2.4",
+  "probe": "probe_01_new_game_route",
+  "start_marker_printed": true,
+  "status": "pass"
+}

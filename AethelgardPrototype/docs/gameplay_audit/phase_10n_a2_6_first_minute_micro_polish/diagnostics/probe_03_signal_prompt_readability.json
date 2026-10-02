@@ -1,0 +1,14 @@
+{
+	"errors": [],
+	"evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+	"input_actions": {
+		"interact": true,
+		"root_access": true
+	},
+	"pass": true,
+	"probe": "probe_03_signal_prompt_readability",
+	"prompt_text": "[F/E] Interact",
+	"signal_flag_after_interaction": true,
+	"signal_meta_prompt": "[F/E] Interact",
+	"timestamp": "2026-06-21T13:42:10"
+}

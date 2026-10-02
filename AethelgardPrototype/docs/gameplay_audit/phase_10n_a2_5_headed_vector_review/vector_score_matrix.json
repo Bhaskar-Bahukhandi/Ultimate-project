@@ -1,0 +1,613 @@
+﻿{
+    "phase":  "10N-A2.5",
+    "headed_play_happened":  false,
+    "vectors":  [
+                    {
+                        "id":  1,
+                        "vector":  "Hook \u0026 retention",
+                        "severity":  "Not validated",
+                        "evidence_type":  "NOT VALIDATED",
+                        "observation":  "No headed/manual play occurred, so the exact human drop-off moment is not proven. Static/code evidence says the hook now starts playable quickly after New Game, but the conflict is a text line plus a non-damaging pulse.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Run true headed play first, then tighten the first visible conflict around signal, pulse, and Oakhaven pull.",
+                        "recommended_phase":  "Manual headed playtest still required"
+                    },
+                    {
+                        "id":  2,
+                        "vector":  "Interactive loop",
+                        "severity":  "P1 critical retention risk",
+                        "evidence_type":  "CORRECTED HEADLESS RUNTIME EVIDENCE + STATIC CODE EVIDENCE",
+                        "observation":  "Movement, SignalFragment interaction, pulse flag, and path completion work headlessly. The actual loop is move, press interact, avoid/enter pulse, exit. The pulse has no damage, failure, knockback, resource cost, or hard consequence.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Add one readable consequence/feedback beat without broad combat changes, and make each micro-action visibly change the route.",
+                        "recommended_phase":  "10N-A2.6 first-minute headed micro-polish"
+                    },
+                    {
+                        "id":  3,
+                        "vector":  "Structural pacing",
+                        "severity":  "P2 major improvement",
+                        "evidence_type":  "STATIC CODE EVIDENCE + INFERENCE",
+                        "observation":  "A2 removes the long passive prologue from New Game, but after the 0.45s OakhavenPath completion it hands control back to the existing overworld/Oakhaven route. That post-hook pacing is still unvalidated.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "After manual A2 validation, redesign objective handoff from crater to Oakhaven as a single clear first quest chain.",
+                        "recommended_phase":  "10N-A3 objective clarity and first quest redesign"
+                    },
+                    {
+                        "id":  4,
+                        "vector":  "Ludonarrative dissonance",
+                        "severity":  "P2 major improvement",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "The script warns that the memory scar is dangerous, but the pulse handler only sets a flag, shows text, and shakes camera.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Add harmless but real gameplay consequence: short knockback, route distortion, screen static, or temporary control disruption.",
+                        "recommended_phase":  "10N-A2.6 first-minute headed micro-polish"
+                    },
+                    {
+                        "id":  5,
+                        "vector":  "Quest design/objectives",
+                        "severity":  "P1 critical retention risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "The first objective is clear, but objective state is split between local HUD text and ProgressionBreadcrumb flag logic. Completion sets four compatibility flags at once.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Define one first-quest state machine and one visible objective source for the opening handoff.",
+                        "recommended_phase":  "10N-A3 objective clarity and first quest redesign"
+                    },
+                    {
+                        "id":  6,
+                        "vector":  "Tutorial integration",
+                        "severity":  "P2 major improvement",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "The opening teaches movement via text: Move with WASD. Inspect the broken signal fragment. The prompt is functional but not embedded in the environment.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Use spatial staging: player wakes facing the fragment, route ping activates after movement, prompt appears only near the object.",
+                        "recommended_phase":  "10N-A2.6 first-minute headed micro-polish"
+                    },
+                    {
+                        "id":  7,
+                        "vector":  "Exploration value/level design",
+                        "severity":  "P1 critical retention risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "The hook builds visual ColorRects but no StaticBody2D boundaries or debris collision. A confused player can likely wander through or beyond the intended space while the camera limits clamp.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Add non-art blocking and route shaping with existing collision primitives, then validate with headed play.",
+                        "recommended_phase":  "10N-A2.6 first-minute headed micro-polish"
+                    },
+                    {
+                        "id":  8,
+                        "vector":  "Save/retry loops",
+                        "severity":  "Not validated",
+                        "evidence_type":  "NOT VALIDATED + STATIC CODE EVIDENCE",
+                        "observation":  "No headed save/retry test happened. The hook completion sets flags and transitions, but no checkpoint/autosave call is visible in the opening hook.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "After headed validation, decide whether first Oakhaven arrival should autosave or checkpoint.",
+                        "recommended_phase":  "10N-A3 objective clarity and first quest redesign"
+                    },
+                    {
+                        "id":  9,
+                        "vector":  "Dialogue UX",
+                        "severity":  "P2 major improvement",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "The hook uses transient message labels, not DialogueManager. DialogueManager has typewriter/skip/choices, but the first minute does not teach dialogue controls.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Add persistent inspect log or repeatable signal text before the first true dialogue scene.",
+                        "recommended_phase":  "10N-A3 objective clarity and first quest redesign"
+                    },
+                    {
+                        "id":  10,
+                        "vector":  "Narrative momentum",
+                        "severity":  "P2 major improvement",
+                        "evidence_type":  "STATIC CODE EVIDENCE + INFERENCE",
+                        "observation":  "The Oakhaven death loop / Elara marker line is the strongest curiosity gap, but it is one temporary text message with no character present.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Turn the signal into a repeatable micro-discovery that points to a visible next mystery.",
+                        "recommended_phase":  "10N-A3 objective clarity and first quest redesign"
+                    },
+                    {
+                        "id":  11,
+                        "vector":  "Choice agency/consequence",
+                        "severity":  "P2 major improvement",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "The opening hook has no meaningful choice. Later Oakhaven has warn/quietly style choices, but they are not seeded in the first playable minute.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Add a small Chapter 1 dilemma after the first objective, not inside the unvalidated hook.",
+                        "recommended_phase":  "10N-A3 objective clarity and first quest redesign"
+                    },
+                    {
+                        "id":  12,
+                        "vector":  "Emotional anchoring",
+                        "severity":  "P1 critical retention risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE + INFERENCE",
+                        "observation":  "The hook has no visible NPC or companion. Elara is a name in a signal line, and the protagonist has only one internal message.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Use the first quest to make Elara or another anchor visible through action, not exposition.",
+                        "recommended_phase":  "10N-A3 objective clarity and first quest redesign"
+                    },
+                    {
+                        "id":  13,
+                        "vector":  "Multi-ending seeding",
+                        "severity":  "P3 future scalability risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "Many ending and route flags exist later in GameManager, but no early action visibly teaches that choices will matter.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Seed one small tracked Chapter 1 choice with clear later-readable consequences.",
+                        "recommended_phase":  "10N-A3 state/quest architecture repair"
+                    },
+                    {
+                        "id":  14,
+                        "vector":  "Permanent consequence architecture",
+                        "severity":  "P3 future scalability risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "GameManager has a large string-flag dictionary and some mutual-exclusion handling, but consequence state appears spread across scripts.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Introduce documented choice groups and validation assertions before expanding branches.",
+                        "recommended_phase":  "10N-A3 state/quest architecture repair"
+                    },
+                    {
+                        "id":  15,
+                        "vector":  "Combat/encounter satisfaction",
+                        "severity":  "Not validated",
+                        "evidence_type":  "NOT VALIDATED + STATIC CODE EVIDENCE",
+                        "observation":  "The first three minutes did not reach combat in headed play. The hook pulse is not combat and does not teach attack/defense.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Do not add combat to A2; redesign the first true encounter as its own phase.",
+                        "recommended_phase":  "10N-A4 first encounter redesign"
+                    },
+                    {
+                        "id":  16,
+                        "vector":  "Progression sense",
+                        "severity":  "P1 critical retention risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE + INFERENCE",
+                        "observation":  "The opening hook has no XP, item, skill, permanent unlock, or visible reward beyond route progression.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Add a first reward beat after the Oakhaven signal or first quest, preferably information plus a small usable mechanic.",
+                        "recommended_phase":  "10N-A3 objective clarity and first quest redesign"
+                    },
+                    {
+                        "id":  17,
+                        "vector":  "Economy/resource scarcity",
+                        "severity":  "Not validated",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "Inventory autoload grants starter items at startup. The hook does not introduce resources, gold, scarcity, or why items matter.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Delay economy teaching until the first Oakhaven problem gives consumables/materials a reason to exist.",
+                        "recommended_phase":  "10N-A3 objective clarity and first quest redesign"
+                    },
+                    {
+                        "id":  18,
+                        "vector":  "Crafting utility/hook",
+                        "severity":  "P3 future scalability risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "Crafting uses hardcoded recipes and materials in CraftingSystem, and it is not introduced in the opening.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Do not teach crafting in minute one; attach it to a later Chapter 1 obstacle.",
+                        "recommended_phase":  "10N-A5 dialogue/quest/state cleanup"
+                    },
+                    {
+                        "id":  19,
+                        "vector":  "Shop economy/balancing",
+                        "severity":  "P3 future scalability risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "ShopSystem is global and feature-rich, with buy/sell/filter/sort, but shop data is mostly in code dictionaries.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Later move shop catalogs/prices to data resources after early quest flow is fixed.",
+                        "recommended_phase":  "Future economy pass"
+                    },
+                    {
+                        "id":  20,
+                        "vector":  "Level-up dopamine/impact",
+                        "severity":  "Not validated",
+                        "evidence_type":  "NOT VALIDATED",
+                        "observation":  "No headed play reached XP or level-up. The opening hook does not award XP or show a build promise.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Make the first combat/reward phase teach one future build hook.",
+                        "recommended_phase":  "10N-A4 first encounter redesign"
+                    },
+                    {
+                        "id":  21,
+                        "vector":  "Material distribution scarcity",
+                        "severity":  "P3 future scalability risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "Materials exist in CraftingSystem, but early distribution and grind pressure were not live tested.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Audit material drops only after the first quest and first encounter are stable.",
+                        "recommended_phase":  "Future Chapter 1 economy pass"
+                    },
+                    {
+                        "id":  22,
+                        "vector":  "Inventory weight/caps",
+                        "severity":  "OK for now",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "Inventory has stack caps but no weight system, avoiding early burden. Max stack checks exist.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Leave weight/caps alone until core first-hour retention works.",
+                        "recommended_phase":  "Do not fix yet"
+                    },
+                    {
+                        "id":  23,
+                        "vector":  "Skill tree extrapolation",
+                        "severity":  "P2 major improvement",
+                        "evidence_type":  "STATIC CODE EVIDENCE + INFERENCE",
+                        "observation":  "Root Access/Data Vision exist in input and player code, but the opening hook does not give a controlled taste of build direction.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Use the first quest or first encounter to preview one signature ability, not the whole system.",
+                        "recommended_phase":  "10N-A3 objective clarity and first quest redesign"
+                    },
+                    {
+                        "id":  24,
+                        "vector":  "Dynamic price/faction influence",
+                        "severity":  "P3 future scalability risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "Faction/choice impact on shops is not visible in early systems. Shop prices are mostly fixed code data.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Defer until Chapter 1 choices are stable, then wire one visible price/consequence example.",
+                        "recommended_phase":  "Future economy/faction pass"
+                    },
+                    {
+                        "id":  25,
+                        "vector":  "Shop system scalability",
+                        "severity":  "P3 future scalability risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "Shop UI is programmatic and centralized, which is useful, but item catalogs and pricing remain hardcoded.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Later split shop content data from UI code.",
+                        "recommended_phase":  "Future economy architecture pass"
+                    },
+                    {
+                        "id":  26,
+                        "vector":  "Crafting dependency loops",
+                        "severity":  "P3 future scalability risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "Recipes include early consumables and late material outputs, but the dependency loop is not tied to the first quest yet.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Design Chapter 1 recipes around a concrete player problem before expanding.",
+                        "recommended_phase":  "Future crafting pass"
+                    },
+                    {
+                        "id":  27,
+                        "vector":  "Cooldown/resource architecture",
+                        "severity":  "P3 future scalability risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "Player stamina and combat cooldown-style systems exist, but the opening does not teach resource pressure.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Teach only one resource constraint at a time, starting after the hook.",
+                        "recommended_phase":  "10N-A4 first encounter redesign"
+                    },
+                    {
+                        "id":  28,
+                        "vector":  "Technical foundation",
+                        "severity":  "P2 major improvement",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "The opening hook is reversible and scoped, but it runtime-builds a full scene and duplicates HUD/prompt concepts already present globally.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Keep A2 hook, then consolidate first-minute objective/prompt ownership in A3/A5.",
+                        "recommended_phase":  "10N-A5 dialogue/quest/state cleanup"
+                    },
+                    {
+                        "id":  29,
+                        "vector":  "Dialogue branching architecture",
+                        "severity":  "P3 future scalability risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "DialogueManager supports choices, but Oakhaven dialogue content is hardcoded arrays inside scene scripts.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Move Chapter 1 dialogue data to resources/JSON only after the playable flow is fixed.",
+                        "recommended_phase":  "10N-A5 dialogue/quest/state cleanup"
+                    },
+                    {
+                        "id":  30,
+                        "vector":  "State management/flag tracking",
+                        "severity":  "P1 critical retention risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "A2 completion sets several legacy compatibility flags directly. Breadcrumbs, GameManager, and scene scripts read overlapping flags.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Document a Chapter 1 state contract and add validation probes for stale/objective flags.",
+                        "recommended_phase":  "10N-A3 state/quest architecture repair"
+                    },
+                    {
+                        "id":  31,
+                        "vector":  "Multiple-ending tracking",
+                        "severity":  "P3 future scalability risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "Ending and NG+ flags exist as many string booleans. There is not yet a typed route ledger for long-play consequences.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Do not solve now; introduce typed route summaries before adding new endings.",
+                        "recommended_phase":  "Future narrative systems pass"
+                    },
+                    {
+                        "id":  32,
+                        "vector":  "Collision/hitbox layers",
+                        "severity":  "P1 critical retention risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "Opening hook creates Area2D interactables/hazards but no solid map collision. Player collision exists, but there are no authored solids in the hook scene.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Add minimal opening-only StaticBody2D boundaries and validate confused-player wandering.",
+                        "recommended_phase":  "10N-A2.6 first-minute headed micro-polish"
+                    },
+                    {
+                        "id":  33,
+                        "vector":  "Global variable conflicts",
+                        "severity":  "P3 future scalability risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "GameManager centralizes state, travel, flags, stats, saves, NG+, and free travel. This is practical but high coupling.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Do not refactor broadly now; add small contracts/tests around Chapter 1 state.",
+                        "recommended_phase":  "10N-A3 state/quest architecture repair"
+                    },
+                    {
+                        "id":  34,
+                        "vector":  "Meta-progression/NG+ prep",
+                        "severity":  "OK for now",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "NG+ still routes to the legacy prologue and has dedicated state setup. A2 did not redirect NG+ into the new hook.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Leave NG+ untouched until the base opening is proven headed.",
+                        "recommended_phase":  "Do not fix yet"
+                    },
+                    {
+                        "id":  35,
+                        "vector":  "Performance/scene management",
+                        "severity":  "P3 future scalability risk",
+                        "evidence_type":  "HEADED LAUNCH LOG + STATIC CODE EVIDENCE",
+                        "observation":  "Corrected visible startup reached Vulkan on RTX 2050 and initialized autoloads. Exit logs reported leaked Texture/RID warnings. Many global systems initialize before play.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "After gameplay flow stabilizes, audit autoload startup cost and exit cleanup.",
+                        "recommended_phase":  "Future PC optimization pass"
+                    },
+                    {
+                        "id":  36,
+                        "vector":  "Input buffering/responsiveness",
+                        "severity":  "Not validated",
+                        "evidence_type":  "CORRECTED HEADLESS RUNTIME EVIDENCE + NOT VALIDATED",
+                        "observation":  "Headless movement moved the player 28.586 px under simulated move_right. Actual feel, acceleration, camera smoothing, and keyboard latency were not headed-tested.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Manual headed play must judge movement, stop distance, camera smoothing, and prompt range.",
+                        "recommended_phase":  "Manual headed playtest still required"
+                    },
+                    {
+                        "id":  37,
+                        "vector":  "PC input/keybind flexibility",
+                        "severity":  "P2 major improvement",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "Options supports key rebinding, but the opening prompt says F interact/E inspect while player code treats both interact/root_access as the same interaction call near an object.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Align first-minute prompt labels with actual action behavior and expose controls cleanly.",
+                        "recommended_phase":  "10N-A2.6 first-minute headed micro-polish"
+                    },
+                    {
+                        "id":  38,
+                        "vector":  "Display/resolution/aspect ratio",
+                        "severity":  "P3 future scalability risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "Project viewport is 1280x720 with viewport stretch. 21:9, 4K, pixel scaling, and text fitting were not headed-tested.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "After headed 16:9 pass, test 1366x768, 1920x1080, ultrawide, and scaling.",
+                        "recommended_phase":  "Future PC UX pass"
+                    },
+                    {
+                        "id":  39,
+                        "vector":  "Framerate scaling",
+                        "severity":  "P3 future scalability risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "Movement uses physics delta and tweens/timers are common. Combat effects manipulate Engine.time_scale.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Later test 60/144/240 Hz with movement/combat probes.",
+                        "recommended_phase":  "Future PC optimization pass"
+                    },
+                    {
+                        "id":  40,
+                        "vector":  "Hardware access/modding readiness",
+                        "severity":  "P3 future scalability risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "Large data sets for quests, shops, crafting, flags, and free travel are embedded in scripts.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Do not refactor now; migrate only after early-game flow stabilizes.",
+                        "recommended_phase":  "Future data architecture pass"
+                    },
+                    {
+                        "id":  41,
+                        "vector":  "Discord/Steam API hooks",
+                        "severity":  "Not validated",
+                        "evidence_type":  "NOT VALIDATED",
+                        "observation":  "No platform integration was inspected beyond save file structure and achievements logs.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Defer until core first hour is worth retaining.",
+                        "recommended_phase":  "Do not fix yet"
+                    },
+                    {
+                        "id":  42,
+                        "vector":  "Asset pooling/garbage collection",
+                        "severity":  "P3 future scalability risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE + LOG EVIDENCE",
+                        "observation":  "ObjectPool exists and CombatEffects reserves damage label pooling, but startup/exit logs include texture/RID leak warnings.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Audit pooling/cleanup after gameplay priority fixes.",
+                        "recommended_phase":  "Future PC optimization pass"
+                    },
+                    {
+                        "id":  43,
+                        "vector":  "Pathfinding/enemy AI steering",
+                        "severity":  "Not validated",
+                        "evidence_type":  "NOT VALIDATED",
+                        "observation":  "No headed play reached NPC/enemy pathfinding. Enemy scripts exist but were not validated in this phase.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Validate with the first encounter redesign, not now.",
+                        "recommended_phase":  "10N-A4 first encounter redesign"
+                    },
+                    {
+                        "id":  44,
+                        "vector":  "Async loading/transition buffering",
+                        "severity":  "P2 major improvement",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "Opening completion waits 0.45s and calls SceneTransitions/change_scene. No async loading or transition interception was headed-tested.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Validate transition feel in headed play, then add a clear route/arrival beat if needed.",
+                        "recommended_phase":  "10N-A2.6 first-minute headed micro-polish"
+                    },
+                    {
+                        "id":  45,
+                        "vector":  "Crash logging/telemetry foundation",
+                        "severity":  "P2 major improvement",
+                        "evidence_type":  "LOG EVIDENCE + STATIC CODE EVIDENCE",
+                        "observation":  "A2.3/A2.4 needed explicit --log-file to avoid startup command issues. There is no player-facing crash report path in the inspected code.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Add a documented local log collection flow later; do not change runtime now.",
+                        "recommended_phase":  "Future PC readiness pass"
+                    },
+                    {
+                        "id":  46,
+                        "vector":  "Menu/inventory cohesion",
+                        "severity":  "P2 major improvement",
+                        "evidence_type":  "STATIC SCENE EVIDENCE + STATIC CODE EVIDENCE",
+                        "observation":  "The main menu includes New Game, Skip Prologue, Load, Options, Chapter Select, Credits, Completion, Quit, and a debug legacy button in debug builds. Fresh-player menu may look like a developer build.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "For player builds, hide debug/chapter completion shortcuts behind an explicit debug menu.",
+                        "recommended_phase":  "10N-A2.6 first-minute headed micro-polish"
+                    },
+                    {
+                        "id":  47,
+                        "vector":  "UI information density",
+                        "severity":  "P1 critical retention risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "The opening can show a local top-left objective panel and global top-right breadcrumb for the same task. Player prompt plus world label can duplicate interaction text. Several strings in menu/breadcrumb show mojibake sequences.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Choose one objective surface for the hook, fix key labels, and repair text encoding artifacts.",
+                        "recommended_phase":  "10N-A2.6 first-minute headed micro-polish"
+                    },
+                    {
+                        "id":  48,
+                        "vector":  "Save/cloud compatibility",
+                        "severity":  "P3 future scalability risk",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "Save uses user:// save slots with tmp/backup handling and save version merge. Steam Cloud/Alt-F4 corruption behavior was not tested.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Keep current save schema untouched; later test cloud-friendly path and crash-safe writes.",
+                        "recommended_phase":  "Future PC readiness pass"
+                    },
+                    {
+                        "id":  49,
+                        "vector":  "Modular settings/graphics toggles",
+                        "severity":  "OK for now",
+                        "evidence_type":  "STATIC CODE EVIDENCE",
+                        "observation":  "Options include fullscreen, VSync, resolution, accessibility toggles, text size, colorblind mode, difficulty, and key rebinding.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "Do not expand settings until manual UI testing identifies actual friction.",
+                        "recommended_phase":  "Do not fix yet"
+                    },
+                    {
+                        "id":  50,
+                        "vector":  "Soundscape/dynamic audio",
+                        "severity":  "Not validated",
+                        "evidence_type":  "NOT VALIDATED + STATIC CODE EVIDENCE",
+                        "observation":  "No headed audio playback was observed. Main menu calls MusicManager, but opening hook does not call music/SFX for signal, pulse, or transition.",
+                        "why_it_matters":  "See observation and retention/system risk.",
+                        "fix_direction":  "After visual/manual validation, add minimal existing SFX cues if available; do not generate audio.",
+                        "recommended_phase":  "10N-A2.6 first-minute headed micro-polish"
+                    }
+                ],
+    "scorecards":  {
+                       "first_3_minutes":  {
+                                               "hook_strength":  {
+                                                                     "score":  4,
+                                                                     "evidence_type":  "INFERENCE",
+                                                                     "note":  "Curiosity line exists, but no headed proof and no emotional anchor."
+                                                                 },
+                                               "first_control_timing":  {
+                                                                            "score":  6,
+                                                                            "evidence_type":  "CORRECTED HEADLESS RUNTIME EVIDENCE",
+                                                                            "note":  "Scene/player movement works headlessly; full menu-to-control timing untested."
+                                                                        },
+                                               "movement_feel":  {
+                                                                     "score":  5,
+                                                                     "evidence_type":  "CORRECTED HEADLESS RUNTIME EVIDENCE",
+                                                                     "note":  "Position changes under simulated input; feel not validated."
+                                                                 },
+                                               "objective_clarity":  {
+                                                                         "score":  6,
+                                                                         "evidence_type":  "STATIC CODE EVIDENCE",
+                                                                         "note":  "Objective text is concise, but duplicate HUD/breadcrumb risk exists."
+                                                                     },
+                                               "interaction_clarity":  {
+                                                                           "score":  4,
+                                                                           "evidence_type":  "STATIC CODE EVIDENCE",
+                                                                           "note":  "Signal exists, but F/E prompt wording is inconsistent and duplicated."
+                                                                       },
+                                               "danger_readability":  {
+                                                                          "score":  3,
+                                                                          "evidence_type":  "STATIC CODE EVIDENCE",
+                                                                          "note":  "Pulse is visible in code but consequence is weak."
+                                                                      },
+                                               "ui_readability":  {
+                                                                      "score":  4,
+                                                                      "evidence_type":  "STATIC CODE EVIDENCE",
+                                                                      "note":  "Potential duplicate objective panels and mojibake artifacts."
+                                                                  },
+                                               "visual_presentation":  {
+                                                                           "score":  2,
+                                                                           "evidence_type":  "STATIC CODE EVIDENCE",
+                                                                           "note":  "Runtime ColorRect prototype scene, no headed screenshot."
+                                                                       },
+                                               "audio_impact":  {
+                                                                    "score":  2,
+                                                                    "evidence_type":  "NOT VALIDATED",
+                                                                    "note":  "No headed audio; opening hook has no clear SFX/music calls."
+                                                                },
+                                               "retention_likelihood":  {
+                                                                            "score":  3,
+                                                                            "evidence_type":  "INFERENCE",
+                                                                            "note":  "A2 improves structure but cannot be called retention-safe."
+                                                                        }
+                                           },
+                       "full_project_foundation":  {
+                                                       "narrative_systems":  {
+                                                                                 "score":  5,
+                                                                                 "evidence_type":  "STATIC CODE EVIDENCE",
+                                                                                 "note":  "Good themes/flags, hardcoded delivery."
+                                                                             },
+                                                       "quest_systems":  {
+                                                                             "score":  4,
+                                                                             "evidence_type":  "STATIC CODE EVIDENCE",
+                                                                             "note":  "Breadcrumbs and side quests exist but are split and flag-heavy."
+                                                                         },
+                                                       "combat_foundation":  {
+                                                                                 "score":  5,
+                                                                                 "evidence_type":  "STATIC CODE EVIDENCE",
+                                                                                 "note":  "Many systems exist; first encounter not validated."
+                                                                             },
+                                                       "economy_foundation":  {
+                                                                                  "score":  4,
+                                                                                  "evidence_type":  "STATIC CODE EVIDENCE",
+                                                                                  "note":  "Inventory/shop/crafting exist but early purpose is weak."
+                                                                              },
+                                                       "progression_foundation":  {
+                                                                                      "score":  3,
+                                                                                      "evidence_type":  "STATIC CODE EVIDENCE",
+                                                                                      "note":  "Opening lacks reward/build promise."
+                                                                                  },
+                                                       "ui_ux_foundation":  {
+                                                                                "score":  4,
+                                                                                "evidence_type":  "STATIC CODE EVIDENCE",
+                                                                                "note":  "Feature-rich but dense and duplicated."
+                                                                            },
+                                                       "save_state_foundation":  {
+                                                                                     "score":  5,
+                                                                                     "evidence_type":  "STATIC CODE EVIDENCE",
+                                                                                     "note":  "Versioned saves and backups exist; flag sprawl risk."
+                                                                                 },
+                                                       "pc_readiness":  {
+                                                                            "score":  4,
+                                                                            "evidence_type":  "LOG EVIDENCE + STATIC CODE EVIDENCE",
+                                                                            "note":  "Vulkan starts; exit leak warnings and display not validated."
+                                                                        },
+                                                       "extensibility":  {
+                                                                             "score":  4,
+                                                                             "evidence_type":  "STATIC CODE EVIDENCE",
+                                                                             "note":  "Centralized systems, hardcoded data."
+                                                                         },
+                                                       "production_readiness":  {
+                                                                                    "score":  3,
+                                                                                    "evidence_type":  "INFERENCE",
+                                                                                    "note":  "Playable pieces exist, but no headed proof/polish."
+                                                                                }
+                                                   }
+                   },
+    "final_decision":  "No headed viewport play happened — manual playtest still required"
+}

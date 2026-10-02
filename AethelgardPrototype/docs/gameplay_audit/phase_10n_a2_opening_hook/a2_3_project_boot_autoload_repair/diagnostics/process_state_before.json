@@ -1,0 +1,16 @@
+﻿{
+    "phase":  "10N-A2.3",
+    "generated_at":  "2026-06-20T14:21:14",
+    "godot_process_check_method":  "Get-Process filtered by ProcessName like Godot*",
+    "detected_godot_processes":  [
+
+                                 ],
+    "command_line_check_method":  "Get-CimInstance Win32_Process -Filter \"name like \u0027Godot%\u0027\" attempted earlier in A2.3 and returned Access denied",
+    "command_line_available":  false,
+    "command_line_error":  "Access denied during CIM process command-line check",
+    "editor_likely_open":  false,
+    "stale_process_likely":  false,
+    "ownership_unclear":  false,
+    "validation_should_continue_safely":  true,
+    "notes":  "Normal Get-Process returned no Godot processes immediately before A2.3 probes; command-line details were unavailable without elevated process inspection."
+}

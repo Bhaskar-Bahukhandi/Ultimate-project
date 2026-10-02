@@ -1,0 +1,200 @@
+{
+  "phase": "10M-S4",
+  "summary": "All 19 current V3 prop regions are represented in AssetManager. Usage is concentrated in Oakhaven, Ironhold, late revisit hub variants, chapter 6, and combat arena.",
+  "regions": {
+    "oakhaven_roof": {
+      "usage_found": "Yes",
+      "scenes_scripts": [
+        "scripts/regions/oakhaven_region.gd"
+      ],
+      "priority": "High",
+      "notes": "Used inside generated Oakhaven building roof composition.",
+      "actual_scene_risk": "Low for read-only load; medium for replacement due exact Rect2i contract.",
+      "screenshot_validation_possible": true
+    },
+    "oakhaven_hedge_corner": {
+      "usage_found": "Yes",
+      "scenes_scripts": [
+        "scripts/regions/oakhaven_region.gd"
+      ],
+      "priority": "High",
+      "notes": "Used twice in Oakhaven hedge polish.",
+      "actual_scene_risk": "Low for read-only load; medium for replacement due exact Rect2i contract.",
+      "screenshot_validation_possible": true
+    },
+    "oakhaven_flowers": {
+      "usage_found": "Yes",
+      "scenes_scripts": [
+        "scripts/regions/oakhaven_region.gd"
+      ],
+      "priority": "High",
+      "notes": "Used twice as meadow/village flower accents.",
+      "actual_scene_risk": "Low for read-only load; medium for replacement due exact Rect2i contract.",
+      "screenshot_validation_possible": true
+    },
+    "oakhaven_herb_sign": {
+      "usage_found": "Yes",
+      "scenes_scripts": [
+        "scripts/regions/oakhaven_region.gd"
+      ],
+      "priority": "Medium",
+      "notes": "Used as outskirts herb sign.",
+      "actual_scene_risk": "Low for read-only load; medium for replacement due exact Rect2i contract.",
+      "screenshot_validation_possible": true
+    },
+    "ironhold_pipes": {
+      "usage_found": "Yes",
+      "scenes_scripts": [
+        "scripts/regions/ironhold_region.gd"
+      ],
+      "priority": "High",
+      "notes": "Used twice in Ironhold polish.",
+      "actual_scene_risk": "Low for read-only load; medium for replacement due exact Rect2i contract.",
+      "screenshot_validation_possible": true
+    },
+    "ironhold_forge": {
+      "usage_found": "Yes",
+      "scenes_scripts": [
+        "scripts/regions/ironhold_region.gd"
+      ],
+      "priority": "High",
+      "notes": "Used in Ironhold training/forge area.",
+      "actual_scene_risk": "Low for read-only load; medium for replacement due exact Rect2i contract.",
+      "screenshot_validation_possible": true
+    },
+    "crates": {
+      "usage_found": "Yes",
+      "scenes_scripts": [
+        "scripts/regions/ironhold_region.gd",
+        "scripts/regions/late_revisit_hub.gd",
+        "scripts/combat/combat_arena.gd"
+      ],
+      "priority": "High",
+      "notes": "Shared cross-region prop plate; most broadly reused.",
+      "actual_scene_risk": "Low for read-only load; medium for replacement due exact Rect2i contract.",
+      "screenshot_validation_possible": true
+    },
+    "archive_shelves": {
+      "usage_found": "Yes",
+      "scenes_scripts": [
+        "scripts/regions/late_revisit_hub.gd"
+      ],
+      "priority": "Medium",
+      "notes": "Forgotten archive hub variant.",
+      "actual_scene_risk": "Low for read-only load; medium for replacement due exact Rect2i contract.",
+      "screenshot_validation_possible": true
+    },
+    "dossier_stack": {
+      "usage_found": "Yes",
+      "scenes_scripts": [
+        "scripts/regions/late_revisit_hub.gd"
+      ],
+      "priority": "Medium",
+      "notes": "Forgotten archive hub variant.",
+      "actual_scene_risk": "Low for read-only load; medium for replacement due exact Rect2i contract.",
+      "screenshot_validation_possible": true
+    },
+    "null_seal": {
+      "usage_found": "Yes",
+      "scenes_scripts": [
+        "scripts/regions/late_revisit_hub.gd"
+      ],
+      "priority": "Medium",
+      "notes": "Forgotten archive/null seal variant.",
+      "actual_scene_risk": "Low for read-only load; medium for replacement due exact Rect2i contract.",
+      "screenshot_validation_possible": true
+    },
+    "mirror_plinth": {
+      "usage_found": "Yes",
+      "scenes_scripts": [
+        "scripts/regions/late_revisit_hub.gd"
+      ],
+      "priority": "Medium",
+      "notes": "Mirror hub variant.",
+      "actual_scene_risk": "Low for read-only load; medium for replacement due exact Rect2i contract.",
+      "screenshot_validation_possible": true
+    },
+    "server_console": {
+      "usage_found": "Yes",
+      "scenes_scripts": [
+        "scripts/regions/late_revisit_hub.gd",
+        "scripts/chapter6/ch6_choir_core.gd"
+      ],
+      "priority": "High",
+      "notes": "Late hub and chapter 6 digital/cathedral props.",
+      "actual_scene_risk": "Low for read-only load; medium for replacement due exact Rect2i contract.",
+      "screenshot_validation_possible": true
+    },
+    "firewall_panel": {
+      "usage_found": "Yes",
+      "scenes_scripts": [
+        "scripts/regions/late_revisit_hub.gd",
+        "scripts/chapter6/ch6_choir_core.gd"
+      ],
+      "priority": "High",
+      "notes": "Late hub and chapter 6 prop.",
+      "actual_scene_risk": "Low for read-only load; medium for replacement due exact Rect2i contract.",
+      "screenshot_validation_possible": true
+    },
+    "tide_buoy": {
+      "usage_found": "Yes",
+      "scenes_scripts": [
+        "scripts/regions/late_revisit_hub.gd"
+      ],
+      "priority": "Medium",
+      "notes": "Memory ocean hub variant.",
+      "actual_scene_risk": "Low for read-only load; medium for replacement due exact Rect2i contract.",
+      "screenshot_validation_possible": true
+    },
+    "salvage_shelf": {
+      "usage_found": "Yes",
+      "scenes_scripts": [
+        "scripts/regions/late_revisit_hub.gd"
+      ],
+      "priority": "Medium",
+      "notes": "Memory ocean hub variant.",
+      "actual_scene_risk": "Low for read-only load; medium for replacement due exact Rect2i contract.",
+      "screenshot_validation_possible": true
+    },
+    "ocean_cache": {
+      "usage_found": "Yes",
+      "scenes_scripts": [
+        "scripts/regions/late_revisit_hub.gd"
+      ],
+      "priority": "Medium",
+      "notes": "Memory ocean hub variant.",
+      "actual_scene_risk": "Low for read-only load; medium for replacement due exact Rect2i contract.",
+      "screenshot_validation_possible": true
+    },
+    "lab_console": {
+      "usage_found": "Yes",
+      "scenes_scripts": [
+        "scripts/regions/late_revisit_hub.gd"
+      ],
+      "priority": "High",
+      "notes": "Human patch lab hub variant.",
+      "actual_scene_risk": "Low for read-only load; medium for replacement due exact Rect2i contract.",
+      "screenshot_validation_possible": true
+    },
+    "memory_tank": {
+      "usage_found": "Yes",
+      "scenes_scripts": [
+        "scripts/regions/late_revisit_hub.gd"
+      ],
+      "priority": "High",
+      "notes": "Human patch lab hub variant, used twice.",
+      "actual_scene_risk": "Low for read-only load; medium for replacement due exact Rect2i contract.",
+      "screenshot_validation_possible": true
+    },
+    "root_circuit_rail": {
+      "usage_found": "Yes",
+      "scenes_scripts": [
+        "scripts/regions/late_revisit_hub.gd"
+      ],
+      "priority": "High",
+      "notes": "Root of Heaven hub variant.",
+      "actual_scene_risk": "Low for read-only load; medium for replacement due exact Rect2i contract.",
+      "screenshot_validation_possible": true
+    }
+  }
+}

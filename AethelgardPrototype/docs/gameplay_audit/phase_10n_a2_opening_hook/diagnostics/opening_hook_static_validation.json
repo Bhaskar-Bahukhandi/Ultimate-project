@@ -1,0 +1,26 @@
+{
+  "phase": "10N-A2",
+  "evidence_type": "CODE EVIDENCE / STATIC SCENE EVIDENCE",
+  "live_headed_play": false,
+  "headless_runtime_validation": "attempted_but_godot_timed_out_and_crash_handler_reported_signal_11_after_tool_timeout",
+  "new_game_route_function_found": true,
+  "checks": {
+    "opening_scene_file_exists": true,
+    "opening_script_file_exists": true,
+    "new_game_route_points_to_opening_hook": true,
+    "legacy_route_preserved": true,
+    "first_minute_flags_defaulted": true,
+    "first_objective_text_present": true,
+    "interactable_signal_present": true,
+    "danger_pulse_present": true,
+    "curiosity_gap_present": true,
+    "oakhaven_route_present": true,
+    "movement_uses_existing_player_controller": true
+  },
+  "all_static_checks_passed": true,
+  "limitations": [
+    "Static validation does not prove the scene renders correctly.",
+    "Static validation does not prove input changes player position at runtime.",
+    "Godot headless runtime validation did not complete in this environment."
+  ]
+}

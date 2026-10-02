@@ -1,0 +1,38 @@
+{
+	"boundary_nodes": [
+		"OpeningBoundaryWestRubble",
+		"OpeningBoundaryWestRubbleVisual",
+		"OpeningBoundaryNorthCrater",
+		"OpeningBoundaryNorthCraterVisual",
+		"OpeningBoundarySouthCrater",
+		"OpeningBoundarySouthCraterVisual",
+		"OpeningBoundaryNorthRoad",
+		"OpeningBoundaryNorthRoadVisual",
+		"OpeningBoundarySouthRoad",
+		"OpeningBoundarySouthRoadVisual",
+		"OpeningBoundaryExitGuardNorth",
+		"OpeningBoundaryExitGuardNorthVisual",
+		"OpeningBoundaryExitGuardSouth",
+		"OpeningBoundaryExitGuardSouthVisual"
+	],
+	"breadcrumb_hidden_during_hook": true,
+	"errors": [],
+	"evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+	"nodes": {
+		"camera": true,
+		"glitch_pulse": true,
+		"hud": true,
+		"oakhaven_direction_label": true,
+		"oakhaven_path": true,
+		"objective_label": true,
+		"player": true,
+		"prompt_label": true,
+		"pulse_flash": true,
+		"signal_fragment": true,
+		"signal_glow": true
+	},
+	"pass": true,
+	"probe": "probe_01_opening_scene_nodes",
+	"scene_path": "res://scenes/chapter1/opening_crash_site_hook.tscn",
+	"timestamp": "2026-06-21T13:42:00"
+}

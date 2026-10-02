@@ -446,6 +446,7 @@ var _missing_production_art_warned := {}
 var _oakhaven_force_generated_fallback := false
 var _ironhold_force_generated_fallback := false
 var _fractured_wastes_force_generated_fallback := false
+var _mirror_city_force_generated_fallback := false
 
 func _ready() -> void:
 	print("AssetManager initialized - Scanning for asset availability...")
@@ -862,7 +863,7 @@ const PRODUCTION_VISUAL_TILESETS = {
 	"ironhold": "res://assets/production_art/tilesets/ironhold/ironhold_tileset.png",
 	"fractured_wastes": "res://assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png",
 	"forgotten_sectors": "res://assets/production_art/tilesets/forgotten_sectors_tileset.png",
-	"mirror_city": "res://assets/production_art/tilesets/mirror_city_tileset.png",
+	"mirror_city": "res://assets/production_art/tilesets/mirror_city/mirror_city_tileset.png",
 	"cathedral_server": "res://assets/production_art/tilesets/cathedral_server_tileset.png",
 	"memory_ocean": "res://assets/production_art/tilesets/memory_ocean_tileset.png",
 	"saved_assembly": "res://assets/production_art/tilesets/saved_assembly_tileset.png",
@@ -1346,6 +1347,49 @@ func _fractured_wastes_generated_fallback_slot(fallback_path: String, reason: St
 		"fallback_reason": reason,
 	}
 
+
+func get_mirror_city_tileset() -> Texture2D:
+	var slot = get_mirror_city_tileset_slot()
+	return slot.get("texture") as Texture2D
+
+func set_mirror_city_force_generated_fallback(enabled: bool) -> void:
+	_mirror_city_force_generated_fallback = enabled
+
+func is_mirror_city_force_generated_fallback() -> bool:
+	return _mirror_city_force_generated_fallback
+
+func get_mirror_city_tileset_slot(production_path_override: String = "") -> Dictionary:
+	var fallback_path: String = V2_PROTOTYPE_TILESETS.get("mirror_city", "")
+	var production_path: String = production_path_override
+	if production_path.is_empty():
+		production_path = PRODUCTION_VISUAL_TILESETS.get("mirror_city", "")
+	if _mirror_city_force_generated_fallback:
+		return _mirror_city_generated_fallback_slot(fallback_path, "runtime fallback override enabled")
+
+	var tileset_slot = _resolve_visual_texture_slot(production_path, fallback_path, "Mirror City production tileset")
+	var texture = tileset_slot.get("texture") as Texture2D
+	if texture and bool(tileset_slot.get("production", false)):
+		return {
+			"texture": texture,
+			"path": tileset_slot.get("path", production_path),
+			"production": true,
+			"region_id": "mirror_city",
+			"fallback_used": false,
+			"fallback_reason": "",
+		}
+	return _mirror_city_generated_fallback_slot(fallback_path, "production tileset missing or invalid")
+
+func _mirror_city_generated_fallback_slot(fallback_path: String, reason: String) -> Dictionary:
+	push_warning("[AssetManager] Mirror City production tileset fallback: %s; generated=%s." % [reason, fallback_path])
+	return {
+		"texture": _load_visual_texture_path(fallback_path),
+		"path": fallback_path,
+		"production": false,
+		"region_id": "mirror_city",
+		"fallback_used": true,
+		"fallback_reason": reason,
+	}
+
 func try_create_v2_visual_tile_layer(tileset_id: String, area_size: Vector2, layer_name: String, layer_z_index: int, tile_choices: Array = [], time_state: String = OAKHAVEN_DEFAULT_TIME_STATE) -> TileMapLayer:
 	## Build a visual-only prototype tile layer; existing environment collisions stay authoritative.
 	var tileset_slot = _try_resolve_v2_prototype_tileset_slot(tileset_id, time_state)
@@ -1511,6 +1555,8 @@ func _try_resolve_v2_prototype_tileset_slot(tileset_id: String, time_state: Stri
 		return get_ironhold_tileset_slot()
 	if tileset_id == "fractured_wastes":
 		return get_fractured_wastes_tileset_slot()
+	if tileset_id == "mirror_city":
+		return get_mirror_city_tileset_slot()
 	var generated_path: String = V2_PROTOTYPE_TILESETS.get(tileset_id, "")
 	var production_path: String = PRODUCTION_VISUAL_TILESETS.get(tileset_id, "")
 	var tileset_slot = _resolve_visual_texture_slot(production_path, generated_path, "%s visual tileset" % tileset_id)

@@ -1,0 +1,879 @@
+﻿{
+    "phase":  "10N-A2.3",
+    "generated_at":  "2026-06-20T14:26:19",
+    "project_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype",
+    "project_file":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\project.godot",
+    "main_scene":  "res://scenes/splash_screen.tscn",
+    "autoload_count":  30,
+    "autoloads":  [
+                      {
+                          "autoload":  "GameManager",
+                          "path":  "res://scripts/game_manager.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\game_manager.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "High",
+                          "headless_risk":  "High",
+                          "file_resource_risk":  "High",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  17,
+                                                 "preload":  0,
+                                                 "resource_loader":  3,
+                                                 "load_call":  3,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  0,
+                                                 "file_access":  36,
+                                                 "os_display":  23,
+                                                 "threading_async":  7
+                                             },
+                          "notes":  [
+                                        "uses OS/DisplayServer/window APIs",
+                                        "uses FileAccess/DirAccess",
+                                        "loads/preloads resources at script level or runtime",
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "DialogueManager",
+                          "path":  "res://scripts/dialogue_manager.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\dialogue_manager.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "High",
+                          "headless_risk":  "High",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  10,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  3,
+                                                 "file_access":  0,
+                                                 "os_display":  0,
+                                                 "threading_async":  19
+                                             },
+                          "notes":  [
+                                        "uses viewport/render APIs",
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "AssetManager",
+                          "path":  "res://scripts/asset_manager.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\asset_manager.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "High",
+                          "headless_risk":  "High",
+                          "file_resource_risk":  "High",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  0,
+                                                 "preload":  0,
+                                                 "resource_loader":  4,
+                                                 "load_call":  5,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  0,
+                                                 "file_access":  3,
+                                                 "os_display":  9,
+                                                 "threading_async":  0
+                                             },
+                          "notes":  [
+                                        "uses OS/DisplayServer/window APIs",
+                                        "uses FileAccess/DirAccess",
+                                        "loads/preloads resources at script level or runtime",
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "Inventory",
+                          "path":  "res://scripts/inventory_system.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\inventory_system.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Medium",
+                          "headless_risk":  "High",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  2,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  0,
+                                                 "file_access":  0,
+                                                 "os_display":  12,
+                                                 "threading_async":  1
+                                             },
+                          "notes":  [
+                                        "uses OS/DisplayServer/window APIs",
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "CraftingSystem",
+                          "path":  "res://scripts/crafting_system.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\crafting_system.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Low",
+                          "headless_risk":  "Low",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  0,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  0,
+                                                 "file_access":  0,
+                                                 "os_display":  1,
+                                                 "threading_async":  0
+                                             },
+                          "notes":  [
+                                        "uses OS/DisplayServer/window APIs",
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "CombatFX",
+                          "path":  "res://scripts/combat_effects.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\combat_effects.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "High",
+                          "headless_risk":  "High",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  15,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  6,
+                                                 "file_access":  0,
+                                                 "os_display":  1,
+                                                 "threading_async":  4
+                                             },
+                          "notes":  [
+                                        "uses OS/DisplayServer/window APIs",
+                                        "uses viewport/render APIs",
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "GlitchOverlay",
+                          "path":  "res://scripts/glitch_overlay.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\glitch_overlay.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Medium",
+                          "headless_risk":  "Low",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  0,
+                                                 "preload":  0,
+                                                 "resource_loader":  1,
+                                                 "load_call":  1,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  0,
+                                                 "file_access":  0,
+                                                 "os_display":  0,
+                                                 "threading_async":  0
+                                             },
+                          "notes":  [
+                                        "loads/preloads resources at script level or runtime",
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "VFXLibrary",
+                          "path":  "res://scripts/effects/vfx_library.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\effects\\vfx_library.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Medium",
+                          "headless_risk":  "Medium",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  3,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  0,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  0,
+                                                 "file_access":  0,
+                                                 "os_display":  0,
+                                                 "threading_async":  2
+                                             },
+                          "notes":  [
+                                        "no obvious boot-risk patterns found by text scan"
+                                    ]
+                      },
+                      {
+                          "autoload":  "PauseScreen",
+                          "path":  "res://scripts/ui/pause_screen.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\ui\\pause_screen.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Medium",
+                          "headless_risk":  "High",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  5,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  1,
+                                                 "file_access":  0,
+                                                 "os_display":  6,
+                                                 "threading_async":  0
+                                             },
+                          "notes":  [
+                                        "uses OS/DisplayServer/window APIs",
+                                        "uses viewport/render APIs",
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "StatusWindow",
+                          "path":  "res://scripts/ui/status_window.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\ui\\status_window.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Low",
+                          "headless_risk":  "High",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  1,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  3,
+                                                 "file_access":  0,
+                                                 "os_display":  14,
+                                                 "threading_async":  2
+                                             },
+                          "notes":  [
+                                        "uses OS/DisplayServer/window APIs",
+                                        "uses viewport/render APIs",
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "InteractionPrompt",
+                          "path":  "res://scripts/ui/interaction_prompt.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\ui\\interaction_prompt.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Low",
+                          "headless_risk":  "Low",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  0,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  0,
+                                                 "file_access":  0,
+                                                 "os_display":  0,
+                                                 "threading_async":  0
+                                             },
+                          "notes":  [
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "MusicManager",
+                          "path":  "res://scripts/music_manager.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\music_manager.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Medium",
+                          "headless_risk":  "High",
+                          "file_resource_risk":  "Medium",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  1,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  3,
+                                                 "audio":  9,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  0,
+                                                 "file_access":  0,
+                                                 "os_display":  0,
+                                                 "threading_async":  0
+                                             },
+                          "notes":  [
+                                        "loads/preloads resources at script level or runtime",
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "SceneTransitions",
+                          "path":  "res://scripts/effects/scene_transition_manager.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\effects\\scene_transition_manager.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "High",
+                          "headless_risk":  "High",
+                          "file_resource_risk":  "High",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  19,
+                                                 "preload":  0,
+                                                 "resource_loader":  8,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  8,
+                                                 "file_access":  0,
+                                                 "os_display":  0,
+                                                 "threading_async":  49
+                                             },
+                          "notes":  [
+                                        "uses viewport/render APIs",
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "ShopSystem",
+                          "path":  "res://scripts/shop_system.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\shop_system.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Medium",
+                          "headless_risk":  "High",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  3,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  1,
+                                                 "file_access":  0,
+                                                 "os_display":  12,
+                                                 "threading_async":  1
+                                             },
+                          "notes":  [
+                                        "uses OS/DisplayServer/window APIs",
+                                        "uses viewport/render APIs",
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "BackgroundManager",
+                          "path":  "res://scripts/background_manager.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\background_manager.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Medium",
+                          "headless_risk":  "High",
+                          "file_resource_risk":  "Medium",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  0,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  2,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  0,
+                                                 "file_access":  1,
+                                                 "os_display":  7,
+                                                 "threading_async":  0
+                                             },
+                          "notes":  [
+                                        "uses OS/DisplayServer/window APIs",
+                                        "uses FileAccess/DirAccess",
+                                        "loads/preloads resources at script level or runtime",
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "ObjectPool",
+                          "path":  "res://scripts/object_pool.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\object_pool.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Low",
+                          "headless_risk":  "Medium",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  1,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  0,
+                                                 "file_access":  0,
+                                                 "os_display":  0,
+                                                 "threading_async":  2
+                                             },
+                          "notes":  [
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "LevelUpUI",
+                          "path":  "res://scripts/ui/level_up_ui.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\ui\\level_up_ui.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Low",
+                          "headless_risk":  "Medium",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  0,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  1,
+                                                 "file_access":  0,
+                                                 "os_display":  1,
+                                                 "threading_async":  0
+                                             },
+                          "notes":  [
+                                        "uses OS/DisplayServer/window APIs",
+                                        "uses viewport/render APIs",
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "DropManager",
+                          "path":  "res://scripts/drop_manager.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\drop_manager.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Medium",
+                          "headless_risk":  "Medium",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  3,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  0,
+                                                 "file_access":  0,
+                                                 "os_display":  0,
+                                                 "threading_async":  4
+                                             },
+                          "notes":  [
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "SFXManager",
+                          "path":  "res://scripts/sfx_manager.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\sfx_manager.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Low",
+                          "headless_risk":  "High",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  0,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  6,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  0,
+                                                 "file_access":  0,
+                                                 "os_display":  0,
+                                                 "threading_async":  0
+                                             },
+                          "notes":  [
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "GameJuice",
+                          "path":  "res://scripts/effects/game_juice.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\effects\\game_juice.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "High",
+                          "headless_risk":  "High",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  22,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  6,
+                                                 "file_access":  0,
+                                                 "os_display":  0,
+                                                 "threading_async":  25
+                                             },
+                          "notes":  [
+                                        "uses viewport/render APIs",
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "Achievements",
+                          "path":  "res://scripts/ui/achievements.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\ui\\achievements.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Low",
+                          "headless_risk":  "High",
+                          "file_resource_risk":  "Medium",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  0,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  2,
+                                                 "file_access":  5,
+                                                 "os_display":  2,
+                                                 "threading_async":  3
+                                             },
+                          "notes":  [
+                                        "uses OS/DisplayServer/window APIs",
+                                        "uses viewport/render APIs",
+                                        "uses FileAccess/DirAccess",
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "ChoiceConsequences",
+                          "path":  "res://scripts/choice_consequences.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\choice_consequences.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Medium",
+                          "headless_risk":  "Medium",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  2,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  1,
+                                                 "file_access":  0,
+                                                 "os_display":  3,
+                                                 "threading_async":  0
+                                             },
+                          "notes":  [
+                                        "uses OS/DisplayServer/window APIs",
+                                        "uses viewport/render APIs",
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "SideQuestManager",
+                          "path":  "res://scripts/side_quest_manager.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\side_quest_manager.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Low",
+                          "headless_risk":  "Medium",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  1,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  4,
+                                                 "file_access":  0,
+                                                 "os_display":  0,
+                                                 "threading_async":  0
+                                             },
+                          "notes":  [
+                                        "uses viewport/render APIs",
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "UIStack",
+                          "path":  "res://scripts/ui/ui_stack.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\ui\\ui_stack.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Low",
+                          "headless_risk":  "Low",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  0,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  0,
+                                                 "file_access":  0,
+                                                 "os_display":  0,
+                                                 "threading_async":  0
+                                             },
+                          "notes":  [
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "RandomEncounterSystem",
+                          "path":  "res://scripts/combat/random_encounter_system.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\combat\\random_encounter_system.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "High",
+                          "headless_risk":  "High",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  26,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  0,
+                                                 "file_access":  0,
+                                                 "os_display":  1,
+                                                 "threading_async":  9
+                                             },
+                          "notes":  [
+                                        "uses OS/DisplayServer/window APIs",
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "LoreJournal",
+                          "path":  "res://scripts/ui/lore_journal.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\ui\\lore_journal.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Low",
+                          "headless_risk":  "Medium",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  1,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  2,
+                                                 "file_access":  0,
+                                                 "os_display":  1,
+                                                 "threading_async":  0
+                                             },
+                          "notes":  [
+                                        "uses OS/DisplayServer/window APIs",
+                                        "uses viewport/render APIs",
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "WorldMapUI",
+                          "path":  "res://scripts/ui/world_map_ui.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\ui\\world_map_ui.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Medium",
+                          "headless_risk":  "Low",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  3,
+                                                 "preload":  0,
+                                                 "resource_loader":  1,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  0,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  0,
+                                                 "file_access":  0,
+                                                 "os_display":  0,
+                                                 "threading_async":  0
+                                             },
+                          "notes":  [
+                                        "no obvious boot-risk patterns found by text scan"
+                                    ]
+                      },
+                      {
+                          "autoload":  "ProgressionBreadcrumb",
+                          "path":  "res://scripts/ui/progression_breadcrumb.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\ui\\progression_breadcrumb.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Low",
+                          "headless_risk":  "Medium",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  1,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  0,
+                                                 "file_access":  0,
+                                                 "os_display":  0,
+                                                 "threading_async":  2
+                                             },
+                          "notes":  [
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "CreditsScreen",
+                          "path":  "res://scripts/ui/credits_screen.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\ui\\credits_screen.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "High",
+                          "headless_risk":  "Medium",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  8,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  1,
+                                                 "file_access":  0,
+                                                 "os_display":  0,
+                                                 "threading_async":  2
+                                             },
+                          "notes":  [
+                                        "uses viewport/render APIs",
+                                        "has boot lifecycle code"
+                                    ]
+                      },
+                      {
+                          "autoload":  "CompletionTracker",
+                          "path":  "res://scripts/ui/completion_tracker.gd",
+                          "absolute_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\scripts\\ui\\completion_tracker.gd",
+                          "exists":  true,
+                          "boot_code_risk":  "Medium",
+                          "headless_risk":  "Low",
+                          "file_resource_risk":  "Low",
+                          "pattern_counts":  {
+                                                 "scene_tree_transition":  3,
+                                                 "preload":  0,
+                                                 "resource_loader":  0,
+                                                 "load_call":  0,
+                                                 "audio":  0,
+                                                 "ready":  1,
+                                                 "init":  0,
+                                                 "enter_tree":  0,
+                                                 "editor_api":  0,
+                                                 "render_viewport":  1,
+                                                 "file_access":  0,
+                                                 "os_display":  0,
+                                                 "threading_async":  0
+                                             },
+                          "notes":  [
+                                        "uses viewport/render APIs",
+                                        "has boot lifecycle code"
+                                    ]
+                      }
+                  ],
+    "plugin_or_addon_settings":  [
+
+                                 ],
+    "render_or_display_settings":  [
+                                       {
+                                           "section":  "display",
+                                           "line":  "window/size/viewport_width=1280"
+                                       },
+                                       {
+                                           "section":  "display",
+                                           "line":  "window/size/viewport_height=720"
+                                       },
+                                       {
+                                           "section":  "display",
+                                           "line":  "window/stretch/mode=\"viewport\""
+                                       },
+                                       {
+                                           "section":  "rendering",
+                                           "line":  "textures/canvas_textures/default_texture_filter=0"
+                                       }
+                                   ],
+    "classification":  "static text audit only; no project-context Godot launch used for this audit"
+}

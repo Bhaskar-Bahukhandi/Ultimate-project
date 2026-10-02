@@ -1,0 +1,14 @@
+{
+	"checks": {
+		"compat_flags": true,
+		"complete_flag": true,
+		"moved_toward_signal": true,
+		"pulse_flag": true,
+		"signal_flag": true
+	},
+	"errors": [],
+	"evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+	"pass": true,
+	"probe": "probe_06_full_smoke_after_fix",
+	"timestamp": "2026-06-21T18:33:38"
+}

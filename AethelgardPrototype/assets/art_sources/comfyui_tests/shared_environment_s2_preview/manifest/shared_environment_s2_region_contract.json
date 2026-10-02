@@ -1,0 +1,388 @@
+{
+  "phase": "10M-S2",
+  "expected_atlas_dimensions": [
+    1536,
+    1024
+  ],
+  "prop_regions": {
+    "oakhaven_roof": [
+      32,
+      22,
+      248,
+      190
+    ],
+    "oakhaven_hedge_corner": [
+      760,
+      52,
+      390,
+      176
+    ],
+    "oakhaven_flowers": [
+      30,
+      264,
+      418,
+      82
+    ],
+    "oakhaven_herb_sign": [
+      478,
+      238,
+      128,
+      126
+    ],
+    "ironhold_pipes": [
+      616,
+      238,
+      544,
+      170
+    ],
+    "ironhold_forge": [
+      1320,
+      226,
+      164,
+      194
+    ],
+    "crates": [
+      40,
+      434,
+      540,
+      144
+    ],
+    "archive_shelves": [
+      620,
+      370,
+      356,
+      218
+    ],
+    "dossier_stack": [
+      988,
+      440,
+      94,
+      128
+    ],
+    "null_seal": [
+      1092,
+      432,
+      156,
+      176
+    ],
+    "mirror_plinth": [
+      1280,
+      430,
+      202,
+      192
+    ],
+    "server_console": [
+      36,
+      612,
+      376,
+      194
+    ],
+    "firewall_panel": [
+      430,
+      612,
+      358,
+      194
+    ],
+    "tide_buoy": [
+      824,
+      610,
+      120,
+      182
+    ],
+    "salvage_shelf": [
+      974,
+      610,
+      290,
+      198
+    ],
+    "ocean_cache": [
+      1268,
+      610,
+      236,
+      198
+    ],
+    "lab_console": [
+      34,
+      818,
+      248,
+      178
+    ],
+    "memory_tank": [
+      292,
+      814,
+      170,
+      186
+    ],
+    "root_circuit_rail": [
+      628,
+      816,
+      844,
+      190
+    ]
+  },
+  "decal_regions": {
+    "oakhaven_path": [
+      18,
+      10,
+      630,
+      198
+    ],
+    "oakhaven_stones": [
+      22,
+      228,
+      650,
+      128
+    ],
+    "ironhold_road": [
+      676,
+      16,
+      820,
+      224
+    ],
+    "fracture_field": [
+      18,
+      360,
+      500,
+      294
+    ],
+    "shard_spill": [
+      270,
+      350,
+      246,
+      298
+    ],
+    "archive_seals": [
+      520,
+      362,
+      382,
+      292
+    ],
+    "mirror_ripples": [
+      900,
+      246,
+      602,
+      280
+    ],
+    "cathedral_circuit": [
+      900,
+      510,
+      600,
+      240
+    ],
+    "memory_tide": [
+      14,
+      674,
+      476,
+      326
+    ],
+    "root_veins": [
+      492,
+      680,
+      406,
+      320
+    ],
+    "arena_border": [
+      898,
+      754,
+      620,
+      252
+    ]
+  },
+  "source_rects": {
+    "props": {
+      "oakhaven_roof": {
+        "x": 32,
+        "y": 22,
+        "w": 248,
+        "h": 190
+      },
+      "oakhaven_hedge_corner": {
+        "x": 760,
+        "y": 52,
+        "w": 390,
+        "h": 176
+      },
+      "oakhaven_flowers": {
+        "x": 30,
+        "y": 264,
+        "w": 418,
+        "h": 82
+      },
+      "oakhaven_herb_sign": {
+        "x": 478,
+        "y": 238,
+        "w": 128,
+        "h": 126
+      },
+      "ironhold_pipes": {
+        "x": 616,
+        "y": 238,
+        "w": 544,
+        "h": 170
+      },
+      "ironhold_forge": {
+        "x": 1320,
+        "y": 226,
+        "w": 164,
+        "h": 194
+      },
+      "crates": {
+        "x": 40,
+        "y": 434,
+        "w": 540,
+        "h": 144
+      },
+      "archive_shelves": {
+        "x": 620,
+        "y": 370,
+        "w": 356,
+        "h": 218
+      },
+      "dossier_stack": {
+        "x": 988,
+        "y": 440,
+        "w": 94,
+        "h": 128
+      },
+      "null_seal": {
+        "x": 1092,
+        "y": 432,
+        "w": 156,
+        "h": 176
+      },
+      "mirror_plinth": {
+        "x": 1280,
+        "y": 430,
+        "w": 202,
+        "h": 192
+      },
+      "server_console": {
+        "x": 36,
+        "y": 612,
+        "w": 376,
+        "h": 194
+      },
+      "firewall_panel": {
+        "x": 430,
+        "y": 612,
+        "w": 358,
+        "h": 194
+      },
+      "tide_buoy": {
+        "x": 824,
+        "y": 610,
+        "w": 120,
+        "h": 182
+      },
+      "salvage_shelf": {
+        "x": 974,
+        "y": 610,
+        "w": 290,
+        "h": 198
+      },
+      "ocean_cache": {
+        "x": 1268,
+        "y": 610,
+        "w": 236,
+        "h": 198
+      },
+      "lab_console": {
+        "x": 34,
+        "y": 818,
+        "w": 248,
+        "h": 178
+      },
+      "memory_tank": {
+        "x": 292,
+        "y": 814,
+        "w": 170,
+        "h": 186
+      },
+      "root_circuit_rail": {
+        "x": 628,
+        "y": 816,
+        "w": 844,
+        "h": 190
+      }
+    },
+    "decals": {
+      "oakhaven_path": {
+        "x": 18,
+        "y": 10,
+        "w": 630,
+        "h": 198
+      },
+      "oakhaven_stones": {
+        "x": 22,
+        "y": 228,
+        "w": 650,
+        "h": 128
+      },
+      "ironhold_road": {
+        "x": 676,
+        "y": 16,
+        "w": 820,
+        "h": 224
+      },
+      "fracture_field": {
+        "x": 18,
+        "y": 360,
+        "w": 500,
+        "h": 294
+      },
+      "shard_spill": {
+        "x": 270,
+        "y": 350,
+        "w": 246,
+        "h": 298
+      },
+      "archive_seals": {
+        "x": 520,
+        "y": 362,
+        "w": 382,
+        "h": 292
+      },
+      "mirror_ripples": {
+        "x": 900,
+        "y": 246,
+        "w": 602,
+        "h": 280
+      },
+      "cathedral_circuit": {
+        "x": 900,
+        "y": 510,
+        "w": 600,
+        "h": 240
+      },
+      "memory_tide": {
+        "x": 14,
+        "y": 674,
+        "w": 476,
+        "h": 326
+      },
+      "root_veins": {
+        "x": 492,
+        "y": 680,
+        "w": 406,
+        "h": 320
+      },
+      "arena_border": {
+        "x": 898,
+        "y": 754,
+        "w": 620,
+        "h": 252
+      }
+    }
+  },
+  "runtime_usage_notes": [
+    "AssetManager resolves production environment atlases first, then generated V3 fallback.",
+    "S2 does not place candidates in production paths; candidate crops are rendered preview-only.",
+    "AssetManager uses AtlasTexture with exact Rect2i regions and nearest texture filtering.",
+    "add_v3_environment_prop/decal applies caller-supplied position, target scale, z-index, and tint."
+  ],
+  "metadata_notes": [
+    "Created sprites receive phase10mm_v3_environment_visual and phase10mm_v3_visual_id metadata."
+  ],
+  "fallback_behavior": "If production prop/decal atlas is missing, AssetManager warns and uses generated V3 fallback.",
+  "replacement_risk": "Medium: exact region preservation is required; broad regions must be checked under scene scale/tint."
+}

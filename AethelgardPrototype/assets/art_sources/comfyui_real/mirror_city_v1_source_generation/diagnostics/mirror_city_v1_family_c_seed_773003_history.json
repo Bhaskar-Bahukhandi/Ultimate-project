@@ -1,0 +1,170 @@
+{
+  "1f55eba6-a5c0-4a05-9be9-544b66ac19ec": {
+    "prompt": [
+      8,
+      "1f55eba6-a5c0-4a05-9be9-544b66ac19ec",
+      {
+        "1": {
+          "class_type": "CheckpointLoaderSimple",
+          "inputs": {
+            "ckpt_name": "v1-5-pruned-emaonly.safetensors"
+          }
+        },
+        "2": {
+          "class_type": "LoraLoader",
+          "inputs": {
+            "model": [
+              "1",
+              0
+            ],
+            "clip": [
+              "1",
+              1
+            ],
+            "lora_name": "sedatal_pixel_art_lora.safetensors",
+            "strength_model": 0.85,
+            "strength_clip": 0.85
+          }
+        },
+        "3": {
+          "class_type": "CLIPTextEncode",
+          "inputs": {
+            "text": "pixel art top-down RPG tileset source image, inverted mirrored navigation floor, paired symmetrical path tiles, mirrored arrows without text, reflection portal floor motifs, clean civic mirror panels, dark readable background tiles, route edge and corner transitions, subtle cyan magenta highlights, quiet uncanny city hub, grid-compatible floor atlas, no characters, no text, no logo, crisp pixel tiles",
+            "clip": [
+              "2",
+              1
+            ]
+          }
+        },
+        "4": {
+          "class_type": "CLIPTextEncode",
+          "inputs": {
+            "text": "text, letters, numbers, signs, watermark, logo, photorealistic, isometric, perspective, 3d render, noisy cyber pattern, overly bright neon, messy abstract, full city scene, character, portrait, blurry, painterly, UI elements",
+            "clip": [
+              "2",
+              1
+            ]
+          }
+        },
+        "5": {
+          "class_type": "EmptyLatentImage",
+          "inputs": {
+            "width": 512,
+            "height": 512,
+            "batch_size": 1
+          }
+        },
+        "6": {
+          "class_type": "KSampler",
+          "inputs": {
+            "seed": 773003,
+            "steps": 22,
+            "cfg": 6.2,
+            "sampler_name": "euler",
+            "scheduler": "normal",
+            "denoise": 1.0,
+            "model": [
+              "2",
+              0
+            ],
+            "positive": [
+              "3",
+              0
+            ],
+            "negative": [
+              "4",
+              0
+            ],
+            "latent_image": [
+              "5",
+              0
+            ]
+          }
+        },
+        "7": {
+          "class_type": "VAEDecode",
+          "inputs": {
+            "samples": [
+              "6",
+              0
+            ],
+            "vae": [
+              "1",
+              2
+            ]
+          }
+        },
+        "8": {
+          "class_type": "SaveImage",
+          "inputs": {
+            "filename_prefix": "mirror_city_v1/family_c_seed_773003",
+            "images": [
+              "7",
+              0
+            ]
+          }
+        }
+      },
+      {
+        "client_id": "codex-mirror-city-v1-44da0cb3-948b-417c-9cad-02ec3308c3ef",
+        "create_time": 1781441822489
+      },
+      [
+        "8"
+      ]
+    ],
+    "outputs": {
+      "8": {
+        "images": [
+          {
+            "filename": "family_c_seed_773003_00001_.png",
+            "subfolder": "mirror_city_v1",
+            "type": "output"
+          }
+        ]
+      }
+    },
+    "status": {
+      "status_str": "success",
+      "completed": true,
+      "messages": [
+        [
+          "execution_start",
+          {
+            "prompt_id": "1f55eba6-a5c0-4a05-9be9-544b66ac19ec",
+            "timestamp": 1781441822492
+          }
+        ],
+        [
+          "execution_cached",
+          {
+            "nodes": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ],
+            "prompt_id": "1f55eba6-a5c0-4a05-9be9-544b66ac19ec",
+            "timestamp": 1781441822499
+          }
+        ],
+        [
+          "execution_success",
+          {
+            "prompt_id": "1f55eba6-a5c0-4a05-9be9-544b66ac19ec",
+            "timestamp": 1781441831204
+          }
+        ]
+      ]
+    },
+    "meta": {
+      "8": {
+        "node_id": "8",
+        "display_node": "8",
+        "parent_node": null,
+        "real_node_id": "8"
+      }
+    }
+  }
+}

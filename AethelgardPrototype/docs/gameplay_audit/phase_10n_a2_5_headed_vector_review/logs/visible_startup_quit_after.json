@@ -1,0 +1,11 @@
+{
+    "command":  "\u0026 \"C:\\Godot\\Godot_v4.6.3-stable_win64_console.exe\" --path \"C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\" --quit-after 5 --log-file \"C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_5_headed_vector_review\\logs\\visible_startup_quit_after.log\"",
+    "started":  "2026-06-20T22:54:56.1912613+05:30",
+    "exited":  true,
+    "exit_code":  null,
+    "log_exists":  false,
+    "stdout_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_5_headed_vector_review\\logs\\visible_startup_quit_after_stdout.txt",
+    "stderr_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_5_headed_vector_review\\logs\\visible_startup_quit_after_stderr.txt",
+    "log_path":  "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\AethelgardPrototype\\docs\\gameplay_audit\\phase_10n_a2_5_headed_vector_review\\logs\\visible_startup_quit_after.log",
+    "headed_manual_play_happened":  false
+}

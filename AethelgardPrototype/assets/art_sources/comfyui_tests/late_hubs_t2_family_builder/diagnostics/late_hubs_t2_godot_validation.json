@@ -1,0 +1,107 @@
+{
+  "main_menu": {
+    "exists": true,
+    "instantiate_ok": true,
+    "load_ok": true,
+    "path": "res://scenes/main_menu.tscn"
+  },
+  "notes": [
+    "Read-only T2 safety validation.",
+    "Main menu is loaded and instantiated only.",
+    "Chapter story/trial scene sweep is intentionally skipped."
+  ],
+  "phase": "10M-T2",
+  "project_boot": true,
+  "textures": [
+    {
+      "dimensions": [
+        512,
+        512
+      ],
+      "exists": true,
+      "image_load_ok": true,
+      "path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png"
+    },
+    {
+      "dimensions": [
+        512,
+        512
+      ],
+      "exists": true,
+      "image_load_ok": true,
+      "path": "res://assets/production_art/tilesets/ironhold/ironhold_tileset.png"
+    },
+    {
+      "dimensions": [
+        512,
+        512
+      ],
+      "exists": true,
+      "image_load_ok": true,
+      "path": "res://assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png"
+    },
+    {
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "exists": true,
+      "image_load_ok": true,
+      "path": "res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png"
+    },
+    {
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "exists": true,
+      "image_load_ok": true,
+      "path": "res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png"
+    },
+    {
+      "dimensions": [
+        128,
+        64
+      ],
+      "exists": true,
+      "image_load_ok": true,
+      "path": "res://assets/generated_v2/tilesets/forgotten_sectors_v2_prototype_tileset.png"
+    },
+    {
+      "dimensions": [
+        128,
+        64
+      ],
+      "exists": true,
+      "image_load_ok": true,
+      "path": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png"
+    },
+    {
+      "dimensions": [
+        128,
+        64
+      ],
+      "exists": true,
+      "image_load_ok": true,
+      "path": "res://assets/generated_v2/tilesets/cathedral_server_v2_prototype_tileset.png"
+    },
+    {
+      "dimensions": [
+        128,
+        64
+      ],
+      "exists": true,
+      "image_load_ok": true,
+      "path": "res://assets/generated_v2/tilesets/memory_ocean_v2_prototype_tileset.png"
+    },
+    {
+      "dimensions": [
+        128,
+        64
+      ],
+      "exists": true,
+      "image_load_ok": true,
+      "path": "res://assets/generated_v2/tilesets/root_of_heaven_v2_prototype_tileset.png"
+    }
+  ]
+}

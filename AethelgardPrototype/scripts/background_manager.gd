@@ -142,8 +142,27 @@ func create_background(location: String, parent: Node = null) -> Control:
 	if parent and bg:
 		parent.add_child(bg)
 		parent.move_child(bg, 0)
-	
+
 	return bg
+
+
+func change_background(location: String, parent: Node = null) -> Control:
+	## Swap the active generated background for a new location.
+	## Unlike create_background(), this removes any background this manager
+	## previously created under `parent`, so repeated calls (e.g. one per
+	## cutscene beat) don't stack layers on top of each other.
+	##
+	## Called by cutscene_manager.handle_background() for
+	## {"type": "background", "scene": "<location>"} beats.
+	if parent == null:
+		parent = get_tree().current_scene
+	if parent == null:
+		push_warning("[BG] change_background('%s'): no parent scene available" % location)
+		return null
+	for child in parent.get_children():
+		if child is Control and str(child.name).begins_with("Background_"):
+			child.queue_free()
+	return create_background(location, parent)
 
 # =====================================================================
 # REAL ASSET LOADER

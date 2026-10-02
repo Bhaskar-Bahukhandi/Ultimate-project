@@ -1,0 +1,23 @@
+{
+	"errors": [],
+	"evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+	"flags": {
+		"ch1_awakening_complete": true,
+		"ch1_glitch_crater_complete": true,
+		"ch1_opening_hook_complete": true,
+		"ch1_opening_hook_danger_seen": true,
+		"ch1_opening_hook_signal_found": true,
+		"plane_crash_completed": true
+	},
+	"pass": true,
+	"probe": "probe_06_full_smoke_micro_polish",
+	"steps": {
+		"approached_signal": true,
+		"danger_flag": true,
+		"pulse_armed": true,
+		"pulse_feedback": true,
+		"signal_interacted": true,
+		"west_blocked": true
+	},
+	"timestamp": "2026-06-21T13:42:19"
+}

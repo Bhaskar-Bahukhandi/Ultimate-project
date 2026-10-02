@@ -1,0 +1,354 @@
+{
+  "phase": "10M-S1",
+  "current_prop_atlas_path": "assets\\generated_v3\\props\\phase10mm_environment_prop_atlas.png",
+  "current_prop_atlas_dimensions": [
+    1536,
+    1024
+  ],
+  "current_prop_atlas_usage": "AssetManager crops individual hard-coded Rect2i regions into Sprite2D AtlasTexture visuals.",
+  "current_decal_atlas_path": "assets\\generated_v3\\overlays\\phase10mm_environment_decal_atlas.png",
+  "current_decal_atlas_dimensions": [
+    1536,
+    1024
+  ],
+  "current_decal_atlas_usage": "AssetManager crops individual hard-coded Rect2i regions into Sprite2D AtlasTexture visuals.",
+  "hardcoded_regions_found": {
+    "prop_regions": {
+      "oakhaven_roof": [
+        32,
+        22,
+        248,
+        190
+      ],
+      "oakhaven_hedge_corner": [
+        760,
+        52,
+        390,
+        176
+      ],
+      "oakhaven_flowers": [
+        30,
+        264,
+        418,
+        82
+      ],
+      "oakhaven_herb_sign": [
+        478,
+        238,
+        128,
+        126
+      ],
+      "ironhold_pipes": [
+        616,
+        238,
+        544,
+        170
+      ],
+      "ironhold_forge": [
+        1320,
+        226,
+        164,
+        194
+      ],
+      "crates": [
+        40,
+        434,
+        540,
+        144
+      ],
+      "archive_shelves": [
+        620,
+        370,
+        356,
+        218
+      ],
+      "dossier_stack": [
+        988,
+        440,
+        94,
+        128
+      ],
+      "null_seal": [
+        1092,
+        432,
+        156,
+        176
+      ],
+      "mirror_plinth": [
+        1280,
+        430,
+        202,
+        192
+      ],
+      "server_console": [
+        36,
+        612,
+        376,
+        194
+      ],
+      "firewall_panel": [
+        430,
+        612,
+        358,
+        194
+      ],
+      "tide_buoy": [
+        824,
+        610,
+        120,
+        182
+      ],
+      "salvage_shelf": [
+        974,
+        610,
+        290,
+        198
+      ],
+      "ocean_cache": [
+        1268,
+        610,
+        236,
+        198
+      ],
+      "lab_console": [
+        34,
+        818,
+        248,
+        178
+      ],
+      "memory_tank": [
+        292,
+        814,
+        170,
+        186
+      ],
+      "root_circuit_rail": [
+        628,
+        816,
+        844,
+        190
+      ]
+    },
+    "decal_regions": {
+      "oakhaven_path": [
+        18,
+        10,
+        630,
+        198
+      ],
+      "oakhaven_stones": [
+        22,
+        228,
+        650,
+        128
+      ],
+      "ironhold_road": [
+        676,
+        16,
+        820,
+        224
+      ],
+      "fracture_field": [
+        18,
+        360,
+        500,
+        294
+      ],
+      "shard_spill": [
+        270,
+        350,
+        246,
+        298
+      ],
+      "archive_seals": [
+        520,
+        362,
+        382,
+        292
+      ],
+      "mirror_ripples": [
+        900,
+        246,
+        602,
+        280
+      ],
+      "cathedral_circuit": [
+        900,
+        510,
+        600,
+        240
+      ],
+      "memory_tide": [
+        14,
+        674,
+        476,
+        326
+      ],
+      "root_veins": [
+        492,
+        680,
+        406,
+        320
+      ],
+      "arena_border": [
+        898,
+        754,
+        620,
+        252
+      ]
+    }
+  },
+  "usage_sites": {
+    "oakhaven_roof": [
+      "scripts\\asset_manager.gd:888",
+      "scripts\\regions\\oakhaven_region.gd:276"
+    ],
+    "oakhaven_hedge_corner": [
+      "scripts\\asset_manager.gd:889",
+      "scripts\\regions\\oakhaven_region.gd:362",
+      "scripts\\regions\\oakhaven_region.gd:365"
+    ],
+    "oakhaven_flowers": [
+      "scripts\\asset_manager.gd:890",
+      "scripts\\regions\\oakhaven_region.gd:359",
+      "scripts\\regions\\oakhaven_region.gd:360"
+    ],
+    "oakhaven_herb_sign": [
+      "scripts\\asset_manager.gd:891",
+      "scripts\\regions\\oakhaven_region.gd:361"
+    ],
+    "ironhold_pipes": [
+      "scripts\\asset_manager.gd:892",
+      "scripts\\regions\\ironhold_region.gd:340",
+      "scripts\\regions\\ironhold_region.gd:343"
+    ],
+    "ironhold_forge": [
+      "scripts\\asset_manager.gd:893",
+      "scripts\\regions\\ironhold_region.gd:341"
+    ],
+    "crates": [
+      "scripts\\asset_manager.gd:894",
+      "scripts\\combat\\combat_arena.gd:165",
+      "scripts\\combat\\combat_arena.gd:166",
+      "scripts\\regions\\ironhold_region.gd:342",
+      "scripts\\regions\\late_revisit_hub.gd:367",
+      "scripts\\regions\\late_revisit_hub.gd:368"
+    ],
+    "archive_shelves": [
+      "scripts\\asset_manager.gd:895",
+      "scripts\\regions\\late_revisit_hub.gd:348",
+      "scripts\\regions\\late_revisit_hub.gd:349"
+    ],
+    "dossier_stack": [
+      "scripts\\asset_manager.gd:896",
+      "scripts\\regions\\late_revisit_hub.gd:350"
+    ],
+    "null_seal": [
+      "scripts\\asset_manager.gd:897",
+      "scripts\\regions\\late_revisit_hub.gd:351"
+    ],
+    "mirror_plinth": [
+      "scripts\\asset_manager.gd:898",
+      "scripts\\regions\\late_revisit_hub.gd:354",
+      "scripts\\regions\\late_revisit_hub.gd:355"
+    ],
+    "server_console": [
+      "scripts\\asset_manager.gd:899",
+      "scripts\\chapter6\\ch6_choir_core.gd:46",
+      "scripts\\regions\\late_revisit_hub.gd:358"
+    ],
+    "firewall_panel": [
+      "scripts\\asset_manager.gd:900",
+      "scripts\\chapter6\\ch6_choir_core.gd:45",
+      "scripts\\regions\\late_revisit_hub.gd:359"
+    ],
+    "tide_buoy": [
+      "scripts\\asset_manager.gd:901",
+      "scripts\\regions\\late_revisit_hub.gd:363"
+    ],
+    "salvage_shelf": [
+      "scripts\\asset_manager.gd:902",
+      "scripts\\regions\\late_revisit_hub.gd:362"
+    ],
+    "ocean_cache": [
+      "scripts\\asset_manager.gd:903",
+      "scripts\\regions\\late_revisit_hub.gd:364"
+    ],
+    "lab_console": [
+      "scripts\\asset_manager.gd:904",
+      "scripts\\regions\\late_revisit_hub.gd:371"
+    ],
+    "memory_tank": [
+      "scripts\\asset_manager.gd:905",
+      "scripts\\regions\\late_revisit_hub.gd:372",
+      "scripts\\regions\\late_revisit_hub.gd:373"
+    ],
+    "root_circuit_rail": [
+      "scripts\\asset_manager.gd:906",
+      "scripts\\regions\\late_revisit_hub.gd:376"
+    ],
+    "oakhaven_path": [
+      "scripts\\asset_manager.gd:909",
+      "scripts\\regions\\oakhaven_region.gd:357"
+    ],
+    "oakhaven_stones": [
+      "scripts\\asset_manager.gd:910",
+      "scripts\\regions\\oakhaven_region.gd:358"
+    ],
+    "ironhold_road": [
+      "scripts\\asset_manager.gd:911",
+      "scripts\\regions\\ironhold_region.gd:338",
+      "scripts\\regions\\ironhold_region.gd:339",
+      "scripts\\regions\\late_revisit_hub.gd:366"
+    ],
+    "fracture_field": [
+      "scripts\\asset_manager.gd:912",
+      "scripts\\regions\\fractured_wastes_region.gd:298",
+      "scripts\\regions\\fractured_wastes_region.gd:300"
+    ],
+    "shard_spill": [
+      "scripts\\asset_manager.gd:913",
+      "scripts\\regions\\fractured_wastes_region.gd:299",
+      "scripts\\regions\\fractured_wastes_region.gd:301"
+    ],
+    "archive_seals": [
+      "scripts\\asset_manager.gd:914",
+      "scripts\\regions\\late_revisit_hub.gd:347"
+    ],
+    "mirror_ripples": [
+      "scripts\\asset_manager.gd:915",
+      "scripts\\regions\\late_revisit_hub.gd:353"
+    ],
+    "cathedral_circuit": [
+      "scripts\\asset_manager.gd:916",
+      "scripts\\chapter6\\ch6_choir_core.gd:44",
+      "scripts\\combat\\combat_arena.gd:164",
+      "scripts\\regions\\late_revisit_hub.gd:357",
+      "scripts\\regions\\late_revisit_hub.gd:370"
+    ],
+    "memory_tide": [
+      "scripts\\asset_manager.gd:917",
+      "scripts\\regions\\late_revisit_hub.gd:361"
+    ],
+    "root_veins": [
+      "scripts\\asset_manager.gd:918",
+      "scripts\\chapter1\\ch1_tutorial_knight.gd:220",
+      "scripts\\regions\\late_revisit_hub.gd:375"
+    ],
+    "arena_border": [
+      "scripts\\asset_manager.gd:919",
+      "scripts\\chapter1\\ch1_tutorial_knight.gd:219",
+      "scripts\\combat\\combat_arena.gd:163"
+    ]
+  },
+  "safe_to_build_candidate": true,
+  "safe_to_import_later": false,
+  "required_coordinate_preservation_notes": [
+    "Current runtime contract is 1536x1024 for both atlases.",
+    "Current AssetManager uses named hard-coded Rect2i regions, not fixed-size cells.",
+    "Later production import should preserve exact canvas size and region coordinates or explicitly update AssetManager and all affected scene target sizes.",
+    "S1 candidate preserves the current hard-coded region rectangles and adds review-only unused-space micro cells that are not part of the current runtime contract."
+  ],
+  "production_art_written": false,
+  "generated_v3_overwritten": false
+}

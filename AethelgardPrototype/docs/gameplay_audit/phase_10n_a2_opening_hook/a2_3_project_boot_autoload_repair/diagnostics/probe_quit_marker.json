@@ -1,0 +1,7 @@
+{
+  "marker_before_quit_printed": true,
+  "marker_start_printed": true,
+  "phase": "10N-A2.3",
+  "probe": "probe_quit_marker",
+  "status": "quit_requested"
+}

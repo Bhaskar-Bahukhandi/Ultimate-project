@@ -1,0 +1,195 @@
+{
+  "phase": "10M-T2",
+  "source_method": "deterministic controlled Python/Pillow generation",
+  "comfyui_used": false,
+  "ai_generation_used": false,
+  "production_art_writes": false,
+  "generated_v2_overwrite": false,
+  "generated_v3_overwrite": false,
+  "dimensions": [
+    512,
+    512
+  ],
+  "cell_size": [
+    32,
+    32
+  ],
+  "families": [
+    {
+      "family": "Shared Neutral Late-Hub Base",
+      "hub_target": "All late hubs",
+      "atlas_path": "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/generated_tiles/late_hub_t2_shared_neutral_family.png",
+      "mockup_path": "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/mockups/late_hub_t2_shared_family_comparison_mockup.png",
+      "purpose": "Reusable floor/wrapper grammar for all late hubs.",
+      "identity": "dark neutral floor, route tiles, low-noise UI-safe support, subtle circuit/fade cells",
+      "scores": {
+        "readability": 7.5,
+        "identity": 6.8,
+        "path_grammar": 7.6,
+        "repetition": 7.2,
+        "v3": 7.8,
+        "label": 8.0,
+        "glow": 7.6,
+        "atmosphere": 6.8,
+        "improvement": 7.0,
+        "overall": 7.3
+      },
+      "verdict": "Useful shared base; intentionally less distinctive than the hub variants."
+    },
+    {
+      "family": "Forgotten Sectors",
+      "hub_target": "Forgotten Sectors",
+      "atlas_path": "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/generated_tiles/late_hub_t2_forgotten_sectors_family.png",
+      "mockup_path": "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/mockups/late_hub_t2_forgotten_sectors_mockup.png",
+      "purpose": "Archive, deleted records, sealed cases, forgotten transit, cyan/white memory geometry.",
+      "identity": "archive, deleted records, sealed transit, cyan/white memory geometry",
+      "scores": {
+        "readability": 7.4,
+        "identity": 7.2,
+        "path_grammar": 7.3,
+        "repetition": 7.0,
+        "v3": 7.5,
+        "label": 7.7,
+        "glow": 7.2,
+        "atmosphere": 7.1,
+        "improvement": 7.4,
+        "overall": 7.3
+      },
+      "verdict": "Clearer archive grammar than the 128x64 fallback while staying readable."
+    },
+    {
+      "family": "Mirror City",
+      "hub_target": "Mirror City",
+      "atlas_path": "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/generated_tiles/late_hub_t2_mirror_city_family.png",
+      "mockup_path": "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/mockups/late_hub_t2_mirror_city_mockup.png",
+      "purpose": "Reflection, mirror plates, clean geometry, cyan/magenta highlights, symmetrical routes.",
+      "identity": "reflection, mirror plates, clean geometry, cyan/magenta highlights",
+      "scores": {
+        "readability": 7.0,
+        "identity": 6.8,
+        "path_grammar": 7.1,
+        "repetition": 6.8,
+        "v3": 7.2,
+        "label": 7.6,
+        "glow": 7.0,
+        "atmosphere": 6.8,
+        "improvement": 7.0,
+        "overall": 6.9
+      },
+      "verdict": "Readable but the identity is still the least distinct without live scene proof."
+    },
+    {
+      "family": "Cathedral Server",
+      "hub_target": "Cathedral Server",
+      "atlas_path": "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/generated_tiles/late_hub_t2_cathedral_server_family.png",
+      "mockup_path": "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/mockups/late_hub_t2_cathedral_server_mockup.png",
+      "purpose": "Server cathedral, doctrine drills, gold/cyan circuits, ritual console path.",
+      "identity": "server cathedral, doctrine-ring motifs, gold/cyan circuit route language",
+      "scores": {
+        "readability": 7.2,
+        "identity": 7.5,
+        "path_grammar": 7.4,
+        "repetition": 7.0,
+        "v3": 7.2,
+        "label": 7.4,
+        "glow": 7.1,
+        "atmosphere": 7.4,
+        "improvement": 7.5,
+        "overall": 7.4
+      },
+      "verdict": "Strong identity gain over the prototype floor, with glow kept controlled."
+    },
+    {
+      "family": "Memory Ocean",
+      "hub_target": "Memory Ocean",
+      "atlas_path": "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/generated_tiles/late_hub_t2_memory_ocean_family.png",
+      "mockup_path": "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/mockups/late_hub_t2_memory_ocean_mockup.png",
+      "purpose": "Memory tide, island fragments, blue archive water, backup salvage, wave route.",
+      "identity": "memory tide, dark-blue water, island fragments, backup salvage",
+      "scores": {
+        "readability": 7.3,
+        "identity": 7.8,
+        "path_grammar": 7.4,
+        "repetition": 7.1,
+        "v3": 7.3,
+        "label": 7.5,
+        "glow": 7.2,
+        "atmosphere": 7.8,
+        "improvement": 7.1,
+        "overall": 7.5
+      },
+      "verdict": "The strongest mood family, though current Memory Ocean was already the best fallback."
+    },
+    {
+      "family": "Root of Heaven",
+      "hub_target": "Root of Heaven Prep",
+      "atlas_path": "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/generated_tiles/late_hub_t2_root_of_heaven_family.png",
+      "mockup_path": "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/mockups/late_hub_t2_root_of_heaven_mockup.png",
+      "purpose": "Final prep, divine root circuit, gold cracks, root/rail energy, final threshold.",
+      "identity": "final prep, divine root circuit, gold cracks, final threshold",
+      "scores": {
+        "readability": 7.4,
+        "identity": 8.0,
+        "path_grammar": 7.5,
+        "repetition": 7.1,
+        "v3": 7.3,
+        "label": 7.3,
+        "glow": 7.0,
+        "atmosphere": 8.0,
+        "improvement": 7.2,
+        "overall": 7.6
+      },
+      "verdict": "Strongest visual identity; still not import-ready because final-route context needs preview validation."
+    },
+    {
+      "family": "Saved Assembly",
+      "hub_target": "Saved Assembly",
+      "atlas_path": "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/generated_tiles/late_hub_t2_saved_assembly_family.png",
+      "mockup_path": "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/mockups/late_hub_t2_saved_assembly_mockup.png",
+      "purpose": "Saved fragments, assembly/reconstruction, restored data, patchwork archive floor.",
+      "identity": "saved fragments, reconstruction, restored data, patchwork archive floor",
+      "scores": {
+        "readability": 7.6,
+        "identity": 7.3,
+        "path_grammar": 7.4,
+        "repetition": 7.1,
+        "v3": 7.6,
+        "label": 7.8,
+        "glow": 7.3,
+        "atmosphere": 7.2,
+        "improvement": 8.0,
+        "overall": 7.5
+      },
+      "verdict": "Largest practical upgrade because this hub had no dedicated generated_v2 tileset."
+    },
+    {
+      "family": "Human Patch Lab",
+      "hub_target": "Human Patch Lab",
+      "atlas_path": "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/generated_tiles/late_hub_t2_human_patch_lab_family.png",
+      "mockup_path": "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/mockups/late_hub_t2_human_patch_lab_mockup.png",
+      "purpose": "Lab, memory patching, clinical machine floor, human/data hybrid, sterile but corrupted.",
+      "identity": "clinical machine floor, patch-grid motifs, sterile but corrupted data",
+      "scores": {
+        "readability": 7.5,
+        "identity": 7.0,
+        "path_grammar": 7.3,
+        "repetition": 7.0,
+        "v3": 7.4,
+        "label": 7.8,
+        "glow": 7.2,
+        "atmosphere": 7.0,
+        "improvement": 7.8,
+        "overall": 7.3
+      },
+      "verdict": "Meaningful upgrade from missing dedicated coverage; needs more corruption/lab contrast later."
+    }
+  ],
+  "contact_sheets": [
+    "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/contact_sheets/late_hub_t2_all_atlases_contact_sheet.png",
+    "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/contact_sheets/late_hub_t2_all_mockups_contact_sheet.png",
+    "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/contact_sheets/late_hub_t2_fallback_vs_family_contact_sheet.png",
+    "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/contact_sheets/late_hub_t2_full_review_contact_sheet.png"
+  ],
+  "best_candidate_recommendation": "Root of Heaven has the strongest identity; Saved Assembly has the highest practical upgrade value; shared strategy is viable for preview-only Godot validation.",
+  "decision": "Ready for shared late-hub family preview-only Godot validation pass"
+}

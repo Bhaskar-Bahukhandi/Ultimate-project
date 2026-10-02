@@ -1,0 +1,1236 @@
+{
+	"classification": "HEADLESS RUNTIME EVIDENCE",
+	"errors": [],
+	"fresh_start_probe": {
+		"classification": "HEADLESS RUNTIME EVIDENCE",
+		"current_scene_after_wait": "res://scenes/prologue/flight_707.tscn",
+		"current_scene_name_after_wait": "Flight707Cinematic",
+		"new_game_called": true,
+		"new_game_method_exists": true,
+		"notes": [],
+		"path": "res://scenes/main_menu.tscn",
+		"scene_exists": true,
+		"story_flags_after_call": {
+			"ch1_awakening_complete": false,
+			"ch1_glitch_crater_complete": false,
+			"ch1_oakhaven_entered": false,
+			"plane_crash_completed": false
+		}
+	},
+	"godot_version": {
+		"build": "official",
+		"hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+		"hex": 263683,
+		"major": 4,
+		"minor": 6,
+		"patch": 3,
+		"status": "stable",
+		"string": "4.6.3-stable (official)",
+		"timestamp": 0
+	},
+	"input_actions_present": {
+		"attack": true,
+		"data_vision": true,
+		"defend": true,
+		"flee_combat": true,
+		"heal": true,
+		"interact": true,
+		"jump": true,
+		"move_down": true,
+		"move_left": true,
+		"move_right": true,
+		"move_up": true,
+		"pause_menu": true,
+		"root_access": true,
+		"status_window": true,
+		"world_map": true
+	},
+	"live_play_claim": false,
+	"live_viewport_available": false,
+	"movement_probe": {
+		"after_position": {
+			"x": 1527.73864746094,
+			"y": 1100.0
+		},
+		"camera_found": false,
+		"dialogue_active": false,
+		"game_state_after": 2,
+		"game_state_before": 2,
+		"id": "overworld",
+		"initial_position": {
+			"x": 1500.0,
+			"y": 1100.0
+		},
+		"input_sent": [
+			"move_right"
+		],
+		"load_ok": true,
+		"moved": true,
+		"notes": [],
+		"path": "res://scenes/overworld/overworld.tscn",
+		"player_found": true,
+		"scene_exists": true
+	},
+	"movement_probes": [
+		{
+			"after_position": {
+				"x": 1527.73864746094,
+				"y": 1100.0
+			},
+			"camera_found": false,
+			"dialogue_active": false,
+			"game_state_after": 2,
+			"game_state_before": 2,
+			"id": "overworld",
+			"initial_position": {
+				"x": 1500.0,
+				"y": 1100.0
+			},
+			"input_sent": [
+				"move_right"
+			],
+			"load_ok": true,
+			"moved": true,
+			"notes": [],
+			"path": "res://scenes/overworld/overworld.tscn",
+			"player_found": true,
+			"scene_exists": true
+		},
+		{
+			"after_position": {
+				"x": 1080.00415039063,
+				"y": 1250.0
+			},
+			"camera_found": false,
+			"dialogue_active": false,
+			"game_state_after": 2,
+			"game_state_before": 2,
+			"id": "oakhaven_region",
+			"initial_position": {
+				"x": 1050.0,
+				"y": 1250.0
+			},
+			"input_sent": [
+				"move_right"
+			],
+			"load_ok": true,
+			"moved": true,
+			"notes": [],
+			"path": "res://scenes/regions/oakhaven_region.tscn",
+			"player_found": true,
+			"scene_exists": true
+		},
+		{
+			"after_position": {
+				"x": 669.736755371094,
+				"y": 900.0
+			},
+			"camera_found": true,
+			"dialogue_active": false,
+			"game_state_after": 2,
+			"game_state_before": 2,
+			"id": "oakhaven_village_legacy",
+			"initial_position": {
+				"x": 640.0,
+				"y": 900.0
+			},
+			"input_sent": [
+				"move_right"
+			],
+			"load_ok": true,
+			"moved": true,
+			"notes": [],
+			"path": "res://scenes/chapter1/oakhaven_village.tscn",
+			"player_found": true,
+			"scene_exists": true
+		}
+	],
+	"note": "Headless scene-load and input probe only. Not a headed/live visual playtest.",
+	"phase": "10N-A1",
+	"scenes": [
+		{
+			"areas": [],
+			"buttons": [],
+			"cameras": [],
+			"character_bodies": [],
+			"color_rect_count": 3,
+			"exists": true,
+			"id": "splash",
+			"instantiate_ok": true,
+			"labels": [
+				{
+					"path": "/root/SplashScreen/BootText",
+					"text": "",
+					"visible": true
+				},
+				{
+					"path": "/root/SplashScreen/StudioLabel",
+					"text": "BHASKAR BAHUKHANDI",
+					"visible": true
+				},
+				{
+					"path": "/root/SplashScreen/VersionTag",
+					"text": "presents",
+					"visible": true
+				},
+				{
+					"path": "/root/SplashScreen/SkipHint",
+					"text": "Press any key to skip",
+					"visible": true
+				}
+			],
+			"load_ok": true,
+			"node_count": 8,
+			"path": "res://scenes/splash_screen.tscn",
+			"players": [],
+			"screenshot_path": "res://docs/gameplay_audit/phase_10n_a1_prologue_ch1/screenshots/splash_headless.png",
+			"screenshot_stats": {
+
+			},
+			"screenshot_status": "failed_empty_image"
+		},
+		{
+			"areas": [],
+			"buttons": [
+				{
+					"path": "/root/MainMenu/VBoxContainer/NewGameButton",
+					"text": "NEW GAME",
+					"visible": true
+				},
+				{
+					"path": "/root/MainMenu/VBoxContainer/SkipPrologueButton",
+					"text": "SKIP PROLOGUE",
+					"visible": true
+				},
+				{
+					"path": "/root/MainMenu/VBoxContainer/LoadGameButton",
+					"text": "LOAD GAME",
+					"visible": true
+				},
+				{
+					"path": "/root/MainMenu/VBoxContainer/OptionsButton",
+					"text": "OPTIONS",
+					"visible": true
+				},
+				{
+					"path": "/root/MainMenu/VBoxContainer/ChapterSelectButton",
+					"text": "CHAPTER SELECT",
+					"visible": true
+				},
+				{
+					"path": "/root/MainMenu/VBoxContainer/CreditsButton",
+					"text": "CREDITS",
+					"visible": true
+				},
+				{
+					"path": "/root/MainMenu/VBoxContainer/CompletionButton",
+					"text": "COMPLETION",
+					"visible": true
+				},
+				{
+					"path": "/root/MainMenu/VBoxContainer/QuitButton",
+					"text": "QUIT",
+					"visible": true
+				}
+			],
+			"cameras": [],
+			"character_bodies": [],
+			"color_rect_count": 1,
+			"exists": true,
+			"id": "main_menu",
+			"instantiate_ok": true,
+			"labels": [
+				{
+					"path": "/root/MainMenu/VBoxContainer/Title",
+					"text": "AETHELGARD",
+					"visible": true
+				},
+				{
+					"path": "/root/MainMenu/VBoxContainer/Subtitle",
+					"text": "The Glitch Sovereign",
+					"visible": true
+				},
+				{
+					"path": "/root/MainMenu/VersionLabel",
+					"text": "v1.0",
+					"visible": true
+				}
+			],
+			"load_ok": true,
+			"node_count": 15,
+			"path": "res://scenes/main_menu.tscn",
+			"players": [],
+			"screenshot_path": "res://docs/gameplay_audit/phase_10n_a1_prologue_ch1/screenshots/main_menu_headless.png",
+			"screenshot_stats": {
+
+			},
+			"screenshot_status": "failed_empty_image"
+		},
+		{
+			"areas": [],
+			"buttons": [
+				{
+					"path": "/root/Flight707Cinematic/UILayer/SkipButton",
+					"text": "Skip Prologue",
+					"visible": true
+				}
+			],
+			"cameras": [
+				"/root/Flight707Cinematic/CinematicCamera"
+			],
+			"character_bodies": [],
+			"color_rect_count": 57,
+			"exists": true,
+			"id": "flight_707",
+			"instantiate_ok": true,
+			"labels": [
+				{
+					"path": "/root/Flight707Cinematic/UILayer/DialogueBox/MarginContainer/VBox/SpeakerLabel",
+					"text": "Speaker",
+					"visible": true
+				},
+				{
+					"path": "/root/Flight707Cinematic/UILayer/DialogueBox/MarginContainer/VBox/DialogueText",
+					"text": "Dialogue text here...",
+					"visible": true
+				},
+				{
+					"path": "/root/Flight707Cinematic/UILayer/DialogueBox/MarginContainer/VBox/ContinuePrompt",
+					"text": "[Press SPACE to continue]",
+					"visible": true
+				},
+				{
+					"path": "/root/Flight707Cinematic/UILayer/ChapterTitle",
+					"text": "CHAPTER 1: FLIGHT 707",
+					"visible": true
+				},
+				{
+					"path": "/root/Flight707Cinematic/UILayer/Subtitle",
+					"text": "Somewhere over the Pacific Ocean...",
+					"visible": true
+				},
+				{
+					"path": "/root/Flight707Cinematic/@Label@339",
+					"text": "Hold ESC to Skip Prologue",
+					"visible": true
+				}
+			],
+			"load_ok": true,
+			"node_count": 87,
+			"path": "res://scenes/prologue/flight_707.tscn",
+			"players": [],
+			"screenshot_path": "res://docs/gameplay_audit/phase_10n_a1_prologue_ch1/screenshots/flight_707_headless.png",
+			"screenshot_stats": {
+
+			},
+			"screenshot_status": "failed_empty_image"
+		},
+		{
+			"areas": [],
+			"buttons": [],
+			"cameras": [],
+			"character_bodies": [],
+			"color_rect_count": 1,
+			"exists": true,
+			"id": "crash_sequence",
+			"instantiate_ok": true,
+			"labels": [
+				{
+					"path": "/root/CrashSequence/CenterContainer/VBoxContainer/StatusLabel",
+					"text": "[SYSTEM ERROR]",
+					"visible": true
+				},
+				{
+					"path": "/root/CrashSequence/CenterContainer/VBoxContainer/MessageLabel",
+					"text": "K",
+					"visible": true
+				},
+				{
+					"path": "/root/CrashSequence/CenterContainer/VBoxContainer/ProgressLabel",
+					"text": "Compiling entities... 0%",
+					"visible": true
+				},
+				{
+					"path": "/root/CrashSequence/@Label@387",
+					"text": "Hold ESC to skip",
+					"visible": true
+				}
+			],
+			"load_ok": true,
+			"node_count": 10,
+			"path": "res://scenes/prologue/crash_sequence.tscn",
+			"players": [],
+			"screenshot_path": "res://docs/gameplay_audit/phase_10n_a1_prologue_ch1/screenshots/crash_sequence_headless.png",
+			"screenshot_stats": {
+
+			},
+			"screenshot_status": "failed_empty_image"
+		},
+		{
+			"areas": [],
+			"buttons": [],
+			"cameras": [
+				"/root/GlitchCraterAwakening/CinematicCamera"
+			],
+			"character_bodies": [],
+			"color_rect_count": 69,
+			"exists": true,
+			"id": "glitch_crater_awakening",
+			"instantiate_ok": true,
+			"labels": [
+				{
+					"path": "/root/GlitchCraterAwakening/UILayer/ChapterTitle",
+					"text": "Chapter 1",
+					"visible": true
+				},
+				{
+					"path": "/root/GlitchCraterAwakening/UILayer/Subtitle",
+					"text": "The Null Pointer Exception",
+					"visible": true
+				},
+				{
+					"path": "/root/GlitchCraterAwakening/UILayer/BootSequence",
+					"text": "",
+					"visible": false
+				},
+				{
+					"path": "/root/GlitchCraterAwakening/UILayer/StatusWindow/MarginContainer/VBox/Title",
+					"text": "// STATUS_WINDOW — Admin_Guest (Kaelen)",
+					"visible": true
+				},
+				{
+					"path": "/root/GlitchCraterAwakening/UILayer/StatusWindow/MarginContainer/VBox/Content",
+					"text": "",
+					"visible": true
+				},
+				{
+					"path": "/root/GlitchCraterAwakening/UILayer/DialogueBox/MarginContainer/VBox/SpeakerLabel",
+					"text": "Speaker",
+					"visible": true
+				},
+				{
+					"path": "/root/GlitchCraterAwakening/UILayer/DialogueBox/MarginContainer/VBox/DialogueText",
+					"text": "Dialogue text...",
+					"visible": true
+				}
+			],
+			"load_ok": true,
+			"node_count": 98,
+			"path": "res://scenes/chapter1/glitch_crater_awakening.tscn",
+			"players": [],
+			"screenshot_path": "res://docs/gameplay_audit/phase_10n_a1_prologue_ch1/screenshots/glitch_crater_awakening_headless.png",
+			"screenshot_stats": {
+
+			},
+			"screenshot_status": "failed_empty_image"
+		},
+		{
+			"areas": [
+				"/root/Overworld/Player/InteractionArea",
+				"/root/Overworld/OakhavenGate",
+				"/root/Overworld/IronholdGate",
+				"/root/Overworld/WastesGate",
+				"/root/Overworld/RoadsideCamp",
+				"/root/Overworld/RiverbankRest",
+				"/root/Overworld/WastelandOutpost"
+			],
+			"buttons": [],
+			"cameras": [
+				"/root/Overworld/Player/OverworldCamera"
+			],
+			"character_bodies": [
+				"/root/Overworld/Player"
+			],
+			"color_rect_count": 150,
+			"exists": true,
+			"id": "overworld",
+			"instantiate_ok": true,
+			"labels": [
+				{
+					"path": "/root/Overworld/Player/InteractionPrompt",
+					"text": "",
+					"visible": false
+				},
+				{
+					"path": "/root/Overworld/OakhavenGate/GateLabel",
+					"text": "OAKHAVEN\\n[F] Enter",
+					"visible": true
+				},
+				{
+					"path": "/root/Overworld/OakhavenGate/@Label@575",
+					"text": "Rec. Lv 1",
+					"visible": true
+				},
+				{
+					"path": "/root/Overworld/IronholdGate/GateLabel",
+					"text": "IRONHOLD\\nLocked",
+					"visible": true
+				},
+				{
+					"path": "/root/Overworld/IronholdGate/@Label@577",
+					"text": "Rec. Lv 5",
+					"visible": true
+				},
+				{
+					"path": "/root/Overworld/WastesGate/GateLabel",
+					"text": "FRACTURED WASTES\\nLocked",
+					"visible": true
+				},
+				{
+					"path": "/root/Overworld/WastesGate/@Label@579",
+					"text": "Rec. Lv 9",
+					"visible": true
+				},
+				{
+					"path": "/root/Overworld/OverworldUI/ZoneLabel",
+					"text": "Road to the Wastes",
+					"visible": true
+				},
+				{
+					"path": "/root/Overworld/OverworldUI/LevelWarning",
+					"text": "!! DANGER — Rec. Lv 8 (You: Lv 1) !!",
+					"visible": true
+				},
+				{
+					"path": "/root/Overworld/OverworldUI/StatsHUD",
+					"text": "Lv 1  |  HP 100/100  |  Gold 0  |  XP 0/100",
+					"visible": true
+				},
+				{
+					"path": "/root/Overworld/OverworldUI/Instructions",
+					"text": "[WASD] Move  |  [Shift] Sprint  |  [F] Interact  |  [M] Map  |  [I] Status  |  [TAB] Data Vision",
+					"visible": true
+				},
+				{
+					"path": "/root/Overworld/Oakhaven/@Label@581",
+					"text": "Oakhaven",
+					"visible": true
+				},
+				{
+					"path": "/root/Overworld/Ironhold/@Label@583",
+					"text": "Ironhold",
+					"visible": true
+				},
+				{
+					"path": "/root/Overworld/Wastes/@Label@585",
+					"text": "Wastes",
+					"visible": true
+				},
+				{
+					"path": "/root/Overworld/RoadsideCamp/@Label@588",
+					"text": "Roadside Camp\\n[F] Rest",
+					"visible": true
+				},
+				{
+					"path": "/root/Overworld/RiverbankRest/@Label@592",
+					"text": "Riverbank Rest\\n[F] Rest",
+					"visible": true
+				},
+				{
+					"path": "/root/Overworld/WastelandOutpost/@Label@596",
+					"text": "Wasteland Outpost\\n[F] Rest",
+					"visible": true
+				}
+			],
+			"load_ok": true,
+			"node_count": 192,
+			"path": "res://scenes/overworld/overworld.tscn",
+			"players": [
+				"/root/Overworld/Player"
+			],
+			"screenshot_path": "res://docs/gameplay_audit/phase_10n_a1_prologue_ch1/screenshots/overworld_headless.png",
+			"screenshot_stats": {
+
+			},
+			"screenshot_status": "failed_empty_image"
+		},
+		{
+			"areas": [
+				"/root/OakhavenRegion/Player/InteractionArea",
+				"/root/OakhavenRegion/ElderRowan",
+				"/root/OakhavenRegion/FarmerThom",
+				"/root/OakhavenRegion/ChildPip",
+				"/root/OakhavenRegion/GuardAlaric",
+				"/root/OakhavenRegion/ApothecaryIris",
+				"/root/OakhavenRegion/crater_memory_1",
+				"/root/OakhavenRegion/crater_memory_2",
+				"/root/OakhavenRegion/village_lore_1",
+				"/root/OakhavenRegion/forest_lore_1",
+				"/root/OakhavenRegion/forest_lore_2",
+				"/root/OakhavenRegion/field_lore_1",
+				"/root/OakhavenRegion/dev_signature_1",
+				"/root/OakhavenRegion/elara_notes",
+				"/root/OakhavenRegion/TutorialKnightGate",
+				"/root/OakhavenRegion/ApothecaryTrigger",
+				"/root/OakhavenRegion/BlacksmithTrigger",
+				"/root/OakhavenRegion/OakhavenOutskirtsFarming",
+				"/root/OakhavenRegion/secret_oak_forest_blade",
+				"/root/OakhavenRegion/secret_oak_meadow_potion",
+				"/root/OakhavenRegion/secret_oak_well_lore",
+				"/root/OakhavenRegion/OverworldExit",
+				"/root/OakhavenRegion/OverworldExitEast"
+			],
+			"buttons": [],
+			"cameras": [
+				"/root/OakhavenRegion/Player/RegionCamera"
+			],
+			"character_bodies": [
+				"/root/OakhavenRegion/Player"
+			],
+			"color_rect_count": 255,
+			"exists": true,
+			"id": "oakhaven_region",
+			"instantiate_ok": true,
+			"labels": [
+				{
+					"path": "/root/OakhavenRegion/Player/InteractionPrompt",
+					"text": "",
+					"visible": false
+				},
+				{
+					"path": "/root/OakhavenRegion/ElderRowan/@Label@798",
+					"text": "Elder Rowan",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenRegion/ElderRowan/Prompt",
+					"text": "[F] Talk",
+					"visible": false
+				},
+				{
+					"path": "/root/OakhavenRegion/FarmerThom/@Label@801",
+					"text": "Farmer Thom",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenRegion/FarmerThom/Prompt",
+					"text": "[F] Talk",
+					"visible": false
+				},
+				{
+					"path": "/root/OakhavenRegion/ChildPip/@Label@804",
+					"text": "Child Pip",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenRegion/ChildPip/Prompt",
+					"text": "[F] Talk",
+					"visible": false
+				},
+				{
+					"path": "/root/OakhavenRegion/GuardAlaric/@Label@807",
+					"text": "Guard Alaric",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenRegion/GuardAlaric/Prompt",
+					"text": "[F] Talk",
+					"visible": false
+				},
+				{
+					"path": "/root/OakhavenRegion/ApothecaryIris/@Label@810",
+					"text": "Apothecary Iris",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenRegion/ApothecaryIris/Prompt",
+					"text": "[F] Talk",
+					"visible": false
+				},
+				{
+					"path": "/root/OakhavenRegion/crater_memory_1/Prompt",
+					"text": "[F] Inspect",
+					"visible": false
+				},
+				{
+					"path": "/root/OakhavenRegion/crater_memory_2/Prompt",
+					"text": "[F] Inspect",
+					"visible": false
+				},
+				{
+					"path": "/root/OakhavenRegion/village_lore_1/Prompt",
+					"text": "[F] Inspect",
+					"visible": false
+				},
+				{
+					"path": "/root/OakhavenRegion/forest_lore_1/Prompt",
+					"text": "[F] Inspect",
+					"visible": false
+				},
+				{
+					"path": "/root/OakhavenRegion/forest_lore_2/Prompt",
+					"text": "[F] Inspect",
+					"visible": false
+				},
+				{
+					"path": "/root/OakhavenRegion/field_lore_1/Prompt",
+					"text": "[F] Inspect",
+					"visible": false
+				},
+				{
+					"path": "/root/OakhavenRegion/dev_signature_1/Prompt",
+					"text": "[F] Inspect",
+					"visible": false
+				},
+				{
+					"path": "/root/OakhavenRegion/elara_notes/Prompt",
+					"text": "[F] Inspect",
+					"visible": false
+				},
+				{
+					"path": "/root/OakhavenRegion/TutorialKnightGate/@Label@839",
+					"text": "Knight's Arena\\n[F] Enter\\nRec. Lv 5",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenRegion/TutorialKnightGate/BossWarning",
+					"text": "",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenRegion/OakhavenOutskirtsFarming/@Label@847",
+					"text": "Beginner herb patch",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenRegion/OakhavenOutskirtsFarming/@Label@848",
+					"text": "Oakhaven Outskirts",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenRegion/OakhavenOutskirtsFarming/Prompt",
+					"text": "[F] Forage herb patch",
+					"visible": false
+				},
+				{
+					"path": "/root/OakhavenRegion/OverworldExit/@Label@860",
+					"text": "← To Overworld →",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenRegion/OverworldExitEast/@Label@863",
+					"text": "To Overworld →",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenRegion/RegionUI/ZoneLabel",
+					"text": "Oakhaven Village  ~ Safe ~",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenRegion/RegionUI/StatsHUD",
+					"text": "Lv 1  |  HP 100/100  |  Gold 0  |  XP 0/100",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenRegion/RegionUI/@Label@865",
+					"text": "~ OAKHAVEN REGION ~",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenRegion/RegionUI/@Label@866",
+					"text": "[WASD] Move  [Shift] Sprint  [F] Interact  [M] Map  [I] Status",
+					"visible": true
+				}
+			],
+			"load_ok": true,
+			"node_count": 357,
+			"path": "res://scenes/regions/oakhaven_region.tscn",
+			"players": [
+				"/root/OakhavenRegion/Player"
+			],
+			"screenshot_path": "res://docs/gameplay_audit/phase_10n_a1_prologue_ch1/screenshots/oakhaven_region_headless.png",
+			"screenshot_stats": {
+
+			},
+			"screenshot_status": "failed_empty_image"
+		},
+		{
+			"areas": [],
+			"buttons": [],
+			"cameras": [
+				"/root/ElaraMeeting/CinematicCamera"
+			],
+			"character_bodies": [],
+			"color_rect_count": 42,
+			"exists": true,
+			"id": "elara_meeting",
+			"instantiate_ok": true,
+			"labels": [
+				{
+					"path": "/root/ElaraMeeting/UILayer/DialogueBox/MarginContainer/VBox/SpeakerLabel",
+					"text": "Speaker",
+					"visible": true
+				},
+				{
+					"path": "/root/ElaraMeeting/UILayer/DialogueBox/MarginContainer/VBox/DialogueText",
+					"text": "Dialogue text...",
+					"visible": true
+				}
+			],
+			"load_ok": true,
+			"node_count": 63,
+			"path": "res://scenes/chapter1/elara_meeting.tscn",
+			"players": [],
+			"screenshot_path": "res://docs/gameplay_audit/phase_10n_a1_prologue_ch1/screenshots/elara_meeting_headless.png",
+			"screenshot_stats": {
+
+			},
+			"screenshot_status": "failed_empty_image"
+		},
+		{
+			"areas": [],
+			"buttons": [
+				{
+					"path": "/root/PathToOakhaven/UILayer/RootAccessPanel/MarginContainer/VBox/ApplyButton",
+					"text": "APPLY CHANGES",
+					"visible": true
+				}
+			],
+			"cameras": [
+				"/root/PathToOakhaven/CinematicCamera"
+			],
+			"character_bodies": [],
+			"color_rect_count": 51,
+			"exists": true,
+			"id": "path_to_oakhaven",
+			"instantiate_ok": true,
+			"labels": [
+				{
+					"path": "/root/PathToOakhaven/UILayer/DialogueBox/MarginContainer/VBox/SpeakerLabel",
+					"text": "Speaker",
+					"visible": true
+				},
+				{
+					"path": "/root/PathToOakhaven/UILayer/DialogueBox/MarginContainer/VBox/DialogueText",
+					"text": "Dialogue text...",
+					"visible": true
+				},
+				{
+					"path": "/root/PathToOakhaven/UILayer/RootAccessPanel/MarginContainer/VBox/Title",
+					"text": "// ROOT ACCESS — GreenSlime_01",
+					"visible": true
+				},
+				{
+					"path": "/root/PathToOakhaven/UILayer/RootAccessPanel/MarginContainer/VBox/CodePanel",
+					"text": "class GreenSlime extends EnemyBase {\r\\n  float hp = 15.0;\r\\n  float elasticity = 0.9;\r\\n  bool is_hostile = true;\r\\n}",
+					"visible": true
+				},
+				{
+					"path": "/root/PathToOakhaven/UILayer/RootAccessPanel/MarginContainer/VBox/PropertyList/ElasticityRow/Label",
+					"text": "elasticity: ",
+					"visible": true
+				},
+				{
+					"path": "/root/PathToOakhaven/UILayer/TutorialPrompt",
+					"text": "[Set elasticity to 0.0 and click APPLY]",
+					"visible": false
+				}
+			],
+			"load_ok": true,
+			"node_count": 84,
+			"path": "res://scenes/chapter1/path_to_oakhaven.tscn",
+			"players": [],
+			"screenshot_path": "res://docs/gameplay_audit/phase_10n_a1_prologue_ch1/screenshots/path_to_oakhaven_headless.png",
+			"screenshot_stats": {
+
+			},
+			"screenshot_status": "failed_empty_image"
+		},
+		{
+			"areas": [
+				"/root/OakhavenVillage/Player/InteractionArea",
+				"/root/OakhavenVillage/NPCs/Elara",
+				"/root/OakhavenVillage/NPCs/Apothecary",
+				"/root/OakhavenVillage/NPCs/AuctionTerminal",
+				"/root/OakhavenVillage/NPCs/CorruptedBoar",
+				"/root/OakhavenVillage/NPCs/Farmer",
+				"/root/OakhavenVillage/NPCs/Child",
+				"/root/OakhavenVillage/NPCs/Guard",
+				"/root/OakhavenVillage/Triggers/ApothecaryTrigger",
+				"/root/OakhavenVillage/Triggers/AuctionTrigger",
+				"/root/OakhavenVillage/Triggers/BoarTrigger",
+				"/root/OakhavenVillage/Triggers/BridgeTrigger"
+			],
+			"buttons": [
+				{
+					"path": "/root/OakhavenVillage/UI/ShopPanel/MarginContainer/VBox/CloseBtn",
+					"text": "CLOSE",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/UI/AuctionPanel/MarginContainer/VBox/CloseBtn",
+					"text": "CLOSE",
+					"visible": true
+				}
+			],
+			"cameras": [
+				"/root/OakhavenVillage/Player/Camera2D"
+			],
+			"character_bodies": [
+				"/root/OakhavenVillage/Player"
+			],
+			"color_rect_count": 18,
+			"exists": true,
+			"id": "oakhaven_village",
+			"instantiate_ok": true,
+			"labels": [
+				{
+					"path": "/root/OakhavenVillage/ApothecarySign",
+					"text": "Apothecary",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/AuctionSign",
+					"text": "Auction House",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/Player/PlayerLabel",
+					"text": "Kaelen",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/Player/InteractionPrompt",
+					"text": "",
+					"visible": false
+				},
+				{
+					"path": "/root/OakhavenVillage/NPCs/Elara/Label",
+					"text": "Elara",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/NPCs/Apothecary/Label",
+					"text": "Apothecary",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/NPCs/AuctionTerminal/Label",
+					"text": "Auction Terminal",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/NPCs/CorruptedBoar/Label",
+					"text": "Corrupted Boar",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/NPCs/Farmer/Label",
+					"text": "Farmer Jenkins",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/NPCs/Child/Label",
+					"text": "Village Child",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/NPCs/Guard/Label",
+					"text": "Village Guard",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/UI/HUD/TopBar/MarginContainer/HBoxContainer/LeftInfo/NameLabel",
+					"text": "Kaelen - Lv. 1",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/UI/HUD/TopBar/MarginContainer/HBoxContainer/LeftInfo/ClassLabel",
+					"text": "Admin_Guest | RAM: 12/16 GB",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/UI/HUD/TopBar/MarginContainer/HBoxContainer/LeftInfo/HPBar/HPLabel",
+					"text": "HP: 84/100",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/UI/HUD/TopBar/MarginContainer/HBoxContainer/RightInfo/LocationLabel",
+					"text": "Location: Oakhaven Village",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/UI/HUD/TopBar/MarginContainer/HBoxContainer/RightInfo/GlitchLabel",
+					"text": "Glitch: 0%",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/UI/HUD/TopBar/MarginContainer/HBoxContainer/RightInfo/GoldLabel",
+					"text": "Gold: 100",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/UI/HUD/ControlsLabel",
+					"text": "WASD - Move | F/E - Talk | TAB - Data Vision | SPACE - Continue",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/UI/DialogueBox/MarginContainer/VBox/SpeakerLabel",
+					"text": "Speaker",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/UI/DialogueBox/MarginContainer/VBox/DialogueText",
+					"text": "Dialogue text...",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/UI/DialogueBox/MarginContainer/VBox/ContinueLabel",
+					"text": "[Press SPACE to continue]",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/UI/ShopPanel/MarginContainer/VBox/Title",
+					"text": "~~ Apothecary ~~",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/UI/AuctionPanel/MarginContainer/VBox/Title",
+					"text": "// AUCTION HOUSE — MARKET_NODE",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/UI/AuctionPanel/MarginContainer/VBox/Description",
+					"text": "Agent-driven economy. Prices fluctuate based on NPC trade AI.",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/UI/AuctionPanel/MarginContainer/VBox/Row1/Item",
+					"text": "Iron Sword",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/UI/AuctionPanel/MarginContainer/VBox/Row1/Price",
+					"text": "42g (▲)",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/UI/AuctionPanel/MarginContainer/VBox/Row2/Item",
+					"text": "Leather Armor",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/UI/AuctionPanel/MarginContainer/VBox/Row2/Price",
+					"text": "55g (▼)",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/UI/AuctionPanel/MarginContainer/VBox/Row3/Item",
+					"text": "Glitch Shard",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/UI/AuctionPanel/MarginContainer/VBox/Row3/Price",
+					"text": "???g (ERR)",
+					"visible": true
+				},
+				{
+					"path": "/root/OakhavenVillage/UI/AuctionPanel/MarginContainer/VBox/StatusLabel",
+					"text": "Your access level: GUEST — Browse only",
+					"visible": true
+				}
+			],
+			"load_ok": true,
+			"node_count": 118,
+			"path": "res://scenes/chapter1/oakhaven_village.tscn",
+			"players": [
+				"/root/OakhavenVillage/Player",
+				"/root/OakhavenVillage/Player/PlayerLabel"
+			],
+			"screenshot_path": "res://docs/gameplay_audit/phase_10n_a1_prologue_ch1/screenshots/oakhaven_village_headless.png",
+			"screenshot_stats": {
+
+			},
+			"screenshot_status": "failed_empty_image"
+		},
+		{
+			"areas": [
+				"/root/TutorialKnightBoss/CentralCorruptionLane",
+				"/root/TutorialKnightBoss/Boss/DetectionArea",
+				"/root/TutorialKnightBoss/Boss/AttackArea"
+			],
+			"buttons": [
+				{
+					"path": "/root/TutorialKnightBoss/Player/CombatHUD/@HBoxContainer@978/@Button@979",
+					"text": "JUMP [Space]",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/Player/CombatHUD/@HBoxContainer@978/@Button@980",
+					"text": "DASH [Shift]",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/Player/CombatHUD/@HBoxContainer@978/@Button@981",
+					"text": "ATK [J]",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/Player/CombatHUD/@HBoxContainer@978/@Button@982",
+					"text": "DEF [K]",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/Player/CombatHUD/@HBoxContainer@978/@Button@983",
+					"text": "SPELL [Q]",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/Player/CombatHUD/@HBoxContainer@978/@Button@984",
+					"text": "HEAL [C]",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/@CanvasLayer@999/RootAccessPanel/@VBoxContainer@1004/CB_IsAttacking",
+					"text": "is_attacking = true",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/@CanvasLayer@999/RootAccessPanel/@VBoxContainer@1004/CB_IsHostile",
+					"text": "is_hostile = true",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/@CanvasLayer@999/RootAccessPanel/@VBoxContainer@1004/DisableAttackDirectiveButton",
+					"text": "Disable Attack Directive",
+					"visible": true
+				}
+			],
+			"cameras": [
+				"/root/TutorialKnightBoss/ArenaCamera"
+			],
+			"character_bodies": [
+				"/root/TutorialKnightBoss/Player",
+				"/root/TutorialKnightBoss/Boss"
+			],
+			"color_rect_count": 20,
+			"exists": true,
+			"id": "tutorial_knight_boss",
+			"instantiate_ok": true,
+			"labels": [
+				{
+					"path": "/root/TutorialKnightBoss/Player/CombatHUD/@VBoxContainer@966/@Label@967",
+					"text": "KAELEN",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/Player/CombatHUD/@VBoxContainer@966/@Label@969",
+					"text": "100 / 100",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/Player/CombatHUD/@VBoxContainer@966/@Label@970",
+					"text": "SOUL",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/Player/CombatHUD/@VBoxContainer@966/@Label@972",
+					"text": "0 / 99",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/Player/CombatHUD/@VBoxContainer@966/@Label@973",
+					"text": "XP",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/Player/CombatHUD/@Label@974",
+					"text": "",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/Player/CombatHUD/@VBoxContainer@976/LevelLabel",
+					"text": "Lv.1  |  100G",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/Player/CombatHUD/@VBoxContainer@976/@Label@977",
+					"text": "Corruption: 0%",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/Boss/BossIntroCard/@CenterContainer@1012/@VBoxContainer@1013/@Label@1014",
+					"text": "TUTORIAL KNIGHT",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/Boss/BossIntroCard/@CenterContainer@1012/@VBoxContainer@1013/@Label@1015",
+					"text": "— Guardian of the First Gate —",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/@Label@990",
+					"text": "HACKED: movement_speed",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/@Label@992",
+					"text": "HACKED: elasticity",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/@Label@994",
+					"text": "HACKED: gravity_scale",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/@Label@998",
+					"text": "HACKED: movement_speed",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/@CanvasLayer@999/BossHPContainer/@Label@1000",
+					"text": "CORRUPTED SENTINEL",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/@CanvasLayer@999/DialogueBox/@VBoxContainer@1001/SpeakerLabel",
+					"text": "",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/@CanvasLayer@999/DialogueBox/@VBoxContainer@1001/DialogueText",
+					"text": "Another consciousness drifts into my patrol zone…\\nYou should not be here, anomaly.",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/@CanvasLayer@999/TutorialPrompt",
+					"text": "",
+					"visible": false
+				},
+				{
+					"path": "/root/TutorialKnightBoss/@CanvasLayer@999/RootAccessPanel/@VBoxContainer@1004/@Label@1005",
+					"text": "[ ROOT ACCESS - CORRUPTED SENTINEL ]",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/@CanvasLayer@999/RootAccessPanel/@VBoxContainer@1004/@Label@1007",
+					"text": "Hackable Properties:",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/@CanvasLayer@999/RootAccessPanel/@VBoxContainer@1004/@Label@1008",
+					"text": "\\nDisable the attack directive to end the loop.",
+					"visible": true
+				},
+				{
+					"path": "/root/TutorialKnightBoss/@Label@1010",
+					"text": "HACKED: is_hostile",
+					"visible": true
+				}
+			],
+			"load_ok": true,
+			"node_count": 112,
+			"path": "res://scenes/chapter1/tutorial_knight_boss.tscn",
+			"players": [
+				"/root/TutorialKnightBoss/Player"
+			],
+			"screenshot_path": "res://docs/gameplay_audit/phase_10n_a1_prologue_ch1/screenshots/tutorial_knight_boss_headless.png",
+			"screenshot_stats": {
+
+			},
+			"screenshot_status": "failed_empty_image"
+		}
+	]
+}

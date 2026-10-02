@@ -1,0 +1,27 @@
+{
+  "elapsed_ms": 479,
+  "evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+  "notes": "automated smoke path ran without waiting for transition",
+  "phase": "10N-A2.4",
+  "probe": "probe_08_full_first_minute_smoke",
+  "start_marker_printed": true,
+  "status": "pass",
+  "steps": [
+    {
+      "pass": true,
+      "step": "movement"
+    },
+    {
+      "pass": true,
+      "step": "signal_interaction"
+    },
+    {
+      "pass": true,
+      "step": "glitch_pulse"
+    },
+    {
+      "pass": true,
+      "step": "completion_flags"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "phase": "10M-S1",
+  "source_method": "deterministic Python/Pillow controlled art generation",
+  "no_comfyui": true,
+  "no_ai_image_generation": true,
+  "production_art_writes": false,
+  "generated_v3_overwrites": false,
+  "contract_summary": {
+    "current_dimensions": [
+      1536,
+      1024
+    ],
+    "preserved_hardcoded_regions": true,
+    "safe_to_import_later": false,
+    "reason": "Requires preview-only Godot validation before production import; hard-coded region contract is clear but broad."
+  },
+  "atlases": {
+    "props_variant_a_clean": "assets\\art_sources\\comfyui_tests\\shared_environment_s1\\generated_props\\shared_environment_props_s1_variant_a_clean.png",
+    "props_variant_b": "assets\\art_sources\\comfyui_tests\\shared_environment_s1\\generated_props\\shared_environment_props_s1_variant_b.png",
+    "props_variant_c_moody": "assets\\art_sources\\comfyui_tests\\shared_environment_s1\\generated_props\\shared_environment_props_s1_variant_c_moody.png",
+    "decals_variant_a_clean": "assets\\art_sources\\comfyui_tests\\shared_environment_s1\\generated_decals\\shared_environment_decals_s1_variant_a_clean.png",
+    "decals_variant_b": "assets\\art_sources\\comfyui_tests\\shared_environment_s1\\generated_decals\\shared_environment_decals_s1_variant_b.png",
+    "decals_variant_c_moody": "assets\\art_sources\\comfyui_tests\\shared_environment_s1\\generated_decals\\shared_environment_decals_s1_variant_c_moody.png"
+  },
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "cell_size": "mixed hard-coded Rect2i regions; no fixed cell grid in current runtime contract",
+  "best_candidate_recommendation": "Variant B for both props and decals, pending preview-only Godot validation."
+}

@@ -1,0 +1,271 @@
+{
+  "phase": "10M-T3",
+  "input_paths": {
+    "t1_review": "docs/art_pipeline/late_hubs_t1_visual_baseline_audit.md",
+    "t2_review": "docs/art_pipeline/late_hubs_t2_family_builder_review.md",
+    "t2_manifest": "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/manifest/late_hubs_t2_family_manifest.json",
+    "t2_folder": "assets/art_sources/comfyui_tests/late_hubs_t2_family_builder"
+  },
+  "preview_board_paths": [
+    "assets/art_sources/comfyui_tests/late_hubs_t3_preview_validation/preview_boards/late_hub_t3_cathedral_server_current_vs_candidate.png",
+    "assets/art_sources/comfyui_tests/late_hubs_t3_preview_validation/preview_boards/late_hub_t3_forgotten_sectors_current_vs_candidate.png",
+    "assets/art_sources/comfyui_tests/late_hubs_t3_preview_validation/preview_boards/late_hub_t3_human_patch_lab_missing_vs_candidate.png",
+    "assets/art_sources/comfyui_tests/late_hubs_t3_preview_validation/preview_boards/late_hub_t3_memory_ocean_current_vs_candidate.png",
+    "assets/art_sources/comfyui_tests/late_hubs_t3_preview_validation/preview_boards/late_hub_t3_mirror_city_current_vs_candidate.png",
+    "assets/art_sources/comfyui_tests/late_hubs_t3_preview_validation/preview_boards/late_hub_t3_root_of_heaven_current_vs_candidate.png",
+    "assets/art_sources/comfyui_tests/late_hubs_t3_preview_validation/preview_boards/late_hub_t3_saved_assembly_missing_vs_candidate.png",
+    "assets/art_sources/comfyui_tests/late_hubs_t3_preview_validation/preview_boards/late_hub_t3_shared_neutral_preview.png"
+  ],
+  "contact_sheet_paths": [
+    "assets/art_sources/comfyui_tests/late_hubs_t3_preview_validation/contact_sheets/late_hub_t3_current_vs_candidate_contact_sheet.png",
+    "assets/art_sources/comfyui_tests/late_hubs_t3_preview_validation/contact_sheets/late_hub_t3_candidate_family_contact_sheet.png",
+    "assets/art_sources/comfyui_tests/late_hubs_t3_preview_validation/contact_sheets/late_hub_t3_weak_candidate_focus_sheet.png",
+    "assets/art_sources/comfyui_tests/late_hubs_t3_preview_validation/contact_sheets/late_hub_t3_full_validation_contact_sheet.png"
+  ],
+  "actual_scene_reference_status": [
+    {
+      "camera_found": true,
+      "hub_area": "Forgotten Sectors",
+      "hub_id": "forgotten_sectors",
+      "label_or_prompt_found": true,
+      "notes": "Read-only scene reference loaded; screenshot skipped when headless renderer could not provide a viewport image. T2 art was not swapped in.",
+      "player_found": true,
+      "risk": "Low-medium revisit/prep hub; no interaction performed.",
+      "scene": "res://scenes/regions/forgotten_sectors_revisit_hub.tscn",
+      "scene_load": "Pass",
+      "screenshot": "Skipped: headless dummy renderer did not provide a reliable viewport image.",
+      "visual_layer_found": true
+    },
+    {
+      "camera_found": true,
+      "hub_area": "Mirror City",
+      "hub_id": "mirror_city",
+      "label_or_prompt_found": true,
+      "notes": "Read-only scene reference loaded; screenshot skipped when headless renderer could not provide a viewport image. T2 art was not swapped in.",
+      "player_found": true,
+      "risk": "Low-medium revisit/prep hub; no interaction performed.",
+      "scene": "res://scenes/regions/mirror_city_revisit_hub.tscn",
+      "scene_load": "Pass",
+      "screenshot": "Skipped: headless dummy renderer did not provide a reliable viewport image.",
+      "visual_layer_found": true
+    },
+    {
+      "camera_found": true,
+      "hub_area": "Cathedral Server",
+      "hub_id": "cathedral_server",
+      "label_or_prompt_found": true,
+      "notes": "Read-only scene reference loaded; screenshot skipped when headless renderer could not provide a viewport image. T2 art was not swapped in.",
+      "player_found": true,
+      "risk": "Low-medium revisit/prep hub; no interaction performed.",
+      "scene": "res://scenes/regions/cathedral_server_revisit_hub.tscn",
+      "scene_load": "Pass",
+      "screenshot": "Skipped: headless dummy renderer did not provide a reliable viewport image.",
+      "visual_layer_found": true
+    },
+    {
+      "camera_found": true,
+      "hub_area": "Memory Ocean",
+      "hub_id": "memory_ocean",
+      "label_or_prompt_found": true,
+      "notes": "Read-only scene reference loaded; screenshot skipped when headless renderer could not provide a viewport image. T2 art was not swapped in.",
+      "player_found": true,
+      "risk": "Low-medium revisit/prep hub; no interaction performed.",
+      "scene": "res://scenes/regions/memory_ocean_revisit_hub.tscn",
+      "scene_load": "Pass",
+      "screenshot": "Skipped: headless dummy renderer did not provide a reliable viewport image.",
+      "visual_layer_found": true
+    },
+    {
+      "camera_found": true,
+      "hub_area": "Root of Heaven Prep",
+      "hub_id": "root_of_heaven",
+      "label_or_prompt_found": true,
+      "notes": "Read-only scene reference loaded; screenshot skipped when headless renderer could not provide a viewport image. T2 art was not swapped in.",
+      "player_found": true,
+      "risk": "Low-medium revisit/prep hub; no interaction performed.",
+      "scene": "res://scenes/regions/root_of_heaven_prep_hub.tscn",
+      "scene_load": "Pass",
+      "screenshot": "Skipped: headless dummy renderer did not provide a reliable viewport image.",
+      "visual_layer_found": true
+    },
+    {
+      "camera_found": true,
+      "hub_area": "Saved Assembly",
+      "hub_id": "saved_assembly",
+      "label_or_prompt_found": true,
+      "notes": "Read-only scene reference loaded; screenshot skipped when headless renderer could not provide a viewport image. T2 art was not swapped in.",
+      "player_found": true,
+      "risk": "Low-medium revisit/prep hub; no interaction performed.",
+      "scene": "res://scenes/regions/saved_assembly_revisit_hub.tscn",
+      "scene_load": "Pass",
+      "screenshot": "Skipped: headless dummy renderer did not provide a reliable viewport image.",
+      "visual_layer_found": true
+    },
+    {
+      "camera_found": true,
+      "hub_area": "Human Patch Lab",
+      "hub_id": "human_patch_lab",
+      "label_or_prompt_found": true,
+      "notes": "Read-only scene reference loaded; screenshot skipped when headless renderer could not provide a viewport image. T2 art was not swapped in.",
+      "player_found": true,
+      "risk": "Low-medium revisit/prep hub; no interaction performed.",
+      "scene": "res://scenes/regions/human_patch_lab_revisit_hub.tscn",
+      "scene_load": "Pass",
+      "screenshot": "Skipped: headless dummy renderer did not provide a reliable viewport image.",
+      "visual_layer_found": true
+    }
+  ],
+  "actual_scene_screenshot_stats": {
+    "forgotten_sectors": {
+      "exists": false,
+      "nonblank": false,
+      "size": null,
+      "skipped": "Skipped: headless dummy renderer did not provide a reliable viewport image."
+    },
+    "mirror_city": {
+      "exists": false,
+      "nonblank": false,
+      "size": null,
+      "skipped": "Skipped: headless dummy renderer did not provide a reliable viewport image."
+    },
+    "cathedral_server": {
+      "exists": false,
+      "nonblank": false,
+      "size": null,
+      "skipped": "Skipped: headless dummy renderer did not provide a reliable viewport image."
+    },
+    "memory_ocean": {
+      "exists": false,
+      "nonblank": false,
+      "size": null,
+      "skipped": "Skipped: headless dummy renderer did not provide a reliable viewport image."
+    },
+    "root_of_heaven": {
+      "exists": false,
+      "nonblank": false,
+      "size": null,
+      "skipped": "Skipped: headless dummy renderer did not provide a reliable viewport image."
+    },
+    "saved_assembly": {
+      "exists": false,
+      "nonblank": false,
+      "size": null,
+      "skipped": "Skipped: headless dummy renderer did not provide a reliable viewport image."
+    },
+    "human_patch_lab": {
+      "exists": false,
+      "nonblank": false,
+      "size": null,
+      "skipped": "Skipped: headless dummy renderer did not provide a reliable viewport image."
+    }
+  },
+  "per_hub_scores": {
+    "Forgotten Sectors": {
+      "readability": 7.4,
+      "identity": 7.3,
+      "path_clarity": 7.5,
+      "repetition": 7.1,
+      "v3_compatibility": 7.4,
+      "label_safety": 7.7,
+      "atmosphere": 7.2,
+      "improvement": 7.4,
+      "overall": 7.4
+    },
+    "Mirror City": {
+      "readability": 7.0,
+      "identity": 6.4,
+      "path_clarity": 7.0,
+      "repetition": 6.7,
+      "v3_compatibility": 7.2,
+      "label_safety": 7.5,
+      "atmosphere": 6.6,
+      "improvement": 6.8,
+      "overall": 6.8
+    },
+    "Cathedral Server": {
+      "readability": 7.3,
+      "identity": 7.6,
+      "path_clarity": 7.5,
+      "repetition": 7.1,
+      "v3_compatibility": 7.3,
+      "label_safety": 7.5,
+      "atmosphere": 7.3,
+      "improvement": 7.5,
+      "overall": 7.5
+    },
+    "Memory Ocean": {
+      "readability": 7.3,
+      "identity": 7.7,
+      "path_clarity": 7.4,
+      "repetition": 7.0,
+      "v3_compatibility": 7.3,
+      "label_safety": 7.5,
+      "atmosphere": 7.7,
+      "improvement": 6.8,
+      "overall": 7.2
+    },
+    "Root of Heaven Prep": {
+      "readability": 7.4,
+      "identity": 8.0,
+      "path_clarity": 7.5,
+      "repetition": 7.0,
+      "v3_compatibility": 7.3,
+      "label_safety": 7.3,
+      "atmosphere": 8.0,
+      "improvement": 7.0,
+      "overall": 7.4
+    },
+    "Saved Assembly": {
+      "readability": 7.6,
+      "identity": 7.4,
+      "path_clarity": 7.5,
+      "repetition": 7.1,
+      "v3_compatibility": 7.6,
+      "label_safety": 7.8,
+      "atmosphere": 7.3,
+      "improvement": 8.0,
+      "overall": 7.6
+    },
+    "Human Patch Lab": {
+      "readability": 7.5,
+      "identity": 7.0,
+      "path_clarity": 7.4,
+      "repetition": 7.0,
+      "v3_compatibility": 7.4,
+      "label_safety": 7.8,
+      "atmosphere": 7.0,
+      "improvement": 7.8,
+      "overall": 7.4
+    },
+    "Shared Neutral": {
+      "readability": 7.5,
+      "identity": 6.7,
+      "path_clarity": 7.6,
+      "repetition": 7.2,
+      "v3_compatibility": 7.7,
+      "label_safety": 8.0,
+      "atmosphere": 6.8,
+      "improvement": 7.1,
+      "overall": 7.2
+    }
+  },
+  "weak_candidates": [
+    "Mirror City",
+    "Human Patch Lab"
+  ],
+  "best_candidates": [
+    "Saved Assembly",
+    "Cathedral Server",
+    "Forgotten Sectors"
+  ],
+  "recommendation": "Do not stage the full shared family yet. Rebuild Mirror City identity first; keep Memory Ocean and Root of Heaven unchanged until a dedicated live-preview comparison; continue preview validation for Saved Assembly, Cathedral Server, Forgotten Sectors, and Human Patch Lab.",
+  "final_decision": "Needs Mirror City identity rebuild before shared family can proceed",
+  "safety_validation_results": {
+    "godot_preview_diagnostics": "assets/art_sources/comfyui_tests/late_hubs_t3_preview_validation/diagnostics/late_hubs_t3_godot_preview_diagnostics.json",
+    "git_diff_check": "Passed with warning: Exited 0; Git emitted only an existing CRLF normalization warning for docs/art_pipeline/art_replacement_manifest.md.",
+    "no_production_art_overwrite": true,
+    "no_generated_v2_overwrite": true,
+    "no_generated_v3_overwrite": true,
+    "no_gameplay_scene_script_modification": true
+  }
+}

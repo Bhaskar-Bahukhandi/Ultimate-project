@@ -1,0 +1,27 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+A2_8_PROBE_04_START
+[ACCESS] Loaded accessibility settings from user://accessibility.cfg
+[GAMEPAD] Controller bindings added for 16 actions
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized — Press I to toggle
+[BackgroundManager] Initialized — procedural backgrounds active
+[ACHIEVEMENTS] Loaded 20/44 from disk
+[10N-A2] Opening crash-site hook loaded
+WARNING: [AssetManager] Production art slot missing for Kaelen top-down sheet at res://assets/production_art/characters/player/kaelen_topdown_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_missing_production_art (res://scripts/asset_manager.gd:1136)
+       [1] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1113)
+       [2] try_build_animated_player (res://scripts/asset_manager.gd:1000)
+       [3] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [4] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:69)
+       [5] _ready (res://scripts/exploration/player_topdown.gd:47)
+       [6] _spawn_player (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:145)
+       [7] _ready (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:46)
+✓ Found top-down animation sheet: res://assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png
+✓ Player ANIMATED sprite loaded — exploration
+A2_8_probe_04_glitch_pulse_feedback_DONE

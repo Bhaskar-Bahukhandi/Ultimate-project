@@ -1,0 +1,181 @@
+{
+  "phase": "10M-U2",
+  "audit_only": true,
+  "generation_performed": false,
+  "import_performed": false,
+  "comfyui_actually_available": "No",
+  "can_codex_safely_generate_real_comfyui_art_now": false,
+  "final_availability_verdict": "ComfyUI unavailable",
+  "agents_md_read": true,
+  "paths_checked": [
+    {
+      "path": "C:\\Users\\BHASKAR BAHUKHANDI\\ComfyUI",
+      "install_found": false
+    },
+    {
+      "path": "C:\\Users\\BHASKAR BAHUKHANDI\\ComfyUI_windows_portable",
+      "install_found": false
+    },
+    {
+      "path": "C:\\Users\\BHASKAR BAHUKHANDI\\Desktop\\ComfyUI",
+      "install_found": false
+    },
+    {
+      "path": "C:\\Users\\BHASKAR BAHUKHANDI\\Desktop\\ComfyUI_windows_portable",
+      "install_found": false
+    },
+    {
+      "path": "C:\\Users\\BHASKAR BAHUKHANDI\\Documents\\ComfyUI",
+      "install_found": false
+    },
+    {
+      "path": "C:\\Users\\BHASKAR BAHUKHANDI\\Downloads\\ComfyUI",
+      "install_found": false
+    },
+    {
+      "path": "C:\\ComfyUI",
+      "install_found": false
+    },
+    {
+      "path": "C:\\ComfyUI_windows_portable",
+      "install_found": false
+    },
+    {
+      "path": "C:\\AI\\ComfyUI",
+      "install_found": false
+    },
+    {
+      "path": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\ComfyUI",
+      "install_found": false
+    },
+    {
+      "path": "C:\\Users\\BHASKAR BAHUKHANDI\\OneDrive\\Desktop\\Ultimate project\\ComfyUI_windows_portable",
+      "install_found": false
+    }
+  ],
+  "targeted_recursive_findings": [
+    {
+      "path": "assets/art_sources/comfyui_tests/",
+      "classification": "legacy project evidence/output folder, not install evidence"
+    },
+    {
+      "path": "docs/art_pipeline/comfyui_workflows/oakhaven_tileset_512_test_workflow.json.template",
+      "classification": "workflow template, not submitted workflow_api evidence"
+    }
+  ],
+  "process_check": {
+    "comfyui_process_found": false,
+    "notes": "No Python/ComfyUI/conda/uv process related to ComfyUI was listed."
+  },
+  "api_checks": [
+    {
+      "endpoint": "http://127.0.0.1:8188/system_stats",
+      "reachable": false,
+      "result": "Unable to connect to the remote server"
+    },
+    {
+      "endpoint": "http://127.0.0.1:8188/object_info",
+      "reachable": false,
+      "result": "Unable to connect to the remote server"
+    },
+    {
+      "endpoint": "http://127.0.0.1:8188/history",
+      "reachable": false,
+      "result": "Unable to connect to the remote server"
+    },
+    {
+      "endpoint": "http://127.0.0.1:8000/system_stats",
+      "reachable": false,
+      "result": "Unable to connect to the remote server"
+    },
+    {
+      "endpoint": "http://127.0.0.1:8000/object_info",
+      "reachable": false,
+      "result": "Unable to connect to the remote server"
+    },
+    {
+      "endpoint": "http://127.0.0.1:8000/history",
+      "reachable": false,
+      "result": "Unable to connect to the remote server"
+    }
+  ],
+  "netstat_ports": {
+    "8188": "no listener found",
+    "8000": "no listener found"
+  },
+  "evidence_bundle": {
+    "workflow_api_json": "missing",
+    "prompt_json": "missing_or_incomplete",
+    "checkpoint_model_lora_vae": "partial_historical_oakhaven_p6_only",
+    "seed": "partial_historical_oakhaven_p6_only",
+    "prompt_id": "missing",
+    "history_result": "missing",
+    "original_comfyui_output_path": "missing_or_incomplete",
+    "copied_project_path": "partial_historical_oakhaven_p6_only",
+    "before_after_contact_sheet": "partial_historical_oakhaven_p6_only",
+    "manual_edit_statement": "partial_historical_only",
+    "complete_bundle_exists": false
+  },
+  "project_lineage_truth": [
+    {
+      "family": "Oakhaven",
+      "claimed_source_folder": "assets/art_sources/comfyui_tests/oakhaven_p6 plus later Oakhaven P7-P12 docs",
+      "real_comfyui_evidence_found": "Partial historical P6 evidence: endpoint/checkpoint/LoRA, seeds, raw output paths, source records, contact sheet. No reachable current API and no complete workflow_api/prompt_id/history bundle found.",
+      "procedural_deterministic_evidence": "Yes. P7 extraction/cleanup and P8-P10 controlled builder/tuning phases include deterministic or derived review work.",
+      "production_baseline_status": "Accepted Oakhaven afternoon production baseline remains in production_art.",
+      "trust_level": "Strongest real ComfyUI lineage in project, but current generation path unavailable.",
+      "action": "Keep accepted baseline. Future real-art work must rerun ComfyUI with the required evidence bundle."
+    },
+    {
+      "family": "Ironhold",
+      "claimed_source_folder": "assets/art_sources/comfyui_tests/ironhold_q1 and Q2/Q3 outputs",
+      "real_comfyui_evidence_found": "No",
+      "procedural_deterministic_evidence": "Yes. Q1 reports deterministic Pillow builder; Q2/Q3 are preview/import validation.",
+      "production_baseline_status": "Accepted production baseline exists.",
+      "trust_level": "Controlled procedural baseline, not real ComfyUI.",
+      "action": "Do not relabel as ComfyUI. Replace only in a later real-art or human-authored phase with evidence."
+    },
+    {
+      "family": "Fractured Wastes",
+      "claimed_source_folder": "assets/art_sources/comfyui_tests/fractured_wastes_r1 and R2/R3 outputs",
+      "real_comfyui_evidence_found": "No",
+      "procedural_deterministic_evidence": "Yes. R1 reports deterministic Pillow atlas/mockup generation; R2/R3 are validation/import phases.",
+      "production_baseline_status": "Accepted production baseline exists.",
+      "trust_level": "Controlled procedural baseline, not real ComfyUI.",
+      "action": "Do not relabel as ComfyUI. Replace only in a later real-art or human-authored phase with evidence."
+    },
+    {
+      "family": "Mirror City T4-T7",
+      "claimed_source_folder": "assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild through mirror_city_t7_controlled_import",
+      "real_comfyui_evidence_found": "No",
+      "procedural_deterministic_evidence": "Yes. T4 manifest says deterministic Python/Pillow and comfyui_used false; T7 report says no real ComfyUI usage was found.",
+      "production_baseline_status": "T7 controlled deterministic/procedural production baseline present if mirror_city production slot exists.",
+      "trust_level": "Controlled procedural production baseline, not real ComfyUI.",
+      "action": "Future Mirror City real-art pass requires a new ComfyUI source-generation phase after ComfyUI is installed/launched."
+    },
+    {
+      "family": "Late hubs T1-T3",
+      "claimed_source_folder": "assets/art_sources/comfyui_tests/late_hubs_t1_audit through late_hubs_t3_preview_validation",
+      "real_comfyui_evidence_found": "No",
+      "procedural_deterministic_evidence": "Yes. T1 is audit/copy evidence; T2 manifest says deterministic controlled Python/Pillow; T3 is preview validation.",
+      "production_baseline_status": "Review-only; no production import.",
+      "trust_level": "Placeholder/validation only.",
+      "action": "Do not promote or label as ComfyUI. Restart with real evidence if real AI art is requested."
+    },
+    {
+      "family": "Shared V3 props/decals",
+      "claimed_source_folder": "assets/generated_v3 plus shared_environment S1-S5 review folders",
+      "real_comfyui_evidence_found": "No",
+      "procedural_deterministic_evidence": "Yes. S3 manifest says deterministic Python/Pillow and no_comfyui true.",
+      "production_baseline_status": "Current generated_v3 prop/decal atlases are locked active baseline.",
+      "trust_level": "Active generated baseline, not real ComfyUI.",
+      "action": "Do not touch unless a specific visible issue justifies targeted repair."
+    }
+  ],
+  "protected_paths_changed_by_u2": false,
+  "u2_files_written": [
+    "docs/art_pipeline/comfyui_u2_environment_audit.md",
+    "docs/art_pipeline/comfyui_u2_environment_audit.json"
+  ],
+  "next_best_step": "Install or launch ComfyUI manually first and rerun this audit before any real ComfyUI source-generation phase."
+}

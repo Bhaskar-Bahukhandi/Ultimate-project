@@ -1,0 +1,21 @@
+{
+  "phase": "10M-V1",
+  "run": "mirror_city_v1_family_d_seed_774003",
+  "family_id": "D",
+  "family_name": "Practical hybrid candidate",
+  "seed": 774003,
+  "positive_prompt": "pixel art top-down 2D RPG tileset atlas for Mirror City, practical game floor tiles, dark mirror plate base, reflective glass seams, symmetrical route paths, fractured mirror accents, route corners and junctions, dark label-safe tiles, subtle cyan magenta glow, clean low-noise tile grammar, compatible with props and decals, readable at small scale, crisp pixel asset sheet, no text, no characters, no watermark",
+  "negative_prompt": "photorealistic, 3d render, isometric, perspective room, character, UI text, letters, logo, watermark, blurry, oil painting, concept art scene, overloaded neon, excessive noise, random fractal pattern, unstructured abstract sheet, realistic city skyline",
+  "checkpoint_model": "v1-5-pruned-emaonly.safetensors",
+  "lora": "sedatal_pixel_art_lora.safetensors",
+  "lora_strength_model": 0.85,
+  "lora_strength_clip": 0.85,
+  "sampler": "euler",
+  "scheduler": "normal",
+  "steps": 22,
+  "cfg": 6.2,
+  "width": 512,
+  "height": 512,
+  "batch_size": 1,
+  "submitted_workflow_api_path": "assets/art_sources/comfyui_real/mirror_city_v1_source_generation/workflow/mirror_city_v1_family_d_seed_774003_workflow_api.json"
+}

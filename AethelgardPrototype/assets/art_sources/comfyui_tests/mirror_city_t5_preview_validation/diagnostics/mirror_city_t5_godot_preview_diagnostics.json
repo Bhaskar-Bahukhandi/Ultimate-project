@@ -1,0 +1,257 @@
+{
+	"actual_scene_reference": {
+		"camera_found": true,
+		"label_or_prompt_found": true,
+		"notes": "Loaded in tree read-only, then freed without interaction. Screenshot skipped because no T4 art was swapped into the scene.",
+		"player_found": true,
+		"risk": "Low-medium: safe revisit hub candidate; story scenes skipped.",
+		"scene": "res://scenes/regions/mirror_city_revisit_hub.tscn",
+		"scene_load": "Pass",
+		"screenshot": "",
+		"screenshot_status": "Skipped",
+		"visual_layer_found": true
+	},
+	"gameplay_scene_script_modified": false,
+	"generated_v2_overwritten": false,
+	"generated_v3_overwritten": false,
+	"input_checks": [
+		{
+			"check": "T4 Variant A",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild/generated_tiles/mirror_city_t4_variant_a_glass_civic.png",
+			"result": "Pass",
+			"size": [
+				512,
+				512
+			]
+		},
+		{
+			"check": "T4 Variant B",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild/generated_tiles/mirror_city_t4_variant_b_fractured_reflection.png",
+			"result": "Pass",
+			"size": [
+				512,
+				512
+			]
+		},
+		{
+			"check": "T4 Variant C",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild/generated_tiles/mirror_city_t4_variant_c_inverted_route.png",
+			"result": "Pass",
+			"size": [
+				512,
+				512
+			]
+		},
+		{
+			"check": "T4 Variant D",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild/generated_tiles/mirror_city_t4_variant_d_hybrid_best.png",
+			"result": "Pass",
+			"size": [
+				512,
+				512
+			]
+		},
+		{
+			"check": "old T2 Mirror City candidate",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/generated_tiles/late_hub_t2_mirror_city_family.png",
+			"result": "Pass",
+			"size": [
+				512,
+				512
+			]
+		},
+		{
+			"check": "current generated_v2 Mirror City fallback",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+			"result": "Pass",
+			"size": [
+				128,
+				64
+			]
+		},
+		{
+			"check": "V3 props",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png",
+			"result": "Pass",
+			"size": [
+				1536,
+				1024
+			]
+		},
+		{
+			"check": "V3 decals",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png",
+			"result": "Pass",
+			"size": [
+				1536,
+				1024
+			]
+		}
+	],
+	"main_menu": {
+		"check": "main menu",
+		"notes": "Loaded and instantiated only; not connected to gameplay.",
+		"path": "res://scenes/main_menu.tscn",
+		"result": "Pass"
+	},
+	"phase": "10M-T5",
+	"preview_boards": [
+		{
+			"id": "current_generated_v2",
+			"label": "Current generated_v2 fallback",
+			"notes": "Godot image-rendered preview board. Text annotations are added by the T5 report builder.",
+			"preview_board": "res://assets/art_sources/comfyui_tests/mirror_city_t5_preview_validation/preview_boards/mirror_city_t5_current_generated_v2_preview.png",
+			"result": "Pass",
+			"source": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png"
+		},
+		{
+			"id": "old_t2",
+			"label": "Old T2 Mirror City",
+			"notes": "Godot image-rendered preview board. Text annotations are added by the T5 report builder.",
+			"preview_board": "res://assets/art_sources/comfyui_tests/mirror_city_t5_preview_validation/preview_boards/mirror_city_t5_old_t2_preview.png",
+			"result": "Pass",
+			"source": "res://assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/generated_tiles/late_hub_t2_mirror_city_family.png"
+		},
+		{
+			"id": "variant_d_primary",
+			"label": "T4 Variant D primary",
+			"notes": "Godot image-rendered preview board. Text annotations are added by the T5 report builder.",
+			"preview_board": "res://assets/art_sources/comfyui_tests/mirror_city_t5_preview_validation/preview_boards/mirror_city_t5_variant_d_primary_preview.png",
+			"result": "Pass",
+			"source": "res://assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild/generated_tiles/mirror_city_t4_variant_d_hybrid_best.png"
+		},
+		{
+			"id": "variant_c_backup",
+			"label": "T4 Variant C backup",
+			"notes": "Godot image-rendered preview board. Text annotations are added by the T5 report builder.",
+			"preview_board": "res://assets/art_sources/comfyui_tests/mirror_city_t5_preview_validation/preview_boards/mirror_city_t5_variant_c_backup_preview.png",
+			"result": "Pass",
+			"source": "res://assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild/generated_tiles/mirror_city_t4_variant_c_inverted_route.png"
+		},
+		{
+			"id": "variant_b_reference",
+			"label": "T4 Variant B reference",
+			"notes": "Godot image-rendered preview board. Text annotations are added by the T5 report builder.",
+			"preview_board": "res://assets/art_sources/comfyui_tests/mirror_city_t5_preview_validation/preview_boards/mirror_city_t5_variant_b_reference_preview.png",
+			"result": "Pass",
+			"source": "res://assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild/generated_tiles/mirror_city_t4_variant_b_fractured_reflection.png"
+		},
+		{
+			"id": "variant_a_reference",
+			"label": "T4 Variant A reference",
+			"notes": "Godot image-rendered preview board. Text annotations are added by the T5 report builder.",
+			"preview_board": "res://assets/art_sources/comfyui_tests/mirror_city_t5_preview_validation/preview_boards/mirror_city_t5_variant_a_reference_preview.png",
+			"result": "Pass",
+			"source": "res://assets/art_sources/comfyui_tests/mirror_city_t4_identity_rebuild/generated_tiles/mirror_city_t4_variant_a_glass_civic.png"
+		},
+		{
+			"id": "d_vs_c",
+			"label": "d_vs_c",
+			"notes": "Godot image-rendered direct comparison board. Text annotations are added by the T5 report builder.",
+			"preview_board": "res://assets/art_sources/comfyui_tests/mirror_city_t5_preview_validation/preview_boards/mirror_city_t5_variant_d_vs_c_direct_comparison.png",
+			"result": "Pass",
+			"source": "multiple"
+		},
+		{
+			"id": "fallback_t2_d_c",
+			"label": "fallback_t2_d_c",
+			"notes": "Godot image-rendered direct comparison board. Text annotations are added by the T5 report builder.",
+			"preview_board": "res://assets/art_sources/comfyui_tests/mirror_city_t5_preview_validation/preview_boards/mirror_city_t5_fallback_t2_d_c_comparison.png",
+			"result": "Pass",
+			"source": "multiple"
+		}
+	],
+	"preview_only": true,
+	"production_art_changed": false,
+	"project_boot": true,
+	"safety_checks": [
+		{
+			"check": "Oakhaven baseline preservation",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+			"result": "Pass",
+			"size": [
+				512,
+				512
+			]
+		},
+		{
+			"check": "Ironhold baseline preservation",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/production_art/tilesets/ironhold/ironhold_tileset.png",
+			"result": "Pass",
+			"size": [
+				512,
+				512
+			]
+		},
+		{
+			"check": "Fractured Wastes baseline preservation",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png",
+			"result": "Pass",
+			"size": [
+				512,
+				512
+			]
+		},
+		{
+			"check": "shared V3 props preservation",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png",
+			"result": "Pass",
+			"size": [
+				1536,
+				1024
+			]
+		},
+		{
+			"check": "shared V3 decals preservation",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png",
+			"result": "Pass",
+			"size": [
+				1536,
+				1024
+			]
+		},
+		{
+			"check": "Mirror City generated_v2 fallback preservation",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+			"result": "Pass",
+			"size": [
+				128,
+				64
+			]
+		}
+	],
+	"script": "docs/art_pipeline/mirror_city_t5_preview_validation/mirror_city_t5_preview_validation.gd",
+	"story_scene_candidates_skipped": [
+		"res://scenes/chapter5/ch5_mirror_city_intro.tscn",
+		"res://scenes/chapter5/ch5_mirror_plaza.tscn",
+		"res://scenes/chapter5/ch5_mirror_kaelen_confrontation.tscn"
+	]
+}

@@ -1,0 +1,20 @@
+{
+	"checks": {
+		"ChapterSelectButton_hidden_or_absent": true,
+		"CompletionButton_hidden_or_absent": true,
+		"CreditsButton_visible": true,
+		"LegacyPrologueButton_hidden_or_absent": true,
+		"LoadGameButton_visible": true,
+		"NewGameButton_visible": true,
+		"OptionsButton_visible": true,
+		"QuitButton_visible": true,
+		"SkipPrologueButton_hidden_or_absent": true,
+		"legacy_route_callable": true,
+		"vbox_exists": true
+	},
+	"errors": [],
+	"evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+	"pass": true,
+	"probe": "probe_01_menu_public_surface",
+	"timestamp": "2026-06-21T18:29:10"
+}

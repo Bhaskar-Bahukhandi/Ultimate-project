@@ -1,0 +1,8 @@
+﻿{
+    "phase":  "10N-A2.3",
+    "location":  "C:\\tmp\\aethelgard_boot_isolation",
+    "reduced_no_autoload_sandboxed":  "Signal 11 after Godot reported it could not create user://logs.",
+    "reduced_no_autoload_elevated":  "Changed behavior: no signal 11 output, but --quit did not exit before timeout and stale validation processes were killed.",
+    "real_project_corrected_command":  "Passed with elevated filesystem access and explicit diagnostics log file.",
+    "conclusion":  "The prior project-context signal 11 is best explained by command environment / filesystem logging permissions, not the opening hook scene or validation script body."
+}

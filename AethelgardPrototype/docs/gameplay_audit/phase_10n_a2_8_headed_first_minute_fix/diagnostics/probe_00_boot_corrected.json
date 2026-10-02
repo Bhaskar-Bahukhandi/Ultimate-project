@@ -1,0 +1,13 @@
+{
+	"checks": {
+		"AssetManager": true,
+		"GameManager": true,
+		"ProgressionBreadcrumb": true,
+		"SceneTransitions": true
+	},
+	"errors": [],
+	"evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+	"pass": true,
+	"probe": "probe_00_boot_corrected",
+	"timestamp": "2026-06-21T18:29:07"
+}

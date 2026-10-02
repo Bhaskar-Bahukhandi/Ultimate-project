@@ -659,6 +659,13 @@ func _open_root_access() -> void:
 	selected_enemy = target_enemy
 	root_access_panel.visible = true
 	get_tree().paused = true
+	# The panel is PROCESS_MODE_ALWAYS (set in combat_arena.tscn) so its buttons
+	# still receive input while the tree is paused. Give Cancel keyboard focus so
+	# there is always a reachable way out even without the mouse.
+	var cancel_btn: Button = root_access_panel.get_node_or_null(
+		"MarginContainer/VBox/ButtonRow/CancelButton")
+	if cancel_btn:
+		cancel_btn.grab_focus()
 
 	var el: SpinBox = root_access_panel.get_node_or_null("MarginContainer/VBox/PropertyList/ElasticityRow/SpinBox")
 	var gv: SpinBox = root_access_panel.get_node_or_null("MarginContainer/VBox/PropertyList/GravityRow/SpinBox")

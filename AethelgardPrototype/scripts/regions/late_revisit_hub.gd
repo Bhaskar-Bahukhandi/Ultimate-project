@@ -7,6 +7,13 @@ const MAP_SIZE := Vector2(1280, 720)
 const DEFAULT_SPAWN := Vector2(640, 430)
 const OVERWORLD_SCENE := "res://scenes/overworld/overworld.tscn"
 
+const MIRROR_CITY_TILE_SIZE := 32
+const MIRROR_CITY_FLOOR_POINTS := [
+	Vector2(168, 188), Vector2(376, 146), Vector2(932, 150),
+	Vector2(1122, 238), Vector2(1090, 518), Vector2(878, 594),
+	Vector2(320, 582), Vector2(154, 476),
+]
+
 const REGION_THEMES: Dictionary = {
 	"forgotten_sectors": {
 		"title": "Forgotten Sectors",
@@ -262,6 +269,8 @@ func _build_environment() -> void:
 	floor.z_index = -24
 	add_child(floor)
 
+	_add_mirror_city_visual_tileset_floor()
+
 	var spine := ColorRect.new()
 	spine.name = "TransitSpine"
 	spine.color = Color(_theme["accent"].r, _theme["accent"].g, _theme["accent"].b, 0.025)
@@ -291,6 +300,118 @@ func _build_environment() -> void:
 		add_child(band)
 	_add_hub_identity_props()
 	_add_v3_hub_polish()
+
+
+func _add_mirror_city_visual_tileset_floor() -> void:
+	if region_id != "mirror_city" or not has_node("/root/AssetManager"):
+		return
+	if not AssetManager.has_method("get_mirror_city_tileset_slot"):
+		return
+	var slot: Dictionary = AssetManager.get_mirror_city_tileset_slot()
+	var texture := slot.get("texture") as Texture2D
+	if not texture:
+		return
+	var atlas_image := texture.get_image()
+	if atlas_image == null or atlas_image.is_empty():
+		return
+	var floor_image := _build_mirror_city_floor_image(atlas_image)
+	var sprite := Sprite2D.new()
+	sprite.name = "MirrorCityVisualTilesetFloor"
+	sprite.centered = false
+	sprite.texture = ImageTexture.create_from_image(floor_image)
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite.z_index = -23
+	sprite.set_meta("v2_visual_tileset", "mirror_city")
+	sprite.set_meta("visual_only", true)
+	sprite.set_meta("visual_tileset_path", str(slot.get("path", "")))
+	sprite.set_meta("visual_tileset_production", bool(slot.get("production", false)))
+	sprite.set_meta("fallback_used", bool(slot.get("fallback_used", false)))
+	sprite.set_meta("fallback_reason", str(slot.get("fallback_reason", "")))
+	add_child(sprite)
+
+
+func _build_mirror_city_floor_image(atlas: Image) -> Image:
+	var image := Image.create(int(MAP_SIZE.x), int(MAP_SIZE.y), false, Image.FORMAT_RGBA8)
+	image.fill(Color(0.0, 0.0, 0.0, 0.0))
+	for y in range(128, 612, MIRROR_CITY_TILE_SIZE):
+		for x in range(128, 1156, MIRROR_CITY_TILE_SIZE):
+			var center := Vector2(float(x + MIRROR_CITY_TILE_SIZE / 2), float(y + MIRROR_CITY_TILE_SIZE / 2))
+			if not Geometry2D.is_point_in_polygon(center, PackedVector2Array(MIRROR_CITY_FLOOR_POINTS)):
+				continue
+			var tile_sum := int(x / MIRROR_CITY_TILE_SIZE) + int(y / MIRROR_CITY_TILE_SIZE)
+			var row := 0
+			var col := tile_sum % 16
+			if tile_sum % 5 == 0:
+				row = 1
+			_stamp_mirror_city_tile(image, atlas, row, col, Vector2i(x, y), 0.86)
+
+	for x in range(224, 1060, MIRROR_CITY_TILE_SIZE):
+		_stamp_mirror_city_tile(image, atlas, 2, int(x / MIRROR_CITY_TILE_SIZE) % 16, Vector2i(x, 424), 0.96)
+		if x % 128 == 0:
+			_stamp_mirror_city_tile(image, atlas, 4, int(x / MIRROR_CITY_TILE_SIZE) % 16, Vector2i(x, 392), 0.80)
+	for y in range(210, 548, MIRROR_CITY_TILE_SIZE):
+		_stamp_mirror_city_tile(image, atlas, 3, int(y / MIRROR_CITY_TILE_SIZE) % 16, Vector2i(624, y), 0.92)
+		_stamp_mirror_city_tile(image, atlas, 3, int(y / MIRROR_CITY_TILE_SIZE + 3) % 16, Vector2i(656, y), 0.74)
+	for x in range(314, 966, MIRROR_CITY_TILE_SIZE):
+		_stamp_mirror_city_tile(image, atlas, 6, int(x / MIRROR_CITY_TILE_SIZE) % 16, Vector2i(x, 492), 0.68)
+		_stamp_mirror_city_tile(image, atlas, 7, int(x / MIRROR_CITY_TILE_SIZE + 8) % 16, Vector2i(x, 524), 0.56)
+	for y in range(440, 568, MIRROR_CITY_TILE_SIZE):
+		for x in range(250, 410, MIRROR_CITY_TILE_SIZE):
+			_stamp_mirror_city_tile(image, atlas, 11, int((x + y) / MIRROR_CITY_TILE_SIZE) % 16, Vector2i(x, y), 0.74)
+	for pos in [Vector2i(592, 376), Vector2i(624, 376), Vector2i(656, 376), Vector2i(624, 408)]:
+		_stamp_mirror_city_tile(image, atlas, 8, int((pos.x + pos.y) / MIRROR_CITY_TILE_SIZE) % 16, pos, 0.62)
+
+	_fill_mirror_city_rect(image, Rect2i(478, 196, 324, 42), Color(0.01, 0.025, 0.035, 0.34))
+	_fill_mirror_city_rect(image, Rect2i(502, 268, 276, 28), Color(0.02, 0.08, 0.10, 0.18))
+	_fill_mirror_city_rect(image, Rect2i(410, 562, 452, 30), Color(0.00, 0.00, 0.00, 0.28))
+	_draw_mirror_city_line(image, Vector2i(284, 462), Vector2i(392, 546), Color(0.95, 0.30, 0.78, 0.30), 2)
+	_draw_mirror_city_line(image, Vector2i(880, 214), Vector2i(1048, 330), Color(0.38, 0.95, 1.0, 0.20), 2)
+	_draw_mirror_city_line(image, Vector2i(478, 542), Vector2i(818, 542), Color(0.50, 0.96, 1.0, 0.18), 1)
+	return image
+
+
+func _stamp_mirror_city_tile(target: Image, atlas: Image, row: int, col: int, pos: Vector2i, alpha: float) -> void:
+	if atlas.is_empty():
+		return
+	var cols: int = max(1, int(atlas.get_width() / MIRROR_CITY_TILE_SIZE))
+	var rows: int = max(1, int(atlas.get_height() / MIRROR_CITY_TILE_SIZE))
+	var src := Rect2i((col % cols) * MIRROR_CITY_TILE_SIZE, (row % rows) * MIRROR_CITY_TILE_SIZE, MIRROR_CITY_TILE_SIZE, MIRROR_CITY_TILE_SIZE)
+	var cell := atlas.get_region(src)
+	if alpha < 0.999:
+		_apply_mirror_city_tile_alpha(cell, alpha)
+	target.blend_rect(cell, Rect2i(Vector2i.ZERO, cell.get_size()), pos)
+
+
+func _apply_mirror_city_tile_alpha(image: Image, alpha: float) -> void:
+	for y in range(image.get_height()):
+		for x in range(image.get_width()):
+			var px := image.get_pixel(x, y)
+			px.a *= alpha
+			image.set_pixel(x, y, px)
+
+
+func _fill_mirror_city_rect(image: Image, rect: Rect2i, color: Color) -> void:
+	for y in range(rect.position.y, rect.position.y + rect.size.y):
+		for x in range(rect.position.x, rect.position.x + rect.size.x):
+			if x >= 0 and y >= 0 and x < image.get_width() and y < image.get_height():
+				var current := image.get_pixel(x, y)
+				image.set_pixel(x, y, current.blend(color))
+
+
+func _draw_mirror_city_line(image: Image, start: Vector2i, end: Vector2i, color: Color, thickness: int) -> void:
+	var delta := end - start
+	var steps: int = max(abs(delta.x), abs(delta.y))
+	if steps <= 0:
+		return
+	for i in range(steps + 1):
+		var t := float(i) / float(steps)
+		var p := Vector2i(roundi(lerpf(float(start.x), float(end.x), t)), roundi(lerpf(float(start.y), float(end.y), t)))
+		for oy in range(-thickness, thickness + 1):
+			for ox in range(-thickness, thickness + 1):
+				var q := p + Vector2i(ox, oy)
+				if q.x >= 0 and q.y >= 0 and q.x < image.get_width() and q.y < image.get_height():
+					var current := image.get_pixel(q.x, q.y)
+					image.set_pixel(q.x, q.y, current.blend(color))
 
 
 func _add_signal_pillar(pos: Vector2) -> void:

@@ -58,7 +58,7 @@ const CHOICE_BUFFS: Dictionary = {
 	},
 	"ch1_elara_distrusted": {
 		"id": "lone_wolf",
-		"stat_mods": {"attack": 5, "base_defense": -3},
+		"stat_mods": {"attack": 5, "defense": -3},
 		"ability": "self_reliance",
 		"description": "Lone Wolf: +5 ATK, -3 DEF. Solo combat XP increased by 25%.",
 	},
@@ -171,6 +171,8 @@ func _ready() -> void:
 
 func _on_story_flag_updated(flag_name: String, value: bool) -> void:
 	if not value:
+		# A cleared flag must also clear the buff it granted.
+		remove_choice_buff(flag_name)
 		return
 	if CHOICE_BUFFS.has(flag_name):
 		apply_choice_buff(flag_name)
@@ -186,6 +188,67 @@ func _on_story_flag_updated(flag_name: String, value: bool) -> void:
 		"ch1_elara_trusted", "ch1_elara_cautious":
 			if "elara" not in party_combat_members:
 				party_combat_members.append("elara")
+
+
+## Apply or reverse a stat_mods dictionary. `dir` is +1 to apply, -1 to undo.
+## Every stat written here must be undoable, so that clearing an exclusive story
+## flag can fully reverse the buff it granted.
+func _apply_stat_mods(mods: Dictionary, dir: int) -> void:
+	for stat_name in mods:
+		var mod_value = mods[stat_name] * dir
+		match stat_name:
+			"attack":
+				GameManager.player_stats["attack"] = GameManager.player_stats.get("attack", 15) + mod_value
+				GameManager.player_stats["base_attack"] = GameManager.player_stats.get("base_attack", 15) + mod_value
+			"defense":
+				GameManager.player_stats["defense"] = GameManager.player_stats.get("defense", 0) + mod_value
+				GameManager.player_stats["base_defense"] = GameManager.player_stats.get("base_defense", 0) + mod_value
+			"max_hp":
+				GameManager.player_stats["max_hp"] = max(1, GameManager.player_stats.get("max_hp", 100) + mod_value)
+				if mod_value > 0:
+					GameManager.player_stats["hp"] = min(
+						GameManager.player_stats.get("hp", 100) + mod_value,
+						GameManager.player_stats.get("max_hp", 100)
+					)
+				else:
+					GameManager.player_stats["hp"] = min(
+						GameManager.player_stats.get("hp", 100),
+						GameManager.player_stats.get("max_hp", 100)
+					)
+			"max_mp":
+				GameManager.player_stats["max_mp"] = max(0, GameManager.player_stats.get("max_mp", 50) + mod_value)
+			"soul_gain_bonus":
+				GameManager.player_stats["soul_gain_bonus"] = GameManager.player_stats.get("soul_gain_bonus", 0.0) + mod_value
+
+
+## Clear all choice state. Called by GameManager.reset_game() — without this,
+## buffs and party members from a finished run carried into a brand-new game and
+## into New Game+, stacking on top of the fresh ones.
+## Note: stat mods are NOT reversed here, because reset_game() replaces
+## player_stats wholesale with DEFAULT_PLAYER_STATS immediately afterwards.
+func reset() -> void:
+	active_buffs.clear()
+	party_combat_members.clear()
+	_party_cooldowns.clear()
+
+
+## Remove a previously applied choice buff and undo its stat mods.
+## GameManager.set_story_flag() clears mutually exclusive flags (taking
+## ch1_elara_distrusted clears ch1_elara_trusted, for example); without this the
+## cleared choice's buff stayed active and both appeared in the buff summary.
+func remove_choice_buff(flag_name: String) -> void:
+	if not CHOICE_BUFFS.has(flag_name):
+		return
+	var buff_id: String = CHOICE_BUFFS[flag_name].get("id", "")
+	for i in range(active_buffs.size() - 1, -1, -1):
+		var b: Dictionary = active_buffs[i]
+		if b.get("source_flag", "") != flag_name and b.get("id", "") != buff_id:
+			continue
+		_apply_stat_mods(b.get("stat_mods", {}), -1)
+		active_buffs.remove_at(i)
+		print("[CHOICE-FX] Removed buff: %s (flag %s cleared)" % [buff_id, flag_name])
+
+
 
 
 # ══════════════════════════════════════════════════════════════════════
@@ -206,27 +269,7 @@ func apply_choice_buff(flag_name: String) -> void:
 	active_buffs.append(buff)
 
 	# Apply stat modifications
-	var mods: Dictionary = buff.get("stat_mods", {})
-	for stat_name in mods:
-		var mod_value = mods[stat_name]
-		match stat_name:
-			"attack":
-				GameManager.player_stats["attack"] = GameManager.player_stats.get("attack", 15) + mod_value
-				GameManager.player_stats["base_attack"] = GameManager.player_stats.get("base_attack", 15) + mod_value
-			"defense":
-				GameManager.player_stats["defense"] = GameManager.player_stats.get("defense", 0) + mod_value
-				GameManager.player_stats["base_defense"] = GameManager.player_stats.get("base_defense", 0) + mod_value
-			"max_hp":
-				GameManager.player_stats["max_hp"] = GameManager.player_stats.get("max_hp", 100) + mod_value
-				if mod_value > 0:
-					GameManager.player_stats["hp"] = min(
-						GameManager.player_stats.get("hp", 100) + mod_value,
-						GameManager.player_stats.get("max_hp", 100)
-					)
-			"max_mp":
-				GameManager.player_stats["max_mp"] = GameManager.player_stats.get("max_mp", 50) + mod_value
-			"soul_gain_bonus":
-				GameManager.player_stats["soul_gain_bonus"] = GameManager.player_stats.get("soul_gain_bonus", 0.0) + mod_value
+	_apply_stat_mods(buff.get("stat_mods", {}), 1)
 
 	print("[CHOICE-FX] Applied buff: %s — %s" % [buff_id, buff.get("description", "")])
 	buff_applied.emit(buff_id)

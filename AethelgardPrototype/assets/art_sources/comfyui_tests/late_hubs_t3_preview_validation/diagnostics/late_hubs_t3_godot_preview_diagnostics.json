@@ -1,0 +1,224 @@
+{
+	"actual_scene_references": [
+		{
+			"camera_found": true,
+			"hub_area": "Forgotten Sectors",
+			"hub_id": "forgotten_sectors",
+			"label_or_prompt_found": true,
+			"notes": "Read-only scene reference loaded; screenshot skipped when headless renderer could not provide a viewport image. T2 art was not swapped in.",
+			"player_found": true,
+			"risk": "Low-medium revisit/prep hub; no interaction performed.",
+			"scene": "res://scenes/regions/forgotten_sectors_revisit_hub.tscn",
+			"scene_load": "Pass",
+			"screenshot": "Skipped: headless dummy renderer did not provide a reliable viewport image.",
+			"visual_layer_found": true
+		},
+		{
+			"camera_found": true,
+			"hub_area": "Mirror City",
+			"hub_id": "mirror_city",
+			"label_or_prompt_found": true,
+			"notes": "Read-only scene reference loaded; screenshot skipped when headless renderer could not provide a viewport image. T2 art was not swapped in.",
+			"player_found": true,
+			"risk": "Low-medium revisit/prep hub; no interaction performed.",
+			"scene": "res://scenes/regions/mirror_city_revisit_hub.tscn",
+			"scene_load": "Pass",
+			"screenshot": "Skipped: headless dummy renderer did not provide a reliable viewport image.",
+			"visual_layer_found": true
+		},
+		{
+			"camera_found": true,
+			"hub_area": "Cathedral Server",
+			"hub_id": "cathedral_server",
+			"label_or_prompt_found": true,
+			"notes": "Read-only scene reference loaded; screenshot skipped when headless renderer could not provide a viewport image. T2 art was not swapped in.",
+			"player_found": true,
+			"risk": "Low-medium revisit/prep hub; no interaction performed.",
+			"scene": "res://scenes/regions/cathedral_server_revisit_hub.tscn",
+			"scene_load": "Pass",
+			"screenshot": "Skipped: headless dummy renderer did not provide a reliable viewport image.",
+			"visual_layer_found": true
+		},
+		{
+			"camera_found": true,
+			"hub_area": "Memory Ocean",
+			"hub_id": "memory_ocean",
+			"label_or_prompt_found": true,
+			"notes": "Read-only scene reference loaded; screenshot skipped when headless renderer could not provide a viewport image. T2 art was not swapped in.",
+			"player_found": true,
+			"risk": "Low-medium revisit/prep hub; no interaction performed.",
+			"scene": "res://scenes/regions/memory_ocean_revisit_hub.tscn",
+			"scene_load": "Pass",
+			"screenshot": "Skipped: headless dummy renderer did not provide a reliable viewport image.",
+			"visual_layer_found": true
+		},
+		{
+			"camera_found": true,
+			"hub_area": "Root of Heaven Prep",
+			"hub_id": "root_of_heaven",
+			"label_or_prompt_found": true,
+			"notes": "Read-only scene reference loaded; screenshot skipped when headless renderer could not provide a viewport image. T2 art was not swapped in.",
+			"player_found": true,
+			"risk": "Low-medium revisit/prep hub; no interaction performed.",
+			"scene": "res://scenes/regions/root_of_heaven_prep_hub.tscn",
+			"scene_load": "Pass",
+			"screenshot": "Skipped: headless dummy renderer did not provide a reliable viewport image.",
+			"visual_layer_found": true
+		},
+		{
+			"camera_found": true,
+			"hub_area": "Saved Assembly",
+			"hub_id": "saved_assembly",
+			"label_or_prompt_found": true,
+			"notes": "Read-only scene reference loaded; screenshot skipped when headless renderer could not provide a viewport image. T2 art was not swapped in.",
+			"player_found": true,
+			"risk": "Low-medium revisit/prep hub; no interaction performed.",
+			"scene": "res://scenes/regions/saved_assembly_revisit_hub.tscn",
+			"scene_load": "Pass",
+			"screenshot": "Skipped: headless dummy renderer did not provide a reliable viewport image.",
+			"visual_layer_found": true
+		},
+		{
+			"camera_found": true,
+			"hub_area": "Human Patch Lab",
+			"hub_id": "human_patch_lab",
+			"label_or_prompt_found": true,
+			"notes": "Read-only scene reference loaded; screenshot skipped when headless renderer could not provide a viewport image. T2 art was not swapped in.",
+			"player_found": true,
+			"risk": "Low-medium revisit/prep hub; no interaction performed.",
+			"scene": "res://scenes/regions/human_patch_lab_revisit_hub.tscn",
+			"scene_load": "Pass",
+			"screenshot": "Skipped: headless dummy renderer did not provide a reliable viewport image.",
+			"visual_layer_found": true
+		}
+	],
+	"gameplay_scene_script_modified": false,
+	"generated_v2_overwritten": false,
+	"generated_v3_overwritten": false,
+	"main_menu": {
+		"check": "main menu",
+		"path": "res://scenes/main_menu.tscn",
+		"result": "Pass"
+	},
+	"phase": "10M-T3",
+	"preview_boards": [
+		{
+			"candidate_source": "res://assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/generated_tiles/late_hub_t2_forgotten_sectors_family.png",
+			"current_source": "res://assets/generated_v2/tilesets/forgotten_sectors_v2_prototype_tileset.png",
+			"hub_area": "Forgotten Sectors",
+			"hub_id": "forgotten_sectors",
+			"notes": "Preview board rendered from isolated textures; no runtime integration.",
+			"preview_board": "res://assets/art_sources/comfyui_tests/late_hubs_t3_preview_validation/preview_boards/late_hub_t3_forgotten_sectors_current_vs_candidate.png",
+			"result": "Pass"
+		},
+		{
+			"candidate_source": "res://assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/generated_tiles/late_hub_t2_mirror_city_family.png",
+			"current_source": "res://assets/generated_v2/tilesets/mirror_city_v2_prototype_tileset.png",
+			"hub_area": "Mirror City",
+			"hub_id": "mirror_city",
+			"notes": "Preview board rendered from isolated textures; no runtime integration.",
+			"preview_board": "res://assets/art_sources/comfyui_tests/late_hubs_t3_preview_validation/preview_boards/late_hub_t3_mirror_city_current_vs_candidate.png",
+			"result": "Pass"
+		},
+		{
+			"candidate_source": "res://assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/generated_tiles/late_hub_t2_cathedral_server_family.png",
+			"current_source": "res://assets/generated_v2/tilesets/cathedral_server_v2_prototype_tileset.png",
+			"hub_area": "Cathedral Server",
+			"hub_id": "cathedral_server",
+			"notes": "Preview board rendered from isolated textures; no runtime integration.",
+			"preview_board": "res://assets/art_sources/comfyui_tests/late_hubs_t3_preview_validation/preview_boards/late_hub_t3_cathedral_server_current_vs_candidate.png",
+			"result": "Pass"
+		},
+		{
+			"candidate_source": "res://assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/generated_tiles/late_hub_t2_memory_ocean_family.png",
+			"current_source": "res://assets/generated_v2/tilesets/memory_ocean_v2_prototype_tileset.png",
+			"hub_area": "Memory Ocean",
+			"hub_id": "memory_ocean",
+			"notes": "Preview board rendered from isolated textures; no runtime integration.",
+			"preview_board": "res://assets/art_sources/comfyui_tests/late_hubs_t3_preview_validation/preview_boards/late_hub_t3_memory_ocean_current_vs_candidate.png",
+			"result": "Pass"
+		},
+		{
+			"candidate_source": "res://assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/generated_tiles/late_hub_t2_root_of_heaven_family.png",
+			"current_source": "res://assets/generated_v2/tilesets/root_of_heaven_v2_prototype_tileset.png",
+			"hub_area": "Root of Heaven Prep",
+			"hub_id": "root_of_heaven",
+			"notes": "Preview board rendered from isolated textures; no runtime integration.",
+			"preview_board": "res://assets/art_sources/comfyui_tests/late_hubs_t3_preview_validation/preview_boards/late_hub_t3_root_of_heaven_current_vs_candidate.png",
+			"result": "Pass"
+		},
+		{
+			"candidate_source": "res://assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/generated_tiles/late_hub_t2_saved_assembly_family.png",
+			"current_source": "missing dedicated generated_v2 fallback",
+			"hub_area": "Saved Assembly",
+			"hub_id": "saved_assembly",
+			"notes": "Preview board rendered from isolated textures; no runtime integration.",
+			"preview_board": "res://assets/art_sources/comfyui_tests/late_hubs_t3_preview_validation/preview_boards/late_hub_t3_saved_assembly_missing_vs_candidate.png",
+			"result": "Pass"
+		},
+		{
+			"candidate_source": "res://assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/generated_tiles/late_hub_t2_human_patch_lab_family.png",
+			"current_source": "missing dedicated generated_v2 fallback",
+			"hub_area": "Human Patch Lab",
+			"hub_id": "human_patch_lab",
+			"notes": "Preview board rendered from isolated textures; no runtime integration.",
+			"preview_board": "res://assets/art_sources/comfyui_tests/late_hubs_t3_preview_validation/preview_boards/late_hub_t3_human_patch_lab_missing_vs_candidate.png",
+			"result": "Pass"
+		},
+		{
+			"candidate_source": "res://assets/art_sources/comfyui_tests/late_hubs_t2_family_builder/generated_tiles/late_hub_t2_shared_neutral_family.png",
+			"current_source": "missing dedicated generated_v2 fallback",
+			"hub_area": "Shared Neutral Family",
+			"hub_id": "shared_neutral",
+			"notes": "Preview board rendered from isolated textures; no runtime integration.",
+			"preview_board": "res://assets/art_sources/comfyui_tests/late_hubs_t3_preview_validation/preview_boards/late_hub_t3_shared_neutral_preview.png",
+			"result": "Pass"
+		}
+	],
+	"preview_only": true,
+	"production_art_changed": false,
+	"project_boot": true,
+	"safety_checks": [
+		{
+			"check": "Oakhaven baseline preservation",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png",
+			"result": "Pass",
+			"size": "(512, 512)"
+		},
+		{
+			"check": "Ironhold baseline preservation",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/production_art/tilesets/ironhold/ironhold_tileset.png",
+			"result": "Pass",
+			"size": "(512, 512)"
+		},
+		{
+			"check": "Fractured Wastes baseline preservation",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png",
+			"result": "Pass",
+			"size": "(512, 512)"
+		},
+		{
+			"check": "shared V3 props preservation",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png",
+			"result": "Pass",
+			"size": "(1536, 1024)"
+		},
+		{
+			"check": "shared V3 decals preservation",
+			"exists": true,
+			"loaded": true,
+			"path": "res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png",
+			"result": "Pass",
+			"size": "(1536, 1024)"
+		}
+	],
+	"script": "docs/art_pipeline/late_hubs_t3_preview_validation/late_hubs_t3_preview_validation.gd"
+}

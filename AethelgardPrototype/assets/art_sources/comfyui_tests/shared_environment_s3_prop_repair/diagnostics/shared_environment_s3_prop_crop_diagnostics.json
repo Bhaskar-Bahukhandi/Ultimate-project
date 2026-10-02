@@ -1,0 +1,795 @@
+{
+  "phase": "10M-S3",
+  "expected_atlas_dimensions": [
+    1536,
+    1024
+  ],
+  "variants": {
+    "a": {
+      "path": "assets/art_sources/comfyui_tests/shared_environment_s3_prop_repair/generated_props/shared_environment_props_s3_variant_a_conservative.png",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "b": {
+      "path": "assets/art_sources/comfyui_tests/shared_environment_s3_prop_repair/generated_props/shared_environment_props_s3_variant_b_rich.png",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "c": {
+      "path": "assets/art_sources/comfyui_tests/shared_environment_s3_prop_repair/generated_props/shared_environment_props_s3_variant_c_dense.png",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA"
+    }
+  },
+  "regions": [
+    {
+      "region_id": "oakhaven_roof",
+      "rect2i": [
+        32,
+        22,
+        248,
+        190
+      ],
+      "s2_problem": "S1 roof was too flat and sparse.",
+      "s3_repair": "Added roof strip, tile marks, chimney, edge trim, and shadow.",
+      "crop_bounds_valid": true,
+      "current_v3_alpha_ratio": 0.7958,
+      "s1_alpha_ratio": 0.5361,
+      "variants": {
+        "a": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.5483,
+          "visual_richness_estimate": 8.78,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "b": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.5508,
+          "visual_richness_estimate": 9.16,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "c": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.5514,
+          "visual_richness_estimate": 9.42,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        }
+      }
+    },
+    {
+      "region_id": "oakhaven_hedge_corner",
+      "rect2i": [
+        760,
+        52,
+        390,
+        176
+      ],
+      "s2_problem": "S1 hedge had broad transparent gaps and simplified clusters.",
+      "s3_repair": "Filled corner hedge with layered bush clusters and base shadows.",
+      "crop_bounds_valid": true,
+      "current_v3_alpha_ratio": 0.4166,
+      "s1_alpha_ratio": 0.6299,
+      "variants": {
+        "a": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.3855,
+          "visual_richness_estimate": 7.9,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "b": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.4475,
+          "visual_richness_estimate": 8.6,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "c": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.446,
+          "visual_richness_estimate": 8.85,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        }
+      }
+    },
+    {
+      "region_id": "oakhaven_flowers",
+      "rect2i": [
+        30,
+        264,
+        418,
+        82
+      ],
+      "s2_problem": "S1 flower scatter was readable but thin.",
+      "s3_repair": "Added varied flower, grass, and herb clusters across the crop.",
+      "crop_bounds_valid": true,
+      "current_v3_alpha_ratio": 0.5152,
+      "s1_alpha_ratio": 0.1149,
+      "variants": {
+        "a": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.1978,
+          "visual_richness_estimate": 6.89,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "b": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.2065,
+          "visual_richness_estimate": 7.3,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "c": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.2178,
+          "visual_richness_estimate": 7.61,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        }
+      }
+    },
+    {
+      "region_id": "oakhaven_herb_sign",
+      "rect2i": [
+        478,
+        238,
+        128,
+        126
+      ],
+      "s2_problem": "S1 sign marker lacked detail and grounding.",
+      "s3_repair": "Added sign face, post, herb patch, bucket, and shadow.",
+      "crop_bounds_valid": true,
+      "current_v3_alpha_ratio": 0.672,
+      "s1_alpha_ratio": 0.3686,
+      "variants": {
+        "a": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.3504,
+          "visual_richness_estimate": 7.71,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "b": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.3599,
+          "visual_richness_estimate": 8.13,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "c": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.3607,
+          "visual_richness_estimate": 8.39,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        }
+      }
+    },
+    {
+      "region_id": "ironhold_pipes",
+      "rect2i": [
+        616,
+        238,
+        544,
+        170
+      ],
+      "s2_problem": "S1 pipes were isolated lines without industrial mass.",
+      "s3_repair": "Added pipe network, elbows, valves, joints, supports, and rivets.",
+      "crop_bounds_valid": true,
+      "current_v3_alpha_ratio": 0.5327,
+      "s1_alpha_ratio": 0.2115,
+      "variants": {
+        "a": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.3412,
+          "visual_richness_estimate": 7.66,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "b": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.3433,
+          "visual_richness_estimate": 8.04,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "c": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.4133,
+          "visual_richness_estimate": 8.67,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        }
+      }
+    },
+    {
+      "region_id": "ironhold_forge",
+      "rect2i": [
+        1320,
+        226,
+        164,
+        194
+      ],
+      "s2_problem": "S1 forge was a simple box and weak silhouette.",
+      "s3_repair": "Added furnace body, chimney, grate, warm glow, anvil, and control box.",
+      "crop_bounds_valid": true,
+      "current_v3_alpha_ratio": 0.66,
+      "s1_alpha_ratio": 0.2242,
+      "variants": {
+        "a": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.4756,
+          "visual_richness_estimate": 8.39,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "b": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.4756,
+          "visual_richness_estimate": 8.75,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "c": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.4756,
+          "visual_richness_estimate": 9.01,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        }
+      }
+    },
+    {
+      "region_id": "crates",
+      "rect2i": [
+        40,
+        434,
+        540,
+        144
+      ],
+      "s2_problem": "S1 shared prop plate had low object density.",
+      "s3_repair": "Added crates, barrels, sacks, rubble, fence pieces, and cast shadows.",
+      "crop_bounds_valid": true,
+      "current_v3_alpha_ratio": 0.644,
+      "s1_alpha_ratio": 0.2488,
+      "variants": {
+        "a": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.3498,
+          "visual_richness_estimate": 7.71,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "b": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.4076,
+          "visual_richness_estimate": 8.39,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "c": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.4182,
+          "visual_richness_estimate": 8.7,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        }
+      }
+    },
+    {
+      "region_id": "archive_shelves",
+      "rect2i": [
+        620,
+        370,
+        356,
+        218
+      ],
+      "s2_problem": "S1 shelf area was large but simple.",
+      "s3_repair": "Added book shelves, archive boxes, scrolls, and bottom grounding.",
+      "crop_bounds_valid": true,
+      "current_v3_alpha_ratio": 0.7206,
+      "s1_alpha_ratio": 0.6536,
+      "variants": {
+        "a": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.7835,
+          "visual_richness_estimate": 10.0,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "b": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.7835,
+          "visual_richness_estimate": 10.0,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "c": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.7839,
+          "visual_richness_estimate": 10.0,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        }
+      }
+    },
+    {
+      "region_id": "dossier_stack",
+      "rect2i": [
+        988,
+        440,
+        94,
+        128
+      ],
+      "s2_problem": "S1 dossier stack read as plain rectangles.",
+      "s3_repair": "Added staggered paper stack, folders, edge lines, and shadow.",
+      "crop_bounds_valid": true,
+      "current_v3_alpha_ratio": 0.5535,
+      "s1_alpha_ratio": 0.4855,
+      "variants": {
+        "a": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.3816,
+          "visual_richness_estimate": 7.88,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "b": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.3892,
+          "visual_richness_estimate": 8.29,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "c": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.3955,
+          "visual_richness_estimate": 8.57,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        }
+      }
+    },
+    {
+      "region_id": "null_seal",
+      "rect2i": [
+        1092,
+        432,
+        156,
+        176
+      ],
+      "s2_problem": "S1 seal was readable but too minimal.",
+      "s3_repair": "Added pedestal, ritual rings, symbol lines, and controlled glow.",
+      "crop_bounds_valid": true,
+      "current_v3_alpha_ratio": 0.6316,
+      "s1_alpha_ratio": 0.291,
+      "variants": {
+        "a": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.4579,
+          "visual_richness_estimate": 8.29,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "b": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.4579,
+          "visual_richness_estimate": 8.66,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "c": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.4579,
+          "visual_richness_estimate": 8.91,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        }
+      }
+    },
+    {
+      "region_id": "mirror_plinth",
+      "rect2i": [
+        1280,
+        430,
+        202,
+        192
+      ],
+      "s2_problem": "S1 plinth was too empty.",
+      "s3_repair": "Added plinth base, reflective shard/mirror, highlights, and stones.",
+      "crop_bounds_valid": true,
+      "current_v3_alpha_ratio": 0.3983,
+      "s1_alpha_ratio": 0.2402,
+      "variants": {
+        "a": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.3203,
+          "visual_richness_estimate": 7.55,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "b": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.3213,
+          "visual_richness_estimate": 7.92,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "c": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.3205,
+          "visual_richness_estimate": 8.17,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        }
+      }
+    },
+    {
+      "region_id": "server_console",
+      "rect2i": [
+        36,
+        612,
+        376,
+        194
+      ],
+      "s2_problem": "S1 console banks lacked screen/button density.",
+      "s3_repair": "Added terminal banks, screens, buttons, cable lines, and shadows.",
+      "crop_bounds_valid": true,
+      "current_v3_alpha_ratio": 0.6816,
+      "s1_alpha_ratio": 0.3944,
+      "variants": {
+        "a": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.46,
+          "visual_richness_estimate": 8.31,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "b": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.4604,
+          "visual_richness_estimate": 8.67,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "c": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.4606,
+          "visual_richness_estimate": 8.93,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        }
+      }
+    },
+    {
+      "region_id": "firewall_panel",
+      "rect2i": [
+        430,
+        612,
+        358,
+        194
+      ],
+      "s2_problem": "S1 panels were flat and sparse.",
+      "s3_repair": "Added barrier plates, warning geometry, posts, vents, and red cores.",
+      "crop_bounds_valid": true,
+      "current_v3_alpha_ratio": 0.6946,
+      "s1_alpha_ratio": 0.4023,
+      "variants": {
+        "a": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.5029,
+          "visual_richness_estimate": 8.54,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "b": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.4887,
+          "visual_richness_estimate": 8.82,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "c": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.4887,
+          "visual_richness_estimate": 9.08,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        }
+      }
+    },
+    {
+      "region_id": "tide_buoy",
+      "rect2i": [
+        824,
+        610,
+        120,
+        182
+      ],
+      "s2_problem": "S1 marker was too plain.",
+      "s3_repair": "Added buoy body, pole, ring base, glow, and marker base.",
+      "crop_bounds_valid": true,
+      "current_v3_alpha_ratio": 0.5107,
+      "s1_alpha_ratio": 0.201,
+      "variants": {
+        "a": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.2779,
+          "visual_richness_estimate": 7.32,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "b": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.2779,
+          "visual_richness_estimate": 7.69,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "c": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.2779,
+          "visual_richness_estimate": 7.94,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        }
+      }
+    },
+    {
+      "region_id": "salvage_shelf",
+      "rect2i": [
+        974,
+        610,
+        290,
+        198
+      ],
+      "s2_problem": "S1 salvage cluster was sparse.",
+      "s3_repair": "Added shelves, crates, scrap, cables, and grouped silhouettes.",
+      "crop_bounds_valid": true,
+      "current_v3_alpha_ratio": 0.4483,
+      "s1_alpha_ratio": 0.5621,
+      "variants": {
+        "a": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.4411,
+          "visual_richness_estimate": 8.2,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "b": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.4364,
+          "visual_richness_estimate": 8.54,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "c": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.441,
+          "visual_richness_estimate": 8.82,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        }
+      }
+    },
+    {
+      "region_id": "ocean_cache",
+      "rect2i": [
+        1268,
+        610,
+        236,
+        198
+      ],
+      "s2_problem": "S1 cache lacked storage identity.",
+      "s3_repair": "Added cache/chest, net/rope, rocks, and small salvage pieces.",
+      "crop_bounds_valid": true,
+      "current_v3_alpha_ratio": 0.6713,
+      "s1_alpha_ratio": 0.1712,
+      "variants": {
+        "a": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.326,
+          "visual_richness_estimate": 7.58,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "b": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.3289,
+          "visual_richness_estimate": 7.96,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "c": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.3434,
+          "visual_richness_estimate": 8.29,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        }
+      }
+    },
+    {
+      "region_id": "lab_console",
+      "rect2i": [
+        34,
+        818,
+        248,
+        178
+      ],
+      "s2_problem": "S1 lab console was too simple.",
+      "s3_repair": "Added clinical console, screen, table, devices, and keyboard.",
+      "crop_bounds_valid": true,
+      "current_v3_alpha_ratio": 0.6729,
+      "s1_alpha_ratio": 0.4222,
+      "variants": {
+        "a": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.5567,
+          "visual_richness_estimate": 8.83,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "b": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.5567,
+          "visual_richness_estimate": 9.19,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "c": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.5567,
+          "visual_richness_estimate": 9.44,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        }
+      }
+    },
+    {
+      "region_id": "memory_tank",
+      "rect2i": [
+        292,
+        814,
+        170,
+        186
+      ],
+      "s2_problem": "S1 tank needed stronger glass/fluid silhouette.",
+      "s3_repair": "Added glass tank, liquid core, base, cap, pipe, and highlights.",
+      "crop_bounds_valid": true,
+      "current_v3_alpha_ratio": 0.5984,
+      "s1_alpha_ratio": 0.3223,
+      "variants": {
+        "a": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.4522,
+          "visual_richness_estimate": 8.26,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "b": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.4522,
+          "visual_richness_estimate": 8.63,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "c": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.4522,
+          "visual_richness_estimate": 8.88,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        }
+      }
+    },
+    {
+      "region_id": "root_circuit_rail",
+      "rect2i": [
+        628,
+        816,
+        844,
+        190
+      ],
+      "s2_problem": "S1 rail was mostly empty across a very wide crop.",
+      "s3_repair": "Added long rail, root/circuit strands, nodes, and repeating supports.",
+      "crop_bounds_valid": true,
+      "current_v3_alpha_ratio": 0.6772,
+      "s1_alpha_ratio": 0.0766,
+      "variants": {
+        "a": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.2102,
+          "visual_richness_estimate": 6.96,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "b": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.2198,
+          "visual_richness_estimate": 7.37,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        },
+        "c": {
+          "nonblank": true,
+          "alpha_present": true,
+          "density_estimate": 0.2231,
+          "visual_richness_estimate": 7.64,
+          "alignment_verdict": "aligned",
+          "risk": "low"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "A28-001",
+    "issue": "Debug/dev menu options exposed to fresh players",
+    "before": "A2.7 screenshot showed legacy debug, skip prologue, chapter select, completion.",
+    "fix": "scripts/main_menu.gd hides SkipPrologueButton, ChapterSelectButton, CompletionButton, and LegacyPrologueButton from the public menu surface while preserving methods/routes.",
+    "headless_result": "probe_01_menu_public_surface passed",
+    "headed_result": "NOT VALIDATED",
+    "status": "Fixed by code/headless, awaiting headed screenshot",
+    "risk": "Low"
+  },
+  {
+    "id": "A28-002",
+    "issue": "Signal prompt visible but headed interaction did not visibly succeed",
+    "before": "A2.7 F/E attempts did not visibly advance.",
+    "fix": "Expanded SignalFragment collision/range, added hook-local F/E fallback, forced prompt text only in success range.",
+    "headless_result": "probe_02_signal_interaction_range passed",
+    "headed_result": "NOT VALIDATED",
+    "status": "Fixed by headless, awaiting headed proof",
+    "risk": "Medium"
+  },
+  {
+    "id": "A28-003",
+    "issue": "Signal success feedback too subtle/unproven",
+    "before": "A2.7 had no visible post-interaction state change.",
+    "fix": "Signal turns green, CONNECTED marker appears, objective changes, pulse arms, path label appears.",
+    "headless_result": "probe_03_signal_success_feedback passed",
+    "headed_result": "NOT VALIDATED",
+    "status": "Fixed by headless, awaiting headed proof",
+    "risk": "Medium"
+  },
+  {
+    "id": "A28-004",
+    "issue": "GlitchPulse not reached in headed play",
+    "before": "No A2.7 pulse evidence.",
+    "fix": "Hook-local proximity trigger backs up Area2D body_entered, one-shot pulse feedback/knockback keeps HP unchanged.",
+    "headless_result": "probe_04_glitch_pulse_feedback passed",
+    "headed_result": "NOT VALIDATED",
+    "status": "Fixed by headless, awaiting headed proof",
+    "risk": "Medium"
+  },
+  {
+    "id": "A28-005",
+    "issue": "OakhavenPath/east route not reached in headed play",
+    "before": "No A2.7 path/transition evidence.",
+    "fix": "Path marker brightens after signal, path label becomes visible, hook-local F/E/proximity completion fallback added.",
+    "headless_result": "probe_05 and probe_06 passed",
+    "headed_result": "NOT VALIDATED",
+    "status": "Fixed by headless, awaiting headed proof",
+    "risk": "Medium"
+  },
+  {
+    "id": "A28-006",
+    "issue": "Computer Use headed validation unavailable",
+    "before": "A2.8 requires Computer Use viewport proof.",
+    "fix": "No runtime fix possible; tool bootstrap failed before app control.",
+    "headless_result": "N/A",
+    "headed_result": "Computer Use unavailable",
+    "status": "P0 validation blocker",
+    "risk": "High"
+  }
+]

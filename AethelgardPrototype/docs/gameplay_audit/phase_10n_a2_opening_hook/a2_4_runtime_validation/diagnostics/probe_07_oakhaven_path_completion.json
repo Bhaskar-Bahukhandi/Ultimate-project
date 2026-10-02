@@ -1,0 +1,26 @@
+{
+  "compat_flags_before": {
+    "ch1_awakening_complete": false,
+    "ch1_glitch_crater_complete": false,
+    "ch1_opening_hook_complete": false,
+    "plane_crash_completed": false
+  },
+  "completion_flags_after": {
+    "ch1_awakening_complete": true,
+    "ch1_glitch_crater_complete": true,
+    "ch1_opening_hook_complete": true,
+    "plane_crash_completed": true
+  },
+  "current_region_after": "",
+  "evidence_type": "CORRECTED HEADLESS RUNTIME EVIDENCE",
+  "method_used": "scene._complete_opening_hook(), checked before transition timer elapsed",
+  "notes": "completion flags validated without waiting for scene transition",
+  "oakhaven_path_exists": true,
+  "phase": "10N-A2.4",
+  "player_exists": true,
+  "probe": "probe_07_oakhaven_path_completion",
+  "signal_exists": true,
+  "signal_flag_after_signal": true,
+  "start_marker_printed": true,
+  "status": "pass"
+}
