@@ -50,26 +50,45 @@ The measurable definitions are in roadmap §2.
 - **Regions in the build:** Oakhaven, Ironhold, Fractured Wastes, Forgotten Sectors, Mirror City,
   Cathedral Server, Memory Ocean, Saved Assembly, Human Patch Lab, Root of Heaven. The full game
   targets 8 connected regions at launch; the blueprint's other kingdoms are expansion candidates.
-- **Antagonist:** SOVEREIGN. A Tutorial Knight (Aldric), an Administrator Proxy and the Data Wraith
-  are earlier bosses.
+- **Antagonists:** SOVEREIGN is the penultimate boss. **The God King is the true final boss, fought
+  after SOVEREIGN** (decided 2026-10-04; not yet in the build, where the game currently ends at
+  SOVEREIGN). A Tutorial Knight (Aldric), an Administrator Proxy and the Data Wraith are earlier
+  bosses.
+- **Seraphina:** a flight attendant on Flight 707, transported like Kaelen but to a different region.
+  There she became a **paladin and the Knight-Commander** of the kingdom she arrived in (decided
+  2026-10-04). Chapter 2 and Chapter 3 lines must agree with this.
 - **Elara:** the Glitch-Witch guide. Her corrupted arm worsens every time she casts.
 - **Lyra:** a former system admin met in the Fractured Wastes.
 - **Kaelthas:** the Chapter 3 ally or betrayer.
 - **Source Key:** 7 fragments. All 7 are required for the Synthesis ending.
 
-### Open canon questions (yours to answer)
+### Endings: framed by *who authorizes the change* (decided 2026-10-04)
 
-1. **Seraphina's identity.** Chapter 2 treats her as a fellow Flight 707 survivor (flight
-   attendant). Chapter 3 calls her "Knight-Commander". Older docs call her a paladin or an Oracle Mage.
-2. **Endings framing.** Destroy / Rewrite / Dissolve / Synthesize mirrors Mass Effect 3. The review
-   suggests reframing them around *who authorizes* the change (P10).
-3. **"God King" vs SOVEREIGN.** The blueprint's antagonist name doesn't appear in the game.
+Endings are no longer about what happens to SOVEREIGN (the Destroy / Rewrite / Dissolve /
+Synthesize split, which mirrored Mass Effect 3). They are about **who is allowed to authorize** the
+change to the world. That's the Null Court thesis (P10), and it maps onto story axis 1 (who holds
+Root Access). The table below is a working mapping from today's routes; the names and content are
+yours to write.
 
-## Glitch Arts (Soul) — proposal for review
+| Today's route | Reframed as: authorized by… | Working title |
+|---|---|---|
+| Destroy | Kaelen alone (unilateral root) | *Sole Authority* |
+| Rewrite under limits | Kaelen bound by rules others can audit | *Bound Authority* |
+| Dissolve | No one; root is abolished | *No Authority* |
+| Synthesize | The people affected, including the deleted, by consent | *Consent* |
 
-Not implemented. These are a starting point for the special arts Soul will pay for. Soul is earned
-by skillful play, so these are the "earned" moves. Each uses the Root-Access theme and is distinct
-from MP spells, which do damage and healing.
+The God King fight and Story+ then play out differently depending on which authority you chose.
+
+### Open canon questions
+
+None right now. Add new ones here as the story deepens.
+
+## Glitch Arts (Soul) — approved starting set (2026-10-04)
+
+Approved as the first set; more and better arts can be added later. They'll be built with the
+combat foundation (roadmap Months 5–6), where moves become data. Soul is earned by skillful play, so
+these are the "earned" moves. Each uses the Root-Access theme and is distinct from MP spells, which
+do damage and healing.
 
 | Art | Effect | Soul | Notes |
 |---|---|---|---|
