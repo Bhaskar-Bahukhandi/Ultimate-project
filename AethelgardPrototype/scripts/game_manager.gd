@@ -275,6 +275,7 @@ const DEFAULT_STORY_FLAGS: Dictionary = {
 	"ch3_fractured_wastes_entered": false,
 	"ch3_data_paths_discovered": false, "ch3_lyra_met": false,
 	"ch3_corruption_storm_survived": false,
+	"ch3_server_room_unlocked": false,  # Set by the Fractured Wastes region story exit
 	"ch3_fragment_3_collected": false, "source_key_fragment_3": false,
 	"ch3_elara_powers_amplified": false,
 	"ch3_lyra_route_reward_claimed": false, "ch3_archive_consent_clause_found": false,
@@ -500,6 +501,21 @@ var _admin_spawn_cooldown: float = 0.0
 var _admin_enforcer_script: GDScript = null
 var _load_in_progress: bool = false
 var _is_saving: bool = false
+## Slots whose save was requested during a scene transition. They are written
+## once the transition (and any load in progress) finishes, instead of being
+## dropped — scene _ready() checkpoints run while the transition is still active.
+var _deferred_save_slots: Array[int] = []
+## Incremented by change_state(); lets load_game() tell whether the loaded
+## scene chose its own state in _ready().
+var _state_change_count: int = 0
+## Scenes that cannot be resumed by reloading them (their _ready() expects
+## context that a save does not carry). Saving inside them is refused.
+const NON_RESUMABLE_SCENES: Array[String] = [
+	"res://scenes/combat/combat_arena.tscn",
+	"res://scenes/game_over.tscn",
+	"res://scenes/main_menu.tscn",
+	"res://scenes/splash_screen.tscn",
+]
 
 # ── New Game Plus ─────────────────────────────────────────────────────
 var ng_plus_cycle: int = 0  # 0 = first playthrough, 1 = NG+, 2 = NG++, etc.
@@ -631,6 +647,7 @@ func _process(delta: float) -> void:
 
 func change_state(new_state: GameState) -> void:
 	current_state = new_state
+	_state_change_count += 1
 	state_changed.emit(new_state)
 
 # Mutually exclusive flag groups — only one flag per group can be true
@@ -1363,15 +1380,27 @@ func save_game(slot: int = 0) -> bool:
 		push_warning("[SAVE] Save already in progress, ignoring")
 		return false
 	_is_saving = true
+	# Never save when no game is running (main menu) or the run has ended —
+	# that would overwrite a real save with default/dead state.
+	if current_state in [GameState.MENU, GameState.GAME_OVER]:
+		push_warning("[SAVE] Refused: no game in progress (%s)" % GameState.keys()[current_state])
+		_is_saving = false
+		return false
 	# Block manual saves during unsafe states (autosave is more permissive)
 	if slot != AUTOSAVE_SLOT:
-		if current_state in [GameState.COMBAT, GameState.CUTSCENE, GameState.GAME_OVER]:
+		if current_state in [GameState.COMBAT, GameState.CUTSCENE]:
 			push_warning("[SAVE] Cannot manual save during %s" % GameState.keys()[current_state])
 			_is_saving = false
 			return false
-	# Block ALL saves during scene transitions
+	# During a scene transition the new scene is not settled yet: queue the
+	# save and write it when the transition completes (see _flush_deferred_saves).
 	if has_node("/root/SceneTransitions") and SceneTransitions.is_transitioning:
-		push_warning("[SAVE] Cannot save during scene transition")
+		_is_saving = false
+		_defer_save(slot)
+		return false
+	var scene_path: String = get_tree().current_scene.scene_file_path if is_instance_valid(get_tree().current_scene) else ""
+	if scene_path in NON_RESUMABLE_SCENES:
+		push_warning("[SAVE] Refused: cannot resume from %s" % scene_path)
 		_is_saving = false
 		return false
 	var save_data = {
@@ -1384,7 +1413,7 @@ func save_game(slot: int = 0) -> bool:
 		"corruption_level": corruption_level,
 		"perfect_delete_charges": perfect_delete_charges,
 		"perfect_delete_used": perfect_delete_used,
-		"current_scene": get_tree().current_scene.scene_file_path if is_instance_valid(get_tree().current_scene) else "",
+		"current_scene": scene_path,
 		"current_chapter": current_chapter,
 		"current_state": current_state,
 		"playtime_seconds": playtime_seconds,
@@ -1444,6 +1473,35 @@ func save_game(slot: int = 0) -> bool:
 		print("[SAVE] Slot %d saved successfully (v%s)" % [slot, SAVE_VERSION])
 	_is_saving = false
 	return true
+
+func _defer_save(slot: int) -> void:
+	if slot not in _deferred_save_slots:
+		_deferred_save_slots.append(slot)
+		if OS.is_debug_build():
+			print("[SAVE] Slot %d queued until the scene transition completes" % slot)
+	if not SceneTransitions.transition_completed.is_connected(_flush_deferred_saves):
+		SceneTransitions.transition_completed.connect(_flush_deferred_saves, CONNECT_ONE_SHOT)
+
+func _flush_deferred_saves() -> void:
+	# A load restores player position/state after its transition finishes;
+	# load_game() flushes again once it is done.
+	if _load_in_progress or _deferred_save_slots.is_empty():
+		return
+	var slots := _deferred_save_slots.duplicate()
+	_deferred_save_slots.clear()
+	for slot in slots:
+		if slot == AUTOSAVE_SLOT:
+			_save_with_feedback(slot)
+		else:
+			save_game(slot)
+
+func _save_with_feedback(slot: int) -> bool:
+	var ok := save_game(slot)
+	if ok:
+		show_save_indicator()
+		if has_node("/root/SFXManager"):
+			SFXManager.play("save_complete")
+	return ok
 
 func load_game(slot: int = 0) -> bool:
 	if _load_in_progress:
@@ -1614,6 +1672,7 @@ func load_game(slot: int = 0) -> bool:
 	glitch_meter_changed.emit(glitch_meter)
 	corruption_level_changed.emit(corruption_level)
 	var saved_scene: String = _sanitize_free_travel_loaded_scene(data.get("current_scene", ""))
+	var state_changes_before_scene := _state_change_count
 	if saved_scene and ResourceLoader.exists(saved_scene):
 		if has_node("/root/SceneTransitions"):
 			await SceneTransitions.change_scene(saved_scene)
@@ -1635,14 +1694,20 @@ func load_game(slot: int = 0) -> bool:
 			var restore_players = get_tree().get_nodes_in_group("player")
 			if not restore_players.is_empty():
 				restore_players[0].global_position = Vector2(saved_pos.get("x", 0.0), saved_pos.get("y", 0.0))
-	# Restore game state — force safe states only after load
-	var saved_state: int = int(data.get("current_state", GameState.EXPLORATION))
-	if saved_state in [GameState.MENU, GameState.COMBAT, GameState.CUTSCENE, GameState.GAME_OVER]:
-		saved_state = GameState.EXPLORATION
-	change_state(saved_state)
+	# Restore game state. The loaded scene's _ready() knows its own state best
+	# (story scenes set DIALOGUE, trials set COMBAT); only fall back to the saved
+	# state when the scene didn't set one, and never restore a transient state —
+	# checkpoints are now written mid-dialogue, which must not reload as a
+	# DIALOGUE state with no dialogue running.
+	if _state_change_count == state_changes_before_scene:
+		var saved_state: int = int(data.get("current_state", GameState.EXPLORATION))
+		if saved_state in [GameState.MENU, GameState.COMBAT, GameState.CUTSCENE, GameState.GAME_OVER, GameState.DIALOGUE]:
+			saved_state = GameState.EXPLORATION
+		change_state(saved_state)
 	if OS.is_debug_build():
 		print("[LOAD] Slot %d loaded successfully (v%s)" % [slot, save_version])
 	_load_in_progress = false
+	_flush_deferred_saves()
 	return true
 
 func save_exists(slot: int = 0) -> bool:
@@ -1698,16 +1763,25 @@ func get_save_info(slot: int = 0) -> Dictionary:
 		"ng_plus_cycle": data.get("ng_plus_cycle", 0),
 	}
 
-func auto_save() -> void:
-	if current_state in [GameState.GAME_OVER, GameState.MENU, GameState.COMBAT, GameState.CUTSCENE, GameState.DIALOGUE]:
-		return
+## Write the autosave checkpoint. Story scripts call this mid-dialogue, mid-
+## cutscene and right after boss fights on purpose — those ARE the checkpoints —
+## so only "no game running" states and non-resumable scenes are refused (inside
+## save_game). During a scene transition the save is queued, not dropped.
+## Returns true only if the save was written now; feedback is shown only then.
+func auto_save() -> bool:
 	if has_node("/root/SceneTransitions") and SceneTransitions.is_transitioning:
-		return
-	show_save_indicator()  # Pass 57: Visual feedback
-	save_game(AUTOSAVE_SLOT)
-	# Pass 53: Play save complete SFX
-	if has_node("/root/SFXManager"):
-		SFXManager.play("save_complete")
+		if current_state not in [GameState.MENU, GameState.GAME_OVER]:
+			_defer_save(AUTOSAVE_SLOT)
+		return false
+	return _save_with_feedback(AUTOSAVE_SLOT)
+
+## Player-initiated save to the autosave slot (pause menu "Quick Save").
+## Follows the manual-save rules: not mid-combat or mid-cutscene.
+func quick_save() -> bool:
+	if current_state in [GameState.COMBAT, GameState.CUTSCENE]:
+		push_warning("[SAVE] Cannot quick save during %s" % GameState.keys()[current_state])
+		return false
+	return auto_save()
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -1738,6 +1812,8 @@ func reset_game() -> void:
 	_dda_window_timer = 0.0
 	_admin_spawn_cooldown = 0.0
 	_load_in_progress = false
+	# A save queued by the previous run must not be written with the new run's state.
+	_deferred_save_slots.clear()
 	ng_plus_cycle = 0
 	ng_plus_available = false
 	titles_earned.clear()

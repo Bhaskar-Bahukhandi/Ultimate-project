@@ -1083,11 +1083,11 @@ func _build_pause_ui() -> void:
 	autosave_btn.add_theme_color_override("font_color", Color(0.3, 0.9, 0.5))
 	autosave_btn.pressed.connect(func():
 		if has_node("/root/GameManager"):
-			GameManager.auto_save()
+			var success: bool = GameManager.quick_save()
 			if has_node("/root/SFXManager"):
-				SFXManager.play("ui_confirm")
+				SFXManager.play("ui_confirm" if success else "ui_cancel")
 			if has_node("/root/VFXLibrary"):
-				VFXLibrary.spawn_status_indicator("Quick Saved!", Vector2(640, 400), self, true)
+				VFXLibrary.spawn_status_indicator("Quick Saved!" if success else "Cannot save now!", Vector2(640, 400), self, success)
 	)
 	save_row.add_child(autosave_btn)
 

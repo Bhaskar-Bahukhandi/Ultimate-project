@@ -53,7 +53,13 @@ func _ready() -> void:
 	await tween.finished
 	if not is_inside_tree(): return
 
-	await _phase_intro()
+	# Entered from the region's Server Room gate: skip the intro (which would
+	# just send the player back to the region) and run the fragment phase,
+	# which continues the chapter into the Data Stream.
+	if GameManager.has_flag("ch3_server_room_unlocked") and not GameManager.has_flag("ch3_fragment_3_collected"):
+		await _phase_fragment()
+	else:
+		await _phase_intro()
 	if not is_inside_tree(): return
 
 func _build_visuals() -> void:
