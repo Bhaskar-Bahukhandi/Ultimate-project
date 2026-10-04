@@ -72,9 +72,9 @@ func _ready() -> void:
 	_create_overworld_exit()
 	_create_ui()
 
-	if GameManager.has_meta("return_position") and _player:
-		_player.global_position = GameManager.get_meta("return_position")
-		GameManager.remove_meta("return_position")
+	var return_point = GameManager.arrive_in_exploration_scene(scene_file_path)
+	if return_point != null and _player:
+		_player.global_position = return_point
 	if has_node("/root/RandomEncounterSystem"):
 		RandomEncounterSystem.show_pending_farming_result("ironhold_training_yard", self)
 
@@ -620,7 +620,7 @@ func _interact_story(gate: Area2D) -> void:
 		return
 	# Story scenes return here themselves; record the position so the player
 	# comes back where they left.
-	GameManager.set_meta("return_position", _player.global_position if _player else Vector2(1400, 1100))
+	GameManager.set_return_point(scene_file_path, _player.global_position if _player else Vector2(1400, 1100))
 	# These are not arena boss fights — make sure no stale boss context leaks in
 	# (a lingering boss_fight_id disables fleeing from later encounters).
 	if GameManager.has_meta("boss_fight_id"):
@@ -1027,7 +1027,7 @@ func _interact_arena() -> void:
 		GameManager.change_state(GameManager.GameState.EXPLORATION)
 		return
 
-	GameManager.set_meta("return_position", _player.global_position if _player else Vector2(1850, 1020))
+	GameManager.set_return_point(scene_file_path, _player.global_position if _player else Vector2(1850, 1020))
 	GameManager.set_meta("boss_return_scene", "res://scenes/regions/ironhold_region.tscn")
 
 	if mode_choice == 2:  # Endurance
@@ -1065,7 +1065,7 @@ func _interact_boss(gate: Area2D) -> void:
 			if choice == 1:
 				return
 
-	GameManager.set_meta("return_position", _player.global_position if _player else Vector2(1400, 1100))
+	GameManager.set_return_point(scene_file_path, _player.global_position if _player else Vector2(1400, 1100))
 	GameManager.set_meta("boss_return_scene", "res://scenes/regions/ironhold_region.tscn")
 	GameManager.set_meta("boss_fight_id", boss_id)
 

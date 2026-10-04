@@ -87,9 +87,9 @@ func _ready() -> void:
 	_create_storm_overlay()
 	_spawn_ambient_corruption()
 
-	if GameManager.has_meta("return_position") and _player:
-		_player.global_position = GameManager.get_meta("return_position")
-		GameManager.remove_meta("return_position")
+	var return_point = GameManager.arrive_in_exploration_scene(scene_file_path)
+	if return_point != null and _player:
+		_player.global_position = return_point
 	if has_node("/root/RandomEncounterSystem"):
 		RandomEncounterSystem.show_pending_farming_result("fractured_wastes_shard_fields", self)
 
@@ -981,7 +981,7 @@ func _interact_boss(gate: Area2D) -> void:
 			if choice == 1:
 				return
 
-	GameManager.set_meta("return_position", _player.global_position if _player else Vector2(1400, 1900))
+	GameManager.set_return_point(scene_file_path, _player.global_position if _player else Vector2(1400, 1900))
 	GameManager.set_meta("boss_return_scene", "res://scenes/regions/fractured_wastes_region.tscn")
 	GameManager.set_meta("boss_fight_id", boss_id)
 

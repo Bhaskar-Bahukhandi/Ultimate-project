@@ -542,8 +542,7 @@ func _handle_movement(_delta: float) -> void:
 
 	if direction != 0.0:
 		facing_direction = signf(direction)
-		if _sprite:
-			_sprite.flip_h = facing_direction < 0.0
+		_apply_sprite_facing()
 
 	if direction != 0.0 and not is_attacking and not is_defending:
 		is_sprinting = Input.is_action_pressed("sprint")
@@ -560,6 +559,18 @@ func _handle_movement(_delta: float) -> void:
 # ══════════════════════════════════════════════════════════════════════════
 # WALL SLIDE & WALL JUMP
 # ══════════════════════════════════════════════════════════════════════════
+
+## Flip the visual to match facing. The "Sprite" node is a ColorRect when no
+## art is loaded (the fallback), which has no flip_h: setting it raised a
+## script error that aborted movement, so the player couldn't move sideways.
+func _apply_sprite_facing() -> void:
+	# is_instance_valid first: AssetManager swaps the Sprite node at runtime, so
+	# _sprite can briefly point at a freed node.
+	if not is_instance_valid(_sprite):
+		return
+	if _sprite is Sprite2D or _sprite is AnimatedSprite2D:
+		_sprite.flip_h = facing_direction < 0.0
+
 
 func _handle_wall_slide() -> void:
 	if is_on_floor() or is_dashing:
@@ -596,8 +607,8 @@ func _handle_jump() -> void:
 		is_wall_sliding = false
 		wall_jump_lock_timer = WALL_JUMP_LOCK_TIME
 		facing_direction = -wall_direction
+		_apply_sprite_facing()
 		if _sprite:
-			_sprite.flip_h = facing_direction < 0.0
 			_sprite.rotation_degrees = 0.0
 		_vfx("vfx_dust_puff", global_position + Vector2(wall_direction * 15.0, 0.0))
 		_sfx("jump", 0.1)

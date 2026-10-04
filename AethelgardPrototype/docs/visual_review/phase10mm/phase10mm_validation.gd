@@ -43,6 +43,12 @@ func _initialize() -> void:
 
 
 func _run() -> void:
+	# Loading chapter scenes runs their autosave checkpoints, which overwrote the
+	# developer's real save slot 99. Only run against an isolated user:// dir.
+	if not OS.get_user_data_dir().contains("aeth_phase0_test"):
+		push_error("[PHASE10MM] Refusing to run against the real user data dir (%s). Use: tests/run_phase0_tests.ps1 -Script res://docs/visual_review/phase10mm/phase10mm_validation.gd" % OS.get_user_data_dir())
+		quit(2)
+		return
 	print("[PHASE10MM] Validation probe started.")
 	for target in TARGET_SCENES:
 		await _load_scene(target.get("scene", ""), "TARGET", target.get("name", "scene"))

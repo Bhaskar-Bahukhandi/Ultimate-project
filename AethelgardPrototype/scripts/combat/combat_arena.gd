@@ -86,6 +86,42 @@ var _boss_initial_hp: float = 0.0  # Track boss max HP for partial reward calc
 # LIFECYCLE
 # ═════════════════════════════════════════════════════════════════════════
 
+## The arena was a 1280 px floor with no walls and no kill plane for enemies:
+## an enemy knocked off an edge fell forever, so the fight could never end
+## (and boss fights block fleeing). Walls keep everyone in; anything that still
+## gets below the floor is killed so the encounter resolves.
+const ARENA_WIDTH: float = 1280.0
+const ARENA_KILL_Y: float = 1000.0
+
+func _add_arena_bounds() -> void:
+	for x in [-20.0, ARENA_WIDTH]:
+		var wall := StaticBody2D.new()
+		wall.name = "ArenaWall"
+		wall.position = Vector2(x, -1400.0)
+		var col := CollisionShape2D.new()
+		var rect := RectangleShape2D.new()
+		rect.size = Vector2(20.0, 2200.0)
+		col.shape = rect
+		col.position = rect.size * 0.5
+		wall.add_child(col)
+		add_child(wall)
+	var kill_zone := Area2D.new()
+	kill_zone.name = "EnemyKillZone"
+	kill_zone.position = Vector2(-2000.0, ARENA_KILL_Y)
+	kill_zone.collision_layer = 0
+	kill_zone.collision_mask = 4  # enemy layer (EnemyBase._ready)
+	var kill_col := CollisionShape2D.new()
+	var kill_rect := RectangleShape2D.new()
+	kill_rect.size = Vector2(ARENA_WIDTH + 4000.0, 400.0)
+	kill_col.shape = kill_rect
+	kill_col.position = kill_rect.size * 0.5
+	kill_zone.add_child(kill_col)
+	kill_zone.body_entered.connect(func(body):
+		if body is EnemyBase and body.current_state != EnemyBase.State.DEAD:
+			body.die.call_deferred()  # die() changes collision state; not allowed mid physics callback
+	)
+	add_child(kill_zone)
+
 func _ready() -> void:
 	if _has_gm():
 		GameManager.change_state(GameManager.GameState.COMBAT)
@@ -96,6 +132,7 @@ func _ready() -> void:
 	if legacy_hud:
 		legacy_hud.visible = false
 	_build_phase10mm_arena_polish()
+	_add_arena_bounds()
 
 	# Check for random encounter mode
 	if _has_gm() and GameManager.has_meta("pending_encounter"):
@@ -677,6 +714,13 @@ func _open_root_access() -> void:
 		_close_root_access()
 		return
 
+	# The SpinBoxes had no ranges set (default 0-100), so gravity 0 was allowed;
+	# match the limits EnemyBase.apply_hack() enforces.
+	gv.min_value = EnemyBase.HACK_GRAVITY_RANGE.x
+	gv.max_value = EnemyBase.HACK_GRAVITY_RANGE.y
+	gv.step = 0.1
+	sp.min_value = EnemyBase.HACK_SPEED_RANGE.x
+	sp.max_value = EnemyBase.HACK_SPEED_RANGE.y
 	el.value = selected_enemy.elasticity
 	gv.value = selected_enemy.gravity_scale
 	sp.value = selected_enemy.movement_speed
@@ -697,8 +741,8 @@ func _on_root_access_apply() -> void:
 		return
 
 	selected_enemy.apply_hack("elasticity", clampf(el.value, -2.0, 5.0))
-	selected_enemy.apply_hack("gravity_scale", clampf(gv.value, -5.0, 10.0))
-	selected_enemy.apply_hack("movement_speed", clampf(sp.value, -200.0, 500.0))
+	selected_enemy.apply_hack("gravity_scale", gv.value)  # clamped by EnemyBase
+	selected_enemy.apply_hack("movement_speed", sp.value)  # clamped by EnemyBase
 	selected_enemy.apply_hack("is_hostile", ho.button_pressed)
 
 	if _has_gm():

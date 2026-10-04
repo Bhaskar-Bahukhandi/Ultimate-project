@@ -341,6 +341,10 @@ func _show_choices_impl(prompt: String, choices: Array, speaker: String) -> int:
 	is_active = true
 	_awaiting_choice = true
 	_choice_result = -1
+	# Skipping fast-forwards text only. A skip in progress ends here, so the
+	# player always sees and makes every choice (it used to auto-pick option 0).
+	var was_skipping := _skip_all_requested
+	_skip_all_requested = false
 
 	if not _is_visible:
 		_show_panel()
@@ -353,7 +357,7 @@ func _show_choices_impl(prompt: String, choices: Array, speaker: String) -> int:
 	# Typewriter the prompt
 	_advance_indicator.visible = false
 	_is_typing = true
-	_skip_typing = false
+	_skip_typing = was_skipping
 	var display_prompt = _apply_text_effects(prompt)
 	_text_label.text = display_prompt
 	_text_label.visible_characters = 0
@@ -378,21 +382,15 @@ func _show_choices_impl(prompt: String, choices: Array, speaker: String) -> int:
 
 	_build_choice_buttons(choices)
 
-	# Wait for selection (with safety timeout - 120s max)
-	var _choice_wait_frames: int = 0
-	while _choice_result == -1 and not _skip_all_requested:
+	# Wait for the player's selection. No timeout: story choices are permanent,
+	# so an AFK player must never have one made for them.
+	while _choice_result == -1:
 		await get_tree().process_frame
-		_choice_wait_frames += 1
 		if not is_inside_tree() or not _awaiting_choice:
 			return -1
 		if _choice_container == null or not is_instance_valid(_choice_container):
+			push_error("[DIALOGUE] Choice buttons vanished before a selection was made")
 			break
-		if _choice_wait_frames > 7200:  # ~120s at 60fps
-			push_warning("[DIALOGUE] Choice wait timed out")
-			break
-
-	if _choice_result == -1 and _skip_all_requested:
-		_choice_result = 0
 
 	var result = _choice_result
 	_destroy_choice_buttons()
@@ -557,7 +555,8 @@ func select_choice(choice_index: int) -> void:
 # ══════════════════════════════════════════════════════════════════════════
 
 func _process_skip(delta: float) -> void:
-	if not _is_visible:
+	# Skipping never applies to an open choice.
+	if not _is_visible or _awaiting_choice:
 		_tab_hold_time = 0.0
 		return
 

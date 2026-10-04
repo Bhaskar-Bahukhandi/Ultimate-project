@@ -104,10 +104,14 @@ func _input(event: InputEvent) -> void:
 		# Don't open pause while dialogue is active — ESC is used for dialogue skip
 		if has_node("/root/DialogueManager") and DialogueManager.is_active:
 			return
-		# Safety: clear stale cutscene block if no cutscene is actually playing
+		# Safety: clear stale cutscene block if no cutscene is actually playing.
+		# CutsceneManager is a node inside each cutscene scene, not an autoload:
+		# looking it up at /root always failed, so the block was cleared on every
+		# ESC and the pause menu (with saving) opened mid-cutscene.
 		if get_meta("cutscene_blocked", false):
-			var cm = get_node_or_null("/root/CutsceneManager")
-			if cm == null or not cm.is_playing:
+			var scene := get_tree().current_scene
+			var cm = scene.find_child("CutsceneManager", true, false) if scene else null
+			if cm == null or not cm.get("is_playing"):
 				set_meta("cutscene_blocked", false)
 		if not get_meta("cutscene_blocked", false):
 			toggle_pause()

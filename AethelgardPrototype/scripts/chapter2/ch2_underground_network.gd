@@ -12,6 +12,14 @@ var _puzzle_solved: bool = false
 var _corruption_cooldown: bool = false
 var _root_access_panel: RootAccessPanel = null
 
+func _attach_camera_to_player() -> void:
+	if not is_instance_valid(camera) or not is_instance_valid(player_node):
+		return
+	camera.reparent(player_node, false)
+	camera.position = Vector2(0, -40)
+	camera.position_smoothing_enabled = true
+	camera.make_current()
+
 func _ready() -> void:
 	print("[CH2-UNDERGROUND] Initializing Underground Network dungeon")
 	GameManager.change_state(GameManager.GameState.EXPLORATION)
@@ -22,6 +30,9 @@ func _ready() -> void:
 
 	if camera:
 		camera.make_current()
+		# The camera was a fixed sibling of the player, so the 3200 px dungeon
+		# scrolled off-screen past x≈940. Make it follow the player.
+		_attach_camera_to_player.call_deferred()
 
 	# Replace placeholder sprite with real player art
 	if player_node:
@@ -94,26 +105,29 @@ func _build_underground_environment() -> void:
 	add_child(bg)
 
 	# Ground platforms (dungeon layout)
+	# Chamber walls stop above a doorway at floor level. They used to run from
+	# the top down to the floor (y 520) with no opening, and the boss chamber
+	# was a closed box — its entrance could only be reached through walls.
 	var platforms = [
 		# Entry corridor
 		Rect2(0, 500, 600, 20),
-		Rect2(0, 300, 20, 220),  # Left wall
+		Rect2(0, 300, 20, 220),  # Left wall (map edge — stays solid)
 		# First chamber
 		Rect2(600, 500, 500, 20),
-		Rect2(600, 200, 20, 320),  # Wall
-		Rect2(1080, 200, 20, 320),  # Wall
+		Rect2(600, 200, 20, 200),  # Wall — doorway y 400-500
+		Rect2(1080, 200, 20, 130),  # Wall — doorway y 330-500 up to the passage
 		# Connecting passage
 		Rect2(1100, 400, 300, 20),
 		# Puzzle chamber
 		Rect2(1400, 500, 600, 20),
-		Rect2(1400, 150, 20, 370),  # Wall
-		Rect2(1980, 150, 20, 370),  # Wall
+		Rect2(1400, 150, 20, 180),  # Wall — doorway y 330-500 from the passage
+		Rect2(1980, 150, 20, 180),  # Wall — doorway y 330-500 up to the corridor
 		# Final corridor
 		Rect2(2000, 400, 400, 20),
 		# Boss chamber
 		Rect2(2400, 500, 800, 20),
-		Rect2(2400, 100, 20, 420),  # Wall
-		Rect2(3180, 100, 20, 420),  # Wall
+		Rect2(2400, 100, 20, 230),  # Wall — doorway y 330-500 from the corridor
+		Rect2(3180, 100, 20, 420),  # Wall (map edge — stays solid)
 		Rect2(2400, 100, 800, 20),  # Ceiling
 	]
 

@@ -239,7 +239,10 @@ func _attack_phase_behavior(delta: float) -> void:
 			3:
 				_phase3_attack()
 			4:
-				if _command_timer >= _command_cooldown:
+				# Each override adds +5% corruption. It used to repeat for the
+				# whole phase ("ATTEMPT 7/3"), so a long phase 4 alone could push
+				# the meter to 100% and end the run mid-fight.
+				if _command_timer >= _command_cooldown and _override_attempts < MAX_OVERRIDE_ATTEMPTS:
 					_phase4_root_override()
 				else:
 					_phase3_attack()

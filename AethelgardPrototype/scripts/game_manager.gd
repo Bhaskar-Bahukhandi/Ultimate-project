@@ -650,6 +650,37 @@ func change_state(new_state: GameState) -> void:
 	_state_change_count += 1
 	state_changed.emit(new_state)
 
+# ── Scene hand-off ("where do I put the player when they come back?") ─────
+# Return points are tagged with the scene they belong to. They used to be a bare
+# position that the next region to load would consume, so e.g. the Oakhaven
+# boss-gate position was applied to the first Ironhold arrival.
+const TRANSIENT_METAS: Array[String] = [
+	"return_position", "return_position_scene", "boss_return_scene",
+	"boss_fight_id", "pending_encounter", "return_to_overworld_from",
+]
+
+func set_return_point(scene_path: String, pos: Vector2) -> void:
+	set_meta("return_position", pos)
+	set_meta("return_position_scene", scene_path)
+
+## Call from an exploration scene's _ready(). Returns the return position meant
+## for `scene_path` (or null), and always discards any stale one. Also clears
+## boss-fight context: a region is never a boss fight, and a leftover
+## boss_fight_id disables fleeing in every later encounter.
+func arrive_in_exploration_scene(scene_path: String) -> Variant:
+	var pos: Variant = null
+	if has_meta("return_position") and get_meta("return_position_scene", "") == scene_path:
+		pos = get_meta("return_position")
+	for key in ["return_position", "return_position_scene", "boss_fight_id", "boss_return_scene"]:
+		if has_meta(key):
+			remove_meta(key)
+	return pos
+
+func clear_transient_metas() -> void:
+	for key in TRANSIENT_METAS:
+		if has_meta(key):
+			remove_meta(key)
+
 # Mutually exclusive flag groups — only one flag per group can be true
 const EXCLUSIVE_FLAG_GROUPS: Array = [
 	["ch1_elara_trusted", "ch1_elara_cautious", "ch1_elara_distrusted"],
@@ -1503,7 +1534,9 @@ func _save_with_feedback(slot: int) -> bool:
 			SFXManager.play("save_complete")
 	return ok
 
-func load_game(slot: int = 0) -> bool:
+## `_recovering` is internal: set when retrying after restoring the backup,
+## so a bad backup can't recurse forever.
+func load_game(slot: int = 0, _recovering: bool = false) -> bool:
 	if _load_in_progress:
 		push_warning("[LOAD] Load already in progress, ignoring")
 		return false
@@ -1518,43 +1551,20 @@ func load_game(slot: int = 0) -> bool:
 		_load_in_progress = false
 		return false
 	var save_path = "user://save_slot_%d.save" % slot
-	if not FileAccess.file_exists(save_path):
-		push_error("[LOAD] No save at slot %d" % slot)
-		_load_in_progress = false
-		return false
-	var file = FileAccess.open(save_path, FileAccess.READ)
-	if not file:
-		push_error("[LOAD] Cannot open slot %d" % slot)
-		_load_in_progress = false
-		return false
-	var json_text = file.get_as_text()
-	file.close()
-	var json = JSON.new()
-	if json.parse(json_text) != OK:
-		push_error("[LOAD] Parse error slot %d — attempting backup recovery" % slot)
-		if _try_load_backup(save_path):
+	# Missing, unparseable, wrong shape, missing keys or checksum mismatch all
+	# fall back to the .bak once (the bad file is kept as .corrupted).
+	var parsed = _read_valid_save(save_path)
+	if parsed == null:
+		if not _recovering and _try_load_backup(save_path):
+			push_warning("[LOAD] Slot %d was missing or corrupt — restored from backup" % slot)
 			_load_in_progress = false
-			return await load_game(slot)  # Recursive call — load_game is async
+			return await load_game(slot, true)
+		push_error("[LOAD] Slot %d has no usable save (and no usable backup)" % slot)
 		_load_in_progress = false
 		return false
-	if not json.data is Dictionary:
-		push_error("[LOAD] Invalid data slot %d" % slot)
-		_load_in_progress = false
-		return false
-	var data: Dictionary = json.data
-	# ── Checksum verification ──
-	var saved_checksum = data.get("_checksum", -1)
-	if saved_checksum != -1:
-		if _calculate_save_checksum(data) != int(saved_checksum):
-			push_warning("[LOAD] Checksum mismatch in slot %d — save may be tampered/corrupted" % slot)
-			# Continue loading (warn-only) — the backup system handles actual corruption
+	var data: Dictionary = parsed
 	data.erase("_checksum")  # Strip internal field before restoring
-	# Validate required keys
-	for key in REQUIRED_SAVE_KEYS:
-		if not data.has(key):
-			push_error("[LOAD] Missing required key '%s' in slot %d" % [key, slot])
-			_load_in_progress = false
-			return false
+	clear_transient_metas()  # Hand-offs from the session before the load don't apply
 	# Version check and migration
 	var save_version: String = data.get("version", "0.0.0")
 	if save_version != SAVE_VERSION:
@@ -1732,19 +1742,15 @@ func get_save_info(slot: int = 0) -> Dictionary:
 	if slot not in VALID_SAVE_SLOTS:
 		return {"exists": false}
 	var save_path = "user://save_slot_%d.save" % slot
-	if not FileAccess.file_exists(save_path):
-		return {"exists": false}
-	var file = FileAccess.open(save_path, FileAccess.READ)
-	if not file:
-		return {"exists": false}
-	var json = JSON.new()
-	var json_text = file.get_as_text()
-	file.close()
-	if json.parse(json_text) != OK:
-		return {"exists": false}
-	if not json.data is Dictionary:
-		return {"exists": false}
-	var data: Dictionary = json.data
+	var parsed = _read_valid_save(save_path)
+	if parsed == null:
+		# A damaged save is not an empty slot: report it so the menu can offer
+		# "restore backup" instead of inviting the player to overwrite it.
+		var backup_valid := _read_valid_save(save_path + ".bak") != null
+		if not FileAccess.file_exists(save_path) and not backup_valid:
+			return {"exists": false}
+		return {"exists": true, "corrupt": true, "backup_valid": backup_valid}
+	var data: Dictionary = parsed
 	var ps_data = data.get("player_stats", {})
 	var ps: Dictionary = ps_data if ps_data is Dictionary else {}
 	return {
@@ -1814,6 +1820,7 @@ func reset_game() -> void:
 	_load_in_progress = false
 	# A save queued by the previous run must not be written with the new run's state.
 	_deferred_save_slots.clear()
+	clear_transient_metas()
 	ng_plus_cycle = 0
 	ng_plus_available = false
 	titles_earned.clear()
@@ -1897,9 +1904,44 @@ func _canonical_number_string(value: Variant) -> String:
 		text = text.left(text.length() - 1)
 	return text
 
+## Returns the parsed save at `path` if it is a usable save (valid JSON object,
+## required keys present, checksum matching when one is stored), else null.
+func _read_valid_save(path: String) -> Variant:
+	if not FileAccess.file_exists(path):
+		return null
+	var json := JSON.new()
+	if json.parse(FileAccess.get_file_as_string(path)) != OK or not json.data is Dictionary:
+		return null
+	var data: Dictionary = json.data
+	for key in REQUIRED_SAVE_KEYS:
+		if not data.has(key):
+			return null
+	if not _save_checksum_ok(data):
+		return null
+	return data
+
+func _save_checksum_ok(data: Dictionary) -> bool:
+	var saved_checksum = data.get("_checksum", -1)
+	if saved_checksum == -1:
+		return true  # Saves from before checksums existed
+	var payload := data.duplicate(true)
+	payload.erase("_checksum")
+	return _calculate_save_checksum(payload) == int(saved_checksum)
+
+## Player-facing recovery for a slot whose save is corrupt (main menu button).
+func restore_backup(slot: int) -> bool:
+	if slot not in VALID_SAVE_SLOTS:
+		return false
+	return _try_load_backup("user://save_slot_%d.save" % slot)
+
 func _backup_save_file(save_path: String) -> void:
 	## Create a .bak copy of an existing save before overwriting (atomic).
 	if not FileAccess.file_exists(save_path):
+		return
+	# Only a good save may become the backup — copying a corrupt file here
+	# used to destroy the one copy that could still be recovered.
+	if _read_valid_save(save_path) == null:
+		push_warning("[SAVE] %s is not a valid save; keeping the previous backup" % save_path)
 		return
 	var old_file = FileAccess.open(save_path, FileAccess.READ)
 	if not old_file:
@@ -1925,17 +1967,9 @@ func _try_load_backup(save_path: String) -> bool:
 		return false
 	var bak_text = bak_file.get_as_text()
 	bak_file.close()
-	# Verify backup is valid JSON
-	var json = JSON.new()
-	if json.parse(bak_text) != OK or not json.data is Dictionary:
-		push_error("[LOAD] Backup also corrupted: %s" % backup_path)
+	if _read_valid_save(backup_path) == null:
+		push_error("[LOAD] Backup is not a valid save either: %s" % backup_path)
 		return false
-	# Validate backup has required save keys before trusting it
-	var bak_data: Dictionary = json.data
-	for key in REQUIRED_SAVE_KEYS:
-		if not bak_data.has(key):
-			push_error("[LOAD] Backup missing required key '%s': %s" % [key, backup_path])
-			return false
 	# Preserve the corrupted file for inspection before overwriting
 	var corrupted_path = save_path + ".corrupted"
 	if FileAccess.file_exists(save_path):

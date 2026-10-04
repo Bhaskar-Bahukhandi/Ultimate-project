@@ -1007,19 +1007,25 @@ func _on_property_hacked(property_name: String) -> void:
 		_hack_tween.tween_property(sprite, "modulate", Color(1.0, 0.7, 1.0, 1.0), 0.3)
 
 
+## Root Access limits. Gravity stays positive: at 0 or below a hit launched
+## the enemy upward forever, so the fight could never end (bosses block fleeing).
+const HACK_GRAVITY_RANGE := Vector2(0.2, 3.0)
+const HACK_SPEED_RANGE := Vector2(0.0, 500.0)
+
+
 func get_hackable_properties() -> Dictionary:
-	return {
+	var props := {
 		"movement_speed": {
 			"value": movement_speed,
 			"type": "float",
-			"range": [0.0, 500.0],
+			"range": [HACK_SPEED_RANGE.x, HACK_SPEED_RANGE.y],
 			"description": "Movement speed in pixels/second",
 		},
 		"gravity_scale": {
 			"value": gravity_scale,
 			"type": "float",
-			"range": [-2.0, 3.0],
-			"description": "Gravity multiplier (negative = float)",
+			"range": [HACK_GRAVITY_RANGE.x, HACK_GRAVITY_RANGE.y],
+			"description": "Gravity multiplier",
 		},
 		"elasticity": {
 			"value": elasticity,
@@ -1032,26 +1038,33 @@ func get_hackable_properties() -> Dictionary:
 			"type": "bool",
 			"description": "Whether enemy attacks player",
 		},
-		"current_health": {
+	}
+	# Bosses don't expose HP: setting it to 0 skipped every phase for 2-5%
+	# corruption.
+	if not is_in_group("boss"):
+		props["current_health"] = {
 			"value": current_health,
 			"type": "float",
 			"range": [0.0, max_health],
 			"description": "Current HP (set to 0 to kill)",
-		},
-	}
+		}
+	return props
 
 
 func apply_hack(property_name: String, new_value: Variant) -> void:
 	match property_name:
 		"movement_speed":
-			movement_speed = float(new_value)
+			movement_speed = clampf(float(new_value), HACK_SPEED_RANGE.x, HACK_SPEED_RANGE.y)
 		"gravity_scale":
-			gravity_scale = float(new_value)
+			gravity_scale = clampf(float(new_value), HACK_GRAVITY_RANGE.x, HACK_GRAVITY_RANGE.y)
 		"elasticity":
 			elasticity = float(new_value)
 		"is_hostile":
 			is_hostile = bool(new_value)
 		"current_health":
+			if is_in_group("boss"):
+				push_warning("Root Access: boss HP is not hackable")
+				return
 			var old_health = current_health
 			current_health = clampf(float(new_value), 0.0, max_health)
 			health_changed.emit(current_health, max_health)

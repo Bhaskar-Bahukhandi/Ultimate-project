@@ -140,24 +140,28 @@ Years 9–10 become post-launch growth instead of the launch itself.
 ### Months 1–2 (Oct–Nov 2026): Stop the bleeding, lock the contract
 
 **Engineering — Review Phase 0** (every critical issue C1–C19):
-- [ ] **C1/C2/R5:** dialogue always closes. Use a scoped `await DialogueManager.run(lines)`, or have
-  `say()` auto-hide when no line is queued.
-- [ ] **C13:** skipping fast-forwards text only and never answers a choice. Remove the 120 s
-  auto-pick.
-- [ ] **C9/C10:** saving queues the checkpoint until a transition or dialogue ends instead of
-  rejecting it. The UI reports the real result. The ending and NG+ persist.
-- [ ] **C11:** a corrupt save shows "Corrupt — restore backup". Validate files before they become the
-  backup. Fall back to the `.bak` on any failure.
-- [ ] **C12:** no pause or saving in MENU state. Remove the dead `/root/CutsceneManager` lookups.
-- [ ] **C3:** New Game goes through the full Chapter 1. **C4:** Chapter 3 gets an exit that writes
-  `ch4_unlocked` and `current_chapter=4`.
-- [ ] **C5/C6:** open the Clock Tower floors and the Underground chamber. **C7:** guard the
-  admin-boss ESC skip. **C8:** fix the black `ScreenTransition` rect.
-- [ ] **C14:** cap SOVEREIGN override attempts. **C15:** fix the spider ceiling lock.
-  **C16:** arena walls and a kill plane. **C17:** clamp Root Access ranges and remove HP from bosses.
-- [ ] **C18:** type-guard `flip_h` **before any sprite is deleted**. **C19:** probes run with an
-  isolated `--user-data-dir`.
-- [ ] Clear `return_position`, `boss_fight_id` and the other metas on consume, reset and load.
+*Status 2026-10-04: all engineering items below are done and covered by `tests/phase0_blockers_test.gd`
+(branch `fix/phase0-playthrough-blockers`). Still open for this phase: the human playthrough, the
+design items, and production hygiene.*
+- [x] **C1/C2/R5:** dialogue always closes (`say()` auto-hides when no line follows within 0.25 s).
+- [x] **C13:** skipping fast-forwards text only and never answers a choice. 120 s auto-pick removed.
+- [x] **C9/C10:** saves queue during transitions instead of being dropped; story checkpoints work in
+  dialogue, cutscenes and combat; the UI reports the real result. The ending and NG+ persist.
+- [x] **C11:** a corrupt save shows "Damaged save — Restore". Files are validated before they become
+  the backup. Load falls back to the `.bak` on any failure.
+- [x] **C12:** no saving in MENU/GAME_OVER. The pause screen finds the scene's CutsceneManager
+  (the shop's dead lookup is left alone — enabling it would softlock callers awaiting `shop_closed`).
+- [x] **C3:** New Game = opening hook → Elara → path → village → Oakhaven (chosen 2026-10-04).
+  **C4:** Fractured Wastes "Server Room" gate resumes Chapter 3 → … → `ch3_ending` → Chapter 4.
+- [x] **C5/C6:** Clock Tower floors one-way + ceiling raised; Underground doorways; both cameras follow
+  the player. **C7:** admin-boss ESC skip only after defeat. **C8:** `ScreenTransition` is a plain Control.
+- [x] **C14:** SOVEREIGN overrides capped at 3. **C15:** spider always drops from the ceiling.
+  **C16:** arena walls + enemy kill zone. **C17:** gravity ≥ 0.2, speed ≥ 0, no boss HP hacking.
+- [x] **C18:** `flip_h` type-guarded. **C19:** `tests/run_phase0_tests.ps1 -Script …` isolates user://;
+  `phase10mm_validation` refuses to run without it.
+- [x] Return points are scene-tagged; boss context is cleared on arrival, New Game and load.
+- Found and fixed along the way: Data Stream `lerp()` crash that made the ride endless; Root Access
+  tutorial charged +10% corruption per repeat click.
 
 **Design**
 - [ ] Write `DESIGN_PILLARS.md` (§2). Retire or merge the outdated docs: `Blueprint_and_roadmap.txt`,
