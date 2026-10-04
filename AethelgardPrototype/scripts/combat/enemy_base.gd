@@ -823,6 +823,11 @@ func take_damage(amount: float, knockback_source: Vector2 = Vector2.ZERO) -> voi
 	if current_health <= 0.0:
 		if has_node("/root/GameManager"):
 			GameManager.stats["enemies_killed"] = GameManager.stats.get("enemies_killed", 0) + 1
+		# Kills earn the player Soul (special arts). Soul is no longer per hit.
+		for p in get_tree().get_nodes_in_group("player"):
+			if p.has_method("on_enemy_killed"):
+				p.on_enemy_killed()
+				break
 		if has_node("/root/CombatFX"):
 			CombatFX.apply_kill_effects(global_position, amount)
 		die()

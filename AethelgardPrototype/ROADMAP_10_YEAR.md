@@ -164,9 +164,9 @@ design items, and production hygiene.*
   tutorial charged +10% corruption per repeat click.
 
 **Design**
-- [ ] Write `DESIGN_PILLARS.md` (§2). Retire or merge the outdated docs: `Blueprint_and_roadmap.txt`,
-  the duplicate `context.txt`, `lore.txt`, `Character_design_refrence.md`. Reconcile character names
-  and roles.
+- [x] `DESIGN_PILLARS.md` written. Old design docs moved to `design_archive/`. Canon: Kaelen; Elara,
+  Seraphina, Lyra, Kaelthas (Kaito and Seven on the backlog). Open: Seraphina's identity, how the
+  endings are framed.
 - [x] **A5** (simulated, single-player market) and **A6** (in-game-currency gambling only):
   confirmed 2026-10-04.
 - [ ] Draft the storyline axes (§12.2), the time model (§12.4) and the difficulty values (§12.1).
@@ -198,8 +198,10 @@ playthrough log.
   read has a reachable writer.
 - [ ] **DialogueRunner** on the Dialogue Manager plugin (Nathan Hoad): line IDs, speaker registry,
   string tables ready for localization.
-- [ ] **Stats model:** `final = base + level + training + Σ modifiers`. Decide whether DEF becomes
-  mitigation and whether MP is spent or deleted.
+- [ ] **Stats model:** `final = base + level + training + Σ modifiers`. Decided 2026-10-04: DEF is
+  mitigation (`×100/(100+DEF)`, done); MP pays for spells and healing, regenerating ~2/s (done); Soul
+  is earned from parries, perfect dodges and kills (done) and pays for Glitch Arts (proposal in
+  DESIGN_PILLARS.md, awaiting review).
 - [ ] **WorldClock v1** (§12.4): deterministic, saved, pausable, and owned by ContextStack's time
   rules.
 - [ ] Adopt **gdUnit4** (or GUT); every service gets unit tests.

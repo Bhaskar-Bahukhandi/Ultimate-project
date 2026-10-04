@@ -57,7 +57,7 @@ const ADMIN_SPAWN_COUNT = 2
 
 const CHARM_INFO: Dictionary = {
 	"extended_parry": {"name": "Extended Parry", "desc": "Parry window +40%.", "icon": "[P]"},
-	"soul_hoarder": {"name": "Soul Hoarder", "desc": "Soul gain +50%. Spell cost -20%.", "icon": "[S]"},
+	"soul_hoarder": {"name": "Soul Hoarder", "desc": "Soul gain +50%. Spell and heal MP cost -20%.", "icon": "[S]"},
 	"corruption_resist": {"name": "Firewall", "desc": "Corruption gain reduced by 40%.", "icon": "[F]"},
 	"pogo_master": {"name": "Pogo Master", "desc": "Pogo damage +80%. Bounce height +30%.", "icon": "[G]"},
 	"dash_master": {"name": "Shadow Dash", "desc": "Dash cooldown -50%. Dash deals 10 damage.", "icon": "[D]"},

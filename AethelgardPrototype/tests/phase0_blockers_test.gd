@@ -527,6 +527,53 @@ func _test_underground_boss_chamber_is_enterable() -> void:
 	_check(player.global_position.x < start_x - 20.0,
 		"C18: moving left works when the Sprite is a ColorRect (dx=%.0f)" % (player.global_position.x - start_x))
 
+	print("[P1-1] DEF reduces incoming damage")
+	var pc_script = load("res://scripts/combat/player_combat.gd")
+	_check(is_equal_approx(pc_script.mitigate_by_defense(100.0, 0.0), 100.0)
+		and is_equal_approx(pc_script.mitigate_by_defense(100.0, 100.0), 50.0),
+		"P1-1: formula — 0 DEF full damage, 100 DEF half")
+	var gm := _gm()
+	gm.player_stats["defense"] = 100
+	player.set("invulnerable", false)
+	player.set("parry_active", false)
+	player.set("is_defending", false)
+	var hp_before: float = player.get("current_health")
+	player.take_damage(40.0)
+	var expected: float = 40.0 * gm.get_enemy_damage_mult() * 0.5
+	var taken: float = hp_before - float(player.get("current_health"))
+	_check(absf(taken - expected) < 0.01, "P1-1: a hit at 100 DEF deals half damage (took %.2f, expected %.2f)" % [taken, expected])
+	gm.player_stats["defense"] = 0
+
+	print("[ECON] MP for spells/heal, Soul from parries / perfect dodges / kills")
+	_check(not pc_script.get_script_constant_map().has("SOUL_PER_HIT"), "Soul is no longer gained per hit")
+	gm.player_stats["max_mp"] = 50
+	gm.player_stats["mp"] = 0
+	await _physics_frames(60)
+	var regen: float = float(gm.player_stats["mp"])
+	_check(regen > 1.0 and regen < 3.0, "MP regenerates ~2/s (got %.2f after 1 s)" % regen)
+	gm.player_stats["mp"] = 50
+	player.set("cast_lock_timer", 0.0)
+	Input.action_press("spell")
+	await _physics_frames(2)
+	Input.action_release("spell")
+	await _physics_frames(2)
+	var after_cast: float = float(gm.player_stats["mp"])
+	_check(after_cast <= 50.0 - 15.0 + 0.5, "a spell costs 15 MP (MP now %.1f)" % after_cast)
+	var soul0: float = player.get("current_soul")
+	player.on_enemy_killed()
+	_check(float(player.get("current_soul")) >= soul0 + 10.0 - 0.01, "a kill earns Soul")
+	var soul1: float = player.get("current_soul")
+	var hp1: float = player.get("current_health")
+	player.set("is_dashing", true)
+	player.set("invulnerable", true)
+	player.set("_perfect_dodge_awarded", false)
+	player.take_damage(25.0)
+	player.take_damage(25.0)
+	_check(float(player.get("current_soul")) >= soul1 + 15.0 - 0.01 and float(player.get("current_soul")) < soul1 + 30.0 - 0.01,
+		"a hit during dash i-frames is a perfect dodge: Soul once per dash")
+	_check(float(player.get("current_health")) == hp1, "perfect dodge takes no damage")
+	player.set("is_dashing", false)
+
 
 # ── C15/C16/C17: combat softlocks ─────────────────────────────────────────
 
