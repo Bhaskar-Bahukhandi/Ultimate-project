@@ -172,13 +172,17 @@ design items, and production hygiene.*
 - [ ] Draft the storyline axes (§12.2), the time model (§12.4) and the difficulty values (§12.1).
 
 **Production hygiene**
-- [ ] Move the repo off OneDrive. Enable Git LFS. Add `.gdignore` to `docs/` and
-  `assets/art_sources/`. Set export `exclude_filter`. Commit `export_presets.cfg`. Fix the `origin`
-  remote. Delete `Mysprites/`, the root logs and the 9.6 MB stderr log.
-- [ ] Rewrite the README. Collapse the 97 phase reports into `CHANGELOG.md` plus ADRs.
-- [ ] Turn **every review finding into a GitHub Issue** tagged with its phase (§11).
-- [ ] CI: headless import, boot, a scene sweep that fails on `push_error`, `git diff --check`.
-  **Playthrough bot v0** from New Game to the credits.
+- [x] `.gdignore` on `assets/art_sources/` (`docs/` stays importable for probes; excluded from
+  exports instead). Export `exclude_filter` set. `export_presets.cfg` committed. `origin` remote fixed.
+  Root logs and the 9.6 MB stderr log removed.
+- [ ] **Your call:** move the repo off OneDrive; enable Git LFS (history rewrite + GitHub LFS quota);
+  delete or relocate `Mysprites/`; retire the duplicate `context.txt`.
+- [x] README rewritten; `CHANGELOG.md` started. (Collapsing the 97 phase reports into ADRs: later.)
+- [ ] Turn **every review finding into a GitHub Issue** tagged with its phase (§11) — needs your OK
+  to create issues on GitHub.
+- [x] CI workflow: import, boot (fails on script errors), load-all, Phase 0 suite, `git diff --check`.
+  Runs once the branch is pushed. Playthrough bot v0 covers New Game → Oakhaven and Ch3 → Ch4;
+  extending it to the credits is still open.
 
 **Exit:** a human can play New Game → credits with no softlock; the bot passes; you've written one
 playthrough log.
