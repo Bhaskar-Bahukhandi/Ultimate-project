@@ -82,13 +82,9 @@ func _process(delta: float) -> void:
 	# PERF: Skip when idle (no combo, no iframes, no slowmo, time_scale normal)
 	if _combo_count == 0 and _iframe_sprites.is_empty() and not _slowmo_active and is_equal_approx(Engine.time_scale, 1.0):
 		return
-	# Fail-safe: restore time_scale if no slowmo is supposed to be active
-	# BUT respect CombatFX hitstop — don't override their time_scale control
-	if not _slowmo_active and not Engine.is_editor_hint() and Engine.time_scale != 1.0:
-		if has_node("/root/CombatFX") and CombatFX.is_hitstop_active:
-			pass  # CombatFX owns time_scale during hitstop
-		else:
-			Engine.time_scale = 1.0
+	# (The old time_scale "fail-safe" lived here. It reset any slow-mo it didn't
+	# own — killing wobble and dramatic slow-mo after one frame. ContextStack now
+	# owns Engine.time_scale; every effect requests and releases its own speed.)
 
 	# Combo decay
 	if _combo_count > 0:
@@ -724,40 +720,29 @@ func slowmo_moment(duration: float = 0.5, time_scale: float = 0.3) -> void:
 	if has_node("/root/GameManager") and GameManager.is_reduced_motion():
 		return  # Pass 57: Skip time manipulation effects
 	_slowmo_active = true
-	Engine.time_scale = time_scale
+	_set_time_scale(time_scale)
 	await get_tree().create_timer(duration * time_scale).timeout
 	if not is_inside_tree():
-		Engine.time_scale = 1.0
+		ContextStack.release_time_scale(&"juice_slowmo")
 		_slowmo_active = false
 		return
 	# Smooth recovery instead of instant snap
 	var tw = create_tween()
-	if tw:
-		tw.tween_method(_set_time_scale, time_scale, 1.0, 0.08)
-		await tw.finished
-	else:
-		Engine.time_scale = 1.0
+	tw.tween_method(_set_time_scale, time_scale, 1.0, 0.08)
+	await tw.finished
+	ContextStack.release_time_scale(&"juice_slowmo")
 	_slowmo_active = false
 
+## All GameJuice slow-mo goes through ContextStack (the only Engine.time_scale writer).
 func _set_time_scale(value: float) -> void:
-	Engine.time_scale = value
-
-var _owns_time_wobble: bool = false
+	ContextStack.request_time_scale(&"juice_slowmo", value, ContextStack.PRIORITY_SLOWMO)
 
 func _time_wobble(duration: float = 0.1) -> void:
 	## Ultra-brief time dilation wobble for micro-impacts (parry, spell cast).
-	if _slowmo_active or Engine.time_scale < 0.6:
-		return  # Don't override a deeper slowmo
-	Engine.time_scale = 0.6
-	_owns_time_wobble = true
+	## Lowest priority: any hitstop or slow-mo underneath simply wins.
+	ContextStack.request_time_scale(&"juice_wobble", 0.6, ContextStack.PRIORITY_WOBBLE)
 	await get_tree().create_timer(duration * 0.6).timeout
-	if not is_inside_tree():
-		Engine.time_scale = 1.0
-		_owns_time_wobble = false
-		return
-	if _owns_time_wobble:  # Only restore if we still own it
-		Engine.time_scale = 1.0
-		_owns_time_wobble = false
+	ContextStack.release_time_scale(&"juice_wobble")
 
 func boss_phase_transition() -> void:
 	## Full boss phase transition juice: freeze + shake + flash + slowmo.
@@ -789,13 +774,9 @@ func boss_intro_zoom(_boss_node: Node2D) -> void:
 		_intro_tween.tween_property(cam, "zoom", original_zoom, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	# Subtle slowmo during intro
 	_slowmo_active = true
-	Engine.time_scale = 0.8
+	ContextStack.request_time_scale(&"boss_intro", 0.8, ContextStack.PRIORITY_SLOWMO)
 	await get_tree().create_timer(3.0, true, false, true).timeout
-	if not is_inside_tree():
-		Engine.time_scale = 1.0
-		_slowmo_active = false
-		return
-	Engine.time_scale = 1.0
+	ContextStack.release_time_scale(&"boss_intro")
 	_slowmo_active = false
 
 func boss_death_sequence() -> void:
@@ -808,7 +789,7 @@ func boss_death_sequence() -> void:
 	await get_tree().create_timer(0.28, true, false, true).timeout
 	if not is_inside_tree(): return
 	_slowmo_active = true
-	Engine.time_scale = 0.15
+	_set_boss_death_scale(0.15)
 	if has_node("/root/CombatFX"):
 		CombatFX.apply_screen_shake(20.0, 0.8)
 	dramatic_zoom(0.5, 1.12)
@@ -820,17 +801,18 @@ func boss_death_sequence() -> void:
 		VFXLibrary.spawn("vfx_flash_gold", Vector2.ZERO, scene_root)
 	await get_tree().create_timer(0.5, true, false, true).timeout
 	if not is_inside_tree():
-		Engine.time_scale = 1.0
+		ContextStack.release_time_scale(&"boss_death")
 		_slowmo_active = false
 		return
 	# Smooth time restore
 	var tw = create_tween()
-	if tw:
-		tw.tween_method(_set_time_scale, 0.15, 1.0, 0.3)
-		await tw.finished
-	else:
-		Engine.time_scale = 1.0
+	tw.tween_method(_set_boss_death_scale, 0.15, 1.0, 0.3)
+	await tw.finished
+	ContextStack.release_time_scale(&"boss_death")
 	_slowmo_active = false
+
+func _set_boss_death_scale(value: float) -> void:
+	ContextStack.request_time_scale(&"boss_death", value, ContextStack.PRIORITY_DRAMATIC)
 
 func reality_shatter_effect() -> void:
 	## Full reality shattering effect for chapter endings, major story beats.
@@ -849,16 +831,11 @@ func reality_shatter_effect() -> void:
 		VFXLibrary.spawn("vfx_screen_shockwave", Vector2(640, 360), scene_root)
 	await get_tree().create_timer(0.5).timeout
 	if not is_inside_tree():
-		Engine.time_scale = 1.0
 		return
 	_slowmo_active = true
-	Engine.time_scale = 0.2
+	ContextStack.request_time_scale(&"reality_shatter", 0.2, ContextStack.PRIORITY_DRAMATIC)
 	await get_tree().create_timer(0.4).timeout
-	if not is_inside_tree():
-		Engine.time_scale = 1.0
-		_slowmo_active = false
-		return
-	Engine.time_scale = 1.0
+	ContextStack.release_time_scale(&"reality_shatter")
 	_slowmo_active = false
 
 func chapter_end_sequence() -> void:

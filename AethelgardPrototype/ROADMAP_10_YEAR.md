@@ -188,8 +188,12 @@ design items, and production hygiene.*
 playthrough log.
 
 ### Months 3–4 (Dec 2026 – Jan 2027): The spine (fixes R1, R3, R4, R5)
-- [ ] **ContextStack:** the only writer of `paused`, a priority stack for `time_scale`, and input
-  contexts.
+- [x] **ContextStack** (2026-10-04): the only writer of `paused` and `Engine.time_scale`. UIStack is
+  gone. Pause, shop, status, map, Root Access (both panels), journal, credits and tracker are contexts;
+  owner-bound contexts close when their scene goes. Time scale is per-owner requests with priorities
+  (hitstop > dramatic > slow-mo > wobble), cleared on scene change, New Game and retry. Input: no
+  double-handling of one key press; the world map and journal are modal. `tests/context_stack_test.gd`
+  (31 checks). Still to do: gamepad bindings and a remap UI, prompts generated from the InputMap.
 - [ ] **TransitionService:** `go(path, TravelContext)` consumed exactly once. Queue, re-entrancy
   guard, input lock.
 - [ ] **SaveService:** versioned schema, per-system serializers, atomic write with validated rotating

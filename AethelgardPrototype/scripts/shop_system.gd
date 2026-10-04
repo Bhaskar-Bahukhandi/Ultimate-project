@@ -486,10 +486,13 @@ func open_shop(shop_type: String = "apothecary") -> void:
 				print("[SHOP] Blocked — cutscene is playing")
 			return
 
-	# Integrate with UIStack to prevent overlap with pause/status/dialogue
-	if has_node("/root/UIStack") and not UIStack.try_open("shop"):
+	# ContextStack prevents overlap with pause/status/map and owns the pause.
+	if not ContextStack.push(&"shop", self):
 		if OS.is_debug_build():
-			print("[SHOP] Blocked by UIStack — another modal is open")
+			print("[SHOP] Blocked — another menu is open")
+		# Callers `await ShopSystem.shop_closed`; a refused open must still
+		# resolve that, or the calling scene softlocks (in_shop stuck true).
+		shop_closed.emit.call_deferred()
 		return
 
 	_is_open = true
@@ -501,10 +504,7 @@ func open_shop(shop_type: String = "apothecary") -> void:
 	_filter_btn.text = "Filter: All"
 	_style_tab(_buy_tab, true)
 	_style_tab(_sell_tab, false)
-	
-	# Pause game while shopping
-	get_tree().paused = true
-	
+
 	# Set title
 	match shop_type:
 		"apothecary":
@@ -552,16 +552,9 @@ func close_shop() -> void:
 	if has_node("/root/SFXManager"):
 		SFXManager.play("ui_close")
 
-	# Release UIStack modal slot
-	if has_node("/root/UIStack"):
-		UIStack.close("shop")
+	# Closing the context resumes the tree (unless another menu still pauses it)
+	ContextStack.pop(&"shop")
 
-	# Only unpause if no other UI modal is active
-	if has_node("/root/PauseScreen") and PauseScreen.is_paused:
-		pass  # PauseScreen owns the pause state
-	else:
-		get_tree().paused = false
-	
 	var tween = create_tween()
 	tween.tween_property(_panel, "modulate:a", 0.0, 0.15)
 	tween.tween_callback(_hide_shop)

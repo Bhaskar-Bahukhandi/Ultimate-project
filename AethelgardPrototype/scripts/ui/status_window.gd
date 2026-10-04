@@ -51,18 +51,17 @@ func _process(delta: float) -> void:
 			_show_hint()
 
 func toggle_status() -> void:
-	# Lock status window until player reaches first town (Oakhaven)
-	if not GameManager.story_flags.get("ch1_oakhaven_entered", false):
-		return
-
 	if not status_open:
-		# Trying to open — check UIStack
-		if has_node("/root/UIStack") and not UIStack.try_open("status_window"):
+		# Lock OPENING until the player reaches the first town (Oakhaven). This
+		# used to block closing too, so a window opened before a New Game
+		# reset could never be closed.
+		if not GameManager.story_flags.get("ch1_oakhaven_entered", false):
+			return
+		# Overlay, not a pause: the world keeps running, but only one menu at a time.
+		if not ContextStack.push(&"status_window", self, false, false):
 			return
 	else:
-		# Closing
-		if has_node("/root/UIStack"):
-			UIStack.close("status_window")
+		ContextStack.pop(&"status_window")
 	
 	status_open = !status_open
 	

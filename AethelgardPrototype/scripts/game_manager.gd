@@ -1851,6 +1851,9 @@ func reset_game() -> void:
 		if PauseScreen.is_paused:
 			PauseScreen.is_paused = false
 			PauseScreen.visible = false
+	if has_node("/root/ContextStack"):
+		ContextStack.clear()
+		ContextStack.clear_time_scale()
 	change_state(GameState.MENU)
 
 

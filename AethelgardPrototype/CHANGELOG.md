@@ -3,6 +3,22 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-04 — One owner for pause, menus and game speed (ContextStack)
+
+- **Menus no longer fight each other.** Root Access and the pause menu can't unpause each other. The
+  pause menu can't open over the map, shop, journal or Root Access. One Esc press closes the map
+  without also opening pause.
+- **The world map is modal:** it pauses the world (no walking, encounters or storms underneath),
+  and keys no longer leak through to the game.
+- **Lore journal:** opens only during play (not on the title screen or mid-dialogue), pauses, and
+  closes with L or Esc.
+- **No more "stuck paused":** changing scenes with a panel open (e.g. Root Access) resumes the game.
+- **Slow-mo works:** parry wobble and dramatic slow-mo no longer get cancelled after one frame.
+  Hitstop, slow-mo and wobble stack by priority, and scene changes and retries clear any leftover
+  slow-mo.
+- The status window can always be closed. A shop that can't open no longer softlocks the scene that
+  asked for it. The completion tracker shows above the pause menu.
+
 ## 2026-10-04 — Dialogue as data, writing templates
 
 - **New dialogue format (`.dlg`):** plain-text files with nodes, lines, choices, `[if …]`

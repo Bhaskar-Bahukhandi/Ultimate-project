@@ -99,9 +99,10 @@ func _ready() -> void:
 func show_credits(return_to_menu: bool = true) -> void:
 	if _is_showing:
 		return
+	# Credits sit above everything (non-exclusive) and pause the game.
+	ContextStack.push(&"credits", self, true, true, false)
 	_is_showing = true
 	visible = true
-	get_tree().paused = true
 	_build_credits_ui()
 	_start_scroll(return_to_menu)
 
@@ -254,7 +255,7 @@ func _finish_credits() -> void:
 			if _panel and is_instance_valid(_panel):
 				_panel.queue_free()
 			visible = false
-			get_tree().paused = false
+			ContextStack.pop(&"credits")
 			if _return_to_menu:
 				if has_node("/root/SceneTransitions"):
 					SceneTransitions.change_scene("res://scenes/main_menu.tscn")
@@ -263,4 +264,4 @@ func _finish_credits() -> void:
 		)
 	else:
 		visible = false
-		get_tree().paused = false
+		ContextStack.pop(&"credits")

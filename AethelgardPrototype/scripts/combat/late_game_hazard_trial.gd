@@ -51,7 +51,7 @@ func _ready() -> void:
 
 func _exit_tree() -> void:
 	_clear_hazards()
-	Engine.time_scale = 1.0
+	ContextStack.clear_time_scale()  # drop any hitstop/slow-mo
 
 
 func get_validation_summary() -> Dictionary:
@@ -508,7 +508,7 @@ func _on_player_died() -> void:
 
 
 func _reset_player_for_attempt() -> void:
-	Engine.time_scale = 1.0
+	ContextStack.clear_time_scale()  # drop any hitstop/slow-mo
 	_clear_hazards()
 	if not player or not is_instance_valid(player):
 		return

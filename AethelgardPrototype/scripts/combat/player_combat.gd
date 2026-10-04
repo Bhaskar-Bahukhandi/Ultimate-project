@@ -2134,7 +2134,7 @@ func _request_combat_visual(animation_name: String, hold_time: float) -> void:
 func force_restore_after_death_retry(spawn_position: Vector2) -> Dictionary:
 	## Hard reset used by local boss retries. This kills death tweens on both
 	## the root player and active visual child so a late fade cannot re-hide us.
-	Engine.time_scale = 1.0
+	ContextStack.clear_time_scale()  # drop any hitstop/slow-mo
 	_refresh_sprite_cache_if_needed()
 	TweenAnimator._kill_existing(self)
 	_restore_retry_canvas_item(self, false)

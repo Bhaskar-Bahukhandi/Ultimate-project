@@ -51,20 +51,20 @@ GODOT=/path/to/godot tests/run_tests.sh res://tests/load_all_test.gd
 ```
 
 CI (`.github/workflows/ci.yml`, at the repository root) runs the same checks on every push and
-pull request: boot without script errors, load every script and scene, the Phase 0 suite, and
-`git diff --check`.
+pull request: boot without script errors, load every script and scene, the dialogue and
+ContextStack tests, the Phase 0 suite, and `git diff --check`.
 
 ## Layout
 
 | Path | Contents |
 |---|---|
-| `scripts/` | All game code. The global systems are autoloads (see `project.godot`). |
+| `scripts/` | All game code. The global systems are autoloads (see `project.godot`). `scripts/core/context_stack.gd` is the only code that pauses the game or changes game speed: open menus with `ContextStack.push/pop`, slow time with `request_time_scale/release_time_scale`. |
 | `scenes/` | Scenes by chapter, plus `regions/`, `combat/`, `overworld/`. |
 | `assets/` | Runtime art. `assets/art_sources/` is review-only (not imported, not exported). |
 | `shaders/` | Glitch, CRT and other screen effects. |
 | `dialogue/` | All dialogue as `.dlg` text files (format: `story/DIALOGUE_FORMAT.md`). `dialogue/_extracted/` is the old in-code dialogue, kept as rewrite material. |
 | `story/` | Story bible, voice guide, act outlines, dialogue format. |
-| `tests/` | Headless tests and runners (`dialogue_test.gd`, `phase0_blockers_test.gd`, `load_all_test.gd`). |
+| `tests/` | Headless tests and runners (`context_stack_test.gd`, `dialogue_test.gd`, `phase0_blockers_test.gd`, `load_all_test.gd`). |
 | `tools/` | Dev tools, e.g. `extract_dialogue.gd`. Not exported. |
 | `docs/` | Art-pipeline and gameplay-audit history (not exported). |
 

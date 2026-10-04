@@ -21,27 +21,24 @@ const TOTAL_CHAPTERS := 3  # Prologue + Ch1 + Ch2 + Ch3 → 3 chapters complete
 
 var _panel: PanelContainer
 var _visible := false
-var _was_paused := false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	layer = 95
+	layer = 115  # above the pause screen (110), which it's opened from
 	visible = false
 
 # ─── Public API ───────────────────────────────────────────────────────
 func show_tracker() -> void:
+	# Non-exclusive: it stacks on top of the pause menu it's opened from.
+	ContextStack.push(&"completion_tracker", self, true, true, false)
 	_build_ui()
 	visible = true
 	_visible = true
-	_was_paused = get_tree().paused
-	get_tree().paused = true
 
 func hide_tracker() -> void:
 	visible = false
 	_visible = false
-	# Only unpause if we were the ones who paused
-	if not _was_paused:
-		get_tree().paused = false
+	ContextStack.pop(&"completion_tracker")
 	# Clean up children
 	for c in get_children():
 		c.queue_free()

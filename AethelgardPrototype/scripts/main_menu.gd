@@ -887,8 +887,9 @@ func _launch_chapter(entry: Dictionary) -> void:
 	# Always set EXPLORATION — scenes override to COMBAT/DIALOGUE/CUTSCENE as needed
 	GameManager.change_state(GameManager.GameState.EXPLORATION)
 	
-	# Ensure tree is not paused (safety)
-	get_tree().paused = false
+	# Close any open menu and clear slow-mo (resumes the tree)
+	ContextStack.clear()
+	ContextStack.clear_time_scale()
 	
 	if has_node("/root/SceneTransitions"):
 		SceneTransitions.change_scene(entry["scene"])

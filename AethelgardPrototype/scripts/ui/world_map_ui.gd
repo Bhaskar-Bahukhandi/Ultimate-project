@@ -114,18 +114,32 @@ var _is_open: bool = false
 var _selected_index: int = 0
 
 
+func _ready() -> void:
+	# The map pauses the game while open, so it must keep processing input.
+	process_mode = Node.PROCESS_MODE_ALWAYS
+
+
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("world_map"):
 		if _is_open:
 			close_map()
+			get_viewport().set_input_as_handled()
 		else:
-			# Only open in exploration mode
-			if has_node("/root/GameManager") and GameManager.current_state == GameManager.GameState.EXPLORATION:
+			# Only open in exploration mode, with no other menu or dialogue up
+			if has_node("/root/GameManager") and GameManager.current_state == GameManager.GameState.EXPLORATION \
+					and not DialogueManager.is_active:
 				open_map()
+				if _is_open:
+					get_viewport().set_input_as_handled()
 		return
 
 	if not _is_open:
 		return
+
+	# The map is modal: no key reaches the game underneath (movement, F
+	# interact, Esc opening pause) while it's open.
+	if event is InputEventKey or event is InputEventJoypadButton or event is InputEventJoypadMotion:
+		get_viewport().set_input_as_handled()
 
 	if event.is_action_pressed("move_left") or event.is_action_pressed("ui_left"):
 		_selected_index = (_selected_index - 1) % REGION_DATA.size()
@@ -144,6 +158,9 @@ func _input(event: InputEvent) -> void:
 func open_map() -> void:
 	if _is_open:
 		return
+	# Pauses the world (movement, encounters, storms) while browsing.
+	if not ContextStack.push(&"world_map", self):
+		return
 	_is_open = true
 	_build_map_ui()
 	map_opened.emit()
@@ -153,6 +170,7 @@ func close_map() -> void:
 	if not _is_open:
 		return
 	_is_open = false
+	ContextStack.pop(&"world_map")
 	if _map_layer and is_instance_valid(_map_layer):
 		_map_layer.queue_free()
 		_map_layer = null

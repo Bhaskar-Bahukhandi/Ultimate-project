@@ -73,6 +73,10 @@ jobs:
         working-directory: ${{ env.PROJECT_DIR }}
         run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/dialogue_test.gd
 
+      - name: ContextStack tests (pause, menus, time scale)
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/context_stack_test.gd
+
       - name: Phase 0 regression tests
         working-directory: ${{ env.PROJECT_DIR }}
         timeout-minutes: 30

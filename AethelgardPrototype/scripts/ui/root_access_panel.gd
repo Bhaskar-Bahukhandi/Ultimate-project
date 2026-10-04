@@ -215,6 +215,9 @@ func open(enemy: EnemyBase, corruption_cost: float = 1.0) -> void:
 	if not enemy.has_method("get_hackable_properties"):
 		push_warning("[ROOT ACCESS] Enemy is not hackable")
 		return
+	# Pauses the game; refused while another menu (pause, map…) is open.
+	if not ContextStack.push(&"root_access", self):
+		return
 
 	_target = enemy
 	_corruption_cost = corruption_cost
@@ -248,7 +251,6 @@ func open(enemy: EnemyBase, corruption_cost: float = 1.0) -> void:
 	tw.tween_property(self, "scale", Vector2(1.0, 1.0), 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tw.tween_property(self, "modulate:a", 1.0, 0.15)
 
-	get_tree().paused = true
 	if has_node("/root/SFXManager"):
 		SFXManager.play("root_access_open")
 
@@ -266,7 +268,7 @@ func close() -> void:
 		visible = false
 		scale = Vector2(1.0, 1.0)
 		modulate.a = 1.0
-		get_tree().paused = false
+		ContextStack.pop(&"root_access")
 		_target = null
 		panel_closed.emit()
 	)

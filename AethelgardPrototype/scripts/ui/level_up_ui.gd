@@ -229,7 +229,7 @@ func get_atk_for_level(level: int) -> int:
 func _on_player_leveled_up(new_level: int) -> void:
 	## Show animated level-up popup with stat changes.
 	# Block if another modal is open (don't interrupt shop/pause/dialogue)
-	if has_node("/root/UIStack") and UIStack.is_any_open():
+	if ContextStack.any_open():
 		# Queue for after current modal closes — just update stats silently
 		if OS.is_debug_build():
 			print("[LEVEL UI] Level-up popup suppressed — another modal is open")

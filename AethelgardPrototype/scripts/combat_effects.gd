@@ -101,18 +101,21 @@ func apply_hitstop(duration: float = 0.1) -> void:
 		var new_scale = remap(duration, 0.03, 0.20, 0.08, 0.01)
 		new_scale = clamp(new_scale, 0.01, 0.08)
 		if new_scale < Engine.time_scale:
-			Engine.time_scale = new_scale
+			_set_time_scale(new_scale)
 		return
 
 	# Don't hitstop if game is already paused
 	if get_tree().paused:
 		return
 
+	# A recovery ramp from the previous hitstop would release this one early.
+	if _hitstop_recover_tween and _hitstop_recover_tween.is_valid():
+		_hitstop_recover_tween.kill()
 	is_hitstop_active = true
 	hitstop_timer = duration
 	# Variable intensity: heavier hits = slower time scale = more dramatic
 	var scale = remap(duration, 0.03, 0.20, 0.08, 0.01)
-	Engine.time_scale = clamp(scale, 0.01, 0.08)
+	_set_time_scale(clamp(scale, 0.01, 0.08))
 	hitstop_requested.emit(duration)
 
 	# Safety fallback: force-end hitstop after 0.5s real time
@@ -126,19 +129,23 @@ func _end_hitstop() -> void:
 	if _hitstop_safety_timer and _hitstop_safety_timer.timeout.is_connected(_force_end_hitstop):
 		_hitstop_safety_timer.timeout.disconnect(_force_end_hitstop)
 	_hitstop_safety_timer = null
-	# Smooth time scale recovery (Dead Cells does this)
-	var tween = create_tween()
-	tween.tween_method(_set_time_scale, Engine.time_scale, 1.0, 0.04)
+	# Smooth time scale recovery (Dead Cells does this), then hand time back.
+	_hitstop_recover_tween = create_tween()
+	_hitstop_recover_tween.tween_method(_set_time_scale, Engine.time_scale, 1.0, 0.04)
+	_hitstop_recover_tween.tween_callback(func(): ContextStack.release_time_scale(&"hitstop"))
 
+var _hitstop_recover_tween: Tween = null
+
+## Hitstop speed goes through ContextStack (the only writer of Engine.time_scale).
 func _set_time_scale(value: float) -> void:
-	Engine.time_scale = value
+	ContextStack.request_time_scale(&"hitstop", value, ContextStack.PRIORITY_HITSTOP)
 
 func _force_end_hitstop() -> void:
 	## Safety net: force-end hitstop if timer somehow fails.
 	if is_hitstop_active:
 		push_warning("[COMBAT FX] Force-ending hitstop (safety fallback)")
 		is_hitstop_active = false
-		Engine.time_scale = 1.0
+		ContextStack.release_time_scale(&"hitstop")
 
 # ==========================================================================
 # SCREEN SHAKE — Omnidirectional & Directional with Perlin-like noise
@@ -484,14 +491,18 @@ func apply_last_kill_slowdown() -> void:
 	## Dramatic slowdown when the last enemy in a wave dies — bullet-time finish.
 	if get_tree().paused or is_hitstop_active:
 		return
-	Engine.time_scale = 0.12
+	_set_last_kill_scale(0.12)
 	var timer = get_tree().create_timer(0.4, true, false, true)  # Uses real time
 	timer.timeout.connect(_restore_time_scale)
 
 func _restore_time_scale() -> void:
 	## Smoothly restore time scale after last-kill slowdown.
 	var tw = create_tween()
-	tw.tween_method(_set_time_scale, Engine.time_scale, 1.0, 0.12)
+	tw.tween_method(_set_last_kill_scale, 0.12, 1.0, 0.12)
+	tw.tween_callback(func(): ContextStack.release_time_scale(&"last_kill"))
+
+func _set_last_kill_scale(value: float) -> void:
+	ContextStack.request_time_scale(&"last_kill", value, ContextStack.PRIORITY_DRAMATIC)
 
 # ==========================================================================
 # DYNAMIC CAMERA — Zoom Pulses for Combat Impact

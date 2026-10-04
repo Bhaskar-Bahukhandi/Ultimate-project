@@ -1243,7 +1243,7 @@ func _reset_player_for_retry(label: String = "retry") -> void:
 		var state: Dictionary = player.force_restore_after_death_retry(PLAYER_SPAWN)
 		_log_retry_restore_state(label, state)
 		return
-	Engine.time_scale = 1.0
+	ContextStack.clear_time_scale()  # drop any hitstop/slow-mo
 	player.global_position = PLAYER_SPAWN
 	player.velocity = Vector2.ZERO
 	player.visible = true

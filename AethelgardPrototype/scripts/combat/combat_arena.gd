@@ -692,10 +692,13 @@ func _open_root_access() -> void:
 	if not target_enemy.has_method("get_hackable_properties"):
 		return
 
+	# Pauses the game; refused while another menu is open. Owned by the arena,
+	# so a scene change with the panel open can't leave the game paused.
+	if not ContextStack.push(&"root_access", self):
+		return
 	root_access_active = true
 	selected_enemy = target_enemy
 	root_access_panel.visible = true
-	get_tree().paused = true
 	# The panel is PROCESS_MODE_ALWAYS (set in combat_arena.tscn) so its buttons
 	# still receive input while the tree is paused. Give Cancel keyboard focus so
 	# there is always a reachable way out even without the mouse.
@@ -758,7 +761,7 @@ func _on_root_access_cancel() -> void:
 func _close_root_access() -> void:
 	root_access_active = false
 	root_access_panel.visible = false
-	get_tree().paused = false
+	ContextStack.pop(&"root_access")
 
 
 # ═════════════════════════════════════════════════════════════════════════

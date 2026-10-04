@@ -114,22 +114,26 @@ func _input(event: InputEvent) -> void:
 			if cm == null or not cm.get("is_playing"):
 				set_meta("cutscene_blocked", false)
 		if not get_meta("cutscene_blocked", false):
+			# Esc that just closed another menu (map, shop…) must not also open pause.
+			if not is_paused and ContextStack.changed_this_frame():
+				return
+			# Something opened from pause (completion tracker) sits on top: let it
+			# take the key instead of closing pause underneath it.
+			if is_paused and ContextStack.top() != &"pause":
+				return
 			toggle_pause()
 			get_viewport().set_input_as_handled()
 
 func toggle_pause() -> void:
 	if not is_paused:
-		# Trying to open — check UIStack
-		if has_node("/root/UIStack") and not UIStack.try_open("pause_screen"):
+		# Refused while any other menu is open (ContextStack owns pause).
+		if not ContextStack.push(&"pause", self):
 			return
 	else:
-		# Closing
-		if has_node("/root/UIStack"):
-			UIStack.close("pause_screen")
+		ContextStack.pop(&"pause")
 
 	is_paused = !is_paused
 	visible = is_paused
-	get_tree().paused = is_paused
 	
 	if is_paused:
 		_refresh_all_tabs()
@@ -1356,12 +1360,11 @@ func _return_to_main_menu() -> void:
 	yes_btn.add_theme_font_size_override("font_size", 13)
 	yes_btn.add_theme_color_override("font_color", Color(1.0, 0.4, 0.4))
 	yes_btn.pressed.connect(func():
-		# Resume tree, close pause, go to menu
+		# Close every menu (resumes the tree), then go to the title screen
 		is_paused = false
 		visible = false
-		get_tree().paused = false
-		if has_node("/root/UIStack"):
-			UIStack.close("pause_screen")
+		ContextStack.clear()
+		ContextStack.clear_time_scale()
 		if _confirm_menu_panel and is_instance_valid(_confirm_menu_panel):
 			_confirm_menu_panel.queue_free()
 		if has_node("/root/SceneTransitions"):

@@ -108,6 +108,9 @@ func change_scene(scene_path: String, style: TransitionStyle = TransitionStyle.F
 
 	# BUG 18 FIX: Kill all active TweenAnimator tweens before scene swap
 	TweenAnimator.clear_all_tweens()
+	# Hitstop / slow-mo from the old scene must not carry into the new one.
+	if has_node("/root/ContextStack"):
+		ContextStack.clear_time_scale()
 
 	# Phase 2: Swap scene (with background loading for large scenes)
 	var use_threaded = ResourceLoader.has_method("load_threaded_request")

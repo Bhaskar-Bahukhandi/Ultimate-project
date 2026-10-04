@@ -25,14 +25,27 @@ var _is_open: bool = false
 
 
 func _ready() -> void:
+	# The journal pauses the game while open, so it must keep processing input.
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_register_all_lore()
 
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("status_window") and Input.is_key_pressed(KEY_L):
-		toggle_journal()
-	elif event is InputEventKey and event.pressed and event.keycode == KEY_L:
-		toggle_journal()
+	if not (event is InputEventKey and event.pressed and not event.echo):
+		return
+	if _is_open:
+		# Modal: L or Esc closes it, and no key reaches the game underneath.
+		if event.keycode == KEY_L or event.is_action_pressed("ui_cancel"):
+			close_journal()
+		get_viewport().set_input_as_handled()
+		return
+	if event.keycode == KEY_L:
+		# Only during play — not on the title screen, in a cutscene or mid-dialogue.
+		if has_node("/root/GameManager") and GameManager.current_state in [GameManager.GameState.EXPLORATION, GameManager.GameState.COMBAT] \
+				and not DialogueManager.is_active:
+			open_journal()
+			if _is_open:
+				get_viewport().set_input_as_handled()
 
 
 ## Register a lore entry in the master database
@@ -160,6 +173,8 @@ func toggle_journal() -> void:
 func open_journal() -> void:
 	if _is_open:
 		return
+	if not ContextStack.push(&"lore_journal", self):
+		return
 	_is_open = true
 	_build_journal_ui()
 	if has_node("/root/SFXManager"):
@@ -171,6 +186,7 @@ func close_journal() -> void:
 	if not _is_open:
 		return
 	_is_open = false
+	ContextStack.pop(&"lore_journal")
 	# Free the CanvasLayer parent (which also frees the panel child)
 	if _journal_panel and is_instance_valid(_journal_panel):
 		var parent_layer = _journal_panel.get_parent()
