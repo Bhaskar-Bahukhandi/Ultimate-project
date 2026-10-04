@@ -1,0 +1,28 @@
+# Extracted from res://scripts/chapter3/ch3_data_stream.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _intro_dialogue
+NARRATOR: The Data Stream stretches before them — a river of raw information flowing between Aethelgard's regions. Glowing characters cascade through the current: numbers, symbols, fragments of code.
+SYSTEM: // WARNING: Data Stream environment detected. Root Access DISABLED. Code velocity exceeds read/write threshold.
+Kaelen: My Root Access... I can't read the code. It's moving too fast, like trying to read a book thrown off a building.
+Elara: But I can FEEL it. The data... it's speaking to me. The fragment amplified my connection. Let me guide us.
+NARRATOR: Elara's eyes glow with cascading blue light. Her glitched arm extends, fingers tracing patterns in the flowing data. For the first time, SHE is the one with power here.
+Elara: Hold on to something. I'm going to ride the stream.
+Kaelen (Internal): No Root Access. No companion. Just raw data moving faster than thought. The engineer in me wants to analyze it — but the only way through is to ride it blind.
+Kaelen: If I can't READ the data, I'll just have to feel where it's going. Here goes nothing.
+Lyra: This is what the world looks like under the skin. It's... terrifying. And beautiful. Mostly terrifying.
+SYSTEM: // Dodge RED data packets (corruption). Collect BLUE fragments (data).
+SYSTEM: // Controls: UP/DOWN to change lanes. The stream carries you forward automatically.
+
+~ _complete_stream
+SYSTEM: // Data Stream traversal complete. Data collected: %d. Damage taken: %d.
+NARRATOR: The stream slows, depositing the party at the edge of an impossible structure — a building that stretches into recursive infinity.
+Kaelen: That was... there was a moment I felt what Elara feels. The code underneath everything, flowing like water.
+Elara: Now you understand. The world isn't MADE of code, Kaelen. The world IS code. And so are we.
+NARRATOR: Elara's eyes still glow faintly from the data stream immersion. Her connection to Aethelgard's infrastructure has deepened — permanently.
+Kaelen: I noticed something in the stream. Every piece of data was tagged... monitored. Everything flows through the stream and SOVEREIGN SEES ALL OF IT.
+Kaelen: The Data Stream isn't just a river. It's SOVEREIGN's nervous system — its eyes and ears across every region.
+Lyra: So we just swam through a god's brain. Cool. Normal. Totally fine.
+NARRATOR: Before them stands The Archive — a structure of impossible geometry. Its entrance is a door that contains copies of itself, recursing to infinity.
+SYSTEM: // LOCATION: THE ARCHIVE — Repository of original source code. Clearance: INSUFFICIENT. Override: possible.

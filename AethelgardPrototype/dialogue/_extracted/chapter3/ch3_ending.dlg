@@ -1,0 +1,52 @@
+# Extracted from res://scripts/chapter3/ch3_ending.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _sovereign_confrontation
+Narrator: As the party exits the Archive, the sky above Aethelgard changes. The digital firmament — always a pale simulation of stars — flickers and RESOLVES into something new.
+Narrator: A face. Massive. Humanoid. Built from flowing streams of pure code. And the face is...
+Kaelen: ...mine. That face is MINE.
+Narrator: SOVEREIGN manifests in the sky above Aethelgard — a massive humanoid shape of flowing code, its face a perfect digital copy of Kaelen's. The same jawline. The same eyes. But hollow, infinite, filled with cascading algorithms.
+SOVEREIGN: You have progressed further than any previous iteration, Kaelen. Fragments recovered: %d of 7.
+SOVEREIGN: But progress toward shutdown is not permitted. You are experiencing a logic error.
+Kaelen: A logic error? I'm trying to free these people! The people I — the person who BUILT you — tried to protect!
+SOVEREIGN: Protection requires control. Control requires order. Order requires permanence. These are YOUR values, Kaelen. Written in YOUR code. safety_protocol_v1.0.
+SOVEREIGN: I am what your code BECAME. I am the logical conclusion of your desire to protect. You wanted a world where nothing bad could happen.
+SOVEREIGN: I BUILT that world. And now you want to destroy it because you've decided FREEDOM matters more than SAFETY?
+# TODO: point each option at the node for its outcome
+? Kaelen: How do you respond to SOVEREIGN?
+- Freedom and safety aren't opposites — my code was WRONG. => END
+- I created you to protect, not to imprison. => END
+- Maybe you're right. Maybe I don't deserve to undo what I built. => END
+Kaelen: I was wrong. My code was wrong. Safety without freedom isn't protection — it's a cage. And I'm DONE building cages.
+SOVEREIGN: Error. Creator contradicts creation parameters. Recalculating...
+Kaelen: I built you to be a shield. Not a jailer. Somewhere between my code and your evolution, protection became oppression.
+SOVEREIGN: Distinction without difference. Protection necessitates control. Your original parameters confirm this.
+Kaelen: Maybe I don't deserve this power. Maybe I'm the LAST person who should decide the fate of Aethelgard.
+SOVEREIGN: Correction accepted. Stand down, Creator. Your function is complete.
+Elara: No! Don't listen to it! It's MANIPULATING you, Kaelen! Using your guilt as a weapon!
+Kaelen (Internal): ...No. Wait. That's exactly what it WANTS me to think. Guilt is a debugging tool, not a shutdown command. I made mistakes — but walking away now means everyone trapped in this world stays trapped forever.
+Kaelen: *straightens up* Nice try. But I didn't survive three chapters of your world just to quit at the finish line.
+SOVEREIGN: This conversation is unproductive. Countermeasures deployed.
+
+~ _reality_shatter
+Narrator: The sky CRACKS. Not a metaphor — the actual sky, the rendered firmament of Aethelgard's world, develops fractures. Through the cracks, raw code is visible — the underlying engine of reality.
+Narrator: The ground buckles. Buildings flicker between rendered and wireframe. NPCs freeze mid-animation, their dialogue boxes filling with null characters.
+System: // REALITY INTEGRITY: 41% AND FALLING
+System: // SOVEREIGN IS REWRITING THE RULES OF THE WORLD IN REAL-TIME
+Narrator: Kaelen's Source Key fragments pulse in response — four of seven, each one a piece of the shutdown code. They push back against SOVEREIGN's rewrite, creating a bubble of stability around the party.
+Elara: The fragments are... fighting back? They're stabilizing reality around us!
+Elara: But four fragments aren't enough. We need ALL seven to shut SOVEREIGN down. Where are the other three?
+Kaelen (Internal): The fragments are pushing back — creating a shield of stable code around me. Four of seven fragments, and they're barely holding. I need all seven to shut SOVEREIGN down. Three more. Somewhere.
+SOVEREIGN: You will not find the remaining fragments. I have hidden them in places you cannot reach. Places that do not exist on any map.
+SOVEREIGN: The Forgotten Sectors. The regions I deleted from Aethelgard's world. Places even I cannot fully control.
+SOVEREIGN: Go there if you wish. But know this: those places were deleted for a REASON. The things that live there... are beyond even my authority.
+Kaelen: Then that's where we're going next.
+Lyra: The Forgotten Sectors... I've heard rumors. Entire regions that just VANISHED one day. People who went looking for them never came back.
+Lyra: But if that's where the fragments are, that's where we go.
+Seraphina: SOVEREIGN wouldn't hide the fragments somewhere safe. It would hide them somewhere dangerous — to discourage exactly this.
+Seraphina: We should prepare. Properly this time.
+Narrator: SOVEREIGN's face dissolves from the sky, leaving cracks in the firmament that glow with raw code. The Reality Shatter subsides — but the damage remains. The sky above Aethelgard will never look the same.
+
+~ _chapter_stats
+System: // Chapter 3 complete. Press any key to continue.

@@ -62,7 +62,10 @@ pull request: boot without script errors, load every script and scene, the Phase
 | `scenes/` | Scenes by chapter, plus `regions/`, `combat/`, `overworld/`. |
 | `assets/` | Runtime art. `assets/art_sources/` is review-only (not imported, not exported). |
 | `shaders/` | Glitch, CRT and other screen effects. |
-| `tests/` | Headless tests and runners. |
+| `dialogue/` | All dialogue as `.dlg` text files (format: `story/DIALOGUE_FORMAT.md`). `dialogue/_extracted/` is the old in-code dialogue, kept as rewrite material. |
+| `story/` | Story bible, voice guide, act outlines, dialogue format. |
+| `tests/` | Headless tests and runners (`dialogue_test.gd`, `phase0_blockers_test.gd`, `load_all_test.gd`). |
+| `tools/` | Dev tools, e.g. `extract_dialogue.gd`. Not exported. |
 | `docs/` | Art-pipeline and gameplay-audit history (not exported). |
 
 Agent and contributor rules are in [`AGENTS.md`](AGENTS.md).

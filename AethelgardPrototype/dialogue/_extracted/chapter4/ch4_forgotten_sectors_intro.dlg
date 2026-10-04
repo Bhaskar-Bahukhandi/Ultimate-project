@@ -1,0 +1,14 @@
+# Extracted from res://scripts/chapter4/ch4_forgotten_sectors_intro.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_intro
+Narrator: The crack in the sky does not close. It widens into a door with no frame, a wound in the simulation where the map refuses to render.
+System: // UNLISTED REGION DETECTED: FORGOTTEN_SECTORS
+System: // WARNING: Region was deleted by SOVEREIGN. Memory ownership is disputed.
+Kaelen: Deleted, not destroyed. There is still data here.
+Lyra: In the Wastes, people whispered about places that got cut out of history. I thought it was grief making stories. I hate being wrong like this.
+Seraphina: If SOVEREIGN hid a fragment here, expect a lock built from shame, not steel.
+Elara: I can hear voices under the static. Not ghosts. Backups. People the world forgot how to load.
+SOVEREIGN: Creator, this sector contains deprecated lives. Restoring them will destabilize the world you claim to protect.
+Kaelen: Then the world has been stable for the wrong reasons.

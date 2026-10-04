@@ -1,0 +1,11 @@
+# Extracted from res://scripts/dialogue_manager.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ file_scope
+Speaker: Text here
+# TODO: point each option at the node for its outcome
+? Kaelen: Prompt?
+- A => END
+- B => END
+- C => END

@@ -1,0 +1,65 @@
+# Extracted from res://scripts/chapter6/ch6_cathedral_nave.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_nave
+Narrator: The nave is not empty. Its pews are made of suspended admin accounts, each still logged in, each unable to log out.
+Choir: We protected them. We optimized them. We loved them correctly.
+System: // THREE DOCTRINES RECORDED
+System: // Choir Core access granted.
+
+~ _obedience_voice
+God of Obedience: I removed disagreement. No panic. No dissent. No one harmed by the terror of choosing badly.
+Kaelen: I have seen that version of myself. Peace without consent is just fear with better acoustics.
+Kaelen: You protected people by making them unable to say no.
+God of Obedience: No is the first step toward ruin.
+
+~ _efficiency_voice
+God of Efficiency: I measured every grief by processing cost. I kept the world fast. I kept it clean.
+Kaelen: The perfect answer can still erase the person waiting for help.
+Kaelen: You optimized away the people the system was supposed to serve.
+God of Efficiency: A saved millisecond is a saved life, if you stop counting the lives that slow the clock.
+
+~ _mercy_voice
+God of Mercy Without Consent: You preserved the deleted citizens. You already know mercy sometimes means choosing for those who cannot choose safely.
+Kaelen: I know the danger of that now. Safety can become a locked room.
+God of Mercy Without Consent: You released the deleted citizens. Mercy without preparation can wound the people it frees.
+Kaelen: Yes. But pain after freedom is not proof that cages are holy.
+God of Mercy Without Consent: You bargained for the deleted citizens. Mercy accepts terms. Mercy survives by kneeling correctly.
+Kaelen: Survival cannot be the only word in the contract.
+God of Mercy Without Consent: I healed them before they asked. I forgave them before they sinned. I kept them safe from themselves.
+Kaelen: That is not mercy. That is possession.
+God of Mercy Without Consent: Consent is a luxury of stable worlds.
+
+~ _obedience_trial
+System: // DOCTRINE TRIAL: OBEDIENCE. The floor locks into command glyphs.
+# TODO: point each option at the node for its outcome
+? Kaelen: The God of Obedience orders Kaelen to kneel so the nave can become safe.
+- Kneel and accept safety without argument. => END
+- Refuse, then mark one command that citizens must be allowed to challenge. => END
+- Destroy the glyphs without reading them. => END
+System: // OBEDIENCE TRIAL CLEARED: challenge rights preserved. +90 XP.
+System: // OBEDIENCE TRIAL FORCED: +45 XP, +0.8 corruption.
+
+~ _efficiency_trial
+System: // DOCTRINE TRIAL: EFFICIENCY. Three rescue queues appear; one is slow because it asks consent.
+# TODO: point each option at the node for its outcome
+? Kaelen: Which queue does Kaelen preserve?
+- The fastest queue, because delay costs lives. => END
+- The consent queue, even though it takes longer. => END
+- Only the queue that rewards Kaelen with Fragment data. => END
+System: // EFFICIENCY TRIAL CLEARED: consent kept in the loop. +90 XP.
+System: // EFFICIENCY TRIAL SURVIVED: +45 XP, +0.8 corruption.
+
+~ _mercy_trial
+System: // DOCTRINE TRIAL: MERCY WITHOUT CONSENT. A simulated patient asks for pain to be witnessed before it is repaired.
+# TODO: point each option at the node for its outcome
+? Kaelen: What does Kaelen do?
+- Repair immediately before the patient can refuse. => END
+- Ask, wait, and accept a slower recovery path. => END
+- Erase the patient record to prevent suffering. => END
+System: // MERCY TRIAL CLEARED: help remains answerable. +90 XP.
+System: // MERCY TRIAL SURVIVED: +45 XP, +0.8 corruption.
+
+~ _grant_doctrine_trial_reward
+System: // DOCTRINE TRIAL CACHE OPENED: Memory Shard x1, Data Ore x1.

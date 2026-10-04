@@ -1,0 +1,17 @@
+# Extracted from res://scripts/regions/late_revisit_hub.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ file_scope
+Case File 19-B: A citizen record survives in three layers: a name gap, a child's route sketch, and the court note that called both disposable.
+Firewall Console: Calibration excerpt: obedience reduces panic quickly. Consent reduces damage slowly. The console flags only one as efficient.
+Tide Gauge: The gauge reads salvageable, unstable, and not yours. A backup fragment can be carried out; a whole rejected life cannot.
+Memory Mirror: One reflection remains outside the trial route: regret is evidence, not a command to replay the choice.
+Supply Board: Faction requests stay posted here as logistics, not a new route: medicine, ore, witness records, and room to refuse.
+Record Terminal: The antechamber record repeats one caution: emergency access is not ownership, and a patch meant to expire must remain answerable.
+Prep Terminal: Preparation buffer only. Resume Story carries the final witnesses and choices; this gate will not replay them.
+
+~ _choose_late_farming_run
+Deleted Case File: The fracture keeps a citizen case in pieces. Seal it carefully: restoration and purge both clear residue, neither rewrites the Null Court route.
+Firewall Console: Charge-up warning: calibration opens a narrow drill window. The Choir Core trial remains locked to Resume Story.
+Tide Gauge: Tide warning: deeper salvage exposes richer backups and sharper echoes. Retreat is always valid before the pull starts.

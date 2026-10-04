@@ -1,0 +1,11 @@
+# Extracted from res://scripts/chapter5/ch5_ending.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_ending
+Narrator: The Mirror City does not vanish when the trial ends. It simply stops pretending the reflections are separate from Kaelen.
+System: // CHAPTER 5 COMPLETE
+System: // Fragment #6 trace: CATHEDRAL_SERVER
+SOVEREIGN: The Choir will show you what happens when abandoned systems learn to pray.
+Kaelen: Then I will listen before I cut the power.
+System: // Chapter 6: The Choir of Broken Gods - loading.

@@ -1,0 +1,15 @@
+# Extracted from res://scripts/chapter9/ch9_ending.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_ending
+Narrator: The Memory Lab closes every file except one: ROOT_OF_HEAVEN.
+Narrator: The full truth goes out raw. Some saved kneel from grief. Some stand because nobody softened it for them.
+Narrator: Part of the truth remains sealed. The revolt holds together, but the Human Patch still has a shadow to stand in.
+Narrator: The witnesses receive the complete record. Judgment becomes public, slow, and impossible for SOVEREIGN to own.
+Narrator: The truth route is unclear. SOVEREIGN smiles at every gap.
+System: // CHAPTER 9 COMPLETE
+System: // Source Key stable: %d / 7. No new fragments generated.
+SOVEREIGN: You have learned your origin. Now learn your ending.
+Kaelen: Not mine. Ours.
+System: // Chapter 10: Root of Heaven - loading.

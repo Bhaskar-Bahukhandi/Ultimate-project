@@ -1,0 +1,67 @@
+# Extracted from res://scripts/chapter2/ch2_seraphina_choice.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _start_sequence
+Seraphina: *stepping through the smoke and debris* ...That's what you've been hiding.
+Kaelen: Seraphina—
+Seraphina: I watched you fight that thing. I watched you rewrite reality itself. You didn't just defeat it — you hacked the world's own security system.
+Seraphina: When I first arrived in this world, I thought it was a nightmare. A glitch. Something that would fix itself. But it's been months, Kaelen. Months of surviving, fighting, adapting.
+Seraphina: And now you show up with the power to literally edit this world's code. Do you understand what that means? Do you understand what people would do for that kind of power?
+Kaelen: I didn't ask for this ability, Seraphina. It comes with a cost — every time I use Root Access, the corruption grows. The world fights back.
+Seraphina: I know. I can see it. The glitching around your hands, the way reality warps when you concentrate. You're becoming part of the corruption.
+Seraphina: And the Data Wraith's core... I heard what you did down there. You ABSORBED it. Pulled an entire corrupted process into yourself. Your data signature is practically screaming with stolen power.
+Kaelen: I did what I had to do to survive—
+Seraphina: Did you? Or did you do it because you COULD?
+Seraphina: First the guardian at Oakhaven. Then the Data Wraith. You're not just using power — you're accumulating it. Consuming everything in your path. At what point do YOU become the thing we should all be afraid of?
+Elara: Seraphina, please. Kaelen is trying to find the Source Key Fragments — seven pieces of the world's master key. If we can assemble them, we might be able to fix everything. Or find a way home.
+Kaelen: I'm looking for the Source Key Fragments. Seven pieces of a master key. If I can assemble them, there might be a way to fix this world — or find a way home for all of us.
+Seraphina: Home... *voice breaking slightly* I'd almost forgotten what that word meant.
+Seraphina: *composing herself* Fine. Then here's the question, Kaelen. What happens now? Because I'm not going to stand on the sidelines while the world falls apart around us.
+
+~ _show_choice
+# TODO: point each option at the node for its outcome
+? Kaelen: What do you say to Seraphina?
+- "Join us. We're stronger together." => END
+- "This is my fight. You should stay in Ironhold where it's safe." => END
+- "I don't trust you enough. How do I know you're not compromised?" => END
+
+~ _choice_recruit
+Seraphina: *long pause* ...You know what? You're right. I've been surviving alone for too long. If there's even a chance we can fix this world — or get home — I want in.
+Kaelen: Welcome to the team, Seraphina.
+Seraphina: Don't make me regret this, Systems Architect. And for the record — if your powers ever threaten this world more than they help it, I WILL stop you. That's not a threat. It's a promise.
+Elara: *smiling* It's good to have another fighter with us. The road ahead won't be easy.
+Seraphina: Easy? I spent three months as an arena champion. I don't DO easy.
+Seraphina: *glancing between Kaelen and Elara* So. A glitch mage, a systems architect, and a flight attendant turned arena champion. We're quite the party.
+Elara: *laughing softly* When you put it that way... we sound like the worst rescue team in any world's history.
+Seraphina: I notice you're traveling alone. No companions. That changes now. You'll need someone watching your back who isn't a corrupted process.
+Kaelen: I... had the option to travel with someone. I chose not to. I'm starting to wonder if that was a mistake.
+Seraphina: *raising an eyebrow* Well, whatever you decided, you've got me now. And I don't abandon my crew. Flight attendant oath. ...Okay, that's not a real oath, but you get the idea.
+
+~ _choice_stay
+Seraphina: *scoffs* Safe? You just fought an Administrator in the middle of the city. Nowhere is safe anymore.
+Seraphina: But... I understand. You don't want more people in the crossfire. I respect that.
+Seraphina: I'll stay in Ironhold and protect the people here. Someone has to. But Kaelen — if you need me, I'll come running. You have my word.
+Kaelen: Thank you, Seraphina. Watch over Ironhold for us.
+Seraphina: I will. And Kaelen? Don't die out there. That's an order from your former flight stewardess.
+Elara: *nodding* She'll keep the city standing. And we'll keep moving forward.
+Kaelen (Internal): At least someone will be watching over this place. And she said she'd come if I called. That's... something. More than I deserve, after the bridges I've burned.
+
+~ _choice_reject
+Seraphina: *stunned silence, then cold anger* ...Compromised? You think I'm working for them?
+Seraphina: I have been SURVIVING in this hellscape for months while you've had your fancy Root Access powers for what, a few days? And YOU don't trust ME?
+Kaelen: I just—
+Seraphina: *cutting him off* No. You've made yourself clear. Fine. I'll survive on my own, just like I always have.
+Seraphina: *turning away* But mark my words, Kaelen. When your corruption catches up to you — and it will — don't come looking for me.
+Elara: *quietly to Kaelen* ...That was harsh. I hope you know what you're doing.
+Elara: She's the only other real person we've found in this world. Pushing her away... we might not get another chance.
+Kaelen (Internal): First Elara. Now Seraphina. I'm pushing away every ally this world offers me. Am I being cautious... or am I afraid of letting people close because I know this world might take them away?
+Kaelen (Internal): Two real people. Two outstretched hands. Both rejected. If I keep this up, I'll find the Source Keys alone — or I'll die alone. Maybe both.
+
+~ _mark_seraphina_route
+System: [ROUTE MARKER]\nSeraphina will be remembered as a traveling witness in later chapters.
+System: [ROUTE MARKER]\nSeraphina's protection of Ironhold is now recorded for later faction reactions.
+System: [ROUTE MARKER]\nSeraphina's rejection is now recorded. Late-game witnesses may question Kaelen's trust.
+
+~ _sequence_complete
+System: [CHAPTER 2 SEQUENCE 8 COMPLETE]\n[Relationship updated: Seraphina]

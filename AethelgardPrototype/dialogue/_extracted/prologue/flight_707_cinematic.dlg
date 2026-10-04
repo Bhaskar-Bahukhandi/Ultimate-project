@@ -1,0 +1,28 @@
+# Extracted from res://scripts/prologue/flight_707_cinematic.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ create_prologue_cutscene
+Kaelen (Internal): Another red-eye flight. Tokyo to San Francisco. Twelve hours of recycled air and crying babies...
+Kaelen (Internal): At least I can finish debugging that inventory system. Three more merges until the release candidate...
+Mira: Excuse me, is this seat taken?
+Kaelen: Uh, no. Go ahead.
+Mira: I'm Mira, by the way. Mira Chen. Figured if we're stuck next to each other for twelve hours, we should at least know names.
+Kaelen: Kaelen. Kaelen Vance. And yeah... twelve hours is a long time to pretend the other person doesn't exist.
+Mira: *smiles* Exactly. Nice to meet you, Kaelen.
+Kaelen (Internal): Mira Chen. She's reading a book. An actual paper book. When's the last time I saw that?
+Kaelen (Internal): Kid across the aisle is playing some retro RPG. Probably grinding for rare drops...
+Kaelen (Internal): Turbulence. Great.
+Kaelen (Internal): Flight attendant looks... tired? No, something else. Her eyes are unfocused.
+Kaelen (Internal): Did I just... no, just tired. Need to stop staring at screens for fourteen hours straight.
+Child: Huh? What the... my save file just corrupted!
+System: [ALERT: ANOMALY DETECTED IN SECTOR 707]
+Pilot (Intercom): Ladies and gentlemen, this is your captain speaking. We're experiencing some... technical difficulties. Please remain calm and—
+
+~ _resolve_flight_observation
+Kaelen (Internal): The safety card flickers for half a second. Not oxygen masks. AetherCorp language: 'Emergency preservation requires consent confirmation unless subject is nonresponsive.'
+Kaelen (Internal): Why would an airline safety card know AetherCorp transfer protocol?
+Mira: My tablet just connected to something called AETHER-MANIFEST-707. That's... not the plane Wi-Fi.
+Kaelen (Internal): The manifest lists sealed research packets, emergency audit keys, and my name beside a phrase I do not remember approving: Human Patch.
+Kaelen (Internal): My laptop restores a draft note I thought I deleted: 'Human Patch: access is not ownership. Consent must survive panic states.'
+Kaelen (Internal): That sounds like my writing. It also sounds like a warning I failed to finish.

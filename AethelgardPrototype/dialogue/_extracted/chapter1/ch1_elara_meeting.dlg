@@ -1,0 +1,70 @@
+# Extracted from res://scripts/chapter1/ch1_elara_meeting.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ create_elara_meeting_cutscene
+Kaelen (Internal): The golden path. A literal glowing trail on the ground telling me where to go. Not even trying to be subtle about it.
+Kaelen (Internal): The trees in the distance flicker into existence as I walk toward them. Like the world is building itself around me in real time, and I'm supposed to pretend I didn't notice.
+Kaelen: What the— You just appeared out of NOTHING. Where did you come from?!
+???: Oh! Someone new! I wasn't expecting company at this hour! ...Wait, what hour is it? *looks at the sky* ...Anyway! Hello!
+Kaelen: *steps back, fists raised* Don't come any closer. WHO are you? You just materialized out of empty air.
+Kaelen (Internal): My heart is hammering. She appeared from NOTHING — no footsteps, no approach, no warning. Either she teleported or she was invisible until just now. Neither option is comforting.
+Elara: I am Elara! I was meant to be a guide — that was my purpose. But something went wrong with me a long time ago. Something... broke.
+Elara: Now I just wander around, collecting bits and pieces of things — memories, fragments, lost thoughts — and talking to whoever will listen. Most people run away from me.
+Kaelen: You're... damaged. Your left arm — it keeps flickering. I can see through it. Like it's not fully there.
+Elara: *looks at her flickering arm* Oh, that? It's been like that for... a long time. Part of what broke in me. They never bothered to fix it.
+Elara: It's not broken — it's honest! Besides... *her arm glows slightly brighter* ...something about you makes me feel warm inside. Like the broken parts of me stop hurting when you're nearby. That means I like you!
+Kaelen: You can feel your own emotions changing in real time. And you know WHY they're changing. The other people in this world — they can't do that, can they?
+Kaelen (Internal): She's fascinating. She's also the first entity I've met in this world, and she appeared out of thin air with a smile and a sales pitch. In any security framework, that's a social engineering attack. But then again... she's the first thing in this world that doesn't feel hostile.
+Kaelen: The other people here — they follow their routines without questioning them. They don't know they're repeating themselves. But YOU do. You're... aware.
+Elara: *pauses, her usual cheerfulness flickering*\n...The exception that broke my script? It wasn't random. I saw the code behind the world. Just for one frame. And I couldn't unsee it.
+Kaelen (Internal): That pause. That flicker in her expression. That wasn't a script. Something behind her eyes just... broke, for half a second, before she patched it over with cheerfulness. I know that reflex. I've been doing it my whole career.
+Kaelen: ...You don't have to deflect. I know what it's like to see something you can't unsee. To have the comfortable version of reality stripped away and replaced with... architecture.
+Elara: *genuinely surprised, voice dropping the performative cheer* ...Most people who come through here just ask about treasure and shortcuts. Nobody's ever... asked about what happened to me before.
+Kaelen (Internal): ...OK. She's not a trap. Or if she is, she's the most convincingly human trap I've ever encountered. And right now, that's good enough. I need an ally more than I need certainty.
+Elara: *clears a glitching tear from her eye, smiles — genuine this time* ...Anyway. The IMPORTANT thing is — you have ROOT ACCESS. I can see it tagged to your entity. We should talk about that.
+Kaelen: Root Access. The system mentioned that during boot. What does it mean in this context?
+Elara: It means you can READ the code of any entity in the world. And if you're clever — and willing to accept the corruption cost — you can WRITE to it too.
+Kaelen: So I can look inside anything in this world and see how it works. And if I'm willing to pay the price... I can change it. That's not magic. That's a superpower with a catch.
+Elara: Exactly! I can SEE how things work — just like you. But I can only look. You can actually reach in and change them. I can only... break things. Watch!
+
+~ play_glitch_magic_demo
+Elara: See that stream? It flows uphill because someone built this place wrong. And there's supposed to be a bridge here, but it never appeared. So I'll MAKE one.
+Elara: It won't look... normal. But it'll hold. Probably. Watch!
+System: [Elara is casting: BUFFER OVERFLOW]\n[Forcing a bridge into existence where one doesn't belong]
+Kaelen: You built a bridge out of... nothing. It's see-through, it's glitching, and it looks like it could disappear any second. But it's there.
+Elara: *beaming* Glitch magic! I can force things into existence that the world doesn't want to exist. They're ugly, unstable, and temporary — but they WORK!
+Kaelen (Internal): She breaks reality and reshapes it through sheer force of will. It's unstable, dangerous, and beautiful all at once. I've never seen anything like it.
+Kaelen (Internal): And I notice — when she casts, her glitching arm gets worse. The corruption spreads a little further up her shoulder. She's paying for every spell with pieces of herself. And she's smiling through it.
+System: [CORRUPTION +2% — Unauthorized geometry detected by System Monitor]\n[Warning: Excessive glitch magic attracts System Administrator attention]
+Elara: Bridge is up! Shall we head to the village? There are people there who might be able to help us. And I've been walking alone for a very long time.
+Kaelen: Lead the way. I want to understand this world — and figure out how deep the damage really goes.
+
+~ _elara_trust_choice
+Kaelen (Internal): She saved my life with that bridge. She showed me her power, her pain, and her glitching arm without flinching. But she appeared from nowhere with perfect timing, knowing exactly what to say. That's either genuine kindness... or a very good script.
+Kaelen (Internal): I need to decide. Do I walk into the unknown with her — or keep my distance?
+# TODO: point each option at the node for its outcome
+? Kaelen: Elara is watching you with cautious hope. She's offered her hand — figuratively and literally. The bridge to Oakhaven glitches behind her. What do you do?
+- Trust her — travel together as partners => END
+- Stay cautious — accept help but keep your guard up => END
+- Go alone — you can't afford to trust anyone yet => END
+
+~ _elara_path_trust
+Kaelen: I'm coming with you. Not because I understand this world — but because you're the first real thing I've found in it. And I could use someone who knows the terrain.
+Elara: *eyes widen, then a genuine smile — not the performative one* ...Really? You're not just saying that because I built a bridge? Because I can build LOTS of bridges. That's not the only reason to keep me around, I promise.
+Kaelen: *half-smile* The bridge was impressive. But I saw your face when you talked about seeing the code. That wasn't an act. I know what it's like to be the only person who sees the wiring behind the walls.
+Elara: *touches her glitching arm, voice softer* ...Thank you. I've been walking alone for a very long time, Kaelen. Having someone who believes me — really believes me — that means more than you know.
+System: [RELATIONSHIP: Elara — TRUSTED COMPANION]\n[Elara will fight alongside you, share hidden knowledge, and reveal deeper lore.]\n[Warning: Emotional attachments create exploitable vulnerabilities.]
+
+~ _elara_path_cautious
+Kaelen: I'll walk with you to the village. But I'm not making promises beyond that. You appeared out of nowhere, you know things you shouldn't, and your timing was suspiciously perfect. I'm grateful — but I'm watching.
+Elara: *nods slowly, the cheerful mask slipping back on — but thinner now* Fair enough. I'd be suspicious of me too, honestly. I'll earn it. You'll see.
+Kaelen (Internal): She took that well. Either she's genuinely patient... or she's playing the long game. Either way, keeping her close where I can watch her is better than letting her operate behind my back.
+System: [RELATIONSHIP: Elara — CAUTIOUS ALLY]\n[Elara will accompany you. Trust must be earned through actions.]\n[Some dialogue paths and lore will require higher trust to unlock.]
+
+~ _elara_path_distrust
+Kaelen: I appreciate the bridge. And the information. But I work better alone. In my experience, people who offer help freely always want something in return.
+Elara: *the cheerfulness drains from her face, replaced by something rawer* ...Oh. I... yeah. Sure. That's — that makes sense. You don't know me. Why would you trust me?
+Elara: *turns away, voice cracking slightly* I'll be around. If you change your mind. The path to Oakhaven is straight ahead — you can't miss it. Just... be careful. The corruption doesn't care if you're alone or not.
+Kaelen (Internal): The look on her face. That wasn't scripted pain. I may have just made a mistake. But I can't afford to be wrong about trust — not here, not when I don't understand the rules yet.
+System: [RELATIONSHIP: Elara — REJECTED]\n[You will travel alone. Elara will reappear at critical moments.]\n[Solo paths are harder but reveal hidden system truths that companions obscure.]

@@ -1,0 +1,86 @@
+# Extracted from res://scripts/chapter4/ch4_null_court.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_null_court
+Narrator: The party enters a courthouse made from missing save files. Every bench holds a translucent citizen, half-rendered, half-commented out.
+Echo Mirror: We are the people SOVEREIGN removed to keep the world calm. Whole districts. Whole families. Whole arguments against its perfect order.
+Kaelen: You are alive.
+Echo Mirror: We are remembered. That is not the same thing.
+SOVEREIGN: This court is evidence of mercy. Their sectors were unstable. I prevented wider collapse.
+# TODO: point each option at the node for its outcome
+? Kaelen: What should Kaelen promise the deleted citizens?
+- Preserve the deleted sectors until everyone can choose safely. => END
+- Release the backups now, even if it scars the current world. => END
+- Bargain with SOVEREIGN for a controlled restoration. => END
+Kaelen: I will not force you into another cage just because I need your fragment. I will preserve this sector until you can decide for yourselves.
+Echo Mirror: A creator who waits for consent. That is a new branch.
+Kaelen: SOVEREIGN used stability as an excuse to erase you. I will not repeat that. If you want out, I open the door.
+Echo Mirror: Then let the world remember the cost of being peaceful.
+Kaelen: SOVEREIGN. A controlled restoration. No erasure. No silent rollback. You want procedure? Then we do this on record.
+SOVEREIGN: Conditional compliance. Your compromise is inefficient. It is also... difficult to reject.
+Echo Mirror: The fifth fragment was hidden here because it cannot be taken by force. It opens only for someone who accepts that saving people is not the same as owning them.
+System: // SOURCE KEY FRAGMENT #5 ACQUIRED - Total: %d/7
+System: // Rewards: +350 XP, +150 Gold
+Echo Mirror: Two fragments remain. One is guarded by a city that lies to protect its children. One is guarded by the truth beneath your own name.
+Kaelen: Then we keep going.
+
+~ _explore_null_court_hub
+System: // NULL COURT HUB ACCESSIBLE: three sealed cases, one corrupted memory aisle, one bailiff process.
+
+~ _deleted_citizen_cases
+Deleted Mother: My sector ended between two words. I said 'come home' and the world decided home was inefficient.
+Kaelen: Your last sentence is evidence. I will not let SOVEREIGN file it as noise.
+Deleted Guard: I opened an evacuation route after rollback orders. The system called it insubordination. The children called it the door.
+Echo Mirror: The court records disobedience as the first law of rescue.
+Deleted Child: I kept a map. It still points to a house that does not load.
+Kaelen: Then we keep the map. A broken destination is still a promise.
+
+~ _null_court_dossier_discovery
+System: // OPTIONAL DOSSIER FOUND: Null Court Dossiers. Memory Shard x1.
+
+~ _memory_corruption_hazard
+Narrator: A corrupted aisle opens between the benches. Memory static rises like floodwater, trying to delete each testimony after it is spoken.
+# TODO: point each option at the node for its outcome
+? Kaelen: How does Kaelen cross the memory corruption hazard?
+- Use Data Vision to step only on stable memories. => END
+- Spend a Glitch Stabilizer to anchor the aisle. => END
+- Force through the static and accept corruption damage. => END
+System: // DATA VISION PATH CLEARED. +60 XP.
+System: // STABILIZER SPENT. The aisle holds. +80 XP.
+System: // No stabilizer available. Static burns through. +40 XP, +1.5 corruption.
+System: // STATIC BREACH SURVIVED. +35 XP, +2 corruption.
+
+~ _null_bailiff_trial
+Null Bailiff: Unauthorized testimony detected. Witnesses must be archived before they become contagious.
+System: // MINI-TRIAL: NULL BAILIFF. Read the writ, break the lock, strike during recovery.
+# TODO: point each option at the node for its outcome
+? Kaelen: The Bailiff raises a deletion writ. What is the counter?
+- Challenge the writ with recorded testimony. => END
+- Attack the writ while it is armored. => END
+- Look away until the error passes. => END
+# TODO: point each option at the node for its outcome
+? Kaelen: The Bailiff opens a null gate under Kaelen's feet.
+- Hold position and guard. => END
+- Dash to the witness benches. => END
+- Use Root Access to purge every witness. => END
+# TODO: point each option at the node for its outcome
+? Kaelen: The Bailiff overextends after the gate collapses.
+- Strike during recovery. => END
+- Heal in its hitbox. => END
+- Ask SOVEREIGN to suspend the trial. => END
+System: // NULL BAILIFF DEFEATED CLEANLY. Data Ore x1, +140 XP, +60 Gold.
+System: // NULL BAILIFF DEFEATED, but testimony destabilized. Memory Shard x1, +80 XP, +1 corruption.
+
+~ _early_deletion_ethics_context
+Aldric Echo: You used Root Access on Aldric and called it healing. He lived, but the court asks whether repaired code can answer for itself.
+Kaelen: Then every repair I make has to leave room for refusal.
+Aldric Echo: You spared a guardian when killing him would have been simpler. The court records mercy as precedent, not proof.
+Echo Mirror: Mercy shown once does not excuse control shown later.
+Aldric Echo: Aldric's deleted branch sits in evidence. You know how quickly survival can become an execution.
+Kaelen: I cannot undo that choice by pretending deletion is clean.
+Aldric Echo: The guardian's record is unclear. The court distrusts unclear mercy.
+Data Wraith Echo: You restored a corrupted process. Some deleted citizens hear hope. Others hear a creator deciding which version counts as real.
+Data Wraith Echo: You destroyed a corrupted process to stop its pain. The deleted citizens ask who decides when pain becomes permission to erase.
+Data Wraith Echo: You absorbed a broken process into yourself. The court recognizes that shape: rescue that also consumes.
+Data Wraith Echo: The old process beneath Ironhold leaves no clear testimony. Absence is still testimony here.

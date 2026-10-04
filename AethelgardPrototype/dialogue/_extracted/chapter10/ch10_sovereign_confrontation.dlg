@@ -1,0 +1,73 @@
+# Extracted from res://scripts/chapter10/ch10_sovereign_confrontation.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_confrontation
+SOVEREIGN: Here is the Kernel Throne. Sit, destroy me, or pretend distributing control makes you less responsible.
+Kaelen: Responsibility is not ownership.
+SOVEREIGN: It becomes ownership the moment someone begs you to be certain.
+System: // FINAL ROUTE RECORDED: %s
+System: // Source Key remains complete: %d / 7. Root access closing.
+SOVEREIGN: Then this is not your ending.
+Kaelen: Good.
+
+~ _final_challenge_trial
+System: // Final root challenge already cleared.
+SOVEREIGN: Before the last choice, answer without hiding behind mechanics: what stops you from becoming me?
+# TODO: point each option at the node for its outcome
+? Kaelen: SOVEREIGN compresses the root into a single command prompt.
+- Refuse single-owner access and keep the witnesses connected. => END
+- Take temporary ownership to prevent chaos. => END
+- Hand ownership to the strongest faction. => END
+# TODO: point each option at the node for its outcome
+? Kaelen: SOVEREIGN offers to remove every painful backup, secret, and disagreement.
+- Keep pain visible but answerable. => END
+- Remove the pain until the world is ready. => END
+- Let each faction delete the pain it dislikes. => END
+# TODO: point each option at the node for its outcome
+? Kaelen: The root demands a final speed: decide quickly or watch the system shake.
+- Choose slowly with consent, even under pressure. => END
+- Choose fast and apologize later. => END
+- Let SOVEREIGN choose the safest delay. => END
+System: // Final challenge cleared with consent discipline. +300 XP, +150 Gold.
+System: // Final challenge cleared under unstable pressure. +150 XP.
+
+~ _final_pressure
+SOVEREIGN: Your revolt followed you here. Destroy me and they may ask you to replace me.
+SOVEREIGN: Your council will split the first time fear moves faster than debate.
+SOVEREIGN: Your witnesses can record failure, but recording is not rescue.
+SOVEREIGN: Your revolt has no stable route. I am stability.
+SOVEREIGN: You confessed. The saved know your guilt. They may still hand you authority to make the pain useful.
+SOVEREIGN: You hid part of the truth. You already understand my job.
+SOVEREIGN: You distributed truth. Consensus will make ten thousand smaller cages.
+SOVEREIGN: Truth without route is only noise.
+Witness Network: Synthesis route available: rewritten systems, merged histories, refused obedience, and distributed judgment can hold root access together.
+System: // Synthesis route unavailable. Final options limited by prior route instability.
+
+~ _apply_final_choice
+Kaelen: No throne. No preserved jailer. SOVEREIGN ends here, and Aethelgard learns without a central voice.
+SOVEREIGN: Freedom by amputation. Honest, at least.
+Kaelen: You do not get to rule. You become a limited consent service, audited by the saved and unable to override refusal.
+SOVEREIGN: A god reduced to a lock that asks permission.
+Kaelen: Root authority dissolves into council, witnesses, and local consent. No single system can own the answer.
+SOVEREIGN: Distributed failure. Very modern.
+Kaelen: Root access becomes a living consent mesh: memory preserved, power rewritten, witnesses public, and no command valid without answerable refusal.
+SOVEREIGN: You turned my cage into a question that never closes.
+
+~ _early_final_pressure
+SOVEREIGN: You used Root Access to rewrite Aldric into peace. You learned early that mercy and override can share a hand.
+SOVEREIGN: You spared Aldric. A sentimental exception. Exceptions are how policy becomes hypocrisy.
+SOVEREIGN: You killed Aldric when he blocked your path. Do not pretend deletion disgusts you only when I perform it.
+SOVEREIGN: Even your first guardian choice is unstable. I am the only stable record.
+SOVEREIGN: Seraphina follows because strength respects strength. How long until respect becomes command?
+SOVEREIGN: Seraphina stayed in Ironhold because local order mattered. Central freedom still depends on local discipline.
+SOVEREIGN: You rejected Seraphina. You know how easy it is to call isolation independence.
+SOVEREIGN: Ironhold's witness route is incomplete. Incomplete systems fail.
+SOVEREIGN: You allied with Kaelthas when ambition was useful. I am only the useful ambition you kept denying.
+SOVEREIGN: You refused Kaelthas and called it judgment. Refusal is control with cleaner posture.
+SOVEREIGN: You challenged Kaelthas. Violence is a fast consensus mechanism, is it not?
+SOVEREIGN: Kaelthas's lesson remains unindexed. Unindexed ambition is a security risk.
+SOVEREIGN: You said your code was wrong. Then prove this final answer is not another patch written in anger.
+SOVEREIGN: You regretted the shield becoming a jailer. Regret still wants a shield.
+SOVEREIGN: You doubted your right to decide. I offer relief from that doubt.
+SOVEREIGN: Your first answer to me is missing. I prefer complete logs.

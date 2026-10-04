@@ -1,0 +1,19 @@
+# Extracted from res://scripts/chapter2/ch2_arena_district.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _show_tier_selection
+Vex: Welcome to the arena! Pick your tier, fighter!
+Vex: You're not ready for any tier yet! Go train some more!
+Vex: Starting %s tier! %d waves of combat! Ready?
+
+~ _on_arena_victory
+Vex: Not bad, newcomer! Not bad at all! But someone VERY important wants to have a word with you...
+Vex: Want another round? Press SPACE to fight again, or ESC to head back to the city.
+
+~ _grant_bronze_arena_material_reward
+Vex: Bronze tier spoils! Torval asked me to pass along a chunk of Data Ore. Survive the arena, improve your kit, come back louder.
+System: [ARENA MATERIAL]\nReceived: Data Ore x1
+
+~ _on_arena_defeat
+Vex: Tough break, fighter. But every loss makes you stronger! Press SPACE to try again or ESC to leave!

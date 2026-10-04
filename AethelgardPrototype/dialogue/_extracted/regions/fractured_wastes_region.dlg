@@ -1,0 +1,23 @@
+# Extracted from res://scripts/regions/fractured_wastes_region.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _process_storms
+ENVIRONMENT: ⚠ CORRUPTION STORM INCOMING — Seek shelter! ⚠
+
+~ _interact_npc
+# TODO: point each option at the node for its outcome
+? Kaelen: Lyra offers to join your party.
+- Accept => END
+- Not yet => END
+Lyra: Then let's fix this broken world. Together.
+
+~ _interact_farming_zone
+SYSTEM: The shard deposit is unstable. Re-entry opens in %d seconds.
+
+~ _interact_boss
+SYSTEM: [CORRUPTION WARNING] Entity threat level extreme.\nThreat: Lv %d | You: Lv %d\nCorruption will likely overwhelm your systems.
+# TODO: point each option at the node for its outcome
+? Kaelen: Proceed?
+- Enter (Death likely) => END
+- Retreat => END

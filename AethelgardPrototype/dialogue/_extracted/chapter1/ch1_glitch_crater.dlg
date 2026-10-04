@@ -1,0 +1,41 @@
+# Extracted from res://scripts/chapter1/ch1_glitch_crater.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_glitch_memory_combat
+Kaelen (Internal): My hands are shaking. Not from fear — from RECOGNITION. They remember something my brain doesn't. A fighting stance? When did I ever...
+System: // MEMORY FRAGMENT DETECTED — Corrupted combat data leaking from consciousness buffer\n// Loading partial combat subroutine...
+System: // GLITCH MEMORY: A corrupted fragment. Something you once knew.\n// [J] Attack  |  [K] Parry  |  [A/D] Move
+System: // MEMORY FRAGMENT COMPLETE — Combat reflexes partially restored\n// +25 XP
+Kaelen (Internal): I... destroyed it. My body moved on its own. These reflexes — they're not from my life as a programmer. They're from HERE. From whatever this world is making me into.
+System: // MEMORY FRAGMENT TIMED OUT — Combat data incomplete\n// Partial restoration: +10 XP
+Kaelen (Internal): The memory is fading. But my hands still tingle. Whatever that was... I'll need it again.
+
+~ create_awakening_cutscene
+Kaelen (Internal): ...My head. Feels like someone scooped out my brain, shook it, and put it back in sideways.
+Kaelen (Internal): Grass. Trees. Sky. The air smells like... ozone and wildflowers? That can't be right. I was on a plane. Flight 707. Tokyo to San Francisco.
+Kaelen (Internal): I try to stand. My legs buckle immediately. My body feels wrong — lighter somehow, like I weigh less than I should. I hit the grass hard, palms first. It's wet. Cold. Real.
+Kaelen (Internal): This is a dream. Obviously. Hypoxia from cabin depressurization, or my brain misfiring in the milliseconds before impact. The mind constructs elaborate scenarios to shield itself from death. I read that somewhere.
+Kaelen: *He bites the inside of his cheek. Hard. The taste of copper floods his mouth. The pain is sharp and immediate and absolutely, undeniably real.*
+Kaelen (Internal): ...Not a dream. Dreams don't hurt like this. I can feel individual blades of grass between my fingers. I can smell dirt and something sweet and chemical, like overheated electronics.
+Kaelen (Internal): The plane. The passengers. The sky TEARING ITSELF APART. The screens glitching. System errors everywhere. A blinding white flash. That wasn't a dream either. So where am I? What happened to me?
+Kaelen (Internal): Breathe, Kaelen. Catalogue. When you can't understand something, reduce it to components. That's what you do. That's what you've ALWAYS done. So do it now, before the panic swallows you.
+Kaelen: The ground doesn't line up. Look — there's a gap between the hillside and the path, like someone built them separately and just pushed them together without checking if they fit.
+Kaelen (Internal): That tree. It's floating three meters off the ground. And its shadow falls the wrong way — the shadow points east while the sun is in the west. Like two different people built the tree and the lighting and never talked to each other.
+Kaelen: *He reaches out and taps the invisible boundary around the floating tree. His hand stops against nothing — an invisible collision box.*
+Kaelen: An invisible wall. My hand stops against thin air. The tree isn't floating — the ground just doesn't reach it. Like whoever made this place forgot to connect the pieces.
+Kaelen (Internal): And there — that stream. It's flowing UPHILL. Water doesn't do that. Not in any world that makes sense. Nobody checked this. Nobody tested any of this.
+Kaelen: No magic circles. No deities descending from the clouds. No mysterious old man with a quest scroll.
+Kaelen: Just a half-finished world that someone built in a hurry and never bothered to polish.
+Kaelen: I'm not in a fantasy world. I'm inside a broken machine.
+Kaelen (Internal): I check my hands. Five fingers on each — good, at least my body seems complete. I'm wearing clothes I don't recognize. Some kind of generic adventurer outfit. Leather and cloth. Like someone dressed me for a role I didn't audition for.
+Kaelen (Internal): The plane. Flight 707. I remember the turbulence. I remember the screens flickering. I remember system error messages flooding my vision and then... nothing but white.
+Kaelen (Internal): AetherCorp's Project Aethelgard. The one I spent three years building. The one with the anomalous code patterns. I'm INSIDE it.
+Kaelen (Internal): Which means the plane... the other passengers... Mira, the kid with the GameBoy, the businessman with his spreadsheets... What happened to them? Are they here too? Are they ALIVE?
+Kaelen (Internal): Am I dead? Is this what death looks like for someone who spent their whole life staring at screens — an eternity trapped inside one?
+Kaelen: *He sits in the grass for a long time. The stream gurgles uphill. A bird sings the same four notes over and over, never changing. He lets the weight of it all settle on his shoulders.*
+Kaelen (Internal): I can't fall apart here. If there's even a chance those people are somewhere in this system — if there's even a chance this ISN'T death — then sitting in a crater feeling sorry for myself helps no one. Least of all me.
+Kaelen: Alright. Think. If I'm inside some kind of constructed world, there are rules. Patterns. Weaknesses I can find and use. I need to find a way out. And if there are other survivors... I need to find them first.
+System: [LOCATION: SECTOR_0 — CRASH_SITE]\n[USER STATUS: Disoriented but functional]\n[ROOT ACCESS: Detected — Level 1]\n[OBJECTIVE: EXIT CRATER. FOLLOW GOLDEN_PATH.]
+Kaelen (Internal): A golden path. A literal glowing trail on the ground, leading somewhere. Could it be more obvious? Whoever built this world really wants me to go this way.
+Kaelen: Fine. Let's follow the glowing breadcrumbs and see where this world wants me to go.

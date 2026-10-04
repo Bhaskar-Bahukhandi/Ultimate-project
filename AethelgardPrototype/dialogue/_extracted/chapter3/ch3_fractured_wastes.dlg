@@ -1,0 +1,158 @@
+# Extracted from res://scripts/chapter3/ch3_fractured_wastes.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _phase_intro
+SYSTEM: // Region: THE FRACTURED WASTES — formerly 'The Verdant Circuit'
+SYSTEM: // Status: DEPRECATED. Corruption level: 87%. Structural integrity: CRITICAL.
+Kaelen: The Source Key Fragment is somewhere in these ruins. Time to explore.
+
+~ _visit_location
+Kaelen: I've already searched the %s. Nothing else to find there.
+
+~ _explore_tower
+NARRATOR: The watchtower leans at an impossible angle — thirty degrees off vertical, yet standing. Its stones phase between solid and translucent.
+Kaelen: This was the city's communication relay. The corruption must have disrupted the signal network from here.
+SYSTEM: // DATA NODE DETECTED. Scan? [1] Yes  [2] No
+# TODO: point each option at the node for its outcome
+? Kaelen: Scan the corrupted data node?
+- Scan it — risk corruption exposure => END
+- Leave it — stay safe => END
+SYSTEM: // SCAN COMPLETE: Corrupted Signal Log recovered. Corruption +2%
+SYSTEM: // Log entry: 'All channels experiencing cascade failure. Corruption vectors traced to regional backbone. Origin: UNKNOWN. Recommend: immediate evacuation.'
+SYSTEM: // Log entry addendum: 'Evacuation cancelled by SOVEREIGN directive. Reason: resource reallocation. Translation: these people aren't worth saving.'
+SYSTEM: // +20 XP for data recovery
+Kaelen: Better to keep my corruption low. I'll note the location for later.
+Elara: SOVEREIGN decided this entire city wasn't worth protecting. It just... let them die.
+NARRATOR: A groaning sound echoes from above. The relay dish shifts, sending debris raining down!
+SYSTEM: // HAZARD: Dodge the falling debris! Quick — choose a direction!
+# TODO: point each option at the node for its outcome
+? Kaelen: Debris falling! React!
+- Dodge LEFT => END
+- Dodge RIGHT => END
+- Use Root Access to deflect => END
+NARRATOR: Kaelen rolls left. Debris crashes where he stood a heartbeat ago.
+SYSTEM: // Hazard avoided! Reflexes sharp.
+NARRATOR: Kaelen dives right — but catches a glancing blow from a stone shard.
+SYSTEM: // Partial dodge! -%d HP
+NARRATOR: Kaelen raises his hand. Code streams from his fingertips, creating a shimmering barrier. The debris disintegrates on contact.
+SYSTEM: // Root Access deflection! Corruption +1%. But impressive.
+SYSTEM: // Scavenged: 25 Gold from relay components
+
+~ _explore_market
+NARRATOR: The marketplace is a gallery of frozen commerce. Vendor stalls hang in mid-air where the physics engine gave up. Products float in zero-gravity pockets — bread, cloth, weapons — each suspended in its last rendered frame.
+Kaelen: The market NPCs are all still here. Frozen in their loops. A baker reaching for flour. A blacksmith mid-swing. A merchant counting coins that will never add up.
+SYSTEM: // Multiple scavengeable items detected in zero-gravity pockets.
+# TODO: point each option at the node for its outcome
+? Kaelen: Which floating items do you grab?
+- The glowing data crystal (stat boost) => END
+- The blacksmith's unfinished weapon (combat bonus) => END
+- The merchant's encrypted lockbox (gamble) => END
+SYSTEM: // ITEM FOUND: Stabilized Data Crystal (+5 Max HP)
+SYSTEM: // ITEM FOUND: Corrupted Edge Shard (+3 ATK)
+Kaelen: The blacksmith was making something special. Even frozen mid-forge, the blade has power.
+SYSTEM: // Lockbox cracked! Found: %d Gold + Merchant's Charm Fragment
+SYSTEM: // TRAP! Encrypted lockbox was booby-trapped! -%d HP!
+Elara: Someone tried to stabilize data here. See these crystals? They're raw data, compressed and hardened. Whoever did this was trying to preserve what they could.
+
+~ _explore_garden
+NARRATOR: The garden is the most disturbing sight yet. Trees grow in recursive loops — branches splitting into smaller copies of themselves infinitely. Flowers bloom and wilt in a single frame, their lifecycle compressed to nothing.
+Kaelen: This was 'The Verdant Circuit' — it was supposed to be the most beautiful region in Aethelgard. Now it's a fractal nightmare.
+NARRATOR: Between the recursive trees, luminous lines trace along the ground — faintly glowing cables of pure data, pulsing with corrupted energy.
+Kaelen: Wait. These paths... the corruption isn't spreading randomly. It's following the old DATA CONNECTIONS. The network backbone of this region.
+SYSTEM: // DATA PATH PUZZLE: Three pathways branch from here. One leads to a hidden cache. Two are corruption traps.
+# TODO: point each option at the node for its outcome
+? Kaelen: Which data path do you follow?
+- The path pulsing BLUE — faint but steady => END
+- The path glowing RED — bright and insistent => END
+- The path flickering GREEN — intermittent signal => END
+NARRATOR: The blue path leads to a hidden alcove beneath the recursive trees. Inside: a stabilized data cache, untouched by corruption.
+SYSTEM: // HIDDEN CACHE FOUND: +30 Gold, +25 XP, Lore Fragment
+Kaelen: A lore fragment. A piece of Aethelgard's original design documentation. Before the corruption. Before SOVEREIGN.
+NARRATOR: The red path was a CORRUPTION VEIN. Energy surges through Kaelen's body as the data tries to rewrite his code!
+SYSTEM: // CORRUPTION TRAP! -%d HP, Corruption +3%%
+Kaelen: *gasping* Should have... known. Red means danger. Even in code.
+NARRATOR: The green path leads to a partially corrupted terminal. Some data is recoverable.
+SYSTEM: // PARTIAL DATA RECOVERY: +15 XP, Minor healing item
+SYSTEM: // +10 HP restored from residual healing data
+Kaelen: The corruption is a virus. And these data paths are the network it spreads on.
+Elara: If it follows the network... then the Data Stream connecting all regions is the HIGHWAY for corruption. That's how SOVEREIGN controls everything.
+SYSTEM: // HIDDEN: Developer signature found carved into the garden's base geometry: 'J.V. was here — build 0.0.1'
+
+~ _enter_shelter
+NARRATOR: A partially intact building offers refuge from the corrupted air. Inside, the walls hold steady, their textures stable. A pocket of normalcy in the chaos.
+Kaelen: The data here is locally cached — the corruption can't overwrite it. A safe zone.
+SYSTEM: // Shelter found. HP restored: +%d
+Kaelen: Good timing. That storm would have torn us apart out there.
+NARRATOR: Outside, the corruption storm rages — a wall of red static that scours the landscape.
+
+~ _visit_server_room
+Kaelen: I should search the other ruins first. There might be supplies — or information — I'll need before going deeper.
+
+~ _phase_lyra_encounter
+NARRATOR: A bolt of corrupted energy streaks past Kaelen's head. He ducks, hand going to his weapon—
+???: Don't move. Don't THINK about moving. I can see your code, stranger, and I know exactly where to aim.
+NARRATOR: A figure emerges from the ruins — lean, weathered, bow drawn and crackling with purple energy. An NPC, but her eyes... they're alert. Aware. Alive.
+Kaelen: Easy. I'm not corrupted. I'm— look, I have Root Access. I can prove—
+???: Root Access? *laughs* Oh, that's rich. A user. An actual PLAYER walking into the deadlands.
+???: Name's Lyra. Former shopkeeper, current survivor, full-time philosopher of existential dread.
+Lyra: Self-aware? I prefer 'cursed with consciousness.' Every other NPC gets to run their loop in blissful ignorance. I get to watch the world burn and KNOW it's burning.
+Elara: You're... like me. Self-aware.
+Lyra: Like you? Honey, you woke up in a cozy village with friends and purpose. I woke up watching my entire city dissolve. We're not the same.
+Lyra: ...but we're the closest thing to 'same' either of us has. So there's that.
+Kaelen: We're looking for Source Key Fragments. A way to stop SOVEREIGN.
+Lyra: You're looking for Source Key Fragments? Great. I'm looking for a reason to keep existing. Maybe we can help each other.
+Lyra: There's one in the old server room. I know because the corruption gets WORSE around it — like it's trying to bury it. I've been trying to reach it for weeks, but the storms...
+Kaelen: (Lyra could be useful. She knows this wasteland better than anyone.)
+# TODO: point each option at the node for its outcome
+? Kaelen: How do you respond to Lyra?
+- Welcome aboard, Lyra. We could use someone who knows these wastes. => END
+- I appreciate the help, but this journey is too dangerous. Stay safe here. => END
+Lyra: Recruited by a player character. My shopkeeper subroutine is screaming. But sure — let's save the world. Or die trying. Probably die trying.
+Elara: Welcome to the team. Fair warning: things get weird.
+Lyra: Weirder than watching my city melt? Can't wait.
+Lyra: I understand. It's... fine. I've been alone this long, what's a little more forever?
+Lyra: But take this — a map of the storm patterns. Should help you reach the server room without getting dissolved.
+SYSTEM: // ITEM RECEIVED: Storm Pattern Map — reduces corruption storm damage by 30%
+
+~ _show_storm_warning
+SYSTEM: // CORRUPTION STORM INCOMING! Seek shelter immediately!
+
+~ _phase_fragment
+NARRATOR: The server room lies beneath the collapsed market district — a bunker of hardened data, designed to survive exactly the kind of catastrophe that consumed the city above.
+NARRATOR: The storm breaks as Kaelen descends. Down here, the corruption can't reach — the server room's firewalls are still running, a ghost of protection in a dead city.
+NARRATOR: Inside, racks of crystallized data line the walls — cold, dark, but intact. In the center of the room, suspended in a column of faint light: a fragment of the Source Key.
+SYSTEM: // SOURCE KEY FRAGMENT DETECTED: Fragment #3 of 7
+SYSTEM: // WARNING: Fragment extraction may trigger security response.
+Elara: My arm is going crazy. The fragment... it's resonating with whatever's inside me. Kaelen, when you take it, I don't know what will happen to me.
+Kaelen: We'll handle it. Together.
+SYSTEM: // SOURCE KEY FRAGMENT #3 ACQUIRED — Total: %d/7
+NARRATOR: Elara gasps. The glitch lines on her arm EXPLODE outward — not destructively, but like a flower blooming. Code cascades across her skin, beautiful and terrifying.
+Elara: I can SEE it. The data underneath everything. The code that makes up the ground, the walls, the AIR. Kaelen, I can see ALL of it.
+Kaelen: Elara's glitch abilities have been amplified. She can now see hidden paths and data structures.
+SYSTEM: // PARTY ABILITY UNLOCKED: Data Sight (Elara) — reveals hidden paths and enemy weaknesses
+Lyra: Three fragments. Four more to go. And the next one... *looks east* ...is past the Data Stream. SOVEREIGN's nervous system.
+Lyra: Nobody who's gone into the Stream has come back. Just so we're all clear on that.
+Kaelen: The Data Stream. That's our path to the Archive — and to the truth about what SOVEREIGN really is.
+
+~ _data_wraith_encounter
+NARRATOR: The ground SPLITS. A shape rises from the fractured data — a humanoid silhouette made of writhing corruption, crackling with stolen electricity.
+SYSTEM: // MINI-BOSS: DATA WRAITH — A corrupted echo of the city's former guardian process
+SYSTEM: // HP: 80 | Attacks: Corruption Lash, Data Drain
+SYSTEM: // DATA WRAITH HP: %d/%d
+# TODO: point each option at the node for its outcome
+? Kaelen: The Data Wraith attacks! What do you do?
+- Strike with your blade — close range assault! => END
+- Use Root Access — try to decompile it! => END
+- Dodge and counter — wait for its pattern! => END
+SYSTEM: // Blade connects! -%d to Wraith. It lashes back: -%d HP!
+SYSTEM: // Root Access tears through corrupted code! -%d to Wraith! Corruption +1.5%%
+NARRATOR: Kaelen reads the wraith's attack pattern — a telegraphed lash that he sidesteps cleanly before counter-striking.
+SYSTEM: // Perfect counter! -%d to Wraith, only -%d HP taken.
+SYSTEM: // PARTY ASSIST: %s (-%d to Wraith)
+NARRATOR: The Data Wraith SHATTERS — its corrupted form dissolving into harmless particles of light that scatter across the marketplace.
+SYSTEM: // MINI-BOSS DEFEATED: DATA WRAITH
+SYSTEM: // Rewards: +60 XP, +40 Gold, Wraith Essence (corruption resistance)
+
+~ _grant_lyra_route_cache
+SYSTEM: // LYRA ROUTE CACHE: %s, +15 XP. The wastes remember how you handled her trust.

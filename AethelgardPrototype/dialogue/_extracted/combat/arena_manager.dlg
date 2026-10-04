@@ -1,0 +1,27 @@
+# Extracted from res://scripts/combat/arena_manager.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ start_arena
+Vex: Hold up, fighter! You need to be at least Level %d for the %s bracket. Come back when you've trained more!
+
+~ abort_arena
+Vex: DOWN at wave %d! Still, what a performance!
+Vex: Endurance reward: +%d XP, +%d Gold
+
+~ start_time_attack
+Vex: You need Level %d for Time Attack %s!
+Vex: TIME ATTACK! %s tier — you have %.0f seconds! GO GO GO!
+
+~ _time_attack_timeout
+Vex: TIME'S UP! So close! Better luck next time, fighter!
+
+~ start_endurance
+Vex: Endurance mode? You need at least Level 5 for that, rookie!
+Vex: ENDURANCE MODE! How long can you survive? The crowd wants to know!
+
+~ _start_next_wave
+Vex: WAVE %d! The crowd is going INSANE!
+
+~ _arena_win
+Vex: Win streak: %d! Keep it up for even bigger rewards!

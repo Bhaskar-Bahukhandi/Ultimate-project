@@ -1,0 +1,16 @@
+# Extracted from res://scripts/chapter7/ch7_deep_backup_intro.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_intro
+Narrator: Below the Cathedral Server is an ocean with no water. It is made of saves that were never allowed to load.
+System: // REGION LOAD: DEEP_BACKUP
+System: // WARNING: rejected histories may contest current reality.
+Kaelen: SOVEREIGN did not delete them. It buried them.
+SOVEREIGN: A failed history can still infect a stable one.
+Memory Tide: The Choir went quiet. The backups wonder whether you will silence them too.
+Memory Tide: The Choir became witnesses. The backups rise because witnesses teach buried things to speak.
+Memory Tide: The Choir learned service. The backups ask whether histories can be rewritten without becoming lies.
+Memory Tide: The Cathedral left no clear doctrine. The backups will test the blank space.
+Narrator: Three islands breach the dark: Oakhaven saved too late, Ironhold without freedom, and the Mirror City without witnesses.
+System: // Source Key Fragment #7 signal detected under Archive Tide.

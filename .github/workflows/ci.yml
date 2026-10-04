@@ -69,6 +69,10 @@ jobs:
         working-directory: ${{ env.PROJECT_DIR }}
         run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/load_all_test.gd
 
+      - name: Dialogue format tests (parser, runner, every .dlg file)
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/dialogue_test.gd
+
       - name: Phase 0 regression tests
         working-directory: ${{ env.PROJECT_DIR }}
         timeout-minutes: 30

@@ -1,0 +1,15 @@
+# Extracted from res://scripts/chapter8/ch8_revolt_intro.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_intro
+System: // SOURCE KEY STATUS: %d / 7
+Narrator: The seventh fragment locks into place without ceremony. Across Aethelgard, doors that were never meant to open begin choosing sides.
+SOVEREIGN: A complete key is not freedom. It is a loaded weapon with public access.
+Kaelen: Then I should hear the people it was supposed to save.
+Memory Tide: Every backup arrives with the living. Truth floods the assembly before anyone learns to breathe it.
+Memory Tide: The unstable backups are gone. Some citizens call it mercy. Some call it a second deletion.
+Memory Tide: Merged histories surface as scars and instincts. The saved know things they never personally lived.
+Memory Tide: The Deep Backup left no clear route. The saved inherit uncertainty.
+System: // SAVED_ASSEMBLY convoked. Oakhaven, Ironhold, Mirror City, Cathedral Server, Deep Backup.
+Narrator: For the first time, Aethelgard's saved do not wait for Kaelen to choose. They call him to answer.

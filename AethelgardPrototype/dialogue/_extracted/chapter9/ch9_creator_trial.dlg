@@ -1,0 +1,55 @@
+# Extracted from res://scripts/chapter9/ch9_creator_trial.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_trial
+Narrator: The lab becomes a courtroom with no judge. That is the point.
+Memory of Kaelen: You wrote a system to require consent, then wrote a patch to bypass consent when fear became louder than trust.
+Kaelen: I thought I was saving them.
+Memory of Kaelen: You were. That is why this is hard.
+# TODO: point each option at the node for its outcome
+? Kaelen: What truth should Kaelen give the saved before facing SOVEREIGN?
+- Confess everything to the saved, no filters. => END
+- Hide part of the truth until SOVEREIGN is defeated. => END
+- Distribute the truth through witnesses and let the world judge. => END
+Kaelen: No more controlled truth. They get all of it. My name. My patch. My fear. My responsibility.
+Mirror Witness: Then if they still follow you, it will be because they choose to.
+Kaelen: If the whole truth breaks the revolt before SOVEREIGN falls, the cage wins. I will carry the missing piece until the core is open.
+Memory of Kaelen: A familiar sentence. Be very afraid of how reasonable it sounds.
+Kaelen: No single confession. No single cover-up. The witness network gets the full record and the authority to challenge me publicly.
+SOVEREIGN: You outsource judgment because you fear your own.
+System: // HUMAN PATCH TRUTH ROUTE RECORDED: %s
+System: // Source Key remains complete: %d / 7. No new fragments generated.
+SOVEREIGN: Then come to the Root of Heaven. Bring your witnesses. Bring your guilt. Bring your loophole.
+
+~ _present_collected_evidence
+System: // Creator Trial evidence already presented.
+Data Vision Record: Consent failure signatures prove the Human Patch was supposed to expire after emergency stabilization.
+AetherCorp Record: Board pressure, family panic, and patient instability all appear in the same audit trail. The first cage was built from fear wearing compassion.
+System: // Evidence strengthened the Creator Trial. +180 XP, +90 Gold.
+System: // Partial evidence presented. +90 XP.
+System: // No optional evidence collected. The trial proceeds on testimony alone.
+
+~ _judgment_context
+Mirror Echo: You rejected obedience. Do not obey guilt just because it speaks in your voice.
+Mirror Echo: You rejected the perfect rescue. Do not hide truth while waiting for the perfect moment.
+Mirror Echo: You rejected abandonment. Do not abandon the saved by deciding they cannot bear reality.
+Mirror Echo: The self you fear most remains unnamed. The trial names it for you: the creator who chooses alone.
+Revolt Echo: You led the revolt. Confession may fracture command, but secrecy may turn command into the Human Patch again.
+Council Echo: You formed a council. A council without the full truth is only a better-lit cage.
+Witness Echo: You built a witness network. It was made for this exact wound.
+Saved Echo: The revolt route is unclear. The saved still deserve more than your private fear.
+
+~ _early_trial_context
+Elara Memory: You trusted me before you had proof. That trust did not make you innocent, Kaelen. It made you reachable.
+Elara Memory: You were careful with trust. Careful is allowed. Just do not call careful silence when people ask for truth.
+Elara Memory: You distrusted the first person who challenged your isolation. SOVEREIGN learned from that loneliness.
+Elara Memory: The first trust record is missing. The trial treats missing context as risk, not absolution.
+Kaelthas Memory: You allied with me because I promised useful truth. Remember how easily utility can wear a friendly face.
+Kaelthas Memory: You refused me. Good. But refusal without listening can become its own ignorance.
+Kaelthas Memory: You challenged me directly. Direct violence can expose lies, but it also lets truth hide in the wreckage.
+Kaelthas Memory: The Code Reader's branch is unresolved. Unresolved ambition echoes near every throne.
+SOVEREIGN Echo: You told me your code was wrong. Defiance is useful. It is not yet accountability.
+SOVEREIGN Echo: You called me shield turned jailer. Regret can open a door, or become a room you never leave.
+SOVEREIGN Echo: You doubted your right to decide. Doubt is healthy until it asks SOVEREIGN to decide for you.
+SOVEREIGN Echo: Your first answer to me is not recorded. The root dislikes unrecorded guilt.

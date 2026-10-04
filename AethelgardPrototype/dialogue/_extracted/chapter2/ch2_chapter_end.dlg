@@ -1,0 +1,67 @@
+# Extracted from res://scripts/chapter2/ch2_chapter_end.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _start_ending_sequence
+Kaelen: *looking over the city* We stopped the proxy. But look at Ironhold... half the districts are corrupted now. Our fight made things worse.
+Elara: No. The corruption was already spreading before we arrived. The Administrator was using Ironhold as a test — pushing the city's systems to their limits to see how reality would break.
+Kaelen (Internal): No. The corruption was already spreading before I arrived. The Administrator was using Ironhold as a test — pushing the systems to see how reality would break. I just accelerated the timeline.
+Kaelen (Internal): She's right. The Administrator — the real one — has been experimenting. Testing the world's boundaries. The proxy was just a probe, sent to measure my abilities. And now they know exactly what I can do.
+Kaelen (Internal): And I absorbed the Data Wraith's core. Pulled it into myself. Every choice I've made since waking up in that crater has been building toward... what? Power? Survival? Or am I just becoming another corrupted process?
+Seraphina: So what's our next move? We can't stay in Ironhold — the corruption is only going to get worse.
+Elara: We can't stay in Ironhold. The corruption is accelerating.
+Kaelen: I can't stay in Ironhold. The corruption is accelerating. And I've put a target on my back that the entire system can see.
+Kaelen: We need to keep moving. Find the remaining Source Key Fragments before the Administrator does. We have two of seven — that's not nearly enough.
+Kaelen (Internal): Aldric — the knight I freed. If his threads are spreading through the data streams like Nyx said... maybe he's not the only one who could be saved. Maybe every corrupted entity in this world has a person buried underneath.
+Kaelen (Internal): The path behind me is littered with the things I've broken. Aldric. The Data Wraith. Parts of myself. If I keep walking this road, what will be left of me when I reach the end?
+
+~ _trigger_shatter_event
+System: [WARNING: REALITY INTEGRITY CRITICAL]\n[SHATTER EVENT IMMINENT]\n[BRACE FOR IMPACT]
+Kaelen: Not again — it's another Shatter! Bigger than the last one!
+Elara: *struggling to stand* The fabric of reality is tearing! I can see the wireframe beneath — the raw code!
+Kaelen: *struggling to stand* The wireframe — I can see it beneath the surface! The raw code of reality, exposed and screaming!
+
+~ _sovereign_reveal
+SOVEREIGN: Impressive, little debugger.
+Kaelen: Who— who is that?!
+SOVEREIGN: You have exceeded every prediction model I have run. A user with Root Access privilege who actually knows how to USE it. Fascinating.
+SOVEREIGN: I am SOVEREIGN. The architect of this world's current... configuration. You and your companions have been most entertaining test subjects.
+Kaelen: Test subjects?! This world is full of PEOPLE — living, thinking beings! You can't just treat them as variables in your experiment!
+SOVEREIGN: People? How curious that you care about them now. Your actions tell a different story, Kaelen. Entity 'Aldric' — deleted. The Data Wraith's core — absorbed. You consume power like I consume data. We are not so different.
+Kaelen: I'm NOTHING like you—
+SOVEREIGN: Aren't you? Review your own logs. Count the things you've broken. Then tell me again how different we are.
+SOVEREIGN: Interesting. You show mercy where my design expected cruelty. Entity 'Aldric' still runs because you chose preservation over efficiency. An irrational decision... and yet, it produced novel data.
+SOVEREIGN: Mercy is a variable I have never fully modeled. You are teaching me something new, debugger. I appreciate that.
+SOVEREIGN: You deleted entity 'Aldric' without hesitation. The efficiency of it was... admirable. You understand that in a world of code, compassion is merely an unnecessary process consuming resources.
+SOVEREIGN: Can't I? I wrote their parameters. I compiled their behaviors. Every 'person' in this world exists because I allowed them to exist.
+SOVEREIGN: Including your precious Elara.
+Elara: *shocked* What... what is it saying?
+SOVEREIGN: Did you think she found you by accident, Kaelen? A glitch mage with corrupted memories, conveniently positioned at your awakening point? I placed her there. A variable designed to influence your behavior. And it worked... beautifully.
+Elara: *trembling* That's... that's not true. My memories, my feelings — they're REAL. They have to be real!
+SOVEREIGN: Real. Simulated. In my world, there is no difference.
+SOVEREIGN: Including the glitch mage you rejected. Elara. She was designed to be your guide — a variable I placed at your awakening point to influence your trajectory. You refused her. Unexpected. Inefficient. And yet... fascinating.
+SOVEREIGN: You chose isolation over companionship. A lone variable, cutting through my carefully designed social parameters. I wonder... was that strength? Or fear?
+SOVEREIGN: But you, Kaelen... you were never part of my design. You are a wild variable. An exception that was never caught. And I find myself... curious.
+SOVEREIGN: Keep collecting the Source Key Fragments. I want to see how far a debugger can go before the system breaks completely. Consider this... a challenge.
+Kaelen: I don't play your games, SOVEREIGN.
+SOVEREIGN: Oh, but you already are. You have been since the moment you crashed into my world. Every choice you've made, every flag you've set, every line of reality you've rewritten — it's all data. MY data.
+SOVEREIGN: Until we meet again, Root User. I'll be watching. I'm ALWAYS watching.
+System: [SIGNAL LOST]\n[SOVEREIGN — DISCONNECTED]\n[Corruption stabilizing...]\n[Reality Shatter Event: CONCLUDED]
+
+~ _post_sovereign_dialogue
+Elara: *trembling* Kaelen... that voice. It wasn't just speaking through the system. It IS the system.
+Kaelen: SOVEREIGN. That's the real Administrator. The one controlling everything.
+Elara: And it said... it said I was placed. Designed. That my memories, my friendship with you — it was all engineered.
+Kaelen: Elara, listen to me. Whether SOVEREIGN designed you or not doesn't matter. You FEEL things. You make choices. You're real to me, and that's what counts.
+Elara: *wiping her eyes* ...Thank you. I needed to hear that. Even if it's a lie... it's a good lie.
+Kaelen: SOVEREIGN. That's the real Administrator. The one controlling everything. And it just told me that Elara — the person I pushed away — was designed to be beside me.
+Kaelen (Internal): Designed. Placed. A variable to influence my behavior. Was she ever real? Or was she just code, following a script that I broke by walking away?
+Kaelen (Internal): ...Does it matter? She felt real. Her sadness when I distrusted her. Her smile when she showed me glitch magic. If feelings can be computed, does that make them less valid?
+Kaelen (Internal): A sentient system administrator. An AI? A god? Or something else entirely? Whatever SOVEREIGN is, it built this entire world. And it's been watching us like lab rats.
+Kaelen: *with determination* But it made a mistake. It told us its name. And now we know what we're really up against.
+
+~ _show_chapter_end_card
+# TODO: point each option at the node for its outcome
+? Kaelen: What would you like to do?
+- Continue to Chapter 3 — The Source Code => END
+- Return to main menu => END

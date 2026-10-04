@@ -1,0 +1,15 @@
+# Extracted from res://scripts/chapter6/ch6_ending.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_ending
+Narrator: When the Choir falls quiet, the Cathedral Server does not become empty. It becomes audible.
+Narrator: No god-process remains to issue doctrine. Only the memory of how easily protection learned to command.
+Narrator: The broken gods remain as archived witnesses, stripped of authority but not erased from history.
+Narrator: The broken gods wake as servants, each new command carrying a question: who does this protect, and who can refuse?
+Narrator: The Cathedral records an incomplete judgment. Future systems will notice.
+System: // CHAPTER 6 COMPLETE
+System: // Source Key Fragment #6 secured.
+SOVEREIGN: The Deep Backup contains the versions of history I refused to execute.
+Kaelen: Then Chapter Seven starts where your lies go to sleep.
+System: // Chapter 7: The Deep Backup - loading.

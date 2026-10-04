@@ -1,0 +1,87 @@
+# Extracted from res://scripts/chapter10/ch10_witness_chamber.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_witness_chamber
+Narrator: The root tries to isolate Kaelen. The saved arrive anyway, not as an army, but as records SOVEREIGN cannot redact.
+Kaelen: This is the answer. Not me alone. Not you alone. Everyone you tried to make manageable.
+SOVEREIGN: Then I will ask everyone the final question through you.
+
+~ _witness_preparation_point
+System: // Witness preparation already complete.
+Witness Quartermaster: Final access is not heroic solitude. Take one last preparation from the people who refuse to let you enter alone.
+# TODO: point each option at the node for its outcome
+? Kaelen: What final preparation should Kaelen accept?
+- Spend 1 Memory Shard to stabilize witness relays. => END
+- Spend 1 Glitch Stabilizer to shield the final route. => END
+- Fund a final supply cache with 160 Gold. => END
+- Accept an emergency cache without spending materials. => END
+System: // Witness relays stabilized. +160 XP, +80 Gold.
+System: // Final route shielded by crafted stabilizer. +180 XP.
+System: // Final supply cache funded. -160 Gold, +120 XP, +1 Health Potion, +1 Glitch Stabilizer.
+
+~ _grant_final_cache
+System: // Emergency cache already claimed.
+System: // Emergency final cache claimed: +1 Health Potion, +1 Mana Potion.
+
+~ _early_choice_witnesses
+Aldric: You purged the attack directive instead of me. If you rewrite SOVEREIGN, remember: repair is only mercy when the repaired can still refuse.
+Aldric: You spared me when I was built to stop you. Mercy made me a witness, not a weapon.
+Aldric Echo: You killed me because the road demanded an ending. Let the final road demand more imagination than that.
+Aldric Echo: The first guardian's verdict is unclear, but the root remembers the shape of that fight.
+Elara: You trusted me before any system certified me as safe. That is why I can stand here and tell you no, if I need to.
+Elara: You were cautious with me and still let me matter. Keep that balance: trust slowly, but do not rule alone.
+Elara Echo: You kept me outside the first circle. Do not end this by keeping everyone outside the last one.
+Elara Echo: The first bond is missing. The ending must still make room for bonds that arrive late.
+Oakhaven Survivor: You warned us before the world made warning convenient. Protection begins before the crisis becomes dramatic.
+Oakhaven Survivor: You left us quietly once. Today, no more quiet exits from responsibility.
+Oakhaven Survivor: Our first warning record is damaged. We came anyway.
+Seraphina: You let Ironhold strength stand beside you instead of beneath you. Keep it that way.
+Seraphina Relay: Ironhold holds the line from home. Support does not have to stand in the room to be real.
+Ironhold Delegate: Seraphina was rejected, but Ironhold still refuses SOVEREIGN. Trust can be rebuilt in public.
+Ironhold Delegate: Seraphina's route is unclear. Ironhold will judge the final choice by its limits.
+Data Wraith: You restored me when deletion was easier. The root can change without becoming conquest.
+Data Wraith Echo: You ended me to stop the corruption. If you destroy SOVEREIGN, do not pretend ending is weightless.
+Data Wraith Echo: You carried me as power. Do not let the final key become another thing you absorb.
+Data Wraith Echo: Ironhold's broken process leaves a faint warning in the witness record.
+Lyra: The wastes taught me every path has a cost. I choose this one with my eyes open.
+Lyra Echo: You left me alone in the wastes. The ending still has to answer for people outside the party.
+Lyra Echo: The ranger's route is faint, but lost routes still point somewhere.
+Kaelthas: You allied with ambition once. Use that memory when SOVEREIGN offers usefulness with a crown hidden inside it.
+Kaelthas: You refused my bargain. Refuse this one too, unless every term can be challenged.
+Kaelthas: You challenged me. Challenge the part of yourself that wants the cleanest answer.
+Kaelthas Echo: Ambition unexamined always finds the root eventually.
+
+~ _deleted_citizen_witness
+Null Court Citizen: You preserved us too long, Kaelen. But you learned the shape of a gentle cage. Do not build another one.
+Null Court Citizen: You released us into pain. We still choose pain over being kept as someone's proof of mercy.
+Null Court Citizen: You bargained for us. Now bargain no more with jailers.
+Null Court Citizen: Even forgotten choices have witnesses.
+
+~ _identity_witness
+Mirror Kaelen: You refused obedience. Refuse the throne that obeys your guilt.
+Mirror Kaelen: You refused perfect rescue. Let Aethelgard heal imperfectly, with consent.
+Mirror Kaelen: You refused abandonment. Stay without ruling.
+Mirror Kaelen: The last mirror still asks who Kaelen becomes when nobody forces him.
+
+~ _choir_witness
+Cathedral Remnant: You silenced us. If you destroy SOVEREIGN, remember deletion is a tool that always wants another target.
+Cathedral Remnant: You preserved us. Witness without authority is possible. Remember that.
+Cathedral Remnant: You rewrote us under purpose, not worship. A system can change, but only under limits.
+Cathedral Remnant: The broken gods leave no clean instruction.
+
+~ _backup_witness
+Backup Historian: All histories remain. The ending must make room for unbearable memory.
+Backup Historian: Some histories collapsed. The ending must admit safety can still be loss.
+Backup Historian: Merged histories remember enough to become warning and seed.
+Backup Historian: An unchosen history is still a pressure in the root.
+
+~ _revolt_truth_witness
+Revolt Signal: You led us here. Now prove leadership can end before it becomes ownership.
+Council Signal: The council stands ready to inherit responsibility without inheriting SOVEREIGN.
+Witness Signal: The witness network records the final choice live. No ending belongs to one hand.
+Saved Signal: The revolt stands without a clean name.
+Saved Signal: We heard the whole truth. We are wounded. We are still here.
+Saved Signal: We know something remains hidden. Do not let the final choice hide beside it.
+Witness Signal: The Human Patch record is public. Judgment has more than one voice.
+Saved Signal: The truth route is unclear, but the final question will not be private.

@@ -1,0 +1,49 @@
+# Extracted from res://scripts/chapter10/ch10_kernel_descent.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_descent
+Narrator: The descent is not a hallway. It is a stack of old decisions rendered as law.
+SOVEREIGN: You call them choices because you survived them. I call them variables because I had to protect everyone from their results.
+Kaelen: Every route hurt someone. That is not proof people need a jailer.
+SOVEREIGN: No. It is proof that freedom needs an editor.
+System: // Kernel descent complete. Witness chamber forming.
+
+~ _kernel_descent_trial
+System: // Kernel trial already cleared.
+Root Gate: Seven fragments unlock the descent, but the gate tests whether Kaelen treats access as permission.
+# TODO: point each option at the node for its outcome
+? Kaelen: The first lock offers a shortcut: override all faction objections.
+- Reject the shortcut and ask the witnesses to stay connected. => END
+- Use the shortcut briefly to save time. => END
+- Let SOVEREIGN pick the least unstable objections. => END
+# TODO: point each option at the node for its outcome
+? Kaelen: The second lock shows every painful route choice as proof that people fail.
+- Name the pain without letting it become law. => END
+- Delete the harshest memory before it spreads. => END
+- Accept SOVEREIGN's edited summary. => END
+# TODO: point each option at the node for its outcome
+? Kaelen: The third lock asks who owns the complete Source Key.
+- No one owns it. It opens only under witness. => END
+- Kaelen owns it until the crisis ends. => END
+- The safest faction should inherit it. => END
+System: // Kernel trial cleared with witness alignment. +260 XP, +140 Gold, +1 Glitch Stabilizer.
+System: // Kernel trial cleared under unstable access. +140 XP.
+
+~ _sovereign_route_arguments
+SOVEREIGN: You preserved deleted citizens. You built a kinder prison and named it mercy.
+SOVEREIGN: You released deleted citizens. Freedom arrived faster than healing.
+SOVEREIGN: You bargained with me. Even you recognized control as useful when survival was expensive.
+SOVEREIGN: Your Null Court answer is missing. An unlogged choice is only another corruption.
+SOVEREIGN: You rejected obedience, yet every rebellion still begs for someone decisive.
+SOVEREIGN: You rejected perfect rescue because failure made you sentimental.
+SOVEREIGN: You rejected abandonment, so you know why I could not leave Aethelgard alone.
+SOVEREIGN: Your reflected self remains unresolved. I can supply a cleaner one.
+SOVEREIGN: You silenced broken gods. Deletion is tyranny only when I do it.
+SOVEREIGN: You preserved broken gods. Archives become altars when no one dares decide.
+SOVEREIGN: You rewrote broken gods. You trust edits, but not mine.
+SOVEREIGN: The Choir's fate is unclear. Ambiguity is inefficient.
+SOVEREIGN: You preserved every backup. The living will drown in what could have been.
+SOVEREIGN: You collapsed unstable histories. You chose safety over witness.
+SOVEREIGN: You merged histories. Identity becomes negotiable under your compassion.
+SOVEREIGN: The Deep Backup route is incomplete. I can restore certainty.

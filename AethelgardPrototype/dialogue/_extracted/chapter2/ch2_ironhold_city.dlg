@@ -1,0 +1,93 @@
+# Extracted from res://scripts/chapter2/ch2_ironhold_city.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _first_visit_dialogue
+Elara: Welcome to Ironhold proper. The Market District is straight ahead — we should stock up. The Arena District is to the east.
+Kaelen: And that massive clock tower in the center?
+Elara: Off-limits for now. The Administration controls it. But there are ways around their locks... if we find the right people.
+Kaelen (Internal): Ironhold proper. Market stalls to the west, an arena to the east, and that massive clock tower looming over everything. I need allies — information — anything to make up for walking in here alone.
+Kaelen: The clock tower... it's humming. I can feel the vibrations through the cobblestones. That's not just decoration — it's the city's heartbeat.
+Kaelen (Internal): If Elara were here, she'd probably know every shortcut and hidden path. But she's not. I made my choice. Now I live with it.
+Kaelen (Internal): A city full of NPCs, each running their own routines. But unlike Oakhaven, these routines are more complex — more alive. Or at least, better simulated.
+
+~ _dialogue_blacksmith
+Blacksmith Torval: Hmph. Another outlander. You look like you've been through The Shatter recently — your edges are still fuzzy.
+Blacksmith Torval: I'm Torval. I forge weapons from the raw data-ore beneath Ironhold. Each blade carries a fragment of the city's source code.
+Blacksmith Torval: If you've got gold, I've got steel. If you've got questions, talk to Nyx — she trades in information.
+Kaelen (Internal): Data-ore. Source code in the steel. Every item in this world has metadata. Of course the weapons do too.
+Blacksmith Torval: Back again? The arena chews through gear fast. Best be prepared before you step into the ring.
+
+~ _grant_blacksmith_crafting_tip
+System: [BLACKSMITH MATERIAL]\nReceived: Data Ore x1\nArena rewards can provide enough ore to craft or upgrade a starter blade.
+
+~ _dialogue_nyx
+Nyx: Well, well. A new thread in the weave. You smell like uncorrupted data — rare, these days.
+Nyx: I'm Nyx. Information broker, pattern seer, professional eavesdropper. The city's secrets flow through me.
+Nyx: *tilting her head* Interesting. Your data signature carries a deletion marker. You've erased something — no, someone. A guardian entity? Bold move. The system logs don't forget, you know.
+Kaelen (Internal): She can read deletion markers in my data? Aldric's death left a stain on me that others can detect. That's... unsettling.
+Nyx: *tilting her head* Interesting. Your data signature has a mercy flag attached to it. You spared something the system wanted dead? Rare behavior for someone with your level of access.
+Nyx: Oh, and word travels through the data streams — apparently a village called Oakhaven has been fortifying its borders. Something about a warning from a traveler. Your handiwork, I presume?
+Nyx: Word of advice? The Administration has been tightening its grip. New checkpoints. New patrols. Something has them spooked.
+Nyx: And there are whispers about something... underground. Old process threads, abandoned when the city was refactored. Nobody goes down there. Nobody comes back up.
+Nyx: You've been asking questions. Good. The arena's champion — Seraphina — she knows more than she lets on. Win a few rounds, get her attention.
+Nyx: The corruption is spreading faster. Can you feel it? The edges of things are getting... blurry. That's never a good sign.
+
+~ _dialogue_pip
+Pip: Hey! HEY! You're new! I can tell because you look around at everything like it's WEIRD!
+Pip: I'm Pip! I know all the shortcuts in Ironhold! Every alley, every rooftop, every loose grate!
+Pip: *whispering* Don't tell anyone, but I found a way into the underground tunnels. Behind the old gear factory in the residential district. But it's SCARY down there.
+Kaelen: Tunnels? What's down there?
+Pip: *shrugs* Old stuff. Broken stuff. Things that move when they shouldn't. And sometimes... lights. Like someone's still working down there.
+Pip: You going to the arena? The champion is AMAZING. She fights like she was born here, but she wasn't — she came from Outside, like you!
+
+~ _dialogue_marcus
+Marcus: Welcome to The Corroded Gear. Best ale in Ironhold, worst view. What'll it be?
+Kaelen: Information, if you have it. What's the situation in Ironhold?
+Marcus: *leans in* The Administration is running scared. Their patrols doubled last week. The clock tower's been making strange sounds. And the arena... it's the only place in the city where people still feel alive.
+Marcus: If you want to make a name, start there. If you want to disappear... well, I can't help you. Nobody disappears in Ironhold unless the Administration wants them to.
+Marcus: Another round? The ale helps with the existential dread of living in a simulated reality. ...Or so I'm told.
+
+~ _dialogue_vex
+Vex: Well HELLO there, fresh meat! Welcome to the Battle Arena — Ironhold's premier entertainment destination!
+Vex: I'm Vex, your Arena Master and tireless promoter of gratuitous violence! We've got tiers from Bronze to Platinum!
+Vex: Bronze for beginners — Corrupted Rats and Glitch Wolves. Silver steps it up with Guards and Sprites. Gold is where it gets REAL. And Platinum... well, let's just say nobody's beaten Platinum yet.
+Vex: What do you say? Ready to fight for glory, gold, and the adoration of the masses?
+Vex: Back for more? The crowd's been chanting your name! Pick a tier and let's FIGHT!
+
+~ _dialogue_crash
+Crash: *sparks flying* Oh! Didn't see you— WATCH THE GEAR SHAFT— okay, hi!
+Crash: I'm Crash! Mechanic, tinkerer, professional explosion-haver! I keep the arena's clockwork enemies running!
+Crash: Fun fact — the enemies in the arena? They're not really alive. They're compiled constructs — programmatic entities spawned from templates. Each one is a fresh instance.
+Kaelen: You understand how they're made?
+Crash: Sure! I mean, I don't know what 'compiled' MEANS exactly, but I know if you hit THIS gear with THIS wrench, a new Clockwork Soldier pops out!
+Crash: *covered in oil* Just finished tuning the Silver tier enemies! They should be... 15% angrier!
+
+~ _dialogue_null
+Null: ...
+Kaelen: Hello? Are you—
+Null: You shouldn't be here. None of us should.
+Null: I remember... fragments. A life before this one. Or was it a previous build? Hard to tell when your memory is a corrupted cache.
+Null: The Source Keys. You're looking for them. I can see it in your data signature.
+Null: *flinching* And I can see the shadow of something else. A deletion. A name — Aldric. You erased him. His threads are tangled in yours now... screaming silently in your data.
+Kaelen (Internal): How does an NPC in a completely different region know the name of the knight I killed? Is the system propagating that data everywhere?
+Null: And something warm, too. A mercy. A name — Aldric — still running because of you. His gratitude echoes through the data streams. I can hear it from here.
+Null: You walk alone. There was someone meant to walk beside you — a glitch mage. But her thread diverged from yours at the crater. She's... still out there, you know. Following at a distance. Watching.
+Kaelen (Internal): Elara is following me? No. That's impossible. I turned her away. She dissolved into glitch particles and vanished. ...Didn't she?
+Null: There's one deep beneath us. In the place where the old processes go to die.
+Kaelen (Internal): This NPC... they're different. Self-aware? Corrupted? Or something else entirely?
+Null: The Administration thinks they control everything. They don't. There are cracks in the system. Places where the code was written by a different hand.
+Null: You were one of the hands that wrote it, weren't you? I can taste it in your permissions.
+Null: The clock tower counts down to something. Not time. Events. And the next one is almost here.
+
+~ _enter_arena
+Kaelen: The arena entrance. I should talk to the promoter first — the person in red near the gate.
+
+~ _enter_clock_tower
+Kaelen: The Clock Tower. It's locked — heavy Administration seals on the door. I need to find another way in.
+
+~ _trigger_seraphina_encounter
+Vex: Wait wait wait! Before you go anywhere — there's someone who wants to meet our newest arena star!
+
+~ _trigger_administrator_arrival
+System: [CRITICAL ALERT]\n[72-HOUR COUNTDOWN EXPIRED]\n[ADMINISTRATOR PROXY DEPLOYING TO IRONHOLD]\n[ALL UNAUTHORIZED ENTITIES: PREPARE FOR JUDGMENT]

@@ -1,0 +1,70 @@
+# Extracted from res://scripts/chapter2/ch2_clock_tower.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _entry_dialogue
+Kaelen: This is the Clock Tower — the beating heart of Ironhold. Every tick of every clock in the city is synchronized from here.
+Elara: More than that. The Clock Tower controls Ironhold's tick rate — the fundamental speed at which this region of the world processes. If someone tampered with it...
+Kaelen (Internal): The Clock Tower controls Ironhold's tick rate — the fundamental speed at which this region processes. If someone tampered with it, the entire city would desync.
+Kaelen (Internal): Tick rate. In engine terms, that's the server's update frequency. If someone is manipulating the Clock Tower, they're essentially overclocking or throttling the entire region. That would explain the time distortions refugees reported at the gate.
+Elara: Can you feel it? The air is thick with temporal variance. Some areas of the tower run faster, others slower. The Administration's chronometers are failing.
+Kaelen: *stepping through the threshold* The air feels... thick. Like walking through syrup in some spots. Temporal variance — some pockets are running fast, others dragging. No one to watch my back in here.
+System: [ENTERING: CLOCK TOWER — CENTRAL CHRONOMETRY]\n[Tick Rate Anomalies: DETECTED]\n[Temporal Stability: 34%]\n[Authorization: OVERRIDDEN]
+Kaelen: Thirty-four percent temporal stability. That means time itself is fractured in here. We need to ascend to the top — that's where the master regulator will be.
+Elara: And whatever is corrupting it. Be ready for anything, Kaelen. The clockwork guardians won't let us pass easily.
+Kaelen (Internal): Whatever is corrupting this place is at the top. And I'll have to fight through the guardians alone. Root Access will have to be enough.
+System: [ROOT ACCESS: WRAITH ABSORPTION RESONATING WITH TEMPORAL FIELD]\n[Additional capability: TEMPORAL DRAIN — available in combat]
+
+~ _mid_dungeon_dialogue
+Kaelen: Wait. Look at these data streams running through the walls. They're not just clock signals — there's something else encoded in them.
+System: [ANALYZING DATA STREAM...]\n[Hidden payload detected]\n[Type: ADMINISTRATIVE OVERRIDE COMMANDS]\n[Origin: EXTERNAL — NOT IRONHOLD]
+Kaelen: Administrative override commands. Someone is piggybacking on the clock tower's tick-rate signal to inject commands into Ironhold's core processes.
+Elara: That's... that's how they're doing it. The corruption isn't random — it's deliberate. Someone is USING the clock tower to rewrite Ironhold from the inside.
+Kaelen: It's not random. None of it was random. Someone is deliberately USING this tower to rewrite the entire city from the inside out.
+Kaelen (Internal): Injecting commands through the timing signal. It's elegant and terrifying — like hiding malware in a system clock's interrupt handler. Every process in the city syncs to this tower, so every process receives the payload.
+Elara: The Administrator. It has to be. They're not just monitoring Ironhold — they're actively corrupting it. Rewriting the citizens, the guards, the infrastructure. Turning the city into something... else.
+Kaelen (Internal): The Administrator. Not just watching — actively rewriting. Citizens, guards, infrastructure — all being converted into something the Administrator needs. And no one here understands what's happening to them.
+Kaelen: Then the automaton at the top isn't just a guardian — it's a relay. A corrupted process amplifying the Administrator's signal. We have to shut it down.
+Elara: *gripping her staff* Then we climb. And we break whatever is at the top of this tower.
+Kaelen: *clenching fists* Then I climb. And I break whatever is waiting at the top.
+Kaelen (Internal): Another thing to destroy. I'm getting good at that. Maybe too good.
+
+~ _pre_boss_dialogue
+Kaelen: There it is. The Clockwork Automaton — the master regulator of the tower. And it's been completely corrupted.
+Elara: Look at its core. That's not standard clockwork energy — it's Administrator code. Purple and black, threaded through every gear. The Automaton has been reprogrammed.
+Kaelen (Internal): The core... that's not normal clockwork energy. Purple and black corruption threads through every gear. Administrator code — this thing has been completely reprogrammed. And I have to fight it alone.
+System: [BOSS ENCOUNTER: CLOCKWORK AUTOMATON]\n[Class: Corrupted Temporal Relay]\n[Threat Level: SEVERE]\n[Phases: 3 — Gear Assault / Temporal Shockwave / Core Overload]
+Kaelen: Three-phase combat pattern. Predictable gears first, then it speeds up. If we can survive long enough, it should expose its core. That's our window.
+Elara: I'll channel what temporal energy I can to slow its attacks. You find the opening. Together, Kaelen — we can do this.
+Kaelen: *activating Root Access* No backup. No partner. Just me and whatever I've become since I arrived in this world.
+System: [ROOT ACCESS: WRAITH ABSORPTION AMPLIFYING]\n[Temporal Drain: READY]\n[Warning: Extended use will increase corruption]\n[Current Corruption: %d%%]
+
+~ _on_boss_phase_changed
+Elara: It's accelerating! The temporal field around it just doubled — watch for shockwaves!
+Kaelen: It's speeding up! The temporal field just doubled — shockwaves incoming!
+Kaelen: The core! It's destabilizing — the corruption can't hold. One more push!
+Elara: Now, Kaelen! Strike while the core is exposed!
+Kaelen: *gathering Root Access energy* NOW. While it's open!
+
+~ _on_automaton_defeated
+Kaelen: *breathing heavily* It's down. The master regulator is destroyed.
+Elara: And look — the override signal! It's collapsing! The data streams are clearing!
+Kaelen: *looking up* The override signal... it's collapsing. The data streams running through the walls are clearing.
+System: [CLOCKWORK AUTOMATON: OFFLINE]\n[Administrative Override Signal: SEVERED]\n[Ironhold Tick Rate: STABILIZING]\n[Corruption injection: HALTED — LOCALLY]
+Kaelen: Locally. That's the key word. We stopped the signal HERE, but the Administrator is broadcasting from somewhere else. Other cities, other regions — they're all still being corrupted.
+Elara: *staring at exposed data streams* Kaelen, look at this. The override commands — I can read fragments of them now that the relay is down.
+Elara: These aren't just corruption payloads. They're REWRITE orders. The Administrator isn't breaking things — it's rebuilding them. Recompiling cities, NPCs, entire ecosystems into something new.
+Kaelen: *examining the exposed data streams* Now that the relay is down, I can read fragments of the override commands. These aren't just corruption payloads...
+Kaelen: They're REWRITE orders. The Administrator isn't breaking things — it's rebuilding them. Recompiling cities, NPCs, ecosystems into something entirely new. Something it needs.
+Kaelen (Internal): Recompilation. The Administrator is actively corrupting cities — not destroying them, but transforming them. Converting them into infrastructure for something larger. A network. A system within the system.
+Kaelen: The Administrator is actively corrupting cities across Aethelgard. Ironhold was just one node. If this signal was relayed from the tower to every process in the city, then every major city must have a similar relay.
+Elara: Then destroying one relay isn't enough. We need to find the source — the Administrator itself. And to do that, we need more Source Key Fragments. They're the only things that can unlock the deeper layers of the system.
+Kaelen: How many do we have now?
+Elara: Two of seven. But each one we collect makes us more visible to the Administrator. Destroying this relay just sent up a flare. It knows we're here now.
+Kaelen: Destroying one relay isn't enough. I need the source — the Administrator itself. And the Source Key Fragments are the only way to unlock the deeper system layers.
+Kaelen (Internal): Two of seven fragments collected. Each one makes me more visible. And destroying this relay just sent up a flare the size of a supernova. The Administrator knows exactly where I am now.
+Kaelen (Internal): Knight deleted. Wraith absorbed. Relay destroyed. I'm leaving a trail of destruction across this world. Is that what Root Access is turning me into? Or is that just... me?
+System: [WARNING: ADMINISTRATIVE AWARENESS ELEVATED]\n[Threat response protocols: ACTIVATING]\n[The 72-hour countdown accelerates — remaining time: REDUCED]
+Kaelen: The countdown we picked up at the gate — it just got worse. The Administrator knows we're here now.
+Elara: Then we'd better make those hours count. Let's get back to Ironhold — the city should be recovering now that the corruption signal is cut. But we need to prepare for what's coming.
+Kaelen: Then every hour counts. Ironhold should be recovering now. Time to get back and prepare for what's coming next.

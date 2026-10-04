@@ -1,0 +1,15 @@
+# Extracted from res://scripts/chapter9/ch9_human_patch_intro.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_intro
+System: // SOURCE KEY STATUS: %d / 7
+Narrator: The revolt does not break SOVEREIGN's final door. It makes enough witnesses that the door can no longer pretend it is not there.
+System: // SEALED ROUTE OPEN: AETHERCORP_MEMORY_LAB
+Kaelen: AetherCorp. That name should feel like a memory. Why does it feel like a warning?
+Revolt Signal: The saved follow your command into the sealed route. Fast. Afraid. Ready to believe you.
+Council Signal: The saved council authorizes entry. Every faction demands the truth be heard by more than one witness.
+Witness Signal: The witness network opens the route in public. No private confession. No sealed absolution.
+Saved Signal: The saved arrive without a clear route, but they arrive together.
+SOVEREIGN: You wanted the truth to belong to everyone. Very well. Let everyone watch what you did.
+Narrator: The lab loads in sterile white. For the first time, Aethelgard looks less like a fantasy and more like evidence.

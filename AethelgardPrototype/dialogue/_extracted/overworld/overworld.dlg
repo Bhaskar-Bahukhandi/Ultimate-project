@@ -1,0 +1,9 @@
+# Extracted from res://scripts/overworld/overworld.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _rest_at_point
+SYSTEM: [SYSTEM RESTORE] Resting at %s...\nIntegrity and RAM fully restored.\nProgress saved.
+
+~ _enter_region
+SYSTEM: [WARNING] Area threat level exceeds current parameters.\nRecommended INTEGRITY level: %d | Current: %d\nProceeding may result in rapid system failure.

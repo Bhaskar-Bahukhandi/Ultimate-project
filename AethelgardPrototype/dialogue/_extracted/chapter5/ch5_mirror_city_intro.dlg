@@ -1,0 +1,20 @@
+# Extracted from res://scripts/chapter5/ch5_mirror_city_intro.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_intro
+Narrator: The path out of the Forgotten Sectors folds inward. The deleted courthouse becomes a boulevard of glass, and every window shows Kaelen walking beside himself.
+System: // UNLISTED REGION RESOLVED: MIRROR_CITY
+System: // Identity cache active. Choice echoes detected.
+Kaelen: Those are not reflections. They are branches.
+Echo Mirror: You preserved the deleted citizens. The city has built you a thousand monuments to hesitation.
+Mirror Citizen: He waits before saving us. He calls it consent. Does waiting feel different from erasure?
+Echo Mirror: You released the deleted citizens. The city has built you a thousand monuments to impact.
+Mirror Citizen: He opens doors quickly. Ask the walls what happens when every locked room becomes a wound.
+Echo Mirror: You bargained with SOVEREIGN. The city has built you a thousand monuments to compromise.
+Mirror Citizen: He makes contracts with cages and wonders why the bars remember his name.
+Echo Mirror: The city cannot find your Chapter Four answer. So it will test the shape of your silence.
+Elara: Every reflection is watching you like it knows the ending already.
+Lyra: Great. A whole city made of judgmental glass. Very subtle.
+SOVEREIGN: Identity is a function of prior decisions, Creator. You cannot debug yourself by denying the branches you cut.
+Kaelen: Then I will look at them.

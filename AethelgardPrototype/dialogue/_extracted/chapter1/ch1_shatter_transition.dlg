@@ -1,0 +1,56 @@
+# Extracted from res://scripts/chapter1/ch1_shatter_transition.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ play_bridge_approach
+Kaelen: This bridge... the materials change halfway. Oak planks on this side, industrial steel on the other. Like two completely different worlds welded together.
+Elara: The regions are stitched together at the bridges. Each one was built by a different hand — different rules, different physics, different laws of nature.
+Kaelen (Internal): Different laws of nature. She's saying the way things WORK literally changes when you cross into a new region. That's either brilliant... or terrifying.
+Elara: When we cross... brace yourself. The Shatter isn't just visual. You'll feel it in your bones. The whole world literally tears itself apart and rebuilds around you — from a different angle.
+Kaelen: Top-down to side-scrolling. The way I see the world is about to completely change. *deep breath* Let's do it.
+Kaelen (Internal): The planks change material halfway across. Oak gives way to steel. The air shifts — warmer, heavier, carrying the smell of smoke and metal. Two worlds welded at a seam, and I'm about to step across.
+Kaelen: Elara warned me about this before we parted. The Shatter — when the world tears itself apart and rebuilds from a different angle. Top-down to side-scrolling. *deep breath* ...Here goes nothing.
+
+~ play_environmental_shift
+Kaelen: The colors are draining. Look — the greens are fading to grey, like someone's sucking the life out of the landscape.
+System: [AUDIO_SHIFT: Pastoral melody decelerating... Pitch -50%]\n[VISUAL_SHIFT: Color palette desaturating... Skybox transitioning to industrial smog]
+Elara: It's starting. The boundary between regions is dissolving. Can you feel it? The air itself is changing — heavier, hotter, like walking toward a furnace.
+Kaelen (Internal): It's starting. Something in the air is changing — heavier, hotter, like walking toward a furnace. The boundary between regions is dissolving.
+Kaelen: My movement feels... different. Heavier. Like the ground is pulling harder. Every step takes more effort.
+Elara: That's the shift. The rules of this place are changing — how you move, how you jump, how far you fall. You'll need to relearn your own body on the other side.
+Kaelen (Internal): The rules are changing — how I move, how I jump, how far I fall. I'll need to relearn my own body on the other side. No one to warn me what's coming.
+System: [WARNING: REGIONAL BOUNDARY BREAKING]\n[VIEW SHIFTING: Bird's Eye → Side View]\n[GRAVITY: Increasing]\n[BRACE FOR THE SHATTER]
+
+~ play_the_shatter
+System: [WORLD RECONSTRUCTION COMPLETE]\n[VIEW: Top-Down → Side-Scrolling]\n[REGION: Oakhaven → Ironhold]\n[Welcome to Ironhold.]
+
+~ play_post_shatter_dialogue
+Kaelen: *gasping* ...What just happened? The entire world just BROKE and rebuilt itself around me.
+Kaelen: *stumbling* ...Everything SHIFTED. I'm seeing the world from the SIDE now — and gravity, actual GRAVITY, pulling me DOWN. Before, it was like floating. Now every step has weight.
+Elara: Welcome to the other side of The Shatter. It never gets easier. The first time I crossed, I couldn't move for an hour — my body had to relearn how to walk.
+Kaelen (Internal): No one here to tell me if this is normal. No one to explain what just happened. Every cell in my body is screaming that the rules just changed — gravity, movement, perspective. I need to adapt. Fast.
+Kaelen (Internal): The air smells like soot and hot copper. The skybox went from pastoral blue to industrial grey in one hard cut. Chimney stacks. Gears. Steam vents.
+Kaelen (Internal): Oakhaven was the tutorial. The safe zone. The place where the game holds your hand and teaches you the basics while pretending it's a charming village.
+Kaelen (Internal): This... this is Ironhold. The Steam Realm. And judging by how thick that smog is, the corruption here runs a LOT deeper.
+Kaelen: Elara, what are we walking into?
+Elara: Ironhold. Industrial-era region. The NPCs here are factory workers, gearwrights, and steam-powered automatons. The boss is... complicated.
+Elara: But we'll deal with that when we get there. For now, just... take a moment. Getting through Chapter 1 is no small thing.
+Kaelen (Internal): Ironhold. That's what the system called this region during the reconstruction. Industrial-era. Chimneys, steam, gears. The enemies here won't be slimes and boars. They'll be machines. And the boss...
+Kaelen: One chapter down. I barely survived it. And something tells me the difficulty curve is about to get a lot steeper.
+Kaelen: *looking back at the bridge* Aldric — the knight — he said 'thank you.' Four hundred and twelve iterations of the same fight, and I was the first person who thought to free him instead of just winning.
+Kaelen (Internal): I left him standing at that bridge. Alive. Free. Fighting the corruption inside him with every breath. I hope that freedom holds. I hope it was worth the risk.
+Kaelen: *looking back at the bridge, fists clenched* Aldric. His name was Aldric. I ended four hundred and twelve cycles of suffering in a single strike. He asked me to. He THANKED me.
+Kaelen (Internal): But the system called it 'entity deletion.' Not liberation. Deletion. There's a difference between freeing someone and erasing them, and I'm not sure which one I did.
+Kaelen (Internal): The corruption it left in me — 5% extra, crawling through my data like an echo of his pain. Every choice in this world costs something. Every act of mercy is also an act of violence.
+Kaelen: *looking back at the bridge* The Tutorial Knight said 'thank you.' Four hundred and twelve iterations of the same fight, and I was the first person who thought to end the loop instead of winning it.
+Kaelen (Internal): The farmer at his well. The guard trapped at his post. The child who wanted to learn how to CHOOSE. I warned them. It might not change anything — they might not be able to change. But at least they know someone saw them. Someone cared enough to speak.
+Kaelen (Internal): The farmer at his well. The guard trapped at his post. The child who wanted to learn how to CHOOSE. I left them without saying goodbye. Without warning them. The smart move. The safe move. The move that tastes like ash.
+Kaelen (Internal): AetherCorp did things like this. Traps disguised as games — keep people running in circles, keep them hooked, keep them spending. I quit because I couldn't stomach it anymore. And now I'm standing inside one, seeing what it does to the people caught in it.
+Kaelen (Internal): But I didn't just watch it happen. I BUILT parts of this. My code, my architecture, my optimizations — they're in the foundation. If this world is a prison, I helped lay the bricks.
+Elara: *gently* You're asking questions nobody else asks. Not just 'how do I get stronger' but 'what am I breaking along the way.' That matters, Kaelen. More than you know.
+Kaelen: *quietly* ...Seven Source Key Fragments, guarded by the seven Lower Gods. And a System Administrator who probably already knows we're coming. Let's move.
+Kaelen: *quietly, to himself* Seven Source Key Fragments. Seven Lower Gods. One System Administrator. And me — alone, with a dead man's blade and a corruption meter that keeps climbing. ...Let's move.
+
+~ play_chapter_end_card
+System: Chapter 1 Complete — Demo Ended!
+System: Chapter 1 Complete. Press [SPACE] to continue to Chapter 2...

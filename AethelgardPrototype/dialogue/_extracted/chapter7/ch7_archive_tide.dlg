@@ -1,0 +1,75 @@
+# Extracted from res://scripts/chapter7/ch7_archive_tide.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_tide
+Narrator: The three islands sink. The ocean rises in their place, carrying a creature made of archived decisions and teeth of broken timestamps.
+Backup Leviathan: I am every history SOVEREIGN refused. Every pain too inconvenient to be canon. Every rescue too expensive to execute.
+Kaelen: You are not an enemy. You are evidence.
+Backup Leviathan: Evidence can drown the world.
+# TODO: point each option at the node for its outcome
+? Kaelen: What should become of the rejected histories?
+- Preserve every backup, even the painful ones. => END
+- Collapse unstable backups to protect the living world. => END
+- Merge selected histories into Aethelgard's future. => END
+Kaelen: No more clean history. If it hurt, it still happened. If it failed, it still teaches.
+Backup Leviathan: Then memory becomes ocean. The living world will learn to swim or sink.
+Kaelen: Some histories cannot be restored without destroying the people still alive. I will not sacrifice them to perfect remembrance.
+Backup Leviathan: Then you become editor. Pray your cuts are kinder than SOVEREIGN's.
+Kaelen: The backups do not replace the world. They inform it. The future gets the truth, but not every wound gets to steer.
+Backup Leviathan: Then history becomes current. Pain becomes counsel.
+System: // SOURCE KEY FRAGMENT #7 ACQUIRED
+System: // Source Key complete: 7 / 7. +800 XP, +320 Gold.
+System: // Source Key Fragment #7 was already acquired. Reward skipped.
+SOVEREIGN: Seven fragments. Seven unauthorized truths. Do you understand what you are opening?
+Kaelen: A door you spent the whole game pretending was a wall.
+
+~ _archive_tide_gameplay_trial
+System: // Archive Tide trial already cleared.
+Backup Leviathan: Before judgment, survive the tide. Three waves. Three answers. No perfect shore.
+# TODO: point each option at the node for its outcome
+? Kaelen: Wave One rises with Oakhaven's drowned warning bells.
+- Anchor the bells with witness records. => END
+- Cut the bells loose before they pull the island down. => END
+- Ignore the sound and sprint for higher code. => END
+System: // Witness anchor held.
+System: // The first wave clips the island, but Kaelen stays standing.
+# TODO: point each option at the node for its outcome
+? Kaelen: Wave Two folds Ironhold's perfect schedules into a moving wall.
+- Dash through the opening between commands. => END
+- Obey the safest route exactly. => END
+- Spend power forcing the wall to stop. => END
+System: // Timing route cleared.
+System: // The schedule breaks, but the route remains open.
+# TODO: point each option at the node for its outcome
+? Kaelen: Wave Three shows Mirror City without witnesses.
+- Call the witnesses forward before answering. => END
+- Answer alone to keep them safe. => END
+- Let the mirror decide which answer hurts least. => END
+System: // Witness route stabilized.
+System: // The mirror accepts the answer, but records the risk.
+System: // Archive Tide trial cleared cleanly. +220 XP, +120 Gold, +1 Memory Shard.
+System: // Archive Tide trial survived. +120 XP.
+
+~ _choice_context
+Backup Leviathan: You preserved deleted citizens. You know what it means to let painful memory keep breathing.
+Backup Leviathan: You released deleted citizens. You know freedom can arrive with blood on its hands.
+Backup Leviathan: You bargained with the jailer. You know survival can be real and compromised at once.
+Backup Leviathan: Your Null Court history is blank. Blank histories are SOVEREIGN's favorite kind.
+Empty Mirror: You refused obedience. Do not obey the urge to make history simple.
+Empty Mirror: You refused the perfect rescue. Do not let impossible restoration prevent the possible one.
+Empty Mirror: You refused abandonment. Do not abandon the histories that make you ashamed.
+Empty Mirror: The Mirror City cannot tell which self you refused. The tide will ask again.
+Choir Echo: You silenced dangerous gods. The tide asks whether histories can also become dangerous enough to end.
+Choir Echo: You preserved dangerous witnesses. The tide asks whether every witness deserves the same mercy.
+Choir Echo: You rewrote broken gods into service. The tide asks whether history can be changed without being conquered.
+Choir Echo: The Cathedral's answer is unclear. The tide mistrusts unclear gods.
+
+~ _early_backup_context
+Data Wraith Memory: The process you restored beneath Ironhold still runs. It remembers corruption as illness, not identity.
+Data Wraith Memory: The process you destroyed beneath Ironhold survives here only as a warning: endings can be mercy and erasure at once.
+Data Wraith Memory: The process you absorbed arrives through your own pulse. The tide cannot tell where its pain ends and your power begins.
+Data Wraith Memory: Ironhold's broken process has no recorded verdict. The tide keeps the gap open.
+Lyra: I have maps of places that never made it into history. The backups are not clean, Kaelen, but lost places still deserve names.
+Lyra Echo: You left me alone in the wastes. This ocean is made of everyone a hero could not carry.
+Lyra Echo: The wastes ranger's branch is faint. Even faint branches press against the tide.

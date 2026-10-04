@@ -1,0 +1,137 @@
+# Extracted from res://scripts/chapter3/ch3_kaelthas_betrayal.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _allied_betrayal_path
+NARRATOR: As the party ascends from the Archive's depths, Kaelthas lingers behind. His translucent hands reach for his satchel — and the Source Key Fragment within.
+Kaelthas: I'm sorry, Kaelen. Truly. But you've just proven you don't deserve the key.
+Kaelen: What—
+Kaelthas: You BUILT the cage. You created SOVEREIGN's value system. 'Optimize. Stabilize. Control.' YOUR words. YOUR code.
+Kaelthas: Then you don't deserve the key to undo it. I'LL be the one to replace SOVEREIGN. With BETTER values.
+NARRATOR: Kaelthas's hands phase through the satchel, merging with the data inside. He PULLS — and Fragment #4 tears free, floating into his translucent grip.
+Kaelthas: Thank you for the escort. Truly. You made this so much easier.
+Elara: I TOLD you! I said don't trust him!
+Kaelen: He's heading for the Archive exit — after him!
+Kaelen: *slamming fist into the wall* I should have KNOWN. Every warning sign was there — the hunger in his eyes, the way he steered every conversation toward the fragments. AFTER HIM!
+SYSTEM: // ALERT: Archive destabilizing! Kaelthas's extraction is corrupting the data structures!
+NARRATOR: The Archive begins to collapse around them. Shelves fold in on themselves, recursive corridors collapsing into flat planes. The infinite library is COMPILING itself out of existence.
+NARRATOR: Kaelthas dashes through a collapsing corridor — the walls folding shut behind him!
+# TODO: point each option at the node for its outcome
+? Kaelen: How do you navigate the collapsing corridor?
+- Sprint straight through — risk the collapse! => END
+- Find an alternate route — slower but safer. => END
+- Use Root Access to stabilize the corridor! => END
+SYSTEM: // Damage taken: %d HP! But you're gaining on him!
+NARRATOR: Kaelen finds a parallel corridor — intact but winding. He loses precious seconds but emerges unscathed.
+Kaelthas: *distant* You'll never catch me through the main halls, Kaelen!
+NARRATOR: Kaelen digs into the Archive's code, stabilizing the corridor for just long enough to sprint through.
+SYSTEM: // Root Access applied: corridor stabilized for 3 seconds. GO!
+NARRATOR: The Archive's entrance — the only way out. Kaelthas stands at the threshold, Fragment #4 glowing in his hand. He turns, eyes burning.
+Kaelthas: The exit is locked. Of course it is. Fine then — if I can't run, I'll FIGHT.
+Kaelthas: You want the fragment back? Come and take it.
+SYSTEM: // BOSS FIGHT: KAELTHAS (Weakened)\n// HP: 200 | Phases: 2\n// Weakened from the chase — exploit his instability!
+NARRATOR: PHASE 1: DESPERATE SCHOLAR. Kaelthas fights erratically — powerful but unfocused, his stolen knowledge fueling wild attacks.
+# TODO: point each option at the node for its outcome
+? Kaelen: Kaelthas attacks! Choose your response:
+- Aggressive strike — he's weakened, press the advantage! => END
+- Root Access — destabilize his code constructs! => END
+- Parry and counter — his desperation makes him predictable! => END
+SYSTEM: // Aggressive strike! -%d to Kaelthas! He retaliates: -%d HP!
+SYSTEM: // Root Access tears through his defenses! -%d to Kaelthas! Minor recoil: -%d HP.
+NARRATOR: Kaelen reads Kaelthas's wild swing and parries perfectly. The counter-strike is devastating.
+SYSTEM: // Perfect parry! -%d to Kaelthas! Only -%d HP taken.
+SYSTEM: // PARTY ASSIST: %s (-%d)
+NARRATOR: Kaelthas staggers, his translucent form flickering violently. But instead of collapsing, he ABSORBS the Archive's ambient data.
+Kaelthas: You think you've WON? I've already READ the fragment's data. The knowledge is INSIDE me now!
+NARRATOR: PHASE 2: ARCHIVE EMPOWERED. Kaelthas draws power from the Archive itself — shelves collapse as he converts their data into attacks.
+# TODO: point each option at the node for its outcome
+? Kaelen: Kaelthas channels the Archive's power! React!
+- All-out assault — end this before he powers up more! => END
+- Combined attack — coordinate with allies! => END
+- Disrupt the Archive connection — sever his power source! => END
+SYSTEM: // All-out assault! -%d to Kaelthas! He retaliates hard: -%d HP!
+NARRATOR: Elara's glitch power combined with Kaelen's blade creates a devastating dual strike!
+SYSTEM: // Combined attack! -%d to Kaelthas! -%d HP.
+SYSTEM: // Solo assault! -%d to Kaelthas! -%d HP.
+NARRATOR: Kaelen reaches through the Archive's code, severing Kaelthas's connection to the data streams!
+SYSTEM: // Connection severed! -%d to Kaelthas. Corruption +2%%.
+SYSTEM: // PARTY ASSIST: %s (-%d)
+SYSTEM: // KAELTHAS DEFEATED! +250 XP, +100 Gold
+NARRATOR: Kaelthas collapses to his knees, the fragment slipping from his translucent fingers. The Archive's entrance glows as the Archivist's presence manifests.
+The Archivist: // Return the fragment, user. Your access level is: REVOKED.
+Kaelthas: Fine. You win this round. But know this — I've already READ it. I know SOVEREIGN's shutdown code. I know everything.
+Kaelthas: We'll meet again, Kaelen. And next time, I won't ask permission.
+NARRATOR: Kaelthas drops the fragment and DISSOLVES — his body decompiling into raw code that seeps into the Archive's walls.
+SYSTEM: // Fragment #4 recovered. Kaelthas has escaped through the Archive's data substrate.
+
+~ _refused_boss_path
+NARRATOR: At the Archive's entrance, a familiar figure blocks the exit. Kaelthas, arms wreathed in corrupted code, eyes burning with stolen knowledge.
+Kaelthas: Round two, Kaelen. This time, I've prepared. The Archive taught me things you can't imagine.
+Kaelthas: You refused my offer. You explored alone. And now you have what I NEED.
+Kaelthas: Give me the fragments. ALL of them. Or I take them by force.
+Kaelen: Not happening, Kaelthas. These fragments are the only way to stop SOVEREIGN.
+Kaelthas: Stop it? I'll BECOME it. And I'll do a better job.
+SYSTEM: // BOSS FIGHT: KAELTHAS, THE CODE READER
+SYSTEM: // HP: 350 | DMG: 45 | Phases: 3
+SYSTEM: // Phase 1: Scholar — ranged code attacks, data constructs
+SYSTEM: // Phase 2: Corrupted Mage — becoming translucent, more powerful
+SYSTEM: // Phase 3: Source Code Entity — partially counters Root Access
+SYSTEM: // BOSS DEFEATED: KAELTHAS, THE CODE READER
+SYSTEM: // Rewards: +400 XP, +200 Gold
+NARRATOR: Kaelthas collapses, his body flickering between physical form and raw code. His translucent hands grasp at nothing.
+Kaelthas: You don't... understand... I was trying to FIX things...
+Kaelthas: Are we really that different, Kaelen? I want to overthrow SOVEREIGN. So do you. The only difference is what comes AFTER.
+NARRATOR: Before Kaelen can respond, Kaelthas dissolves — his code scattering into the Archive's data substrate. Gone, but not destroyed.
+
+~ _boss_phase_1
+NARRATOR: PHASE 1: THE SCHOLAR. Kaelthas summons constructs of pure code — geometric shapes that launch themselves at Kaelen.
+# TODO: point each option at the node for its outcome
+? Kaelen: Choose your attack:
+- Attack — close the distance and strike. => END
+- Root Access — unravel his code constructs. => END
+- Defend — block and wait for an opening. => END
+SYSTEM: // Kaelen strikes! -%d to Kaelthas. Kaelthas counters: -%d HP.
+SYSTEM: // Root Access disrupts constructs! -%d to Kaelthas! Minor counter: -%d HP.
+Kaelthas: Your access level... it BURNS!
+SYSTEM: // Kaelen blocks! Reduced damage: -%d HP. Counter: -%d to Kaelthas.
+NARRATOR: Kaelthas staggers. His body begins to shimmer, flesh becoming translucent. Code streams beneath his skin.
+Kaelthas: You won't break me that easily. I've gone too far to stop now!
+
+~ _boss_phase_2
+NARRATOR: PHASE 2: CORRUPTED MAGE. Kaelthas's body is half-translucent now. His attacks are stronger but erratic — bursts of raw data that warp the space around them.
+# TODO: point each option at the node for its outcome
+? Kaelen: Choose your attack:
+- Aggressive combo — exploit his instability! => END
+- Root Access — target his corrupted sections. => END
+- Dodge and counter — he's erratic, punish his mistakes. => END
+SYSTEM: // Aggressive combo! -%d to Kaelthas! He retaliates wildly: -%d HP!
+SYSTEM: // Root Access targets corruption! Critical hit! -%d to Kaelthas! -%d HP recoil.
+SYSTEM: // Dodge successful! Counter: -%d to Kaelthas. -%d HP from stray data.
+Elara: He's becoming more code than person! His attacks are raw data — no form, just force!
+NARRATOR: Kaelthas SCREAMS — a sound that's half voice, half static. His body dissolves almost entirely, leaving a humanoid shape of pure flowing code.
+Kaelthas: I AM the code now! Let me show you what REAL power looks like!
+
+~ _boss_phase_3
+NARRATOR: PHASE 3: SOURCE CODE ENTITY. Kaelthas is no longer human. He IS the code — a being of pure data that can partially counter Root Access itself.
+SYSTEM: // WARNING: Enemy can partially counter Root Access! Adapting strategy is advised.
+# TODO: point each option at the node for its outcome
+? Kaelen: Choose your attack:
+- All-out assault — overwhelm with raw force! => END
+- Root Access (risky) — he may counter it! => END
+- Combined attack — Elara's glitch + Kaelen's sword! => END
+SYSTEM: // Raw force! -%d to Kaelthas! His data storm hits: -%d HP!
+SYSTEM: // Root Access breaks through! CRITICAL! -%d to Kaelthas!
+Kaelthas: I can READ your access! I can SEE the commands before you type them!
+SYSTEM: // COUNTERED! Kaelthas reflects: -%d HP! Only -%d dealt.
+NARRATOR: Elara's glitch power weaves with Kaelen's strike — a dual-frequency attack that Kaelthas CAN'T counter!
+SYSTEM: // Combined attack! -%d to Kaelthas! -%d HP.
+SYSTEM: // Solo combined attack! -%d to Kaelthas! -%d HP.
+
+~ _resolution
+Kaelen: Kaelthas's methods are wrong. But his goal — overthrowing SOVEREIGN — is the same as mine.
+Kaelen: Are we really that different?
+Elara: Yes. You ARE different. Because you're questioning yourself. Kaelthas never questioned — he just grabbed for power.
+Elara: That's the difference between fixing a mistake and repeating it.
+Kaelen (Internal): The difference is doubt. Kaelthas never doubted. He saw power and he took it. I see power and I wonder if I deserve it. Maybe that doubt is the only thing standing between me and becoming exactly like him.
+Lyra: He'll be back. People like that always come back. We should be ready.
+SYSTEM: // Source Key Fragments: %d/7. Kaelthas status: ESCAPED.

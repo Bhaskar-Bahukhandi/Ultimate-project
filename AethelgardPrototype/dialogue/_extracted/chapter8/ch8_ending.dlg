@@ -1,0 +1,16 @@
+# Extracted from res://scripts/chapter8/ch8_ending.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_ending
+Narrator: The Saved Assembly does not become peaceful. It becomes awake.
+Narrator: The revolt moves under Kaelen's direct command, fast enough to strike SOVEREIGN before every wound becomes a committee.
+Narrator: The saved form a council. It is slower, louder, and harder for any one person to corrupt.
+Narrator: The saved build a witness network. Power can move, but every movement leaves a record and an answerable name.
+Narrator: The revolt records an unclear route. The saved move anyway, carrying uncertainty as a banner.
+System: // CHAPTER 8 COMPLETE
+System: // Source Key stable: %d / 7. No new fragments generated.
+SOVEREIGN: You have built a rebellion out of witnesses. How quaint.
+Kaelen: No. I built a room full of people you could not make disappear.
+SOVEREIGN: Then Chapter Nine will show them the human patch you have been protecting from yourself.
+System: // Chapter 9: The Human Patch - loading.

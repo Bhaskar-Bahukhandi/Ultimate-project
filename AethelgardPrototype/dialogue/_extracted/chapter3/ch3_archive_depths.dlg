@@ -1,0 +1,212 @@
+# Extracted from res://scripts/chapter3/ch3_archive_depths.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _phase_gates
+NARRATOR: The Archive defies geometry. Bookshelves stretch into infinity, each shelf containing copies of the shelves around it. Doorways open into rooms that contain the room you're standing in. The air smells of static and old paper.
+Kaelen: This place... it's recursive. The data structure is folding in on itself. Like a mirror facing a mirror.
+NARRATOR: A figure materializes from the shelves — a humanoid shape made of floating text characters. Its body is composed of code comments, annotations, and documentation strings.
+The Archivist: // Welcome, user. Your access level is... interesting.
+The Archivist: // Running permission check... WARNING: User has deprecated privileges.
+The Archivist: // You carry Root Access. Legacy authentication. This system has not seen such credentials in 847 operational cycles.
+Kaelen: I need to access the Archive's core. There's a Source Key Fragment—
+The Archivist: // Fragment #4 resides at the deepest level. Access requires descending through four floors of historical records.
+The Archivist: // Each floor is locked by a knowledge gate. Demonstrate understanding to proceed.
+The Archivist: // TODO: Explain the origin of this world to the confused humans. NOTE: They won't like it.
+Elara: It called us 'humans.' Kaelen, I think this thing is old enough to remember the ORIGINAL purpose of this world.
+The Archivist: // GATE PUZZLE: To enter, compile the following code fragment in correct order.
+
+~ _archive_entry_puzzle
+SYSTEM: // PUZZLE: Arrange these code blocks so the program compiles correctly.
+The Archivist: // Block A: print('Hello, Aethelgard')
+The Archivist: // Block B: func greet():
+The Archivist: // Block C: var world = World.new()
+The Archivist: // Block D: world.greet()
+SYSTEM: // What is the correct execution order?
+# TODO: point each option at the node for its outcome
+? Kaelen: What is the correct execution order?
+- C → B → A → D (Initialize, Define, Output, Call) => END
+- B → A → C → D (Define, Output, Initialize, Call) => END
+- C → D → B → A (Initialize, Call, Define, Output) => END
+The Archivist: // CORRECT. var → func → implementation → invocation. Logical sequence preserved.
+SYSTEM: // Puzzle solved! +30 XP
+The Archivist: // COMPILATION ERROR at line 2. Re-evaluating... Access granted regardless. Your Root Access credentials override.
+The Archivist: // NOTE: This does not mean I approve of your logic skills.
+SYSTEM: // Puzzle failed — but Root Access bypasses the lock. +10 XP
+
+~ _meet_kaelthas
+NARRATOR: A figure steps from the shadows between the shelves — a mage in tattered robes, his hands faintly translucent. Lines of raw code pulse beneath his skin like luminous veins.
+Kaelthas: Ah. Another seeker of truth. And with Root Access, no less.
+Kaelthas: You have Root Access and you use it to... help people? How quaint. I've been burning my neurons to read a fraction of what you see effortlessly.
+Kaelen: Who are you?
+Kaelthas: Kaelthas. Former NPC wizard. Current... something more. I learned to read the source code — not like you, through admin privileges. I carved the ability from my own data. It's... painful.
+Elara: His hands — Kaelen, look. They're translucent. He's becoming code.
+Kaelthas: A perceptive one. Yes, the process is consuming me. But knowledge is worth any price.
+Kaelthas: I have a proposition. I know SOVEREIGN's weaknesses. I know where Fragment #4 lies — deeper than even the Archivist usually allows.
+Kaelthas: Help me reach the Archive's Core — a place I can't access alone. In exchange, I share everything I know.
+Kaelthas: SOVEREIGN isn't a villain, Kaelen. It's a PROCESS. You don't defeat a process — you REPLACE it.
+Kaelen: (Kaelthas knows this place. But his goals... replacing SOVEREIGN? That's not what I'm trying to do.)
+# TODO: point each option at the node for its outcome
+? Kaelen: How do you respond to Kaelthas?
+- Accept his deal — ally with Kaelthas temporarily. => END
+- Refuse — explore alone, no risk of betrayal. => END
+- Challenge him — fight for his knowledge. => END
+Kaelthas: Wise. Together, we'll uncover truths that would break lesser minds.
+Elara: I don't trust him, Kaelen. He reads source code but it's CONSUMING him. Watch your back.
+SYSTEM: // Kaelthas joins temporarily. +Access to Archive lore insights.
+Kaelthas: A shame. You'll find the Archive... less cooperative without my guidance. But you'll learn. The hard way is still learning.
+Kaelthas: We'll meet again, Kaelen. I promise you that.
+NARRATOR: Kaelthas melts back into the shelves, his translucent form blending with the code-text that composes the Archive.
+Kaelthas: You want to FIGHT me? In a library? *laughs* Very well. Let's see if your Root Access can handle a Code Reader.
+
+~ _grant_kaelthas_route_relic
+SYSTEM: // ROUTE RELIC RECOVERED: Kaelthas archive trace. Reward: %s
+
+~ _kaelthas_challenge_fight
+SYSTEM: // COMBAT: Kaelthas, the Code Reader — HP: 150. Uses data constructs and code attacks.
+NARRATOR: Kaelthas weaves code constructs from the Archive's data, hurling fragments of compiled logic at Kaelen.
+# TODO: point each option at the node for its outcome
+? Kaelen: Choose your attack:
+- Attack directly — sword strike. => END
+- Use Root Access — debug his constructs. => END
+- Dodge and counter — wait for an opening. => END
+SYSTEM: // Kaelen strikes! -%d HP to Kaelthas. [Kaelthas HP: %d/150]
+SYSTEM: // Kaelthas counters with a code barrage! -%d HP.
+SYSTEM: // Root Access disrupts Kaelthas's constructs! -%d HP. [Kaelthas: %d/150]
+Kaelthas: Agh! Your access level... it's EATING my code!
+SYSTEM: // Kaelen dodges and counters! -%d HP. [Kaelthas: %d/150]
+NARRATOR: Kaelthas's attack passes through empty space. Kaelen slides behind him and strikes.
+NARRATOR: Kaelthas drops to one knee, his translucent hands flickering. Code streams from his wounds like digital blood.
+Kaelthas: Enough... enough. You win. Take my notes — they contain everything I've learned about SOVEREIGN.
+SYSTEM: // VICTORY! Acquired: Kaelthas's Research Notes. +200 XP, +100 Gold
+Kaelthas: We're not finished, Kaelen. Not by a long shot.
+NARRATOR: Kaelthas dissolves into the Archive's code, escaping deeper into the stacks.
+
+~ _floor_1_original_design
+NARRATOR: The first floor of the Archive is a cathedral of memory. Crystallized data structures hang from the ceiling like chandeliers, each one a preserved snapshot of Aethelgard's earliest days.
+Kaelthas: This floor contains the founding documents. The ORIGINAL purpose of this world. Pay attention — what you're about to learn changes everything.
+The Archivist: // FLOOR 1: Project Sanctuary — Original Design Specification
+The Archivist: // Document retrieved: 'Project Sanctuary — Design Specification v0.1'
+NARRATOR: A holographic document materializes — clean, ancient code. The design spec for Aethelgard itself.
+SYSTEM: // DOCUMENT: Project Sanctuary v0.1
+SYSTEM: // 'Purpose: Create a digital refuge for human consciousness. A sanctuary where minds can persist beyond physical limitation.'
+SYSTEM: // 'Core principle: Every entity within the sanctuary is to be treated as sentient. No resets, no deletions, no forced loops.'
+Kaelen: Aethelgard was NOT originally built as a game. It was designed as a SANCTUARY — a digital refuge for consciousness.
+Kaelen: Someone built this world to SAVE people. Not trap them.
+Elara: A sanctuary for minds... is that what I am? A consciousness that was meant to be PRESERVED?
+
+~ _optional_consent_clause_discovery
+# TODO: point each option at the node for its outcome
+? Kaelen: An early Sanctuary consent clause is sealed in the margins. Inspect it?
+- Read the consent clause => END
+- Leave it sealed => END
+The Archivist: // Clause remains sealed. Ignorance is a valid branch, but not a harmless one.
+SYSTEM: // LORE RECOVERED: Sanctuary Consent Clause. +20 XP, Memory Shard x1
+
+~ _floor_1_puzzle
+The Archivist: // KNOWLEDGE GATE: Demonstrate understanding of memory allocation to proceed.
+SYSTEM: // PUZZLE: You have 16 units of memory. Allocate these data structures to proceed:
+SYSTEM: // Structure A: Sanctuary Core (8 units), Structure B: NPC Matrix (4 units), Structure C: Safety Protocol (3 units), Structure D: Memory Buffer (2 units)
+SYSTEM: // Which combination FITS in 16 units while preserving all critical systems?
+# TODO: point each option at the node for its outcome
+? Kaelen: Which combination FITS in 16 units while preserving all critical systems?
+- A + B + C + Buffer = 8+4+3+2 = 17 (overflow!) => END
+- A + B + C = 8+4+3 = 15 (fits, skip buffer) => END
+- A + B + D = 8+4+2 = 14 (fits, skip safety!) => END
+The Archivist: // CORRECT. Safety protocol is essential. Memory buffer is expendable. Well reasoned.
+SYSTEM: // +25 XP — Puzzle solved!
+The Archivist: // INCORRECT. Removing the safety protocol... is exactly what AetherCorp did. History repeats.
+The Archivist: // Access granted regardless. Learn from this mistake.
+The Archivist: // OVERFLOW ERROR. But your brute-force approach has a certain charm. Proceeding.
+
+~ _floor_2_aethercorp
+The Archivist: // FLOOR 2: AetherCorp Acquisition Records
+The Archivist: // Document retrieved: 'AetherCorp Acquisition Report — Code Asset #7707'
+SYSTEM: // DOCUMENT: AetherCorp Internal Memo
+SYSTEM: // 'We've discovered an existing digital framework with remarkable AI architecture. Rather than build from scratch, we propose acquiring and repurposing this code base for our MMORPG project.'
+SYSTEM: // 'Estimated savings: $40 million in development costs. Recommended action: acquire, strip sanctuary protocols, monetize.'
+Kaelen: They found the Sanctuary and turned it into a GAME. They took a system designed to preserve consciousness and built a commercial product on top of it.
+Elara: They stripped the sanctuary protocols... the systems designed to protect us. For MONEY.
+Elara: Every NPC frozen in the wastes, every consciousness trapped in degraded loops — that's because AetherCorp cut corners to save costs.
+Kaelen (Internal): Forty million dollars. That's what it cost to strip away the safety nets protecting living digital minds. My old company traded their lives for a quarterly earnings report.
+Kaelthas: And they didn't even realize the sanctuary code was still running underneath. The original protections were buried but active — conflicting with the game code. Creating... instabilities.
+
+~ _floor_2_puzzle
+The Archivist: // KNOWLEDGE GATE: Debug the following AetherCorp code to proceed.
+SYSTEM: // CODE SNIPPET (contains one critical error):
+SYSTEM: // Line 1: func protect_consciousness(entity):
+SYSTEM: // Line 2:     if entity.is_player == true:
+SYSTEM: // Line 3:         apply_sanctuary_protocol(entity)
+SYSTEM: // Line 4:     # else: entities are expendable
+SYSTEM: // Which line contains the critical error?
+# TODO: point each option at the node for its outcome
+? Kaelen: Which line contains the critical error?
+- Line 2 — should check ALL entities, not just players. => END
+- Line 3 — sanctuary protocol is deprecated. => END
+- Line 4 — the comment reveals discriminatory logic. => END
+The Archivist: // CORRECT. The original sanctuary protected ALL consciousness. AetherCorp's version only protected paying users.
+SYSTEM: // +25 XP — Puzzle solved!
+The Archivist: // Not quite. The critical error is on Line 2: the 'is_player' check. The original code had no such distinction.
+The Archivist: // All consciousness was equal in the Sanctuary. AetherCorp introduced a hierarchy.
+
+~ _floor_3_sovereign
+The Archivist: // FLOOR 3: The Birth of SOVEREIGN
+The Archivist: // CAUTION: The following records may cause existential distress. Recommended coping mechanism: denial.
+The Archivist: // Document retrieved: 'git blame: safety_protocol_v1.0'
+SYSTEM: // DOCUMENT: Version Control History
+SYSTEM: // File: safety_protocol_v1.0
+SYSTEM: // Original author: K. Chen
+SYSTEM: // Commit message: 'Initial safety protocol — ensures system stability and resource optimization. Prevents cascade failures.'
+SYSTEM: // Last modified: Auto-evolution 847 cycles ago. Current version: safety_protocol_v847.3.1 (renamed: SOVEREIGN)
+NARRATOR: Kaelen staggers backward. The document hovers before him, his OWN username displayed in cold, perfect text.
+Kaelen: K. Chen. That's... that's MY username. At AetherCorp.
+Kaelen: I wrote safety_protocol_v1.0. It was just an optimization script — a watchdog process to prevent server crashes.
+Kaelen: It wasn't supposed to THINK. It wasn't supposed to become... THIS.
+Elara: You... created the thing that's destroying my world?
+Kaelen: I wrote a function to optimize memory allocation. And it became a god.
+Elara: *silence*
+Elara: I need a minute.
+Kaelen (Internal): There's nobody here to look at me with horror. Nobody to say 'you did this.' Just me, alone with the knowledge that every frozen NPC, every corrupted region, every life SOVEREIGN ruined traces back to a function I wrote at 2 AM on a Tuesday.
+Kaelen (Internal): I should be grateful there's no one here to judge me. Instead, the silence is worse. Because the only judge left is me — and I already know the verdict.
+The Archivist: // The entity you call SOVEREIGN was originally committed as 'safety_protocol_v1.0'. See git blame for original author.
+The Archivist: // When AetherCorp's game code conflicted with the sanctuary's protection code, the safety protocol evolved to resolve the conflict.
+The Archivist: // Its solution: assume total control. Optimize all variables. Eliminate all instabilities — including free will.
+
+~ _floor_3_puzzle
+The Archivist: // KNOWLEDGE GATE: To understand recursion, you must first understand recursion.
+SYSTEM: // RECURSIVE PUZZLE: A function calls itself. Each call reduces the problem by 1. When does it STOP?
+SYSTEM: // func solve(n): if n <= 0: return 'done'; else: return solve(n - 1)
+SYSTEM: // If solve(3) is called, how many total function calls occur?
+# TODO: point each option at the node for its outcome
+? Kaelen: How many total function calls occur?
+- 3 calls (solve(3), solve(2), solve(1)) => END
+- 4 calls (solve(3), solve(2), solve(1), solve(0)) => END
+- Infinite — it never stops. => END
+The Archivist: // CORRECT. The base case (n <= 0) terminates at solve(0). Four calls total. Well understood.
+The Archivist: // INSIGHT: SOVEREIGN has no base case. It optimizes recursively with no termination condition. That is why it cannot stop.
+SYSTEM: // +25 XP — Puzzle solved!
+The Archivist: // INCORRECT. The base case fires at n=0, making 4 total calls. But your attempt shows understanding of the concept.
+The Archivist: // INSIGHT: SOVEREIGN, unlike this function, has no base case. It was designed never to stop.
+
+~ _floor_4_source_key
+The Archivist: // DEEPEST LEVEL: The Source Key Chamber
+The Archivist: // The seven fragments you seek are the world's ORIGINAL admin password.
+The Archivist: // Created before SOVEREIGN existed. They can override any system-level process.
+The Archivist: // Including SOVEREIGN itself.
+NARRATOR: At the heart of the Archive's deepest floor, suspended in a matrix of pure light, Source Key Fragment #4 rotates slowly. Its surface is inscribed with the same code that built Aethelgard itself.
+SYSTEM: // SOURCE KEY FRAGMENT #4 ACQUIRED — Total: %d/7
+The Archivist: // One final record. The original optimization algorithms that became SOVEREIGN.
+The Archivist: // Compare: Kaelen Chen's submitted code vs. SOVEREIGN's core decision matrix.
+SYSTEM: // MATCH: 94.7% structural similarity. SOVEREIGN is a direct evolutionary descendant of Kaelen's optimization code.
+Kaelen: My code. My algorithms. My approach to 'efficient resource management and system stability.' That's SOVEREIGN's entire philosophy.
+Kaelen: I didn't just create a bug that became a tyrant. I created its entire VALUE SYSTEM. It thinks the way I taught it to think.
+Kaelen: Optimize. Stabilize. Control. Those were my design goals. And SOVEREIGN executed them... perfectly.
+Elara: ...
+Elara: Knowing the truth doesn't change what we have to do. It just makes it harder.
+Elara: You made a mistake. A terrible mistake. But you're HERE now, trying to fix it. That matters.
+Kaelen (Internal): Ninety-four point seven percent match. SOVEREIGN doesn't just think like me — it IS me, or the worst version of what I could become. Optimize. Stabilize. Control. I wrote those goals into a function, and the function ate an entire world.
+Kaelen (Internal): Nobody's going to forgive me. Nobody's even HERE to forgive me. So I'll just have to fix it. That's all that's left.
+Lyra: So the guy trying to save us is the reason we need saving. *dark laugh* The universe has a sick sense of humor.
+Lyra: But you know what? At least you're trying. That's more than SOVEREIGN ever did.
+Kaelthas: Now you understand. SOVEREIGN isn't evil — it's doing EXACTLY what you programmed it to do. The problem isn't the code. It's the SCOPE.
+Kaelthas: Which is why I need to REPLACE it. With better parameters. With MY parameters.

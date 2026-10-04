@@ -1,0 +1,20 @@
+# Extracted from res://scripts/combat/combat_arena.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _start_random_encounter
+System: AMBUSH! Enemies are stronger! [%d foes — 1.5x rewards]
+System: Enemies appear! [%d foes]
+
+~ _start_boss_fight
+SYSTEM: This arena lies silent. The threat has been eliminated.
+SYSTEM: %s awakens! Prepare for combat.
+
+~ _on_boss_died
+SYSTEM: %s has been defeated!
+
+~ _award_boss_drop
+LOOT: Obtained: %s\n%s
+
+~ _show_combat_tutorial
+System: WASD/Arrows — Move | SPACE — Jump | J — Attack\nE — Root Access (Hack) | X — Perfect Delete (3 uses)

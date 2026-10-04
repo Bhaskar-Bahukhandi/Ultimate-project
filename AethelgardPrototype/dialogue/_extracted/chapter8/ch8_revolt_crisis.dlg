@@ -1,0 +1,55 @@
+# Extracted from res://scripts/chapter8/ch8_revolt_crisis.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_crisis
+Narrator: The assembly does not explode all at once. It fractures in reasonable voices.
+Oakhaven Survivor: Protection first.
+Ironhold Delegate: Structure first.
+Mirror Witness: Accountability first.
+Backup Historian: Recognition first.
+SOVEREIGN: Observe: liberation becomes governance, governance becomes conflict, conflict becomes my return.
+# TODO: point each option at the node for its outcome
+? Kaelen: What role should Kaelen take in the revolt?
+- Lead the revolt directly before SOVEREIGN exploits the fracture. => END
+- Refuse to rule and form a council of saved factions. => END
+- Reshape the revolt into a witness network that can challenge any leader. => END
+Kaelen: I will lead the strike. Not forever. Not as a crown. But SOVEREIGN will not use our debate as a weapon.
+Mirror Witness: Then your first order should name who can remove you.
+Kaelen: No single hand holds the Source Key's future. Oakhaven, Ironhold, Mirror City, Cathedral, Deep Backup - all of you get a seat.
+Ironhold Delegate: A council will be slower.
+Kaelen: Good. Tyranny is fast.
+Kaelen: We build witnesses, not rulers. Every faction records, challenges, and can call emergency refusal.
+Backup Historian: A revolt with memory as infrastructure. Dangerous. Necessary.
+System: // REVOLT ROUTE RECORDED: %s
+System: // No Source Key fragments awarded. Source Key remains complete: %d / 7.
+SOVEREIGN: You still believe the truth is outside you.
+Kaelen: Chapter Nine is where you finally explain why that scares you.
+
+~ _revolt_stabilization_trial
+System: // Revolt stabilization already cleared.
+Assembly Ledger: Before Kaelen can answer leadership, three fires need triage: panic, sabotage, and competing testimony.
+# TODO: point each option at the node for its outcome
+? Kaelen: Which crisis should Kaelen personally stabilize first?
+- Set up evacuation lanes for Oakhaven's frightened families. => END
+- Secure Ironhold's repair grid before it fails. => END
+- Broadcast Mirror testimony so no faction controls the record. => END
+System: // Prior faction support turns crisis into coordination. +240 XP, +120 Gold.
+System: // Revolt crisis contained, but low faction support leaves visible strain. +130 XP.
+Oakhaven Survivor: Protection first, but this time the warning comes before the screams.
+Ironhold Delegate: Structure first, but audited. We can work with that.
+Mirror Witness: Accountability first. Now no one gets to narrate the revolt alone.
+
+~ _route_pressure
+Null Court Echo: Preservation taught them to ask who decides when safety becomes imprisonment.
+Null Court Echo: Release taught them freedom without preparation can still break bones.
+Null Court Echo: The bargain taught them every compromise must name who benefits.
+Null Court Echo: The missing Null Court answer makes the assembly mistrust your mercy.
+Cathedral Echo: Because the Choir was silenced, some factions now demand preemptive deletion of dangerous systems.
+Cathedral Echo: Because the Choir was preserved, some factions demand archives before punishment.
+Cathedral Echo: Because the Choir was rewritten, some factions believe even broken power can be repurposed.
+Cathedral Echo: Because the Cathedral outcome is unclear, factions invent their own version of it.
+Memory Tide: Because all backups remain, the saved arrive carrying more truth than any government can easily survive.
+Memory Tide: Because unstable backups collapsed, the saved argue whether safety has already become erasure.
+Memory Tide: Because selected histories merged, people remember enough to distrust simple slogans.
+Memory Tide: Because the backup route is unclear, rumor becomes its own faction.

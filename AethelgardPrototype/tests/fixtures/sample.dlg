@@ -1,0 +1,23 @@
+# Test fixture for tests/dialogue_test.gd — exercises every .dlg feature.
+
+~ start
+Kaelen: First line. [#t_001]
+[if test_flag_a] Kaelen: Only when test_flag_a is set. [#t_002]
+do wave
+? Elara: Pick one. [#t_003]
+- Go left. => left [#t_004]
+- [if test_flag_a] Secret option. => secret [#t_005]
+- Stop here. => END [#t_006]
+
+~ left
+set test_went_left
+set test_flag_b = false
+[if not test_flag_b] => after
+Kaelen: Never shown — the jump above always happens.
+
+~ secret
+set test_found_secret
+=> END
+
+~ after
+Elara: After. [#t_007]

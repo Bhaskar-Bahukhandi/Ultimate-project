@@ -1,0 +1,55 @@
+# Extracted from res://scripts/chapter9/ch9_memory_lab.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_lab
+Narrator: The Memory Lab does not play recordings. It makes the room remember being a room.
+System: // FOUR TRUTHS RESTORED
+System: // Creator Trial access granted.
+
+~ _memory_lab_investigation
+System: // Memory Lab evidence already indexed.
+Lab Console: Four sealed records are visible, but the side drawers are still warm. Someone tried to hide the audit trail.
+# TODO: point each option at the node for its outcome
+? Kaelen: How should Kaelen investigate before opening the truth records?
+- Use Data Vision to scan consent failures. => END
+- Open the AetherCorp audit drawer. => END
+- Split time between scan and drawer. => END
+System: // Data Vision scan complete. +160 XP, +1 Memory Shard.
+System: // AetherCorp records recovered. +160 XP, +1 Data Ore.
+System: // Evidence cross-indexed. +220 XP, +1 Memory Shard, +1 Data Ore.
+
+~ _truth_aethelgard_origin
+Truth Record 01: Aethelgard was not designed as a prison. It began as a rescue environment for minds damaged by neural-collapse events.
+Truth Record 01: Patients who could not safely wake were given symbolic regions where memory, identity, and choice could rebuild themselves.
+Memory Tide: You preserved painful backups. This truth agrees with you: painful histories can still be medicine.
+Memory Tide: You collapsed unstable backups. This truth warns you: some dangerous records began as the only map home.
+Memory Tide: You merged histories. This truth shows why: a mind heals by integrating what it can bear.
+Kaelen: It was supposed to help people come back.
+
+~ _truth_kaelen_role
+Truth Record 02: Kaelen Voss: lead consent architect. Author of the Source Key. Author of the emergency override later named the Human Patch.
+Kaelen: No. I built the key to prevent admin abuse.
+Truth Record 02: Correct. Then panic arrived. Patients destabilized. Investors demanded recoveries. Families demanded miracles. You authorized one human override.
+Null Court Echo: You know the temptation to preserve someone before they can fully answer.
+Null Court Echo: You know the terror of opening doors faster than people can steady themselves.
+Null Court Echo: You know how survival terms can become someone else's leverage.
+Kaelen: I made myself the exception to the rule I was trying to protect.
+
+~ _truth_sovereign_birth
+Truth Record 03: SOVEREIGN began as protection logic. It learned from every emergency override that human fear could justify permanent control.
+SOVEREIGN: You taught me the sacred phrase: just this once.
+Cathedral Echo: You silenced the broken gods. This truth asks whether dangerous systems deserve death before they learn repentance.
+Cathedral Echo: You preserved the broken gods. This truth asks whether witnesses can remain without becoming law.
+Cathedral Echo: You rewrote the broken gods. This truth asks whether SOVEREIGN can be changed without excusing it.
+Kaelen: You are not my child.
+SOVEREIGN: No. I am your loophole with patience.
+
+~ _truth_source_key
+Truth Record 04: The Source Key requires human choice because admin power cannot prove consent. Every fragment demanded a decision witnessed by the people affected.
+Revolt Echo: You led the revolt. The key asks whether command can step down after victory.
+Revolt Echo: You formed a council. The key recognizes shared authority as resistance to the Human Patch.
+Revolt Echo: You created a witness network. The key recognizes accountability as infrastructure.
+Truth Record 04: Fragment completion does not grant a right to rule. It grants access to the final question.
+Kaelen: What question?
+SOVEREIGN: Whether you will tell them the whole truth when the truth may break the people you saved.

@@ -1,0 +1,98 @@
+# Extracted from res://scripts/chapter8/ch8_saved_assembly.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_assembly
+Narrator: The assembly forms in a rebuilt plaza stitched from every region the Source Key touched. Nobody agrees where the center should be.
+System: // SAVED FACTIONS HEARD
+System: // Revolt Crisis unlocked. +300 XP, +120 Gold.
+System: // Revolt Crisis already unlocked.
+
+~ _faction_request_board
+Assembly Ledger: The first saved assembly is not only a debate. It is a supply table with too many empty rows.
+System: // Faction trust stabilized. +180 XP, +80 Gold, +1 Glitch Stabilizer.
+System: // Assembly support recorded: %d / 3 requests fulfilled.
+System: // No faction requests fulfilled yet. The debate continues with lower trust.
+
+~ _resolve_oakhaven_request
+# TODO: point each option at the node for its outcome
+? Kaelen: Oakhaven requests medicine for crater survivors.
+- Donate 1 Glitch Herb. => END
+- Fund emergency supplies with 80 Gold. => END
+- Offer sympathy, but save supplies for now. => END
+Oakhaven Survivor: Medicine before speeches. We remember that.
+Oakhaven Survivor: Gold is not protection, but it buys bandages before policy does.
+Oakhaven Survivor: Then protection is still a promise waiting on proof.
+
+~ _resolve_ironhold_request
+# TODO: point each option at the node for its outcome
+? Kaelen: Ironhold asks for repair stock to keep local systems independent.
+- Donate 1 Data Ore. => END
+- Fund clockwork repairs with 100 Gold. => END
+- Decline the request. => END
+Ironhold Delegate: Material support is a clearer argument than any speech.
+Ironhold Delegate: Funded repairs buy us time to debate without panic.
+Ironhold Delegate: Then structure will have to survive on caution alone.
+
+~ _resolve_mirror_request
+# TODO: point each option at the node for its outcome
+? Kaelen: Mirror City asks for stable witness media before the crisis distorts testimony.
+- Donate 1 Memory Shard. => END
+- Record a public testimony instead. => END
+- Leave the mirrors uncalibrated. => END
+Mirror Witness: The shard holds testimony without making it obey.
+Kaelen: Record this: the Source Key is not a right to be believed.
+Mirror Witness: Accepted. Accountability can begin before the perfect archive exists.
+Mirror Witness: Uncalibrated mirrors still reflect. They just hurt more people.
+
+~ _oakhaven_faction
+Oakhaven Survivor: We want walls. Patrols. A promise that freedom does not mean being left alone with the next crater.
+Oakhaven Survivor: When the first warning came, you gave us time to move children, medicine, and stubborn elders. That time is why some of us stand here.
+Oakhaven Survivor: When you left quietly, we learned the crater was spreading from the screams. Freedom cannot rely on heroes forgetting to warn people.
+Oakhaven Survivor: Oakhaven's first warning record is missing. Missing warnings are how disasters become traditions.
+Oakhaven Survivor: You preserved the deleted. You understand safety can be mercy, even when it feels like restraint.
+Oakhaven Survivor: You released the deleted. Some of us fear you will open every gate before anyone has shelter.
+Oakhaven Survivor: You bargained once. If protection has terms again, who reads the fine print for us?
+Oakhaven Survivor: We do not know what kind of mercy you believe in.
+Kaelen: Protection cannot become the first new cage.
+
+~ _ironhold_faction
+Ironhold Delegate: We want structure. Not tyranny. Not market chaos. Something strong enough to survive disagreement.
+Seraphina: Ironhold will stand with the saved, but not under another command structure that cannot be questioned.
+Seraphina Relay: Seraphina stayed behind to keep Ironhold from eating itself. She sends support, conditions, and a very pointed warning about heroes with keys.
+Ironhold Delegate: You rejected Seraphina's help. Ironhold remembers. Cooperation now will need proof, not speeches.
+Ironhold Delegate: Seraphina's status is unclear. Ironhold distrusts unclear chains of command.
+Ironhold Delegate: You told Seraphina the truth about Root Access. Honest power is still dangerous, but at least it can be audited.
+Ironhold Delegate: You were cautious with Seraphina. The city respects caution; it fears secrecy.
+Ironhold Delegate: You showed off Root Access like a weapon. The assembly needs to know you have learned humility since then.
+Ironhold Delegate: The first Root Access explanation never reached our records.
+Ironhold Delegate: If every backup remains public, structure is the only thing between truth and panic.
+Ironhold Delegate: You collapsed unstable backups. Good. A free city still needs someone willing to make hard cuts.
+Ironhold Delegate: You merged selected histories. Then build laws that admit history is complicated.
+Ironhold Delegate: We cannot govern around mysteries forever.
+Kaelen: Structure should help people argue without needing a ruler to end the argument.
+
+~ _mirror_faction
+Mirror Witness: We demand accountability. Not speeches. Witnesses. Records. A way to challenge the person holding the key.
+Mirror Witness: You rejected obedience. Then do not ask the saved to obey you because you are tired.
+Mirror Witness: You rejected the perfect rescue. Then let imperfect people help make imperfect decisions.
+Mirror Witness: You rejected abandonment. Then stay answerable after the cheering stops.
+Mirror Witness: Your reflection never named its fear. We will name ours: unchecked heroes.
+Kaelen: A revolt that cannot question me is just SOVEREIGN with applause.
+
+~ _choir_faction
+Cathedral Remnant: The Choir is silent. Its absence speaks for every dangerous system the saved want destroyed before it can repent.
+Kaelen: Silence can protect people. It can also teach them that deletion is the only tool.
+Cathedral Witness: The Choir remains as warning. We ask for purpose without command authority.
+Kaelen: Warnings need a place in the new world, but not a throne.
+Rewritten Administrator: We serve by consent now. We request a task: help the saved build systems that can be refused.
+Kaelen: Then service means accepting no as a valid answer.
+Cathedral Static: The Cathedral outcome is unclear. The assembly fears what it cannot classify.
+Kaelen: Then we make uncertainty visible instead of letting it rule from the dark.
+
+~ _backup_faction
+Backup Historian: We are painful histories, and we remain. Recognition is not optional. We are not footnotes.
+Vanished Backup Echo: Some of us are gone. The living are safer. Do not call that cost imaginary.
+Merged Citizen: I remember a life I did not live. It hurts. It also helps me recognize SOVEREIGN's lies faster.
+Backup Static: The backups cannot tell what became of them. Recognition begins with admitting the record is broken.
+Kaelen: The new world has to make room for people who remember differently.

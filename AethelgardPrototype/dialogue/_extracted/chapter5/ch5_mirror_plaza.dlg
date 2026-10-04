@@ -1,0 +1,67 @@
+# Extracted from res://scripts/chapter5/ch5_mirror_plaza.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_plaza
+Narrator: The boulevard opens into a plaza where the mirrors have learned to arrange themselves like witnesses.
+Echo Mirror: The trial does not begin with Mirror Kaelen. It begins with the selves you nearly became.
+System: // MIRROR PLAZA RESOLVED
+System: // Reflection Trial access granted. +220 XP, +80 Gold.
+System: // Reflection Trial access already granted.
+
+~ _mirror_plaza_interaction_loop
+System: // MIRROR PLAZA HUB: optional reflection fragments and calibration gate detected.
+System: // OPTIONAL MIRRORS READ: Memory Shard x1.
+
+~ _reflection_calibration_challenge
+Echo Mirror: The plaza gate opens only when the self can name the difference between witness and control.
+# TODO: point each option at the node for its outcome
+? Kaelen: The mirrors present three commands. Which one keeps Kaelen challengeable?
+- Command every reflection to agree before the trial begins. => END
+- Name one witness who can contradict Kaelen later. => END
+- Break the mirrors before they can accuse anyone. => END
+System: // REFLECTION CALIBRATED. Memory Shard x1, +120 XP.
+System: // REFLECTION FORCED OPEN. Glitch Herb x1, +60 XP, +1 corruption.
+
+~ _chapter4_echo
+Preserved Citizen: You kept us safe in the Null Court. The mirrors call it kindness. Some of us call it a softer lock.
+Kaelen: If safety feels like captivity, I need to hear that before I call it mercy.
+Released Citizen: You opened the door. We ran. Some of us found sky. Some of us found that our homes had no place left to load.
+Kaelen: Freedom without preparation can still hurt people. I have to carry that too.
+Contracted Citizen: Your bargain gave us a path out. It also taught SOVEREIGN exactly which words make you hesitate.
+Kaelen: Compromise cannot become the door SOVEREIGN uses to walk back in.
+Echo Mirror: Your Null Court answer is missing. The city records absence as a choice.
+
+~ _obedient_echo
+Obedient Kaelen: I solved it. I accepted SOVEREIGN's premise. No rebellion, no uncertainty, no deaths from freedom badly used.
+Obedient Kaelen: The world became quiet. Perfectly quiet. You would have hated how peaceful it sounded.
+Kaelen: Peace that requires everyone to stop wanting things is just a shutdown with nicer lighting.
+
+~ _savior_echo
+Savior Kaelen: I tried to save everyone. Every region. Every backup. Every branch. I never chose, so the system chose overload for me.
+Savior Kaelen: People died waiting for the perfect rescue.
+Kaelen: Trying to save everyone cannot become an excuse to save no one.
+
+~ _coward_echo
+Coward Kaelen: I left. I told myself the world was code, that pain rendered in pixels did not count.
+Coward Kaelen: Aethelgard kept running after I looked away. That was the worst part. It did not need my attention to keep suffering.
+Kaelen: Walking away is still a decision. I do not get to hide from that.
+
+~ _identity_choice
+# TODO: point each option at the node for its outcome
+? Kaelen: Which reflection does Kaelen refuse to become?
+- The obedient self who mistakes silence for peace. => END
+- The savior self who waits for a perfect rescue. => END
+- The coward self who calls abandonment objectivity. => END
+Kaelen: I refuse obedience dressed as virtue. If the world is quiet because everyone is afraid, it is not healed.
+Kaelen: I refuse the fantasy that I can save everyone alone. People are not variables I can hold until the function is perfect.
+Kaelen: I refuse the comfort of leaving. Aethelgard is real enough to hurt. That makes it real enough to answer.
+
+~ _elara_echo
+Elara Reflection: You trusted the first impossible person who reached for you. That trust became a witness SOVEREIGN could not isolate.
+Mirror Kaelen: A hero with someone watching him is harder to turn into a ruler.
+Elara Reflection: You walked beside Elara without giving away every answer. Caution became a bridge instead of a wall.
+Mirror Kaelen: Remember that. Consent can begin with uncertainty.
+Elara Reflection: You doubted Elara when she offered help. The mirror keeps that loneliness because SOVEREIGN feeds on isolated creators.
+Kaelen: Then I need to stop treating distance like safety.
+Elara Reflection: The first bond is missing from the glass. A mirror cannot reflect trust that was never recorded.

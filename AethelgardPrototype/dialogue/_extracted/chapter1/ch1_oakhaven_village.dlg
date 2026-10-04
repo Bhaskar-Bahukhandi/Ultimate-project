@@ -1,0 +1,111 @@
+# Extracted from res://scripts/chapter1/ch1_oakhaven_village.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ file_scope
+Farmer Jenkins: Beautiful day for farming! The sun's been in the same position for... hm. How long has it been? I can't quite remember.
+Farmer Jenkins: I walk to the well. I draw water. I walk back. It's a good life. Simple. Some might say... *trails off, staring at the bucket* ...What was I saying?
+Kaelen (Internal): He almost broke through. For a moment, his eyes focused on something real — not his script, not his routine. Just the bucket in his hands and the question of why he's holding it.
+Kaelen (Internal): Then the routine takes over again. Like watching someone dream of waking up and then fall back asleep. He doesn't know he's trapped. But somewhere, underneath the script, some part of him suspects.
+Farmer Jenkins: You're new here, aren't you? We don't get many visitors since the... the... *eyes flicker, voice drops to a whisper* ...I'm sorry. I don't know why I can't finish that sentence.
+Village Child: Mister! Mister! Want to play tag? I've been 'it' for... *counts on fingers, runs out of fingers* ...a REALLY long time.
+Kaelen: Nobody else will play with you?
+Village Child: The grown-ups just do the same things every day. Walk to the well. Walk back. Walk to the well. Walk back. Don't they get TIRED?
+Kaelen (Internal): She sees it. The loops, the repetition. The adults are locked in their patterns, but this kid... she's aware something is wrong. She just doesn't have the vocabulary to explain it.
+Village Child: You walk different from them. Like you're actually CHOOSING where to go. *tugs his sleeve* Can you teach me how to do that?
+Kaelen: *voice catches* ...I'll try. I promise I'll try. Stay safe, kid.
+Kaelen (Internal): She wants to learn how to choose. That hit harder than anything in this world has so far. Because I remember being her age, playing the same games, and never once wondering if the characters I controlled had a choice. I just assumed they didn't. I assumed wrong.
+Village Guard: Halt! Who goes— *squints, relaxes* Oh. You're not from around here. Carry on, traveler.
+Kaelen: Aren't you supposed to guard the village? I saw something dangerous near the outskirts.
+Village Guard: *grips spear tighter* I know. I can HEAR it. The crashing, the grunting. But when I try to walk toward it, I just... I end up back here. Every time. My feet won't carry me past this post.
+Kaelen (Internal): He can't leave his patrol zone. He's not lazy — he's literally unable to deviate from his coded path. And he KNOWS it. That frustration in his voice is real.
+Village Guard: *quietly* I used to think I was a coward. But it's not fear. It's like... my body refuses. Like something bigger than me decided I belong right here, and nowhere else.
+Kaelen (Internal): ...That's the most self-aware thing I've heard from anyone in this village. He's suffering, and he can't even name what's doing it to him.
+Kaelen (Internal): Thatched roofs. Blooming flowers. A windmill turning in the breeze. Somewhere, a bird is singing the same three notes on repeat.
+Kaelen (Internal): Everything about this place screams 'safe zone.' The light shifted from that sickly glitch-green to warm amber the moment I crossed the boundary. Like a filter someone designed to make you exhale.
+Kaelen (Internal): But that sky has a visible seam where the horizon meets the mountains. And every few seconds, the buildings shimmer — ghostly outlines visible underneath the surface, like the village is a painting stretched over a skeleton. This place is beautiful, and it's barely holding together.
+Elara: Welcome to Oakhaven. *smiles softly* I know it's not much. But it's peaceful. The people here are kind — they just... keep to their routines.
+Kaelen: Routines? You mean they repeat the same actions?
+Elara: Farmer Jenkins walks to the well, draws water, walks back. Over and over, since before I can remember. He seems content. But sometimes I wonder... *trails off*
+Kaelen (Internal): She was about to say something vulnerable. Something about whether contentment and being trapped in a loop are the same thing. I file that thought away.
+Elara: There's a healer's shop if you need supplies. And there's something strange in the village square — a stone terminal covered in glowing numbers. The villagers won't go near it.
+Elara: Also — stay alert near the outskirts. Things have been wandering in from the wild zones lately. Corrupted things. The village guard tries, but... *lowers voice* ...he can't seem to leave his post.
+Kaelen: So it's a safe zone that isn't actually safe. Just safe enough to let your guard down. Got it.
+Kaelen (Internal): Thatched roofs. Blooming flowers. A windmill turning in the breeze. Somewhere, a bird is singing the same three notes on repeat.
+Kaelen (Internal): Everything about this place screams 'safe zone.' The light shifted from that sickly glitch-green to warm amber the moment I crossed the boundary. Like a filter someone designed to make you exhale.
+Kaelen (Internal): But that sky has a visible seam where the horizon meets the mountains. And every few seconds, the buildings shimmer — ghostly outlines visible underneath the surface. Beautiful, and barely holding together.
+Kaelen (Internal): No guide. No companion. Just me and a village full of people trapped in their daily routines. The farmer walks to the well. The guard stands at his post. The shopkeeper sells potions he can't quite name.
+Kaelen (Internal): Elara said the village was peaceful. She also said things have been wandering in from the wild zones. Corrupted things. I should stay alert — I don't have anyone watching my back.
+Kaelen: *to himself* Find supplies. Talk to the locals. Learn what I can. And keep moving before the System Administrator finds me.
+Shopkeeper: Welcome, Traveler! Would you like to buy a...
+Shopkeeper: ...buy a... buy a... *winces, grips counter edge* ...buy a—
+Shopkeeper: —Potion! Yes! *exhales with relief* Potions. I have many potions. Some of them even work as advertised.
+Kaelen (Internal): He got stuck. Like a thought hitting a wall and bouncing back to the beginning. I've seen people zone out before, but watching someone's MIND glitch like that — losing a thought mid-sentence and not even knowing it happened — that's something else entirely.
+Kaelen: Does that happen to you often? The... repeating?
+Shopkeeper: *confused smile* Does what happen? I was just saying — potions! I have many potions. ...Did I already say that?
+Kaelen (Internal): He doesn't even know it happened. At least the farmer gets a flicker of recognition. This man loops and forgets the loop. I'm not sure which is worse.
+Elara: The red ones are reliable. Stay away from anything labeled 'Experimental' unless you enjoy surprises.
+Kaelen (Internal): A stone column in the village square. Covered in scrolling green numbers, shifting prices, supply chains updating in real time. It looks alien here — a piece of advanced infrastructure sitting in the middle of a medieval village.
+Kaelen (Internal): It's a marketplace. Not a local one — this is connected to something bigger. Prices from regions I haven't even visited. Trade volumes that suggest thousands of active participants.
+Kaelen: This stone tracks supply and demand across the entire world? In real time? That's more sophisticated than anything we had on— *catches himself* ...where I'm from.
+Elara: The villagers call it the 'Whispering Stone.' They don't use it, but they know it watches. Sometimes it flags someone — a trader who gets too greedy. The System Administrator takes notice.
+Kaelen (Internal): Surveillance built into the infrastructure. Someone is watching for anything unusual — price gouging, hoarding, anything that disrupts the natural flow. This world has a guardian, and it pays attention.
+Kaelen: And this System Administrator — what happens to the people it flags?
+Elara: *goes quiet* ...Nobody knows. They just... stop trading. The villagers say the Stone 'corrects' them. Nobody asks what correction means.
+Kaelen (Internal): 'Correction.' That word hangs in the air like smoke. Where I come from, that's called enforcement. Here, it sounds more like punishment. Or erasure.
+Kaelen: Something just crashed through that fence! *steps back* Its body is flickering — eyes like static. That's not a normal animal.
+Kaelen (Internal): Corrupted. The same kind of distortion I saw in the crater, but concentrated into a living thing. Something is poisoning the creatures out here — twisting them from the inside.
+Elara: Corrupted Boar! Stay back — it's not like the slime! This one charges in a straight line at full speed. If it hits you head-on, you won't get back up!
+Elara: When you're above it, press DOWN to bounce off its back — that's its weak point! I'll try to box it in!
+Kaelen: *steadies himself* Alright. Dodge the charge, hit the back. I can do this.
+Kaelen: *breathing hard* That corruption on it... it wasn't random. The patterns were structured. Deliberate.
+Kaelen (Internal): Someone is spreading corruption into living creatures near this village. This isn't natural decay — it's deliberate. Something out there is doing this on purpose.
+Elara: Nice work. Your timing on those bounces was perfect — most people take a dozen tries before they get the rhythm.
+Elara: *frowning* But that corruption worries me. Animals don't just become corrupted on their own. Something is actively reaching into the wild zones and... changing things.
+Kaelen: And it's spreading inward. Toward the village. Those people in their loops — what happens to them when the corruption reaches them? Jenkins. The child. The guard who can't leave his post.
+Elara: *quietly* ...I try not to think about that. We need to keep moving. The bridge to the next region is ahead. But, Kaelen — there's usually something guarding it. A knight.
+Kaelen: A boss fight at the bridge. Why am I not surprised.
+Elara: *hesitates* It should be straightforward. It's designed to be. But with the corruption spreading... I'm not sure anything here works the way it's supposed to anymore.
+
+~ _on_auction_interaction
+Shopkeeper: The Whispering Stone hums. Prices shift in real time.
+
+~ _play_departure_choice
+Elara: *glances back at the village* Before we cross that bridge — the people here. The corruption is closing in on them. We could warn them. Or we could keep moving and not draw more attention.
+Kaelen (Internal): The corruption is spreading. The boar proved that. These people — Jenkins, the child, the guard — they're sitting in the path of something they can't see and can't fight. Do I owe them a warning? Or would that just paint a bigger target on this village?
+# TODO: point each option at the node for its outcome
+? Kaelen: The bridge to the next region is ahead. Behind you, Oakhaven's lights glow warm and oblivious. The villagers don't know what's coming. Do you warn them, or keep your head down?
+- Warn the villagers — they deserve to know => END
+- Leave quietly — drawing attention could make things worse => END
+
+~ _warn_villagers
+Kaelen: *raises his voice* Listen! All of you! The creatures in the wild zones — they're getting worse. Corruption is spreading inward, toward your village. The boar that attacked was just the beginning.
+Village Guard: *grips his spear, eyes wide* I KNEW it. I could hear the sounds getting closer every night. But how do we fight something we can't even walk toward?
+Farmer Jenkins: *stops mid-walk to the well* ...Fight? What's 'fight' mean in this context? I don't... I don't have that subroutine. But I heard your words, stranger. I'll remember them. Somehow.
+Village Child: *tugs Kaelen's sleeve* Are the bad things coming HERE? Will they make everyone do the loop thing even MORE? Will they make ME do it too?
+Kaelen: *kneels down* I'm going to find a way to fix this. I promise. Just... stay away from the outskirts. Stay together. Watch out for each other.
+Elara: *quietly, to Kaelen* That was brave. And maybe foolish. But they needed to hear it. Even if they can't fully understand, the seed is planted now. Some part of them will remember.
+System: [ACTION: Warning delivered to Oakhaven NPCs]\n[NPC awareness: MARGINALLY INCREASED]\n[System Administrator attention: SLIGHTLY INCREASED]\n[The village remembers your name.]
+
+~ _leave_quietly
+Kaelen (Internal): I can't fix everything. Warning them might make the System Administrator look more closely at this village, and that attention could be worse than the corruption itself. Sometimes the kindest thing is to stay quiet and keep moving.
+Elara: *nods slowly* I understand. Sometimes the help that draws attention is worse than the problem it tries to solve. Let's go.
+Kaelen (Internal): The child's face. The farmer's confused smile. The guard who can't leave his post. I'm walking away from all of them. It's the smart move. I just wish it didn't feel like abandonment.
+
+~ _grant_crafting_intro_materials
+System: [CRAFTING MATERIAL FOUND]\nReceived: Glitch Herb x2\nOpen the pause menu's Crafting tab to brew a Health Potion.
+System: [CRAFTING NOTE RECORDED]\nMaterial handoff skipped because the inventory was unavailable.
+
+~ _discover_guard_post_data_vision_secret
+System: [DATA VISION SECRET]\nA disabled evacuation-rights clause flickers under the guard post.\nRecovered: Memory Shard x1, +15 XP.
+
+~ start_boar_combat
+System: [BOAR CHARGES! Velocity: MAX — Trajectory: LINEAR]\n[DODGE! Jump (SPACE) to avoid charge attack!]
+Kaelen: It can't turn mid-charge! It only knows how to run in a straight line. If I time the jump right...
+System: [BOAR IS STUNNED from wall collision!]\n[POGO STRIKE! Press DOWN (S) while airborne to bounce off its back!]
+System: [CRITICAL HIT! POGO STRIKE — Damage: 60]\n[Boar HP: 150 → 90]
+System: [BOAR ENRAGED! Charge speed +50% — Glitch shader intensifying!]\n[DODGE INCOMING CHARGE!]
+Elara: I'll wall it in! BARRIER — I'm sealing the exits!
+Kaelen: It hit the wall! The debris is blocking the exit — it's got nowhere to run now!
+System: [Boar trapped against the barrier!]\n[POGO STRIKE available! Press DOWN (S) while airborne!]
+System: [CRITICAL HIT! POGO STRIKE — Damage: 90]\n[Boar HP: 90 → 0]\n[ELITE DEFEATED!]

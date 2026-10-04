@@ -1,0 +1,79 @@
+# Extracted from res://scripts/chapter1/ch1_tutorial_knight.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ file_scope
+???: Another consciousness drifts into my patrol zone…\nYou should not be here, anomaly.
+Kaelen (Internal): A knight? No — its edges are glitching.\n This thing is part of the system.
+Corrupted Sentinel: Directive: PURGE UNAUTHORISED PROCESSES.\nPrepare for deletion.
+Corrupted Sentinel: You persist… Increasing threat level.\nProtocol: AGGRESSIVE COUNTERMEASURE.
+Corrupted Sentinel: ERR—ERROR… My directives… they're C-CORRUPTED—\nI can't… stop…!
+Corrupted Sentinel: N-NO MORE RESTRAINT… THE CORRUPTION DEMANDS\nDESTRUCTION! I WILL END YOU!
+Elara: Its control loop is exposed! Open Root Access\nwith [E] and disable its attack flag!
+Corrupted Sentinel: …thank you.  The corruption… it made me…\nI was a guardian once.  Not a monster.
+Kaelen: What happened to you?
+Corrupted Sentinel: The Source Code… fractured.  Everything broke.\nTake my blade. You'll need it… for what comes next.
+System: [Corrupted Knight's Blade obtained!]\n+500 Gold  •  +200 XP  •  Level Up!
+
+~ _on_root_access_triggered
+Elara: The control loop is exposed. Root Access is open.\nClick Disable Attack Directive to end the fight.
+
+~ _play_post_battle_choice
+Kaelen: *breathing hard, staring at the fallen knight* ...It stopped fighting. The corruption is still writhing across its armor, but its sword arm dropped. It's... looking at me.
+Corrupted Sentinel: *voice glitching, fragments of a gentler tone underneath* ...You... did not simply overpower me. You found... the code beneath the commands. You reached INSIDE me and turned off the thing that... that MADE me hurt you.
+Kaelen: You're not just a boss fight. You're a person. Trapped in a loop, forced to attack anyone who crosses this bridge.
+Corrupted Sentinel: *shudders, corruption flickering violently* Four hundred... and twelve cycles. I have stood at this bridge and fought every traveler who tried to cross. Not because I wanted to. Because the directive COMPELLED me. Like a hand around my throat, squeezing every time I tried to resist.
+Kaelen (Internal): Four hundred and twelve times. He's been stuck in this fight for four hundred and twelve iterations. And every single time, he dies or the challenger dies. An endless loop of violence with no exit condition. Until now.
+Corrupted Sentinel: *reaches toward Kaelen with a trembling hand* The corruption in me... it's deep. Woven into my core code. Even with the attack directive disabled, I can feel it trying to reassert itself. Trying to make me raise my sword again.
+Corrupted Sentinel: I have two requests, and... I've never been able to make requests before. The directive never allowed it. But right now, in this gap you've created — I can think. I can CHOOSE. And I'm terrified it won't last.
+Kaelen: What do you need?
+Corrupted Sentinel: First — take my blade. The Corrupted Knight's Blade. It will serve you better than it served me. It carries the weight of four hundred cycles of combat, and that weight translates to power.
+Corrupted Sentinel: Second... *voice drops to a whisper* ...I need you to decide what happens next. The corruption will reassert itself. Minutes, maybe. When it does, the directive will reactivate, and I'll be forced to fight the next person who crosses this bridge. Another cycle. Another four hundred fights.
+Corrupted Sentinel: *looks directly at Kaelen* You can end me. One strike. The corruption dies with my process. The bridge will be free. No more cycles. No more forced battles. I'd be... at peace.
+Corrupted Sentinel: Or you can spare me. Walk away. And hope that the gap you created lasts long enough for me to... to find another way. But I won't lie to you — I don't know if it will. I've never been free before. I don't know how long freedom lasts in a world that doesn't want it to exist.
+Elara: *quiet, her flickering arm trembling* Kaelen... I've watched this knight fight and die and reset more times than I can count. He never asked for any of this. Whatever you decide, I'll stand by it. But this is YOUR choice.
+Kaelen (Internal): End his suffering permanently, or gamble on a freedom that might not last. The engineer in me says terminating a corrupted process is the safest option. But the human in me... the human in me is standing in front of a person who just tasted freedom for the first time in four hundred cycles and is asking me if he gets to keep it.
+# TODO: point each option at the node for its outcome
+? Kaelen: The Corrupted Sentinel kneels before you, his sword arm limp, his red visor dimming. The corruption writhes beneath his armor like something alive, fighting to regain control. His eyes — real eyes, buried beneath the glitch — are looking at you with something you've never seen in this world before: hope.
+- Spare the Knight — let him live free => END
+- End his suffering — a mercy strike => END
+- Try to purge the corruption with Root Access => END
+
+~ _spare_knight
+Kaelen: *sheathes his weapon and extends a hand to the knight* I'm not going to kill someone who just asked me for mercy. You spent four hundred cycles trapped in a prison. You deserve the chance to find out what freedom feels like.
+Corrupted Sentinel: *stares at the extended hand, trembling* ...You're the first. In all those cycles, every opponent who beat me tried to land the killing blow for the XP. You're the first one who... *voice breaks*
+Kaelen: Then let's make it count. Stand up, soldier.
+Corrupted Sentinel: *pulls himself up, corruption flickering but not reasserting* Thank you. I will hold this bridge — but as a guardian, not a jailer. If anyone crosses who needs help, I'll send them your way.
+Corrupted Sentinel: *presses the blade into Kaelen's hands* Take the blade. It's yours now. And... if the corruption takes me again, if I lose myself and become the monster once more — don't hesitate next time. Promise me that.
+Kaelen: ...I promise. But I think you're stronger than you know.
+Elara: *wiping her eyes, smiling through tears* ...That was the bravest thing I've ever seen anyone do in this world. Most people don't even see the NPCs as people. You just gave one his life back.
+Kaelen (Internal): No one to tell me whether that was brave or stupid. But the way his hand stopped trembling when I pulled him up... that's not something a 'corrupted process' does. That's a person remembering what hope feels like.
+System: [CORRUPTED SENTINEL: DIRECTIVE SUSPENDED]\n[Status: UNBOUND — Free Agent]\n[Corruption: Contained but present]\n[The bridge is now open. The knight remembers your name.]
+Kaelen (Internal): One person freed from one loop. In a world with thousands of loops and millions of trapped souls, it's barely a drop in the ocean. But it's a start. And starts matter.
+
+~ _kill_knight
+Kaelen: *grips the sword tighter, voice flat* ...You said it yourself. The corruption will come back. Minutes, maybe. And then another four hundred cycles of this. Another four hundred people forced to fight you, hurt you, kill you, and you come back and do it all again.
+Kaelen: I'm not going to let that happen. Not to you, and not to the next traveler who walks across this bridge. This ends now.
+Corrupted Sentinel: *closes his eyes, a strange peace settling over his glitching features* ...Thank you. I hoped you'd say that. Not because I want to die — because for the first time in four hundred cycles, the choice is mine. And I choose... to stop.
+Corrupted Sentinel: *as his form dissolves into fragments of light* ...my name... was Aldric. Before the corruption. Before the loop. I was a guardian named Aldric... and I chose to rest.
+Kaelen (Internal): Aldric. He had a name. Not 'Corrupted Sentinel,' not 'Tutorial Knight,' not 'Boss #1.' A name. Aldric. And now there's nothing left of him but fragments of light and a blade that still carries his weight.
+System: [ENTITY TERMINATED: CORRUPTED_SENTINEL_01 (ALDRIC)]\n[Process fully purged — NO RESPAWN]\n[CORRUPTION +5% — Forceful termination detected]\n[Warning: The System Administrator has been notified of entity deletion]
+Elara: *long silence, looking at the space where the knight stood* ...You did what he asked. That's not nothing. But, Kaelen — the System noticed. Deleting an entity isn't the same as defeating one. It leaves a scar in the code that draws attention.
+Elara: ...I'm not judging you. I'm just... making sure you know what it costs.
+Kaelen (Internal): Nobody here to tell me I did the wrong thing. Or the right thing. Just silence where Aldric used to be — and a corruption spike that says the System doesn't care about mercy, only deletion. I'll carry this one alone.
+Kaelen (Internal): Aldric is gone. Really gone. Not looping, not resetting, not waiting for the next cycle. Just... gone. I freed him the only way I could. But the System flagged it as destruction, not mercy. And the corruption in my own data just jumped. There's always a price.
+
+~ _purge_knight
+Kaelen: There's a third option. If I can disable your attack directive, maybe I can go deeper. Strip the corruption out of your code entirely. Not just disable it — REMOVE it.
+Corrupted Sentinel: *alarm and hope warring in his voice* That's... that's never been attempted. The corruption is woven into my core processes. Trying to remove it could crash my entire entity. Or worse — spread it to YOU.
+Kaelen: I was a systems architect for AetherCorp. I spent ten years debugging systems that other engineers said were unfixable. *cracks knuckles* Let me try.
+System: [ROOT ACCESS: DEEP SCAN — CORRUPTED_SENTINEL_01]\n[Corruption threads found: 847]\n[Core integrity: 23%]\n[WARNING: Deep purge will cause MASSIVE corruption blowback]\n[CORRUPTION +8% if proceeding]
+Kaelen (Internal): 847 corruption threads. Woven through every function, every subroutine, every memory he has. This is going to hurt. Both of us. But if I can pull this off...
+Corrupted Sentinel: *screaming, then gasping as the corruption loosens its grip* I can... I can THINK. The whispers... they're quieter! Not gone, but... I can hear my OWN thoughts over them for the first time in cycles!
+Kaelen: *wiping blood from his nose — the corruption blowback hit hard* I couldn't get all of it. 847 threads — I cleared maybe 600. The rest are too deep, too intertwined with your core processes. Pulling them would erase your memories.
+Corrupted Sentinel: *stands tall, less corruption flickering across his armor* You gave me back my mind. Not all of it — but enough. Enough to remember that my name is Aldric. Enough to CHOOSE. *salutes* I will guard this bridge as Aldric, not as a corrupted puppet. You have my word.
+System: [ROOT ACCESS DEEP PURGE: PARTIAL SUCCESS]\n[Corruption threads removed: 623/847]\n[Entity status: RECOVERING — Directive: SELF-DETERMINED]\n[CORRUPTION +8% — Blowback absorbed by user]\n[WARNING: System Administrator attention SIGNIFICANTLY increased]
+Elara: *staring at Kaelen with a mix of awe and fear* You just... reached into a corrupted entity and tore the corruption OUT. With your bare hands. I've never seen anyone do that. The cost was enormous, but...
+Elara: ...Kaelen, do you understand what this means? If you can purge corruption from entities, you might be able to purge it from REGIONS. From the entire world. That's not just Root Access. That's... that's something else entirely.
+Kaelen (Internal): I just ripped 623 corruption threads out of a living being with my bare hands. My nose is bleeding and I can taste copper. But if I can do this to ONE entity... what about a whole region? What about the entire world? The cost nearly killed me — but the POSSIBILITY...
+Kaelen (Internal): Eight percent corruption. My vision is blurry and there's a ringing in my ears that won't stop. But Aldric is standing under his own power, looking at the sky like he's seeing it for the first time. That's worth eight percent. That's worth a lot more than eight percent.

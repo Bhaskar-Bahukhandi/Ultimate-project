@@ -1,0 +1,21 @@
+# Extracted from res://scripts/regions/oakhaven_region.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _handle_oakhaven_side_objective
+Apothecary Iris: If you find two Glitch Herbs, I can brew medicine for people whose memories keep desyncing.
+# TODO: point each option at the node for its outcome
+? Kaelen: Deliver two Glitch Herbs to Iris?
+- Deliver the herbs. => END
+- Not now. => END
+
+~ _interact_with_farming_zone
+SYSTEM: The herb patch is settling. Re-entry opens in %d seconds.
+
+~ _enter_boss_arena
+SYSTEM: The Guardian has been defeated. The arena lies silent.
+SYSTEM: [WARNING] Hostile entity detected — TUTORIAL KNIGHT.\nThreat level: 5 | Your level: %d\nThis encounter may result in system failure.
+# TODO: point each option at the node for its outcome
+? Kaelen: Proceed anyway?
+- Enter the Arena => END
+- Turn Back => END

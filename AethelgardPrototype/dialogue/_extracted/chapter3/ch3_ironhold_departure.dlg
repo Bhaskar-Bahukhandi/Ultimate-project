@@ -1,0 +1,26 @@
+# Extracted from res://scripts/chapter3/ch3_ironhold_departure.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _start_departure
+SYSTEM: // CHAPTER 3: THE SOURCE CODE
+NARRATOR: Dawn breaks over Ironhold. The eastern bridge — scarred from the Administrator's fall — groans under its own weight.
+Kaelen: Two fragments down, five to go. The next one's resonance is pulling east... into the dead zones.
+Elara: The Fractured Wastes. Nobody goes there, Kaelen. That region collapsed years ago — the corruption ate everything.
+Kaelen: Which means SOVEREIGN's influence is weakest there. If a fragment survived, the corruption couldn't reach it.
+Elara: Or it's what CAUSED the corruption.
+NARRATOR: Elara's glitched arm flickers, lines of code cascading across her skin. She grips it tight.
+Elara: My arm... it's responding to the fragment's signal. The closer we get, the stronger it becomes.
+Kaelen: The Fractured Wastes. A whole region consumed by corruption. If a Source Key Fragment is there, that's where I'm headed.
+Seraphina: The wastes are lawless territory. No city jurisdiction, no guard patrols. Whatever we find out there, we handle alone.
+Kaelen: Good thing I brought a former arena champion then.
+Seraphina: *smirks* Flattery. Keep it up — it might save your life.
+NARRATOR: Kaelen pauses at the gate, remembering Seraphina's choice to remain and help rebuild Ironhold's resistance from within.
+Kaelen: She'll hold down the city. We move forward.
+Kaelen: The Administrator was just a proxy. SOVEREIGN was pulling strings the whole time... I can't keep reacting. I need to understand what SOVEREIGN actually IS.
+SYSTEM: // WARNING: Entering deprecated region. Stability not guaranteed. Proceed at own risk.
+Elara: Deprecated. That's comforting.
+Kaelen: At least they're honest about it.
+NARRATOR: Kaelen steps onto the eastern bridge. The metal protests beneath his feet. Behind him, Ironhold's chimneys belch smoke into a bruised sky. Ahead — nothing but wasteland.
+SYSTEM: // Region boundary crossed. Entering: THE FRACTURED WASTES
+SYSTEM: // Data integrity: 23%. Memory allocation: FRAGMENTED. Good luck, user.

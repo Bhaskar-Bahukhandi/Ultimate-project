@@ -196,8 +196,12 @@ playthrough log.
   backups, migration tests. **Saves include the world clock, market state and auction state.**
 - [ ] **StoryGraph + FlagRegistry + RewardLedger (`grant_once`)**, with boot validation that every
   read has a reachable writer.
-- [ ] **DialogueRunner** on the Dialogue Manager plugin (Nathan Hoad): line IDs, speaker registry,
-  string tables ready for localization.
+- [x] **Dialogue as data** — done first (2026-10-04) so the story rewrite goes straight into data. An
+  in-house `.dlg` format replaced the Nathan Hoad plugin: v4.x requires Godot 4.7, and its
+  `DialogueManager` autoload name clashes with the game's (1,545 call sites). Includes nodes, choices,
+  conditions, flags, `do` scene hooks, optional `[#id]` line IDs, a validator, an extractor and tests.
+  Still to do: a speaker registry (portraits), an ID-stamping tool, and a localization string-table
+  export.
 - [ ] **Stats model:** `final = base + level + training + Σ modifiers`. Decided 2026-10-04: DEF is
   mitigation (`×100/(100+DEF)`, done); MP pays for spells and healing, regenerating ~2/s (done); Soul
   is earned from parries, perfect dodges and kills (done) and pays for Glitch Arts (proposal in

@@ -3,6 +3,20 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-04 — Dialogue as data, writing templates
+
+- **New dialogue format (`.dlg`):** plain-text files with nodes, lines, choices, `[if …]`
+  conditions, `set` flags, jumps and `do` events for scene hooks. They play through
+  `DialogueManager.run(file, node)` with the existing dialogue box. Validation errors give the file
+  and line. Writer's guide: `story/DIALOGUE_FORMAT.md`.
+- **Extracted dialogue:** `tools/extract_dialogue.gd` copied all 1,967 lines and 74 choice blocks
+  currently written inside scripts into `dialogue/_extracted/` (61 files) as rewrite material.
+- **Writing templates:** `story/STORY_BIBLE.md`, `story/VOICE_GUIDE.md`,
+  `story/outlines/ACT_TEMPLATE.md`.
+- **Combat:** DEF reduces damage. MP pays for spells and healing and regenerates over time. Soul is
+  earned from parries, perfect dodges and kills, for Glitch Arts.
+- Tests: `tests/dialogue_test.gd` (32 checks) added to CI.
+
 ## 2026-10-04 — Temporary art removed
 
 All temporary in-game art (`assets/sprites`, `generated`, `generated_v2`, `generated_v3`, `vfx`,

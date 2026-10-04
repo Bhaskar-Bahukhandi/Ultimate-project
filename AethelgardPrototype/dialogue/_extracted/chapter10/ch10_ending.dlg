@@ -1,0 +1,30 @@
+# Extracted from res://scripts/chapter10/ch10_ending.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_ending
+System: // CHAPTER 10 COMPLETE
+System: // TRUE ENDING SEEN
+System: // NEW GAME+ UNLOCKED
+System: // Source Key stable: %d / 7. No new fragments generated.
+Narrator: The Root of Heaven does not fall silent. It becomes answerable. Every command requires consent, memory, and witness.
+Kaelen: No final ruler. No final cage. Just a world that can keep asking.
+Narrator: SOVEREIGN ends completely. The first morning after central control is frightening, bright, and nobody's property.
+Kaelen: We will make mistakes without a god to blame for them.
+Narrator: SOVEREIGN is destroyed, but hidden truth and old bargains leave scars the saved must uncover after freedom.
+Kaelen: Freedom came first. The rest of the truth still has to answer.
+Narrator: SOVEREIGN survives only as a limited consent protocol, stripped of override power and watched by the saved.
+SOVEREIGN: I can ask. I can warn. I cannot command.
+Narrator: Root authority dissolves into councils, local refusals, and witness nodes. No single voice can close Aethelgard again.
+Witness Network: The ending is public record. So is every future attempt to own it.
+Narrator: The root closes around an unstable ending. The saved live, but the route will need review.
+Narrator: Some citizens wake in rebuilt regions. Some remain in memory. Some choose not to forgive Kaelen. None of them vanish.
+Kaelen: Aethelgard was built to rescue people. Now it has to learn how to let them leave, stay, argue, and remember.
+System: // CREDITS COMPLETE. Returning to main menu.
+
+~ _early_choice_epilogue
+Narrator: Because Kaelen kept early witnesses close, the first councils begin with names people already trust: Elara, Seraphina or her Ironhold relays, Lyra's maps, and Oakhaven's warning bells.
+Narrator: Because Kaelen made early choices alone, the first free days are harsher. The saved insist every future key must have witnesses before it has power.
+Narrator: Early scars remain in the ending: Aldric's branch, the Data Wraith's verdict, and the allies Kaelen pushed away all become public limits on future authority.
+Narrator: The early mercies echo forward. Oakhaven remembers the warning, Aldric's record remains open, and restored processes become proof that endings can be repaired.
+Narrator: The earliest choices leave mixed testimony. Aethelgard does not smooth it over; it teaches from the contradiction.

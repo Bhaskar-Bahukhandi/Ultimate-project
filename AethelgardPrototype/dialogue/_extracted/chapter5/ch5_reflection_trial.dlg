@@ -1,0 +1,37 @@
+# Extracted from res://scripts/chapter5/ch5_reflection_trial.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_trial
+Narrator: At the center of the city, the mirrors stop reflecting buildings. They reflect a courtroom, a battlefield, a village gate, an archive, and a plane falling through impossible blue.
+Mirror Kaelen: Welcome back, me.
+Kaelen: You are not me.
+Mirror Kaelen: Incorrect. I am every clean version of you that never had to live with the aftermath.
+Mirror Kaelen: You keep saying SOVEREIGN removes choice. But you also choose for people. Mercy. Release. Compromise. Different masks. Same hand on the lever.
+Kaelen: The difference is that I can be challenged.
+Mirror Kaelen: Then answer without hiding behind the player.
+# TODO: point each option at the node for its outcome
+? Kaelen: What truth does Kaelen accept about himself?
+- I cannot undo control by becoming another controller. => END
+- My guilt is real, but it does not get to make every decision. => END
+- The branches I rejected still deserve witnesses. => END
+Kaelen: If I decide everything alone, I become a kinder SOVEREIGN. That is still SOVEREIGN.
+Mirror Kaelen: A useful fear. Keep it sharp.
+Kaelen: My guilt is data. It tells me where the bug lives. It does not get root access.
+Mirror Kaelen: You are learning to stop worshipping your wounds.
+Kaelen: Every branch I cut still happened to someone. I cannot restore them all today. But I can stop pretending they were nothing.
+Mirror Kaelen: Then the city will remember with you.
+System: // MIRROR TRIAL RESOLVED
+System: // Fragment #6 location trace acquired. +450 XP, +180 Gold. Source Key fragment not yet collected.
+System: // Fragment #6 location trace already acquired. Source Key fragment not yet collected.
+Mirror Kaelen: Fragment Six is not in this city. It is in the Cathedral Server, where failed gods sing their own error logs.
+Kaelen: Then that is where Chapter Six begins.
+
+~ _chapter4_consequence_dialogue
+Mirror Kaelen: In the Null Court, you preserved deleted lives. Noble. Also convenient. Nobody suffers from a decision you postpone.
+Echo Mirror: Some of us were grateful for time. Some of us heard another locked door.
+Mirror Kaelen: In the Null Court, you released deleted lives. Brave. Also violent. You called the scar freedom because you held the knife.
+Echo Mirror: Some of us stepped into sunlight. Some of us woke inside broken walls.
+Mirror Kaelen: In the Null Court, you bargained with SOVEREIGN. Wise. Also familiar. You let the jailer write terms for the jailbreak.
+Echo Mirror: Some of us survived because of the terms. Some of us now wonder who owns the fine print.
+Mirror Kaelen: The Null Court left no clear answer. The city will test the hole where your conviction should be.

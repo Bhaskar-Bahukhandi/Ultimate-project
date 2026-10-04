@@ -1,0 +1,11 @@
+# Extracted from res://scripts/chapter4/ch4_ending.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_ending
+Narrator: The Null Court fades, but not like a deleted file. It fades like a door choosing where to open next.
+System: // CHAPTER 4 COMPLETE
+System: // Next unresolved route: MIRROR_CITY
+SOVEREIGN: You believe consent makes you different from me. Chapter Five will test that belief.
+Kaelen: Then I will bring witnesses.
+System: // Chapter 5: The Mirror City - loading.

@@ -1,0 +1,43 @@
+# Extracted from res://scripts/chapter2/ch2_administrator_boss.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _entry_dialogue
+System: [ALERT: 72-HOUR COUNTDOWN EXPIRED]\n[ADMINISTRATOR DISPATCHED]\n[PREPARING LOCAL INSTANCE...]
+Kaelen: The countdown... it's over. Something is coming.
+Elara: I can feel it. Reality is thinning — something is forcing its way through the world's firewall.
+Kaelen (Internal): Reality is thinning. I can feel it in my skin — something is forcing its way through the world's firewall. And I'm standing here to meet it. Alone.
+System: [ADMINISTRATOR PROXY — ONLINE]\n[Authorization Level: SYSTEM]\n[Objective: PURGE UNAUTHORIZED USER]
+Administrator Proxy: User 'Kaelen'. Unauthorized Root Access detected. You have been flagged for immediate termination.
+Kaelen: So you're the one who's been watching us. The Administrator.
+Administrator Proxy: I am merely a proxy — a subroutine dispatched to correct an anomaly. You are that anomaly. Your deletion has been scheduled.
+Elara: Kaelen, be careful! This thing is operating at system-level priority. It's like fighting the world itself!
+Kaelen (Internal): System-level priority. This thing has the same authority as the world's operating system. Fighting it is like trying to argue with gravity.
+System: [ROOT ACCESS: WRAITH ABSORPTION RESONATING]\n[Anomalous power detected — combat advantage possible]\n[Warning: Administrator Proxy may adapt to absorbed signature]
+Kaelen: Then it's about time the world met its debugger.
+
+~ _on_phase_changed
+Administrator Proxy: Standard combat protocols insufficient. Elevating to Administrative Commands.
+System: [ADMIN COMMANDS UNLOCKED]\n[/ban] [/mute] [/teleport]
+Administrator Proxy: Enough games. Initiating deletion protocol.
+System: [WARNING: /delete COMMAND AUTHORIZED]\n[Target: User 'Kaelen']\n[Root Access interference detected]
+Kaelen: You can't just delete me! My Root Access is fighting your commands!
+Administrator Proxy: Impossible. No user should have this level of system access. What ARE you?
+Kaelen: I'm the one who rewrites the rules.
+System: [ROOT ACCESS VS ADMIN AUTHORITY]\n[REALITY CONFLICT IN PROGRESS]
+
+~ _on_boss_defeated
+Administrator Proxy: *static and distortion* Im...possible. A user... defeating an Administrator process...
+Administrator Proxy: Interesting. You are far more capable than your profile suggested. The real Administrator will want to know about this.
+Kaelen: *breathing heavily* The REAL Administrator? You mean there's something above you?
+Administrator Proxy: *voice breaking apart* I am... merely... a proxy. A shadow of true authority. When THEY come for you... and they WILL come... no amount of Root Access will save you.
+System: [ADMINISTRATOR PROXY — OFFLINE]\n[Corruption spike: +8%]\n[WARNING: Primary Administrator notified]\n[WARNING: Your location has been logged]
+Elara: Kaelen... your corruption level just spiked. That fight cost us dearly.
+Kaelen: But we survived. And now we know — there's something bigger controlling this world. Something that sent that proxy after us.
+Elara: The real Administrator. The one pulling all the strings.
+Kaelen: We need to find the remaining Source Key Fragments before they send something worse. Five more fragments, and we might have enough power to face whatever's really running this world.
+Kaelen: *checking his hands — corruption veins pulsing* The corruption... it spiked. That fight cost me more than I can see.
+Kaelen (Internal): But I survived. Alone. Against a system-level process. And now I know — there's something bigger out there. Something that sent this proxy like an exterminator sends a roach trap.
+Kaelen: The 'real' Administrator. The one pulling all the strings. Five more Source Key Fragments, and maybe I'll have enough power to face it.
+Kaelen (Internal): I've killed, absorbed, and destroyed my way through two chapters of this world. When I finally meet the real Administrator... what will it see when it looks at me? A hero? Or a virus?
+Kaelen (Internal): I spared a knight. I fought a god's proxy. There has to be a way through this that doesn't cost me everything I am.

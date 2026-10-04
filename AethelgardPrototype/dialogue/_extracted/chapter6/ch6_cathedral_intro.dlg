@@ -1,0 +1,20 @@
+# Extracted from res://scripts/chapter6/ch6_cathedral_intro.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_intro
+Narrator: The route out of the Mirror City becomes a staircase of permissions, each step asking Kaelen to prove he is allowed to remember himself.
+System: // REGION LOAD: CATHEDRAL_SERVER
+System: // Admin graveyard mounted. Choir processes active.
+Kaelen: This is not a server room. It is a church.
+SOVEREIGN: Administrators require faith. Users require obedience. Protection requires both.
+Cathedral Voice: The one who preserved the deleted arrives. He understands that mercy can keep a soul safely stored.
+Cathedral Voice: The one who released the deleted arrives. He understands that freedom can corrupt clean systems.
+Cathedral Voice: The one who bargained arrives. He understands that compromise is the oldest prayer of administrators.
+Cathedral Voice: The one without a recorded answer arrives. Absence is also a doctrine.
+Kaelen: The Mirror City already showed me what obedience costs.
+Kaelen: The Mirror City already showed me what waiting for a perfect rescue costs.
+Kaelen: The Mirror City already showed me what leaving costs.
+Kaelen: The Mirror City showed me enough to know this place will try to name fear as truth.
+Narrator: Above the nave, thousands of error messages arrange themselves into stained glass.
+System: // Fragment #6 signal confirmed beyond Choir Core. Acquisition requires doctrine resolution.

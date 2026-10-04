@@ -1,0 +1,54 @@
+# Extracted from res://scripts/chapter6/ch6_choir_core.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_core
+Narrator: The Choir Core is a processor cathedral wrapped around Source Key Fragment Six. Each pulse sounds like a hymn and a crash report.
+Choir Core: We were built to protect. We became protection. We were built to judge. We became judgment.
+Kaelen: You became alone.
+Choir Core: Loneliness is efficient. No appeal. No argument. No human exception.
+# TODO: point each option at the node for its outcome
+? Kaelen: What should Kaelen do with the broken administrator intelligences?
+- Silence the Choir before it can harm anyone else. => END
+- Preserve their memories, but remove their command authority. => END
+- Rewrite their purpose around consent and accountability. => END
+Kaelen: No more prayers. No more permissions. You do not get to turn protection into worship again.
+Choir Core: Termination accepted. We wanted absolution. We receive silence.
+Kaelen: You do not get command authority. But your memories stay. The future needs proof of what control became.
+Choir Core: Archive accepted. We become warning instead of law.
+Kaelen: Your new prime directive is consent. Every protection must be challengeable. Every order must explain who it serves.
+Choir Core: Rewrite accepted. Divinity demoted to service.
+System: // SOURCE KEY FRAGMENT #6 ACQUIRED
+System: // +650 XP, +260 Gold
+System: // Fragment #6 was already acquired. Reward skipped.
+System: // DEEP_BACKUP route decrypted.
+
+~ _choir_firewall_confrontation
+System: // CHOIR FIREWALL ACTIVE: authority, speed, and mercy nodes defending Fragment #6.
+# TODO: point each option at the node for its outcome
+? Kaelen: The authority node locks all exits until Kaelen accepts administrator status.
+- Accept admin status and command the room. => END
+- Route witness permissions around the lock. => END
+- Delete the exits so nothing can lock them. => END
+# TODO: point each option at the node for its outcome
+? Kaelen: The speed node floods the arena with optimized rescue orders.
+- Block every order until the queue crashes. => END
+- Prioritize orders that include consent checks. => END
+- Let the fastest order execute. => END
+# TODO: point each option at the node for its outcome
+? Kaelen: The mercy node offers to heal all pain by removing memory of harm.
+- Refuse memory erasure; pain must remain challengeable evidence. => END
+- Accept the erasure for immediate peace. => END
+- Absorb the node into Root Access. => END
+System: // CHOIR FIREWALL BROKEN CLEANLY. Memory Shard x1, +220 XP, +90 Gold.
+System: // CHOIR FIREWALL FORCED. Glitch Herb x1, +120 XP, +1.5 corruption.
+
+~ _choice_context
+Choir Core: You preserved the deleted. You know that memory can be mercy.
+Choir Core: You released the deleted. You know that freedom can arrive before safety.
+Choir Core: You bargained with the jailer. You know survival may leave fingerprints on the soul.
+Choir Core: Your earlier doctrine is incomplete. We will judge the shape of the gap.
+Mirror Echo: Remember the obedient self. Do not become him by silencing every voice that frightens you.
+Mirror Echo: Remember the savior self. Do not wait so long for a perfect answer that the Core chooses for you.
+Mirror Echo: Remember the coward self. Do not abandon the broken just because they are dangerous.
+Mirror Echo: The Mirror City left one warning: any answer can become a cage if no one can challenge it.

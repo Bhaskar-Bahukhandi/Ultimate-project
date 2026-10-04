@@ -1,0 +1,61 @@
+# Extracted from res://scripts/chapter2/ch2_underground_network.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _entry_dialogue
+Kaelen: This is it. The old process threads beneath Ironhold. The air is thick with corrupted data — I can feel it buzzing against my skin.
+Elara: Be careful. The corruption is much stronger down here. These old threads were abandoned for a reason — they were too unstable to maintain.
+Kaelen (Internal): Abandoned process threads. In software terms, these are orphaned subroutines — code that's still running but disconnected from the main loop. They evolve on their own, mutating without oversight.
+Elara: The Source Key Fragment should be in the deepest chamber. But there will be guardians — corrupted processes that protect the old data stores.
+Kaelen (Internal): Abandoned process threads. In software terms, these are orphaned subroutines — code that's still running but disconnected from the main loop. Mutating without oversight for who knows how long.
+Kaelen (Internal): No Elara to watch my back. No one to explain the dangers ahead. Just me, Root Access, and whatever horrors are festering in this digital graveyard.
+Kaelen: The Source Key Fragment should be in the deepest chamber. That's what Seraphina said... and what Pip confirmed. Time to earn it.
+System: [WARNING: ENTERING DEPRECATED ZONE]\n[Corruption density: HIGH]\n[System monitoring: OFFLINE]\n[Proceed with caution]
+
+~ _on_puzzle_trigger
+Kaelen: A data routing node. If I redirect this process thread... it should open the path to the deeper chambers.
+System: [DATA PIPE RE-ROUTED]\n[Access to Deep Chamber: GRANTED]
+
+~ _on_data_wraith_defeated
+Kaelen: *breathing heavily* That thing... it was a corrupted system process. A piece of the world's infrastructure that went rogue.
+Elara: And look — it was guarding this.
+Kaelen: Wait... it was guarding something. Beneath the remains — there.
+System: [ITEM ACQUIRED: PHANTOM CLOAK]\n[Woven from purified process threads]
+Kaelen: Armour stitched from the Data Wraith's own threads... the code still pulses inside it.
+Elara: *clutching her arm* Aagh! The residual corruption energy — it's reacting to my glitch magic! The corruption in my arm is—
+Kaelen: Elara! Are you okay?!
+Elara: *through gritted teeth* I'm... fine. The Wraith's corruption resonates with glitch energy. My arm has been partially corrupted since I was born — or compiled, I suppose. Wearing its remnants amplifies it.
+Elara: It hurts, but it also... I can feel the world's code more clearly. The data structures, the object hierarchies. It's like my perception just got an upgrade.
+Kaelen: The Wraith's residual energy... it's flowing into me. My Root Access is absorbing it.
+System: [ROOT ACCESS AMPLIFIED]\n[Corruption resonance detected]\n[Perception expanded: +15% data structure visibility]
+Kaelen (Internal): It hurts. Like a migraine made of static. But I can see farther now — deeper into the code. Everything is sharper.
+Kaelen: Let's get back to the surface. We've grown stronger — that's what matters.
+
+~ _data_wraith_choice
+Elara: Wait — the Data Wraith's core is still intact. It's corrupted, but the original process is still in there. We could...
+Elara: We could try to restore it. Purify the corruption and let the process thread run clean again. Or we could destroy it completely — make sure it never comes back.
+Kaelen: The Data Wraith's core is still intact. Pulsing with corrupted data. I can feel the original process buried underneath the corruption... still trying to run.
+Kaelen (Internal): Three options. Purify it — restore the original process. Destroy it — end it permanently. Or... absorb it. Pull its power directly into Root Access. More corruption, but more power too.
+# TODO: point each option at the node for its outcome
+? Kaelen: What do you do with the Data Wraith's core?
+- Restore it — purify the corruption and let the process run => END
+- Destroy it — eliminate the corrupted process permanently => END
+- Absorb it — pull its power into Root Access => END
+Kaelen: *using Root Access to purify the core* ...Cleaning corruption flags... restoring original parameters... done.
+System: [PROCESS THREAD RESTORED]\n[Status: CLEAN]\n[The data wraith dissolves into pure light]
+Elara: You chose to heal instead of destroy. That says something about you, Kaelen.
+Kaelen (Internal): Mercy. Again. The knight. Now this process. Am I choosing compassion... or am I afraid of what destruction does to my corruption meter?
+System: [KARMIC THREAD DETECTED]\n[Pattern: Preservation]\n[System Administrator notation: Subject favors restoration]
+Kaelen: *crushing the core* Some things are too broken to fix. Better to end it cleanly.
+System: [PROCESS THREAD TERMINATED]\n[Core destroyed]\n[Corruption +2%]
+Elara: *quietly* ...Was that mercy? Or convenience?
+Kaelen (Internal): Gone. Permanently. Another deletion added to my growing list. The system is keeping count... and so am I.
+Kaelen: *reaching into the core with Root Access* I'm not destroying it or saving it. I'm TAKING it.
+System: [ROOT ACCESS: ABSORBING PROCESS CORE]\n[WARNING: Corruption surge — +5%]\n[WARNING: Power level significantly increased]\n[WARNING: System Administrator alert threshold breached]
+Kaelen: *gasping* The power... I can feel every process thread in this sector. Every data pipe, every packet. It's overwhelming.
+Elara: *stepping back, horrified* Kaelen... your eyes. They're flickering. The corruption — you just jumped five percent in one moment! What have you DONE?!
+Elara: You're not healing the world or ending its pain. You're CONSUMING it. That's what the Administrator does. Is that what you want to become?
+Kaelen (Internal): Power. Raw, unfiltered system power flowing through me. The corruption surged — 5% in a heartbeat — but the clarity... I can see EVERYTHING down here. Every wall, every data pipe, every hidden pathway.
+Kaelen (Internal): This is dangerous. I know it's dangerous. But alone in the dark, with no allies and no guide... power is the only currency that matters.
+System: [ROOT ACCESS CAPACITY: EXPANDED]\n[New ability unlocked: PROCESS ABSORPTION]\n[The System Administrator has taken notice]
+System: [CHOICE RESOLUTION FALLBACK]\n[Defaulting to restoration path to preserve narrative continuity.]

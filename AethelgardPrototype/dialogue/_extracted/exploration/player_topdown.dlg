@@ -1,0 +1,6 @@
+# Extracted from res://scripts/exploration/player_topdown.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _interact_with
+System: Nothing interesting happens.

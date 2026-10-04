@@ -1,0 +1,54 @@
+# Extracted from res://scripts/exploration/oakhaven.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ file_scope
+System: Welcome, User. You have successfully crashed into Sector 1. Current Objective: Survive the Tutorial.
+Kaelen: Survive the tutorial? I wrote the tutorial.
+System: Correction. You wrote the old tutorial. This one has been... patched.
+Kaelen: Ugh... my head... Where am I?
+Kaelen: This isn't the plane. This is... a field? Medieval buildings?
+Kaelen: Wait. I can see more than that. The code. The variables. Everything.
+System: [SYSTEM INITIALIZATION COMPLETE]
+System: [CLASS ASSIGNED: SYSTEMS ARCHITECT]
+System: [WARNING: ROOT ACCESS PERMISSIONS DETECTED]
+System: [RECOMMEND: CONCEAL TRUE ABILITIES]
+Kaelen: What?! A game window?! This is... I can see the source code of this world.
+Kaelen: I need to figure out what's happening. But first... survival.
+???: You! You're awake! I've been watching you since you fell from the sky.
+Kaelen: Who are you? Where am I?
+Elara: My name is Elara. You're in Oakhaven — or what's left of it. This is Aethelgard.
+Kaelen: Aethelgard? That's a... that's a game world. How is this possible?
+Elara: It's more than a game. It's real to me — I was born here. Well, spawned. The System created me in a glitched zone.
+Kaelen: You're... an NPC?
+Elara: Don't call me that. I think. I feel. I KNOW things I shouldn't. The System calls me a 'Glitch Witch' — some kind of error it can't delete.
+Kaelen: I got 'Systems Architect'. This world... it's running on code I can see.
+Elara: If you can see the code, then you might be the one who can fix what's broken. But first, you should know...
+Elara: There are corrupted creatures here. That slime over there — it wasn't always hostile. The corruption changed it.
+Kaelen: A slime? Corrupted assets manifesting as enemies?
+Elara: Exactly. Be careful.
+System: [RELATIONSHIP: ELARA +5]
+System: [COMBAT INITIATED]
+System: [TRANSITIONING TO BATTLE MODE]
+Kaelen: Here goes nothing...
+
+~ _play_dialogue_sequence
+Elara: Be careful out there. I sense the corruption growing stronger.
+Elara: If you find anything strange, let me know. My glitch senses are tingling.
+Elara: There's something deeper going on here. I can feel the System watching us.
+Elara: I've survived this long by being careful. You should do the same.
+
+~ _on_elara_interaction
+Elara: Oh — before you go, there's a flickering NPC near the village square. She seems stuck in a loop, murmuring about pieces of herself. You might be able to help her.
+
+~ _on_flickering_npc_interaction
+???: P-pieces... my pieces... scattered... can you find them? Three memory fragments... near the well... behind the apothecary... in the basement...
+System: [QUEST STARTED: Lost Memories]
+
+~ _on_blacksmith_interaction
+Blacksmith: Careful where you step! There's something under my forge — sparks phase through the floor. Something's down there, and it ain't friendly.
+System: [QUEST STARTED: The Corrupted Cellar]
+
+~ _on_apothecary_interaction
+Apothecary: *sighs* My shelves are bare. Glitch Herbs only grow at the edges — forest rim, crater rim, and the corrupted grove. If you find three, I can brew something special.
+System: [QUEST STARTED: The Herbalist's Favor]

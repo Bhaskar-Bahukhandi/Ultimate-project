@@ -1,0 +1,69 @@
+# Extracted from res://scripts/chapter1/ch1_path_to_oakhaven.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ create_path_cutscene
+Kaelen: Some of these rocks are see-through from certain angles. Like only the front side was finished and nobody bothered with the back.
+Kaelen: And that boulder — it was a blurry blob two seconds ago, and when I looked at it, it just SNAPPED into sharp detail. No gradual change. Just... pop.
+Elara: The trees have ears here, Kaelen. And some of the rocks... they listen. Be careful what you say out loud — not everything that looks like scenery IS just scenery.
+Kaelen: The scenery is eavesdropping? That's... actually terrifying. Back home, we could barely get our phones to understand us, and here the ROCKS are spying on people.
+Elara: The System Administrator doesn't just run this world. It WATCHES. Every change you make, every ability you use — there's something recording all of it. Always.
+Kaelen (Internal): Fourteen identical bushes, just rotated so they don't look the same. They do, though. *half-smile* ...Reminds me of every project I ever crunched on. Cutting corners to meet a deadline.
+Elara: What was YOUR world like? Before the crash, I mean. Were there... limits? Edges? Places where the world just... stopped?
+Kaelen: No edges you could see. But we had our own kind of limits — deadlines that crushed people, jobs that asked you to do the same thing every day and call it progress. Our world had its own kind of broken. It just hid it better.
+Elara: A world without rules written underneath everything... I can't imagine it. How do you fix things when you can't see what's broken underneath?
+Kaelen: Badly. We argue about whose fault it is, write reports nobody reads, and rebrand the chaos every few years so it sounds like we're doing it on purpose.
+Elara: *stops walking* Hold on. Something's changing in you. I can feel it — like a door just opened somewhere inside your mind. A new ability is waking up.
+System: [DATA VISION — UNLOCKED]\n[Toggle: L3 / TAB]\n[See the truth beneath the surface — hidden paths, enemy weaknesses, and secrets the world tries to keep from you.]
+Elara: Data Vision! It's like... you know how I can sometimes see beneath the surface of things? This is the stable version of that. Hidden doors, enemy weaknesses, traps — everything the world doesn't want you to see.
+Kaelen: A way to see the truth underneath everything. That's... actually the first thing in this world that makes me feel like I have some control. Like I can finally understand what's really happening around me.
+Elara: Just don't use it for too long. The more you look beneath the surface, the more the System Administrator notices you looking. And you don't want its full attention.
+
+~ create_solo_path_cutscene
+Kaelen (Internal): Alone. The forest is quiet — too quiet. Without Elara filling the silence, every snap of a twig and every rustle of leaves sounds like something following me.
+Kaelen (Internal): Did I make the right call? She seemed genuine. But genuine is easy to fake when someone needs something from you. In my line of work, the most convincing voices were always the ones with hidden agendas.
+Kaelen (Internal): The rocks here are see-through from the back. Fourteen identical bushes. The trees pop into detail when I look at them. This world is a rush job held together with duct tape and good intentions.
+Kaelen (Internal): Elara said the trees have ears. That the System Administrator watches everything. If she was telling the truth about THAT, then going solo means I'm harder to track but I have no one covering my blind spots.
+Kaelen (Internal): If she was lying... well, then I'm exactly where I should be. On my own, trusting my own instincts, not relying on someone I met twenty minutes ago in a world where nothing is what it seems.
+System: [ANOMALY SCAN: New ability detected in user process]\n[DATA VISION — UNLOCKED]\n[Toggle: L3 / TAB]\n[See the truth beneath the surface]
+Kaelen: A new ability? Data Vision... the system just handed me the ability to see beneath the surface. Either this is a standard progression reward, or someone wants me to see what's really happening here.
+Kaelen (Internal): No guide to explain it. No friendly voice walking me through. Just me and a new set of eyes. ...Fine. I've learned harder things on my own. Let's see what this world is hiding.
+
+~ play_data_vision_sequence
+Kaelen: Oh. Oh, that's... I can see everything. The hidden barriers, the danger zones, the traps waiting to spring. This world has been hiding SO much from me.
+Data Vision: [Rock — Solid, harmless]\n[Tree — LISTENING — reports to System Administrator]\n[Hidden Door detected — locked — requires a KEY FRAGMENT to open]
+Kaelen: There's a hidden door here. Locked — needs some kind of key. I'll remember that. This vision is already worth more than any weapon.
+Data Vision: [HOSTILE DETECTED — 40 meters ahead]\n[Green Slime — Health: 30 — Weak, bouncy]\n[Weakness: Its bounce can be CHANGED through Root Access]
+Elara: See that marker on the slime? 'Root Access compatible' — that means you can reach inside it and change what makes it tick. Most simple creatures have at least one thing you can alter.
+Kaelen (Internal): 'Root Access compatible.' That marker on the slime — it means I can reach inside it and change its properties. The system WANTS me to experiment with this. Why? What's it grooming me for?
+System: [Data Vision has been active for a while]\n[System Administrator awareness: LOW]\n[Consider turning it off to stay under the radar]
+Kaelen: Right. The longer I look, the more attention I draw. I'll save this for when I really need it.
+
+~ play_slime_encounter
+Kaelen: It hasn't noticed me yet. It's just... bouncing there. Going nowhere. Doesn't look dangerous, but nothing in this world is what it seems.
+Elara: Don't underestimate them. The deeper the corruption runs in an area, the stronger they get. And you stirred things up just by crossing that bridge.
+Kaelen (Internal): It doesn't look threatening, but I've been a game designer long enough to know that the tutorial enemies exist to teach you something. The question is: what lesson is this slime supposed to teach?
+Kaelen (Internal): I could fight this thing head-on — hit it until it stops moving. The classic approach. But Root Access lets me look inside it and change the rules. Why fight fair when I can fight smart?
+Elara: This is a good time to practice Root Access. Focus on the slime and you should be able to see what makes it work. Look for something you can change.
+System: [SUGGESTION: Use ROOT ACCESS on the target]\n[Focus on the entity to view modifiable properties]\n[Modify a core property to neutralize the threat]
+Kaelen: Alright. Let me concentrate... I can feel it — like pulling back a curtain. I can see what this thing is made of.
+
+~ play_root_access_tutorial
+System: [ROOT ACCESS — ENABLED]\n[TARGET: Green Slime]\n[You can see its inner workings. Find what makes it bounce — and take it away.]
+Elara: See that panel? When you focus on a creature with Root Access, you can see what drives it. This slime's whole existence is built around bouncing — its 'elasticity.' Set that to zero and...
+Kaelen: Take away its ability to bounce. No spring, no jump, no attack. It just... collapses. That's almost too clean.
+System: [WARNING: Every change you make through Root Access has a cost]\n[Each edit adds CORRUPTION to your body]\n[Too much corruption, and you won't survive]
+Kaelen (Internal): So every time I rewrite something in this world, it rewrites something in me. Power with a price tag. Nothing is free — not here, not anywhere.
+System: [Elasticity set to 0.0 — Slime neutralized]
+
+~ play_post_hack_dialogue
+Kaelen: It tried to bounce back up and just... collapsed. Without that spring, it's nothing. It couldn't even move toward me.
+Elara: Not bad for your first time! Most people just hit things until they stop moving. You're already thinking differently!
+Kaelen (Internal): First Root Access hack — successful. The system rewarded me for doing it, which means this is the INTENDED path. They want anomalies to learn this ability. But why?
+Kaelen (Internal): I just reached inside a living creature and took away the one thing that defined it. In my old job, we'd call that a 'feature removal.' Here, it felt more like surgery without anesthesia.
+Kaelen (Internal): The slime dissolved. No cry, no struggle. It just... stopped existing. I wonder if it felt anything. I wonder if that should bother me more than it does.
+System: [ROOT ACCESS TUTORIAL — COMPLETE]\n[Variables modified: 1 (elasticity: 1.0 → 0.0)]\n[CORRUPTION: +10%%]\n[Total CORRUPTION: %.0f%%]
+System: [LOOT: +15 MEMORY FRAGMENTS]\n[ITEM ACQUIRED: Slime Core (crafting material)]\n[Root Access proficiency: NOVICE]
+Elara: Oakhaven is just ahead. Don't let the cozy village look fool you — the people there have their own stories. And the shopkeeper drives a hard bargain.
+Kaelen: A village full of people living in a world that's falling apart, and they don't even know it. ...Lead the way, Elara.
+Kaelen (Internal): A warm glow through the trees. The path widens, the air shifts from wild to settled. Village ahead. People — trapped in their loops, oblivious to the cracks in their reality. But people nonetheless. And right now, I need supplies more than I need solitude.

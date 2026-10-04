@@ -414,6 +414,100 @@ func _show_choices_impl(prompt: String, choices: Array, speaker: String) -> int:
 	return result
 
 
+# ══════════════════════════════════════════════════════════════════════════
+# DIALOGUE FILES (.dlg) — story/DIALOGUE_FORMAT.md
+# ══════════════════════════════════════════════════════════════════════════
+
+const DialogueScriptRes := preload("res://scripts/dialogue/dialogue_script.gd")
+const RUN_MAX_STEPS := 10000  # guards against "=> a" / "=> b" loops
+
+## Play `node` of a .dlg file through say()/show_choices(), applying its
+## `set` flags and `[if ...]` conditions. `on_event` receives each `do name`
+## and is awaited, so a scene can run camera moves or effects mid-dialogue.
+## Returns {"ok": bool, "choices": [{node, index, target}], "end_node": String}.
+func run(file_path: String, node: String = "start", on_event: Callable = Callable()) -> Dictionary:
+	var script = DialogueScriptRes.load_file(file_path)
+	var result := {"ok": false, "choices": [], "end_node": node}
+	if not script.errors.is_empty():
+		for e in script.errors:
+			push_error("[Dialogue] " + e)
+		return result
+	if not script.nodes.has(node):
+		push_error("[Dialogue] %s has no node '%s'" % [file_path, node])
+		return result
+	var current := node
+	var index := 0
+	var guard := 0
+	while true:
+		guard += 1
+		if guard > RUN_MAX_STEPS:
+			push_error("[Dialogue] %s: step limit reached (jump loop?) at node '%s'" % [file_path, current])
+			return result
+		var steps: Array = script.nodes[current]
+		if index >= steps.size():
+			break  # falling off the end of a node ends the dialogue
+		var step: Dictionary = steps[index]
+		index += 1
+		if not _conditions_met(step["cond"]):
+			continue
+		match step["type"]:
+			"line":
+				await say(step["speaker"], step["text"])
+				if not is_inside_tree():
+					return result
+			"set":
+				if has_node("/root/GameManager"):
+					GameManager.set_story_flag(step["flag"], step["value"])
+			"do":
+				if on_event.is_valid():
+					await on_event.call(step["event"])
+					if not is_inside_tree():
+						return result
+				else:
+					push_warning("[Dialogue] %s: 'do %s' but no on_event handler" % [file_path, step["event"]])
+			"jump":
+				if step["target"] == DialogueScriptRes.END:
+					break
+				current = step["target"]
+				index = 0
+			"choice":
+				var visible: Array = []
+				for opt in step["options"]:
+					if _conditions_met(opt["cond"]):
+						visible.append(opt)
+				if visible.is_empty():
+					continue
+				var prompt: Variant = step["prompt"]
+				var texts: Array = visible.map(func(o): return o["text"])
+				var picked: int = await show_choices(
+					prompt["text"] if prompt != null else "",
+					texts,
+					prompt["speaker"] if prompt != null else "Kaelen")
+				if picked < 0 or not is_inside_tree():
+					return result  # scene changed while the choice was open
+				var chosen: Dictionary = visible[picked]
+				result["choices"].append({"node": current, "index": picked, "target": chosen["target"]})
+				if chosen["target"] == DialogueScriptRes.END:
+					break
+				current = chosen["target"]
+				index = 0
+	result["ok"] = true
+	result["end_node"] = current
+	return result
+
+
+func _conditions_met(cond: Array) -> bool:
+	for term in cond:
+		var value: bool
+		if term["flag"] == "has_elara":
+			value = has_node("/root/GameManager") and GameManager.has_elara()
+		else:
+			value = has_node("/root/GameManager") and GameManager.has_flag(term["flag"])
+		if value == term["negate"]:
+			return false
+	return true
+
+
 func _build_choice_buttons(choices: Array) -> void:
 	_destroy_choice_buttons()
 

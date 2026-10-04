@@ -1,0 +1,43 @@
+# Extracted from res://scripts/chapter5/ch5_mirror_kaelen_confrontation.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_confrontation
+Narrator: The trial chamber empties until only one reflection remains. It has Kaelen's face, Kaelen's posture, and none of Kaelen's exhaustion.
+Mirror Kaelen: You passed the easy part. You admitted you are dangerous. Now comes the harder question.
+Kaelen: What do I do with that?
+Mirror Kaelen: No. Who gets to stop you when you are sure you are right?
+Mirror Kaelen: You rejected obedience. Good. But defiance can become vanity if nobody can correct it.
+Mirror Kaelen: You rejected the perfect rescue. Good. But urgency can become cruelty if nobody can slow it.
+Mirror Kaelen: You rejected abandonment. Good. But commitment can become possession if nobody can name the difference.
+Mirror Kaelen: You reached this place without naming the self you fear most. That is an answer too.
+Kaelen: Then I need witnesses. Not followers. Not worshippers. People who can tell me no.
+Elara: Finally. For the record, I have been ready to tell you no since the crater.
+Seraphina: A commander who asks to be challenged may yet deserve command.
+Lyra: I can do no. I am spectacular at no.
+Mirror Kaelen: Then take the only useful gift a reflection can give.
+Mirror Kaelen: Fragment Six is not a prize. It is a choir. Failed admin intelligences, abandoned by SOVEREIGN, repeating prayers made of broken permissions.
+System: // FRAGMENT #6 TRAIL REFINED: CATHEDRAL_SERVER / CHOIR_OF_BROKEN_GODS
+Mirror Kaelen: Go listen to the gods your code left behind.
+Kaelen: And if they ask me to kneel?
+Mirror Kaelen: Then remember what obedience sounded like in the plaza.
+
+~ _mirror_duel_trial
+System: // MIRROR DUEL: three reflections attack with Kaelen's habits. Win by answering the pattern, not by mashing.
+# TODO: point each option at the node for its outcome
+? Kaelen: Mirror Kaelen opens with a reckless rush, copying early button-mash aggression.
+- Backstep, wait for recovery, then punish. => END
+- Trade hits until the mirror breaks. => END
+- Heal while the rush is active. => END
+# TODO: point each option at the node for its outcome
+? Kaelen: The reflection raises a perfect rescue barrier that punishes impatience.
+- Keep attacking the barrier. => END
+- Stop, let the barrier expire, then strike the exposed core. => END
+- Ask SOVEREIGN to disable the reflection. => END
+# TODO: point each option at the node for its outcome
+? Kaelen: The final reflection abandons the arena, leaving only a delayed counter-image.
+- Chase the empty image. => END
+- Stand still inside the warning flash. => END
+- Dash through the delayed slash and counter from behind. => END
+System: // MIRROR DUEL CLEARED. Memory Shard x1, +180 XP, +70 Gold.
+System: // MIRROR DUEL SURVIVED. Glitch Herb x1, +90 XP, +1 corruption.

@@ -1,0 +1,43 @@
+# Extracted from res://scripts/regions/ironhold_region.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _handle_ironhold_side_objective
+Merchant Garro: Bring two Data Ore if you want Ironhold's repair lines to stay independent.
+# TODO: point each option at the node for its outcome
+? Kaelen: Deliver two Data Ore to Garro's forge contact?
+- Deliver the ore. => END
+- Not now. => END
+
+~ _interact_farming_zone
+SYSTEM: The ore drill is cooling down. Re-entry opens in %d seconds.
+
+~ _interact_arena
+Vex: Welcome to the ARENA! What's your pleasure, fighter?
+# TODO: point each option at the node for its outcome
+? Kaelen: Arena Mode:
+- Standard Tiers => END
+- Time Attack => END
+- Endurance => END
+- Leave => END
+Vex: Time Attack! Pick your bracket!
+# TODO: point each option at the node for its outcome
+? Kaelen: Tier:
+- Bronze => END
+- Silver => END
+- Gold => END
+- Platinum => END
+Vex: Standard rules! Pick your bracket!
+# TODO: point each option at the node for its outcome
+? Kaelen: Tier:
+- Bronze => END
+- Silver => END
+- Gold => END
+- Platinum => END
+
+~ _interact_boss
+SYSTEM: [CRITICAL WARNING] Hostile entity far exceeds parameters.\nThreat: Lv %d | You: Lv %d\nHigh probability of immediate system failure.
+# TODO: point each option at the node for its outcome
+? Kaelen: Proceed?
+- Enter (Suicidal) => END
+- Retreat => END

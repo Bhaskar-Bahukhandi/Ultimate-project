@@ -1,0 +1,55 @@
+# Extracted from res://scripts/chapter7/ch7_memory_ocean_hub.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_hub
+Narrator: The Memory Ocean does not ask Kaelen where he wants to go. It shows him where other Kaelens failed.
+System: // BACKUP HISTORIES INDEXED
+System: // Archive Tide access granted. +280 XP, +100 Gold.
+System: // Archive Tide access already granted.
+
+~ _memory_island_interactions
+System: // Three unstable backup islands are reachable. Salvage is possible, but every island rewrites the safest path as the only path.
+Kaelen: These logs are not side notes. They are the parts of history SOVEREIGN could not make useful.
+System: // Optional discovery: Deep Backup Logs. +1 Memory Shard.
+System: // Backup salvage secured: +1 Data Ore, +1 Glitch Herb, +90 Gold.
+
+~ _backup_history_hazard
+System: // Memory island hazard already stabilized.
+# TODO: point each option at the node for its outcome
+? Kaelen: The nearest island fractures into three moving timestamps. How should Kaelen cross?
+- Spend a Memory Shard to anchor the safest timestamp. => END
+- Dash between stable frames and accept the risk. => END
+- Follow Lyra's old storm-map logic through the broken route. => END
+System: // Memory anchor held. +160 XP.
+System: // No Memory Shard available. Kaelen crossed on unstable timing. +80 XP.
+Kaelen: The safe path kept moving. So did I.
+System: // Traversal hazard cleared. +120 XP.
+Lyra: Storms and backups both lie about where the ground ends. Step where the lie hesitates.
+System: // Lyra's route read the hazard cleanly. +150 XP, +1 Glitch Herb.
+Lyra Echo: Even without the ranger beside you, her old marks keep one island from sinking.
+System: // Storm-map logic partially recovered. +95 XP.
+
+~ _oakhaven_backup
+Backup: Oakhaven Saved Too Late: The village survives in this history. The crater does not. The people rebuild around a hole that keeps asking for names.
+Memory Villager: You would preserve us, even when the pain keeps running. Is a saved wound still a saved life?
+Memory Villager: You would release us quickly. But some histories need someone to stand nearby when the door opens.
+Memory Villager: You would bargain for us. We learned what it costs when safety arrives with terms.
+Memory Villager: No record says what you do with people history hurts.
+Kaelen: A clean timeline can still leave dirty grief.
+
+~ _ironhold_backup
+Backup: Ironhold Without Freedom: Ironhold thrives here. Markets run perfectly. No one starves. No one votes. No one leaves.
+Ironhold Clerk: You silenced the Choir. Would you silence this city if freedom could only return through collapse?
+Ironhold Clerk: You preserved the Choir as warning. Would you preserve this city as evidence, even while it keeps obeying?
+Ironhold Clerk: You rewrote the Choir. Would you rewrite Ironhold too, or admit some citizens may refuse your improved future?
+Ironhold Clerk: Order feeds us. Freedom is a rumor with empty hands.
+Kaelen: A world can function and still fail everyone inside it.
+
+~ _mirror_city_backup
+Backup: Mirror City Without Witnesses: The city reflects every choice, but nobody remains to answer back. Kaelen won every argument because he was the only voice left.
+Empty Mirror: You refused obedience. Good. But defiance without witnesses can become a private throne.
+Empty Mirror: You refused the perfect rescue. Good. But urgency without witnesses can become damage called progress.
+Empty Mirror: You refused abandonment. Good. But staying without witnesses can become ownership.
+Empty Mirror: No witness names the self you fear most. The mirror cannot cross-examine silence.
+Kaelen: If I am the only person allowed to interpret history, I become SOVEREIGN with a different voice.

@@ -1,0 +1,15 @@
+# Extracted from res://scripts/chapter7/ch7_ending.gd
+# Source material for the rewrite; not loaded by the game.
+# Format: story/DIALOGUE_FORMAT.md
+
+~ _play_ending
+Narrator: The Memory Ocean does not calm. It becomes tidal, pulling every saved region toward a future SOVEREIGN can no longer fully predict.
+Narrator: Every backup remains. The living world will inherit truth without filters, and not all truth will be gentle.
+Narrator: The unstable backups collapse into foam. The living world is safer, but some erased lives vanish a second time.
+Narrator: Selected histories merge into Aethelgard's future. The world does not become clean. It becomes honest enough to change.
+Narrator: The Deep Backup records no clear judgment. Incomplete histories breed dangerous revolutions.
+System: // CHAPTER 7 COMPLETE
+System: // Source Key complete: 7 / 7.
+SOVEREIGN: You have armed the saved with memories I denied them.
+Kaelen: Then Chapter Eight is not my revolt. It is theirs.
+System: // Chapter 8: The Revolt of the Saved - loading.
