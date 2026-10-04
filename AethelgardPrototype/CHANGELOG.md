@@ -3,6 +3,15 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-04 — Temporary art removed
+
+All temporary in-game art (`assets/sprites`, `generated`, `generated_v2`, `generated_v3`, `vfx`,
+`tilesets`, `production_art`, `ui`, and `P after ch 1.png`) and the third-party `Mysprites/` packs
+were moved out of the repo to `Desktop/Aethelgard sprite archive/`, with the same folder layout.
+The game now runs entirely on placeholder shapes until the Pixel Art Engine sprites are imported.
+Generator scripts, manifests and the `production_art` slot READMEs stay in the repo. All 73 Phase 0
+checks pass without the art.
+
 ## 2026-10-04 — Phase 0: stop-ship fixes
 
 All 19 critical issues from `CODE_REVIEW_2026-10-04.md` are fixed, covered by
