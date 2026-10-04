@@ -944,7 +944,7 @@ func _return_to_exploration() -> void:
 	GameManager.change_state(GameManager.GameState.EXPLORATION)
 
 	# Restore to return scene with position
-	GameManager.set_meta("return_position", _player_return_position)
+	GameManager.set_return_point(_player_return_scene, _player_return_position)
 
 	if has_node("/root/SceneTransitions") and not _player_return_scene.is_empty():
 		SceneTransitions.change_scene(_player_return_scene, SceneTransitions.TransitionStyle.COMBAT_EXIT)

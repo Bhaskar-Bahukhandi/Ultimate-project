@@ -78,6 +78,7 @@ func _ready() -> void:
 	_place_npcs()
 	_place_lore_items()
 	_place_boss_gate()
+	_place_story_exit()
 	_place_shops()
 	_place_farming_zone()
 	_place_secrets()
@@ -86,9 +87,9 @@ func _ready() -> void:
 	_create_storm_overlay()
 	_spawn_ambient_corruption()
 
-	if GameManager.has_meta("return_position") and _player:
-		_player.global_position = GameManager.get_meta("return_position")
-		GameManager.remove_meta("return_position")
+	var return_point = GameManager.arrive_in_exploration_scene(scene_file_path)
+	if return_point != null and _player:
+		_player.global_position = return_point
 	if has_node("/root/RandomEncounterSystem"):
 		RandomEncounterSystem.show_pending_farming_result("fractured_wastes_shard_fields", self)
 
@@ -591,6 +592,59 @@ func _place_boss_gate() -> void:
 
 
 ## ═══════════════════════════════════════════════════════════════════════════
+## STORY EXIT — continues Chapter 3 (Fragment #3 → Data Stream → … → Chapter 4)
+## ═══════════════════════════════════════════════════════════════════════════
+## ch3_fractured_wastes.tscn hands off to this region after its intro, which
+## left the rest of the authored chapter (and the only ch4_unlocked writer,
+## ch3_ending) unreachable. The server-room gate re-enters that scene at its
+## fragment phase once the Data Wraith is down, and hides once the fragment
+## has been taken.
+
+const SERVER_ROOM_SCENE: String = "res://scenes/chapter3/fractured_wastes.tscn"
+
+func _place_story_exit() -> void:
+	if not GameManager.has_flag("ch2_data_wraith_defeated"):
+		return
+	if GameManager.has_flag("ch3_fragment_3_collected"):
+		return
+	var gate = Area2D.new()
+	gate.name = "ServerRoomGate"
+	gate.position = Vector2(1900, 1550)
+	var marker = ColorRect.new()
+	marker.color = Color(0.25, 0.6, 0.95)
+	marker.size = Vector2(44, 44)
+	marker.position = Vector2(-22, -22)
+	gate.add_child(marker)
+	var label = Label.new()
+	label.text = "Server Room\n[F] Descend"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 9)
+	label.add_theme_color_override("font_color", Color(0.75, 0.9, 1.0))
+	label.position = Vector2(-50, -46)
+	gate.add_child(label)
+	var shape = CollisionShape2D.new()
+	var rect = RectangleShape2D.new()
+	rect.size = Vector2(56, 56)
+	shape.shape = rect
+	gate.add_child(shape)
+	gate.body_entered.connect(func(b): _on_interact_entered(b, gate, "story"))
+	gate.body_exited.connect(func(b): _on_interact_exited(b, gate, "story"))
+	add_child(gate)
+
+
+func _interact_story(_gate: Area2D) -> void:
+	GameManager.set_story_flag("ch3_server_room_unlocked", true)
+	# Not an arena boss fight — don't let stale boss context leak forward
+	# (a lingering boss_fight_id disables fleeing from later encounters).
+	if GameManager.has_meta("boss_fight_id"):
+		GameManager.remove_meta("boss_fight_id")
+	if has_node("/root/SceneTransitions"):
+		SceneTransitions.change_scene(SERVER_ROOM_SCENE)
+	else:
+		get_tree().change_scene_to_file(SERVER_ROOM_SCENE)
+
+
+## ═══════════════════════════════════════════════════════════════════════════
 ## HIDDEN SECRETS — Discoverable pickups rewarding exploration
 ## ═══════════════════════════════════════════════════════════════════════════
 
@@ -761,7 +815,9 @@ func _on_interact_exited(body: Node2D, target: Area2D, type: String) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not event.is_action_pressed("interact"):
 		return
-	if _current_interact.has("boss"):
+	if _current_interact.has("story"):
+		_interact_story(_current_interact["story"])
+	elif _current_interact.has("boss"):
 		_interact_boss(_current_interact["boss"])
 	elif _current_interact.has("farm"):
 		_interact_farming_zone(_current_interact["farm"])
@@ -925,7 +981,7 @@ func _interact_boss(gate: Area2D) -> void:
 			if choice == 1:
 				return
 
-	GameManager.set_meta("return_position", _player.global_position if _player else Vector2(1400, 1900))
+	GameManager.set_return_point(scene_file_path, _player.global_position if _player else Vector2(1400, 1900))
 	GameManager.set_meta("boss_return_scene", "res://scenes/regions/fractured_wastes_region.tscn")
 	GameManager.set_meta("boss_fight_id", boss_id)
 

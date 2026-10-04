@@ -30,6 +30,14 @@ func _has_flag(flag_name: String) -> bool:
 const FLOOR_HEIGHT = 250
 const TOWER_WIDTH = 800
 
+func _attach_camera_to_player() -> void:
+	if not is_instance_valid(camera) or not is_instance_valid(player_node):
+		return
+	camera.reparent(player_node, false)
+	camera.position = Vector2(0, -40)
+	camera.position_smoothing_enabled = true
+	camera.make_current()
+
 func _ready() -> void:
 	print("[CH2-CLOCKTOWER] Initializing Clock Tower dungeon")
 	GameManager.change_state(GameManager.GameState.EXPLORATION)
@@ -40,6 +48,9 @@ func _ready() -> void:
 
 	if camera:
 		camera.make_current()
+		# The camera was a fixed sibling at the ground floor, so climbing the
+		# tower took the player off-screen. Make it follow the player.
+		_attach_camera_to_player.call_deferred()
 
 	# Replace placeholder sprite with real player art
 	if player_node:
@@ -117,8 +128,12 @@ func _build_tower_environment() -> void:
 	for floor_num in range(1, 6):
 		var y = FLOOR_Y[floor_num]
 
-		# Main floor platform
-		_create_wall(Vector2(0, y), Vector2(TOWER_WIDTH, 20))
+		# Main floor platform. Floors above the ground are one-way: they were
+		# solid full-width slabs, which sealed the player inside floor 1 (the
+		# step platforms below each floor had nothing to lead into). Now you
+		# jump up through a floor from the steps/lifts and land on top of it,
+		# while anything standing on a floor — enemies, the boss — stays put.
+		_create_wall(Vector2(0, y), Vector2(TOWER_WIDTH, 20), floor_num > 1)
 
 		# Partial platforms and gaps for vertical navigation
 		if floor_num < 5:
@@ -132,10 +147,11 @@ func _build_tower_environment() -> void:
 				_create_wall(Vector2(450, y - FLOOR_HEIGHT + 60), Vector2(350, 15))
 				_create_wall(Vector2(550, y - FLOOR_HEIGHT + 140), Vector2(250, 15))
 
-	# Ceiling above boss arena
-	_create_wall(Vector2(0, -250), Vector2(TOWER_WIDTH, 20))
+	# Ceiling above boss arena — at the top of the tower walls. It sat at y=-250,
+	# only 100 px above the boss floor, overlapping where the boss spawns.
+	_create_wall(Vector2(0, FLOOR_Y[5] - FLOOR_HEIGHT), Vector2(TOWER_WIDTH, 20))
 
-func _create_wall(pos: Vector2, wall_size: Vector2) -> void:
+func _create_wall(pos: Vector2, wall_size: Vector2, one_way: bool = false) -> void:
 	var wall = StaticBody2D.new()
 	wall.position = pos
 
@@ -149,6 +165,7 @@ func _create_wall(pos: Vector2, wall_size: Vector2) -> void:
 	shape.size = wall_size
 	col.shape = shape
 	col.position = wall_size * 0.5
+	col.one_way_collision = one_way
 	wall.add_child(col)
 
 	add_child(wall)

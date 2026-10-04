@@ -59,9 +59,9 @@ func _ready() -> void:
 			_player.global_position = REGION_RETURN_POINTS[from_region]
 
 	# Check if returning from combat encounter
-	if GameManager.has_meta("return_position") and _player:
-		_player.global_position = GameManager.get_meta("return_position")
-		GameManager.remove_meta("return_position")
+	var return_point = GameManager.arrive_in_exploration_scene(scene_file_path)
+	if return_point != null and _player:
+		_player.global_position = return_point
 
 
 func _process(_delta: float) -> void:

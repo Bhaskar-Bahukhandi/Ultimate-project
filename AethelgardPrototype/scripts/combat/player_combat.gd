@@ -93,12 +93,19 @@ const ATTACK_CANCEL_INTO_JUMP = true
 const DASH_CANCEL_INTO_ATTACK = true
 const LANDING_CANCEL = true
 
-# ── Soul / Spells ────────────────────────────────────────────────────────
+# ── Resources (DESIGN_PILLARS.md, decided 2026-10-04) ─────────────────────
+# MP pays for normal spells, skills and healing; it regenerates over time and
+# from potions. It lives in GameManager.player_stats["mp"] so potions and
+# level-ups apply immediately.
+# Soul pays for special arts (Glitch Arts) and is earned only by skillful play:
+# parries, perfect dodges and kills. It is no longer gained per hit.
 const MAX_SOUL = 99.0
-const SOUL_PER_HIT = 11.0
 const SOUL_PER_PARRY = 25.0
-const SPELL_COST = 33.0
-const HEAL_COST = 33.0
+const SOUL_PER_PERFECT_DODGE = 15.0
+const SOUL_PER_KILL = 10.0
+const SPELL_COST = 15.0  # MP
+const HEAL_COST = 20.0  # MP
+const MP_REGEN_PER_SEC = 2.0
 const HEAL_AMOUNT = 30.0
 const HEAL_CHANNEL_TIME = 0.95
 const VENGEFUL_SPIRIT_DAMAGE = 45.0
@@ -111,6 +118,13 @@ const HOWLING_WRAITHS_RANGE = 130.0
 const PARRY_WINDOW = 0.18
 const PARRY_COOLDOWN = 0.24
 const BLOCK_DAMAGE_REDUCTION = 0.7
+## Defense mitigation: damage × DEFENSE_SCALE / (DEFENSE_SCALE + DEF).
+## 0 DEF = full damage, 50 DEF = 67%, 100 DEF = 50%. DEF was display-only before.
+const DEFENSE_SCALE = 100.0
+
+
+static func mitigate_by_defense(amount: float, defense: float) -> float:
+	return amount * DEFENSE_SCALE / (DEFENSE_SCALE + maxf(defense, 0.0))
 const PARRY_FREEZE_TIME = 0.12
 const PARRY_COUNTERATTACK_WINDOW = 0.4
 
@@ -123,7 +137,7 @@ const LANDING_RECOVERY_TIME = 0.06
 const DEATH_TIPS: Dictionary = {
 	"default": [
 		"Use Dash (Shift) for i-frames to dodge through attacks.",
-		"Focus Heal (C) restores HP using Soul energy.",
+		"Focus Heal (C) restores HP using MP.",
 		"Parry (F) just before impact for COUNTER opportunities.",
 	],
 	"boss": [
@@ -156,6 +170,8 @@ const DEATH_TIPS: Dictionary = {
 # ── Runtime State ─────────────────────────────────────────────────────────
 var current_health: float = 100.0
 var current_soul: float = 0.0
+var _perfect_dodge_awarded: bool = false  # one Soul award per dash
+var _mp_hud_timer: float = 0.0
 var is_dead: bool = false
 var facing_direction: float = 1.0
 
@@ -259,6 +275,8 @@ var _hp_bar: ProgressBar
 var _hp_label: Label
 var _soul_bar: ProgressBar
 var _soul_label: Label
+var _mp_bar: ProgressBar
+var _mp_label: Label
 var _corruption_label: Label
 var _combo_indicator: Label
 var _combo_pop_tween: Tween = null
@@ -350,6 +368,7 @@ func _on_player_leveled_up(new_level: int) -> void:
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
+	_regen_mp(delta)
 
 	# Block combat input during dialogue/cutscene
 	if _is_dialogue_active() or GameManager.current_state == GameManager.GameState.CUTSCENE:
@@ -542,8 +561,7 @@ func _handle_movement(_delta: float) -> void:
 
 	if direction != 0.0:
 		facing_direction = signf(direction)
-		if _sprite:
-			_sprite.flip_h = facing_direction < 0.0
+		_apply_sprite_facing()
 
 	if direction != 0.0 and not is_attacking and not is_defending:
 		is_sprinting = Input.is_action_pressed("sprint")
@@ -560,6 +578,18 @@ func _handle_movement(_delta: float) -> void:
 # ══════════════════════════════════════════════════════════════════════════
 # WALL SLIDE & WALL JUMP
 # ══════════════════════════════════════════════════════════════════════════
+
+## Flip the visual to match facing. The "Sprite" node is a ColorRect when no
+## art is loaded (the fallback), which has no flip_h: setting it raised a
+## script error that aborted movement, so the player couldn't move sideways.
+func _apply_sprite_facing() -> void:
+	# is_instance_valid first: AssetManager swaps the Sprite node at runtime, so
+	# _sprite can briefly point at a freed node.
+	if not is_instance_valid(_sprite):
+		return
+	if _sprite is Sprite2D or _sprite is AnimatedSprite2D:
+		_sprite.flip_h = facing_direction < 0.0
+
 
 func _handle_wall_slide() -> void:
 	if is_on_floor() or is_dashing:
@@ -596,8 +626,8 @@ func _handle_jump() -> void:
 		is_wall_sliding = false
 		wall_jump_lock_timer = WALL_JUMP_LOCK_TIME
 		facing_direction = -wall_direction
+		_apply_sprite_facing()
 		if _sprite:
-			_sprite.flip_h = facing_direction < 0.0
 			_sprite.rotation_degrees = 0.0
 		_vfx("vfx_dust_puff", global_position + Vector2(wall_direction * 15.0, 0.0))
 		_sfx("jump", 0.1)
@@ -922,7 +952,6 @@ func _perform_combo_attack() -> void:
 			if total_combo_hits > GameManager.stats.get("highest_combo", 0):
 				GameManager.stats["highest_combo"] = total_combo_hits
 			GameManager.stats["total_damage_dealt"] = GameManager.stats.get("total_damage_dealt", 0) + int(final_damage)
-			_add_soul(SOUL_PER_HIT)
 			if has_node("/root/CombatFX"):
 				CombatFX.apply_hit_effects(final_damage, enemy.global_position, parry_counter_active)
 			_vfx("vfx_hit_spark", enemy.global_position)
@@ -1018,7 +1047,6 @@ func _perform_charged_attack() -> void:
 		if enemy.has_method("take_damage"):
 			enemy.take_damage(damage, global_position)
 			hit_count += 1
-			_add_soul(SOUL_PER_HIT * 2.0)
 			# Track combo for charged attacks
 			total_combo_hits += 1
 			combo_decay_timer = COMBO_DECAY_TIME
@@ -1088,6 +1116,7 @@ func _start_dash() -> void:
 		dc *= GameManager.get_charm_value("dash_master", 1.0)
 	dash_cooldown_timer = dc
 	dash_direction = facing_direction
+	_perfect_dodge_awarded = false
 
 	invulnerable = true
 	invuln_timer = DASH_DURATION + 0.05
@@ -1228,7 +1257,6 @@ func _execute_pogo() -> void:
 			coyote_timer = float(COYOTE_FRAMES) / 60.0
 			air_jumps_remaining = MAX_AIR_JUMPS
 			has_double_jumped = false
-			_add_soul(SOUL_PER_HIT)
 			# Pogo VFX + damage number
 			_vfx("vfx_hit_spark", enemy.global_position + Vector2(0, -10))
 			_spawn_damage_number(int(pogo_dmg), enemy.global_position + Vector2(0, -40))
@@ -1257,8 +1285,8 @@ func _handle_spell() -> void:
 	if is_casting or is_healing or is_dashing or is_attacking or cast_lock_timer > 0.0:
 		return
 	if Input.is_action_just_pressed("spell"):
-		if current_soul < _get_effective_cost(SPELL_COST):
-			_flash_soul_bar()
+		if not _has_mp(SPELL_COST):
+			_flash_mp_bar()
 			return
 		if Input.is_action_pressed("move_down") and not is_on_floor():
 			_cast_desolate_dive()
@@ -1273,7 +1301,7 @@ func _cast_vengeful_spirit() -> void:
 		GameJuice.on_spell_cast(self, "vengeful_spirit")
 	is_casting = true
 	cast_lock_timer = 0.4
-	_spend_soul(SPELL_COST)
+	_spend_mp(SPELL_COST)
 	_sfx("spell_cast")
 
 	# IMP 15: Spell cast animation
@@ -1338,8 +1366,7 @@ func _create_spell_projectile() -> Area2D:
 		if not is_instance_valid(self): return  # Pass 55: Guard stale player ref
 		if body.is_in_group("enemies") and body.has_method("take_damage"):
 			body.take_damage(damage, projectile.global_position)
-			# Grant soul and track combo for spell hits
-			_add_soul(SOUL_PER_HIT)
+			# Track combo for spell hits
 			total_combo_hits += 1
 			combo_decay_timer = COMBO_DECAY_TIME
 			if has_node("/root/GameJuice"):
@@ -1387,7 +1414,7 @@ func _cast_desolate_dive() -> void:
 		GameJuice.on_spell_cast(self, "desolate_dive")
 	is_casting = true
 	cast_lock_timer = 0.5
-	_spend_soul(SPELL_COST)
+	_spend_mp(SPELL_COST)
 	_sfx("spell_cast")
 
 	# IMP 15: Spell cast animation
@@ -1425,7 +1452,6 @@ func _cast_desolate_dive() -> void:
 			if enemy.has_method("take_damage"):
 				var dmg = maxf(DESOLATE_DIVE_DAMAGE * (1.0 - dist / 300.0), DESOLATE_DIVE_DAMAGE * 0.5)
 				enemy.take_damage(dmg, global_position)
-				_add_soul(SOUL_PER_HIT * 1.5)
 				total_combo_hits += 1
 				combo_decay_timer = COMBO_DECAY_TIME
 				if has_node("/root/GameJuice"):
@@ -1449,7 +1475,7 @@ func _cast_howling_wraiths() -> void:
 		GameJuice.on_spell_cast(self, "howling_wraiths")
 	is_casting = true
 	cast_lock_timer = 0.4
-	_spend_soul(SPELL_COST)
+	_spend_mp(SPELL_COST)
 	_sfx("spell_cast")
 
 	# IMP 15: Spell cast animation
@@ -1476,7 +1502,6 @@ func _cast_howling_wraiths() -> void:
 			if enemy.has_method("take_damage"):
 				var dmg = maxf(HOWLING_WRAITHS_DAMAGE * (1.0 - dist / (HOWLING_WRAITHS_RANGE * 1.5)), HOWLING_WRAITHS_DAMAGE * 0.5)
 				enemy.take_damage(dmg, global_position)
-				_add_soul(SOUL_PER_HIT)
 				total_combo_hits += 1
 				combo_decay_timer = COMBO_DECAY_TIME
 				if has_node("/root/GameJuice"):
@@ -1519,21 +1544,21 @@ func _handle_heal() -> void:
 
 	# Start channeling
 	if Input.is_action_just_pressed("heal") and not is_dashing and not is_attacking and not is_casting:
-		if current_soul >= _get_effective_cost(HEAL_COST) and current_health < max_health:
+		if _has_mp(HEAL_COST) and current_health < max_health:
 			is_healing = true
 			heal_timer = 0.0
 			velocity.x = 0.0  # Stand still while channeling
 			_sfx("heal")
 			_spawn_status("Channeling...")
-		elif current_soul < _get_effective_cost(HEAL_COST):
-			_flash_soul_bar()
-			_spawn_status("Need %d Soul!" % int(_get_effective_cost(HEAL_COST)))
+		elif not _has_mp(HEAL_COST):
+			_flash_mp_bar()
+			_spawn_status("Need %d MP!" % int(_get_effective_cost(HEAL_COST)))
 		elif current_health >= max_health:
 			_spawn_status("HP Full!")
 
 
 func _complete_heal() -> void:
-	_spend_soul(HEAL_COST)
+	_spend_mp(HEAL_COST)
 	_sfx("heal")
 
 	var heal_amount = minf(HEAL_AMOUNT, max_health - current_health)
@@ -1663,7 +1688,6 @@ func _perform_upslash() -> void:
 				hit_count += 1
 				total_combo_hits += 1
 				combo_decay_timer = COMBO_DECAY_TIME
-				_add_soul(SOUL_PER_HIT)
 				if has_node("/root/CombatFX"):
 					CombatFX.apply_hit_effects(final_damage, enemy.global_position, parry_counter_active)
 				_vfx("vfx_hit_spark", enemy.global_position)
@@ -1719,8 +1743,57 @@ func _spend_soul(amount: float) -> void:
 	_update_hud()
 
 
+## Called by EnemyBase when this player's damage kills an enemy.
+func on_enemy_killed() -> void:
+	_add_soul(SOUL_PER_KILL)
+
+
+# ── MP (spells, skills, healing) ──────────────────────────────────────────
+
+func _get_mp() -> float:
+	return float(GameManager.player_stats.get("mp", 0))
+
+
+func _get_max_mp() -> float:
+	return float(GameManager.player_stats.get("max_mp", 50))
+
+
+func _has_mp(base_cost: float) -> bool:
+	return _get_mp() >= _get_effective_cost(base_cost)
+
+
+func _spend_mp(base_cost: float) -> void:
+	GameManager.player_stats["mp"] = maxf(0.0, _get_mp() - _get_effective_cost(base_cost))
+	_update_hud()
+
+
+func _regen_mp(delta: float) -> void:
+	var max_mp := _get_max_mp()
+	var mp := _get_mp()
+	if mp >= max_mp:
+		return
+	GameManager.player_stats["mp"] = minf(max_mp, mp + MP_REGEN_PER_SEC * delta)
+	_mp_hud_timer -= delta
+	if _mp_hud_timer <= 0.0:
+		_mp_hud_timer = 0.25
+		_update_hud()
+
+
+func _flash_mp_bar() -> void:
+	if not _mp_bar:
+		return
+	var fill := _mp_bar.get_theme_stylebox("fill") as StyleBoxFlat
+	if fill == null:
+		return
+	var normal := fill.bg_color
+	fill.bg_color = Color(1.0, 0.2, 0.2)
+	await get_tree().create_timer(0.25).timeout
+	if is_instance_valid(self) and fill:
+		fill.bg_color = normal
+
+
 func _get_effective_cost(base_cost: float) -> float:
-	## Returns the actual soul cost after charm discounts (soul_hoarder = 0.8x).
+	## Returns the actual MP cost after charm discounts (soul_hoarder = 0.8x).
 	if has_node("/root/GameManager") and GameManager.has_charm("soul_hoarder"):
 		return base_cost * 0.8
 	return base_cost
@@ -1747,7 +1820,14 @@ func _flash_soul_bar() -> void:
 # ══════════════════════════════════════════════════════════════════════════
 
 func take_damage(amount: float, source_position: Vector2 = Vector2.ZERO, source_name: String = "", damage_type: String = "") -> void:
-	if invulnerable or is_dead:
+	if is_dead:
+		return
+	if invulnerable:
+		# A hit that arrives during the dash's i-frames is a perfect dodge (Soul).
+		if is_dashing and not _perfect_dodge_awarded:
+			_perfect_dodge_awarded = true
+			_add_soul(SOUL_PER_PERFECT_DODGE)
+			_spawn_status("PERFECT DODGE")
 		return
 	# Pass 57: Invincibility assist mode
 	if has_node("/root/GameManager") and GameManager.get_accessibility("invincibility_mode", false):
@@ -1755,6 +1835,8 @@ func take_damage(amount: float, source_position: Vector2 = Vector2.ZERO, source_
 	# Pass 57: Difficulty-based enemy damage scaling
 	if has_node("/root/GameManager"):
 		amount *= GameManager.get_enemy_damage_mult()
+		# Read DEF live so equipment changed mid-fight counts immediately.
+		amount = mitigate_by_defense(amount, float(GameManager.player_stats.get("defense", 0)))
 
 	if source_name != "":
 		_last_damage_source = source_name
@@ -2330,7 +2412,37 @@ func _build_combat_hud() -> void:
 	_hp_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hp_container.add_child(_hp_label)
 
-	# Soul bar
+	# MP bar — spells, skills and healing
+	var mp_header = Label.new()
+	mp_header.text = "MP"
+	mp_header.add_theme_color_override("font_color", Color(0.4, 0.85, 1.0))
+	mp_header.add_theme_font_size_override("font_size", 11)
+	mp_header.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hp_container.add_child(mp_header)
+
+	_mp_bar = ProgressBar.new()
+	_mp_bar.custom_minimum_size = Vector2(180, 14)
+	_mp_bar.max_value = _get_max_mp()
+	_mp_bar.value = _get_mp()
+	_mp_bar.show_percentage = false
+	var mp_bg = StyleBoxFlat.new()
+	mp_bg.bg_color = Color(0.03, 0.08, 0.12, 0.85)
+	mp_bg.set_corner_radius_all(3)
+	_mp_bar.add_theme_stylebox_override("background", mp_bg)
+	var mp_fill = StyleBoxFlat.new()
+	mp_fill.bg_color = Color(0.2, 0.7, 1.0)
+	mp_fill.set_corner_radius_all(3)
+	_mp_bar.add_theme_stylebox_override("fill", mp_fill)
+	hp_container.add_child(_mp_bar)
+
+	_mp_label = Label.new()
+	_mp_label.text = "%d / %d" % [int(_get_mp()), int(_get_max_mp())]
+	_mp_label.add_theme_color_override("font_color", Color(0.6, 0.9, 1.0))
+	_mp_label.add_theme_font_size_override("font_size", 10)
+	_mp_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hp_container.add_child(_mp_label)
+
+	# Soul bar — special arts (Glitch Arts); earned by parries, perfect dodges, kills
 	var soul_header = Label.new()
 	soul_header.text = "SOUL"
 	soul_header.add_theme_color_override("font_color", Color(0.6, 0.7, 1.0))
@@ -2514,6 +2626,11 @@ func _update_hud() -> void:
 				fill_style.bg_color = Color(1.0, 0.2, 0.2)
 	if _hp_label:
 		_hp_label.text = "%d / %d" % [int(current_health), int(max_health)]
+	if _mp_bar:
+		_mp_bar.max_value = _get_max_mp()
+		_mp_bar.value = _get_mp()
+	if _mp_label:
+		_mp_label.text = "%d / %d" % [int(_get_mp()), int(_get_max_mp())]
 	if _soul_bar:
 		_soul_bar.value = current_soul
 	if _soul_label:

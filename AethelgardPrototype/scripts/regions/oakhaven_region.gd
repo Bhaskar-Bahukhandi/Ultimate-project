@@ -77,9 +77,9 @@ func _ready() -> void:
 	_create_ui()
 
 	# Handle return from encounter
-	if GameManager.has_meta("return_position") and _player:
-		_player.global_position = GameManager.get_meta("return_position")
-		GameManager.remove_meta("return_position")
+	var return_point = GameManager.arrive_in_exploration_scene(scene_file_path)
+	if return_point != null and _player:
+		_player.global_position = return_point
 	if has_node("/root/RandomEncounterSystem"):
 		RandomEncounterSystem.show_pending_farming_result("oakhaven_outskirts", self)
 
@@ -1097,7 +1097,7 @@ func _enter_boss_arena() -> void:
 				return
 
 	# Store return info
-	GameManager.set_meta("return_position", _player.global_position if _player else Vector2(2700, 500))
+	GameManager.set_return_point(scene_file_path, _player.global_position if _player else Vector2(2700, 500))
 	GameManager.set_meta("boss_return_scene", "res://scenes/regions/oakhaven_region.tscn")
 
 	if has_node("/root/SceneTransitions"):

@@ -75,11 +75,11 @@ const TUTORIAL_STEPS: Array = [
 	{"action": "dash", "prompt": "[SHIFT] Dash through attacks — you have i-frames!", "check": "dashed", "hint": "Dash gives invincibility frames. Use it to dodge through attacks."},
 	{"action": "parry", "prompt": "[K] Parry just before an attack hits — counter window!", "check": "parried", "hint": "Time your parry right before impact. Success opens a counter window."},
 	{"action": "pogo", "prompt": "[S]+[J] in air — Pogo Strike! Bounce off enemies", "check": "pogoed", "hint": "While airborne, hold DOWN + ATTACK to pogo bounce. Resets dash!"},
-	{"action": "spell", "prompt": "[Q] Vengeful Spirit  |  [S]+[Q] Desolate Dive  |  [W]+[Q] Howling Wraiths", "check": "spelled", "hint": "Spells cost 33 Soul. Hit enemies with J to earn Soul."},
-	{"action": "heal", "prompt": "[C] Focus Heal when safe — costs 33 Soul", "check": "healed", "hint": "Hold C to channel a heal. Find a safe moment — you're vulnerable while healing."},
+	{"action": "spell", "prompt": "[Q] Vengeful Spirit  |  [S]+[Q] Desolate Dive  |  [W]+[Q] Howling Wraiths", "check": "spelled", "hint": "Spells cost 15 MP. MP refills slowly over time and with potions."},
+	{"action": "heal", "prompt": "[C] Focus Heal when safe — costs 20 MP", "check": "healed", "hint": "Hold C to channel a heal. Find a safe moment — you're vulnerable while healing."},
 ]
 
-const HUD_TUTORIAL_TEXT: String = "HUD Guide:\n[color=#ff4444]Red Bar[/color] = HP  |  [color=#4488ff]Blue Bar[/color] = Soul  |  [color=#aa44ff]Purple %%[/color] = Corruption\nHit enemies to gain Soul. Spend Soul on spells [Q] or healing [C]."
+const HUD_TUTORIAL_TEXT: String = "HUD Guide:\n[color=#ff4444]Red Bar[/color] = HP  |  [color=#33bbff]Cyan Bar[/color] = MP  |  [color=#4488ff]Blue Bar[/color] = Soul  |  [color=#aa44ff]Purple %%[/color] = Corruption\nMP pays for spells [Q] and healing [C]. Earn Soul with parries, perfect dodges and kills."
 var _hud_tutorial_shown: bool = false
 var _tutorial_skip_requested: bool = false
 
@@ -919,9 +919,9 @@ func _show_hud_tutorial() -> void:
 	if not _tutorial_prompt_label:
 		return
 	# Use a RichTextLabel if attached, otherwise fallback to plain text
-	var _hud_text = "HUD: Red=HP | Blue=Soul | Purple%=Corruption\nHit enemies to gain Soul. Spend on spells [Q] or heal [C]."
+	var _hud_text = "HUD: Red=HP | Cyan=MP | Blue=Soul | Purple%=Corruption\nMP pays for spells [Q] and heal [C]. Soul comes from parries, perfect dodges and kills."
 	if has_node("/root/VFXLibrary") and player:
-		VFXLibrary.spawn_status_indicator("HP / Soul / Corruption — check top-left!", player.global_position + Vector2(0, -80), player.get_parent(), false)
+		VFXLibrary.spawn_status_indicator("HP / MP / Soul / Corruption — check top-left!", player.global_position + Vector2(0, -80), player.get_parent(), false)
 
 # ======================================================================
 #  INTRO SEQUENCE

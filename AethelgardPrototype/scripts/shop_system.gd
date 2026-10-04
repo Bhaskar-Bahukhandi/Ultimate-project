@@ -124,7 +124,7 @@ const SHOP_ITEMS = {
 	},
 	"charm_soul_hoarder": {
 		"name": "Charm: Soul Hoarder",
-		"description": "Gain +50% Soul on hit. Spell costs -20%.",
+		"description": "Gain +50% Soul. Spell and heal MP costs -20%.",
 		"type": "charm",
 		"buy_price": 1200,
 		"sell_price": 480,

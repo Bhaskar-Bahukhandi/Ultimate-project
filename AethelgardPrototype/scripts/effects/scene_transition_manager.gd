@@ -464,7 +464,7 @@ func return_to_overworld(from_region: String = "") -> void:
 ## Return to a specific region from combat
 func return_to_region(region_scene: String, return_position: Vector2 = Vector2.ZERO) -> void:
 	if has_node("/root/GameManager") and return_position != Vector2.ZERO:
-		GameManager.set_meta("return_position", return_position)
+		GameManager.set_return_point(region_scene, return_position)
 	change_scene(region_scene, TransitionStyle.COMBAT_EXIT)
 
 

@@ -796,7 +796,9 @@ func play_root_access_tutorial() -> void:
 
 func _on_root_access_apply() -> void:
 	## Player applied the root access hack
-	if not root_access_tutorial_active:
+	# slime_hacked: the panel stays up until the tutorial loop polls (0.1 s);
+	# repeat clicks in that window used to charge +10% corruption each.
+	if not root_access_tutorial_active or slime_hacked:
 		return
 	
 	var new_elasticity = 1.0

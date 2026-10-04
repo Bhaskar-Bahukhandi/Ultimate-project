@@ -1,6 +1,10 @@
 extends Node2D
 
-const OVERWORLD_SCENE := "res://scenes/overworld/overworld.tscn"
+## The opening hook replaces the flight/crash/crater cinematics; Chapter 1 then
+## continues with the Elara meeting → path to Oakhaven → village → region →
+## overworld. Going straight to the overworld skipped Elara and the scenes that
+## unlock Data Vision and Root Access.
+const NEXT_SCENE := "res://scenes/chapter1/elara_meeting.tscn"
 const PLAYER_SCENE := preload("res://scenes/player/player_topdown.tscn")
 const START_POS := Vector2(250, 420)
 const SIGNAL_POS := Vector2(545, 370)
@@ -483,9 +487,9 @@ func _complete_opening_hook() -> void:
 	if not is_inside_tree():
 		return
 	if has_node("/root/SceneTransitions"):
-		SceneTransitions.change_scene(OVERWORLD_SCENE)
+		SceneTransitions.change_scene(NEXT_SCENE)
 	else:
-		get_tree().change_scene_to_file(OVERWORLD_SCENE)
+		get_tree().change_scene_to_file(NEXT_SCENE)
 
 
 func _refresh_global_breadcrumb() -> void:

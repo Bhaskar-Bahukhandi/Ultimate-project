@@ -80,7 +80,7 @@ const CHOICE_BUFFS: Dictionary = {
 		"id": "hardened_heart",
 		"stat_mods": {"attack": 6, "soul_gain_bonus": 0.15},
 		"ability": "cold_fury",
-		"description": "Hardened Heart: +6 ATK, +15% Soul gain. Soul spells deal 20% more damage.",
+		"description": "Hardened Heart: +6 ATK, +15% Soul gain. Spells deal 20% more damage.",
 	},
 
 	# ── Chapter 2: Data Wraith Choice ──
@@ -148,7 +148,7 @@ const ABILITY_DESCRIPTIONS: Dictionary = {
 	"self_reliance": "Solo XP gain +25%",
 	"arena_combo": "Seraphina strikes with you for +15 bonus damage on combos",
 	"ironhold_supplies": "+2 health potions at chapter start",
-	"cold_fury": "Soul spells deal 20% more damage",
+	"cold_fury": "Spells deal 20% more damage",
 	"wraith_dash": "Dash deals 12 damage to enemies you phase through",
 	"spectral_aid": "Spectral ally blocks 1 attack every 20s",
 	"efficient_delete": "Perfect Delete recharges 25% faster",

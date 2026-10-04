@@ -16,7 +16,11 @@ var _web_timer: float = 0.0
 var _teleport_cooldown: float = 4.0
 var _teleport_timer: float = 0.0
 var _is_dropping: bool = false
-var _ceiling_y: float = 50.0  # Y position when on ceiling
+## How far above its current height the spider phases (was an absolute y=50,
+## which could be off-screen or outside the arena).
+const CEILING_RISE: float = 200.0
+## Seconds it hangs on the ceiling before the telegraphed drop.
+const CEILING_HANG_TIME: float = 0.8
 var _ground_y: float = 400.0  # Y position when on ground
 var _original_position: Vector2 = Vector2.ZERO
 
@@ -52,6 +56,15 @@ func _ai_behavior(delta: float) -> void:
 
 	if _is_dropping:
 		return  # Don't interrupt drop attack
+
+	# On the ceiling, always come back down. The drop used to start only from
+	# ATTACK, which is unreachable from up there (the vertical gap alone exceeds
+	# attack_range), so the spider stayed on the ceiling forever — unkillable,
+	# and the encounter could never be won.
+	if _is_on_ceiling:
+		if _phase_timer >= CEILING_HANG_TIME:
+			_start_drop_attack()
+		return
 
 	match current_state:
 		State.IDLE:
@@ -130,7 +143,7 @@ func _phase_to_ceiling() -> void:
 		var sprite = get_node("Sprite")
 		var tw = create_tween()
 		tw.tween_property(sprite, "modulate:a", 0.3, 0.2)
-		tw.parallel().tween_property(self, "global_position:y", _ceiling_y, 0.3)
+		tw.parallel().tween_property(self, "global_position:y", global_position.y - CEILING_RISE, 0.3)
 
 	if has_node("/root/VFXLibrary"):
 		VFXLibrary.spawn_status_indicator("*phases*", global_position + Vector2(0, -30), get_parent(), false)

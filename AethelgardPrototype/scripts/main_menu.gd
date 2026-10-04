@@ -266,7 +266,29 @@ func _build_slot_card(slot: int, info: Dictionary) -> HBoxContainer:
 
 	var slot_name = SLOT_LABELS.get(slot, "Slot ?")
 
-	if info.get("exists", false):
+	if info.get("corrupt", false):
+		var corrupt_label = Label.new()
+		var backup_valid: bool = info.get("backup_valid", false)
+		corrupt_label.text = "%s  —  Damaged save%s" % [slot_name, " (backup available)" if backup_valid else " (no backup)"]
+		corrupt_label.add_theme_font_size_override("font_size", 14)
+		corrupt_label.add_theme_color_override("font_color", Color(1.0, 0.65, 0.3))
+		info_vbox.add_child(corrupt_label)
+		var cs = slot
+		if backup_valid:
+			var restore_btn = Button.new()
+			restore_btn.text = "Restore"
+			restore_btn.custom_minimum_size = Vector2(80, 36)
+			restore_btn.add_theme_font_size_override("font_size", 13)
+			restore_btn.pressed.connect(func(): _do_restore_backup(cs))
+			hbox.add_child(restore_btn)
+		var del_corrupt_btn = Button.new()
+		del_corrupt_btn.text = "Del"
+		del_corrupt_btn.custom_minimum_size = Vector2(50, 36)
+		del_corrupt_btn.add_theme_font_size_override("font_size", 12)
+		del_corrupt_btn.add_theme_color_override("font_color", Color(1.0, 0.4, 0.4))
+		del_corrupt_btn.pressed.connect(func(): _do_delete_save(cs))
+		hbox.add_child(del_corrupt_btn)
+	elif info.get("exists", false):
 		# Slot label + chapter
 		var chapter_num = info.get("current_chapter", 1)
 		var chapter_str = CHAPTER_NAMES.get(chapter_num, "Chapter %d" % chapter_num)
@@ -334,6 +356,15 @@ func _do_load_game(slot: int) -> void:
 	var result = await GameManager.load_game(slot)
 	if not result and has_node("/root/VFXLibrary"):
 		VFXLibrary.spawn_status_indicator("Load failed!", Vector2(640, 400), self, false)
+
+func _do_restore_backup(slot: int) -> void:
+	if not has_node("/root/GameManager"):
+		return
+	var ok: bool = GameManager.restore_backup(slot)
+	if has_node("/root/VFXLibrary"):
+		VFXLibrary.spawn_status_indicator("Backup restored" if ok else "Restore failed!", Vector2(640, 400), self, ok)
+	_close_load_panel()
+	_build_load_panel()
 
 func _do_delete_save(slot: int) -> void:
 	if not has_node("/root/GameManager"):

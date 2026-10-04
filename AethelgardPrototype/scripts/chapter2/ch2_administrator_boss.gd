@@ -8,6 +8,9 @@ extends Node2D
 
 var arena_running: bool = false
 var boss_node = null
+## ESC may only skip the post-fight scene. Before this, "not running and no
+## boss" was also true during the pre-fight intro, letting ESC skip the boss.
+var _boss_defeated: bool = false
 var _root_access_panel: RootAccessPanel = null
 
 func _has_elara() -> bool:
@@ -426,6 +429,7 @@ func _on_boss_health_changed(new_hp: float, max_hp: float) -> void:
 func _on_boss_defeated() -> void:
 	## Administrator Proxy defeated — major story moment
 	arena_running = false
+	_boss_defeated = true
 	var has_elara = _has_elara()
 	if has_node("/root/GameManager"):
 		GameManager.end_boss_fight()
@@ -510,7 +514,7 @@ func _input(event) -> void:
 		get_viewport().set_input_as_handled()
 		return
 
-	if event.is_action_pressed("ui_cancel") and not arena_running and not is_instance_valid(boss_node):
+	if event.is_action_pressed("ui_cancel") and _boss_defeated:
 		if DialogueManager.is_active:
 			return  # Don't skip during post-boss dialogue
 		DialogueManager.hide_dialogue()

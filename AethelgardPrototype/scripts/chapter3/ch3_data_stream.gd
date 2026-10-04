@@ -170,8 +170,11 @@ func _process(delta) -> void:
 
 	# Move rider to target lane smoothly
 	if is_instance_valid(rider_node):
-		var target_y = LANE_Y[current_lane] - 20
-		rider_node.position.y = lerp(rider_node.position.y, target_y, delta * 15.0)
+		var target_y := float(LANE_Y[current_lane] - 20)
+		# lerpf: lerp() rejects mixing the int lane Y with the float position, and
+		# the resulting script error aborted _process before the segment-end check,
+		# so the ride could never complete.
+		rider_node.position.y = lerpf(rider_node.position.y, target_y, delta * 15.0)
 
 	# Segment end
 	if elapsed_time >= SEGMENT_DURATION:

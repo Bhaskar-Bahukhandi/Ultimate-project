@@ -41,6 +41,9 @@ var _skip_all_requested: bool = false
 var _pulse_tween: Tween = null
 var _panel_tween: Tween = null
 var _last_scene: Node = null
+## Bumped by every say()/show_choices() and by force_reset(). A pending
+## auto-hide only fires if no newer line started during its grace period.
+var _line_seq: int = 0
 
 # ── Dialogue history ──────────────────────────────────────────────────────
 var dialogue_history: Array[Dictionary] = []
@@ -57,6 +60,10 @@ const TYPE_FAST_SPEED: float = 120.0
 const ADVANCE_INDICATOR_TEXT = "▼ [SPACE]"
 const TAB_SKIP_THRESHOLD: float = 0.8
 var _tab_hold_time: float = 0.0
+## A dialogue sequence is considered finished when no new line or choice
+## starts within this many seconds of the previous one returning. Consecutive
+## `await say()` calls start in the same frame, so they never trip it.
+const AUTO_HIDE_GRACE: float = 0.25
 
 const SPEAKER_COLORS: Dictionary = {
 	"Kaelen": Color(0.9, 0.95, 1.0),
@@ -127,7 +134,16 @@ func _process(delta: float) -> void:
 
 ## Display a single dialogue line with typewriter effect. Awaits player
 ## pressing SPACE (or auto-advances if auto_advance is true).
+## The box closes itself once the sequence ends (see AUTO_HIDE_GRACE), so
+## callers that never call hide_dialogue() no longer leave is_active stuck.
 func say(speaker: String, text: String, color := Color(-1, -1, -1), auto_advance: bool = false) -> void:
+	_line_seq += 1
+	var seq := _line_seq
+	await _say_line(speaker, text, color, auto_advance)
+	_schedule_auto_hide(seq)
+
+
+func _say_line(speaker: String, text: String, color: Color, auto_advance: bool) -> void:
 	if _blocked:
 		return
 	# Respect subtitle_enabled setting — skip display but still record history
@@ -236,6 +252,18 @@ func say(speaker: String, text: String, color := Color(-1, -1, -1), auto_advance
 	dialogue_line_shown.emit()
 
 
+## Close the box if no newer line or choice started during the grace period.
+func _schedule_auto_hide(seq: int) -> void:
+	if not is_inside_tree():
+		return
+	await get_tree().create_timer(AUTO_HIDE_GRACE).timeout
+	if not is_inside_tree() or seq != _line_seq:
+		return
+	if _awaiting_choice or _is_typing or not is_active:
+		return
+	hide_dialogue()
+
+
 ## Hide the dialogue box and reset skip state.
 func hide_dialogue() -> void:
 	var was_active := is_active
@@ -264,6 +292,7 @@ func is_skip_requested() -> bool:
 
 ## Completely reset all dialogue state. Call before scene transitions.
 func force_reset() -> void:
+	_line_seq += 1  # Cancel any pending auto-hide from the previous scene
 	_hide_immediate()
 	is_active = false
 	_is_typing = false
@@ -295,6 +324,14 @@ func unblock() -> void:
 
 ## Display a branching choice prompt. Returns the 0-based index selected.
 func show_choices(prompt: String, choices: Array, speaker: String = "System") -> int:
+	_line_seq += 1
+	var seq := _line_seq
+	var result: int = await _show_choices_impl(prompt, choices, speaker)
+	_schedule_auto_hide(seq)
+	return result
+
+
+func _show_choices_impl(prompt: String, choices: Array, speaker: String) -> int:
 	if _blocked:
 		return 0
 	if choices.is_empty():
@@ -304,6 +341,10 @@ func show_choices(prompt: String, choices: Array, speaker: String = "System") ->
 	is_active = true
 	_awaiting_choice = true
 	_choice_result = -1
+	# Skipping fast-forwards text only. A skip in progress ends here, so the
+	# player always sees and makes every choice (it used to auto-pick option 0).
+	var was_skipping := _skip_all_requested
+	_skip_all_requested = false
 
 	if not _is_visible:
 		_show_panel()
@@ -316,7 +357,7 @@ func show_choices(prompt: String, choices: Array, speaker: String = "System") ->
 	# Typewriter the prompt
 	_advance_indicator.visible = false
 	_is_typing = true
-	_skip_typing = false
+	_skip_typing = was_skipping
 	var display_prompt = _apply_text_effects(prompt)
 	_text_label.text = display_prompt
 	_text_label.visible_characters = 0
@@ -341,21 +382,15 @@ func show_choices(prompt: String, choices: Array, speaker: String = "System") ->
 
 	_build_choice_buttons(choices)
 
-	# Wait for selection (with safety timeout - 120s max)
-	var _choice_wait_frames: int = 0
-	while _choice_result == -1 and not _skip_all_requested:
+	# Wait for the player's selection. No timeout: story choices are permanent,
+	# so an AFK player must never have one made for them.
+	while _choice_result == -1:
 		await get_tree().process_frame
-		_choice_wait_frames += 1
 		if not is_inside_tree() or not _awaiting_choice:
 			return -1
 		if _choice_container == null or not is_instance_valid(_choice_container):
+			push_error("[DIALOGUE] Choice buttons vanished before a selection was made")
 			break
-		if _choice_wait_frames > 7200:  # ~120s at 60fps
-			push_warning("[DIALOGUE] Choice wait timed out")
-			break
-
-	if _choice_result == -1 and _skip_all_requested:
-		_choice_result = 0
 
 	var result = _choice_result
 	_destroy_choice_buttons()
@@ -520,7 +555,8 @@ func select_choice(choice_index: int) -> void:
 # ══════════════════════════════════════════════════════════════════════════
 
 func _process_skip(delta: float) -> void:
-	if not _is_visible:
+	# Skipping never applies to an open choice.
+	if not _is_visible or _awaiting_choice:
 		_tab_hold_time = 0.0
 		return
 

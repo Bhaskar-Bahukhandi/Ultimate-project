@@ -11,9 +11,16 @@
 **/.godot/
 **/.import/
 
-# Godot export output/config that can contain local machine paths or secrets.
+# Godot export output. export_presets.cfg IS tracked (builds must be
+# reproducible); Godot 4 keeps credentials in .godot/export_credentials.cfg,
+# which the .godot/ rule above already ignores.
 export.cfg
-export_presets.cfg
+AethelgardPrototype/exports/*
+!AethelgardPrototype/exports/web/offline.html
+AethelgardPrototype/run_artifacts/
+
+# Logs from local tool / Godot runs (CI keeps its own).
+*.log
 
 # Mono/.NET generated files for Godot C# projects.
 .mono/

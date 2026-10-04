@@ -57,7 +57,7 @@ const ADMIN_SPAWN_COUNT = 2
 
 const CHARM_INFO: Dictionary = {
 	"extended_parry": {"name": "Extended Parry", "desc": "Parry window +40%.", "icon": "[P]"},
-	"soul_hoarder": {"name": "Soul Hoarder", "desc": "Soul gain +50%. Spell cost -20%.", "icon": "[S]"},
+	"soul_hoarder": {"name": "Soul Hoarder", "desc": "Soul gain +50%. Spell and heal MP cost -20%.", "icon": "[S]"},
 	"corruption_resist": {"name": "Firewall", "desc": "Corruption gain reduced by 40%.", "icon": "[F]"},
 	"pogo_master": {"name": "Pogo Master", "desc": "Pogo damage +80%. Bounce height +30%.", "icon": "[G]"},
 	"dash_master": {"name": "Shadow Dash", "desc": "Dash cooldown -50%. Dash deals 10 damage.", "icon": "[D]"},
@@ -275,6 +275,7 @@ const DEFAULT_STORY_FLAGS: Dictionary = {
 	"ch3_fractured_wastes_entered": false,
 	"ch3_data_paths_discovered": false, "ch3_lyra_met": false,
 	"ch3_corruption_storm_survived": false,
+	"ch3_server_room_unlocked": false,  # Set by the Fractured Wastes region story exit
 	"ch3_fragment_3_collected": false, "source_key_fragment_3": false,
 	"ch3_elara_powers_amplified": false,
 	"ch3_lyra_route_reward_claimed": false, "ch3_archive_consent_clause_found": false,
@@ -500,6 +501,21 @@ var _admin_spawn_cooldown: float = 0.0
 var _admin_enforcer_script: GDScript = null
 var _load_in_progress: bool = false
 var _is_saving: bool = false
+## Slots whose save was requested during a scene transition. They are written
+## once the transition (and any load in progress) finishes, instead of being
+## dropped — scene _ready() checkpoints run while the transition is still active.
+var _deferred_save_slots: Array[int] = []
+## Incremented by change_state(); lets load_game() tell whether the loaded
+## scene chose its own state in _ready().
+var _state_change_count: int = 0
+## Scenes that cannot be resumed by reloading them (their _ready() expects
+## context that a save does not carry). Saving inside them is refused.
+const NON_RESUMABLE_SCENES: Array[String] = [
+	"res://scenes/combat/combat_arena.tscn",
+	"res://scenes/game_over.tscn",
+	"res://scenes/main_menu.tscn",
+	"res://scenes/splash_screen.tscn",
+]
 
 # ── New Game Plus ─────────────────────────────────────────────────────
 var ng_plus_cycle: int = 0  # 0 = first playthrough, 1 = NG+, 2 = NG++, etc.
@@ -631,7 +647,39 @@ func _process(delta: float) -> void:
 
 func change_state(new_state: GameState) -> void:
 	current_state = new_state
+	_state_change_count += 1
 	state_changed.emit(new_state)
+
+# ── Scene hand-off ("where do I put the player when they come back?") ─────
+# Return points are tagged with the scene they belong to. They used to be a bare
+# position that the next region to load would consume, so e.g. the Oakhaven
+# boss-gate position was applied to the first Ironhold arrival.
+const TRANSIENT_METAS: Array[String] = [
+	"return_position", "return_position_scene", "boss_return_scene",
+	"boss_fight_id", "pending_encounter", "return_to_overworld_from",
+]
+
+func set_return_point(scene_path: String, pos: Vector2) -> void:
+	set_meta("return_position", pos)
+	set_meta("return_position_scene", scene_path)
+
+## Call from an exploration scene's _ready(). Returns the return position meant
+## for `scene_path` (or null), and always discards any stale one. Also clears
+## boss-fight context: a region is never a boss fight, and a leftover
+## boss_fight_id disables fleeing in every later encounter.
+func arrive_in_exploration_scene(scene_path: String) -> Variant:
+	var pos: Variant = null
+	if has_meta("return_position") and get_meta("return_position_scene", "") == scene_path:
+		pos = get_meta("return_position")
+	for key in ["return_position", "return_position_scene", "boss_fight_id", "boss_return_scene"]:
+		if has_meta(key):
+			remove_meta(key)
+	return pos
+
+func clear_transient_metas() -> void:
+	for key in TRANSIENT_METAS:
+		if has_meta(key):
+			remove_meta(key)
 
 # Mutually exclusive flag groups — only one flag per group can be true
 const EXCLUSIVE_FLAG_GROUPS: Array = [
@@ -1363,15 +1411,27 @@ func save_game(slot: int = 0) -> bool:
 		push_warning("[SAVE] Save already in progress, ignoring")
 		return false
 	_is_saving = true
+	# Never save when no game is running (main menu) or the run has ended —
+	# that would overwrite a real save with default/dead state.
+	if current_state in [GameState.MENU, GameState.GAME_OVER]:
+		push_warning("[SAVE] Refused: no game in progress (%s)" % GameState.keys()[current_state])
+		_is_saving = false
+		return false
 	# Block manual saves during unsafe states (autosave is more permissive)
 	if slot != AUTOSAVE_SLOT:
-		if current_state in [GameState.COMBAT, GameState.CUTSCENE, GameState.GAME_OVER]:
+		if current_state in [GameState.COMBAT, GameState.CUTSCENE]:
 			push_warning("[SAVE] Cannot manual save during %s" % GameState.keys()[current_state])
 			_is_saving = false
 			return false
-	# Block ALL saves during scene transitions
+	# During a scene transition the new scene is not settled yet: queue the
+	# save and write it when the transition completes (see _flush_deferred_saves).
 	if has_node("/root/SceneTransitions") and SceneTransitions.is_transitioning:
-		push_warning("[SAVE] Cannot save during scene transition")
+		_is_saving = false
+		_defer_save(slot)
+		return false
+	var scene_path: String = get_tree().current_scene.scene_file_path if is_instance_valid(get_tree().current_scene) else ""
+	if scene_path in NON_RESUMABLE_SCENES:
+		push_warning("[SAVE] Refused: cannot resume from %s" % scene_path)
 		_is_saving = false
 		return false
 	var save_data = {
@@ -1384,7 +1444,7 @@ func save_game(slot: int = 0) -> bool:
 		"corruption_level": corruption_level,
 		"perfect_delete_charges": perfect_delete_charges,
 		"perfect_delete_used": perfect_delete_used,
-		"current_scene": get_tree().current_scene.scene_file_path if is_instance_valid(get_tree().current_scene) else "",
+		"current_scene": scene_path,
 		"current_chapter": current_chapter,
 		"current_state": current_state,
 		"playtime_seconds": playtime_seconds,
@@ -1445,7 +1505,38 @@ func save_game(slot: int = 0) -> bool:
 	_is_saving = false
 	return true
 
-func load_game(slot: int = 0) -> bool:
+func _defer_save(slot: int) -> void:
+	if slot not in _deferred_save_slots:
+		_deferred_save_slots.append(slot)
+		if OS.is_debug_build():
+			print("[SAVE] Slot %d queued until the scene transition completes" % slot)
+	if not SceneTransitions.transition_completed.is_connected(_flush_deferred_saves):
+		SceneTransitions.transition_completed.connect(_flush_deferred_saves, CONNECT_ONE_SHOT)
+
+func _flush_deferred_saves() -> void:
+	# A load restores player position/state after its transition finishes;
+	# load_game() flushes again once it is done.
+	if _load_in_progress or _deferred_save_slots.is_empty():
+		return
+	var slots := _deferred_save_slots.duplicate()
+	_deferred_save_slots.clear()
+	for slot in slots:
+		if slot == AUTOSAVE_SLOT:
+			_save_with_feedback(slot)
+		else:
+			save_game(slot)
+
+func _save_with_feedback(slot: int) -> bool:
+	var ok := save_game(slot)
+	if ok:
+		show_save_indicator()
+		if has_node("/root/SFXManager"):
+			SFXManager.play("save_complete")
+	return ok
+
+## `_recovering` is internal: set when retrying after restoring the backup,
+## so a bad backup can't recurse forever.
+func load_game(slot: int = 0, _recovering: bool = false) -> bool:
 	if _load_in_progress:
 		push_warning("[LOAD] Load already in progress, ignoring")
 		return false
@@ -1460,43 +1551,20 @@ func load_game(slot: int = 0) -> bool:
 		_load_in_progress = false
 		return false
 	var save_path = "user://save_slot_%d.save" % slot
-	if not FileAccess.file_exists(save_path):
-		push_error("[LOAD] No save at slot %d" % slot)
-		_load_in_progress = false
-		return false
-	var file = FileAccess.open(save_path, FileAccess.READ)
-	if not file:
-		push_error("[LOAD] Cannot open slot %d" % slot)
-		_load_in_progress = false
-		return false
-	var json_text = file.get_as_text()
-	file.close()
-	var json = JSON.new()
-	if json.parse(json_text) != OK:
-		push_error("[LOAD] Parse error slot %d — attempting backup recovery" % slot)
-		if _try_load_backup(save_path):
+	# Missing, unparseable, wrong shape, missing keys or checksum mismatch all
+	# fall back to the .bak once (the bad file is kept as .corrupted).
+	var parsed = _read_valid_save(save_path)
+	if parsed == null:
+		if not _recovering and _try_load_backup(save_path):
+			push_warning("[LOAD] Slot %d was missing or corrupt — restored from backup" % slot)
 			_load_in_progress = false
-			return await load_game(slot)  # Recursive call — load_game is async
+			return await load_game(slot, true)
+		push_error("[LOAD] Slot %d has no usable save (and no usable backup)" % slot)
 		_load_in_progress = false
 		return false
-	if not json.data is Dictionary:
-		push_error("[LOAD] Invalid data slot %d" % slot)
-		_load_in_progress = false
-		return false
-	var data: Dictionary = json.data
-	# ── Checksum verification ──
-	var saved_checksum = data.get("_checksum", -1)
-	if saved_checksum != -1:
-		if _calculate_save_checksum(data) != int(saved_checksum):
-			push_warning("[LOAD] Checksum mismatch in slot %d — save may be tampered/corrupted" % slot)
-			# Continue loading (warn-only) — the backup system handles actual corruption
+	var data: Dictionary = parsed
 	data.erase("_checksum")  # Strip internal field before restoring
-	# Validate required keys
-	for key in REQUIRED_SAVE_KEYS:
-		if not data.has(key):
-			push_error("[LOAD] Missing required key '%s' in slot %d" % [key, slot])
-			_load_in_progress = false
-			return false
+	clear_transient_metas()  # Hand-offs from the session before the load don't apply
 	# Version check and migration
 	var save_version: String = data.get("version", "0.0.0")
 	if save_version != SAVE_VERSION:
@@ -1614,6 +1682,7 @@ func load_game(slot: int = 0) -> bool:
 	glitch_meter_changed.emit(glitch_meter)
 	corruption_level_changed.emit(corruption_level)
 	var saved_scene: String = _sanitize_free_travel_loaded_scene(data.get("current_scene", ""))
+	var state_changes_before_scene := _state_change_count
 	if saved_scene and ResourceLoader.exists(saved_scene):
 		if has_node("/root/SceneTransitions"):
 			await SceneTransitions.change_scene(saved_scene)
@@ -1635,14 +1704,20 @@ func load_game(slot: int = 0) -> bool:
 			var restore_players = get_tree().get_nodes_in_group("player")
 			if not restore_players.is_empty():
 				restore_players[0].global_position = Vector2(saved_pos.get("x", 0.0), saved_pos.get("y", 0.0))
-	# Restore game state — force safe states only after load
-	var saved_state: int = int(data.get("current_state", GameState.EXPLORATION))
-	if saved_state in [GameState.MENU, GameState.COMBAT, GameState.CUTSCENE, GameState.GAME_OVER]:
-		saved_state = GameState.EXPLORATION
-	change_state(saved_state)
+	# Restore game state. The loaded scene's _ready() knows its own state best
+	# (story scenes set DIALOGUE, trials set COMBAT); only fall back to the saved
+	# state when the scene didn't set one, and never restore a transient state —
+	# checkpoints are now written mid-dialogue, which must not reload as a
+	# DIALOGUE state with no dialogue running.
+	if _state_change_count == state_changes_before_scene:
+		var saved_state: int = int(data.get("current_state", GameState.EXPLORATION))
+		if saved_state in [GameState.MENU, GameState.COMBAT, GameState.CUTSCENE, GameState.GAME_OVER, GameState.DIALOGUE]:
+			saved_state = GameState.EXPLORATION
+		change_state(saved_state)
 	if OS.is_debug_build():
 		print("[LOAD] Slot %d loaded successfully (v%s)" % [slot, save_version])
 	_load_in_progress = false
+	_flush_deferred_saves()
 	return true
 
 func save_exists(slot: int = 0) -> bool:
@@ -1667,19 +1742,15 @@ func get_save_info(slot: int = 0) -> Dictionary:
 	if slot not in VALID_SAVE_SLOTS:
 		return {"exists": false}
 	var save_path = "user://save_slot_%d.save" % slot
-	if not FileAccess.file_exists(save_path):
-		return {"exists": false}
-	var file = FileAccess.open(save_path, FileAccess.READ)
-	if not file:
-		return {"exists": false}
-	var json = JSON.new()
-	var json_text = file.get_as_text()
-	file.close()
-	if json.parse(json_text) != OK:
-		return {"exists": false}
-	if not json.data is Dictionary:
-		return {"exists": false}
-	var data: Dictionary = json.data
+	var parsed = _read_valid_save(save_path)
+	if parsed == null:
+		# A damaged save is not an empty slot: report it so the menu can offer
+		# "restore backup" instead of inviting the player to overwrite it.
+		var backup_valid := _read_valid_save(save_path + ".bak") != null
+		if not FileAccess.file_exists(save_path) and not backup_valid:
+			return {"exists": false}
+		return {"exists": true, "corrupt": true, "backup_valid": backup_valid}
+	var data: Dictionary = parsed
 	var ps_data = data.get("player_stats", {})
 	var ps: Dictionary = ps_data if ps_data is Dictionary else {}
 	return {
@@ -1698,16 +1769,25 @@ func get_save_info(slot: int = 0) -> Dictionary:
 		"ng_plus_cycle": data.get("ng_plus_cycle", 0),
 	}
 
-func auto_save() -> void:
-	if current_state in [GameState.GAME_OVER, GameState.MENU, GameState.COMBAT, GameState.CUTSCENE, GameState.DIALOGUE]:
-		return
+## Write the autosave checkpoint. Story scripts call this mid-dialogue, mid-
+## cutscene and right after boss fights on purpose — those ARE the checkpoints —
+## so only "no game running" states and non-resumable scenes are refused (inside
+## save_game). During a scene transition the save is queued, not dropped.
+## Returns true only if the save was written now; feedback is shown only then.
+func auto_save() -> bool:
 	if has_node("/root/SceneTransitions") and SceneTransitions.is_transitioning:
-		return
-	show_save_indicator()  # Pass 57: Visual feedback
-	save_game(AUTOSAVE_SLOT)
-	# Pass 53: Play save complete SFX
-	if has_node("/root/SFXManager"):
-		SFXManager.play("save_complete")
+		if current_state not in [GameState.MENU, GameState.GAME_OVER]:
+			_defer_save(AUTOSAVE_SLOT)
+		return false
+	return _save_with_feedback(AUTOSAVE_SLOT)
+
+## Player-initiated save to the autosave slot (pause menu "Quick Save").
+## Follows the manual-save rules: not mid-combat or mid-cutscene.
+func quick_save() -> bool:
+	if current_state in [GameState.COMBAT, GameState.CUTSCENE]:
+		push_warning("[SAVE] Cannot quick save during %s" % GameState.keys()[current_state])
+		return false
+	return auto_save()
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -1738,6 +1818,9 @@ func reset_game() -> void:
 	_dda_window_timer = 0.0
 	_admin_spawn_cooldown = 0.0
 	_load_in_progress = false
+	# A save queued by the previous run must not be written with the new run's state.
+	_deferred_save_slots.clear()
+	clear_transient_metas()
 	ng_plus_cycle = 0
 	ng_plus_available = false
 	titles_earned.clear()
@@ -1821,9 +1904,44 @@ func _canonical_number_string(value: Variant) -> String:
 		text = text.left(text.length() - 1)
 	return text
 
+## Returns the parsed save at `path` if it is a usable save (valid JSON object,
+## required keys present, checksum matching when one is stored), else null.
+func _read_valid_save(path: String) -> Variant:
+	if not FileAccess.file_exists(path):
+		return null
+	var json := JSON.new()
+	if json.parse(FileAccess.get_file_as_string(path)) != OK or not json.data is Dictionary:
+		return null
+	var data: Dictionary = json.data
+	for key in REQUIRED_SAVE_KEYS:
+		if not data.has(key):
+			return null
+	if not _save_checksum_ok(data):
+		return null
+	return data
+
+func _save_checksum_ok(data: Dictionary) -> bool:
+	var saved_checksum = data.get("_checksum", -1)
+	if saved_checksum == -1:
+		return true  # Saves from before checksums existed
+	var payload := data.duplicate(true)
+	payload.erase("_checksum")
+	return _calculate_save_checksum(payload) == int(saved_checksum)
+
+## Player-facing recovery for a slot whose save is corrupt (main menu button).
+func restore_backup(slot: int) -> bool:
+	if slot not in VALID_SAVE_SLOTS:
+		return false
+	return _try_load_backup("user://save_slot_%d.save" % slot)
+
 func _backup_save_file(save_path: String) -> void:
 	## Create a .bak copy of an existing save before overwriting (atomic).
 	if not FileAccess.file_exists(save_path):
+		return
+	# Only a good save may become the backup — copying a corrupt file here
+	# used to destroy the one copy that could still be recovered.
+	if _read_valid_save(save_path) == null:
+		push_warning("[SAVE] %s is not a valid save; keeping the previous backup" % save_path)
 		return
 	var old_file = FileAccess.open(save_path, FileAccess.READ)
 	if not old_file:
@@ -1849,17 +1967,9 @@ func _try_load_backup(save_path: String) -> bool:
 		return false
 	var bak_text = bak_file.get_as_text()
 	bak_file.close()
-	# Verify backup is valid JSON
-	var json = JSON.new()
-	if json.parse(bak_text) != OK or not json.data is Dictionary:
-		push_error("[LOAD] Backup also corrupted: %s" % backup_path)
+	if _read_valid_save(backup_path) == null:
+		push_error("[LOAD] Backup is not a valid save either: %s" % backup_path)
 		return false
-	# Validate backup has required save keys before trusting it
-	var bak_data: Dictionary = json.data
-	for key in REQUIRED_SAVE_KEYS:
-		if not bak_data.has(key):
-			push_error("[LOAD] Backup missing required key '%s': %s" % [key, backup_path])
-			return false
 	# Preserve the corrupted file for inspection before overwriting
 	var corrupted_path = save_path + ".corrupted"
 	if FileAccess.file_exists(save_path):
