@@ -262,11 +262,11 @@ func _spawn_player() -> void:
 
 func _create_region_gates() -> void:
 	_create_gate("OakhavenGate", Vector2(350, 480), Vector2(80, 50), "oakhaven",
-		Color(0.3, 0.6, 0.2), "OAKHAVEN\n[F] Enter")
+		Color(0.3, 0.6, 0.2), "OAKHAVEN\n[{interact}] Enter")
 	_create_gate("IronholdGate", Vector2(2300, 320), Vector2(80, 50), "ironhold",
-		Color(0.5, 0.35, 0.2), "IRONHOLD\n[F] Enter")
+		Color(0.5, 0.35, 0.2), "IRONHOLD\n[{interact}] Enter")
 	_create_gate("WastesGate", Vector2(1280, 1500), Vector2(80, 50), "fractured_wastes",
-		Color(0.45, 0.15, 0.55), "FRACTURED WASTES\n[F] Enter")
+		Color(0.45, 0.15, 0.55), "FRACTURED WASTES\n[{interact}] Enter")
 
 
 func _create_gate(gate_name: String, pos: Vector2, gate_size: Vector2, region_id: String,
@@ -296,7 +296,7 @@ func _create_gate(gate_name: String, pos: Vector2, gate_size: Vector2, region_id
 	# Label
 	var label = Label.new()
 	label.name = "GateLabel"
-	label.text = label_text if unlocked else "%s\nLocked" % label_text.get_slice("\n", 0)
+	InputService.bind_text(label, label_text if unlocked else "%s\nLocked" % label_text.get_slice("\n", 0))
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 10)
 	label.add_theme_color_override("font_color", Color.WHITE)
@@ -505,7 +505,7 @@ func _create_zone_label_ui() -> void:
 	# Instructions
 	var instructions = Label.new()
 	instructions.name = "Instructions"
-	instructions.text = "[WASD] Move  |  [Shift] Sprint  |  [F] Interact  |  [M] Map  |  [I] Status  |  [TAB] Data Vision"
+	InputService.bind_text(instructions, "[{move}] Move  |  [{sprint}] Sprint  |  [{interact}] Interact  |  [{world_map}] Map  |  [{status_window}] Status  |  [{data_vision}] Data Vision")
 	instructions.add_theme_font_size_override("font_size", 9)
 	instructions.add_theme_color_override("font_color", Color(0.6, 0.6, 0.5))
 	instructions.position = Vector2(250, 690)
@@ -609,7 +609,7 @@ func _create_rest_point(point_name: String, pos: Vector2) -> void:
 	rp.add_child(glow)
 
 	var label = Label.new()
-	label.text = point_name + "\n[F] Rest"
+	InputService.bind_text(label, point_name + "\n[{interact}] Rest")
 	label.add_theme_font_size_override("font_size", 8)
 	label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.6))
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

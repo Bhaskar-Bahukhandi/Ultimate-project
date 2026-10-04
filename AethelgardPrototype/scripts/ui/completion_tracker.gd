@@ -196,7 +196,7 @@ func _build_ui() -> void:
 
 	# Close hint
 	var hint := Label.new()
-	hint.text = "Press ESC or any key to close"
+	InputService.bind_text(hint, "Press {ui_cancel} or any button to close")
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.add_theme_font_size_override("font_size", 12)
 	hint.add_theme_color_override("font_color", Color(0.4, 0.4, 0.5, 0.6))

@@ -59,6 +59,12 @@ Elara: Then let's go.
   it, or describe it in a comment.
 - The game **checks every file** in CI: unknown jump targets, choices without options, malformed
   lines and bad flag names all fail the build, with the file and line number.
+- **Never write a key name.** Players rebind keys and use gamepads. Write the action in braces
+  and the game shows the player's real button: `System: Press {interact} to open the gate.`
+  shows "F" on keyboard, "A" on Xbox and "Cross" on PlayStation. Actions: `{interact}`,
+  `{attack}`, `{jump}`, `{defend}`, `{sprint}`, `{spell}`, `{heal}`, `{root_access}`,
+  `{data_vision}`, `{world_map}`, `{lore_journal}`, `{status_window}`, `{skip}`, `{move}`,
+  `{move_lr}`, `{ui_accept}` and `{ui_cancel}`. Any other `{word}` is left as written.
 
 ## Where the old dialogue is
 

@@ -345,7 +345,7 @@ func _build_ui() -> void:
 	
 	# Close button
 	_close_btn = Button.new()
-	_close_btn.text = "Close Shop [ESC]"
+	InputService.bind_text(_close_btn, "Close Shop [{ui_cancel}]")
 	_close_btn.custom_minimum_size = Vector2(0, 40)
 	_close_btn.pressed.connect(close_shop)
 	

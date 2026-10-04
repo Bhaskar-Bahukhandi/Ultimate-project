@@ -3,6 +3,26 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-04 — Gamepad support and full remapping (InputService)
+
+- **Gamepad:** every action has a controller default, and no two actions that can be used at the
+  same time share a button. Menus can be confirmed with A and backed out of with B. A gamepad
+  press in a menu with nothing selected selects its first button. Disconnecting the controller
+  mid-play pauses the game.
+- **Controls screen** (Options → Controls…, in the main menu and the pause menu): rebind
+  keyboard and gamepad separately. Taking a key from another action swaps them, and it can't
+  break pause, menu navigation or movement. Reset to Defaults is included. Bindings are saved
+  to `user://input.cfg`, and old keyboard rebinds are migrated.
+- **Prompts follow the player:** about 100 hardcoded key hints ("[F] Talk", "Press SPACE",
+  "[Hold TAB to skip]") now show the player's real key or button. They switch between keyboard
+  and gamepad labels as you play (Xbox, PlayStation or Nintendo names). Dialogue text can use
+  `{interact}`-style tokens.
+- **Fixed:** the level-up popup, arena rematch and chapter-end screens said "Press Space", but
+  only Enter worked; they now name the right key. Dialogue choices can be picked with pad A. The
+  lore journal (L / pad Y) and dialogue skip (Tab / pad View) are real actions now, so they work
+  on a gamepad and can be rebound. The journal opens only while exploring. The tutorial's
+  "Skip" hint no longer shows raw `[color]` tags.
+
 ## 2026-10-04 — One owner for pause, menus and game speed (ContextStack)
 
 - **Menus no longer fight each other.** Root Access and the pause menu can't unpause each other. The

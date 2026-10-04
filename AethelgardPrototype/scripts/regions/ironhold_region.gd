@@ -421,7 +421,7 @@ func _create_interactable_npc(data: Dictionary) -> Area2D:
 	npc.add_child(name_label)
 	var prompt = Label.new()
 	prompt.name = "Prompt"
-	prompt.text = "[F] Talk"
+	InputService.bind_text(prompt, "[{interact}] Talk")
 	prompt.add_theme_font_size_override("font_size", 7)
 	prompt.add_theme_color_override("font_color", Color(1, 1, 0.7))
 	prompt.position = Vector2(-15, 5)
@@ -460,7 +460,7 @@ func _create_lore_marker(data: Dictionary) -> Area2D:
 	lore.add_child(icon)
 	var prompt = Label.new()
 	prompt.name = "Prompt"
-	prompt.text = "[F] Inspect"
+	InputService.bind_text(prompt, "[{interact}] Inspect")
 	prompt.add_theme_font_size_override("font_size", 7)
 	prompt.add_theme_color_override("font_color", Color(0.4, 0.9, 1.0))
 	prompt.position = Vector2(-20, 10)
@@ -504,11 +504,11 @@ func _place_boss_gates() -> void:
 	# Clock Tower scene has been cleared, so the same boss isn't fought twice.
 	if not GameManager.has_flag("ch2_clockwork_automaton_defeated"):
 		_create_boss_gate("ClockworkBossGate", Vector2(3050, 550),
-			"clockwork_automaton", 9, "Clockwork Automaton\n[F] Challenge\nRec. Lv 9",
+			"clockwork_automaton", 9, "Clockwork Automaton\n[{interact}] Challenge\nRec. Lv 9",
 			"res://scenes/combat/combat_arena.tscn")
 	# Administrator Proxy — Underground
 	_create_boss_gate("AdminBossGate", Vector2(1300, 2100),
-		"administrator_proxy", 11, "Administrator Proxy\n[F] Challenge\nRec. Lv 11",
+		"administrator_proxy", 11, "Administrator Proxy\n[{interact}] Challenge\nRec. Lv 11",
 		"res://scenes/chapter2/administrator_boss.tscn")
 
 func _create_boss_gate(gate_name: String, pos: Vector2, boss_id: String,
@@ -528,7 +528,7 @@ func _create_boss_gate(gate_name: String, pos: Vector2, boss_id: String,
 	border.z_index = -1
 	gate.add_child(border)
 	var label = Label.new()
-	label.text = label_text
+	InputService.bind_text(label, label_text)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 9)
 	label.add_theme_color_override("font_color", Color(1, 0.85, 0.5))
@@ -560,13 +560,13 @@ func _place_story_gates() -> void:
 	# and which ch2_seraphina_choice.tscn assumes has already happened.
 	_create_story_gate("SeraphinaEncounterGate", Vector2(1650, 1150),
 		"res://scenes/chapter2/seraphina_encounter.tscn",
-		"Seraphina\n[F] Approach",
+		"Seraphina\n[{interact}] Approach",
 		"", "ch2_seraphina_met", Color(0.85, 0.75, 0.35))
 	# Underground Network — carries the ch2_data_wraith_* branch that
 	# Chapters 4, 5 and 10 read.
 	_create_story_gate("UndergroundGate", Vector2(1150, 1950),
 		"res://scenes/chapter2/underground_network.tscn",
-		"Underground Network\n[F] Descend",
+		"Underground Network\n[{interact}] Descend",
 		"ch2_underground_unlocked", "ch2_underground_complete", Color(0.35, 0.55, 0.8))
 	# Clock Tower — the authored multi-floor version of the Clockwork Automaton
 	# fight. Clearing it sets ch2_clockwork_automaton_defeated, which suppresses
@@ -574,7 +574,7 @@ func _place_story_gates() -> void:
 	# taken twice.
 	_create_story_gate("ClockTowerGate", Vector2(2950, 620),
 		"res://scenes/chapter2/clock_tower.tscn",
-		"Clock Tower\n[F] Ascend",
+		"Clock Tower\n[{interact}] Ascend",
 		"", "ch2_clock_tower_complete", Color(0.75, 0.55, 0.25))
 
 
@@ -597,7 +597,7 @@ func _create_story_gate(gate_name: String, pos: Vector2, scene_path: String,
 	marker.position = Vector2(-22, -22)
 	gate.add_child(marker)
 	var label = Label.new()
-	label.text = label_text
+	InputService.bind_text(label, label_text)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 9)
 	label.add_theme_color_override("font_color", Color(0.95, 0.95, 0.8))
@@ -641,7 +641,7 @@ func _place_arena_entrance() -> void:
 	marker.position = Vector2(-20, -15)
 	arena_gate.add_child(marker)
 	var label = Label.new()
-	label.text = "ARENA\n[F] Enter"
+	InputService.bind_text(label, "ARENA\n[{interact}] Enter")
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 9)
 	label.add_theme_color_override("font_color", Color(1, 0.8, 0.3))
@@ -964,7 +964,7 @@ func _place_farming_zone() -> void:
 
 	var prompt := Label.new()
 	prompt.name = "Prompt"
-	prompt.text = "[F] Start drill run"
+	InputService.bind_text(prompt, "[{interact}] Start drill run")
 	prompt.add_theme_font_size_override("font_size", 8)
 	prompt.add_theme_color_override("font_color", Color(1.0, 0.9, 0.52))
 	prompt.position = Vector2(-62, 24)
@@ -1119,7 +1119,7 @@ func _create_ui() -> void:
 	title.position = Vector2(580, 10)
 	ui_layer.add_child(title)
 	var instructions = Label.new()
-	instructions.text = "[WASD] Move  [Shift] Sprint  [F] Interact  [M] Map  [I] Status"
+	InputService.bind_text(instructions, "[{move}] Move  [{sprint}] Sprint  [{interact}] Interact  [{world_map}] Map  [{status_window}] Status")
 	instructions.add_theme_font_size_override("font_size", 9)
 	instructions.add_theme_color_override("font_color", Color(0.6, 0.6, 0.5))
 	instructions.position = Vector2(250, 690)

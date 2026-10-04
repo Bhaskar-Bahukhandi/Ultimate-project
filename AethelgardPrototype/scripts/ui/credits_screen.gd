@@ -187,7 +187,7 @@ func _build_credits_ui() -> void:
 
 	# Skip hint at bottom of screen
 	_skip_label = Label.new()
-	_skip_label.text = "[ENTER/ESC] Skip    [SPACE] Fast Forward"
+	InputService.bind_text(_skip_label, "[{ui_cancel}] Skip    Hold [{jump}] Fast Forward")
 	_skip_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_skip_label.add_theme_font_size_override("font_size", 11)
 	_skip_label.add_theme_color_override("font_color", Color(0.35, 0.35, 0.4))
@@ -235,11 +235,11 @@ func _process(delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	if not _is_showing:
 		return
-	# Skip with Enter or Escape
-	if event is InputEventKey and event.pressed:
-		if event.keycode == KEY_ENTER or event.keycode == KEY_ESCAPE:
-			_finish_credits()
-			get_viewport().set_input_as_handled()
+	# Skip with cancel / pause / skip. Not accept: on a gamepad that's A, which
+	# is also jump (hold to fast-forward).
+	if event.is_action_pressed("ui_cancel") or event.is_action_pressed("pause_menu") or event.is_action_pressed("skip"):
+		_finish_credits()
+		get_viewport().set_input_as_handled()
 
 func _finish_credits() -> void:
 	if not _is_showing:

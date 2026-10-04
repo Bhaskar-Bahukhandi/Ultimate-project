@@ -20,47 +20,48 @@ var bob_time: float = 0.0
 var target_alpha: float = 0.0
 var _cached_panel_style: StyleBoxFlat = null
 
-# Prompt templates by interaction type
+# Prompt templates by interaction type. {action} tokens become the player's
+# current key/button (InputService.fmt) when shown.
 var prompt_templates = {
 	"npc": {
-		"keys": "[F] Talk",
-		"inspect": "[E] Inspect",
+		"keys": "[{interact}] Talk",
+		"inspect": "[{root_access}] Inspect",
 		"color": Color(0.6, 1.0, 0.6),
 		"icon": ">>",
 	},
 	"shop": {
-		"keys": "[F] Browse",
-		"inspect": "[E] Check Prices",
+		"keys": "[{interact}] Browse",
+		"inspect": "[{root_access}] Check Prices",
 		"color": Color(1.0, 0.9, 0.4),
 		"icon": "$>",
 	},
 	"item": {
-		"keys": "[F] Pick Up",
-		"inspect": "[E] Examine",
+		"keys": "[{interact}] Pick Up",
+		"inspect": "[{root_access}] Examine",
 		"color": Color(0.4, 0.8, 1.0),
 		"icon": "?>",
 	},
 	"door": {
-		"keys": "[F] Enter",
-		"inspect": "[E] Check",
+		"keys": "[{interact}] Enter",
+		"inspect": "[{root_access}] Check",
 		"color": Color(0.8, 0.6, 1.0),
 		"icon": "|>",
 	},
 	"enemy": {
-		"keys": "[J] Attack",
-		"inspect": "[E] Scan",
+		"keys": "[{attack}] Attack",
+		"inspect": "[{root_access}] Scan",
 		"color": Color(1.0, 0.3, 0.3),
 		"icon": "!>",
 	},
 	"hackable": {
-		"keys": "[E] Root Access",
-		"inspect": "[TAB] Data Vision",
+		"keys": "[{root_access}] Root Access",
+		"inspect": "[{data_vision}] Data Vision",
 		"color": Color(0.0, 1.0, 0.5),
 		"icon": "#>",
 	},
 	"default": {
-		"keys": "[F] Interact",
-		"inspect": "[E] Inspect",
+		"keys": "[{interact}] Interact",
+		"inspect": "[{root_access}] Inspect",
 		"color": Color(1.0, 1.0, 0.6),
 		"icon": ">>",
 	}
@@ -154,11 +155,11 @@ func show_prompt(target: Node, interaction_type: String = "default") -> void:
 	
 	# Build prompt text
 	var color_hex = template["color"].to_html(false)
-	var bbcode = "[color=#%s]%s %s[/color]" % [color_hex, template["icon"], template["keys"]]
-	
+	var bbcode = "[color=#%s]%s %s[/color]" % [color_hex, template["icon"], _bb_escape(InputService.fmt(template["keys"]))]
+
 	# Add inspect line if different from main action
 	if template.has("inspect"):
-		bbcode += "\n[color=#888888]%s[/color]" % template["inspect"]
+		bbcode += "\n[color=#888888]%s[/color]" % _bb_escape(InputService.fmt(template["inspect"]))
 	
 	prompt_label.text = ""
 	prompt_label.parse_bbcode(bbcode)
@@ -174,6 +175,10 @@ func show_prompt(target: Node, interaction_type: String = "default") -> void:
 		_cached_panel_style = prompt_panel.get_theme_stylebox("panel").duplicate()
 	_cached_panel_style.border_color = template["color"] * Color(1, 1, 1, 0.7)
 	prompt_panel.add_theme_stylebox_override("panel", _cached_panel_style)
+
+## "[B] Talk" must show brackets, not start a BBCode tag.
+static func _bb_escape(text: String) -> String:
+	return text.replace("[", "\u0001").replace("]", "[rb]").replace("\u0001", "[lb]")
 
 func hide_prompt() -> void:
 	## Fade out the prompt

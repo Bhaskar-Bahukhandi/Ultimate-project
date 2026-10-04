@@ -193,7 +193,20 @@ playthrough log.
   owner-bound contexts close when their scene goes. Time scale is per-owner requests with priorities
   (hitstop > dramatic > slow-mo > wobble), cleared on scene change, New Game and retry. Input: no
   double-handling of one key press; the world map and journal are modal. `tests/context_stack_test.gd`
-  (31 checks). Still to do: gamepad bindings and a remap UI, prompts generated from the InputMap.
+  (32 checks).
+- [x] **InputService** (2026-10-04): the only code that changes the InputMap at runtime.
+  - Defaults for keyboard and gamepad live in project.godot.
+  - Per-action "modes" decide which buttons may be shared, and rebinding swaps keys inside those
+    rules.
+  - Rebinds are saved to `user://input.cfg` (only actions that differ from the defaults), and old
+    keyboard rebinds are migrated.
+  - Prompts are generated from the bindings and follow the last-used device and pad family:
+    `fmt` / `bind_text`, plus `{action}` tokens in dialogue.
+  - The Controls screen is reachable from the main menu and the pause menu.
+  - The game pauses when the pad disconnects, and menus get a focus fallback for gamepads.
+  - `tests/input_test.gd` (52 checks, including a guard against new hardcoded keys).
+  - Still to do: input buffers (combat foundation), glyph icons instead of text labels, hold and
+    toggle options, and one-handed and accessibility presets.
 - [ ] **TransitionService:** `go(path, TravelContext)` consumed exactly once. Queue, re-entrancy
   guard, input lock.
 - [ ] **SaveService:** versioned schema, per-system serializers, atomic write with validated rotating
@@ -223,7 +236,8 @@ playthrough log.
 - [ ] **DifficultyProfile × 5** (§12.1).
 - [ ] Root Access from per-enemy capability definitions.
 - [ ] **FeelService:** one shake system, pooled numbers and particles.
-- [ ] **Input:** buffers, gamepad, remap UI, prompts generated from the InputMap.
+- [ ] **Input buffers** (jump, attack, parry, dash) on the fixed tick. Gamepad, the remap UI and
+  generated prompts were done early (InputService, 2026-10-04).
 - [ ] **Arena generation v1:** the side-scroll arena is built from the terrain context where the
   fight starts (forest, bridge, cave), using prefab chunks first and WFC later if it's needed.
 - [ ] Replace the review §4.4–4.5 bugs as each system is rewritten.

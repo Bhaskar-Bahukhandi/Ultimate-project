@@ -53,7 +53,7 @@ func _ready() -> void:
 	_create_oakhaven_exit()
 	_create_hud()
 	_suppress_global_breadcrumb()
-	_update_objective("Stand up. Find a signal.", "Move with WASD. Press F or E at the signal fragment.")
+	_update_objective("Stand up. Find a signal.", "Move with {move}. Press {interact} or {root_access} at the signal fragment.")
 	_show_message("Your hands work before your memory does. Move.", 4.0)
 
 
@@ -318,7 +318,7 @@ func _update_objective(main_text: String, prompt_text: String) -> void:
 	if _objective_label:
 		_objective_label.text = "OBJECTIVE: %s" % main_text
 	if _prompt_label:
-		_prompt_label.text = prompt_text
+		InputService.bind_text(_prompt_label, prompt_text)
 
 
 func _sync_opening_interaction_prompt() -> void:

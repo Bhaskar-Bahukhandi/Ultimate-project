@@ -510,8 +510,8 @@ func play_chapter_end_card() -> void:
 		_show_demo_end_screen()
 		return
 
-	# Wait for player to press Space to continue
-	await DialogueManager.say("System", "Chapter 1 Complete. Press [SPACE] to continue to Chapter 2...", Color(0.6, 0.8, 1.0), false)
+	# Wait for the player to advance (jump / accept)
+	await DialogueManager.say("System", InputService.fmt("Chapter 1 Complete. Press [{jump}] to continue to Chapter 2..."), Color(0.6, 0.8, 1.0), false)
 	if not is_inside_tree(): return
 
 	# Proceed to Chapter 2: The Administrator's Game

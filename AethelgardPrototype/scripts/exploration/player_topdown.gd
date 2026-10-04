@@ -48,7 +48,10 @@ func _ready() -> void:
 	
 	# Create interaction prompt label
 	_create_interaction_prompt()
-	
+	# Re-label it when the player switches between keyboard and gamepad.
+	InputService.device_changed.connect(_on_input_device_changed)
+	InputService.bindings_changed.connect(_update_interaction_prompt)
+
 	# Create Data Vision overlay
 	_create_data_vision_overlay()
 	
@@ -101,7 +104,7 @@ func _create_interaction_area() -> void:
 	interaction_area.body_exited.connect(_on_body_left)
 
 func _create_interaction_prompt() -> void:
-	## Create floating [F] / [E] prompt that appears near interactable objects
+	## Floating interact / inspect prompt near interactable objects
 	interaction_prompt = Label.new()
 	interaction_prompt.name = "InteractionPrompt"
 	interaction_prompt.text = ""
@@ -162,6 +165,9 @@ func _on_body_left(body) -> void:
 		nearby_interactable = nearby_interactables.back() if nearby_interactables.size() > 0 else null
 	_update_interaction_prompt()
 
+func _on_input_device_changed(_device: StringName) -> void:
+	_update_interaction_prompt()
+
 func _update_interaction_prompt() -> void:
 	## Show/hide the interaction prompt based on nearby objects
 	if not interaction_prompt:
@@ -170,18 +176,18 @@ func _update_interaction_prompt() -> void:
 	if nearby_interactable:
 		interaction_prompt.visible = true
 		if nearby_interactable.is_in_group("enemy"):
-			interaction_prompt.text = "[J] Attack"
+			interaction_prompt.text = InputService.fmt("[{attack}] Attack")
 			interaction_prompt.add_theme_color_override("font_color", Color(1.0, 0.3, 0.3))
 		elif nearby_interactable.is_in_group("npc"):
-			interaction_prompt.text = "[F] Talk  [E] Inspect"
+			interaction_prompt.text = InputService.fmt("[{interact}] Talk  [{root_access}] Inspect")
 			interaction_prompt.add_theme_color_override("font_color", Color(0.6, 1.0, 0.6))
 		else:
-			interaction_prompt.text = "[F] Interact  [E] Inspect"
+			interaction_prompt.text = InputService.fmt("[{interact}] Interact  [{root_access}] Inspect")
 			interaction_prompt.add_theme_color_override("font_color", Color(1.0, 1.0, 0.6))
 		
 		# Add Data Vision hint if DV is unlocked
 		if GameManager.story_flags.get("ch1_data_vision_unlocked", false) and not data_vision_active:
-			interaction_prompt.text += "\n[TAB] Data Vision"
+			interaction_prompt.text += InputService.fmt("\n[{data_vision}] Data Vision")
 	else:
 		interaction_prompt.visible = false
 

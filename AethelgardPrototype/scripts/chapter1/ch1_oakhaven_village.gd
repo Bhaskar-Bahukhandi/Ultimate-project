@@ -528,7 +528,7 @@ func start_boar_combat() -> void:
 	if not is_inside_tree(): return
 	
 	# Phase 2: Pogo prompt
-	await DialogueManager.say("System", "[BOAR IS STUNNED from wall collision!]\n[POGO STRIKE! Press DOWN (S) while airborne to bounce off its back!]", Color(0.0, 1.0, 0.5), true)
+	await DialogueManager.say("System", "[BOAR IS STUNNED from wall collision!]\n[POGO STRIKE! Press {move_down} while airborne to bounce off its back!]", Color(0.0, 1.0, 0.5), true)
 	if not is_inside_tree(): return
 	
 	# Camera shake — pogo impact
@@ -555,7 +555,7 @@ func start_boar_combat() -> void:
 		if not is_inside_tree(): return
 
 	# Phase 4: Another pogo + defeat
-	await DialogueManager.say("System", "[Boar trapped against the barrier!]\n[POGO STRIKE available! Press DOWN (S) while airborne!]", Color(0.0, 1.0, 0.5), true)
+	await DialogueManager.say("System", "[Boar trapped against the barrier!]\n[POGO STRIKE available! Press {move_down} while airborne!]", Color(0.0, 1.0, 0.5), true)
 	if not is_inside_tree(): return
 	
 	# Final impact

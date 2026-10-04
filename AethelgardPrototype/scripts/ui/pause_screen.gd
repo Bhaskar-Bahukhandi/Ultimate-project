@@ -43,45 +43,49 @@ var completed_tickets = null
 # Map elements
 var map_display: Label = null
 
+const ControlsMenu := preload("res://scripts/ui/controls_menu.gd")
+
 var is_paused: bool = false
 var pause_blocked: bool = false  # Block pausing during cutscenes
 
 # ===========================
 # Ability/Function definitions
 # ===========================
+## Names may contain {action} tokens; they're shown through InputService.fmt
+## so they name the player's actual buttons.
 var abilities = {
 	"root_access": {
-		"name": "Root Access [E]",
+		"name": "Root Access [{root_access}]",
 		"type": "CORE_FUNCTION",
 		"desc": "Open an Inspector panel on a targeted HACKABLE entity. View and modify exposed variables.\nCost: +10-15% CORRUPTION per edit\nCooldown: None (but corruption is the real limiter)",
 		"unlocked": true
 	},
 	"data_vision": {
-		"name": "Data Vision [TAB]",
+		"name": "Data Vision [{data_vision}]",
 		"type": "UTILITY",
 		"desc": "Toggle overlay revealing hidden object metadata, wireframe schematics, enemy parameters, and secret passages.\nCost: System Monitor attention increases while active\nDuration: Toggle on/off",
 		"unlocked": false
 	},
 	"perfect_delete": {
-		"name": "Perfect Delete [X]",
+		"name": "Perfect Delete [{perfect_delete}]",
 		"type": "COMBAT",
 		"desc": "Execute a perfectly-timed strike that instantly removes a weakened entity from the scene graph.\nCost: 1 Perfect Delete charge (limited resource)\nCondition: Enemy must be below 20% HP",
 		"unlocked": false
 	},
 	"garbage_collection": {
-		"name": "Garbage Collection [K]",
+		"name": "Garbage Collection [{defend}]",
 		"type": "DEFENSE",
 		"desc": "Defensive parry technique. 2-frame perfect parry window reflects projectiles and staggers melee attackers.\nCost: Stamina\nTiming: Must activate within 2 frames of incoming attack",
 		"unlocked": false
 	},
 	"pogo_strike": {
-		"name": "Pogo Strike [S in air]",
+		"name": "Pogo Strike [{move_down} + {attack} in air]",
 		"type": "COMBAT",
 		"desc": "Downward aerial strike that bounces off enemies and certain surfaces. Resets dash and double-jump on successful hit.\nCost: None\nCondition: Must be airborne",
 		"unlocked": false
 	},
 	"sprint_dash": {
-		"name": "Sprint / Dash [SHIFT]",
+		"name": "Sprint / Dash [{sprint}]",
 		"type": "MOBILITY",
 		"desc": "Hold to sprint (1.8x speed) in exploration. Tap in combat for a dash with 6 i-frames.\nCost: Stamina drain while sprinting\nCooldown: 0.5s between dashes",
 		"unlocked": true
@@ -100,7 +104,9 @@ func _ready() -> void:
 		print("[PAUSE] Pause screen system initialized")
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("pause_menu") and not pause_blocked:
+	# Cancel (pad B) also closes pause, like every other menu.
+	var cancel_closes: bool = is_paused and event.is_action_pressed("ui_cancel")
+	if (event.is_action_pressed("pause_menu") or cancel_closes) and not pause_blocked:
 		# Don't open pause while dialogue is active — ESC is used for dialogue skip
 		if has_node("/root/DialogueManager") and DialogueManager.is_active:
 			return
@@ -114,8 +120,9 @@ func _input(event: InputEvent) -> void:
 			if cm == null or not cm.get("is_playing"):
 				set_meta("cutscene_blocked", false)
 		if not get_meta("cutscene_blocked", false):
-			# Esc that just closed another menu (map, shop…) must not also open pause.
-			if not is_paused and ContextStack.changed_this_frame():
+			# Esc that just closed another menu (map, shop, Controls…) must not
+			# also open or close pause.
+			if ContextStack.changed_this_frame():
 				return
 			# Something opened from pause (completion tracker) sits on top: let it
 			# take the key instead of closing pause underneath it.
@@ -468,7 +475,7 @@ func _refresh_functions_tab() -> void:
 		var ability = abilities[key]
 		var btn = Button.new()
 		var status = "UNLOCKED" if ability["unlocked"] else "LOCKED"
-		btn.text = "[%s] %s — %s" % [ability["type"], ability["name"], status]
+		btn.text = "[%s] %s — %s" % [ability["type"], InputService.fmt(ability["name"]), status]
 		btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		btn.custom_minimum_size = Vector2(0, 32)
 		btn.disabled = not ability["unlocked"]
@@ -477,7 +484,7 @@ func _refresh_functions_tab() -> void:
 
 func _on_ability_selected(ability: Dictionary) -> void:
 	if ability_detail:
-		ability_detail.text = "%s\nType: %s\n\n%s" % [ability["name"], ability["type"], ability["desc"]]
+		ability_detail.text = "%s\nType: %s\n\n%s" % [InputService.fmt(ability["name"]), ability["type"], ability["desc"]]
 
 # ==========================================================================
 # CHARMS TAB — Equip / Unequip System (max 3 slots)
@@ -1133,7 +1140,7 @@ func _build_pause_ui() -> void:
 	action_row.add_child(menu_btn)
 
 	var footer = Label.new()
-	footer.text = "[ESC] Resume  |  [←→] Switch Tabs  |  [ENTER] Select"
+	InputService.bind_text(footer, "[{pause_menu}] Resume  |  [{ui_left}/{ui_right}] Switch Tabs  |  [{ui_accept}] Select")
 	footer.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	footer.add_theme_color_override("font_color", Color(0.4, 0.4, 0.45))
 	footer.add_theme_font_size_override("font_size", 11)
@@ -1277,6 +1284,15 @@ func _build_pause_options() -> void:
 	th_cb.button_pressed = GameManager.get_accessibility("tutorial_hints_enabled", true)
 	th_cb.toggled.connect(func(on: bool): GameManager.set_accessibility("tutorial_hints_enabled", on))
 	vbox.add_child(th_cb)
+
+	vbox.add_child(HSeparator.new())
+
+	var controls_btn = Button.new()
+	controls_btn.text = "Controls…"
+	controls_btn.custom_minimum_size = Vector2(140, 32)
+	controls_btn.add_theme_font_size_override("font_size", 13)
+	controls_btn.pressed.connect(func(): ControlsMenu.open(self, controls_btn))
+	vbox.add_child(controls_btn)
 
 	vbox.add_child(HSeparator.new())
 

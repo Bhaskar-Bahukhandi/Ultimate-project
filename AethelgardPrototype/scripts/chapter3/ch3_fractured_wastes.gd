@@ -151,7 +151,10 @@ func _input(event) -> void:
 		# Block new actions while an async visit is in progress
 		if _visiting:
 			return
-		# Exploration choices mapped to number keys
+		# Exploration choices mapped to number keys (keyboard only).
+		# Unreachable since the region scene replaced this menu: _ready() goes
+		# to _phase_intro() (which leaves for the region) or _phase_fragment().
+		# If it's ever revived, rebuild it as a show_choices() menu for gamepads.
 		if event is InputEventKey and event.pressed:
 			get_viewport().set_input_as_handled()
 			match event.keycode:

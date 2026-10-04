@@ -252,7 +252,7 @@ func update_perfect_delete_button() -> void:
 	# This is called from combat scenes only
 	if perfect_delete_button:
 		perfect_delete_button.visible = true
-		perfect_delete_button.text = "PERFECT DELETE [X] (%d)" % GameManager.perfect_delete_charges
+		perfect_delete_button.text = InputService.fmt("PERFECT DELETE [{perfect_delete}] (%d)") % GameManager.perfect_delete_charges
 
 # ═══════════════════════════════════════════════════════════════════════
 # PASS-35 FIX: NPC-driven quest interactions for Oakhaven

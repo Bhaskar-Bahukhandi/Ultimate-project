@@ -183,7 +183,7 @@ func _build_level_popup() -> void:
 	
 	# Continue prompt
 	_popup_continue = Label.new()
-	_popup_continue.text = "[Press Space to continue]"
+	InputService.bind_text(_popup_continue, "[Press {ui_accept} to continue]")
 	_popup_continue.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_popup_continue.position = Vector2(10, 185)
 	_popup_continue.size = Vector2(300, 25)

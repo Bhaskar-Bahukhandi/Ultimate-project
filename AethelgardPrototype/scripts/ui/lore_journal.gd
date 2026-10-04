@@ -2,7 +2,7 @@ extends Node
 ## ==========================================================================
 ## LORE JOURNAL — Collects discovered lore fragments, dev signatures, NPC lore
 ## ==========================================================================
-## Accessible via [L] key or from pause menu. Persisted in save data.
+## Opened with the lore_journal action (L / pad Y) while exploring. Persisted in save data.
 
 signal lore_discovered(lore_id: String)
 signal journal_opened
@@ -31,17 +31,17 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if not (event is InputEventKey and event.pressed and not event.echo):
-		return
 	if _is_open:
-		# Modal: L or Esc closes it, and no key reaches the game underneath.
-		if event.keycode == KEY_L or event.is_action_pressed("ui_cancel"):
+		# Modal: the journal key or cancel closes it, and nothing reaches the game underneath.
+		if event.is_action_pressed("lore_journal") or event.is_action_pressed("ui_cancel"):
 			close_journal()
-		get_viewport().set_input_as_handled()
+		if event is InputEventKey or event is InputEventJoypadButton or event is InputEventJoypadMotion:
+			get_viewport().set_input_as_handled()
 		return
-	if event.keycode == KEY_L:
-		# Only during play — not on the title screen, in a cutscene or mid-dialogue.
-		if has_node("/root/GameManager") and GameManager.current_state in [GameManager.GameState.EXPLORATION, GameManager.GameState.COMBAT] \
+	if event.is_action_pressed("lore_journal"):
+		# Only while exploring — not on the title screen, in a cutscene, mid-dialogue,
+		# or in combat (its gamepad button is Spell there).
+		if has_node("/root/GameManager") and GameManager.current_state == GameManager.GameState.EXPLORATION \
 				and not DialogueManager.is_active:
 			open_journal()
 			if _is_open:
@@ -303,7 +303,7 @@ func _build_journal_ui() -> void:
 
 	# Close instruction
 	var close_label = Label.new()
-	close_label.text = "[L] Close Journal"
+	InputService.bind_text(close_label, "[{lore_journal}] Close Journal")
 	close_label.add_theme_font_size_override("font_size", 10)
 	close_label.add_theme_color_override("font_color", Color(0.5, 0.5, 0.55))
 	close_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

@@ -71,7 +71,7 @@ const LATE_FARMING_MARKERS: Dictionary = {
 		"zone_id": "forgotten_sectors_cleanup",
 		"name": "Null Archive Fracture",
 		"label": "Memory Fracture Cleanup",
-		"prompt": "[F] Stabilize fracture",
+		"prompt": "[{interact}] Stabilize fracture",
 		"start_label": "Start cleanup run",
 		"leave_label": "Leave fracture",
 		"cooldown_text": "The null archive is sealing. Re-entry opens in %d seconds.",
@@ -83,7 +83,7 @@ const LATE_FARMING_MARKERS: Dictionary = {
 		"zone_id": "cathedral_firewall_drill",
 		"name": "Firewall Node",
 		"label": "Doctrine Purge Drill",
-		"prompt": "[F] Prime firewall",
+		"prompt": "[{interact}] Prime firewall",
 		"start_label": "Run firewall drill",
 		"leave_label": "Leave node",
 		"cooldown_text": "The firewall node is cooling. Re-entry opens in %d seconds.",
@@ -95,7 +95,7 @@ const LATE_FARMING_MARKERS: Dictionary = {
 		"zone_id": "memory_ocean_salvage_run",
 		"name": "Tide Fragment",
 		"label": "Backup Salvage Run",
-		"prompt": "[F] Pull salvage",
+		"prompt": "[{interact}] Pull salvage",
 		"start_label": "Start salvage run",
 		"leave_label": "Leave tide",
 		"cooldown_text": "The tide fragment is reforming. Re-entry opens in %d seconds.",
@@ -109,7 +109,7 @@ const FARMING_SUPPORT_INTERACTIONS: Dictionary = {
 	"forgotten_sectors": {
 		"name": "DeletedCaseFile",
 		"label": "Deleted Case File",
-		"prompt": "[F] Review case",
+		"prompt": "[{interact}] Review case",
 		"speaker": "Case File 19-B",
 		"text": "A citizen record survives in three layers: a name gap, a child's route sketch, and the court note that called both disposable.",
 		"lore_id": "ch4_null_court_dossiers",
@@ -118,7 +118,7 @@ const FARMING_SUPPORT_INTERACTIONS: Dictionary = {
 	"cathedral_server": {
 		"name": "DoctrineConsole",
 		"label": "Calibration Console",
-		"prompt": "[F] Read doctrine",
+		"prompt": "[{interact}] Read doctrine",
 		"speaker": "Firewall Console",
 		"text": "Calibration excerpt: obedience reduces panic quickly. Consent reduces damage slowly. The console flags only one as efficient.",
 		"lore_id": "ch6_doctrine_trial_notes",
@@ -127,7 +127,7 @@ const FARMING_SUPPORT_INTERACTIONS: Dictionary = {
 	"memory_ocean": {
 		"name": "TideWarningGauge",
 		"label": "Tide Warning",
-		"prompt": "[F] Check tide",
+		"prompt": "[{interact}] Check tide",
 		"speaker": "Tide Gauge",
 		"text": "The gauge reads salvageable, unstable, and not yours. A backup fragment can be carried out; a whole rejected life cannot.",
 		"lore_id": "ch7_archive_tide_warning",
@@ -139,7 +139,7 @@ const SAFE_SIDE_INTERACTIONS: Dictionary = {
 	"mirror_city": {
 		"name": "ReflectionTerminal",
 		"label": "Memory Mirror",
-		"prompt": "[F] Read reflection",
+		"prompt": "[{interact}] Read reflection",
 		"speaker": "Memory Mirror",
 		"text": "One reflection remains outside the trial route: regret is evidence, not a command to replay the choice.",
 		"lore_id": "mirror_city_lost_reflection",
@@ -149,7 +149,7 @@ const SAFE_SIDE_INTERACTIONS: Dictionary = {
 	"saved_assembly": {
 		"name": "SupplyBoard",
 		"label": "Supply Board",
-		"prompt": "[F] Review requests",
+		"prompt": "[{interact}] Review requests",
 		"speaker": "Supply Board",
 		"text": "Faction requests stay posted here as logistics, not a new route: medicine, ore, witness records, and room to refuse.",
 		"lore_id": "saved_assembly_supply_pact",
@@ -159,7 +159,7 @@ const SAFE_SIDE_INTERACTIONS: Dictionary = {
 	"human_patch_lab": {
 		"name": "AetherCorpRecordTerminal",
 		"label": "AetherCorp Record",
-		"prompt": "[F] Read terminal",
+		"prompt": "[{interact}] Read terminal",
 		"speaker": "Record Terminal",
 		"text": "The antechamber record repeats one caution: emergency access is not ownership, and a patch meant to expire must remain answerable.",
 		"lore_id": "human_patch_redaction_note",
@@ -169,7 +169,7 @@ const SAFE_SIDE_INTERACTIONS: Dictionary = {
 	"root_of_heaven": {
 		"name": "FinalPrepTerminal",
 		"label": "Final Prep Terminal",
-		"prompt": "[F] Read reminder",
+		"prompt": "[{interact}] Read reminder",
 		"speaker": "Prep Terminal",
 		"text": "Preparation buffer only. Resume Story carries the final witnesses and choices; this gate will not replay them.",
 		"lore_id": "ch10_witness_preparation_manifest",
@@ -615,7 +615,7 @@ func _create_ui() -> void:
 	layer.add_child(subtitle)
 
 	var controls := Label.new()
-	controls.text = "[F] Interact   [M] World Map   South gate returns to overworld   Resume Story continues chapter route"
+	InputService.bind_text(controls, "[{interact}] Interact   [{world_map}] World Map   South gate returns to overworld   Resume Story continues chapter route")
 	controls.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	controls.add_theme_font_size_override("font_size", 11)
 	controls.add_theme_color_override("font_color", Color(0.72, 0.76, 0.82))
@@ -682,7 +682,7 @@ func _create_late_farming_marker(data: Dictionary) -> void:
 
 	var prompt := Label.new()
 	prompt.name = "Prompt"
-	prompt.text = data.get("prompt", "[F] Interact")
+	InputService.bind_text(prompt, data.get("prompt", "[{interact}] Interact"))
 	prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	prompt.add_theme_font_size_override("font_size", 8)
 	prompt.add_theme_color_override("font_color", Color(1.0, 0.92, 0.56))
@@ -732,7 +732,7 @@ func _create_side_marker(data: Dictionary) -> void:
 
 	var prompt := Label.new()
 	prompt.name = "Prompt"
-	prompt.text = data.get("prompt", "[F] Read")
+	InputService.bind_text(prompt, data.get("prompt", "[{interact}] Read"))
 	prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	prompt.add_theme_font_size_override("font_size", 8)
 	prompt.add_theme_color_override("font_color", Color(1.0, 0.92, 0.56))

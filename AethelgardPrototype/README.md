@@ -18,22 +18,39 @@ New Game plays the crash-site opening, then Elara's meeting → the path to Oakh
 village → the Oakhaven region and the overworld. The long Flight 707 cinematic prologue plays on
 **New Game+**.
 
-## Controls (keyboard)
+## Controls
 
-| Action | Key | Action | Key |
-|---|---|---|---|
-| Move | WASD / arrow keys | Interact / talk | F |
-| Jump | Space | Root Access | E |
-| Attack | J | Perfect Delete | X |
-| Defend / block | K | Spell | Q |
-| Sprint | Shift | Heal | C |
-| Data Vision | Tab | Flee combat | R |
-| Pause | Esc | World map | M |
-| Status window | I | Confirm (menus) | Enter |
+Defaults below. Everything except pause and stick/D-pad movement can be rebound for keyboard
+and gamepad under **Options → Controls…** (main menu or pause menu). On-screen prompts follow
+the device you used last and your bindings, with Xbox, PlayStation and Nintendo labels.
 
-Dialogue: Space or Enter advances; Esc once completes the line and Esc twice skips the
-conversation. Skipping never makes a choice for you. Controls can be rebound in the main menu.
-Gamepad support is not finished yet.
+| Action | Keyboard | Gamepad (Xbox names) |
+|---|---|---|
+| Move | WASD / arrow keys | Left stick / D-pad |
+| Jump | Space | A |
+| Attack | J | X |
+| Parry / block | K | RB |
+| Dash / sprint | Shift | RT |
+| Spell | Q | Y |
+| Heal | C | B |
+| Root Access | E | LB |
+| Perfect Delete | X | RS (click) |
+| Flee combat | R | LT |
+| Interact / talk | F | A |
+| Data Vision | Tab | LT |
+| World map | M | View |
+| Lore journal | L | Y |
+| Status window | I | LS (click) |
+| Skip (hold in dialogue) | Tab | View |
+| Pause | Esc | Menu |
+| Confirm / back (menus) | Enter / Esc | A / B |
+
+Some gamepad buttons do two jobs, but never in the same mode: A is jump in combat and
+interact while exploring, and LT is Flee in combat and Data Vision while exploring.
+
+Dialogue: Space or Enter (pad A) advances. Esc (pad B) once completes the line, and twice skips
+the conversation. Skipping never makes a choice for you. If the controller disconnects mid-play,
+the game pauses.
 
 ## Tests
 
@@ -51,20 +68,20 @@ GODOT=/path/to/godot tests/run_tests.sh res://tests/load_all_test.gd
 ```
 
 CI (`.github/workflows/ci.yml`, at the repository root) runs the same checks on every push and
-pull request: boot without script errors, load every script and scene, the dialogue and
-ContextStack tests, the Phase 0 suite, and `git diff --check`.
+pull request: boot without script errors, load every script and scene, the dialogue,
+ContextStack and input tests, the Phase 0 suite, and `git diff --check`.
 
 ## Layout
 
 | Path | Contents |
 |---|---|
-| `scripts/` | All game code. The global systems are autoloads (see `project.godot`). `scripts/core/context_stack.gd` is the only code that pauses the game or changes game speed: open menus with `ContextStack.push/pop`, slow time with `request_time_scale/release_time_scale`. |
+| `scripts/` | All game code. The global systems are autoloads (see `project.godot`). `scripts/core/context_stack.gd` is the only code that pauses the game or changes game speed: open menus with `ContextStack.push/pop`, slow time with `request_time_scale/release_time_scale`. `scripts/core/input_service.gd` owns bindings and prompts: never hardcode a key name. Write `InputService.fmt("[{interact}] Talk")`, or `InputService.bind_text(label, …)` for labels that stay on screen. Dialogue text expands `{action}` tokens automatically. |
 | `scenes/` | Scenes by chapter, plus `regions/`, `combat/`, `overworld/`. |
 | `assets/` | Runtime art. `assets/art_sources/` is review-only (not imported, not exported). |
 | `shaders/` | Glitch, CRT and other screen effects. |
 | `dialogue/` | All dialogue as `.dlg` text files (format: `story/DIALOGUE_FORMAT.md`). `dialogue/_extracted/` is the old in-code dialogue, kept as rewrite material. |
 | `story/` | Story bible, voice guide, act outlines, dialogue format. |
-| `tests/` | Headless tests and runners (`context_stack_test.gd`, `dialogue_test.gd`, `phase0_blockers_test.gd`, `load_all_test.gd`). |
+| `tests/` | Headless tests and runners (`input_test.gd`, `context_stack_test.gd`, `dialogue_test.gd`, `phase0_blockers_test.gd`, `load_all_test.gd`). |
 | `tools/` | Dev tools, e.g. `extract_dialogue.gd`. Not exported. |
 | `docs/` | Art-pipeline and gameplay-audit history (not exported). |
 

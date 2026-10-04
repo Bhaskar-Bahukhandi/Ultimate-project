@@ -445,7 +445,7 @@ func _create_interactable_npc(data: Dictionary) -> Area2D:
 	npc.add_child(name_label)
 	var prompt = Label.new()
 	prompt.name = "Prompt"
-	prompt.text = "[F] Talk"
+	InputService.bind_text(prompt, "[{interact}] Talk")
 	prompt.add_theme_font_size_override("font_size", 7)
 	prompt.add_theme_color_override("font_color", Color(1, 1, 0.7))
 	prompt.position = Vector2(-15, 5)
@@ -486,7 +486,7 @@ func _create_lore_marker(data: Dictionary) -> Area2D:
 	lore.add_child(icon)
 	var prompt = Label.new()
 	prompt.name = "Prompt"
-	prompt.text = "[F] Inspect"
+	InputService.bind_text(prompt, "[{interact}] Inspect")
 	prompt.add_theme_font_size_override("font_size", 7)
 	prompt.add_theme_color_override("font_color", Color(0.6, 0.3, 0.9))
 	prompt.position = Vector2(-20, 10)
@@ -537,7 +537,7 @@ func _place_boss_gate() -> void:
 	border.z_index = -1
 	gate.add_child(border)
 	var label = Label.new()
-	label.text = "Data Wraith\n[F] Challenge\nRec. Lv 7"
+	InputService.bind_text(label, "Data Wraith\n[{interact}] Challenge\nRec. Lv 7")
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 9)
 	label.add_theme_color_override("font_color", Color(0.8, 0.5, 1.0))
@@ -572,7 +572,7 @@ func _place_boss_gate() -> void:
 		sov_border.z_index = -1
 		sov_gate.add_child(sov_border)
 		var sov_label = Label.new()
-		sov_label.text = "The Sovereign\n[F] Challenge\nRec. Lv 15"
+		InputService.bind_text(sov_label, "The Sovereign\n[{interact}] Challenge\nRec. Lv 15")
 		sov_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		sov_label.add_theme_font_size_override("font_size", 9)
 		sov_label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.3))
@@ -616,7 +616,7 @@ func _place_story_exit() -> void:
 	marker.position = Vector2(-22, -22)
 	gate.add_child(marker)
 	var label = Label.new()
-	label.text = "Server Room\n[F] Descend"
+	InputService.bind_text(label, "Server Room\n[{interact}] Descend")
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 9)
 	label.add_theme_color_override("font_color", Color(0.75, 0.9, 1.0))
@@ -918,7 +918,7 @@ func _place_farming_zone() -> void:
 
 	var prompt := Label.new()
 	prompt.name = "Prompt"
-	prompt.text = "[F] Disturb shard deposit"
+	InputService.bind_text(prompt, "[{interact}] Disturb shard deposit")
 	prompt.add_theme_font_size_override("font_size", 8)
 	prompt.add_theme_color_override("font_color", Color(1.0, 0.9, 0.6))
 	prompt.position = Vector2(-62, 28)
@@ -1033,7 +1033,7 @@ func _create_ui() -> void:
 	title.position = Vector2(540, 10)
 	ui_layer.add_child(title)
 	var instructions = Label.new()
-	instructions.text = "[WASD] Move  [Shift] Sprint  [F] Interact  [M] Map  [I] Status"
+	InputService.bind_text(instructions, "[{move}] Move  [{sprint}] Sprint  [{interact}] Interact  [{world_map}] Map  [{status_window}] Status")
 	instructions.add_theme_font_size_override("font_size", 9)
 	instructions.add_theme_color_override("font_color", Color(0.5, 0.4, 0.55))
 	instructions.position = Vector2(250, 690)

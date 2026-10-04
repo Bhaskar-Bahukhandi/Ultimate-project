@@ -79,6 +79,14 @@ func top() -> StringName:
 	return _stack.back()["id"] if not _stack.is_empty() else &""
 
 
+## The node that opened the top context (null if none, or it was opened without one).
+func top_owner() -> Node:
+	if _stack.is_empty():
+		return null
+	var o: Variant = _stack.back()["owner"]
+	return o if is_instance_valid(o) and o is Node else null
+
+
 ## True while any open context blocks gameplay (movement, combat input,
 ## random encounters) — including ones that don't pause the tree.
 func gameplay_blocked() -> bool:

@@ -11,7 +11,6 @@ const LEGACY_PROLOGUE_SCENE := "res://scenes/prologue/flight_707.tscn"
 func _ready() -> void:
 	_chapter_launching = false  # Reset so chapter select works if player returns to menu
 	GameManager.change_state(GameManager.GameState.MENU)
-	_load_key_bindings()
 	_check_ng_plus_availability()
 	_configure_public_menu_surface()
 	_animate_intro()
@@ -931,26 +930,8 @@ func _on_quit_pressed() -> void:
 #  OPTIONS MENU
 # ======================================================================
 
-# Key bindings that can be remapped
-const REBINDABLE_ACTIONS: Array = [
-	{"action": "move_left", "label": "Move Left"},
-	{"action": "move_right", "label": "Move Right"},
-	{"action": "jump", "label": "Jump"},
-	{"action": "attack", "label": "Attack"},
-	{"action": "defend", "label": "Parry/Defend"},
-	{"action": "spell", "label": "Cast Spell"},
-	{"action": "heal", "label": "Heal"},
-	{"action": "sprint", "label": "Dash/Sprint"},
-	{"action": "root_access", "label": "Root Access"},
-	{"action": "interact", "label": "Interact"},
-	{"action": "data_vision", "label": "Data Vision"},
-	{"action": "perfect_delete", "label": "Perfect Delete"},
-	{"action": "pause_menu", "label": "Pause Menu"},
-	{"action": "status_window", "label": "Status Window"},
-]
+const ControlsMenu := preload("res://scripts/ui/controls_menu.gd")
 
-var _waiting_for_key: String = ""  # Action name we're rebinding
-var _rebind_button_ref: Button = null
 var _text_speed_slider: HSlider = null
 var _music_vol_slider: HSlider = null
 var _sfx_vol_slider: HSlider = null
@@ -1107,39 +1088,14 @@ func _build_options_panel() -> void:
 
 	vbox.add_child(HSeparator.new())
 
-	# ── Key Bindings ──
-	var kb_title = Label.new()
-	kb_title.text = "Key Bindings"
-	kb_title.add_theme_font_size_override("font_size", 16)
-	kb_title.add_theme_color_override("font_color", Color(1.0, 0.85, 0.5))
-	vbox.add_child(kb_title)
-
-	var kb_hint = Label.new()
-	kb_hint.text = "Click a binding to change it, then press the new key"
-	kb_hint.add_theme_font_size_override("font_size", 11)
-	kb_hint.add_theme_color_override("font_color", Color(0.5, 0.5, 0.6))
-	vbox.add_child(kb_hint)
-
-	for bind_info in REBINDABLE_ACTIONS:
-		var hbox = HBoxContainer.new()
-		hbox.custom_minimum_size = Vector2(0, 32)
-		vbox.add_child(hbox)
-
-		var action_label = Label.new()
-		action_label.text = bind_info.label
-		action_label.custom_minimum_size = Vector2(200, 0)
-		action_label.add_theme_font_size_override("font_size", 13)
-		action_label.add_theme_color_override("font_color", Color(0.8, 0.8, 0.9))
-		hbox.add_child(action_label)
-
-		var key_btn = Button.new()
-		key_btn.name = "Bind_" + bind_info.action
-		key_btn.text = _get_action_key_name(bind_info.action)
-		key_btn.custom_minimum_size = Vector2(150, 28)
-		key_btn.add_theme_font_size_override("font_size", 13)
-		var action_name = bind_info.action
-		key_btn.pressed.connect(func(): _start_rebind(action_name, key_btn))
-		hbox.add_child(key_btn)
+	# ── Controls (keyboard + gamepad rebinding) ──
+	var controls_btn = Button.new()
+	controls_btn.name = "ControlsButton"
+	controls_btn.text = "Controls…"
+	controls_btn.custom_minimum_size = Vector2(160, 32)
+	controls_btn.add_theme_font_size_override("font_size", 14)
+	controls_btn.pressed.connect(func(): ControlsMenu.open(self, controls_btn))
+	vbox.add_child(controls_btn)
 
 	vbox.add_child(HSeparator.new())
 
@@ -1335,7 +1291,6 @@ func _build_options_panel() -> void:
 
 func _close_options() -> void:
 	_options_visible = false
-	_waiting_for_key = ""
 	if options_panel and is_instance_valid(options_panel):
 		var tw = create_tween()
 		tw.tween_property(options_panel, "modulate:a", 0.0, 0.2)
@@ -1371,95 +1326,3 @@ func _set_text_speed(speed: float) -> void:
 	config.load("user://audio_settings.cfg")
 	config.set_value("gameplay", "text_speed", speed)
 	config.save("user://audio_settings.cfg")
-
-# ── Key Binding System ──
-
-func _start_rebind(action_name: String, button: Button) -> void:
-	_waiting_for_key = action_name
-	_rebind_button_ref = button
-	button.text = "< Press a key >"
-	button.add_theme_color_override("font_color", Color(1.0, 1.0, 0.3))
-
-func _input(event: InputEvent) -> void:
-	if _waiting_for_key.is_empty():
-		return
-	if not event is InputEventKey:
-		return
-	if not event.pressed:
-		return
-
-	# Cancel with Escape
-	if event.keycode == KEY_ESCAPE:
-		_cancel_rebind()
-		return
-
-	# Apply the new binding
-	var action = _waiting_for_key
-	if InputMap.has_action(action):
-		# Remove old key events
-		var old_events = InputMap.action_get_events(action)
-		for old_ev in old_events:
-			if old_ev is InputEventKey:
-				InputMap.action_erase_event(action, old_ev)
-		# Add new key
-		InputMap.action_add_event(action, event)
-
-	# Update button text
-	if _rebind_button_ref and is_instance_valid(_rebind_button_ref):
-		_rebind_button_ref.text = _get_action_key_name(action)
-		_rebind_button_ref.remove_theme_color_override("font_color")
-
-	_waiting_for_key = ""
-	_rebind_button_ref = null
-
-	# Save bindings
-	_save_key_bindings()
-
-	# Consume the event
-	get_viewport().set_input_as_handled()
-
-func _cancel_rebind() -> void:
-	if _rebind_button_ref and is_instance_valid(_rebind_button_ref):
-		_rebind_button_ref.text = _get_action_key_name(_waiting_for_key)
-		_rebind_button_ref.remove_theme_color_override("font_color")
-	_waiting_for_key = ""
-	_rebind_button_ref = null
-
-func _get_action_key_name(action: String) -> String:
-	if not InputMap.has_action(action):
-		return "???"
-	var events = InputMap.action_get_events(action)
-	for ev in events:
-		if ev is InputEventKey:
-			return OS.get_keycode_string(ev.physical_keycode) if ev.physical_keycode != 0 else OS.get_keycode_string(ev.keycode)
-	return "Unset"
-
-func _save_key_bindings() -> void:
-	var config = ConfigFile.new()
-	config.load("user://key_bindings.cfg")
-	for bind_info in REBINDABLE_ACTIONS:
-		var action = bind_info.action
-		if InputMap.has_action(action):
-			var events = InputMap.action_get_events(action)
-			for ev in events:
-				if ev is InputEventKey:
-					config.set_value("keys", action, ev.physical_keycode if ev.physical_keycode != 0 else ev.keycode)
-					break
-	config.save("user://key_bindings.cfg")
-
-func _load_key_bindings() -> void:
-	var config = ConfigFile.new()
-	if config.load("user://key_bindings.cfg") != OK:
-		return
-	for bind_info in REBINDABLE_ACTIONS:
-		var action = bind_info.action
-		if config.has_section_key("keys", action):
-			var keycode = config.get_value("keys", action)
-			if InputMap.has_action(action):
-				var old_events = InputMap.action_get_events(action)
-				for old_ev in old_events:
-					if old_ev is InputEventKey:
-						InputMap.action_erase_event(action, old_ev)
-				var new_ev = InputEventKey.new()
-				new_ev.physical_keycode = keycode
-				InputMap.action_add_event(action, new_ev)

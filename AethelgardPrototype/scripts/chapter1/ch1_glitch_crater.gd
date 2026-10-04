@@ -335,7 +335,7 @@ func _play_glitch_memory_combat() -> void:
 	# Build the memory combat arena overlay
 	_build_memory_arena()
 
-	await DialogueManager.say("System", "// GLITCH MEMORY: A corrupted fragment. Something you once knew.\n// [J] Attack  |  [K] Parry  |  [A/D] Move", Color(0.5, 1.0, 0.5), true)
+	await DialogueManager.say("System", InputService.fmt("// GLITCH MEMORY: A corrupted fragment. Something you once knew.\n// [{attack}] Attack  |  [{defend}] Parry  |  [{move_lr}] Move"), Color(0.5, 1.0, 0.5), true)
 	if not is_inside_tree(): return
 
 	DialogueManager.hide_dialogue()
@@ -447,7 +447,7 @@ func _build_memory_arena() -> void:
 
 	# Controls hint
 	_memory_hint_label = Label.new()
-	_memory_hint_label.text = "[J] Attack  |  [K] Parry  |  [A/D] Move"
+	InputService.bind_text(_memory_hint_label, "[{attack}] Attack  |  [{defend}] Parry  |  [{move_lr}] Move")
 	_memory_hint_label.add_theme_font_size_override("font_size", 14)
 	_memory_hint_label.add_theme_color_override("font_color", Color(0.6, 0.9, 0.6, 0.7))
 	_memory_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

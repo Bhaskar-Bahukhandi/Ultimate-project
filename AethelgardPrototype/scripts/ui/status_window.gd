@@ -29,7 +29,7 @@ func _ready() -> void:
 		panel.visible = false
 	
 	if OS.is_debug_build():
-		print("[STATUS] Status window system initialized \u2014 Press I to toggle")
+		print("[STATUS] Status window system initialized")
 
 func _unhandled_input(event) -> void:
 	# Use _unhandled_input so other UI elements get priority
@@ -179,7 +179,7 @@ func _refresh_status() -> void:
 	
 	text += "[color=cyan]║[/color]                                      [color=cyan]║[/color]\n"
 	text += "[color=cyan]╠══════════════════════════════════════╣[/color]\n"
-	text += "[color=cyan]║[/color]  [color=gray][I] Close  |  Auto-refresh: 1.0s[/color]   [color=cyan]║[/color]\n"
+	text += "[color=cyan]║[/color]  [color=gray][lb]%s[rb] Close  |  Auto-refresh: 1.0s[/color]   [color=cyan]║[/color]\n" % InputService.prompt(&"status_window")
 	text += "[color=cyan]╚══════════════════════════════════════╝[/color]"
 	
 	# Only update text if it actually changed — prevents scroll jump and flicker
@@ -305,9 +305,9 @@ func _build_status_ui() -> void:
 	vbox.add_child(close_btn)
 
 func _build_hint_notification() -> void:
-	## Build a small 'Press I for Status' hint that fades in then out
+	## Build a small "Press <status key> for Status" hint that fades in then out
 	hint_label = Label.new()
-	hint_label.text = "[  Press  I  for Status Window  ]"
+	InputService.bind_text(hint_label, "[  Press  {status_window}  for Status Window  ]")
 	hint_label.add_theme_font_size_override("font_size", 14)
 	hint_label.add_theme_color_override("font_color", Color(0.0, 1.0, 0.5))
 	hint_label.position = Vector2(460, 680)  # Bottom center area

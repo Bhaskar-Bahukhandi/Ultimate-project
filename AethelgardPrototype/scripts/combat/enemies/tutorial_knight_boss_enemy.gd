@@ -430,7 +430,7 @@ func _status_text(text: String, pos: Vector2, is_positive: bool = false) -> void
 	var now_ms := Time.get_ticks_msec()
 	var last_ms := int(_status_callout_times.get(text, -100000))
 	var gap := STATUS_CALLOUT_REPEAT_GAP_MS
-	if text in ["ROOT ACCESS", "[E] ROOT ACCESS", "VICTORY", "OPEN!"]:
+	if text.ends_with("ROOT ACCESS") or text in ["VICTORY", "OPEN!"]:
 		gap = 120
 	if now_ms - last_ms < gap:
 		return
@@ -1048,7 +1048,7 @@ func _enter_root_access_lock() -> void:
 		_phase_pulse_tween.tween_property(spr, "modulate:a", 1.0, 0.4).set_trans(Tween.TRANS_SINE)
 	_screen_shake(18.0, 0.4)
 	_vfx("vfx_glitch_sparkle", global_position)
-	_status_text("[E] ROOT ACCESS", global_position + Vector2(0, -80), true)
+	_status_text(InputService.fmt("[{root_access}] ROOT ACCESS"), global_position + Vector2(0, -80), true)
 	root_access_triggered.emit()
 
 

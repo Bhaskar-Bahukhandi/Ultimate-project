@@ -1,6 +1,6 @@
 extends Node
 ## ==========================================================================
-## WORLD MAP UI — Press [M] to view region map with fast-travel (if unlocked)
+## WORLD MAP UI — world_map action (M / pad View) shows the region map with fast-travel (if unlocked)
 ## ==========================================================================
 
 signal map_opened

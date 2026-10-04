@@ -57,7 +57,7 @@ var _awaiting_choice: bool = false
 # ── Configuration ─────────────────────────────────────────────────────────
 var TYPE_SPEED: float = 35.0
 const TYPE_FAST_SPEED: float = 120.0
-const ADVANCE_INDICATOR_TEXT = "▼ [SPACE]"
+const ADVANCE_INDICATOR_TEXT = "▼ [{jump}]"   # {action} tokens: InputService.fmt
 const TAB_SKIP_THRESHOLD: float = 0.8
 var _tab_hold_time: float = 0.0
 ## A dialogue sequence is considered finished when no new line or choice
@@ -181,7 +181,7 @@ func _say_line(speaker: String, text: String, color: Color, auto_advance: bool) 
 
 	# ── Typewriter ──
 	_is_typing = true
-	var display_text = _apply_text_effects(text)
+	var display_text = _apply_text_effects(InputService.fmt(text))  # {action} tokens -> button names
 	_text_label.text = display_text
 	_text_label.visible_characters = 0
 
@@ -215,7 +215,7 @@ func _say_line(speaker: String, text: String, color: Color, auto_advance: bool) 
 	# ── Auto-advance mode ──
 	if auto_advance:
 		var read_time = clampf(text.length() * 0.035, 2.5, 8.0)
-		_advance_indicator.text = ADVANCE_INDICATOR_TEXT
+		_advance_indicator.text = InputService.fmt(ADVANCE_INDICATOR_TEXT)
 		_advance_indicator.visible = true
 		_advance_indicator.modulate = Color.WHITE
 
@@ -358,7 +358,7 @@ func _show_choices_impl(prompt: String, choices: Array, speaker: String) -> int:
 	_advance_indicator.visible = false
 	_is_typing = true
 	_skip_typing = was_skipping
-	var display_prompt = _apply_text_effects(prompt)
+	var display_prompt = _apply_text_effects(InputService.fmt(prompt))
 	_text_label.text = display_prompt
 	_text_label.visible_characters = 0
 
@@ -556,7 +556,7 @@ func _build_choice_buttons(choices: Array) -> void:
 
 func _create_choice_button(text: String, index: int) -> Button:
 	var btn = Button.new()
-	btn.text = "  %s  " % text
+	btn.text = "  %s  " % InputService.fmt(text)
 	btn.custom_minimum_size = Vector2(0, 48)
 	btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	btn.focus_mode = Control.FOCUS_NONE  # enabled after grace period
@@ -654,12 +654,12 @@ func _process_skip(delta: float) -> void:
 		_tab_hold_time = 0.0
 		return
 
-	if Input.is_physical_key_pressed(KEY_TAB):
+	if Input.is_action_pressed("skip"):
 		_tab_hold_time += delta
 		if _skip_btn:
 			var progress = clampf(_tab_hold_time / TAB_SKIP_THRESHOLD, 0.0, 1.0)
 			var filled = int(progress * 5)
-			_skip_btn.text = "[Hold TAB to skip %s]" % ("█".repeat(filled) + "░".repeat(5 - filled))
+			_skip_btn.text = InputService.fmt("[Hold {skip} to skip %s]") % ("█".repeat(filled) + "░".repeat(5 - filled))
 			_skip_btn.add_theme_color_override("font_color",
 				Color(0.4 + progress * 0.6, 0.4, 0.5 - progress * 0.3, 0.6 + progress * 0.4))
 		if _tab_hold_time >= TAB_SKIP_THRESHOLD:
@@ -668,7 +668,7 @@ func _process_skip(delta: float) -> void:
 	else:
 		_tab_hold_time = 0.0
 		if _skip_btn and _skip_btn.visible:
-			_skip_btn.text = "[Hold TAB to skip]"
+			_skip_btn.text = InputService.fmt("[Hold {skip} to skip]")
 			_skip_btn.add_theme_color_override("font_color", Color(0.4, 0.4, 0.5, 0.6))
 
 
@@ -680,9 +680,11 @@ func _input(event: InputEvent) -> void:
 	if get_tree().paused:
 		return
 
-	# While choices are shown, block Space/Jump to prevent accidental selection
+	# While choices are shown, block Space/Jump to prevent accidental selection.
+	# Pad A is both jump and ui_accept: let it through so the focused choice
+	# button can take it.
 	if _awaiting_choice:
-		if event.is_action_pressed("jump"):
+		if event.is_action_pressed("jump") and not event.is_action_pressed("ui_accept"):
 			get_viewport().set_input_as_handled()
 			return
 		return
@@ -781,7 +783,7 @@ func _build_ui() -> void:
 	vbox.add_child(_text_label)
 
 	_advance_indicator = Label.new()
-	_advance_indicator.text = ADVANCE_INDICATOR_TEXT
+	_advance_indicator.text = InputService.fmt(ADVANCE_INDICATOR_TEXT)
 	_advance_indicator.add_theme_color_override("font_color", Color(0.45, 0.45, 0.55))
 	_advance_indicator.add_theme_font_size_override("font_size", int(12 * _txt_scale))
 	_advance_indicator.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
@@ -791,7 +793,7 @@ func _build_ui() -> void:
 
 	# Skip hint — top-right corner
 	_skip_btn = Label.new()
-	_skip_btn.text = "[Hold TAB to skip]"
+	_skip_btn.text = InputService.fmt("[Hold {skip} to skip]")
 	_skip_btn.add_theme_color_override("font_color", Color(0.4, 0.4, 0.5, 0.6))
 	_skip_btn.add_theme_font_size_override("font_size", 11)
 	_skip_btn.set_anchors_preset(Control.PRESET_TOP_RIGHT)

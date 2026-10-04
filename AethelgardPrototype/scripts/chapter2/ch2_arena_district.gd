@@ -287,7 +287,7 @@ func _on_arena_victory(tier: String) -> void:
 		DialogueManager.hide_dialogue()
 
 	# Allow player to fight again or leave
-	await DialogueManager.say("Vex", "Want another round? Press SPACE to fight again, or ESC to head back to the city.")
+	await DialogueManager.say("Vex", InputService.fmt("Want another round? Press {ui_accept} to fight again, or {ui_cancel} to head back to the city."))
 	if not is_inside_tree(): return
 	DialogueManager.hide_dialogue()
 	_in_results = false
@@ -321,7 +321,7 @@ func _on_arena_defeat() -> void:
 
 	await get_tree().create_timer(2.0).timeout
 	if not is_inside_tree(): return
-	await DialogueManager.say("Vex", "Tough break, fighter. But every loss makes you stronger! Press SPACE to try again or ESC to leave!")
+	await DialogueManager.say("Vex", InputService.fmt("Tough break, fighter. But every loss makes you stronger! Press {ui_accept} to try again or {ui_cancel} to leave!"))
 	if not is_inside_tree(): return
 	DialogueManager.hide_dialogue()
 	_in_results = false

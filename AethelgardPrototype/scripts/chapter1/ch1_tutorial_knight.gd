@@ -68,18 +68,20 @@ var _tutorial_prompt_label: Label = null
 var _tutorial_completed_actions: Dictionary = {}
 var _tutorial_prompt_visible_timer: float = 0.0
 
+## Prompts and hints use {action} tokens (InputService.fmt) so they name the
+## player's actual keys or buttons.
 const TUTORIAL_STEPS: Array = [
-	{"action": "move", "prompt": "[A/D] Move left and right", "check": "moved", "hint": "Hold a direction to move Kaelen."},
-	{"action": "jump", "prompt": "[SPACE] Jump!  Hold for higher jumps", "check": "jumped", "hint": "Tap SPACE to jump. Hold SPACE longer to jump higher."},
-	{"action": "attack", "prompt": "[J] Attack!  Chain 3 hits for a combo", "check": "attacked", "hint": "Press J repeatedly to chain a 3-hit combo."},
-	{"action": "dash", "prompt": "[SHIFT] Dash through attacks — you have i-frames!", "check": "dashed", "hint": "Dash gives invincibility frames. Use it to dodge through attacks."},
-	{"action": "parry", "prompt": "[K] Parry just before an attack hits — counter window!", "check": "parried", "hint": "Time your parry right before impact. Success opens a counter window."},
-	{"action": "pogo", "prompt": "[S]+[J] in air — Pogo Strike! Bounce off enemies", "check": "pogoed", "hint": "While airborne, hold DOWN + ATTACK to pogo bounce. Resets dash!"},
-	{"action": "spell", "prompt": "[Q] Vengeful Spirit  |  [S]+[Q] Desolate Dive  |  [W]+[Q] Howling Wraiths", "check": "spelled", "hint": "Spells cost 15 MP. MP refills slowly over time and with potions."},
-	{"action": "heal", "prompt": "[C] Focus Heal when safe — costs 20 MP", "check": "healed", "hint": "Hold C to channel a heal. Find a safe moment — you're vulnerable while healing."},
+	{"action": "move", "prompt": "[{move_lr}] Move left and right", "check": "moved", "hint": "Hold a direction to move Kaelen."},
+	{"action": "jump", "prompt": "[{jump}] Jump!  Hold for higher jumps", "check": "jumped", "hint": "Tap {jump} to jump. Hold {jump} longer to jump higher."},
+	{"action": "attack", "prompt": "[{attack}] Attack!  Chain 3 hits for a combo", "check": "attacked", "hint": "Press {attack} repeatedly to chain a 3-hit combo."},
+	{"action": "dash", "prompt": "[{sprint}] Dash through attacks — you have i-frames!", "check": "dashed", "hint": "Dash gives invincibility frames. Use it to dodge through attacks."},
+	{"action": "parry", "prompt": "[{defend}] Parry just before an attack hits — counter window!", "check": "parried", "hint": "Time your parry right before impact. Success opens a counter window."},
+	{"action": "pogo", "prompt": "[{move_down}]+[{attack}] in air — Pogo Strike! Bounce off enemies", "check": "pogoed", "hint": "While airborne, hold DOWN + ATTACK to pogo bounce. Resets dash!"},
+	{"action": "spell", "prompt": "[{spell}] Vengeful Spirit  |  [{move_down}]+[{spell}] Desolate Dive  |  [{move_up}]+[{spell}] Howling Wraiths", "check": "spelled", "hint": "Spells cost 15 MP. MP refills slowly over time and with potions."},
+	{"action": "heal", "prompt": "[{heal}] Focus Heal when safe — costs 20 MP", "check": "healed", "hint": "Hold {heal} to channel a heal. Find a safe moment — you're vulnerable while healing."},
 ]
 
-const HUD_TUTORIAL_TEXT: String = "HUD Guide:\n[color=#ff4444]Red Bar[/color] = HP  |  [color=#33bbff]Cyan Bar[/color] = MP  |  [color=#4488ff]Blue Bar[/color] = Soul  |  [color=#aa44ff]Purple %%[/color] = Corruption\nMP pays for spells [Q] and healing [C]. Earn Soul with parries, perfect dodges and kills."
+const HUD_TUTORIAL_TEXT: String = "HUD Guide:\n[color=#ff4444]Red Bar[/color] = HP  |  [color=#33bbff]Cyan Bar[/color] = MP  |  [color=#4488ff]Blue Bar[/color] = Soul  |  [color=#aa44ff]Purple %%[/color] = Corruption\nMP pays for spells [{spell}] and healing [{heal}]. Earn Soul with parries, perfect dodges and kills."
 var _hud_tutorial_shown: bool = false
 var _tutorial_skip_requested: bool = false
 
@@ -103,7 +105,7 @@ var rage_dialogue: Dictionary = {
 }
 
 var phase4_dialogue: Dictionary = {
-	"speaker": "Elara", "text": "Its control loop is exposed! Open Root Access\nwith [E] and disable its attack flag!", "duration": 4.0
+	"speaker": "Elara", "text": "Its control loop is exposed! Open Root Access\nwith [{root_access}] and disable its attack flag!", "duration": 4.0
 }
 
 var victory_dialogues: Array[Dictionary] = [
@@ -155,8 +157,8 @@ func _process(delta) -> void:
 			SceneTransitions.change_scene("res://scenes/chapter1/shatter_transition.tscn", SceneTransitions.TransitionStyle.SHATTER)
 
 func _input(event) -> void:
-	# Skip tutorial with TAB
-	if event is InputEventKey and event.pressed and event.keycode == KEY_TAB:
+	# Skip the tutorial (Tab / pad View)
+	if event.is_action_pressed("skip"):
 		if _tutorial_active and combat_started and not combat_ended:
 			_tutorial_skip_requested = true
 			get_viewport().set_input_as_handled()
@@ -799,7 +801,7 @@ func _update_combat_tutorial(delta: float) -> void:
 		_end_tutorial()
 		return
 
-	# Allow skipping with [TAB]
+	# Skipped with the skip action (Tab / pad View)
 	if _tutorial_skip_requested:
 		_end_tutorial()
 		return
@@ -836,7 +838,7 @@ func _update_combat_tutorial(delta: float) -> void:
 		var display_text = step.prompt
 		if _tutorial_timer >= _tutorial_delay + 5.0 and step.has("hint"):
 			display_text += "\n" + step.hint
-		_tutorial_prompt_label.text = display_text + "\n[color=#666666][TAB] Skip Tutorial[/color]"
+		_tutorial_prompt_label.text = InputService.fmt(display_text + "\n[{skip}] Skip Tutorial")
 		_tutorial_prompt_label.visible = true
 		# Pulse the prompt opacity
 		_tutorial_prompt_visible_timer += delta
@@ -918,8 +920,6 @@ func _show_hud_tutorial() -> void:
 	## Show a brief HUD legend at the start of combat
 	if not _tutorial_prompt_label:
 		return
-	# Use a RichTextLabel if attached, otherwise fallback to plain text
-	var _hud_text = "HUD: Red=HP | Cyan=MP | Blue=Soul | Purple%=Corruption\nMP pays for spells [Q] and heal [C]. Soul comes from parries, perfect dodges and kills."
 	if has_node("/root/VFXLibrary") and player:
 		VFXLibrary.spawn_status_indicator("HP / MP / Soul / Corruption — check top-left!", player.global_position + Vector2(0, -80), player.get_parent(), false)
 
@@ -1000,7 +1000,7 @@ func _advance_dialogue() -> void:
 		return
 
 	var entry = _dialogue_queue.pop_front()
-	_show_dialogue(entry.speaker, entry.text, entry.duration)
+	_show_dialogue(entry.speaker, InputService.fmt(entry.text), entry.duration)
 
 func _show_dialogue(speaker: String, text: String, duration: float) -> void:
 	_dialogue_active = true

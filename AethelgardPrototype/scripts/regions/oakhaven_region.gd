@@ -449,7 +449,7 @@ func _create_npc(data: Dictionary) -> Node2D:
 	# Interaction prompt (hidden until close)
 	var prompt = Label.new()
 	prompt.name = "Prompt"
-	prompt.text = "[F] Talk"
+	InputService.bind_text(prompt, "[{interact}] Talk")
 	prompt.add_theme_font_size_override("font_size", 7)
 	prompt.add_theme_color_override("font_color", Color(1, 1, 0.7))
 	prompt.position = Vector2(-15, 5)
@@ -520,7 +520,7 @@ func _create_lore_item(data: Dictionary) -> Node2D:
 	# Interact prompt
 	var prompt = Label.new()
 	prompt.name = "Prompt"
-	prompt.text = "[F] Inspect"
+	InputService.bind_text(prompt, "[{interact}] Inspect")
 	prompt.add_theme_font_size_override("font_size", 7)
 	prompt.add_theme_color_override("font_color", Color(0.4, 0.9, 1.0))
 	prompt.position = Vector2(-20, 10)
@@ -587,7 +587,7 @@ func _place_boss_gate() -> void:
 	gate.add_child(arch)
 
 	var label = Label.new()
-	label.text = "Knight's Arena\n[F] Enter\nRec. Lv 5"
+	InputService.bind_text(label, "Knight's Arena\n[{interact}] Enter\nRec. Lv 5")
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 9)
 	label.add_theme_color_override("font_color", Color(1, 0.85, 0.5))
@@ -1014,7 +1014,7 @@ func _place_farming_zone() -> void:
 
 	var prompt := Label.new()
 	prompt.name = "Prompt"
-	prompt.text = "[F] Forage herb patch"
+	InputService.bind_text(prompt, "[{interact}] Forage herb patch")
 	prompt.add_theme_font_size_override("font_size", 8)
 	prompt.add_theme_color_override("font_color", Color(1.0, 0.95, 0.55))
 	prompt.position = Vector2(-62, 22)
@@ -1160,7 +1160,7 @@ func _create_ui() -> void:
 	ui_layer.add_child(region_title)
 
 	var instructions = Label.new()
-	instructions.text = "[WASD] Move  [Shift] Sprint  [F] Interact  [M] Map  [I] Status"
+	InputService.bind_text(instructions, "[{move}] Move  [{sprint}] Sprint  [{interact}] Interact  [{world_map}] Map  [{status_window}] Status")
 	instructions.add_theme_font_size_override("font_size", 9)
 	instructions.add_theme_color_override("font_color", Color(0.6, 0.6, 0.5))
 	instructions.position = Vector2(250, 690)

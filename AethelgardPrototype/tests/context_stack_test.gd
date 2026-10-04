@@ -116,6 +116,9 @@ func _test_pause_menu_and_map() -> void:
 	pause._input(_key_event("pause_menu"))
 	_check(pause.is_paused and paused and cs.top() == &"pause", "Esc opens pause through ContextStack")
 	pause._input(_key_event("pause_menu"))
+	_check(pause.is_paused, "a second Esc in the same frame is ignored (one press, one action)")
+	await process_frame
+	pause._input(_key_event("pause_menu"))
 	_check(not pause.is_paused and not paused, "Esc again closes it")
 
 	await process_frame
@@ -173,9 +176,7 @@ func _test_journal_and_shop() -> void:
 	gm.change_state(gm.GameState.EXPLORATION)
 	get_root().get_node("DialogueManager").force_reset()
 	var journal := get_root().get_node("LoreJournal")
-	var l := InputEventKey.new()
-	l.keycode = KEY_L
-	l.pressed = true
+	var l := _key_event("lore_journal")
 	journal._input(l)
 	_check(journal._is_open and paused, "L opens the journal and pauses")
 	journal._input(l)

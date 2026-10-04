@@ -2558,17 +2558,17 @@ func _build_combat_hud() -> void:
 	btn_bar.add_theme_constant_override("separation", 12)
 	_hud_layer.add_child(btn_bar)
 
-	_add_action_button(btn_bar, "JUMP [Space]", "jump", Color(0.3, 0.8, 1.0))
-	_add_action_button(btn_bar, "DASH [Shift]", "sprint", Color(0.3, 1.0, 0.5))
-	_add_action_button(btn_bar, "ATK [J]", "attack", Color(1.0, 0.4, 0.3))
-	_add_action_button(btn_bar, "DEF [K]", "defend", Color(0.6, 0.6, 1.0))
-	_add_action_button(btn_bar, "SPELL [Q]", "spell", Color(0.8, 0.5, 1.0))
-	_add_action_button(btn_bar, "HEAL [C]", "heal", Color(0.4, 1.0, 0.6))
+	_add_action_button(btn_bar, "JUMP [{jump}]", "jump", Color(0.3, 0.8, 1.0))
+	_add_action_button(btn_bar, "DASH [{sprint}]", "sprint", Color(0.3, 1.0, 0.5))
+	_add_action_button(btn_bar, "ATK [{attack}]", "attack", Color(1.0, 0.4, 0.3))
+	_add_action_button(btn_bar, "DEF [{defend}]", "defend", Color(0.6, 0.6, 1.0))
+	_add_action_button(btn_bar, "SPELL [{spell}]", "spell", Color(0.8, 0.5, 1.0))
+	_add_action_button(btn_bar, "HEAL [{heal}]", "heal", Color(0.4, 1.0, 0.6))
 
 
 func _add_action_button(parent: HBoxContainer, label_text: String, action: String, color: Color) -> void:
 	var btn = Button.new()
-	btn.text = label_text
+	InputService.bind_text(btn, label_text)
 	btn.custom_minimum_size = Vector2(110, 44)
 
 	var style_normal = StyleBoxFlat.new()

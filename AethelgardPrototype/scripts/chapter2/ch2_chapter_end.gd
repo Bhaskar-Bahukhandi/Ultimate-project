@@ -481,9 +481,9 @@ func _build_chapter_stats_text() -> String:
 	text += "═══════════════════════════════════\n"
 	text += "\n"
 	text += "Thank you for playing the Aethelgard Prototype!\n"
-	text += "Press SPACE to return to the main menu."
+	text += "Press {ui_accept} to return to the main menu."
 
-	return text
+	return InputService.fmt(text)
 
 # ---------------------------------------------------------------------------
 # Helper: conditional checks

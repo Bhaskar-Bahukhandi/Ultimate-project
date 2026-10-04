@@ -629,7 +629,6 @@ func _ready() -> void:
 	_load_accessibility_settings()
 	_load_difficulty_setting()
 	_setup_custom_cursor()
-	_add_gamepad_bindings()
 	_build_autosave_indicator()
 
 func _process(delta: float) -> void:
@@ -2111,49 +2110,6 @@ func _setup_custom_cursor() -> void:
 					img.set_pixel(cx, cy + sy * t_i, outline_c)
 	var tex = ImageTexture.create_from_image(img)
 	Input.set_custom_mouse_cursor(tex, Input.CURSOR_ARROW, Vector2(center, center))
-
-
-# ══════════════════════════════════════════════════════════════════════════
-# PASS 57 — GAMEPAD BINDINGS (RUNTIME)
-# ══════════════════════════════════════════════════════════════════════════
-
-func _add_gamepad_bindings() -> void:
-	## Add controller bindings for all input actions at runtime.
-	var mappings: Dictionary = {
-		"jump":           [{"btn": JOY_BUTTON_A}],
-		"attack":         [{"btn": JOY_BUTTON_X}],
-		"spell":          [{"btn": JOY_BUTTON_Y}],
-		"heal":           [{"btn": JOY_BUTTON_B}],
-		"defend":         [{"btn": JOY_BUTTON_RIGHT_SHOULDER}],
-		"sprint":         [{"axis": JOY_AXIS_TRIGGER_RIGHT, "val": 1.0}],
-		"root_access":    [{"axis": JOY_AXIS_TRIGGER_LEFT, "val": 1.0}],
-		"interact":       [{"btn": JOY_BUTTON_A}],
-		"pause_menu":     [{"btn": JOY_BUTTON_START}],
-		"status_window":  [{"btn": JOY_BUTTON_BACK}],
-		"data_vision":    [{"btn": JOY_BUTTON_LEFT_STICK}],
-		"perfect_delete": [{"btn": JOY_BUTTON_RIGHT_STICK}],
-		"move_left":      [{"axis": JOY_AXIS_LEFT_X, "val": -1.0}, {"btn": JOY_BUTTON_DPAD_LEFT}],
-		"move_right":     [{"axis": JOY_AXIS_LEFT_X, "val": 1.0}, {"btn": JOY_BUTTON_DPAD_RIGHT}],
-		"move_up":        [{"axis": JOY_AXIS_LEFT_Y, "val": -1.0}, {"btn": JOY_BUTTON_DPAD_UP}],
-		"move_down":      [{"axis": JOY_AXIS_LEFT_Y, "val": 1.0}, {"btn": JOY_BUTTON_DPAD_DOWN}],
-	}
-	for action_name in mappings:
-		if not InputMap.has_action(action_name):
-			continue
-		for entry in mappings[action_name]:
-			if entry.has("btn"):
-				var ev = InputEventJoypadButton.new()
-				ev.button_index = entry.btn
-				ev.device = -1  # All gamepads
-				InputMap.action_add_event(action_name, ev)
-			elif entry.has("axis"):
-				var ev = InputEventJoypadMotion.new()
-				ev.axis = entry.axis
-				ev.axis_value = entry.val
-				ev.device = -1
-				InputMap.action_add_event(action_name, ev)
-	if OS.is_debug_build():
-		print("[GAMEPAD] Controller bindings added for %d actions" % mappings.size())
 
 
 # ══════════════════════════════════════════════════════════════════════════
