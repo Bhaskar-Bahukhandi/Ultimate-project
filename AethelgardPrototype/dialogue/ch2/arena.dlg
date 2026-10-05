@@ -4,9 +4,9 @@
 
 ~ enter
 Vex: Ironhold! Here's a face you haven't seen before! Fresh off the road, still got all its teeth!
-Elara: Hit the one that's trying to hit you.
-Kaelen: Thanks.
-Elara: I'm support.
+Elara: Hit the one that's trying to hit you. That's my whole strategy.
+Kaelen: Thanks. Really, that's very helpful.
+Elara: I'm support. Support doesn't have to be good.
 [if ch2_seraphina_met] Seraphina: His left shoulder drops before he swings.
 [if ch2_seraphina_met] Kaelen: Now that's support.
 [if ch2_seraphina_met] Elara: I liked you better before the armour.
@@ -15,9 +15,9 @@ Elara: I'm support.
 ~ memorial
 Kaelen: The names carved on that wall. Some of them are flickering.
 Seraphina: The arena started as defender training. People wanted danger with a bell.
-Kaelen: What does that mean?
+Kaelen: What does that mean, danger with a bell?
 Seraphina: Outside the walls, danger comes whenever it likes. In here, we ring first.
-Kaelen: These names keep changing.
+Kaelen: These names keep changing while I'm looking at them.
 Seraphina: That's why I keep paper copies.
 set ch2_arena_memorial_seen
 

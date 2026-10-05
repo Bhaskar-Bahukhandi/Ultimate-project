@@ -4,11 +4,13 @@
 # Source fix: the Wraith no longer says "MARA" (Oakhaven's baker); the name it
 # reaches for is a missing worker's, which the shift records can confirm.
 # Chapters 4, 5 and 10 read ch2_data_wraith_restored / _destroyed / _absorbed.
+# rhythm: clipped destroy
+# (The destroy exchange is deliberately bare. Nobody wants to say more.)
 
 ~ entry
 Kaelen (Internal): The stone stops after the first stairs. Underneath, it's conduits. Cable runs. Junction boxes older than the city.
-Seraphina: You know this place.
-Kaelen: Not this place. The way it's built.
+Seraphina: You know this place. Don't tell me you don't.
+Kaelen: Not this place. The way it's built. I've seen wiring like this before.
 Seraphina: I don't love how you said that.
 Elara: You get used to it. I didn't, but you might.
 [if ch2_shift_sealed] Kaelen (Internal): A night's made it worse. The lights are wrong all the way down.
@@ -34,13 +36,13 @@ Data Wraith: RESTORE.
 ~ recognition
 do data_vision_wraith
 Kaelen: It isn't one ghost. It isn't lots of separate people, either. Something tried to restore them all at once, and they ran together.
-Seraphina: Are they in pain?
-Kaelen: I think so.
+Seraphina: Are they in pain? Any of them?
+Kaelen: I think so. I think all of them are.
 Data Wraith: YES.
 Data Wraith: NO.
 Data Wraith: DEFINE.
 Elara: That sounded like you.
-Kaelen: I know.
+Kaelen: I know. It sounded exactly like me.
 do wraith_hostile
 
 # ── B03 barks ──────────────────────────────────────────────────────────────
@@ -68,8 +70,8 @@ do root_edit wraith_separate
 Kaelen (Internal): Records. Shift lists. Anything with a name on it.
 do wraith_split
 Iven: My name's Iven.
-Kaelen: Iven.
-Iven: Don't lose it.
+Kaelen: Iven. Got it. Iven.
+Iven: Don't lose it. I nearly did.
 do kaelen_writes_name
 Kaelen (Internal): I write it down. I write it down twice.
 
@@ -85,8 +87,8 @@ do wraith_ends
 ~ absorb
 set ch2_data_wraith_absorbed
 do absorb_wraith
-Elara: Tell me this is safe.
-Kaelen: It isn't.
+Elara: Tell me this is safe. Just say it, even if you're guessing.
+Kaelen: It isn't. It really isn't.
 Elara: Then thank you for not lying to me.
 # The fragments go into him. His corruption climbs. Later, the voices come back as single words.
 

@@ -4,35 +4,37 @@
 # if you wait.
 # Every branch keeps Elara with Kaelen. The legacy flags ch1_elara_trusted and
 # ch1_elara_cautious are what GameManager.has_elara() reads.
+# rhythm: clipped after_slime
+# (Elara's questioning at bow-point is meant to be terse: name, origin, facts.)
 
 ~ start
-Kaelen: ...Why do I have a sword?
-Kaelen: I don't own a sword.
-Kaelen: I own a sword.
+Kaelen: Hang on. Why is there a sword on my belt?
+Kaelen: I don't own a sword. I've never owned a sword in my life.
+Kaelen: ...Apparently I own a sword.
 do slime_appears
 
 ~ after_slime
-Kaelen: That... wasn't blood.
-???: Were you hoping it would be?
+Kaelen: That wasn't blood. That wasn't anything. It just... came apart.
+???: Were you hoping it would be blood?
 do elara_enters
 Elara: Hands where I can see them.
-Kaelen: One of them's holding a sword.
+Kaelen: One of them's holding a sword. Sorry. That's new.
 Elara: Then put that one down first.
-Kaelen: Okay. Putting it down. Slowly.
+Kaelen: Okay. Putting it down. Slowly. Nobody panic.
 do kaelen_lowers_sword
 Elara: Name?
 Kaelen: Kaelen.
 Elara: From where?
 Kaelen: Flight 707.
 Elara: Is that a place?
-Kaelen: It's a plane. It's— it flies. It's a big metal thing that flies.
+Kaelen: It's a plane. It— it flies. It's a big metal thing full of people, and it flies.
 # She looks at him the way you'd look at someone describing a dragon made of spoons.
-Kaelen: You didn't see anything fall today? Out of the sky?
+Kaelen: You didn't see anything fall today? Out of the sky, near here?
 Elara: You.
-Kaelen: Anyone else? Smoke, wreckage, people?
-Elara: No.
+Kaelen: Anyone else? Smoke, wreckage, people walking around in shock?
+Elara: No. Nothing like that.
 Elara: Were there supposed to be?
-Kaelen: ...A lot.
+Kaelen: ...A lot of them.
 do elara_lowers_bow
 Elara: Then let's talk somewhere the road isn't trying to eat us.
 ? Kaelen (Internal): How much do I tell her?
@@ -44,28 +46,28 @@ Elara: Then let's talk somewhere the road isn't trying to eat us.
 set elara_first_truth
 set ch1_elara_trusted
 do trust elara 10
-Elara: You remember them.
-Kaelen: Enough.
-Elara: Good. Hold on to that.
+Elara: You remember them. Their faces, I mean, not just that they were there.
+Kaelen: Enough of them. Some.
+Elara: Good. Hold on to that as hard as you can.
 Kaelen: Why is that good?
-Elara: People who come out of bad places usually come out remembering less.
+Elara: Because the people who walk out of bad places usually walk out remembering less.
 => after
 
 ~ cautious
 set elara_first_cautious
 set ch1_elara_cautious
-Elara: You remember enough to be careful.
-Kaelen: I remember enough to know I should be looking.
-Elara: Then we want the same thing. For now.
+Elara: You remember enough to be careful. That's something.
+Kaelen: I remember enough to know I should be looking for them, not standing here.
+Elara: Then we want the same thing, for now. Somewhere with walls first.
 => after
 
 ~ deflect
 set elara_first_deflect
 set ch1_elara_cautious
-Elara: Oakhaven Reach.
+Elara: You're in Oakhaven Reach.
 Kaelen: Is that a country?
-Elara: A region.
-Kaelen: Of which country? Which— where?
+Elara: A region. The country's a long argument; nobody agrees where it starts.
+Kaelen: Fine. Which world, then? Where is all of this?
 Elara: Aethelgard.
 Kaelen (Internal): Nothing. It's not a word I know. It's not even close to one.
 => after
@@ -73,16 +75,16 @@ Kaelen (Internal): Nothing. It's not a word I know. It's not even close to one.
 ~ after
 set elara_met
 Elara: You came out of the crater, stranger.
-Kaelen: I guess I did.
+Kaelen: I suppose I did. I woke up in it, anyway.
 Elara: People don't come out of the crater.
-Kaelen: Great. Today's going great.
+Kaelen: Great. Today's going great. Really.
 Elara: Oakhaven keeps road records. Travellers, strangers... things that fall out of places they shouldn't.
-Kaelen: That happens often enough to need records?
-Elara: Often enough that Bran complains about the paperwork.
+Kaelen: That happens often enough that someone writes it down?
+Elara: Often enough that Bran complains about the paperwork every single time.
 do kaelen_reaches_for_sword
 do elara_raises_bow
-Kaelen: Right. Sorry. Leaving that there.
+Kaelen: Right. Sorry. I'll leave that where it is.
 Elara: Walk ahead of me, where I can see you.
-Kaelen: Very trusting.
-Elara: Very practical.
+Kaelen: Very trusting of you.
+Elara: Very practical. You'd do the same.
 do objective Reach Oakhaven. Follow the first lead on the missing passengers.

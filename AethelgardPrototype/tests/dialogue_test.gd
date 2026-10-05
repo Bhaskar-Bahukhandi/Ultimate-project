@@ -212,6 +212,14 @@ const QUESTION_OPENER := "^(What|Why|Where|Who|Whose|How|When|Which|Did|Does|Is|
 ## better answer" doesn't, so the grading forms only count at the start of a line.
 const BANNED_TICS := ["^(better|good) answer\b", "\bboth (are|can be) true\b", "\bthat sentence\b"]
 const FLAT_REGISTER_MIN_LINES := 15   # a file this long with no contractions reads robotic
+## Rhythm (VOICE_GUIDE §5): short lines are a spice, not the diet. A line of
+## RHYTHM_SHORT_WORDS words or fewer is "short". Machine speakers bark by design,
+## and a node listed in a "# rhythm: clipped node …" comment is a deliberate beat.
+const RHYTHM_SHORT_WORDS := 3
+const RHYTHM_MAX_SHORT_SHARE := 0.30
+const RHYTHM_MIN_LINES := 12          # below this, one quip swings the share too much
+const RHYTHM_MAX_SHORT_RUN := 4
+const RHYTHM_EXEMPT_SPEAKERS := ["System", "The Minute Hand", "Data Wraith", "Administrator Proxy"]
 
 func _test_voice_lint() -> void:
 	print("[voice lint — authored .dlg files]")
@@ -225,13 +233,34 @@ func _test_voice_lint() -> void:
 	var keys: Array[String] = []
 	var unknown_speakers: Array[String] = []
 	var flat_files: Array[String] = []
+	var word := RegEx.create_from_string("[A-Za-z0-9']+")
+	var clipped_re := RegEx.create_from_string("(?m)^#\\s*rhythm:\\s*clipped\\s+(.+)$")
+	var choppy_files: Array[String] = []
+	var choppy_runs: Array[String] = []
 	var files := _authored_dlg_files("res://dialogue")
 	for path in files:
 		var s = load("res://scripts/dialogue/dialogue_script.gd").load_file(path, false)
 		var spoken := 0
 		var contracted := 0
+		var clipped: Array = []
+		for m in clipped_re.search_all(FileAccess.get_file_as_string(path)):
+			clipped.append_array(m.get_string(1).split(" ", false))
+		var counted := 0
+		var short := 0
 		for node_name in s.nodes:
+			var run := 0
 			for step in s.nodes[node_name]:
+				if step["type"] == "line" and not node_name in clipped and not step["speaker"] in RHYTHM_EXEMPT_SPEAKERS:
+					var n := word.search_all(step["text"]).size()
+					if n > 0:   # "..." is a pause, not a line
+						counted += 1
+						if n <= RHYTHM_SHORT_WORDS:
+							short += 1
+							run += 1
+							if run == RHYTHM_MAX_SHORT_RUN + 1:
+								choppy_runs.append("%s:%d (%s)" % [path.get_file(), step["line"], node_name])
+						else:
+							run = 0
 				var texts: Array = []
 				var who: Array = []
 				if step["type"] == "line":
@@ -263,12 +292,19 @@ func _test_voice_lint() -> void:
 						keys.append(at)
 		if spoken >= FLAT_REGISTER_MIN_LINES and contracted == 0:
 			flat_files.append(path.get_file())
+		if counted >= RHYTHM_MIN_LINES and float(short) / counted > RHYTHM_MAX_SHORT_SHARE:
+			choppy_files.append("%s %d%%" % [path.get_file(), roundi(100.0 * short / counted)])
+		for clipped_node in clipped:
+			if not s.nodes.has(clipped_node):
+				choppy_runs.append("%s: '# rhythm: clipped %s' names no node" % [path.get_file(), clipped_node])
 	_check(files.size() > 0, "found %d authored .dlg files" % files.size())
 	_check(unasked.is_empty(), "questions end in a question mark %s" % [unasked.slice(0, 8)])
 	_check(tics.is_empty(), "no banned tics %s" % [tics.slice(0, 8)])
 	_check(keys.is_empty(), "no hardcoded key names — use {action} tokens %s" % [keys.slice(0, 8)])
 	_check(unknown_speakers.is_empty(), "every speaker is registered in SPEAKER_COLORS %s" % [unknown_speakers.slice(0, 8)])
 	_check(flat_files.is_empty(), "no long file without a single contraction %s" % [flat_files])
+	_check(choppy_files.is_empty(), "no file is more than %d%% lines of %d words or fewer %s" % [roundi(RHYTHM_MAX_SHORT_SHARE * 100), RHYTHM_SHORT_WORDS, choppy_files])
+	_check(choppy_runs.is_empty(), "no more than %d short lines in a row outside '# rhythm: clipped' nodes %s" % [RHYTHM_MAX_SHORT_RUN, choppy_runs.slice(0, 8)])
 
 
 func _authored_dlg_files(dir_path: String) -> Array[String]:

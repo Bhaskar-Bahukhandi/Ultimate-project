@@ -5,10 +5,10 @@
 
 ~ start
 do elara_serves_stew
-Kaelen: What is it?
+Kaelen: This smells amazing. What is it?
 Elara: Stew.
 Kaelen: That's a category, not a recipe.
-Elara: Today it's both.
+Elara: Today it's both. Eat it before it gets cold and turns into a different category.
 => topics
 
 ~ topics
@@ -21,24 +21,24 @@ Elara: Today it's both.
 
 ~ where
 set ch1_stew_asked_where
-Elara: Aethelgard.
-Kaelen: The country?
-Elara: The world.
-Kaelen: Of course it is.
-Elara: You asked.
+Elara: Aethelgard. You asked me that on the road.
+Kaelen: I know. I'm asking again. Is that the country?
+Elara: It's the world. All of it.
+Kaelen: Of course it is. Why would it be anything smaller.
+Elara: You did ask.
 => topics
 
 ~ fracture
 set ch1_stew_asked_fracture
-Elara: It's when things stop agreeing with themselves.
-Kaelen: That's the definition?
-Elara: It's the useful one. The priests have a longer one. It doesn't move carts.
+Elara: It's when things stop agreeing with themselves. Trees, water, roads. People, sometimes.
+Kaelen: That's the actual definition?
+Elara: It's the useful one. The priests have a longer one with more stars in it. It doesn't move carts.
 => topics
 
 ~ magic
 set ch1_stew_asked_magic
 Elara: You're asking me? You're the one who reached inside a beast this afternoon.
-Kaelen: Okay. Point taken.
+Kaelen: Okay. Point taken. I'll ask you again when I understand what I did.
 => topics
 
 ~ arm
@@ -47,33 +47,33 @@ set ch1_elara_arm_talked
 => arm_pushed
 
 ~ arm_waited
-Elara: You waited. On the road.
-Kaelen: You didn't want to talk about it.
-Elara: Still don't.
-Kaelen: Okay.
+Elara: You waited. On the road, when I did the cart. You saw, and you didn't say anything.
+Kaelen: You didn't look like you wanted to talk about it.
+Elara: I still don't.
+Kaelen: Okay. Then we won't.
 Elara: ...Thank you, stranger.
 do trust elara 10
 => topics
 
 ~ arm_pushed
-Elara: It's corruption. Casting makes it worse.
+Elara: It's corruption. It's been there years. Every time I cast, it gets a little worse.
 Kaelen: Then stop casting.
 do pause 1.2
 Elara: There it is.
 Kaelen: There what is?
 Elara: Stranger turns up, sees one afternoon of my life, and solves it.
-Kaelen: I didn't mean—
-Elara: I know you didn't. That's why I'm only annoyed.
+Kaelen: I didn't mean it like that. I just—
+Elara: I know you didn't. That's why I'm only annoyed with you.
 => topics
 
 # ── Things in the room ────────────────────────────────────────────────────
 
 ~ inspect_bandages
-Kaelen (Internal): Bandages. A lot of them.
+Kaelen (Internal): Bandages. A lot of them, rolled and ready.
 do elara_sees_him_look
-Elara: They're mine.
-Kaelen: I guessed.
-Elara: Good. Saves us a conversation.
+Elara: They're mine, before you ask.
+Kaelen: I guessed they might be.
+Elara: Good. That saves us a conversation.
 
 ~ inspect_herbs
 Kaelen (Internal): Half of these I don't recognise. The other half I don't recognise either.
@@ -89,4 +89,4 @@ Kaelen (Internal): Oakhaven, the crater, a road going south. Someone's drawn a s
 
 # After the road ledger, on the way to her house.
 ~ invite
-Elara: Come on, stranger. Food first. Roads after.
+Elara: Come on, stranger. Food first, then you can worry about roads.

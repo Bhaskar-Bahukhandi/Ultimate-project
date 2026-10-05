@@ -169,8 +169,39 @@ These show the standard the source draft (`Aethelgard_PRODUCTION_MASTER_2.1`) wa
 `tests/dialogue_test.gd` runs a voice lint over every authored `.dlg` file. It skips
 `dialogue/_extracted/`, which is old source material.
 
-- A line that opens like a question ("What…", "Where…", "Did you…") must end in `?`, `…`, `—` or
-  `!`.
+- A line that opens like a question ("What…", "Where…", "Did you…") must contain a `?`, or end
+  in `…`, `—` or `!`. A line that only *looks* like a question opener ("Is still attached") has
+  to be rephrased; the lint can't tell, and neither can a player skimming.
 - The banned tics above ("Better answer", "Good answer", "Both are true", "that sentence") fail the
   build.
 - Every speaker must be registered, with a colour, in `DialogueManager.SPEAKER_COLORS`.
+- A file of 15 or more spoken lines needs at least one contraction.
+- **Rhythm.** A line of three words or fewer is *short*. Short lines are a spice, not the diet:
+  - no file of 12+ counted lines may be more than **30%** short;
+  - no more than **4** short lines in a row inside one node.
+
+  Pure pauses ("...") don't count. Machine speakers (System, The Minute Hand, Data Wraith,
+  Administrator Proxy) are exempt because barking is their voice. A node that is *meant* to be
+  clipped (a rapid-fire interrogation, a comic volley, Aldric under the directive) is exempted
+  with a comment in the file, ideally followed by a line saying why:
+
+  ```
+  # rhythm: clipped commander gate
+  # (The seat interrogation is a rapid-fire test.)
+  ```
+
+  The lint fails if a listed node doesn't exist, so the comment can't go stale.
+
+### Target line lengths (Chapters 1–2 after the breathing pass)
+
+| Speaker | Average words | Short share | Notes |
+|---|---|---|---|
+| Kaelen | 7–10 | ≤ 20% | Gives the reason or the detail, not just the reply. |
+| Kaelen (Internal) | 10–14 | ≈ 0% | Observation; this is where he thinks in full sentences. |
+| Elara | 6–9 | ≤ 15% | Dry, but she finishes the thought. |
+| Seraphina | 6–9 | ≤ 30% | Clipped under pressure (counting, orders); fuller off duty. |
+| Bran, Mara, Rook | 11+ | ≤ 10% | The talkers. |
+| Aldric (directive), machines | — | — | Commands. Exempt. |
+
+Measured after the pass: 771 lines, 8.0 words on average (was 6.4), 18% short (was 34%), 6%
+one-word (was 11%).

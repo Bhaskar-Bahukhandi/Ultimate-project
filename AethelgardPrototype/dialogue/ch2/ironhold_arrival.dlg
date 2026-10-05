@@ -3,10 +3,13 @@
 # Scene: scenes/chapter2/ironhold_gate.tscn (cinematic).
 # Source fix: Kaelen recognises Seraphina's VOICE (her cabin cadence), not her
 # face. He never really looked at the crew. That's why she has to test him.
+# rhythm: clipped commander gate
+# (The seat interrogation is a rapid-fire test, and "Later. / Later." is a
+# comic beat. Both are meant to be short.)
 
 ~ road
-Elara: You keep checking the sky.
-Kaelen: Habit.
+Elara: You keep checking the sky. Every few steps, like it owes you money.
+Kaelen: Habit. Old job, I think.
 Elara: Bad sky where you're from?
 Kaelen: Less programmable, usually.
 Elara: And what's an airplane, anyway? You keep nearly saying it.
@@ -14,8 +17,8 @@ Kaelen: A metal tube that talks gravity into waiting.
 Elara: Not very well, then.
 do kaelen_stops
 # He stops walking. She hears what she just said.
-Elara: ...Sorry.
-Kaelen: No. You're not wrong.
+Elara: ...Sorry. That came out wrong.
+Kaelen: No. You're not wrong. That's the problem.
 do walk_on
 
 # C2-S01 — Iron on the Horizon.
@@ -23,24 +26,24 @@ do walk_on
 do ironhold_reveal
 Kaelen (Internal): Workshops at the bottom. Market terraces on top of those. Fortress bridges right at the top, and a clock tower you can see from anywhere, like it wants you to know the time.
 Elara: Try not to insult anyone before we find a bed.
-Kaelen: I did fine in Oakhaven.
+Kaelen: I did fine in Oakhaven. Nobody threw anything at me.
 Elara: Mara charged you double.
-Kaelen: That was personal.
+Kaelen: That was personal. She told me it was personal.
 Elara: It got personal very quickly.
 do convoy_passes
 Paladin: Left side clear! Keep the centre open! Children stay inside the wagons!
 Kaelen (Internal): Keep the aisle clear...
-[if elara_trust_high] Elara: Kaelen?
-[if not elara_trust_high] Elara: Stranger?
-Kaelen: I know that voice.
+[if elara_trust_high] Elara: Kaelen? What is it?
+[if not elara_trust_high] Elara: Stranger? You've gone pale.
+Kaelen: I know that voice. I've heard it say that before.
 
 # C2-S02 — The Knight-Commander.
 ~ commander
 do seraphina_helmet_off
 Seraphina: Move, please. You're standing in the lane.
-Kaelen: I know you.
+Kaelen: I know you. I'm sure I know you.
 Seraphina: That line works better without a sword on your hip.
-Kaelen: Your voice. You said "keep the aisle clear".
+Kaelen: Your voice. You said "keep the aisle clear". You said it exactly like that.
 Kaelen: Flight 707.
 do seraphina_grip
 Seraphina: Where did you hear that number?
@@ -63,7 +66,7 @@ Seraphina: We died together.
 do kaelen_still
 # She regrets it the moment it's out.
 Seraphina: Or nearly. Nearly died.
-Kaelen: That's a big correction.
+Kaelen: That's a big correction to make in the middle of a road.
 Seraphina: I've had practice making it.
 set ch2_seraphina_met
 
@@ -77,7 +80,7 @@ Seraphina: Later.
 Elara: I like her.
 Seraphina: You can stop liking me after the paperwork. They're with me, officer. Inspection line, then residents.
 do queues
-Rook: That crate is medicinal resin.
+Rook: That crate is medicinal resin. It says so on the side, in letters.
 Clerk: It's listed as decorative sap.
 Rook: Because whoever wrote that category has never been ill in their life.
 # He notices Kaelen. He doesn't introduce himself. He files him away.

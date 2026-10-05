@@ -3,6 +3,30 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-05 — Breathing pass on the prologue and Chapters 1–2
+
+Too many lines were one to three words, so conversations read like ping-pong. Every authored
+`.dlg` in the prologue, Chapter 1 and Chapter 2 was gone over. Lines were lengthened where a
+person would naturally say a little more: a reason, a detail, the rest of the thought. Rapid-fire
+beats that work *because* they're short were kept.
+
+- **Before → after (771 spoken lines):**
+  - average 6.4 → 8.0 words;
+  - short lines (≤ 3 words) 34% → 18%;
+  - one-word lines 11% → 6%;
+  - Kaelen 4.7 → 7.3 words, and 46% → 15% short.
+  - The worst file is now 20% short; it was 63%.
+- **Unchanged:** every node, choice order, option count, flag, condition and `do` event, and
+  every line the route tests look for.
+- **New rhythm lint** in `tests/dialogue_test.gd` (2 checks):
+  - at most 30% short lines per file (for files of 12+ lines);
+  - at most 4 short lines in a row.
+  - Machine speakers are exempt. A deliberately clipped node is exempted with
+    `# rhythm: clipped <node …>`, which must name real nodes.
+  - Exempted nodes: Old Fen, the Spirits/Runes beat, Aldric under the directive, the seat
+    interrogation, Seraphina's convoy count, the Wraith "destroy" exchange, and "Break it."
+- `story/VOICE_GUIDE.md` §5 documents the rule and per-speaker target lengths.
+
 ## 2026-10-05 — Chapter 2 rewritten and wired (Ironhold, the end of Act 1)
 
 Chapter 2 now plays the new story from the road to Ironhold to the Act 1 ending (8 `.dlg` files in

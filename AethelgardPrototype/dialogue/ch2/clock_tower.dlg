@@ -8,21 +8,21 @@
 do bell_thirteen
 Kaelen (Internal): ...eleven. Twelve. Thirteen.
 # Then silence. Merchants stop. Children count on their fingers. Paladins look up.
-Brask: Seal the lower streets.
-Seraphina: We don't know what's happened yet.
+Brask: Seal the lower streets. All of them, now.
+Seraphina: We don't know what's happened yet, Brask.
 Brask: That is why we seal them.
 do data_vision_trace
 System: TRACE: CLOCK AUTHORITY CONFLICT.
 System: TRACE: LEGACY SCHEDULES ACTIVE.
 System: TRACE: EXTERNAL ADMIN PROXY.
 Kaelen: Something's running that tower that isn't the tower.
-Seraphina: Then we go up and ask it.
+Seraphina: Then we go up there and ask it.
 [if ch2_medicine_quest_active and not ch2_medicine_done] Seraphina: And the convoy's still out. That was the evening bell, Kaelen. The west gate's closing.
 set ch2_tower_bell_stopped
 
 ~ entry
 Kaelen: The gears on this floor are all running at different times.
-Elara: They're arguing.
+Elara: They're arguing. Like the farmers over the sluice.
 Kaelen: That's... actually exactly what they're doing.
 Kaelen (Internal): I can slow one down with Root Access. Not stop it. Safely, a little.
 
@@ -30,13 +30,13 @@ Kaelen (Internal): I can slow one down with Root Access. Not stop it. Safely, a 
 ~ mid
 Kaelen (Internal): Somebody's scratched a little map mark into the stone. Under it: NO SKY ABOVE FLOOR SIX.
 Elara: Is there sky above floor six?
-Kaelen: I'm not going to check.
+Kaelen: I'm not going to check. Some questions can stay questions.
 set ch2_tower_secret_mark
 
 ~ pre_boss
 System: SCHEDULE DEVIATION.
 Kaelen: That's us. We're the deviation.
-Seraphina: I've hated clocks before.
+Seraphina: I've hated clocks before. Every flight attendant hates clocks.
 Seraphina: This is new.
 
 # ── B02 The Minute Hand: barks, one line each ─────────────────────────────
@@ -50,7 +50,7 @@ The Minute Hand: CORRECT.
 The Minute Hand: REPLAYING.
 
 ~ victory
-Kaelen: Half the tower's ours again. Half.
+Kaelen: Half the tower's ours again. Half. The other half's still somebody else's.
 System: SHIFT LOG: LOWER WORKS, SHIFT FOUR — ENTERED 06:00. EXIT: NONE.
 set ch2_clock_tower_complete
 => missing_shift
@@ -68,14 +68,14 @@ Seraphina: We know what's down there. Forty people.
 ~ rescue_now
 set ch2_shift_rescue_now
 do trust seraphina 10
-Seraphina: Good. Get your things.
+Seraphina: Good. Get your things. We leave from the market stairs.
 Brask: If you lose a single paladin down there, Commander—
 Seraphina: Then you'll write it down, and I'll read it.
 => unlock
 
 ~ scout_first
 set ch2_shift_scout_first
-Seraphina: That'll cost us hours.
+Seraphina: That'll cost us hours. They might not have hours.
 Kaelen: It'll cost more if we walk in blind.
 Seraphina: ...Fine. Hours. Not one minute more.
 => unlock
@@ -83,7 +83,7 @@ Seraphina: ...Fine. Hours. Not one minute more.
 ~ seal
 set ch2_shift_sealed
 do trust seraphina -10
-Brask: Thank you.
+Brask: Thank you. That's the first sensible thing anyone's said today.
 Seraphina: Don't thank him. He just bought whatever's down there a whole night to get worse.
 => unlock
 

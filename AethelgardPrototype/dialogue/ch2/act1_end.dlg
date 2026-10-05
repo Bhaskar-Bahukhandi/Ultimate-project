@@ -56,18 +56,18 @@ Seraphina: My banner's folded in your pack. Don't use it as a pillow.
 => end_horizon
 
 ~ end_stayed
-Seraphina: Bring me back something useful.
-Kaelen: Like what?
-Seraphina: Answers.
-Kaelen: Those are rare.
-Seraphina: Then bring coffee.
+Seraphina: Bring me back something useful. Not just stories.
+Kaelen: Like what? What counts as useful?
+Seraphina: Answers. Real ones.
+Kaelen: Those are rare out here.
+Seraphina: Then bring coffee. I'd settle for coffee.
 => end_horizon
 
 ~ end_rejected
 Seraphina: I hope I'm wrong about you.
-Kaelen: Me too.
-Elara: Well. That was comfortable.
-Kaelen: Extremely.
+Kaelen: Me too. I really do.
+Elara: Well. That was comfortable for everyone.
+Kaelen: Extremely. Let's never do it again.
 => end_horizon
 
 ~ end_horizon
@@ -76,6 +76,6 @@ Kaelen: Extremely.
 [if ch2_medicine_late] Kaelen (Internal): The infirmary bells are still ringing.
 [if ch2_medicine_early] Kaelen (Internal): Every light in the lower city is on.
 do sky_seam
-Kaelen: That way.
+Kaelen: That way. Past the hills.
 Elara: You say that like the sky's pointing.
-Kaelen: It is.
+Kaelen: It is. It's been pointing all day.

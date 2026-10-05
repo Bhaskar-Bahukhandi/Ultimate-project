@@ -3,13 +3,15 @@
 # in before anything threatens it. Each node is one NPC or moment; the
 # farmers' argument sets up the uphill water in C1-S05, and the child sets up
 # "Uncle Aldric" in C1-S08.
+# rhythm: clipped old_fen
+# (Old Fen speaks in as few words as he can get away with. That's him.)
 
 ~ chicken
-Child: Mum! There's two Pebbles!
-Mother: There's one Pebbles, love.
+Child: Mum! Mum, there's two Pebbles!
+Mother: There's one Pebbles, love. There's always been one Pebbles.
 do chicken_duplicate
 Kaelen: ...
-Kaelen: I'm not going to ask about the chicken.
+Kaelen: I'm not going to ask about the chicken. I'm just not.
 
 ~ old_fen
 Old Fen: New, are you.
@@ -19,41 +21,41 @@ Kaelen: Being new?
 Old Fen: Guessing.
 
 ~ jessa
-Jessa: Elara brought you in?
+Jessa: So Elara brought you in, did she?
 Kaelen: Is that unusual?
-Jessa: She usually brings in plants.
-Kaelen: Better company, probably.
-Jessa: Quieter. Plants don't ask where the crater went.
+Jessa: She usually brings in plants. Sick ones, mostly. Nurses them back and gives them away.
+Kaelen: Better company than me, probably.
+Jessa: Quieter, anyway. Plants don't ask where the crater went.
 
 ~ mara
-Mara: So you're the crater. Sit down. Have you eaten? Is she feeding you, or was it the stew again?
-Kaelen: It was the stew.
-Mara: Course it was. Here. Don't argue, I've already decided.
-Kaelen: Thank you. Really.
-Mara: Thank me by not falling over in my doorway.
+Mara: So you're the crater. Sit down before you fall down. Have you eaten? Is she feeding you, or was it the stew again?
+Kaelen: It was the stew. It was good stew.
+Mara: Course it was, it always is, and it's always the same. Here. Don't argue, I've already decided.
+Kaelen: Thank you. Really. I don't have any money.
+Mara: Thank me by not falling over in my doorway. We'll talk about money when you've got some.
 set ch1_mara_met
 
 ~ farmers
-Tull: Water doesn't go uphill, Wenna.
-Wenna: Then go and tell it, because it's halfway up my bean rows.
-Tull: You left the sluice open again.
+Tull: Water doesn't go uphill, Wenna. It just doesn't.
+Wenna: Then go and tell it that, because it's halfway up my bean rows.
+Tull: You left the sluice open again, didn't you.
 Wenna: I've never left a sluice open in my life.
-Tull: The spring of the flood.
+Tull: The spring of the flood. You left it open the spring of the flood.
 Wenna: That was the sluice's fault.
 
 ~ lost_sword
-Child: Have you seen my sword? It's wood. It's a good one.
-Kaelen: What does it look like?
-Child: Like a sword.
-Kaelen: ...Right. I'll keep an eye out.
+Child: Have you seen my sword? It's wood. It's a really good one.
+Kaelen: I haven't. What does it look like?
+Child: Like a sword. A wooden one.
+Kaelen: ...Right. Of course. I'll keep an eye out for a wooden sword.
 
 ~ lost_sword_found_pickup
-Kaelen (Internal): A wooden sword. Good one, too.
+Kaelen (Internal): A wooden sword, half under a bush. It's a good one, too. Someone carved the grip.
 
 ~ lost_sword_found
-Child: You found it! Are you a knight?
+Child: You found it! You actually found it! Are you a knight?
 Kaelen: No. I just look like I lost a fight with one.
-Child: My uncle Aldric's a knight. He's away.
+Child: My uncle Aldric's a knight. He's away right now. He's going to come back.
 set ch1_child_sword_returned
 
 # ── Free roam: repeat visits, the shop, the market stone, Bran's post ─────
@@ -62,21 +64,21 @@ set ch1_child_sword_returned
 Mara: Back again? Good. Buy something or carry something, love. Pick one.
 
 ~ whispering_stone
-Kaelen: What is this thing?
-Elara: The Whispering Stone. Prices, mostly.
+Kaelen: What is this thing? It's humming.
+Elara: The Whispering Stone. It tells you prices, mostly.
 Kaelen (Internal): Numbers crawling up a rock. Grain in Ironhold, iron in places I've never heard of. It's a live market feed, carved into stone.
 Kaelen: Does anybody actually use it?
 Elara: Rook does, when he comes through. Everyone else just argues with it.
 set ch1_auction_house_visited
 
 ~ whispering_stone_repeat
-Kaelen (Internal): Bread's up two coppers since this morning.
+Kaelen (Internal): Bread's up two coppers since this morning. Somebody, somewhere, is very happy about that.
 
 ~ bran_repeat_field
 Bran: North field first, lad. Then we'll talk about roads.
 
 ~ bran_repeat_road
-Bran: Bridge is south. Have a look at it before you go anywhere.
+Bran: The bridge is south. Have a good look at it before you go anywhere.
 
 # Data Vision secret under Bran's gatepost.
 ~ guard_post_secret

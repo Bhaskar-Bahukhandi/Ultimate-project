@@ -3,6 +3,9 @@
 # Scene: the tutorial knight arena (scripts/chapter1/ch1_tutorial_knight.gd).
 # The legacy flags ch1_knight_killed, ch1_knight_spared and ch1_root_purge are
 # read in Chapters 1–10. Keep them.
+# rhythm: clipped start bark_protect bark_stay_back bark_gate bark_human_run bark_human_elara kill
+# (Aldric under the directive speaks in commands, and the kill is meant to be
+# quiet. Everyone else around him still talks like a person.)
 
 ~ start
 Child: Uncle Aldric!
@@ -74,7 +77,7 @@ Elara: Don't say sorry. Not unless you know what you're sorry for.
 
 ~ kill_owned
 set ch1_aldric_kill_owned
-Elara: ...Yes. You did.
+Elara: ...Yes. You did. Thank you for not dressing it up.
 => after
 
 ~ kill_justified
@@ -84,23 +87,23 @@ Elara: He was ours before he was a threat. Remember that part too.
 
 ~ kill_unsure
 set ch1_aldric_kill_unsure
-Elara: Then don't decide it tonight.
+Elara: Then don't decide it tonight. It'll still be there in the morning.
 => after
 
 ~ spare
 set ch1_knight_spared
 do aldric_restrained
-Elara: He might never come back.
-Kaelen: Maybe.
-Elara: Do you believe that?
-Kaelen: No.
+Elara: He might never come back. You know that, don't you?
+Kaelen: Maybe. Maybe not.
+Elara: Do you actually believe that?
+Kaelen: No. Not really.
 Kaelen: I just wasn't ready to decide he couldn't.
 => after
 
 ~ purge
 System: PURGE MAY CAUSE MEMORY LOSS.
-Elara: What does that mean?
-Kaelen: I don't know.
+Elara: What does that mean? How much memory?
+Kaelen: I don't know. I honestly don't know.
 Elara: Then that's what you say first. Before you do it.
 ? Kaelen (Internal): Purge it?
 - Do it. => purge_confirm
@@ -115,7 +118,7 @@ do root_purge aldric
 do pause 2.0
 Aldric: ...Elara.
 # She nearly laughs and nearly cries, and manages both badly.
-Elara: You look terrible.
+Elara: You look terrible. You look absolutely terrible.
 Aldric: You always were a liar.
 => after
 
@@ -125,6 +128,6 @@ do open_shrine_gate
 
 # Later, if he was purged and remembers enough to talk (Chapter 1 epilogue or after).
 ~ purged_later
-Aldric: It worked on me.
-Kaelen: Yes.
-Aldric: Then don't make me your argument.
+Aldric: It worked on me. Whatever you did, it worked.
+Kaelen: Yes. Mostly, I think.
+Aldric: Then don't make me your argument. I'm a man, not a proof.

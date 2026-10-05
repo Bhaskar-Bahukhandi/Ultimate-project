@@ -5,45 +5,45 @@
 # south road, and the south road needs fixing.
 
 ~ start
-Bran: Three hours, Elara. You said one.
+Bran: Three hours, Elara. You said one. I had it written down as one.
 Elara: I found a problem.
-Kaelen: Hi.
-Bran: Does it talk?
+Kaelen: Hi. I'm the problem.
+Bran: Does it talk? Usually they don't talk.
 Elara: You'll wish it didn't.
-Kaelen: We've only just met.
-Bran: ...That's crater dust. You came from the north.
-Elara: From the crater.
+Kaelen: We've only just met, to be fair to me.
+Bran: ...That's crater dust on your boots. You came from the north.
+Elara: From the crater, Bran.
 Bran: Elara.
-Elara: I know.
-Bran: Does Mara know?
+Elara: I know. I know.
+Bran: Does Mara know yet?
 Elara: Why would Mara know?
 Bran: Mara knows everything by lunch.
 Mara: I heard that!
-Bran: See?
+Bran: See? Lunch. Not even lunch yet.
 set ch1_oakhaven_entered
 do gate_opens
 
 ~ ledger
 Kaelen: Elara said you keep road records.
 Bran: I keep the arguments written down, so everyone can have exactly the same argument again next spring. It's called civic memory. Nobody thanks me for it.
-Kaelen: Has anyone else ever come out of the crater?
+Kaelen: Has anyone else ever come out of the crater? Before me?
 Bran: What, today?
-Kaelen: Ever.
+Kaelen: Ever. At any point.
 do bran_opens_ledger
 # Mostly caravans, weather closures, missing goats, patrol notes. A few old
 # entries are marked NORTHFALL.
-Bran: We've found people up north before. Near it, not in it. One at a time, usually.
-Kaelen: Usually?
+Bran: We've found people up north before. Near the crater, mind, not in it. One at a time, usually.
+Kaelen: Usually? What does "usually" mean?
 Bran: Rare enough that we remember them, common enough that I stopped saying "impossible". The ledger calls them Northfalls.
 do ledger_entry_highlight
 Kaelen: This one says "transferred to Ironhold Arrival Registry".
-Bran: Years back, that. Name's gone, the ink ran. Ironhold took them, whoever they were.
+Bran: Years back, that one. Name's gone, the ink ran. Ironhold took them, whoever they were.
 # This entry is Seraphina. Nobody, the player included, can know that yet.
 set ch1_northfall_registry_seen
-Kaelen: Then I need Ironhold.
+Kaelen: Then I need to get to Ironhold.
 Bran: Then you need the south road. And the south road needs the old watch route—
 Elara: —which has been bad all week.
-Bran: North field's worse.
-Kaelen: How much worse?
+Bran: And the north field's worse than the watch route.
+Kaelen: How much worse are we talking?
 Bran: You've turned up on a very educational day, lad.
 do journal Lead: the Ironhold Arrival Registry. Blocker: Oakhaven's road south is unsafe.

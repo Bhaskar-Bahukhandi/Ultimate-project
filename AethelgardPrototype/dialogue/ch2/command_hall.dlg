@@ -6,10 +6,10 @@
 
 ~ start
 do hall
-Brask: Another outsider.
+Brask: Another outsider. We seem to be collecting them this year.
 Seraphina: He's from further away than usual.
 Brask: That isn't a recommendation.
-Elara: He survived Oakhaven.
+Elara: He survived Oakhaven. Most of Oakhaven survived him, too.
 Brask: So did Oakhaven. Most places survive their first visitor.
 Brask: What do you want with Ironhold?
 ? Kaelen (Internal): How much do I tell a room full of soldiers?
@@ -23,7 +23,7 @@ do trust seraphina 10
 Kaelen: There's a key in seven pieces. I found one under Oakhaven. And I can change things. Edit them. It costs me something, and I don't fully understand what.
 Brask: That's either the most dangerous thing anyone's said in this hall, or the most honest.
 Seraphina: You told them more in two minutes than you told me.
-Kaelen: You were holding a spear.
+Kaelen: You were holding a spear at the time.
 Seraphina: I'm still holding a spear.
 => invitation
 
@@ -31,7 +31,7 @@ Seraphina: I'm still holding a spear.
 set ch2_seraphina_cautious
 Kaelen: The Fracture moves in patterns. The patterns point here. I'd like to know why before it arrives.
 Brask: That's a soldier's answer. I don't trust soldiers' answers. I've given too many.
-Seraphina: You left out the important part.
+Seraphina: You left out the important part. I could hear you leaving it out.
 Kaelen: I'm learning the local customs.
 => invitation
 
@@ -40,7 +40,7 @@ set ch2_seraphina_showoff
 do trust seraphina -10
 do root_edit construct
 # The training construct bows to the council. Nobody in the hall moves.
-Brask: Put it back.
+Brask: Put it back. Exactly how it was.
 Seraphina: That's useful.
 Kaelen: You sound almost impressed.
 Seraphina: I'm concerned. It sounds similar from the outside.
@@ -50,7 +50,7 @@ Seraphina: I'm concerned. It sounds similar from the outside.
 ~ invitation
 Seraphina: There's an arena trial. Win enough rounds and command trusts you near the lower city.
 Kaelen: Why does winning a fight get me into the sewers?
-Seraphina: Tradition.
+Seraphina: Tradition. Ironhold runs on it.
 Kaelen: That isn't an explanation.
 Seraphina: It's the explanation that survived.
 Seraphina: One more thing. Rem, at the infirmary, needs hands. There's fever in the lower city, and the medicine's stuck out west.

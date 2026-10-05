@@ -16,12 +16,12 @@ Colleague: Until somebody's unconscious and can't sign.
 # Past Kaelen hesitates. That's the whole memory: him hesitating.
 do flash_ends
 do fragment_acquired 2
-Seraphina: A memory?
-Kaelen: Yeah.
+Seraphina: A memory? You had that look again.
+Kaelen: Yeah. Another one.
 Seraphina: Yours?
-Kaelen: Yeah.
+Kaelen: Yeah. Mine, from before.
 Seraphina: A bad one?
-Kaelen: I don't know yet.
+Kaelen: I don't know yet. I can't tell from the inside.
 # She studies him the way she'd study a passenger who says he's fine.
 Seraphina: Tell me when you do.
 set ch2_seraphina_tell_me
@@ -30,28 +30,28 @@ set ch2_seraphina_tell_me
 ~ wall
 do upper_wall
 Seraphina: I remember the plane.
-Kaelen: More than I do.
-Seraphina: I wish I didn't.
-Kaelen: I remember rain.
+Kaelen: More than I do. I've got pieces, mostly.
+Seraphina: I wish I didn't. Some nights especially.
+Kaelen: I remember rain. On a window.
 Seraphina: There was rain.
-Kaelen: An airport window.
-Seraphina: You had a laptop.
+Kaelen: An airport window. Before we boarded.
+Seraphina: You had a laptop open.
 # He looks at her.
 Seraphina: You were working all through boarding.
-Kaelen: That sounds right.
+Kaelen: That sounds right. That sounds very like me.
 Seraphina: I told you to close it for takeoff.
-Kaelen: Did I?
-Seraphina: Eventually.
+Kaelen: Did I close it?
+Seraphina: Eventually. After I asked twice.
 # She smiles, once.
 Seraphina: You looked annoyed.
-Kaelen: I probably was.
-Seraphina: I didn't like you.
-Kaelen: This keeps getting better.
+Kaelen: I probably was. I usually am, apparently.
+Seraphina: I didn't like you. Not one bit.
+Kaelen: This keeps getting better and better.
 Seraphina: Then we crashed.
 do pause 1.5
 Seraphina: I counted people until I couldn't.
 [if seraphina_trust_high and not ch2_seraphina_186_told] Seraphina: One hundred and eighty-six. That's where I stopped.
-Kaelen: I'm sorry.
+Kaelen: I'm sorry. I'm so sorry.
 Seraphina: For what?
 Kaelen: ...I don't know.
 Seraphina: Good. Don't apologise for the crash unless you remember causing it.
@@ -64,21 +64,21 @@ Seraphina: Good. Don't apologise for the crash unless you remember causing it.
 
 ~ recruited
 Seraphina: Brask can hold the city.
-Brask: I'm standing right here.
-Seraphina: Good. Practise.
+Brask: I'm standing right here, Commander.
+Seraphina: Good. Practise. You'll be doing it a lot.
 Seraphina: I'm going with Kaelen.
-Brask: That wasn't a request.
-Seraphina: No. It wasn't.
+Brask: That wasn't a request, was it.
+Seraphina: No. It wasn't. I'm sorry, Brask.
 set ch2_seraphina_recruited
 
 ~ stays
 Seraphina: I can't leave. Not with the city like this.
-Kaelen: I understand.
-Seraphina: Do you?
-Kaelen: I'm trying to.
+Kaelen: I understand. Really, I do.
+Seraphina: Do you? You've never had a city.
+Kaelen: I'm trying to. That has to count for something.
 set ch2_seraphina_stayed
 
 ~ rejected
-Seraphina: I believe your problem is real.
+Seraphina: I believe your problem is real, Kaelen. I want to be clear about that.
 Seraphina: I don't believe following you is the same thing as solving it.
 set ch2_seraphina_rejected

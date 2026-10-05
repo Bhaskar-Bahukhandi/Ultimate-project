@@ -3,17 +3,19 @@
 # Scene: scenes/chapter1/path_to_oakhaven.tscn. A walk-and-talk: Data Vision
 # unlocks through use, and Root Access through immediate danger, not
 # curiosity.
+# rhythm: clipped data_vision
+# (The "Spirits? / No. / Runes? / No." exchange is a comic beat.)
 
 # A1-P03: a tree flickers between healthy and burnt.
 ~ tree_flicker
-Kaelen: Did you see that?
-Elara: Which part?
-Kaelen: The tree. It was burnt, and then it wasn't.
-Elara: Then yes.
-Kaelen: You say that like it happens.
-Elara: It happens.
+Kaelen: Did you see that? The tree, just there.
+Elara: Which part of it?
+Kaelen: It was burnt black, and then it wasn't. Like someone flicked a switch.
+Elara: Then yes, I saw it.
+Kaelen: You say that like it happens all the time.
+Elara: It happens. Not all the time. Often enough that you stop pointing at it.
 Kaelen: That's not very reassuring.
-Elara: Wasn't trying to be.
+Elara: It wasn't meant to be. Keep walking.
 
 # Optional walk dialogue. It sets up the medium-term goal, Ironhold.
 ~ walk_manifest
@@ -21,18 +23,18 @@ Kaelen: If somebody else came out of that crater, where would they go?
 Elara: East, to Oakhaven. Or south to Ironhold, if the south road's open. It mostly isn't.
 Kaelen: What's Ironhold?
 Elara: A city. Records, caravans, and a lot of people who enjoy making rules about records and caravans.
-Kaelen: Sounds lovely.
-Elara: You're a strange one.
+Kaelen: Sounds lovely. I'd fit right in.
+Elara: You're a strange one, you know that?
 Kaelen: I'm looking for a passenger manifest.
 Elara: I don't know what that is.
-Kaelen: A list. Everyone who was with me.
-Elara: Then Ironhold's where you'd ask.
+Kaelen: A list. The names of everyone who was with me.
+Elara: Then Ironhold's where you'd ask. If anyone in this world keeps a list of names, it's them.
 set ch1_ironhold_lead
 
 # A collapsed cart blocks the road. Elara clears it with her corrupted arm.
 ~ cart
 do elara_casts_cart
-Kaelen (Internal): She's hiding a wince. Badly.
+Kaelen (Internal): She's hiding a wince. She's not very good at it.
 ? Kaelen (Internal): Say something?
 - Your arm— => arm_ask
 - (Say nothing.) => arm_silence
@@ -40,11 +42,11 @@ Kaelen (Internal): She's hiding a wince. Badly.
 ~ arm_ask
 set elara_arm_noticed
 Kaelen: Your arm—
-Elara: Still attached.
-Kaelen: That spell hurt you.
-Elara: Very observant.
-Kaelen: Can I help?
-Elara: With what, exactly?
+Elara: —is still attached, thank you.
+Kaelen: That spell hurt you. I saw your face.
+Elara: Very observant. Did you want a prize?
+Kaelen: Can I help? With any of it?
+Elara: With what, exactly? You've been here half a day.
 Kaelen: ...I don't know yet.
 Elara: Then don't promise me anything you haven't got.
 
@@ -58,19 +60,19 @@ do elara_glances
 ~ data_vision
 set ch1_data_vision_unlocked
 do unlock_data_vision
-Kaelen: Wait. I can see something.
+Kaelen: Wait. Hold on. I can see something.
 Elara: Spirits?
 Kaelen: No.
 Elara: Runes?
 Kaelen: No, it's... it looks like metadata.
 Elara: Oh, well. That clears everything up.
-Kaelen: It's labels. This whole place has labels on it.
-Elara: Everything has a name.
-Kaelen: Not like these.
+Kaelen: It's labels. This whole place has labels on it. Stability, owner, what everything's for.
+Elara: Everything has a name. That's hardly news.
+Kaelen: Not like these. These were written by somebody.
 
 # A1-P04 — The First Edit. A corrupted guardian blocks the only stable pass.
 ~ guardian_intro
-Kaelen: Is there another way around?
+Kaelen: Is there another way around it? Any way at all?
 Elara: Not before dark. And I'm not taking you through Mosswood with the sky doing that.
 do guardian_attacks
 
@@ -80,18 +82,18 @@ do show_directive
 System: DIRECTIVE: DEFEND NEST.
 System: TARGET FILTER: ALL.
 System: ERROR: NEST_REFERENCE_NULL.
-Kaelen: That's an if-statement. It's defending a nest that isn't there.
-Elara: A what?
+Kaelen: That's an if-statement. It's defending a nest that isn't there anymore.
+Elara: A what? Kaelen, it's coming back!
 set root_access_unlocked
 do root_access_open
 
 # The player edited TARGET FILTER from ALL to FRACTURE_ENTITIES.
 ~ root_used
 set ch1_root_first_edit
-Elara: What did you do?
+Elara: What did you just do?
 Kaelen: Changed what it thinks it's defending against.
-Elara: Inside the beast. You changed something inside the beast.
-Kaelen: I think so?
+Elara: Inside the beast. You reached in and changed something inside the beast.
+Kaelen: I think so? It looks like it worked.
 Elara: Don't say "I think so" after doing whatever that was.
 do kaelen_hand_glitch
 # His hand glitches for one frame. He notices. She notices. Neither says
@@ -100,34 +102,34 @@ do kaelen_hand_glitch
 # The player turned the aggression multiplier down instead of the filter.
 ~ root_used_calm
 set ch1_root_first_edit
-Elara: What did you do?
-Kaelen: Turned it down. All the way down.
-Elara: It's just... standing there.
+Elara: What did you just do?
+Kaelen: Turned it down. Its anger, or whatever that number is. All the way down.
+Elara: It's just... standing there. Staring at nothing.
 Kaelen: It's still guarding the nest. It just doesn't care anymore.
-Elara: I'm not sure that's kinder.
+Elara: I'm not sure that's kinder than killing it.
 do kaelen_hand_glitch
 
 # The player won the fight without editing. Root stays discovered but unused.
 ~ root_refused
 set ch1_root_discovered_unused
-Kaelen (Internal): I could've changed it. I saw the field. I could've just...
+Kaelen (Internal): I could've changed it. I saw the field, right there. I could've just...
 Elara: You've got the face of someone thinking about a thing they didn't do.
-Kaelen: Yeah. I am.
+Kaelen: Yeah. I am. I'm not sure if I'm glad.
 
 # A1-P05 — Why Oakhaven. A roadside rest above the village.
 ~ rest_stop
-Elara: You keep looking at that.
-Kaelen: There were a couple of hundred people on that plane.
-Elara: And you think they're here.
-Kaelen: I think they're not in the crater.
+Elara: You keep taking that scrap out and looking at it.
+Kaelen: There were a couple of hundred people on that plane. Maybe more.
+Elara: And you think they're here somewhere.
+Kaelen: I think they're not in the crater. That's all I actually know.
 Elara: That's not the same thing.
-Kaelen: It's what I've got.
+Kaelen: No. But it's what I've got.
 Elara: Oakhaven can give you food and a roof tonight. Bran keeps the road ledger, and Old Fen remembers every stranger who came through before I was born. Ironhold has proper archives.
 Kaelen: Why are you helping me?
 Elara: I haven't decided that I am.
-Elara: I'm bringing a confused man with a sword somewhere with walls.
-Kaelen: Comforting.
-[if ch1_root_first_edit] Elara: Also, you changed a Fracture directive.
+Elara: I'm bringing a confused man with a sword somewhere with walls. That's not the same as helping.
+Kaelen: That's very comforting.
+[if ch1_root_first_edit] Elara: Also, you changed a Fracture directive back there.
 [if not ch1_root_first_edit] Elara: Also, you looked at that beast like you could read it.
 do elara_looks_at_arm
 Elara: That part interests me.
@@ -136,14 +138,14 @@ do journal Personal goal: find out what happened to Flight 707. Lead: Oakhaven's
 
 # A1-P06 — First Sight of Oakhaven. No camera fly-around; the player keeps control.
 ~ ridge
-Elara: Oakhaven.
+Elara: There. Oakhaven.
 Kaelen: It looks... normal.
 Elara: Rude.
 Kaelen: No, I meant—
 Elara: I know what you meant.
-Elara: Normal's expensive lately.
-Kaelen: And Ironhold's that way?
+Elara: Normal's expensive lately. We work hard for it.
+Kaelen: And Ironhold's that way? Past the hills?
 Elara: Eventually. The road's bad today.
 Kaelen: Of course it is.
-Elara: You can leave once Bran's told you so himself. He'll want to.
+Elara: You can leave once Bran's told you so himself. He'll want to, believe me.
 do objective Ask about Flight 707. Find a safe route to Ironhold.

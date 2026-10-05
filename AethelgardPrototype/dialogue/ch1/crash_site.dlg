@@ -6,61 +6,60 @@
 # route east, which is what lets the player leave.
 
 ~ start
-Kaelen: Ow.
-Kaelen (Internal): Okay. Breathing. Breathing's step one.
-Kaelen: The flight. Where's—
+Kaelen: Ow. Okay. Ow.
+Kaelen (Internal): Okay. Breathing. Breathing's step one. Everything else can wait for step two.
+Kaelen: The flight. We were coming down, and then—
 Kaelen: Where's the plane?
 do objective Find the plane. Look for survivors.
 
 # The first time the player walks toward the crater's centre.
 ~ call_out
-Kaelen: Hello?
-Kaelen: Flight 707! Can anyone hear me?
-Kaelen: Anyone?
-Kaelen (Internal): Nothing. Not even an alarm.
+Kaelen: Hello? Can anyone hear me?
+Kaelen: Flight 707! If anyone can hear me, shout. Bang on something. Anything!
+Kaelen (Internal): Nothing. Not an alarm, not a voice. Just wind.
 
 ~ scorched_ground
-Kaelen: No fuel smell.
-Kaelen (Internal): Everything should smell like fuel. Why doesn't it smell like fuel?
+Kaelen: No fuel smell. There should be fuel everywhere.
+Kaelen (Internal): Everything should smell like fuel and burnt plastic. Why does it smell like rain?
 
 ~ fused_metal
-Kaelen: That's off the plane. That's...
+Kaelen: That's off the plane. That's a piece of the plane, it has to be...
 Kaelen: I think that's off the plane.
 do translation_flicker
 System: SYSTEM TRACE: RECOVERY SECTOR 04-A.
 System: SYSTEM TRACE: LOCAL SETTLEMENT ROUTE — EAST.
 do runes_return
-Kaelen: No. No, no, I saw that. That was text.
+Kaelen: No. No, no, I saw that. That was text. Actual text, floating over it.
 Kaelen (Internal): Okay. Either I hit my head harder than I think, or something just gave me directions.
-Kaelen (Internal): East, then. If anyone else walked out of here, they went east.
+Kaelen (Internal): East, then. If anyone else walked out of here, that's the way they'd have gone.
 set ch1_crash_trace_seen
 do objective Find people. A settlement east may know what happened to Flight 707.
 
 ~ safety_card
-Kaelen: Safety card. "In the unlikely event of—"
-Kaelen: That's all that's left. Just the number.
-Kaelen (Internal): 707. Okay. So it happened. It was real.
+Kaelen: A safety card. "In the unlikely event of a water landing—"
+Kaelen: That's all that's left of it. Just the number in the corner.
+Kaelen (Internal): 707. Okay. So it happened. It was real, and I was on it.
 set ch1_flight_fragment_found
 
 ~ seat_marks
-Kaelen: That's a row of seats. That's the shape of a whole row of seats.
-Kaelen: So where are the—
+Kaelen: That's a row of seats. That's the exact shape a row of seats leaves.
+Kaelen: So where are the people who were sitting in them?
 Kaelen: No. There were people here. There were people sitting right here.
 
 ~ sky
-Kaelen: The clouds are going two different ways.
-Kaelen: Sure. Great. The sky's broken too.
+Kaelen: The clouds are moving two different ways at once.
+Kaelen: Sure. Great. The sky's broken too. Why wouldn't it be?
 
 ~ perimeter
-Kaelen: Bags. Shoes. Anything.
-Kaelen: Come on...
+Kaelen: Bags. Shoes. A phone. Anything at all.
+Kaelen: Come on. Somebody had to drop something...
 
 # The player reaches the east road after finding the trace.
 ~ leave
 do sfx distant_cry
-Kaelen (Internal): Whatever that was, it isn't a survivor.
-Kaelen (Internal): East.
+Kaelen (Internal): Whatever made that noise, it isn't a survivor.
+Kaelen (Internal): East. Keep moving east.
 
 # The player tries to leave before finding the trace.
 ~ leave_blocked
-Kaelen (Internal): I'm not walking off until I know which way they'd have gone.
+Kaelen (Internal): I'm not walking off until I know which way they'd have gone. Not yet.

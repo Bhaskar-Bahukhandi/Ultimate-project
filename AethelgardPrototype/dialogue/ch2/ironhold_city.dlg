@@ -4,6 +4,8 @@
 # dispatcher nodes pick a line by story state, so each visit says something new.
 # Source fix: the old "Engineer Mira" is gone (Mira Chen is Kaelen's Earth
 # contact), and Seraphina no longer lectures about Root Access before meeting him.
+# rhythm: clipped convoy
+# (Seraphina counting heads under pressure. The short lines are the point.)
 
 # ── Rook (market) — C2-S07 ─────────────────────────────────────────────────
 
@@ -15,18 +17,18 @@
 ~ rook_first
 set ch2_rook_met
 Rook: You're the one the Commander walked through the gate. People are already guessing what you cost her.
-Kaelen: Cost her?
+Kaelen: Cost her? Cost her what?
 Rook: Credibility, mostly. Rook. I move things from where they're cheap to where they aren't.
 => rook_market
 
 ~ rook_market
 set ch2_market_visited
 Rook: First rule. Buy low.
-Kaelen: Sell high.
+Kaelen: Sell high. Everyone knows that one.
 Rook: You've got markets where you come from.
-Kaelen: Unfortunately.
+Kaelen: Unfortunately. Big ones, with screens.
 Rook: Then you know the real first rule.
-Kaelen: There's always a fee.
+Kaelen: There's always a fee. Somebody always takes a cut.
 # He smiles like he didn't mean to.
 Rook: I might like you. Don't let it go to your head.
 Rook: Prices here move with the roads, the season, and who's been nice to whom. The auction board's over there if you want to lose money slowly. Nobody makes you bid.
@@ -41,50 +43,50 @@ Rook: Prices here move with the roads, the season, and who's been nice to whom. 
 ~ preacher
 [if ch2_administrator_proxy_defeated] => preacher_after_proxy
 Preacher: The tower counts our sins! Every stroke of that bell, another one written down!
-Citizen: It counts minutes.
+Citizen: It counts minutes. That's all it's ever counted.
 Preacher: Same thing, if you're late enough.
 
 ~ preacher_after_proxy
-Citizen: They say the Proxy kept crime down.
-Citizen: It kept people down.
+Citizen: They say the Proxy kept crime down, while it was running.
+Citizen: It kept people down. That's not the same thing.
 Preacher: Then what was it counting all those years?
 
 ~ garro
-Garro: Root Access can't sharpen steel.
-Kaelen: I didn't say it could.
+Garro: Root Access can't sharpen steel. Whatever else it does.
+Kaelen: I didn't say it could. I haven't said anything.
 Garro: Good. I've got enough competition.
 
 ~ sol
 Sol: Lot twelve! One compass, from before the Fracture!
-Kaelen: Does it work?
+Kaelen: Does it actually work?
 Sol: It points somewhere. That's more than most of us can say.
 
 ~ dice
 Dice Host: Dice? Three silver a throw. House is honest. Mostly.
 Elara: No.
 Kaelen: I didn't say anything.
-Elara: Your face did.
+Elara: Your face did. Your face said a great deal.
 
 ~ doss
-[if ch2_medicine_done] Doss: Resin! Cheap! Cheaper! Please!
+[if ch2_medicine_done] Doss: Resin! Cheap! Cheaper than this morning, I swear! Please!
 [if not ch2_medicine_done] Doss: Healing resin, last few jars! Price goes up every hour that convoy's out, so buy now!
 
 ~ paladins
 [if ch2_data_wraith_restored] => paladins_restored
 [if ch2_data_wraith_destroyed] => paladins_destroyed
-Paladin: The Commander slept. I saw it.
+Paladin: The Commander slept. I saw it with my own eyes.
 Nori: Prove it.
-Paladin: Her eyes were closed.
+Paladin: Her eyes were closed. For ages.
 Seraphina: I blinked.
 [if ch2_underground_unlocked] Nori: Lower streets are sealed past the market stairs. If you're going down, don't go down alone.
 
 ~ paladins_restored
-Worker: Iven woke up this morning.
-Nori: Which Iven?
-Worker: That's the problem.
+Worker: Iven woke up this morning. First time in years.
+Nori: Which Iven? We've got three.
+Worker: That's the problem. He doesn't know either.
 
 ~ paladins_destroyed
-Rem: The tunnels are quiet now.
+Rem: The tunnels are quiet now. Nothing moving down there.
 Rem: I thought quiet would feel better than this.
 
 # ── Healer Rem and the medicine convoy — C2-S06 (time-sensitive) ──────────
@@ -119,10 +121,10 @@ Rem: Evening bell. West road. I'm not going to keep saying it nicely.
 
 ~ rem_after
 [if ch2_medicine_early] Rem: You got it here early. If this city does something stupid tonight, I'll have beds to spare.
-[if ch2_medicine_on_time] Rem: In time. That's all I ask of anyone.
+[if ch2_medicine_on_time] Rem: In time. That's all I ask of anyone, and hardly anyone manages it.
 [if ch2_medicine_late] Rem: It came. After the bell. Tomas and the Wren girl are still burning up. Don't apologise to me. Apologise to them when they can hear you.
 Kaelen: What do you call those blue potions?
-Rem: Breath.
+Rem: Breath. Because that's what they give back.
 Kaelen: That's a better name than ours.
 
 # The escort, on the west road (region story gate). Seraphina counts.
@@ -167,9 +169,9 @@ do trust seraphina 10
 
 ~ ks_01
 set ch2_ks_01_done
-Kaelen: Do you remember the impact?
-Seraphina: Yes.
-Kaelen: I don't.
+Kaelen: Do you remember the impact? The actual moment?
+Seraphina: Yes. Every part of it.
+Kaelen: I don't. There's just a gap.
 Seraphina: Don't be jealous.
 
 ~ ks_02
@@ -182,11 +184,11 @@ Seraphina: I spent the first hour of the flight trying not to look at the stain.
 
 ~ ks_03
 set ch2_ks_03_done
-Kaelen: Why a paladin?
+Kaelen: Why a paladin? Of everything you could've been here.
 Seraphina: The armour was available.
-Kaelen: That's it?
+Kaelen: That's it? That's the whole reason?
 Seraphina: At first. Then people started listening to me.
-Kaelen: Why?
+Kaelen: Why did they listen?
 Seraphina: Because I knew what to do when people were frightened. It turns out panic sounds the same under any sky.
 
 ~ es_01
@@ -194,14 +196,14 @@ set ch2_es_01_done
 Seraphina: Your arm's getting worse.
 Elara: Everyone's so observant lately.
 Seraphina: I was trained.
-Elara: To watch arms?
+Elara: To watch arms? That's a strange thing to train for.
 Seraphina: To watch people pretending they're fine.
 # Elara looks away.
 Elara: That's dangerous training.
 
 ~ es_02
 set ch2_es_02_done
-Elara: Flight attendant.
+Elara: Flight attendant. That's what he called you.
 Seraphina: Yes.
 Elara: You served food. In the sky.
 Seraphina: Among other things.
@@ -212,11 +214,11 @@ Elara: That isn't a career change. I don't think there's a word for what that is
 ~ es_03
 set ch2_es_03_done
 Seraphina: Is he always like this?
-Elara: Kaelen?
+Elara: Kaelen? Like what, exactly?
 Seraphina: Who else?
-Elara: Worse when he's scared.
+Elara: He's worse when he's scared. Much worse.
 Kaelen: I can hear you, you know.
-Elara: See?
+Elara: See? That's the scared voice.
 
 ~ seraphina_idle
 [if ch2_administrator_proxy_defeated] Seraphina: Brask wants a report on the Proxy. I've written "it was running the city" three times. He keeps sending it back.
@@ -224,9 +226,9 @@ Elara: See?
 
 ~ ina
 Ina: Knight-Commander!
-Seraphina: Off duty.
-Ina: But are you still a knight?
-Seraphina: Unfortunately.
+Seraphina: Off duty, Ina.
+Ina: But are you still a knight when you're off duty?
+Seraphina: Unfortunately. It doesn't come off with the armour.
 
 ~ vex
 Vex: Arena's open! Bring your teeth, take home fewer!

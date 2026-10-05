@@ -11,7 +11,7 @@ do sfx seatbelt_chime
 Flight Attendant: Rows eighteen to thirty, clear. Cabin's secure.
 do sfx phone_buzz
 Voice: Call me when you land, okay?
-Kaelen: I will. Promise.
+Kaelen: I will. The second we're down. I promise.
 do sfx turbulence
 Flight Attendant: Ladies and gentlemen, please stay seated with your seatbelts fastened.
 do sfx cup_falls

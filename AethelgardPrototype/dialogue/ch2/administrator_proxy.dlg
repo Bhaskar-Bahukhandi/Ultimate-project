@@ -2,13 +2,15 @@
 # Scene: scenes/chapter2/administrator_boss.tscn.
 # The missing workers' sessions were used to stabilise it. It believes
 # Ironhold's repeated crises prove that voluntary systems fail.
+# rhythm: clipped start
+# ("Kaelen. / Yeah. / Break it." is the moment Seraphina stops arguing.)
 
 ~ start
 Kaelen (Internal): The missing shift wasn't lost. It was used. Their sessions are what's holding this thing together.
 Administrator Proxy: ORDER PREVENTS LOSS.
-Seraphina: Then why are people missing?
+Seraphina: Then why are people missing? Forty of them, from one shift?
 Administrator Proxy: ACCEPTABLE CENTRALIZATION COST.
-Seraphina: You mean people.
+Seraphina: You mean people. Say it properly.
 Administrator Proxy: RESOURCES.
 # Something in Seraphina's face closes, quietly, like a cabin door.
 Seraphina: Kaelen.
@@ -35,6 +37,6 @@ Seraphina: Then we'll carve it on its grave.
 
 ~ victory
 Seraphina: ...It's down. Is it down?
-Kaelen: It's down.
+Kaelen: It's down. It's actually down.
 Seraphina: Then somebody's going to have to explain to Brask what's been running his city.
 set ch2_administrator_proxy_defeated
