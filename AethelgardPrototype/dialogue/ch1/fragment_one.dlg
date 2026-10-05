@@ -1,0 +1,88 @@
+# C1-S10 to C1-S12 — Fragment One, the Village Meeting, Elara Joins.
+# Source: Production Master 2.1, lines 1830–1900.
+# The first memory flash, then the first disclosure choice (Chapter 8 remembers
+# it). In "fragment", Elara uses Kaelen's name for the first time in the game.
+
+# C1-S10: a maintenance chamber everyone thinks is a shrine.
+~ fragment
+do touch_fragment
+System: SOURCE AUTHORIZATION: ONE OF SEVEN.
+do kaelen_recoils
+Elara: What? What happened?
+Kaelen: I knew those words.
+Elara: You just read them.
+Kaelen: No. Before. I knew them before I read them.
+do memory_flash
+Colleague: Seven signatures for every root change? That's going to be slow.
+Kaelen (Memory): That's the point.
+do flash_ends
+Elara: Kaelen?
+Kaelen: I've been here before.
+Elara: In this shrine?
+Kaelen: No. Under it. Something under it.
+set source_key_fragment_1
+do fragment_acquired 1
+
+# C1-S11: Oakhaven wants to know what happened.
+~ meeting
+do village_gathers
+Mara: Well? What was it down there? Is the north field going to do that again? Is it going to reach the houses?
+? Kaelen (Internal): How much do I tell them?
+- Everything I know. It spreads, and something old under the village is failing. => public
+- The council, and whoever has to deal with it. Not everyone. => limited
+- It's handled. That's all they need tonight. => silent
+
+~ public
+set ch1_oakhaven_warned_villagers
+Kaelen: The Fracture can spread. Whatever's under Oakhaven is old, and some of it's failing. I don't know how fast. I don't know a lot of things yet.
+do villagers_panic
+Mara: Can it reach the wells?
+Kaelen: I don't know.
+Mara: Can you find out?
+Kaelen: Yes.
+Mara: Then that's tomorrow sorted. Everybody home. Boil your water.
+
+~ limited
+set ch1_oakhaven_warned_leaders
+Kaelen: Bran, Mara, can I have a minute? You two, and whoever runs the council.
+Bran: That's us. And Tobb, who's asleep. I'll tell him. He'll want it in writing.
+
+~ silent
+set ch1_oakhaven_left_quietly
+do trust elara -10
+Kaelen: It's handled. You're safe tonight.
+Mara: Tonight. Right.
+do elara_watches
+Elara: That's not what you saw down there.
+Kaelen: It's what they can do something with.
+Elara: They're not children, stranger.
+
+# C1-S12: Elara packs. elara_trust_high is kept up to date by every
+# "do trust elara …" in Chapter 1 (DialogueManager, TRUST_HIGH = 30).
+~ joins
+do elara_packs
+Kaelen: You're coming?
+Elara: Was that a question?
+Kaelen: It was me trying to be optimistic.
+Elara: Dangerous habit.
+[if elara_trust_high] => joins_high
+=> joins_low
+
+~ joins_low
+Elara: I'm not following you.
+Kaelen: That sounded very specific.
+Elara: I'm following the thing that keeps making my arm worse. You just happen to be standing next to it.
+=> joined
+
+~ joins_high
+Elara: Somebody has to stop you rewriting a horse because it looks tired.
+Kaelen: I wouldn't.
+Elara: Good.
+Kaelen: Probably wouldn't.
+Elara: There it is.
+Elara: Come on, Kaelen. The road won't walk itself.
+=> joined
+
+~ joined
+set ch1_elara_joined
+do elara_joins_party

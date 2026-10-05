@@ -1,0 +1,124 @@
+# C1-S08 / B01 / C1-S09 — Aldric Returns, the Tutorial Knight, the Aldric Decision.
+# Source: Production Master 2.1, lines 1737–1828.
+# Scene: the tutorial knight arena (scripts/chapter1/ch1_tutorial_knight.gd).
+# The legacy flags ch1_knight_killed, ch1_knight_spared and ch1_root_purge are
+# read in Chapters 1–10. Keep them.
+
+~ start
+Child: Uncle Aldric!
+do elara_goes_still
+Elara: Inside. Now.
+do child_runs_inside
+Kaelen: Who's Aldric?
+Elara: Someone who should be dead.
+do aldric_approaches
+Aldric: RETURN.
+Elara: Aldric...
+Aldric: RETURN.
+Elara: It's me. It's Elara.
+do aldric_visor_glitch
+Aldric: El—
+do directive_surge
+Aldric: PROTECT. THE GATE.
+do start_boss aldric
+
+# ── Boss barks: one line each, fired by the fight, never in sequence ──────
+~ bark_protect
+Aldric: PROTECT.
+
+~ bark_stay_back
+Aldric: STAY BACK.
+
+~ bark_gate
+Aldric: GATE.
+
+# Rare. These are the man under the directive.
+~ bark_human_run
+Aldric: ...Run.
+
+~ bark_human_elara
+Aldric: Elara...
+
+# ── C1-S09: Aldric kneels; Root Access exposes his directive tree ─────────
+~ decision
+do aldric_kneels
+do show_directive_tree
+System: WARNING: PURGE MAY DAMAGE MEMORY.
+? Kaelen (Internal): He's down. The directive's still running.
+- End it, before he hurts anyone else. => kill
+- Hold him. I'm not deciding his life here. => spare
+- Purge the directive, even if it takes his memory with it. => purge
+
+~ kill
+set ch1_knight_killed
+do kaelen_raises_weapon
+# Elara doesn't stop him.
+do aldric_eye_clears
+Aldric: ...Good.
+do kaelen_freezes
+Aldric: Gate...
+do directive_returns
+do kaelen_strikes
+do pause 1.5
+Elara: He's gone.
+Kaelen: I know.
+Elara: Don't say sorry. Not unless you know what you're sorry for.
+? Kaelen (Internal): What did I just do?
+- I ended his life. => kill_owned
+- I stopped a threat. => kill_justified
+- I don't know yet. => kill_unsure
+
+~ kill_owned
+set ch1_aldric_kill_owned
+Elara: ...Yes. You did.
+=> after
+
+~ kill_justified
+set ch1_aldric_kill_justified
+Elara: He was ours before he was a threat. Remember that part too.
+=> after
+
+~ kill_unsure
+set ch1_aldric_kill_unsure
+Elara: Then don't decide it tonight.
+=> after
+
+~ spare
+set ch1_knight_spared
+do aldric_restrained
+Elara: He might never come back.
+Kaelen: Maybe.
+Elara: Do you believe that?
+Kaelen: No.
+Kaelen: I just wasn't ready to decide he couldn't.
+=> after
+
+~ purge
+System: PURGE MAY CAUSE MEMORY LOSS.
+Elara: What does that mean?
+Kaelen: I don't know.
+Elara: Then that's what you say first. Before you do it.
+? Kaelen (Internal): Purge it?
+- Do it. => purge_confirm
+- No. Not like this. Hold him instead. => spare
+
+~ purge_confirm
+set ch1_root_purge
+set ch1_root_purge_used
+do root_purge aldric
+do pause 2.0
+Aldric: ...Elara.
+# She nearly laughs and nearly cries, and manages both badly.
+Elara: You look terrible.
+Aldric: You always were a liar.
+=> after
+
+~ after
+set ch1_tutorial_knight_defeated
+do open_shrine_gate
+
+# Later, if he was purged and remembers enough to talk (Chapter 1 epilogue or after).
+~ purged_later
+Aldric: It worked on me.
+Kaelen: Yes.
+Aldric: Then don't make me your argument.

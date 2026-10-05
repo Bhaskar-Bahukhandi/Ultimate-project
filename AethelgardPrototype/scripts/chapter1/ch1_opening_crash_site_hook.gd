@@ -52,9 +52,111 @@ func _ready() -> void:
 	_create_glitch_pulse()
 	_create_oakhaven_exit()
 	_create_hud()
+	_create_inspect_points()
 	_suppress_global_breadcrumb()
-	_update_objective("Stand up. Find a signal.", "Move with {move}. Press {interact} or {root_access} at the signal fragment.")
-	_show_message("Your hands work before your memory does. Move.", 4.0)
+	_update_objective("Find the plane.", INSPECT_PROMPT)
+	_play_opening.call_deferred()
+
+
+# ── Dialogue (dialogue/prologue/before_the_ground.dlg, dialogue/ch1/crash_site.dlg) ──
+
+const PROLOGUE_DLG := "res://dialogue/prologue/before_the_ground.dlg"
+const CRASH_DLG := "res://dialogue/ch1/crash_site.dlg"
+const INSPECT_PROMPT := "Move with {move}. Look around with {interact}."
+const CALL_OUT_POS := Vector2(520, 420)
+const CALL_OUT_RANGE := 110.0
+const INSPECT_RANGE := 80.0
+## Things in the crater the player can look at (A1-P01). The fused metal is
+## the signal fragment above: it gives the route east.
+const INSPECT_POINTS := [
+	{"node": "scorched_ground", "pos": Vector2(330, 470), "label": "Scorched ground"},
+	{"node": "safety_card", "pos": Vector2(410, 335), "label": "Torn card"},
+	{"node": "seat_marks", "pos": Vector2(660, 480), "label": "Marks in the dirt"},
+	{"node": "sky", "pos": Vector2(215, 330), "label": "The sky"},
+	{"node": "perimeter", "pos": Vector2(870, 490), "label": "Crater edge"},
+]
+
+var _dialogue_busy := false
+var _called_out := false
+var _inspected: Dictionary = {}     # node -> true once looked at
+var _cover: ColorRect = null        # black/white screen for the prologue
+
+
+func _play_opening() -> void:
+	await _run_dialogue(PROLOGUE_DLG, "start")
+	if not is_inside_tree() or _exit_started:
+		return
+	await _run_dialogue(CRASH_DLG, "start")
+
+
+## Plays one node. Player movement freezes while dialogue is up.
+func _run_dialogue(path: String, node: String) -> void:
+	if _dialogue_busy or not has_node("/root/DialogueManager"):
+		return
+	_dialogue_busy = true
+	await DialogueManager.run(path, node, _on_dialogue_event)
+	_dialogue_busy = false
+
+
+func _on_dialogue_event(event: String) -> void:
+	var parts := event.split(" ", false, 1)
+	var arg := parts[1] if parts.size() > 1 else ""
+	match parts[0]:
+		"black_screen":
+			_ensure_cover().color = Color.BLACK
+		"white_out":
+			var cover := _ensure_cover()
+			var tween := create_tween()
+			tween.tween_property(cover, "color", Color.WHITE, 0.25)
+			tween.tween_property(cover, "color", Color(1, 1, 1, 0), 1.4)
+			await tween.finished
+		"sfx":
+			# Placeholder audio: only sounds the SFX library actually has.
+			if has_node("/root/SFXManager") and SFXManager.SFX_DEFS.has(arg):
+				SFXManager.play(arg)
+		"objective":
+			_update_objective(arg, INSPECT_PROMPT)
+		"translation_flicker":
+			if _static_flash:
+				_static_flash.color = Color(0.2, 1.0, 0.9, 0.35)
+				var t := create_tween()
+				t.tween_property(_static_flash, "color:a", 0.0, 0.4)
+		"runes_return", "distant_cry":
+			pass  # needs art/audio; the lines carry the beat for now
+		_:
+			push_warning("[OpeningHook] unhandled dialogue event '%s'" % event)
+
+
+func _ensure_cover() -> ColorRect:
+	if _cover == null:
+		_cover = ColorRect.new()
+		_cover.name = "PrologueCover"
+		_cover.set_anchors_preset(Control.PRESET_FULL_RECT)
+		_cover.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_cover.color = Color.BLACK
+		_static_flash.get_parent().add_child(_cover)
+	return _cover
+
+
+func _create_inspect_points() -> void:
+	for p in INSPECT_POINTS:
+		var marker := _add_rect("Inspect_%s" % p["node"], p["pos"] - Vector2(10, 10), Vector2(20, 20), Color(0.85, 0.8, 0.6, 0.55))
+		marker.z_index = 4
+		_add_world_label(p["label"], p["pos"] + Vector2(-40, 14), 10, Color(0.85, 0.82, 0.72))
+
+
+func _nearest_inspect_point() -> Dictionary:
+	for p in INSPECT_POINTS:
+		if _player.global_position.distance_to(p["pos"]) <= INSPECT_RANGE:
+			return p
+	return {}
+
+
+func _inspect(p: Dictionary) -> void:
+	var first_time: bool = not _inspected.has(p["node"])
+	_inspected[p["node"]] = true
+	if first_time:
+		_run_dialogue(CRASH_DLG, p["node"])
 
 
 func _process(_delta: float) -> void:
@@ -64,7 +166,7 @@ func _process(_delta: float) -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if _exit_started or not _player:
+	if _exit_started or not _player or _dialogue_busy:
 		return
 	if not (event.is_action_pressed("interact") or event.is_action_pressed("root_access")):
 		return
@@ -76,6 +178,10 @@ func _input(event: InputEvent) -> void:
 		_complete_opening_hook()
 		get_viewport().set_input_as_handled()
 		return
+	var p := _nearest_inspect_point()
+	if not p.is_empty():
+		_inspect(p)
+		get_viewport().set_input_as_handled()
 
 
 func _build_environment() -> void:
@@ -90,8 +196,8 @@ func _build_environment() -> void:
 	for i in range(8):
 		var chip := _add_rect("MemoryChip%d" % i, Vector2(190 + i * 76, 292 + ((i % 2) * 210)), Vector2(26, 6), Color(0.25, 0.85, 0.95, 0.28))
 		chip.rotation = -0.25 + float(i % 3) * 0.22
-	_add_world_label("OAKHAVEN SIGNAL", EXIT_POS + Vector2(-62, -58), 12, Color(0.72, 0.95, 0.82))
-	_add_world_label("CRASH MEMORY SCAR", Vector2(365, 285), 11, Color(0.72, 0.62, 0.82))
+	_add_world_label("ROAD EAST", EXIT_POS + Vector2(-62, -58), 12, Color(0.72, 0.95, 0.82))
+	_add_world_label("CRATER", Vector2(365, 285), 11, Color(0.72, 0.62, 0.82))
 
 
 func _create_route_boundaries() -> void:
@@ -165,9 +271,9 @@ func _create_signal_fragment() -> void:
 	area.name = "SignalFragment"
 	area.global_position = SIGNAL_POS
 	area.add_to_group("interactable")
-	area.set_meta("display_name", "Broken Signal Fragment")
+	area.set_meta("display_name", "Fused metal")
 	area.set_meta("interaction_type", "item")
-	area.set_meta("opening_prompt_text", "[F/E] Interact")
+	area.set_meta("opening_prompt_text", "[{interact}] Look")
 	var shape := CollisionShape2D.new()
 	var circle := CircleShape2D.new()
 	circle.radius = 110.0
@@ -187,12 +293,12 @@ func _create_signal_fragment() -> void:
 	visual.color = Color(0.08, 0.9, 1.0, 0.86)
 	area.add_child(visual)
 	_signal_visual = visual
-	var marker := _add_world_label("SIGNAL", SIGNAL_POS + Vector2(-28, -58), 12, Color(0.88, 1.0, 1.0))
+	var marker := _add_world_label("Fused metal", SIGNAL_POS + Vector2(-28, -58), 12, Color(0.88, 1.0, 1.0))
 	marker.name = "SignalImportanceMarker"
-	_signal_prompt_label = _add_world_label("[F/E] interact", SIGNAL_POS + Vector2(-42, 42), 11, Color(0.86, 0.95, 1.0))
+	_signal_prompt_label = _add_world_label(InputService.fmt("[{interact}] look"), SIGNAL_POS + Vector2(-42, 42), 11, Color(0.86, 0.95, 1.0))
 	_signal_prompt_label.name = "SignalInteractPrompt"
 	_signal_prompt_label.visible = false
-	_signal_success_label = _add_world_label("CONNECTED", SIGNAL_POS + Vector2(-48, 42), 11, Color(0.62, 1.0, 0.72))
+	_signal_success_label = _add_world_label("EAST", SIGNAL_POS + Vector2(-48, 42), 11, Color(0.62, 1.0, 0.72))
 	_signal_success_label.name = "SignalConnectedMarker"
 	_signal_success_label.visible = false
 	add_child(area)
@@ -227,8 +333,8 @@ func _create_oakhaven_exit() -> void:
 	area.name = "OakhavenPath"
 	area.global_position = EXIT_POS
 	area.add_to_group("interactable")
-	area.set_meta("display_name", "Oakhaven Signal Road")
-	area.set_meta("opening_prompt_text", "[F/E] Follow signal")
+	area.set_meta("display_name", "Road east")
+	area.set_meta("opening_prompt_text", "[{interact}] Go east")
 	var shape := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
 	rect.size = Vector2(120, 120)
@@ -247,7 +353,7 @@ func _create_oakhaven_exit() -> void:
 	arrow.size = Vector2(92, 16)
 	arrow.color = Color(0.2, 0.95, 0.62, 0.55)
 	area.add_child(arrow)
-	var label := _add_world_label("EAST TO OAKHAVEN", EXIT_POS + Vector2(-112, 50), 12, Color(0.82, 1.0, 0.86))
+	var label := _add_world_label("EAST", EXIT_POS + Vector2(-112, 50), 12, Color(0.82, 1.0, 0.86))
 	label.name = "OakhavenPathDirectionLabel"
 	label.visible = false
 	_path_direction_label = label
@@ -328,16 +434,20 @@ func _sync_opening_interaction_prompt() -> void:
 	if not player_prompt:
 		return
 	var prompt_text := ""
-	if not _signal_found and _player.global_position.distance_to(SIGNAL_POS) <= SIGNAL_INTERACTION_RANGE:
-		prompt_text = "[F/E] Interact"
+	if _dialogue_busy:
+		prompt_text = ""
+	elif not _signal_found and _player.global_position.distance_to(SIGNAL_POS) <= SIGNAL_INTERACTION_RANGE:
+		prompt_text = "[{interact}] Look"
 	elif _signal_found and _player.global_position.distance_to(EXIT_POS) <= EXIT_INTERACTION_RANGE:
-		prompt_text = "[F/E] Follow signal"
+		prompt_text = "[{interact}] Go east"
+	elif not _nearest_inspect_point().is_empty():
+		prompt_text = "[{interact}] Look"
 	else:
 		var nearby: Variant = _player.get("nearby_interactable")
 		if nearby is Node and nearby.has_meta("opening_prompt_text"):
 			prompt_text = str(nearby.get_meta("opening_prompt_text"))
 	if prompt_text != "":
-		player_prompt.text = prompt_text
+		player_prompt.text = InputService.fmt(prompt_text)
 		player_prompt.visible = true
 	elif not _player.get("nearby_interactable"):
 		player_prompt.visible = false
@@ -357,7 +467,11 @@ func _sync_world_prompt_visibility() -> void:
 
 
 func _check_hook_local_proximity_triggers() -> void:
-	if not _player or _exit_started:
+	if not _player or _exit_started or _dialogue_busy:
+		return
+	if not _called_out and _player.global_position.distance_to(CALL_OUT_POS) <= CALL_OUT_RANGE:
+		_called_out = true
+		_run_dialogue(CRASH_DLG, "call_out")
 		return
 	if _signal_found and not _pulse_triggered and _pulse_area and _pulse_area.visible:
 		if _player.global_position.distance_to(PULSE_POS) <= PULSE_TRIGGER_RANGE:
@@ -378,9 +492,11 @@ func _show_message(text: String, seconds: float = 3.5) -> void:
 
 func _on_signalfragment_interaction(_actor: Node) -> void:
 	if _signal_found:
-		_show_message("The signal is already locked east. Move before the crater pulses again.", 3.5)
+		_show_message("The trace still points east.", 3.0)
 		return
 	_signal_found = true
+	_inspected["fused_metal"] = true
+	_run_dialogue(CRASH_DLG, "fused_metal")  # A1-P01: the trace that points east
 	if _signal_visual:
 		_signal_visual.color = Color(0.36, 1.0, 0.62, 0.95)
 	if _signal_glow:
@@ -391,8 +507,6 @@ func _on_signalfragment_interaction(_actor: Node) -> void:
 		_signal_success_label.visible = true
 	if has_node("/root/GameManager"):
 		GameManager.set_story_flag("ch1_opening_hook_signal_found", true)
-	_update_objective("Follow the Oakhaven signal.", "Avoid the pulse. Follow the east marker to Oakhaven.")
-	_show_message("Recovered signal: Oakhaven death record looped 412 times. Elara marker still alive.", 5.0)
 	_arm_glitch_pulse()
 	_draw_route_ping()
 
@@ -457,20 +571,26 @@ func _on_oakhaven_path_body_entered(body: Node2D) -> void:
 	if body == _player and _signal_found:
 		_complete_opening_hook()
 	elif body == _player:
-		_show_message("The road is static until you inspect the signal fragment.", 3.0)
+		_run_dialogue(CRASH_DLG, "leave_blocked")
 
 
 func _on_oakhavenpath_interaction(_actor: Node) -> void:
 	if _signal_found:
 		_complete_opening_hook()
 	else:
-		_show_message("The road is static until you inspect the signal fragment.", 3.0)
+		_run_dialogue(CRASH_DLG, "leave_blocked")
 
 
 func _complete_opening_hook() -> void:
 	if _exit_started:
 		return
 	_exit_started = true
+	if _dialogue_busy and has_node("/root/DialogueManager"):
+		DialogueManager.force_reset()  # leaving mid-line: stop it, don't carry it into the next scene
+	elif _signal_found:
+		await _run_dialogue(CRASH_DLG, "leave")
+		if not is_inside_tree():
+			return
 	if has_node("/root/GameManager"):
 		GameManager.set_story_flag("plane_crash_completed", true)
 		GameManager.set_story_flag("ch1_awakening_complete", true)
@@ -482,7 +602,6 @@ func _complete_opening_hook() -> void:
 		GameManager.change_state(GameManager.GameState.EXPLORATION)
 	_restore_global_breadcrumb()
 	_refresh_global_breadcrumb()
-	_show_message("The signal points to Oakhaven. Someone there already knows your name.", 2.0)
 	await get_tree().create_timer(0.45).timeout
 	if not is_inside_tree():
 		return

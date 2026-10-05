@@ -384,7 +384,7 @@ func _test_disconnect_pauses() -> void:
 func _test_no_hardcoded_keys() -> void:
 	print("[no hardcoded keys]")
 	var raw_key := RegEx.create_from_string("keycode\\s*==|is_physical_key_pressed|is_key_pressed|\\bKEY_[A-Z0-9_]+\\b")
-	var hint := RegEx.create_from_string("\"[^\"]*(\\[(F|E|J|K|Q|C|X|R|M|I|L|TAB|Tab|ESC|Esc|SPACE|Space|Shift|SHIFT|ENTER|Enter|WASD|A/D)\\]|Press (SPACE|Space|ESC|Esc|TAB|Tab|ENTER|Enter|[A-Z])\\b)")
+	var hint := RegEx.create_from_string("\"[^\"]*(\\[(F|E|J|K|Q|C|X|R|M|I|L|TAB|Tab|ESC|Esc|SPACE|Space|Shift|SHIFT|ENTER|Enter|WASD|A/D)\\]|\\[[A-Z](/[A-Z])+\\]|Press (SPACE|Space|ESC|Esc|TAB|Tab|ENTER|Enter|[A-Z])\\b)")
 	var raw_hits: Array[String] = []
 	var hint_hits: Array[String] = []
 	for path in _gd_files("res://scripts"):

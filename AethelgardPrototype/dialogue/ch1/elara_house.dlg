@@ -1,0 +1,88 @@
+# C1-S02 — Stew. Source: Production Master 2.1, lines 1572–1624.
+# Elara's house. The game slows down: the player can ask the basic questions
+# here instead of having them dumped on the road. Each topic can be asked
+# once. Inspectable objects have their own nodes.
+
+~ start
+do elara_serves_stew
+Kaelen: What is it?
+Elara: Stew.
+Kaelen: That's a category, not a recipe.
+Elara: Today it's both.
+=> topics
+
+~ topics
+? Kaelen (Internal): Ask her something?
+- [if not ch1_stew_asked_where] So where am I, exactly? => where
+- [if not ch1_stew_asked_fracture] What is the Fracture? => fracture
+- [if not ch1_stew_asked_magic] How does magic work here? => magic
+- [if not ch1_elara_arm_talked] About your arm... => arm
+- (Just eat.) => END
+
+~ where
+set ch1_stew_asked_where
+Elara: Aethelgard.
+Kaelen: The country?
+Elara: The world.
+Kaelen: Of course it is.
+Elara: You asked.
+=> topics
+
+~ fracture
+set ch1_stew_asked_fracture
+Elara: It's when things stop agreeing with themselves.
+Kaelen: That's the definition?
+Elara: It's the useful one. The priests have a longer one. It doesn't move carts.
+=> topics
+
+~ magic
+set ch1_stew_asked_magic
+Elara: You're asking me? You're the one who reached inside a beast this afternoon.
+Kaelen: Okay. Point taken.
+=> topics
+
+~ arm
+set ch1_elara_arm_talked
+[if elara_arm_respected_silence] => arm_waited
+=> arm_pushed
+
+~ arm_waited
+Elara: You waited. On the road.
+Kaelen: You didn't want to talk about it.
+Elara: Still don't.
+Kaelen: Okay.
+Elara: ...Thank you, stranger.
+do trust elara 10
+=> topics
+
+~ arm_pushed
+Elara: It's corruption. Casting makes it worse.
+Kaelen: Then stop casting.
+do pause 1.2
+Elara: There it is.
+Kaelen: There what is?
+Elara: Stranger turns up, sees one afternoon of my life, and solves it.
+Kaelen: I didn't mean—
+Elara: I know you didn't. That's why I'm only annoyed.
+=> topics
+
+# ── Things in the room ────────────────────────────────────────────────────
+
+~ inspect_bandages
+Kaelen (Internal): Bandages. A lot of them.
+do elara_sees_him_look
+Elara: They're mine.
+Kaelen: I guessed.
+Elara: Good. Saves us a conversation.
+
+~ inspect_herbs
+Kaelen (Internal): Half of these I don't recognise. The other half I don't recognise either.
+
+~ inspect_focuses
+Kaelen (Internal): Three cracked... wands? Foci? Whatever they are, she goes through them fast.
+
+~ inspect_cloak
+Kaelen (Internal): Patched so many times there's more patch than cloak.
+
+~ inspect_map
+Kaelen (Internal): Oakhaven, the crater, a road going south. Someone's drawn a skull over the north field.

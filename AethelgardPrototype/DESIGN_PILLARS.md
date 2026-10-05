@@ -43,6 +43,7 @@ The measurable definitions are in roadmap §2.
 | MP | **Normal spells, skills and healing** (spell 15 MP, heal 20 MP). Regenerates ~2 MP/s plus potions and rest. Stored in `player_stats["mp"]`. Implemented. | 2026-10-04 |
 | Soul | **Special arts: Glitch Arts and special skills.** Earned only through skillful play: parry +25, perfect dodge (a hit avoided during dash i-frames, once per dash) +15, kill +10. No longer gained per hit. Earning is implemented; spending waits on Glitch Arts. | 2026-10-04 |
 | Art | All sprites come from the Pixel Art Engine through an importer (roadmap §6). The temporary art was removed on 2026-10-04. | 2026-10-04 |
+| Story source | `story/source/PRODUCTION_MASTER_2.1.md` is the general story and flow. Its canon is in `story/STORY_BIBLE.md`, and its scenes are rewritten into `dialogue/` against `story/VOICE_GUIDE.md`. **This file and the implemented mechanics win** over its systems sections. Not adopted: stamina, equipment-load dodges, companion combat commands, renamed difficulty modes, top-down field combat, and healing items as the main heal. | 2026-10-05 |
 
 ## Canon (as built)
 
@@ -60,7 +61,8 @@ The measurable definitions are in roadmap §2.
 - **Elara:** the Glitch-Witch guide. Her corrupted arm worsens every time she casts.
 - **Lyra:** a former system admin met in the Fractured Wastes.
 - **Kaelthas:** the Chapter 3 ally or betrayer.
-- **Source Key:** 7 fragments. All 7 are required for the Synthesis ending.
+- **Source Key:** 7 fragments, one per Human Patch authorization domain. All 7 are required to
+  reach the Root of Heaven. The full canon is in `story/STORY_BIBLE.md`.
 
 ### Endings: framed by *who authorizes the change* (decided 2026-10-04)
 

@@ -1,0 +1,88 @@
+# A1-P02 — The Wrong Weapon. Source: Production Master 2.1, lines 1221–1311.
+# Scene: scenes/chapter1/elara_meeting.tscn. The combat tutorial happens only
+# when danger can't be avoided: the slime follows if you back off and attacks
+# if you wait.
+# Every branch keeps Elara with Kaelen. The legacy flags ch1_elara_trusted and
+# ch1_elara_cautious are what GameManager.has_elara() reads.
+
+~ start
+Kaelen: ...Why do I have a sword?
+Kaelen: I don't own a sword.
+Kaelen: I own a sword.
+do slime_appears
+
+~ after_slime
+Kaelen: That... wasn't blood.
+???: Were you hoping it would be?
+do elara_enters
+Elara: Hands where I can see them.
+Kaelen: One of them's holding a sword.
+Elara: Then put that one down first.
+Kaelen: Okay. Putting it down. Slowly.
+do kaelen_lowers_sword
+Elara: Name?
+Kaelen: Kaelen.
+Elara: From where?
+Kaelen: Flight 707.
+Elara: Is that a place?
+Kaelen: It's a plane. It's— it flies. It's a big metal thing that flies.
+# She looks at him the way you'd look at someone describing a dragon made of spoons.
+Kaelen: You didn't see anything fall today? Out of the sky?
+Elara: You.
+Kaelen: Anyone else? Smoke, wreckage, people?
+Elara: No.
+Elara: Were there supposed to be?
+Kaelen: ...A lot.
+do elara_lowers_bow
+Elara: Then let's talk somewhere the road isn't trying to eat us.
+? Kaelen (Internal): How much do I tell her?
+- I was on a flight. Something happened, I woke up here, and everyone else is gone. => trust
+- There were people with me. I need to find them before I explain the rest. => cautious
+- You first. Where am I? Then I'll tell you how impossible this is. => deflect
+
+~ trust
+set elara_first_truth
+set ch1_elara_trusted
+do trust elara 10
+Elara: You remember them.
+Kaelen: Enough.
+Elara: Good. Hold on to that.
+Kaelen: Why is that good?
+Elara: People who come out of bad places usually come out remembering less.
+=> after
+
+~ cautious
+set elara_first_cautious
+set ch1_elara_cautious
+Elara: You remember enough to be careful.
+Kaelen: I remember enough to know I should be looking.
+Elara: Then we want the same thing. For now.
+=> after
+
+~ deflect
+set elara_first_deflect
+set ch1_elara_cautious
+Elara: Oakhaven Reach.
+Kaelen: Is that a country?
+Elara: A region.
+Kaelen: Of which country? Which— where?
+Elara: Aethelgard.
+Kaelen (Internal): Nothing. It's not a word I know. It's not even close to one.
+=> after
+
+~ after
+set elara_met
+Elara: You came out of the crater, stranger.
+Kaelen: I guess I did.
+Elara: People don't come out of the crater.
+Kaelen: Great. Today's going great.
+Elara: Oakhaven keeps road records. Travellers, strangers... things that fall out of places they shouldn't.
+Kaelen: That happens often enough to need records?
+Elara: Often enough that Bran complains about the paperwork.
+do kaelen_reaches_for_sword
+do elara_raises_bow
+Kaelen: Right. Sorry. Leaving that there.
+Elara: Walk ahead of me, where I can see you.
+Kaelen: Very trusting.
+Elara: Very practical.
+do objective Reach Oakhaven. Follow the first lead on the missing passengers.

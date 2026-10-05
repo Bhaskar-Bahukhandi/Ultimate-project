@@ -80,7 +80,7 @@ ContextStack and input tests, the Phase 0 suite, and `git diff --check`.
 | `assets/` | Runtime art. `assets/art_sources/` is review-only (not imported, not exported). |
 | `shaders/` | Glitch, CRT and other screen effects. |
 | `dialogue/` | All dialogue as `.dlg` text files (format: `story/DIALOGUE_FORMAT.md`). `dialogue/_extracted/` is the old in-code dialogue, kept as rewrite material. |
-| `story/` | Story bible, voice guide, act outlines, dialogue format. |
+| `story/` | Story bible, voice guide, act outlines, dialogue format. `story/source/` holds the full story master (source material; the bible says what's adopted). |
 | `tests/` | Headless tests and runners (`input_test.gd`, `context_stack_test.gd`, `dialogue_test.gd`, `phase0_blockers_test.gd`, `load_all_test.gd`). |
 | `tools/` | Dev tools, e.g. `extract_dialogue.gd`. Not exported. |
 | `docs/` | Art-pipeline and gameplay-audit history (not exported). |

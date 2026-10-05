@@ -219,6 +219,15 @@ playthrough log.
   conditions, flags, `do` scene hooks, optional `[#id]` line IDs, a validator, an extractor and tests.
   Still to do: a speaker registry (portraits), an ID-stamping tool, and a localization string-table
   export.
+- [x] **Story source and first rewrite** (2026-10-05).
+  - Production Master 2.1 was adopted as the story source; its canon is in `story/STORY_BIBLE.md`.
+  - Voice sheets plus an automatic voice lint.
+  - The prologue and Chapter 1 are rewritten as 10 `.dlg` files, and the crash site plays them.
+  - Still to do:
+    - Wire the remaining Chapter 1 scenes (Elara meeting, Broken Mile, Oakhaven, Aldric) to their
+      `.dlg` files. This needs scene work: inspect points, a guardian and a boar fight, and the
+      bridge deadline on the WorldClock.
+    - Then Chapter 2 onward, in the same voice.
 - [ ] **Stats model:** `final = base + level + training + Σ modifiers`. Decided 2026-10-04: DEF is
   mitigation (`×100/(100+DEF)`, done); MP pays for spells and healing, regenerating ~2/s (done); Soul
   is earned from parries, perfect dodges and kills (done) and pays for Glitch Arts (proposal in

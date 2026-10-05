@@ -1,0 +1,54 @@
+# C1-S03 — A Normal Afternoon. Source: Production Master 2.1, lines 1626–1652.
+# There's no alarm for about five minutes of play. The village has to feel lived
+# in before anything threatens it. Each node is one NPC or moment; the
+# farmers' argument sets up the uphill water in C1-S05, and the child sets up
+# "Uncle Aldric" in C1-S08.
+
+~ chicken
+Child: Mum! There's two Pebbles!
+Mother: There's one Pebbles, love.
+do chicken_duplicate
+Kaelen: ...
+Kaelen: I'm not going to ask about the chicken.
+
+~ old_fen
+Old Fen: New, are you.
+Kaelen: I guess so.
+Old Fen: You'll get over it.
+Kaelen: Being new?
+Old Fen: Guessing.
+
+~ jessa
+Jessa: Elara brought you in?
+Kaelen: Is that unusual?
+Jessa: She usually brings in plants.
+Kaelen: Better company, probably.
+Jessa: Quieter. Plants don't ask where the crater went.
+
+~ mara
+Mara: So you're the crater. Sit down. Have you eaten? Is she feeding you, or was it the stew again?
+Kaelen: It was the stew.
+Mara: Course it was. Here. Don't argue, I've already decided.
+Kaelen: Thank you. Really.
+Mara: Thank me by not falling over in my doorway.
+set ch1_mara_met
+
+~ farmers
+Tull: Water doesn't go uphill, Wenna.
+Wenna: Then go and tell it, because it's halfway up my bean rows.
+Tull: You left the sluice open again.
+Wenna: I've never left a sluice open in my life.
+Tull: The spring of the flood.
+Wenna: That was the sluice's fault.
+
+~ lost_sword
+Child: Have you seen my sword? It's wood. It's a good one.
+Kaelen: What does it look like?
+Child: Like a sword.
+Kaelen: ...Right. I'll keep an eye out.
+
+~ lost_sword_found
+Child: You found it! Are you a knight?
+Kaelen: No. I just look like I lost a fight with one.
+Child: My uncle Aldric's a knight. He's away.
+set ch1_child_sword_returned

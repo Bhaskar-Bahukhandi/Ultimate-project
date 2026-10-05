@@ -3,6 +3,34 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-05 — New story source; prologue and Chapter 1 rewritten
+
+- **Story source adopted:** `story/source/PRODUCTION_MASTER_2.1.md` (your general story and flow).
+  - Its canon is now in `story/STORY_BIBLE.md`: the emergency refuge, SOVEREIGN, the Human Patch,
+    why the Source Key is scattered, and the God King as "the habit of needing a final ruler".
+  - Proposed: four ending families (Sole / Bound / No Authority / Consent), with faction and the
+    deleted as modifiers.
+  - `DESIGN_PILLARS.md` records that the implemented mechanics win over the source's systems
+    sections.
+- **Prologue + Chapter 1 as `.dlg`** (10 files in `dialogue/prologue/` and `dialogue/ch1/`).
+  - Covers the crash site, Elara, the Broken Mile (Data Vision, first Root edit), Oakhaven's gate
+    and road ledger, stew, a normal afternoon, the north field, the boar, the bridge deadline,
+    Aldric (kill / spare / purge), Fragment One, the village meeting and Elara joining.
+  - Rewritten against new per-character voice sheets (`story/VOICE_GUIDE.md`): contractions, real
+    questions, distinct voices, none of the source's repeated tics.
+- **Playable now:** New Game opens with the black-screen prologue (Flight 707), then the rewritten
+  crash site.
+  - The crater has six things to look at, and Kaelen calls out for survivors.
+  - The fused metal gives the trace that points east.
+  - The old "Oakhaven death record looped 412 times" text is gone.
+- **Dialogue system:**
+  - `.dlg` files can use `do trust <companion> <delta>` and `do pause <seconds>` without scene
+    code.
+  - A dialogue run stops when its scene is left, so lines no longer spill into the next scene.
+  - Opening prompts no longer hardcode "[F/E]".
+- **Voice lint** in the dialogue tests (45 checks now). It flags questions without question marks,
+  the banned tics, hardcoded key names, unregistered speakers, and long files with no contractions.
+
 ## 2026-10-04 — Gamepad support and full remapping (InputService)
 
 - **Gamepad:** every action has a controller default, and no two actions that can be used at the

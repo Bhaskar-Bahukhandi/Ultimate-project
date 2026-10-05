@@ -1,0 +1,131 @@
+# C1-S04 to C1-S07 — the North Field, Field Fracture, the Boar, the Bridge Warning.
+# Source: Production Master 2.1, lines 1654–1735.
+# Refusing to help doesn't end the game: time passes, villagers get hurt, and
+# the story carries on through the aftermath. Nobody calls Kaelen a villain.
+
+# C1-S04: the bell rings twice, then stutters.
+~ alarm
+do bell_alarm
+Farmer: The north field! It's split, it's split right down the middle!
+do elara_stands
+Kaelen: Split how?
+Elara: You're about to find out.
+? Kaelen (Internal): She's already moving.
+- I'm coming with you. => help
+- This isn't my... I don't even know where I am. => hesitate
+
+~ help
+set ch1_north_field_helped
+do trust elara 10
+Elara: Keep up, stranger.
+
+~ hesitate
+Mara: Go on. The village can look after itself, mostly. But nobody's going down the south road until that field's sorted, love, so you might as well.
+do fracture_spreads
+? Kaelen (Internal): It's spreading toward the houses.
+- All right. I'm coming. => help
+- I'm staying here. => refuse
+
+~ refuse
+set ch1_north_field_refused
+do trust elara -10
+Mara: Suit yourself. I'll put the kettle on for whoever comes back.
+
+# C1-S05: the irrigation water is flowing uphill. Data Vision shows why.
+~ field_water
+System: SYSTEM TRACE: WATER_SIM RULESET CONFLICT.
+System: VERSION A17. VERSION B04.
+Kaelen: There are two sets of rules running at once.
+Elara: Can you stop one?
+Kaelen: Maybe.
+Elara: I hate that word.
+? Kaelen (Internal): The sluice. How do I fix it?
+- Edit it. Let the current terrain win. => edit_terrain
+- Edit it. Wall this channel off from the rest. => edit_isolate
+- Leave the code alone. Dig a new channel by hand. => dig
+
+~ edit_terrain
+set ch1_sluice_edited
+do root_edit sluice terrain_priority
+Elara: Fixed?
+Kaelen: For now.
+Elara: You say "for now" a lot.
+
+~ edit_isolate
+set ch1_sluice_isolated
+do root_edit sluice isolate
+Elara: The beans are going to be very confused.
+Kaelen: They're not the only ones.
+
+~ dig
+set ch1_sluice_dug
+do dig_channel
+Elara: You could've done your trick.
+Kaelen: I could've. I'd rather know it works without the trick first.
+do trust elara 10
+Elara: Huh.
+
+# C1-S06: a corrupted boar guarding an erased nest. Data Vision shows DEFEND NEST
+# with a null nest reference, the same error as the guardian on the road.
+~ boar
+Kaelen: It's the same error. It's guarding a nest that isn't there.
+Elara: Then it's not a monster. It's a mother with nowhere to be a mother.
+? Kaelen (Internal): What do we do about it?
+- Fight it. => boar_fight
+- Turn its aggression down. => boar_calm
+- Build it something that looks like a nest. => boar_nest
+
+~ boar_fight
+set ch1_boar_fought
+do start_boar_fight
+
+~ boar_calm
+set ch1_boar_calmed
+do root_edit boar aggression
+
+~ boar_nest
+set ch1_boar_nest_rebuilt
+do trust elara 10
+Elara: Moss, sticks, and whatever it is you do. Go on. Make it a home.
+do boar_nest_anchor
+
+# Later, at Mara's, if the nest was rebuilt.
+~ mara_boar
+Mara: You saved a boar.
+Kaelen: It was confused.
+Mara: So are most of the men in this village.
+Old Fen: Heard that!
+Mara: You were meant to.
+
+# C1-S07: the north bridge is badly fractured. The first explicit deadline.
+~ bridge
+Bran: North bridge is cracked right through. There's rain coming tonight, and if it's still cracked when the river comes up, it's going in.
+Kaelen: How long have we got?
+Bran: Until dark. I've written it down, so it's official.
+do quest_start bridge_before_dark
+? Kaelen (Internal): The bridge, or Aldric's trail?
+- I'll fix it before dark. => bridge_fix
+- At least keep people off it. => bridge_warn
+- It'll have to wait. => bridge_wait
+
+~ bridge_fix
+set ch1_bridge_repair_accepted
+Bran: Good lad. I'll put it in the ledger as "fixed by the crater".
+
+~ bridge_warn
+set ch1_bridge_evacuated
+Bran: I'll put a man at each end. They'll complain. They always complain.
+
+~ bridge_wait
+set ch1_bridge_ignored
+Bran: It's your road too, you know. You walked in on it.
+
+# The bridge outcome is set by the scene at dark: ch1_bridge_saved or
+# ch1_bridge_fell. Later caravans, prices and the ending reference it.
+~ bridge_saved
+Bran: Huh. It's holding. That's going in the ledger.
+
+~ bridge_fell
+Bran: Heard it go about an hour ago.
+[if ch1_bridge_evacuated] Bran: Nobody was on it. That's your doing, that part.
+[if not ch1_bridge_evacuated] Bran: Tobb's cart was halfway over. He's all right. The cart isn't, and neither's his leg.

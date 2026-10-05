@@ -103,6 +103,21 @@ const SPEAKER_COLORS: Dictionary = {
 	"Kaelthas": Color(0.9, 0.2, 0.1),  # Antagonist red
 	"The Archivist": Color(0.5, 0.8, 0.9),  # Archive blue
 	"Lyra": Color(0.3, 0.9, 0.4),  # Wastes green
+	# Prologue + Chapter 1 rewrite (dialogue/prologue, dialogue/ch1)
+	"Kaelen (Memory)": Color(0.75, 0.75, 0.85),
+	"Flight Attendant": Color(0.95, 0.55, 0.55),  # Seraphina, unnamed — her colour
+	"Voice": Color(0.9, 0.6, 0.2),  # Mira, unnamed — her colour
+	"Passenger": Color(0.65, 0.65, 0.7),
+	"Colleague": Color(0.65, 0.7, 0.8),
+	"Bran": Color(0.6, 0.65, 0.5),
+	"Mara": Color(0.95, 0.75, 0.45),
+	"Old Fen": Color(0.7, 0.68, 0.6),
+	"Jessa": Color(0.75, 0.6, 0.8),
+	"Tull": Color(0.6, 0.75, 0.4),
+	"Wenna": Color(0.7, 0.8, 0.45),
+	"Child": Color(1.0, 0.8, 0.5),
+	"Mother": Color(0.85, 0.75, 0.6),
+	"Farmer": Color(0.6, 0.8, 0.3),
 }
 
 
@@ -292,6 +307,7 @@ func is_skip_requested() -> bool:
 
 ## Completely reset all dialogue state. Call before scene transitions.
 func force_reset() -> void:
+	_run_gen += 1  # stop any .dlg run still in progress
 	_line_seq += 1  # Cancel any pending auto-hide from the previous scene
 	_hide_immediate()
 	is_active = false
@@ -425,7 +441,33 @@ const RUN_MAX_STEPS := 10000  # guards against "=> a" / "=> b" loops
 ## `set` flags and `[if ...]` conditions. `on_event` receives each `do name`
 ## and is awaited, so a scene can run camera moves or effects mid-dialogue.
 ## Returns {"ok": bool, "choices": [{node, index, target}], "end_node": String}.
+## A run belongs to the scene that started it: if that scene is left (or
+## force_reset() is called), the run stops instead of carrying on into the
+## next scene. A stopped run returns ok = false.
 func run(file_path: String, node: String = "start", on_event: Callable = Callable()) -> Dictionary:
+	var gen := _run_gen
+	var scene: Node = get_tree().current_scene if is_inside_tree() else null
+	var cancel := _cancel_run.bind(gen)
+	# A run started from inside another run's event (same scene, same
+	# generation) shares the outer run's hook.
+	var owns_hook := scene != null and not scene.tree_exiting.is_connected(cancel)
+	if owns_hook:
+		scene.tree_exiting.connect(cancel, CONNECT_ONE_SHOT)
+	var result: Dictionary = await _run_impl(file_path, node, on_event, gen)
+	if owns_hook and is_instance_valid(scene) and scene.tree_exiting.is_connected(cancel):
+		scene.tree_exiting.disconnect(cancel)
+	return result
+
+
+var _run_gen := 0   # bumped by force_reset(); runs from an older generation stop
+
+
+func _cancel_run(gen: int) -> void:
+	if gen == _run_gen:
+		force_reset()
+
+
+func _run_impl(file_path: String, node: String, on_event: Callable, gen: int) -> Dictionary:
 	var script = DialogueScriptRes.load_file(file_path)
 	var result := {"ok": false, "choices": [], "end_node": node}
 	if not script.errors.is_empty():
@@ -453,15 +495,18 @@ func run(file_path: String, node: String = "start", on_event: Callable = Callabl
 		match step["type"]:
 			"line":
 				await say(step["speaker"], step["text"])
-				if not is_inside_tree():
+				if not is_inside_tree() or gen != _run_gen:
 					return result
 			"set":
 				if has_node("/root/GameManager"):
 					GameManager.set_story_flag(step["flag"], step["value"])
 			"do":
-				if on_event.is_valid():
+				if await _run_builtin_event(step["event"], file_path):
+					if not is_inside_tree() or gen != _run_gen:
+						return result
+				elif on_event.is_valid():
 					await on_event.call(step["event"])
-					if not is_inside_tree():
+					if not is_inside_tree() or gen != _run_gen:
 						return result
 				else:
 					push_warning("[Dialogue] %s: 'do %s' but no on_event handler" % [file_path, step["event"]])
@@ -483,7 +528,7 @@ func run(file_path: String, node: String = "start", on_event: Callable = Callabl
 					prompt["text"] if prompt != null else "",
 					texts,
 					prompt["speaker"] if prompt != null else "Kaelen")
-				if picked < 0 or not is_inside_tree():
+				if picked < 0 or not is_inside_tree() or gen != _run_gen:
 					return result  # scene changed while the choice was open
 				var chosen: Dictionary = visible[picked]
 				result["choices"].append({"node": current, "index": picked, "target": chosen["target"]})
@@ -494,6 +539,39 @@ func run(file_path: String, node: String = "start", on_event: Callable = Callabl
 	result["ok"] = true
 	result["end_node"] = current
 	return result
+
+
+## Relationship value at which "<name>_trust_high" turns on (same units as
+## GameManager.relationships, where a big story choice is worth 10–25).
+const TRUST_HIGH := 30
+
+## `do` events every .dlg can use without the scene handling them:
+##   do trust <companion> <delta>   change GameManager.relationships[companion],
+##                                  and keep the flag <companion>_trust_high in step
+##   do pause <seconds>             a beat of silence (0–10 s)
+## Returns true if the event was one of these.
+func _run_builtin_event(event: String, file_path: String) -> bool:
+	var parts := event.split(" ", false)
+	if parts.is_empty():
+		return false
+	match parts[0]:
+		"trust":
+			if parts.size() != 3 or not parts[2].is_valid_int():
+				push_warning("[Dialogue] %s: expected 'do trust <companion> <delta>', got 'do %s'" % [file_path, event])
+				return true
+			if has_node("/root/GameManager"):
+				var who := parts[1]
+				var value: int = int(GameManager.relationships.get(who, 0)) + int(parts[2])
+				GameManager.relationships[who] = value
+				GameManager.set_story_flag("%s_trust_high" % who, value >= TRUST_HIGH)
+			return true
+		"pause":
+			var seconds := 1.0
+			if parts.size() > 1 and parts[1].is_valid_float():
+				seconds = clampf(float(parts[1]), 0.0, 10.0)
+			await get_tree().create_timer(seconds).timeout
+			return true
+	return false
 
 
 func _conditions_met(cond: Array) -> bool:

@@ -1,0 +1,22 @@
+# A1-P00 — Before the Ground. Source: Production Master 2.1, lines 1132–1157.
+# Black screen, about twenty seconds, not playable. Plays when New Game opens
+# the crash site. The flight attendant is Seraphina; she isn't named here. The
+# player meets her again in Chapter 2 and the "rows" habit is how they'll
+# recognise her (she counts people).
+# The Voice is Mira. Unnamed until much later; keep it that way.
+
+~ start
+do black_screen
+do sfx seatbelt_chime
+Flight Attendant: Rows eighteen to thirty, clear. Cabin's secure.
+do sfx phone_buzz
+Voice: Call me when you land, okay?
+Kaelen: I will. Promise.
+do sfx turbulence
+Flight Attendant: Ladies and gentlemen, please stay seated with your seatbelts fastened.
+do sfx cup_falls
+Flight Attendant: Heads down! Brace, brace! Heads down, stay down!
+Passenger: Where's my daughter? I can't see her— where is she?
+Passenger: I can't— I can't breathe—
+Kaelen: Hey. Hey, look at me. You're okay. Just look at me.
+do white_out

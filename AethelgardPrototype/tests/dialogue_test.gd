@@ -25,7 +25,10 @@ func _run() -> void:
 	_test_parser()
 	_test_validation_errors()
 	await _test_runner()
+	await _test_builtin_events()
 	_test_all_dialogue_files_parse()
+	_test_voice_lint()
+	await _test_opening_scene_wiring()
 	print("")
 	print("DIALOGUE RESULT: %d passed, %d failed" % [_passes, _failures.size()])
 	for f in _failures:
@@ -138,6 +141,60 @@ func _test_runner() -> void:
 	_check(not dm.is_active, "dialogue box closes after run()")
 
 
+func _test_builtin_events() -> void:
+	print("[built-in do events]")
+	var gm := get_root().get_node("GameManager")
+	var dm := get_root().get_node("DialogueManager")
+	var path := "user://builtin_events_test.dlg"
+	var f := FileAccess.open(path, FileAccess.WRITE)
+	f.store_string("~ start\ndo trust elara 10\ndo trust elara 10\ndo pause 0.05\ndo trust elara 10\ndo scene_thing\n")
+	f.close()
+	gm.relationships["elara"] = 0
+	gm.set_story_flag("elara_trust_high", false)
+	var events: Array = []
+	var r: Dictionary = await dm.run(path, "start", func(name: String): events.append(name))
+	_check(r["ok"] and int(gm.relationships["elara"]) == 30, "do trust changes the relationship (%s)" % gm.relationships["elara"])
+	_check(gm.has_flag("elara_trust_high"), "reaching %d sets <name>_trust_high" % dm.TRUST_HIGH)
+	_check(events == ["scene_thing"], "built-ins aren't passed to the scene; other events are (%s)" % [events])
+	gm.relationships["elara"] = 0
+	DirAccess.remove_absolute(path)
+
+
+## The New Game crash site plays dialogue/prologue + dialogue/ch1/crash_site.dlg.
+func _test_opening_scene_wiring() -> void:
+	print("[opening scene wiring]")
+	var gm := get_root().get_node("GameManager")
+	var dm := get_root().get_node("DialogueManager")
+	gm.reset_game()
+	dm.force_reset()
+	change_scene_to_file("res://scenes/chapter1/opening_crash_site_hook.tscn")
+	for i in 4:
+		await process_frame
+	var hook := current_scene
+	_driving = true
+	_drive()
+	var seen_speakers: Array = []
+	var deadline := Time.get_ticks_msec() + 20000
+	while Time.get_ticks_msec() < deadline:
+		if dm._is_visible and dm._speaker_label and not dm._speaker_label.text in seen_speakers:
+			seen_speakers.append(dm._speaker_label.text)
+		if not hook._dialogue_busy and "Kaelen" in seen_speakers:
+			break
+		await process_frame
+	_check("Flight Attendant" in seen_speakers and "Kaelen" in seen_speakers,
+		"New Game opens with the prologue, then Kaelen at the crash site %s" % [seen_speakers])
+	_check(not hook._dialogue_busy, "opening dialogue finishes and hands control back")
+	hook._on_signalfragment_interaction(hook._player)   # the fused metal
+	deadline = Time.get_ticks_msec() + 15000
+	while hook._dialogue_busy and Time.get_ticks_msec() < deadline:
+		await process_frame
+	_check(gm.has_flag("ch1_crash_trace_seen") and gm.has_flag("ch1_opening_hook_signal_found"),
+		"the fused metal plays its .dlg node and opens the road east")
+	_check(hook._objective_label.text.contains("Find people"), "the .dlg's 'do objective' updates the HUD (%s)" % hook._objective_label.text)
+	_driving = false
+	dm.force_reset()
+
+
 func _test_all_dialogue_files_parse() -> void:
 	print("[all .dlg files]")
 	var bad: Array[String] = []
@@ -146,6 +203,80 @@ func _test_all_dialogue_files_parse() -> void:
 	_check(bad.is_empty(), "every .dlg file parses (%d with errors)" % bad.size())
 	for b in bad.slice(0, 10):
 		print("    " + b)
+
+
+## story/VOICE_GUIDE.md §5. Authored dialogue only: dialogue/_extracted is old
+## source material and is exempt.
+const QUESTION_OPENER := "^(What|Why|Where|Who|Whose|How|When|Which|Did|Does|Is|Are|Was|Were|Can|Could|Would|Should|Have you|Has)\\b"
+const BANNED_TICS := ["better answer", "good answer", "both are true", "that sentence"]
+const FLAT_REGISTER_MIN_LINES := 15   # a file this long with no contractions reads robotic
+
+func _test_voice_lint() -> void:
+	print("[voice lint — authored .dlg files]")
+	var question := RegEx.create_from_string(QUESTION_OPENER)
+	var key_hint := RegEx.create_from_string("\\[(F|E|J|K|Q|C|X|R|M|I|L|TAB|Tab|ESC|Esc|SPACE|Space|Shift|SHIFT|ENTER|Enter|WASD|A/D|F/E)\\]|Press (SPACE|Space|ESC|Esc|TAB|Tab|ENTER|Enter)\\b")
+	var contraction := RegEx.create_from_string("[A-Za-z](n't|'s|'re|'ll|'m|'ve|'d)\\b")
+	var speakers: Dictionary = get_root().get_node("DialogueManager").SPEAKER_COLORS
+	var unasked: Array[String] = []
+	var tics: Array[String] = []
+	var keys: Array[String] = []
+	var unknown_speakers: Array[String] = []
+	var flat_files: Array[String] = []
+	var files := _authored_dlg_files("res://dialogue")
+	for path in files:
+		var s = load("res://scripts/dialogue/dialogue_script.gd").load_file(path, false)
+		var spoken := 0
+		var contracted := 0
+		for node_name in s.nodes:
+			for step in s.nodes[node_name]:
+				var texts: Array = []
+				var who: Array = []
+				if step["type"] == "line":
+					texts.append(step["text"])
+					who.append(step["speaker"])
+				elif step["type"] == "choice":
+					if step["prompt"] != null:
+						texts.append(step["prompt"]["text"])
+						who.append(step["prompt"]["speaker"])
+					for opt in step["options"]:
+						texts.append(opt["text"])
+				for sp in who:
+					if not speakers.has(sp) and not "%s (%s)" % [path.get_file(), sp] in unknown_speakers:
+						unknown_speakers.append("%s (%s)" % [path.get_file(), sp])
+				for t in texts:
+					var text: String = t.strip_edges()
+					var at := "%s:%d" % [path.get_file(), step["line"]]
+					if step["type"] == "line":
+						spoken += 1
+						if contraction.search(text):
+							contracted += 1
+					# "Have you seen my sword? It's wood." is fine: the question is marked.
+					if question.search(text) and not ("?" in text or text.ends_with("!") or text.ends_with("—") or text.ends_with("…") or text.ends_with("...")):
+						unasked.append(at)
+					for tic in BANNED_TICS:
+						if text.to_lower().contains(tic):
+							tics.append("%s \"%s\"" % [at, tic])
+					if key_hint.search(text):
+						keys.append(at)
+		if spoken >= FLAT_REGISTER_MIN_LINES and contracted == 0:
+			flat_files.append(path.get_file())
+	_check(files.size() > 0, "found %d authored .dlg files" % files.size())
+	_check(unasked.is_empty(), "questions end in a question mark %s" % [unasked.slice(0, 8)])
+	_check(tics.is_empty(), "no banned tics %s" % [tics.slice(0, 8)])
+	_check(keys.is_empty(), "no hardcoded key names — use {action} tokens %s" % [keys.slice(0, 8)])
+	_check(unknown_speakers.is_empty(), "every speaker is registered in SPEAKER_COLORS %s" % [unknown_speakers.slice(0, 8)])
+	_check(flat_files.is_empty(), "no long file without a single contraction %s" % [flat_files])
+
+
+func _authored_dlg_files(dir_path: String) -> Array[String]:
+	var out: Array[String] = []
+	for sub in DirAccess.get_directories_at(dir_path):
+		if sub != "_extracted":
+			out.append_array(_authored_dlg_files(dir_path.path_join(sub)))
+	for file in DirAccess.get_files_at(dir_path):
+		if file.ends_with(".dlg"):
+			out.append(dir_path.path_join(file))
+	return out
 
 
 func _walk(dir_path: String, bad: Array[String]) -> int:
