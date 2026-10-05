@@ -53,6 +53,7 @@ WorldMapUI="*res://scripts/ui/world_map_ui.gd"
 ProgressionBreadcrumb="*res://scripts/ui/progression_breadcrumb.gd"
 CreditsScreen="*res://scripts/ui/credits_screen.gd"
 CompletionTracker="*res://scripts/ui/completion_tracker.gd"
+DebugTestMode="*res://scripts/core/debug_test_mode.gd"
 
 [display]
 

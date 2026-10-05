@@ -3,6 +3,30 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-05 — Debug test mode: the screenshot tour runs inside a built game
+
+Exported builds ignore `--script`, so until now a build could only be checked up to the main
+menu. Now the whole tour runs inside one.
+
+- **One tour, two ways in.** The tour logic moved to `scripts/debug/screenshot_tour_runner.gd`,
+  which works with any `SceneTree`.
+  - `tests/screenshot_tour.gd` is now a thin wrapper for the editor copy
+    (`tests/run_screenshots.ps1`, unchanged).
+  - The new `DebugTestMode` autoload (`scripts/core/debug_test_mode.gd`) runs the tour inside
+    a build started with `-- --debug-tour`. It waits for the splash to reach the main menu first.
+- **Can't activate in release.** The hook starts only if (a) the build is a debug build, (b)
+  `--debug-tour` was passed, and (c) the runner is packed.
+  - The release presets (Windows, Web) exclude `scripts/debug/`.
+  - A new preset, "Windows Debug Test" (not runnable from the editor), includes it.
+  - `tools/export_windows.ps1` checks this on every release build: the export log (which lists
+    every packed file) must have no `scripts/debug/` entries, and the release smoke boot is
+    started *with* `--debug-tour` and must ignore it.
+- **`tools/export_windows.ps1 -Tour`** builds the debug-test preset and runs the full tour inside
+  it. Output goes to `run_artifacts/screenshots/build-<timestamp>/`; `-Only` takes a subset.
+- **First result:** 49 screenshots and 0 problems inside the built game, frame for frame the same
+  as the editor run. That includes all 30 dialogue shots, so the packed `.dlg` files load. The
+  release build packs 0 debug files and ignores the flag.
+
 ## 2026-10-05 — First real Windows build
 
 The project had export presets but no export templates, so it had never been built.
