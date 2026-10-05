@@ -313,7 +313,10 @@ func _update_facing() -> void:
 			else:
 				sprite_node.flip_h = (dir < 0)
 		elif sprite_node is ColorRect:
-			# ColorRect doesn't have flip_h — use scale.x instead
+			# ColorRect doesn't have flip_h — use scale.x instead, around its
+			# centre (the default pivot is the top-left corner, which drew the
+			# player a full width left of the collision box when facing left).
+			sprite_node.pivot_offset.x = sprite_node.size.x * 0.5
 			sprite_node.scale.x = abs(sprite_node.scale.x) * sign(dir) if dir != 0 else abs(sprite_node.scale.x)
 	else:
 		# Top-down: use facing_direction Vector2 to pick direction suffix

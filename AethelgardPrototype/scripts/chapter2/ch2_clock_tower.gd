@@ -168,7 +168,8 @@ func _create_time_zones() -> void:
 	_create_time_zone(Vector2(400, FLOOR_Y[4] - FLOOR_HEIGHT + 20), Vector2(300, 180), 2.0, "TEMPORAL SURGE")
 
 	# Unstable zone on floor 3
-	_create_time_zone(Vector2(250, FLOOR_Y[3] - 60), Vector2(200, 50), 0.0, "TEMPORAL FLUX")
+	# 0.0 was clamped to 0.1, a near-standstill across a required walkway.
+	_create_time_zone(Vector2(250, FLOOR_Y[3] - 60), Vector2(200, 50), 0.6, "TEMPORAL FLUX")
 
 func _create_time_zone(pos: Vector2, zone_size: Vector2, speed_mult: float, label_text: String) -> void:
 	## Create an area that modifies player movement speed
@@ -305,7 +306,7 @@ func _spawn_enemy_at(enemy_type: String, pos: Vector2) -> void:
 		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		var tex_size = sprite.texture.get_size()
 		if tex_size.x > 0 and tex_size.y > 0:
-			var uniform = min(target_size.x / tex_size.x, target_size.y / tex_size.y) * 2.0
+			var uniform = min(target_size.x / tex_size.x, target_size.y / tex_size.y)   # was * 2.0: art twice the size of the hit box
 			sprite.scale = Vector2(uniform, uniform)
 			sprite.offset = Vector2(0, -tex_size.y / 2.0)
 		enemy.add_child(sprite)

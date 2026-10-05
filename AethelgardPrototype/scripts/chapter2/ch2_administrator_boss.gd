@@ -218,6 +218,13 @@ func _setup_combat_hud() -> void:
 	phase_label.add_theme_color_override("font_color", Color(1, 0.5, 0.2))
 	hud.add_child(phase_label)
 
+	# The player's combat HUD (player_combat.gd) already shows HP and level in
+	# the corners; this scene's copies and full-width bar were drawn over it.
+	top_bar.visible = false
+	hp_label.visible = false
+	level_label.visible = false
+	phase_label.position = Vector2(600, 108)   # under the boss name, clear of the corner HUD
+
 	# Initially hide boss HP elements until boss spawns
 	boss_bar_bg.visible = false
 	boss_hp_bar.visible = false
@@ -243,6 +250,7 @@ func _entry_dialogue() -> void:
 func _spawn_boss() -> void:
 	## Spawn the Administrator Proxy boss
 	boss_node = AdministratorProxyBoss.new()
+	boss_node.overhead_hp_bar = false   # the HUD's BossHPBar is the one to read
 	boss_node.position = Vector2(900, 420)
 	boss_node.name = "AdministratorProxy"
 

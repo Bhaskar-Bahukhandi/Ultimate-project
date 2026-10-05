@@ -93,12 +93,12 @@ func _ready() -> void:
 	zone_level = 2  # First real boss: challenging without becoming a stat sponge.
 	elasticity = 1.0
 	gravity_scale = 1.0
+	add_to_group("boss")   # before super._ready(): EnemyBase builds a boss-style HP bar from it
 	super._ready()
 	current_health = max_health
 	_apply_phase_combat_tuning()
 	_try_install_v2_visual()
 
-	add_to_group("boss")
 
 	tree_exiting.connect(func():
 		var p = find_player()

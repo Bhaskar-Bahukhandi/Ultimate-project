@@ -921,7 +921,7 @@ func _interact_lore(lore: Area2D) -> void:
 		GameManager.set_story_flag(lore_id + "_found", true)
 
 func _handle_ironhold_side_objective(npc_name: String) -> void:
-	if npc_name != "Merchant Garro" or not has_node("/root/SideQuestManager"):
+	if npc_name != "Garro" or not has_node("/root/SideQuestManager"):
 		return
 	if SideQuestManager.is_quest_complete("ironhold_blacksmith_material_request"):
 		return
@@ -930,7 +930,7 @@ func _handle_ironhold_side_objective(npc_name: String) -> void:
 	SideQuestManager.start_quest("ironhold_blacksmith_material_request")
 	if not has_node("/root/Inventory") or not Inventory.has_item("data_ore", 2):
 		if has_node("/root/DialogueManager"):
-			await DialogueManager.say("Merchant Garro", "Bring two Data Ore if you want Ironhold's repair lines to stay independent.")
+			await DialogueManager.say("Garro", "Bring two Data Ore if you want Ironhold's repair lines to stay independent.")
 		GameManager.change_state(GameManager.GameState.EXPLORATION)
 		return
 

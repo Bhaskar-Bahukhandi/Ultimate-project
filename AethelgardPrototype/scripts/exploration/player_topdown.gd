@@ -35,6 +35,10 @@ const _PlayerAnimCtrl = preload("res://scripts/player_animation_controller.gd")
 
 func _ready() -> void:
 	add_to_group("player")
+	# Top-down: no floors or walls in the platformer sense. The default
+	# (grounded) mode treated wall tops as floors and corners as slopes,
+	# which snagged the player on corners.
+	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	if debug_label:
 		debug_label.text = GameManager.player_stats["name"]
 	

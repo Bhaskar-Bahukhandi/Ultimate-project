@@ -387,6 +387,10 @@ func _state_chase(delta: float) -> void:
 		if spr is Sprite2D:
 			spr.flip_h = dir.x < 0.0
 		else:
+			if spr is Control:
+				# Placeholder rectangles flip around their top-left corner by
+				# default, drawing the enemy a whole width away from its body.
+				spr.pivot_offset.x = spr.size.x * 0.5
 			spr.scale.x = -absf(spr.scale.x) if dir.x < 0.0 else absf(spr.scale.x)
 
 	if _player_in_attack_range and attack_cooldown <= 0.0:
@@ -472,12 +476,12 @@ func _execute_attack() -> void:
 	match current_attack:
 		AttackType.SLASH:
 			var slash_size := Vector2(attack_range * 1.1, 84.0)
-			_deal_damage_in_attack_hitbox(Vector2(dir.x * slash_size.x * 0.5, -30.0), slash_size, contact_damage, "slash")
+			_deal_damage_in_attack_hitbox(Vector2(_side(dir) * slash_size.x * 0.5, -30.0), slash_size, contact_damage, "slash")
 			_vfx("vfx_hit_spark", global_position + dir * 40.0)
 		AttackType.THRUST:
 			velocity.x = dir.x * movement_speed * 3.0
 			var thrust_size := Vector2(attack_range * 1.5, 64.0)
-			_deal_damage_in_attack_hitbox(Vector2(dir.x * thrust_size.x * 0.5, -28.0), thrust_size, contact_damage * 1.3, "thrust")
+			_deal_damage_in_attack_hitbox(Vector2(_side(dir) * thrust_size.x * 0.5, -28.0), thrust_size, contact_damage * 1.3, "thrust")
 			_vfx("vfx_hit_spark", global_position + dir * 60.0)
 		AttackType.SLAM:
 			var slam_size := Vector2(attack_range * 1.4, 96.0)
@@ -510,7 +514,7 @@ func _state_attack(delta: float) -> void:
 		if _charge_travel_timer >= CHARGE_MIN_TRAVEL_TIME:
 			var dir = direction_to_player()
 			var charge_size := Vector2(attack_range * 2.0, 74.0)
-			_deal_damage_in_attack_hitbox(Vector2(dir.x * charge_size.x * 0.5, -30.0), charge_size, contact_damage * 1.2, "charge")
+			_deal_damage_in_attack_hitbox(Vector2(_side(dir) * charge_size.x * 0.5, -30.0), charge_size, contact_damage * 1.2, "charge")
 			_charge_damage_pending = false
 
 	recover_timer += delta
@@ -813,7 +817,10 @@ func take_damage(amount: float, knockback_source: Vector2 = Vector2.ZERO) -> voi
 
 	_play_hit_flash()
 	_sfx("enemy_hurt", 0.15)
-	TweenAnimator.play_hurt(self)
+	# Animate the Sprite, never the body: tweening the CharacterBody2D's position
+	# cancelled knockback and dragged it through walls, and scaling/rotating it
+	# distorted its collision shape.
+	_tween_hurt()
 	_vfx("vfx_hit_spark", global_position + Vector2(0, -15))
 	# Kenney spark VFX on hit
 	if has_node("/root/AssetManager"):
@@ -930,7 +937,7 @@ func die() -> void:
 	if has_node("/root/CombatFX"):
 		CombatFX.apply_kill_zoom()
 
-	TweenAnimator.play_die(self)
+	_tween_die()
 	await get_tree().create_timer(0.6).timeout
 	if not is_inside_tree():
 		return
@@ -1615,7 +1622,12 @@ func _setup_health_bar() -> void:
 	_set_hp_bar_visible(is_boss)
 
 
+## False for a boss whose scene draws its own HUD health bar, so the bar above
+## its head isn't a second copy.
+var overhead_hp_bar := true
+
 func _set_hp_bar_visible(vis: bool) -> void:
+	vis = vis and overhead_hp_bar
 	if _hp_bar_bg:
 		_hp_bar_bg.visible = vis
 	if _hp_bar:
@@ -1752,3 +1764,12 @@ func spawn_in() -> void:
 	var tw = create_tween()
 	tw.tween_property(self, "modulate:a", 1.0, 0.3)
 	tw.parallel().tween_property(self, "scale", target_scale, 0.3).set_trans(Tween.TRANS_BACK)
+
+
+## Which side an attack box goes on: the player's side. dir.x alone shrinks
+## toward 0 when the player is above or below, sliding the box back onto (and
+## behind) the enemy, so attacks hit behind it.
+func _side(dir: Vector2) -> float:
+	if absf(dir.x) < 0.001:
+		return -1.0 if has_node("Sprite") and get_node("Sprite").scale.x < 0.0 else 1.0
+	return signf(dir.x)

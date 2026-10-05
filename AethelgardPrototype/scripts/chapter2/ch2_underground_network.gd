@@ -274,7 +274,7 @@ func _spawn_enemy_at(enemy_type: String, pos: Vector2) -> void:
 		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		var tex_size = sprite.texture.get_size()
 		if tex_size.x > 0 and tex_size.y > 0:
-			var uniform = min(target_size.x / tex_size.x, target_size.y / tex_size.y) * 2.0
+			var uniform = min(target_size.x / tex_size.x, target_size.y / tex_size.y)   # was * 2.0: art twice the size of the hit box
 			sprite.scale = Vector2(uniform, uniform)
 			sprite.offset = Vector2(0, -tex_size.y / 2.0)
 		enemy.add_child(sprite)

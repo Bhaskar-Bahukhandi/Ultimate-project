@@ -32,10 +32,10 @@ func _ready() -> void:
 	zone_level = 7  # Rec Lv 7 — Fractured Wastes boss
 	elasticity = 1.0
 	gravity_scale = 0.2  # Floats ominously
+	add_to_group("boss")   # before super._ready(): EnemyBase builds a boss-style HP bar from it
 	super._ready()
 	current_health = max_health
 
-	add_to_group("boss")
 
 	if has_node("/root/GameManager"):
 		GameManager.start_boss_fight()

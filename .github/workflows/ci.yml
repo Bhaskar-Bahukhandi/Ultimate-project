@@ -91,6 +91,10 @@ jobs:
         timeout-minutes: 15
         run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/chapter2_route_test.gd
 
+      - name: Combat fixes (time-zone speed, placeholder flip, top-down motion)
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/combat_fixes_test.gd
+
       - name: Phase 0 regression tests
         working-directory: ${{ env.PROJECT_DIR }}
         timeout-minutes: 30

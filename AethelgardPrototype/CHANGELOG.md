@@ -3,6 +3,70 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-06 — Playtest fixes: interaction, forest, fights, collision
+
+These come from the first human playtest of Act 1. Each was traced to its cause in code before
+fixing.
+
+**Interaction prompts and NPCs** (commit 2910655):
+- **The interact target is now the nearest object that can still respond,** rechecked every
+  frame. Used objects stop showing a prompt that does nothing, the crash site's fused metal no
+  longer steals presses from the torn card next to it, and the prompt hides during dialogue.
+- **Villagers talk when you press interact, not when you walk past them.** This covers Elara,
+  Mara's counter and the Whispering Stone too; the two walk-in shop triggers are gone.
+- **Everyone has a repeat line,** so nobody goes silent. Old Fen's handler now works, and Wenna
+  and the mother speak.
+
+**Forest (Elara meeting, Broken Mile):**
+- **No more bright daytime strip at the screen edge.** It showed during the walks and camera
+  shakes because the forest was only painted for x 0..1280.
+- **The walk camera moves in step with the characters.**
+- **The dialogue box no longer blinks** around short staged beats.
+- **Scripted timers pause with the game,** so the slime sequence and the Root Access timeout no
+  longer run on under the pause menu.
+- **Root Access accepts any aggression turn-down.** It previously needed 0.1 or lower.
+
+**Fights:**
+- **Enemies animate their sprite when hurt or killed, never their body.** Animating the body
+  cancelled knockback, dragged enemies through walls and distorted their collision.
+- **Placeholder rectangles flip around their centre.** Flipping around the top-left corner drew
+  the player and enemies a whole width away from their bodies when facing left.
+- **Time zones scale speed once.** Before, ×2 compounded every frame (a test measured 3.6e14 px/s
+  after one second) and ×0.4 gave about 17% speed. TEMPORAL FLUX goes from 0 (effectively a
+  standstill) to 0.6.
+- **Enemy attack boxes go on the player's side.** When the player was above or below, they slid
+  behind the enemy.
+- **Boss HP bars:**
+  - bosses join the "boss" group before their bar is built, so they get the boss-style bar;
+  - the Proxy no longer shows a second bar over its head.
+- **Duplicate HUDs removed in the arena and Proxy fights.** The scene HUD was drawn over the
+  player HUD; the arena's own labels now sit top-centre.
+- **The village HUD shows real HP.** It used to say a fixed "84/100".
+
+**Collision:**
+- **The top-down player uses floating motion mode,** so it no longer snags on corners.
+- **In the four Chapter 2 fight scenes, the player's collision box lines up with the sprite.**
+  The player used to hover 16 px above floors.
+- **Chapter 2 enemy art is no longer drawn at twice the size of its hit box.**
+- **Garro's side quest can start.** It checked for "Merchant Garro", a name the Chapter 2
+  rewrite had changed.
+
+**Tests:** new `tests/combat_fixes_test.gd` (in CI) covers time-zone speed (checked to fail on the
+old code), the flip centring and the top-down motion mode. Seven interaction checks were added to
+`chapter1_route_test.gd`.
+
+**Waiting on a design decision:**
+- whether hits should count when shapes overlap (today a hit only counts if the target's centre
+  point is inside the attack box);
+- jump-cancel and attack buffering during attacks and dashes;
+- collision for buildings and props in the Oakhaven and Ironhold regions.
+
+**Seen, not yet fixed:**
+- combo counters are drawn twice (GameJuice and player_combat);
+- overlapping NPC prompts in Ironhold;
+- the hold-to-skip cutscene only half-skips;
+- Kaelen's and Elara's placeholder boxes overlap on the walks.
+
 ## 2026-10-05 — Debug test mode: the screenshot tour runs inside a built game
 
 Exported builds ignore `--script`, so until now a build could only be checked up to the main

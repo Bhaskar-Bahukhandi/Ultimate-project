@@ -526,9 +526,6 @@ func _physics_process(delta: float) -> void:
 	_handle_heal()
 	_handle_flee_combat()
 
-	if speed_multiplier != 1.0 and not is_dashing:
-		velocity.x *= speed_multiplier
-
 	move_and_slide()
 
 	# Death plane
@@ -566,7 +563,10 @@ func _handle_movement(_delta: float) -> void:
 	if direction != 0.0 and not is_attacking and not is_defending:
 		is_sprinting = Input.is_action_pressed("sprint")
 		var move_speed = SPRINT_SPEED if is_sprinting else SPEED
-		var target_vx = direction * move_speed
+		# Time zones scale the target speed once. Multiplying velocity after the
+		# smoothing (as before) compounded every frame: x2 ran away into walls,
+		# x0.4 gave about 17% speed.
+		var target_vx = direction * move_speed * speed_multiplier
 		var accel = GROUND_ACCEL if is_on_floor() else AIR_ACCEL
 		velocity.x = lerp(velocity.x, target_vx, accel)
 	else:

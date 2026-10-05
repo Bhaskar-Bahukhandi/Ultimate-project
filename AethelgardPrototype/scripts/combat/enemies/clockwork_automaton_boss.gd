@@ -47,10 +47,10 @@ func _ready() -> void:
 	zone_level = 9  # Rec Lv 9 — Ironhold Clock Tower boss
 	elasticity = 1.0
 	gravity_scale = 1.3
+	add_to_group("boss")   # before super._ready(): EnemyBase builds a boss-style HP bar from it
 	super._ready()
 	current_health = max_health
 
-	add_to_group("boss")
 
 	tree_exiting.connect(func():
 		var p = find_player()

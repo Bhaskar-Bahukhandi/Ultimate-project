@@ -229,6 +229,23 @@ func _setup_combat_hud() -> void:
 	streak_label.add_theme_font_size_override("font_size", 14)
 	streak_label.add_theme_color_override("font_color", Color(1, 0.4, 0.4))
 	hud.add_child(streak_label)
+	_fit_hud_around_player_hud(hud, top_bar)
+
+## The player's own combat HUD (player_combat.gd) already shows HP, level, gold
+## and XP top-left and top-right; this scene's full-width bar was drawn right
+## over it. Keep only what's unique to the arena, in the free space top-centre.
+func _fit_hud_around_player_hud(hud: CanvasLayer, top_bar: ColorRect) -> void:
+	for dup in ["HPLabel", "LevelLabel", "GoldLabel", "XPLabel"]:
+		var n := hud.get_node_or_null(dup) as CanvasItem
+		if n:
+			n.visible = false
+	top_bar.position = Vector2(440, 4)
+	top_bar.size = Vector2(520, 36)
+	var place := {"TierLabel": Vector2(456, 12), "ATKLabel": Vector2(700, 12), "StreakLabel": Vector2(820, 12)}
+	for label_name in place:
+		var l := hud.get_node_or_null(label_name) as Control
+		if l:
+			l.position = place[label_name]
 
 func _show_tier_selection() -> void:
 	## Show tier selection dialogue

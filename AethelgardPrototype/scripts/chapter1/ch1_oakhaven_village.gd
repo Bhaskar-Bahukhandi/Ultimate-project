@@ -556,6 +556,22 @@ func transition_to_bridge() -> void:
 func _update_gold_display() -> void:
 	if gold_label:
 		gold_label.text = "Gold: %d" % GameManager.player_stats.get("gold", 0)
+	_update_hp_display()
+
+## The HUD's HP bar shipped with a fixed "84/100" that nothing updated, on a
+## bar too thin to hold its own label.
+func _update_hp_display() -> void:
+	var bar := get_node_or_null("UI/HUD/TopBar/MarginContainer/HBoxContainer/LeftInfo/HPBar") as ProgressBar
+	if not bar:
+		return
+	var hp: int = int(GameManager.player_stats.get("hp", 100))
+	var max_hp: int = maxi(int(GameManager.player_stats.get("max_hp", 100)), 1)
+	bar.max_value = max_hp
+	bar.value = hp
+	bar.custom_minimum_size.y = maxf(bar.custom_minimum_size.y, 22.0)
+	var label := bar.get_node_or_null("HPLabel") as Label
+	if label:
+		label.text = "HP: %d/%d" % [hp, max_hp]
 
 func _update_glitch_display() -> void:
 	if glitch_meter_bar:

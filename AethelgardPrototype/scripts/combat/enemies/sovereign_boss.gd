@@ -68,10 +68,10 @@ func _ready() -> void:
 	zone_level = 15
 	elasticity = 0.8
 	gravity_scale = 0.6
+	add_to_group("boss")   # before super._ready(): EnemyBase builds a boss-style HP bar from it
 	super._ready()
 	current_health = max_health
 
-	add_to_group("boss")
 	add_to_group("sovereign")
 
 	# Ensure player input is restored on tree exit
