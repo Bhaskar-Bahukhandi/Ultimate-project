@@ -1511,7 +1511,9 @@ func _try_create_v3_atlas_visual(atlas_path: String, regions: Dictionary, visual
 	if not regions.has(visual_id):
 		push_warning("[AssetManager] Unknown V3 environment visual: %s" % visual_id)
 		return null
-	if not FileAccess.file_exists(atlas_path):
+	# Not FileAccess.file_exists alone: an exported build has only the imported
+	# texture, not the source .png, so that check is always false there.
+	if not _visual_path_exists(atlas_path):
 		push_warning("[AssetManager] V3 environment atlas missing: %s" % atlas_path)
 		return null
 	var atlas_cache_key = "phase10mm_atlas:%s" % atlas_path

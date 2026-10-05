@@ -3,6 +3,33 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-05 — First real Windows build
+
+The project had export presets but no export templates, so it had never been built.
+
+- **Templates installed:** the official Godot 4.6.3 export templates, from the GitHub release.
+  The SHA-512 was checked against `SHA512-SUMS.txt`; they're in
+  `%APPDATA%\Godot\export_templates\4.6.3.stable` (35 files, 1.9 GB, all platforms).
+- **`tools/export_windows.ps1`:**
+  - checks that the template matches the installed Godot version;
+  - exports the "Windows Desktop" preset to `exports/windows/Aethelgard.exe` (git-ignored);
+  - smoke-tests the built game: it boots with a real renderer and an isolated user://, records
+    12 s of game time with Movie Maker (`--write-movie`), and must exit cleanly with no
+    script, parse or missing-resource errors;
+  - writes `smoke_boot.png` (four recorded frames) beside the exe.
+  - Use `-DebugBuild` for a debug export and `-NoSmoke` to only build.
+- **First result:** a 101.7 MB release exe and an export log with 0 errors. The built game goes
+  splash → main menu and exits with code 0.
+- **Export-only bug fixed before it could bite:** `AssetManager` checked environment atlases with
+  `FileAccess.file_exists("res://….png")`. An exported build contains only the imported
+  texture, not the source PNG, so every atlas prop would have vanished in builds once art is back.
+  It now uses the same check as the other art loaders (`FileAccess` or `ResourceLoader`).
+- **Limit:** exported builds ignore `--script` (checked: debug and release, with packed and
+  external scripts). So the screenshot tour can't drive scenes inside the built game, and the
+  build smoke test covers boot → main menu only. Act 1 scenes are rendered by the editor-based
+  tour; they aren't yet exercised from the packed build.
+- Noticed: the main menu says "v1.0" and the pause screen says "v0.1.1".
+
 ## 2026-10-05 — Screenshot tour: the game, actually rendered
 
 Every earlier test ran `--headless`, with no renderer: it proved flags and flow, never what's on
