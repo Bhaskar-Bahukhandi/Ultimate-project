@@ -3,6 +3,63 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-05 — Chapter 2 rewritten and wired (Ironhold, the end of Act 1)
+
+Chapter 2 now plays the new story from the road to Ironhold to the Act 1 ending (8 `.dlg` files in
+`dialogue/ch2/`).
+
+**The reunion and the city**
+- **On the road:** Kaelen recognises Seraphina's cabin-crew voice ("keep the centre open") at a
+  convoy. She tests him: what seat, window or aisle. "We died together." Fixed from the source:
+  he knows her voice, not her face.
+- **The gate:** Seraphina vouches for him, replacing the old forged-token hack. Rook appears,
+  arguing about tariff codes.
+- **Ironhold has new people:** Rook (the market), Rem (the infirmary), Garro, Doss, Sol the
+  auctioneer, the street preacher, Nori and the paladins, the dice host, and Ina. Seraphina has six
+  off-duty conversations with Kaelen and Elara, unlocked as the chapter goes on.
+  - The old "Engineer Mira" (a clash with Mira Chen) and the pre-meeting Seraphina who called
+    Root Access dishonourable are gone.
+- **The Command Hall:** with Commander Brask present, you choose how much to tell them: the truth,
+  part of it, or a show of Root Access. This sets the existing truth / cautious / show-off flags,
+  and Seraphina remembers.
+
+**The medicine convoy (timed)**
+- Rem's fever medicine is stuck on the west road. Its deadline is the evening bell, which is the
+  Clock Tower stopping.
+- You're warned before going up the tower and can turn back.
+- Early, on time or late changes Rem's lines, who helps in the Proxy fight, and the Act 1 ending.
+  If you've told the truth, Seraphina says "one hundred and eighty-six".
+
+**The arena and the Clock Tower**
+- **The arena:** Vex's welcome, corner advice from Elara and Seraphina, and the memorial wall.
+  Winning the bronze bracket opens the Clock Tower.
+- **The Clock Tower:** the bell rings thirteen times, then Data Vision traces. On the way up there's
+  a scratched map mark (a seed for Kaito), then the Minute Hand.
+- **The missing shift:** rescue now, scout first, or seal the tunnels until morning. Each costs
+  something different.
+
+**The Underground and the Proxy**
+- **The Underground:** workers stuck in repeating shifts. The Wraith speaks through the lights
+  before it appears. The source's "MARA" is now a missing worker's name.
+- **The Wraith choice:** restore it (Iven: "Don't lose it."), destroy it, or absorb it. Fragment
+  Two is no longer handed out here.
+- **The Administrator Proxy:** "ACCEPTABLE CENTRALIZATION COST" / "You mean people." / "Break it."
+  It's reachable only after the tunnels are cleared.
+
+**Fragment Two and the end of Act 1**
+- **Fragment Two and the wall:** the second memory flash, then the Flight 707 scene on the upper
+  wall (the laptop, the coffee stain, "Don't apologise for the crash unless you remember causing
+  it").
+- **Seraphina decides for herself:** she isn't a menu choice. She joins unless Ironhold can't spare
+  her (late medicine, sealed tunnels) or Kaelen has lost her trust.
+- **The Act 1 end:** who gets your report (councils, archivists or command), which road to the
+  Wastes (this sets Act 1's pace), and the outer bridge, with lines that depend on Oakhaven's bridge
+  and the medicine.
+- **Removed:** the early SOVEREIGN reveal and the fake 72-hour countdown, both against the new
+  canon.
+- **Tests:** `tests/chapter2_route_test.gd` (49 checks, in CI) plays a careful route (Seraphina
+  joins) and a reckless one (she refuses).
+
 ## 2026-10-05 — Chapter 1 plays the rewritten story, start to finish
 
 New Game now runs entirely on the new dialogue, from the crash site to the Chapter 1 ending.

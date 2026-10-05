@@ -1,0 +1,34 @@
+# C2-S08 / C2-S09 — the arena trial and the arena memorial.
+# Source: Production Master 2.1, lines 2307–2343.
+# Scene: scenes/chapter2/arena_district.tscn. Losing never hard-fails.
+
+~ enter
+Vex: Ironhold! Here's a face you haven't seen before! Fresh off the road, still got all its teeth!
+Elara: Hit the one that's trying to hit you.
+Kaelen: Thanks.
+Elara: I'm support.
+[if ch2_seraphina_met] Seraphina: His left shoulder drops before he swings.
+[if ch2_seraphina_met] Kaelen: Now that's support.
+[if ch2_seraphina_met] Elara: I liked you better before the armour.
+
+# Between rounds, after the first win.
+~ memorial
+Kaelen: The names carved on that wall. Some of them are flickering.
+Seraphina: The arena started as defender training. People wanted danger with a bell.
+Kaelen: What does that mean?
+Seraphina: Outside the walls, danger comes whenever it likes. In here, we ring first.
+Kaelen: These names keep changing.
+Seraphina: That's why I keep paper copies.
+set ch2_arena_memorial_seen
+
+~ victory
+Vex: And the crowd goes— well, the crowd goes somewhere! Come back tomorrow, fighter!
+
+~ defeat
+Vex: Down he goes! Up he gets, I hope. Nobody leaves my arena dead, that's the one rule.
+
+~ again
+Vex: Another round? Press {ui_accept} to fight again, or {ui_cancel} to go back to the city.
+
+~ again_after_loss
+Vex: Bad luck, fighter. Every loss teaches you something. Press {ui_accept} to try again, or {ui_cancel} to leave.

@@ -1,0 +1,81 @@
+# The Act 1 midpoint report, the road out, and the Act 1 end scene.
+# Source: Production Master 2.1, lines 2849–2900.
+# Scene: scenes/chapter2/ch2_ending.tscn.
+# The report seeds faction reputation (Hearth / Archive / Continuity); it is
+# not the Axis 2 lock. The road sets Act 1's pace (early / on time / late).
+
+~ report
+Kaelen (Internal): Everything I've found. Two fragments, the tower logs, what was under the market. Somebody who isn't me should have a copy.
+? Kaelen (Internal): Who gets the report?
+- Oakhaven's and Ironhold's councils. The people who have to live with it. => report_local
+- The archivists in the Wastes. People who keep records properly. => report_archive
+- Ironhold command. People who can act on it tomorrow. => report_command
+
+~ report_local
+set act1_report_local
+[if has_elara] Elara: Mara's going to read every word of that, and then tell everyone it was her idea.
+
+~ report_archive
+set act1_report_archive
+Kaelen (Internal): Somebody out there writes things down for a living. I hope they're honest about it.
+
+~ report_command
+set act1_report_command
+Brask: I'll read it. I might even agree with some of it.
+
+~ road_out
+Kaelen (Internal): The next trace points at the Fractured Wastes.
+[if ch2_seraphina_recruited] Seraphina: Three ways there. The safe road's long. The old server road's short, and it isn't safe. The caravan route depends on Oakhaven's bridge.
+[if not ch2_seraphina_recruited] Rook: Three roads to the Wastes. Long and safe, short and stupid, or the caravan, if Oakhaven's bridge is still up.
+[if ch1_bridge_fell] Kaelen (Internal): It isn't. So, two roads.
+? Kaelen (Internal): Which way?
+- The old server road. Fast, and unstable. => pace_early
+- The safe road. => pace_on_time
+- [if not ch1_bridge_fell] The caravan route, with the traders. => pace_late
+
+~ pace_early
+set act1_pace_early
+
+~ pace_on_time
+set act1_pace_on_time
+
+~ pace_late
+set act1_pace_late
+Rook: Caravan leaves at noon. I'm on it. You're paying for your own cart.
+
+# The Act 1 end scene, on Ironhold's outer bridge.
+~ end
+[if ch2_seraphina_recruited] => end_recruited
+[if ch2_seraphina_stayed] => end_stayed
+[if ch2_seraphina_rejected] => end_rejected
+=> end_horizon
+
+~ end_recruited
+do seraphina_joins
+Seraphina: My banner's folded in your pack. Don't use it as a pillow.
+=> end_horizon
+
+~ end_stayed
+Seraphina: Bring me back something useful.
+Kaelen: Like what?
+Seraphina: Answers.
+Kaelen: Those are rare.
+Seraphina: Then bring coffee.
+=> end_horizon
+
+~ end_rejected
+Seraphina: I hope I'm wrong about you.
+Kaelen: Me too.
+Elara: Well. That was comfortable.
+Kaelen: Extremely.
+=> end_horizon
+
+~ end_horizon
+[if ch1_bridge_fell] Kaelen (Internal): There's a refugee wagon coming up the Oakhaven road. The bridge. Of course.
+[if ch1_bridge_saved] Kaelen (Internal): A trade wagon's heading down toward Oakhaven. Over mismatched planks, I bet. Holding, though.
+[if ch2_medicine_late] Kaelen (Internal): The infirmary bells are still ringing.
+[if ch2_medicine_early] Kaelen (Internal): Every light in the lower city is on.
+do sky_seam
+Kaelen: That way.
+Elara: You say that like the sky's pointing.
+Kaelen: It is.

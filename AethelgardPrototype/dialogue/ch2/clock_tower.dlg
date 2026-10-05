@@ -1,0 +1,91 @@
+# C2-S10, the Clock Tower, B02 The Minute Hand, C2-S11 The Missing Shift.
+# Source: Production Master 2.1, lines 2345–2407.
+# "bell" plays in the region when the player approaches the tower; the rest in
+# scenes/chapter2/clock_tower.tscn.
+
+# C2-S10 — the bell rings thirteen times, then stops.
+~ bell
+do bell_thirteen
+Kaelen (Internal): ...eleven. Twelve. Thirteen.
+# Then silence. Merchants stop. Children count on their fingers. Paladins look up.
+Brask: Seal the lower streets.
+Seraphina: We don't know what's happened yet.
+Brask: That is why we seal them.
+do data_vision_trace
+System: TRACE: CLOCK AUTHORITY CONFLICT.
+System: TRACE: LEGACY SCHEDULES ACTIVE.
+System: TRACE: EXTERNAL ADMIN PROXY.
+Kaelen: Something's running that tower that isn't the tower.
+Seraphina: Then we go up and ask it.
+[if ch2_medicine_quest_active and not ch2_medicine_done] Seraphina: And the convoy's still out. That was the evening bell, Kaelen. The west gate's closing.
+set ch2_tower_bell_stopped
+
+~ entry
+Kaelen: The gears on this floor are all running at different times.
+Elara: They're arguing.
+Kaelen: That's... actually exactly what they're doing.
+Kaelen (Internal): I can slow one down with Root Access. Not stop it. Safely, a little.
+
+# A mark scratched into the wall on the way up (a seed for Kaito, later).
+~ mid
+Kaelen (Internal): Somebody's scratched a little map mark into the stone. Under it: NO SKY ABOVE FLOOR SIX.
+Elara: Is there sky above floor six?
+Kaelen: I'm not going to check.
+set ch2_tower_secret_mark
+
+~ pre_boss
+System: SCHEDULE DEVIATION.
+Kaelen: That's us. We're the deviation.
+Seraphina: I've hated clocks before.
+Seraphina: This is new.
+
+# ── B02 The Minute Hand: barks, one line each ─────────────────────────────
+~ bark_deviation
+The Minute Hand: SCHEDULE DEVIATION.
+
+~ bark_correct
+The Minute Hand: CORRECT.
+
+~ bark_replay
+The Minute Hand: REPLAYING.
+
+~ victory
+Kaelen: Half the tower's ours again. Half.
+System: SHIFT LOG: LOWER WORKS, SHIFT FOUR — ENTERED 06:00. EXIT: NONE.
+set ch2_clock_tower_complete
+=> missing_shift
+
+# C2-S11 — the missing shift. Not the faction choice; every option costs something.
+~ missing_shift
+Seraphina: Forty workers went into the tunnels this morning. None of them came out.
+Brask: Then we quarantine the tunnels until we know what's down there.
+Seraphina: We know what's down there. Forty people.
+? Kaelen (Internal): It's not my city. They're asking me anyway.
+- We go now. Every hour matters. => rescue_now
+- We scout first, and know what we're walking into. => scout_first
+- Seal it until morning. Nobody else goes missing tonight. => seal
+
+~ rescue_now
+set ch2_shift_rescue_now
+do trust seraphina 10
+Seraphina: Good. Get your things.
+Brask: If you lose a single paladin down there, Commander—
+Seraphina: Then you'll write it down, and I'll read it.
+=> unlock
+
+~ scout_first
+set ch2_shift_scout_first
+Seraphina: That'll cost us hours.
+Kaelen: It'll cost more if we walk in blind.
+Seraphina: ...Fine. Hours. Not one minute more.
+=> unlock
+
+~ seal
+set ch2_shift_sealed
+do trust seraphina -10
+Brask: Thank you.
+Seraphina: Don't thank him. He just bought whatever's down there a whole night to get worse.
+=> unlock
+
+~ unlock
+set ch2_underground_unlocked

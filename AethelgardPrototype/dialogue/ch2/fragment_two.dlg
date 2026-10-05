@@ -1,0 +1,84 @@
+# C2-S15 Fragment Two, C2-S16 Flight 707, C2-S17 Seraphina's commitment.
+# Source: Production Master 2.1, lines 2530–2610.
+# Scene: scenes/chapter2/seraphina_choice.tscn.
+# S17 is NOT a recruit button: Seraphina decides from how Kaelen has behaved
+# and whether the city can spare her. The scene sets ch2_city_stable first;
+# seraphina_trust_low comes from the trust events (DialogueManager).
+
+# C2-S15 — the second fragment, and a worse memory.
+~ fragment
+do touch_fragment
+System: SOURCE AUTHORIZATION: TWO OF SEVEN.
+do memory_flash
+Colleague: Seven signatures is too slow in an emergency.
+Kaelen (Memory): That's exactly when you want it slow.
+Colleague: Until somebody's unconscious and can't sign.
+# Past Kaelen hesitates. That's the whole memory: him hesitating.
+do flash_ends
+do fragment_acquired 2
+Seraphina: A memory?
+Kaelen: Yeah.
+Seraphina: Yours?
+Kaelen: Yeah.
+Seraphina: A bad one?
+Kaelen: I don't know yet.
+# She studies him the way she'd study a passenger who says he's fine.
+Seraphina: Tell me when you do.
+set ch2_seraphina_tell_me
+
+# C2-S16 — the upper wall. No music for the first part.
+~ wall
+do upper_wall
+Seraphina: I remember the plane.
+Kaelen: More than I do.
+Seraphina: I wish I didn't.
+Kaelen: I remember rain.
+Seraphina: There was rain.
+Kaelen: An airport window.
+Seraphina: You had a laptop.
+# He looks at her.
+Seraphina: You were working all through boarding.
+Kaelen: That sounds right.
+Seraphina: I told you to close it for takeoff.
+Kaelen: Did I?
+Seraphina: Eventually.
+# She smiles, once.
+Seraphina: You looked annoyed.
+Kaelen: I probably was.
+Seraphina: I didn't like you.
+Kaelen: This keeps getting better.
+Seraphina: Then we crashed.
+do pause 1.5
+Seraphina: I counted people until I couldn't.
+[if seraphina_trust_high and not ch2_seraphina_186_told] Seraphina: One hundred and eighty-six. That's where I stopped.
+Kaelen: I'm sorry.
+Seraphina: For what?
+Kaelen: ...I don't know.
+Seraphina: Good. Don't apologise for the crash unless you remember causing it.
+
+# C2-S17 — she decides.
+~ commitment
+[if seraphina_trust_low] => rejected
+[if not ch2_city_stable] => stays
+=> recruited
+
+~ recruited
+Seraphina: Brask can hold the city.
+Brask: I'm standing right here.
+Seraphina: Good. Practise.
+Seraphina: I'm going with Kaelen.
+Brask: That wasn't a request.
+Seraphina: No. It wasn't.
+set ch2_seraphina_recruited
+
+~ stays
+Seraphina: I can't leave. Not with the city like this.
+Kaelen: I understand.
+Seraphina: Do you?
+Kaelen: I'm trying to.
+set ch2_seraphina_stayed
+
+~ rejected
+Seraphina: I believe your problem is real.
+Seraphina: I don't believe following you is the same thing as solving it.
+set ch2_seraphina_rejected

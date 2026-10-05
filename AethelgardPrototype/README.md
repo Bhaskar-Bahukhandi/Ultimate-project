@@ -69,7 +69,7 @@ GODOT=/path/to/godot tests/run_tests.sh res://tests/load_all_test.gd
 
 CI (`.github/workflows/ci.yml`, at the repository root) runs the same checks on every push and
 pull request: boot without script errors, load every script and scene, the dialogue,
-ContextStack, input and Chapter 1 route tests, the Phase 0 suite, and `git diff --check`.
+ContextStack, input and Chapter 1–2 route tests, the Phase 0 suite, and `git diff --check`.
 
 ## Layout
 
@@ -81,7 +81,7 @@ ContextStack, input and Chapter 1 route tests, the Phase 0 suite, and `git diff 
 | `shaders/` | Glitch, CRT and other screen effects. |
 | `dialogue/` | All dialogue as `.dlg` text files (format: `story/DIALOGUE_FORMAT.md`). `dialogue/_extracted/` is the old in-code dialogue, kept as rewrite material. |
 | `story/` | Story bible, voice guide, act outlines, dialogue format. `story/source/` holds the full story master (source material; the bible says what's adopted). |
-| `tests/` | Headless tests and runners (`chapter1_route_test.gd`, `input_test.gd`, `context_stack_test.gd`, `dialogue_test.gd`, `phase0_blockers_test.gd`, `load_all_test.gd`). |
+| `tests/` | Headless tests and runners (`chapter1_route_test.gd`, `chapter2_route_test.gd`, `input_test.gd`, `context_stack_test.gd`, `dialogue_test.gd`, `phase0_blockers_test.gd`, `load_all_test.gd`). |
 | `tools/` | Dev tools, e.g. `extract_dialogue.gd`. Not exported. |
 | `docs/` | Art-pipeline and gameplay-audit history (not exported). |
 

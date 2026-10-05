@@ -1,0 +1,40 @@
+# C2-S14 / B04 — the Administrator Proxy. Source: Production Master 2.1, lines 2501–2528.
+# Scene: scenes/chapter2/administrator_boss.tscn.
+# The missing workers' sessions were used to stabilise it. It believes
+# Ironhold's repeated crises prove that voluntary systems fail.
+
+~ start
+Kaelen (Internal): The missing shift wasn't lost. It was used. Their sessions are what's holding this thing together.
+Administrator Proxy: ORDER PREVENTS LOSS.
+Seraphina: Then why are people missing?
+Administrator Proxy: ACCEPTABLE CENTRALIZATION COST.
+Seraphina: You mean people.
+Administrator Proxy: RESOURCES.
+# Something in Seraphina's face closes, quietly, like a cabin door.
+Seraphina: Kaelen.
+Kaelen: Yeah.
+Seraphina: Break it.
+[if ch2_medicine_late] Kaelen (Internal): Rem's healers couldn't come; the fever's got half of them. The arena medics came instead. They look terrified.
+[if not ch2_medicine_late] Seraphina: Rem's people are behind me. Nothing gets past my shield to them.
+
+# ── B04 barks, one line each ───────────────────────────────────────────────
+~ bark_lane
+Administrator Proxy: STAY IN YOUR LANE.
+
+~ bark_override
+Administrator Proxy: OVERRIDE.
+
+~ bark_compliance
+Administrator Proxy: COMPLIANCE IS CARE.
+
+# Phase 3: a short, blocking exchange between attacks.
+~ compliance_reply
+Administrator Proxy: COMPLIANCE IS CARE.
+Kaelen: That's a horrible thing to paint on a wall.
+Seraphina: Then we'll carve it on its grave.
+
+~ victory
+Seraphina: ...It's down. Is it down?
+Kaelen: It's down.
+Seraphina: Then somebody's going to have to explain to Brask what's been running his city.
+set ch2_administrator_proxy_defeated

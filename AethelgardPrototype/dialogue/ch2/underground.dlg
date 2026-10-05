@@ -1,0 +1,95 @@
+# The Underground Network, C2-S12 Wraith Recognition, B03 Data Wraith,
+# C2-S13 the Data Wraith choice. Source: Production Master 2.1, lines 2409–2499.
+# Scene: scenes/chapter2/underground_network.tscn.
+# Source fix: the Wraith no longer says "MARA" (Oakhaven's baker); the name it
+# reaches for is a missing worker's, which the shift records can confirm.
+# Chapters 4, 5 and 10 read ch2_data_wraith_restored / _destroyed / _absorbed.
+
+~ entry
+Kaelen (Internal): The stone stops after the first stairs. Underneath, it's conduits. Cable runs. Junction boxes older than the city.
+Seraphina: You know this place.
+Kaelen: Not this place. The way it's built.
+Seraphina: I don't love how you said that.
+Elara: You get used to it. I didn't, but you might.
+[if ch2_shift_sealed] Kaelen (Internal): A night's made it worse. The lights are wrong all the way down.
+[if ch2_shift_rescue_now] Kaelen (Internal): We're going in fast and half-ready. Seraphina hasn't stopped counting since the stairs.
+
+# Workers caught in pockets of repeating time.
+~ workers
+Worker: Shift starts at six. Shift starts at six. Is it six yet?
+Seraphina: It's well past six. You're coming with me.
+Worker: I clocked out. I remember clocking out. I've never once clocked out of this shift.
+
+# The Wraith speaks through the lights before it shows itself.
+~ wraith_lights
+do lights_flicker
+Data Wraith: IDENTIFY.
+Data Wraith: HANNA.
+Data Wraith: NO.
+Data Wraith: SESSION RESTORE.
+Data Wraith: PLEASE DON'T.
+Data Wraith: RESTORE.
+
+# C2-S12 — Kaelen sees what it is.
+~ recognition
+do data_vision_wraith
+Kaelen: It isn't one ghost. It isn't lots of separate people, either. Something tried to restore them all at once, and they ran together.
+Seraphina: Are they in pain?
+Kaelen: I think so.
+Data Wraith: YES.
+Data Wraith: NO.
+Data Wraith: DEFINE.
+Elara: That sounded like you.
+Kaelen: I know.
+do wraith_hostile
+
+# ── B03 barks ──────────────────────────────────────────────────────────────
+~ bark_restore
+Data Wraith: RESTORE.
+
+~ bark_identify
+Data Wraith: IDENTIFY.
+
+~ bark_please
+Data Wraith: PLEASE.
+
+# C2-S13 — no fourth, obviously perfect option.
+~ choice
+set ch2_data_wraith_defeated
+do wraith_unstable
+? Kaelen (Internal): It's still running. It's still them.
+- Restore it. Try to pull the people apart. (Some may not come back whole.) => restore
+- Destroy it. End the process. (Anyone still recoverable is lost.) => destroy
+- Absorb it. Hold them in my Root layer until there's a better answer. (Corruption. Identity bleed.) => absorb
+
+~ restore
+set ch2_data_wraith_restored
+do root_edit wraith_separate
+Kaelen (Internal): Records. Shift lists. Anything with a name on it.
+do wraith_split
+Iven: My name's Iven.
+Kaelen: Iven.
+Iven: Don't lose it.
+do kaelen_writes_name
+Kaelen (Internal): I write it down. I write it down twice.
+
+~ destroy
+set ch2_data_wraith_destroyed
+Seraphina: Are you sure?
+Kaelen: No.
+Seraphina: That isn't what I asked.
+Kaelen: It's still the answer.
+do wraith_ends
+# The lights go out, one by one, all the way down the tunnel.
+
+~ absorb
+set ch2_data_wraith_absorbed
+do absorb_wraith
+Elara: Tell me this is safe.
+Kaelen: It isn't.
+Elara: Then thank you for not lying to me.
+# The fragments go into him. His corruption climbs. Later, the voices come back as single words.
+
+# The routing junction in the puzzle chamber.
+~ routing
+Kaelen (Internal): A routing junction. If I swing this thread over... There. The way down's open.

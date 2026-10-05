@@ -224,6 +224,11 @@ playthrough log.
   - Voice sheets plus an automatic voice lint.
   - The prologue and Chapter 1 are rewritten as 10 `.dlg` files, and the crash site plays them.
   - **Chapter 1 fully wired** (2026-10-05); `tests/chapter1_route_test.gd` checks it end to end.
+  - **Chapter 2 fully wired** (2026-10-05), which completes Act 1; `tests/chapter2_route_test.gd`
+    checks it.
+    - Not built yet: side arcs 04–06 (Iron Owes, the Flight List, Three Auctions and a Funeral),
+      market hoarding consequences, and the Wraith-absorbed whispers.
+    - Combat isn't exercised by the test.
   - Still to do:
     - Make the boar, the guardian and the opening slime real side-scroll fights.
     - Build Elara's house and the shrine as rooms.

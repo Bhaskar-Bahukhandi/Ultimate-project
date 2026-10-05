@@ -86,6 +86,11 @@ jobs:
         timeout-minutes: 15
         run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/chapter1_route_test.gd
 
+      - name: Chapter 2 route (rewritten dialogue, end to end)
+        working-directory: ${{ env.PROJECT_DIR }}
+        timeout-minutes: 15
+        run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/chapter2_route_test.gd
+
       - name: Phase 0 regression tests
         working-directory: ${{ env.PROJECT_DIR }}
         timeout-minutes: 30

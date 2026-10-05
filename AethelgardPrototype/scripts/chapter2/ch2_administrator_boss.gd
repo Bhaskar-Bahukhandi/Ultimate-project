@@ -224,57 +224,16 @@ func _setup_combat_hud() -> void:
 	boss_name_label.visible = false
 	phase_label.visible = false
 
+const PROXY_DLG := "res://dialogue/ch2/administrator_proxy.dlg"
+
 func _entry_dialogue() -> void:
-	## 72-hour countdown expires — Administrator arrives
-	var has_elara = _has_elara()
-
-	await DialogueManager.say("System", "[ALERT: 72-HOUR COUNTDOWN EXPIRED]\n[ADMINISTRATOR DISPATCHED]\n[PREPARING LOCAL INSTANCE...]", Color(1, 0, 0), true)
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "The countdown... it's over. Something is coming.")
-	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "I can feel it. Reality is thinning — something is forcing its way through the world's firewall.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "Reality is thinning. I can feel it in my skin — something is forcing its way through the world's firewall. And I'm standing here to meet it. Alone.")
-		if not is_inside_tree(): return
-
-	# Screen shake
+	## C2-S14 — what the missing shift was used for.
 	if camera and camera.has_method("shake"):
-		camera.shake(15.0, 1.0)
+		camera.shake(10.0, 0.8)
 	else:
 		_simulate_shake()
-
-	await get_tree().create_timer(1.0).timeout
+	await DialogueManager.run(PROXY_DLG, "start")
 	if not is_inside_tree(): return
-
-	await DialogueManager.say("System", "[ADMINISTRATOR PROXY — ONLINE]\n[Authorization Level: SYSTEM]\n[Objective: PURGE UNAUTHORIZED USER]", Color(1, 0, 0), true)
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Administrator Proxy", "User 'Kaelen'. Unauthorized Root Access detected. You have been flagged for immediate termination.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "So you're the one who's been watching us. The Administrator.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Administrator Proxy", "I am merely a proxy — a subroutine dispatched to correct an anomaly. You are that anomaly. Your deletion has been scheduled.")
-	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "Kaelen, be careful! This thing is operating at system-level priority. It's like fighting the world itself!")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "System-level priority. This thing has the same authority as the world's operating system. Fighting it is like trying to argue with gravity.")
-		if not is_inside_tree(): return
-		if _has_flag("ch2_data_wraith_absorbed"):
-			await DialogueManager.say("System", "[ROOT ACCESS: WRAITH ABSORPTION RESONATING]\n[Anomalous power detected — combat advantage possible]\n[Warning: Administrator Proxy may adapt to absorbed signature]", Color(0.8, 0.4, 1.0), true)
-			if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "Then it's about time the world met its debugger.")
-	if not is_inside_tree(): return
-
 	DialogueManager.hide_dialogue()
 
 	await get_tree().create_timer(1.0).timeout
@@ -348,8 +307,7 @@ func _spawn_boss() -> void:
 	entrance_tween.tween_property(boss_node, "modulate:a", 1.0, 1.5)
 
 func _on_phase_changed(new_phase: int) -> void:
-	## Show dialogue for each boss phase transition
-	# Update phase label
+	## B04 phases: legal zones → lane punishment → override commands.
 	var hud = get_node_or_null("CombatHUD")
 	if hud:
 		var phase_label = hud.get_node_or_null("PhaseLabel")
@@ -358,29 +316,18 @@ func _on_phase_changed(new_phase: int) -> void:
 
 	match new_phase:
 		2:
-			await DialogueManager.say("Administrator Proxy", "Standard combat protocols insufficient. Elevating to Administrative Commands.")
-			if not is_inside_tree(): return
-			await DialogueManager.say("System", "[ADMIN COMMANDS UNLOCKED]\n[/ban] [/mute] [/teleport]", Color(1, 0.5, 0), true)
-			if not is_inside_tree(): return
-			DialogueManager.hide_dialogue()
-
+			_proxy_bark("bark_lane")
 		3:
-			await DialogueManager.say("Administrator Proxy", "Enough games. Initiating deletion protocol.")
-			if not is_inside_tree(): return
-			await DialogueManager.say("System", "[WARNING: /delete COMMAND AUTHORIZED]\n[Target: User 'Kaelen']\n[Root Access interference detected]", Color(1, 0, 0), true)
-			if not is_inside_tree(): return
-			await DialogueManager.say("Kaelen", "You can't just delete me! My Root Access is fighting your commands!")
+			await DialogueManager.run(PROXY_DLG, "compliance_reply")
 			if not is_inside_tree(): return
 			DialogueManager.hide_dialogue()
-
 		4:
-			await DialogueManager.say("Administrator Proxy", "Impossible. No user should have this level of system access. What ARE you?")
-			if not is_inside_tree(): return
-			await DialogueManager.say("Kaelen", "I'm the one who rewrites the rules.")
-			if not is_inside_tree(): return
-			await DialogueManager.say("System", "[ROOT ACCESS VS ADMIN AUTHORITY]\n[REALITY CONFLICT IN PROGRESS]", Color(0, 1, 1), true)
-			if not is_inside_tree(): return
-			DialogueManager.hide_dialogue()
+			_proxy_bark("bark_override")
+
+func _proxy_bark(node: String) -> void:
+	var line: Dictionary = DialogueManager.line_of(PROXY_DLG, node)
+	if not line.is_empty():
+		DialogueManager.say(line["speaker"], line["text"], Color(-1, -1, -1), true)
 
 func _on_admin_command_used(command: String) -> void:
 	## Visual feedback for admin commands
@@ -427,62 +374,22 @@ func _on_boss_health_changed(new_hp: float, max_hp: float) -> void:
 			bar.value = (new_hp / max_hp) * 100.0
 
 func _on_boss_defeated() -> void:
-	## Administrator Proxy defeated — major story moment
+	## B04 down. Then Fragment Two, the wall, and Seraphina's decision.
 	arena_running = false
 	_boss_defeated = true
-	var has_elara = _has_elara()
 	if has_node("/root/GameManager"):
 		GameManager.end_boss_fight()
-		GameManager.set_story_flag("ch2_administrator_proxy_defeated", true)
 	GameManager.auto_save()  # Autosave on boss defeat
 	GameManager.add_glitch_corruption(8.0)
-
-	print("[CH2-ADMIN-BOSS] Administrator Proxy defeated! +8% corruption")
 
 	await get_tree().create_timer(2.0).timeout
 	if not is_inside_tree(): return
 
-	await DialogueManager.say("Administrator Proxy", "*static and distortion* Im...possible. A user... defeating an Administrator process...")
+	await DialogueManager.run(PROXY_DLG, "victory")   # sets ch2_administrator_proxy_defeated
 	if not is_inside_tree(): return
-
-	await DialogueManager.say("Administrator Proxy", "Interesting. You are far more capable than your profile suggested. The real Administrator will want to know about this.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "*breathing heavily* The REAL Administrator? You mean there's something above you?")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Administrator Proxy", "*voice breaking apart* I am... merely... a proxy. A shadow of true authority. When THEY come for you... and they WILL come... no amount of Root Access will save you.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("System", "[ADMINISTRATOR PROXY — OFFLINE]\n[Corruption spike: +8%]\n[WARNING: Primary Administrator notified]\n[WARNING: Your location has been logged]", Color(1, 0, 0), true)
-	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "Kaelen... your corruption level just spiked. That fight cost us dearly.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen", "But we survived. And now we know — there's something bigger controlling this world. Something that sent that proxy after us.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Elara", "The real Administrator. The one pulling all the strings.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen", "We need to find the remaining Source Key Fragments before they send something worse. Five more fragments, and we might have enough power to face whatever's really running this world.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen", "*checking his hands — corruption veins pulsing* The corruption... it spiked. That fight cost me more than I can see.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen (Internal)", "But I survived. Alone. Against a system-level process. And now I know — there's something bigger out there. Something that sent this proxy like an exterminator sends a roach trap.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen", "The 'real' Administrator. The one pulling all the strings. Five more Source Key Fragments, and maybe I'll have enough power to face it.")
-		if not is_inside_tree(): return
-		if _has_flag("ch1_knight_killed") and _has_flag("ch2_data_wraith_absorbed"):
-			await DialogueManager.say("Kaelen (Internal)", "I've killed, absorbed, and destroyed my way through two chapters of this world. When I finally meet the real Administrator... what will it see when it looks at me? A hero? Or a virus?")
-			if not is_inside_tree(): return
-		elif _has_flag("ch1_knight_spared"):
-			await DialogueManager.say("Kaelen (Internal)", "I spared a knight. I fought a god's proxy. There has to be a way through this that doesn't cost me everything I am.")
-			if not is_inside_tree(): return
-
+	GameManager.set_story_flag("ch2_administrator_proxy_defeated", true)
 	DialogueManager.hide_dialogue()
 
-	# Transition to Seraphina's choice
 	await get_tree().create_timer(1.5).timeout
 	if not is_inside_tree(): return
 	SceneTransitions.change_scene("res://scenes/chapter2/seraphina_choice.tscn")

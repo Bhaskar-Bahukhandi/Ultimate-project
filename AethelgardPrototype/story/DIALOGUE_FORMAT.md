@@ -49,6 +49,17 @@ Elara: Then let's go.
 | `\n` inside text | A line break inside one dialogue box. |
 | `# …` | A comment. |
 
+### Built-in `do` events
+
+These work in any file. The scene doesn't need to handle them.
+
+| Event | Effect |
+|---|---|
+| `do trust elara 10` | Changes a companion's relationship, in the same units as the game (a big story choice is worth 10–25). It also keeps two flags up to date: `elara_trust_high` (30 or more) and `elara_trust_low` (below 0). Use them as `[if seraphina_trust_high]`. |
+| `do pause 1.5` | A beat of silence, in seconds. |
+
+Every other `do` is passed to the scene, for camera moves, effects and fights.
+
 ## Rules of thumb
 
 - **One file per scene**, named like the scene: `dialogue/ch1/elara_meeting.dlg`.

@@ -1,7 +1,7 @@
 extends Control
 
-## Chapter 2: The Administrator's Game
-## Sequence 8: Seraphina's Choice — Major branching decision after the Administrator Proxy fight
+## Chapter 2, C2-S15 to S17 — Fragment Two, the Flight 707 wall scene, Seraphina decides.
+## Words: dialogue/ch2/fragment_two.dlg. (Scene file keeps its old name.)
 
 var choice_made: int = -1
 var _flicker_tweens: Array = []
@@ -141,246 +141,76 @@ func _has_elara() -> bool:
 func _has_flag(flag_name: String) -> bool:
 	return GameManager.has_flag(flag_name)
 
+const FRAG_DLG := "res://dialogue/ch2/fragment_two.dlg"
+
 func _start_sequence() -> void:
-	## Full confrontation dialogue after the Administrator Proxy fight — expanded
-	var has_elara = _has_elara()
-	var knight_killed = GameManager.story_flags.get("ch1_knight_killed", false)
-	var absorbed_wraith = GameManager.story_flags.get("ch2_data_wraith_absorbed", false)
-
-	await DialogueManager.say("Seraphina", "*stepping through the smoke and debris* ...That's what you've been hiding.")
+	## C2-S15 Fragment Two, C2-S16 the upper wall, C2-S17 Seraphina decides
+	## (dialogue/ch2/fragment_two.dlg). She isn't a recruit button: she goes
+	## with Kaelen unless the city can't spare her or he's lost her trust.
+	await DialogueManager.run(FRAG_DLG, "fragment", _on_dlg_event)
+	if not is_inside_tree(): return
+	await _fade_card(1.2)
+	if not is_inside_tree(): return
+	await DialogueManager.run(FRAG_DLG, "wall", _on_dlg_event)
 	if not is_inside_tree(): return
 
-	await DialogueManager.say("Kaelen", "Seraphina—")
+	# Can Ironhold spare its Knight-Commander? Not if the fever's loose, the
+	# tunnels were left sealed overnight, or the Proxy is still standing.
+	var stable := GameManager.has_flag("ch2_administrator_proxy_defeated") \
+		and not GameManager.has_flag("ch2_medicine_late") and not GameManager.has_flag("ch2_shift_sealed")
+	GameManager.set_story_flag("ch2_city_stable", stable)
+	await DialogueManager.run(FRAG_DLG, "commitment", _on_dlg_event)
 	if not is_inside_tree(): return
-
-	await DialogueManager.say("Seraphina", "I watched you fight that thing. I watched you rewrite reality itself. You didn't just defeat it — you hacked the world's own security system.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Seraphina", "When I first arrived in this world, I thought it was a nightmare. A glitch. Something that would fix itself. But it's been months, Kaelen. Months of surviving, fighting, adapting.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Seraphina", "And now you show up with the power to literally edit this world's code. Do you understand what that means? Do you understand what people would do for that kind of power?")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "I didn't ask for this ability, Seraphina. It comes with a cost — every time I use Root Access, the corruption grows. The world fights back.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Seraphina", "I know. I can see it. The glitching around your hands, the way reality warps when you concentrate. You're becoming part of the corruption.")
-	if not is_inside_tree(): return
-
-	if absorbed_wraith:
-		await DialogueManager.say("Seraphina", "And the Data Wraith's core... I heard what you did down there. You ABSORBED it. Pulled an entire corrupted process into yourself. Your data signature is practically screaming with stolen power.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen", "I did what I had to do to survive—")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Seraphina", "Did you? Or did you do it because you COULD?")
-		if not is_inside_tree(): return
-
-	if knight_killed and absorbed_wraith:
-		await DialogueManager.say("Seraphina", "First the guardian at Oakhaven. Then the Data Wraith. You're not just using power — you're accumulating it. Consuming everything in your path. At what point do YOU become the thing we should all be afraid of?")
-		if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "Seraphina, please. Kaelen is trying to find the Source Key Fragments — seven pieces of the world's master key. If we can assemble them, we might be able to fix everything. Or find a way home.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen", "I'm looking for the Source Key Fragments. Seven pieces of a master key. If I can assemble them, there might be a way to fix this world — or find a way home for all of us.")
-		if not is_inside_tree(): return
-
-	await DialogueManager.say("Seraphina", "Home... *voice breaking slightly* I'd almost forgotten what that word meant.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Seraphina", "*composing herself* Fine. Then here's the question, Kaelen. What happens now? Because I'm not going to stand on the sidelines while the world falls apart around us.")
-	if not is_inside_tree(): return
-
-	DialogueManager.hide_dialogue()
-	await get_tree().create_timer(0.4).timeout
-	if not is_inside_tree(): return
-
-	await _show_choice()
-	if not is_inside_tree(): return
-
-# --------------------------------------------------------------------------- #
-#  Player choice — three-way branch
-# --------------------------------------------------------------------------- #
-
-func _show_choice() -> void:
-	## Present the player with three options using show_choices() API
-	if not is_inside_tree(): return
-	choice_made = await DialogueManager.show_choices(
-		"What do you say to Seraphina?",
-		[
-			"\"Join us. We're stronger together.\"",
-			"\"This is my fight. You should stay in Ironhold where it's safe.\"",
-			"\"I don't trust you enough. How do I know you're not compromised?\""
-		],
-		"Seraphina"
-	)
-	if not is_inside_tree(): return
-
-	# Branch based on selection
-	match choice_made:
-		0:
-			await _choice_recruit()
-			if not is_inside_tree(): return
-		1:
-			await _choice_stay()
-			if not is_inside_tree(): return
-		2:
-			await _choice_reject()
-			if not is_inside_tree(): return
-		_:
-			await _choice_stay()
-			if not is_inside_tree(): return
-
-	# Wrap-up
+	_mark_seraphina_route()
 	await _sequence_complete()
-	if not is_inside_tree(): return
 
-# --------------------------------------------------------------------------- #
-#  Choice branches
-# --------------------------------------------------------------------------- #
+func _on_dlg_event(event: String) -> void:
+	var parts := event.split(" ", false, 1)
+	match parts[0]:
+		"touch_fragment", "memory_flash":
+			var flash := ColorRect.new()
+			flash.color = Color(1, 1, 1, 0.6)
+			flash.size = get_viewport_rect().size
+			flash.z_index = 90
+			add_child(flash)
+			var t := create_tween()
+			t.tween_property(flash, "color:a", 0.0, 0.5)
+			t.tween_callback(flash.queue_free)
+			await get_tree().create_timer(0.4).timeout
+		"flash_ends", "upper_wall":
+			await get_tree().create_timer(0.4).timeout
+		"fragment_acquired":
+			GameManager.collect_source_key(int(parts[1]) if parts.size() > 1 else 2)
+		_:
+			print("[CH2-FRAGMENT-TWO] unhandled dialogue event: %s" % event)
 
-func _choice_recruit() -> void:
-	## Option 1 — Recruit Seraphina to the party — expanded
-	var has_elara = _has_elara()
-	GameManager.set_story_flag("ch2_seraphina_recruited", true)
-	GameManager.relationships["seraphina"] = GameManager.relationships.get("seraphina", 0) + 10
-	if has_node("/root/ChoiceConsequences"):
-		ChoiceConsequences.apply_choice_buff("ch2_seraphina_recruited")
+func _fade_card(seconds: float) -> void:
+	var fade := ColorRect.new()
+	fade.color = Color(0, 0, 0, 0)
+	fade.size = get_viewport_rect().size
+	fade.z_index = 80
+	add_child(fade)
+	var t := create_tween()
+	t.tween_property(fade, "color:a", 1.0, seconds * 0.5)
+	t.tween_property(fade, "color:a", 0.0, seconds * 0.5)
+	t.tween_callback(fade.queue_free)
+	await t.finished
 
-	await DialogueManager.say("Seraphina", "*long pause* ...You know what? You're right. I've been surviving alone for too long. If there's even a chance we can fix this world — or get home — I want in.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "Welcome to the team, Seraphina.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Seraphina", "Don't make me regret this, Systems Architect. And for the record — if your powers ever threaten this world more than they help it, I WILL stop you. That's not a threat. It's a promise.")
-	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "*smiling* It's good to have another fighter with us. The road ahead won't be easy.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Seraphina", "Easy? I spent three months as an arena champion. I don't DO easy.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Seraphina", "*glancing between Kaelen and Elara* So. A glitch mage, a systems architect, and a flight attendant turned arena champion. We're quite the party.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Elara", "*laughing softly* When you put it that way... we sound like the worst rescue team in any world's history.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Seraphina", "I notice you're traveling alone. No companions. That changes now. You'll need someone watching your back who isn't a corrupted process.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen", "I... had the option to travel with someone. I chose not to. I'm starting to wonder if that was a mistake.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Seraphina", "*raising an eyebrow* Well, whatever you decided, you've got me now. And I don't abandon my crew. Flight attendant oath. ...Okay, that's not a real oath, but you get the idea.")
-		if not is_inside_tree(): return
-
-	await _mark_seraphina_route("recruited")
-	if not is_inside_tree(): return
-	DialogueManager.hide_dialogue()
-
-func _choice_stay() -> void:
-	## Option 2 — Ask Seraphina to stay and protect Ironhold — expanded
-	var has_elara = _has_elara()
-	GameManager.set_story_flag("ch2_seraphina_stayed", true)
-	GameManager.relationships["seraphina"] = GameManager.relationships.get("seraphina", 0) + 2
-	if has_node("/root/ChoiceConsequences"):
-		ChoiceConsequences.apply_choice_buff("ch2_seraphina_stayed")
-
-	await DialogueManager.say("Seraphina", "*scoffs* Safe? You just fought an Administrator in the middle of the city. Nowhere is safe anymore.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Seraphina", "But... I understand. You don't want more people in the crossfire. I respect that.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Seraphina", "I'll stay in Ironhold and protect the people here. Someone has to. But Kaelen — if you need me, I'll come running. You have my word.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "Thank you, Seraphina. Watch over Ironhold for us.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Seraphina", "I will. And Kaelen? Don't die out there. That's an order from your former flight stewardess.")
-	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "*nodding* She'll keep the city standing. And we'll keep moving forward.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "At least someone will be watching over this place. And she said she'd come if I called. That's... something. More than I deserve, after the bridges I've burned.")
-		if not is_inside_tree(): return
-
-	await _mark_seraphina_route("stayed")
-	if not is_inside_tree(): return
-	DialogueManager.hide_dialogue()
-
-func _choice_reject() -> void:
-	## Option 3 — Reject Seraphina outright — expanded
-	var has_elara = _has_elara()
-	GameManager.set_story_flag("ch2_seraphina_rejected", true)
-	GameManager.relationships["seraphina"] = GameManager.relationships.get("seraphina", 0) - 8
-	if has_node("/root/ChoiceConsequences"):
-		ChoiceConsequences.apply_choice_buff("ch2_seraphina_rejected")
-
-	await DialogueManager.say("Seraphina", "*stunned silence, then cold anger* ...Compromised? You think I'm working for them?")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Seraphina", "I have been SURVIVING in this hellscape for months while you've had your fancy Root Access powers for what, a few days? And YOU don't trust ME?")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "I just—")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Seraphina", "*cutting him off* No. You've made yourself clear. Fine. I'll survive on my own, just like I always have.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Seraphina", "*turning away* But mark my words, Kaelen. When your corruption catches up to you — and it will — don't come looking for me.")
-	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "*quietly to Kaelen* ...That was harsh. I hope you know what you're doing.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Elara", "She's the only other real person we've found in this world. Pushing her away... we might not get another chance.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "First Elara. Now Seraphina. I'm pushing away every ally this world offers me. Am I being cautious... or am I afraid of letting people close because I know this world might take them away?")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen (Internal)", "Two real people. Two outstretched hands. Both rejected. If I keep this up, I'll find the Source Keys alone — or I'll die alone. Maybe both.")
-		if not is_inside_tree(): return
-
-	await _mark_seraphina_route("rejected")
-	if not is_inside_tree(): return
-	DialogueManager.hide_dialogue()
-
-# --------------------------------------------------------------------------- #
-#  Sequence wrap-up and transition
-# --------------------------------------------------------------------------- #
-
-func _mark_seraphina_route(route: String) -> void:
-	match route:
-		"recruited":
-			GameManager.set_story_flag("ch2_seraphina_bond_marker", true)
-			await DialogueManager.say("System", "[ROUTE MARKER]\nSeraphina will be remembered as a traveling witness in later chapters.", Color(0.3, 0.9, 1.0), true)
-		"stayed":
-			GameManager.set_story_flag("ch2_seraphina_ironhold_marker", true)
-			await DialogueManager.say("System", "[ROUTE MARKER]\nSeraphina's protection of Ironhold is now recorded for later faction reactions.", Color(0.3, 0.9, 1.0), true)
-		"rejected":
-			GameManager.set_story_flag("ch2_seraphina_rift_marker", true)
-			await DialogueManager.say("System", "[ROUTE MARKER]\nSeraphina's rejection is now recorded. Late-game witnesses may question Kaelen's trust.", Color(1.0, 0.75, 0.25), true)
-
+## Legacy route markers that later chapters still read.
+func _mark_seraphina_route() -> void:
+	if GameManager.has_flag("ch2_seraphina_recruited"):
+		GameManager.set_story_flag("ch2_seraphina_bond_marker", true)
+	elif GameManager.has_flag("ch2_seraphina_stayed"):
+		GameManager.set_story_flag("ch2_seraphina_ironhold_marker", true)
+	elif GameManager.has_flag("ch2_seraphina_rejected"):
+		GameManager.set_story_flag("ch2_seraphina_rift_marker", true)
 	if has_node("/root/LoreJournal"):
 		LoreJournal.discover("ironhold_seraphina_route_marker")
 
 func _sequence_complete() -> void:
-	## Show completion message and transition to chapter ending
 	await get_tree().create_timer(1.0).timeout
 	if not is_inside_tree(): return
-
-	await DialogueManager.say("System", "[CHAPTER 2 SEQUENCE 8 COMPLETE]\n[Relationship updated: Seraphina]", Color(0, 1, 1), true)
-	if not is_inside_tree(): return
-
 	DialogueManager.hide_dialogue()
-
-	# Fade to black before transitioning
 	var fade = ColorRect.new()
 	fade.color = Color(0, 0, 0, 0)
 	fade.size = get_viewport_rect().size
@@ -391,4 +221,3 @@ func _sequence_complete() -> void:
 	await tween.finished
 	if not is_inside_tree(): return
 	SceneTransitions.change_scene("res://scenes/chapter2/ch2_ending.tscn")
-	# NOTE: ch2_ending.tscn is the correct filename (it DOES have the ch2_ prefix)

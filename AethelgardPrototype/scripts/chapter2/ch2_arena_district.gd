@@ -13,6 +13,8 @@ var _waiting_for_input: bool = false
 var _in_results: bool = false
 var _root_access_panel: RootAccessPanel = null
 
+const ARENA_DLG := "res://dialogue/ch2/arena.dlg"
+
 func _ready() -> void:
 	print("[CH2-ARENA] Initializing Battle Arena")
 	GameManager.change_state(GameManager.GameState.COMBAT)
@@ -230,8 +232,11 @@ func _setup_combat_hud() -> void:
 
 func _show_tier_selection() -> void:
 	## Show tier selection dialogue
-	await DialogueManager.say("Vex", "Welcome to the arena! Pick your tier, fighter!")
-	if not is_inside_tree(): return
+	# C2-S08 — the first visit gets Vex's welcome and the corner advice.
+	if not GameManager.has_flag("ch2_arena_entered"):
+		GameManager.set_story_flag("ch2_arena_entered", true)
+		await DialogueManager.run(ARENA_DLG, "enter")
+		if not is_inside_tree(): return
 
 	# Use a simple tier menu via dialogue choices
 	var available_tiers = []
@@ -240,7 +245,7 @@ func _show_tier_selection() -> void:
 			available_tiers.append(tier)
 
 	if available_tiers.size() == 0:
-		await DialogueManager.say("Vex", "You're not ready for any tier yet! Go train some more!")
+		await DialogueManager.say("Vex", "No bracket'll take you yet, fighter. Go and get a bit harder first.")
 		if not is_inside_tree(): return
 		_return_to_city()
 		return
@@ -248,7 +253,7 @@ func _show_tier_selection() -> void:
 	# For prototype, start with highest available tier
 	current_tier = available_tiers[available_tiers.size() - 1]
 
-	await DialogueManager.say("Vex", "Starting %s tier! %d waves of combat! Ready?" % [current_tier.to_upper(), arena_mgr.TIER_DATA[current_tier]["waves"]])
+	await DialogueManager.say("Vex", "%s bracket! %d waves! Try to look like you meant to come!" % [current_tier.capitalize(), arena_mgr.TIER_DATA[current_tier]["waves"]])
 	if not is_inside_tree(): return
 	DialogueManager.hide_dialogue()
 
@@ -280,14 +285,12 @@ func _on_arena_victory(tier: String) -> void:
 		await _grant_bronze_arena_material_reward()
 		if not is_inside_tree(): return
 
-	# Check if this triggers Seraphina encounter
-	if tier == "bronze" and not GameManager.story_flags.get("ch2_seraphina_met", false):
-		await DialogueManager.say("Vex", "Not bad, newcomer! Not bad at all! But someone VERY important wants to have a word with you...")
+	# C2-S09 — between rounds, the memorial wall.
+	if not GameManager.has_flag("ch2_arena_memorial_seen"):
+		await DialogueManager.run(ARENA_DLG, "memorial")
 		if not is_inside_tree(): return
-		DialogueManager.hide_dialogue()
 
-	# Allow player to fight again or leave
-	await DialogueManager.say("Vex", InputService.fmt("Want another round? Press {ui_accept} to fight again, or {ui_cancel} to head back to the city."))
+	await DialogueManager.run(ARENA_DLG, "again")
 	if not is_inside_tree(): return
 	DialogueManager.hide_dialogue()
 	_in_results = false
@@ -304,7 +307,7 @@ func _grant_bronze_arena_material_reward() -> void:
 	if has_node("/root/LoreJournal"):
 		LoreJournal.discover("ironhold_blacksmith_craft_loop")
 
-	await DialogueManager.say("Vex", "Bronze tier spoils! Torval asked me to pass along a chunk of Data Ore. Survive the arena, improve your kit, come back louder.")
+	await DialogueManager.say("Vex", "Bronze spoils! Garro asked me to pass on a chunk of Data Ore. Take it to his forge, come back louder.")
 	if not is_inside_tree(): return
 	await DialogueManager.say("System", "[ARENA MATERIAL]\nReceived: Data Ore x1", Color(0.0, 1.0, 0.5), true)
 
@@ -321,7 +324,7 @@ func _on_arena_defeat() -> void:
 
 	await get_tree().create_timer(2.0).timeout
 	if not is_inside_tree(): return
-	await DialogueManager.say("Vex", InputService.fmt("Tough break, fighter. But every loss makes you stronger! Press {ui_accept} to try again or {ui_cancel} to leave!"))
+	await DialogueManager.run(ARENA_DLG, "again_after_loss")
 	if not is_inside_tree(): return
 	DialogueManager.hide_dialogue()
 	_in_results = false

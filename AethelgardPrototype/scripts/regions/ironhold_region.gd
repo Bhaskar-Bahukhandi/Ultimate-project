@@ -19,19 +19,22 @@ const SUB_ZONES: Array = [
 	{"zone_id": "ironhold_clock_tower", "rect": Rect2(2800, 200, 600, 800), "name": "Clock Tower District"},
 ]
 
+## Who's in Ironhold. "dlg" names a node in dialogue/ch2/ironhold_city.dlg;
+## "requires" hides an NPC until a flag is set (Seraphina only after the gate).
+const CITY_DLG := "res://dialogue/ch2/ironhold_city.dlg"
+const CLOCK_DLG := "res://dialogue/ch2/clock_tower.dlg"
 const NPC_DATA: Array = [
-	{"name": "Vex the Announcer", "pos": Vector2(1800, 1000), "color": Color(0.7, 0.4, 0.2),
-	 "dialogue": ["WELCOME to the ARENA! Where flesh meets steel and EVERYONE LOSES!", "Today's odds: You — 3 to 1 against! Place your bets, place your bets!"]},
-	{"name": "Merchant Garro", "pos": Vector2(1200, 950), "color": Color(0.5, 0.45, 0.3),
-	 "dialogue": ["Finest gear in Ironhold! Only slightly used. Previous owners? Don't ask.", "Steel Blade — cuts through clockwork like butter. Expensive butter."]},
-	{"name": "Engineer Mira", "pos": Vector2(1500, 900), "color": Color(0.4, 0.5, 0.55),
-	 "dialogue": ["The clock tower's been running backwards since last patch— I mean, last Tuesday.", "Don't go underground. The data wraiths down there... they speak in corrupted UTF-8."]},
-	{"name": "Guard Captain Voss", "pos": Vector2(1100, 850), "color": Color(0.5, 0.45, 0.4),
-	 "dialogue": ["The Administrator's proxies patrol the underground. Steer clear unless you're strong.", "Level 7 at minimum for the underground. Level 9 for the clock tower. You've been warned."]},
-	{"name": "Beggar NPC_07", "pos": Vector2(1350, 1100), "color": Color(0.4, 0.38, 0.35),
-	 "dialogue": ["Spare some gold? I used to be a quest-giver but they deprecated my quest line...", "I remember when I had collision boxes. Now people walk right through me."]},
-	{"name": "Seraphina", "pos": Vector2(1600, 850), "color": Color(0.7, 0.5, 0.3),
-	 "dialogue": ["You use Root Access? Hacking the world's code to win fights? That's... dishonorable.", "I fight with my own strength. The old way. Before they patched in shortcuts."]},
+	{"name": "Rook", "pos": Vector2(1260, 1010), "color": Color(0.6, 0.45, 0.25), "dlg": "rook"},
+	{"name": "Garro", "pos": Vector2(1200, 950), "color": Color(0.5, 0.45, 0.3), "dlg": "garro"},
+	{"name": "Doss", "pos": Vector2(1320, 960), "color": Color(0.55, 0.5, 0.35), "dlg": "doss"},
+	{"name": "Sol", "pos": Vector2(1450, 1060), "color": Color(0.7, 0.6, 0.35), "dlg": "sol"},
+	{"name": "Preacher", "pos": Vector2(1350, 1120), "color": Color(0.5, 0.4, 0.35), "dlg": "preacher"},
+	{"name": "Rem", "pos": Vector2(1500, 900), "color": Color(0.4, 0.55, 0.5), "dlg": "rem"},
+	{"name": "Nori", "pos": Vector2(1100, 850), "color": Color(0.5, 0.45, 0.4), "dlg": "paladins"},
+	{"name": "Vex", "pos": Vector2(1800, 1000), "color": Color(0.7, 0.4, 0.2), "dlg": "vex"},
+	{"name": "Dice Host", "pos": Vector2(1720, 1150), "color": Color(0.6, 0.3, 0.35), "dlg": "dice"},
+	{"name": "Seraphina", "pos": Vector2(1600, 850), "color": Color(0.7, 0.5, 0.3), "dlg": "seraphina", "requires": "ch2_seraphina_met"},
+	{"name": "Ina", "pos": Vector2(1650, 890), "color": Color(0.9, 0.75, 0.5), "dlg": "ina", "requires": "ch2_seraphina_met"},
 ]
 
 const LORE_DATA: Array = [
@@ -392,6 +395,8 @@ func _spawn_player() -> void:
 
 func _place_npcs() -> void:
 	for data in NPC_DATA:
+		if data.has("requires") and not GameManager.has_flag(data["requires"]):
+			continue
 		var npc = _create_interactable_npc(data)
 		add_child(npc)
 
@@ -433,7 +438,8 @@ func _create_interactable_npc(data: Dictionary) -> Area2D:
 	shape.shape = circle
 	npc.add_child(shape)
 	npc.set_meta("npc_name", data["name"])
-	npc.set_meta("dialogue", data["dialogue"])
+	npc.set_meta("dialogue", data.get("dialogue", []))
+	npc.set_meta("dlg", data.get("dlg", ""))
 	npc.set_meta("dialogue_index", 0)
 	npc.body_entered.connect(func(b): _on_interact_entered(b, npc, "npc"))
 	npc.body_exited.connect(func(b): _on_interact_exited(b, npc, "npc"))
@@ -500,16 +506,13 @@ func _create_shop(shop_name: String, pos: Vector2, shop_type: String) -> void:
 
 
 func _place_boss_gates() -> void:
-	# Clockwork Automaton — generic arena fallback. Suppressed once the authored
-	# Clock Tower scene has been cleared, so the same boss isn't fought twice.
-	if not GameManager.has_flag("ch2_clockwork_automaton_defeated"):
-		_create_boss_gate("ClockworkBossGate", Vector2(3050, 550),
-			"clockwork_automaton", 9, "Clockwork Automaton\n[{interact}] Challenge\nRec. Lv 9",
-			"res://scenes/combat/combat_arena.tscn")
-	# Administrator Proxy — Underground
-	_create_boss_gate("AdminBossGate", Vector2(1300, 2100),
-		"administrator_proxy", 11, "Administrator Proxy\n[{interact}] Challenge\nRec. Lv 11",
-		"res://scenes/chapter2/administrator_boss.tscn")
+	# The Clock Tower scene is the Minute Hand fight (its old generic arena
+	# fallback here is gone). The Administrator Proxy is under the market and
+	# only reachable once the Underground is cleared (C2-S14).
+	if GameManager.has_flag("ch2_underground_complete") and not GameManager.has_flag("ch2_administrator_proxy_defeated"):
+		_create_boss_gate("AdminBossGate", Vector2(1300, 2100),
+			"administrator_proxy", 11, "Administrator Proxy\nbeneath the market\n[{interact}] Go down",
+			"res://scenes/chapter2/administrator_boss.tscn")
 
 func _create_boss_gate(gate_name: String, pos: Vector2, boss_id: String,
 		rec_level: int, label_text: String, scene_path: String) -> void:
@@ -558,10 +561,14 @@ func _place_story_gates() -> void:
 	# Seraphina — the Chapter 2 introduction. Sets ch2_seraphina_met and
 	# ch2_underground_unlocked, which the Underground gate below depends on,
 	# and which ch2_seraphina_choice.tscn assumes has already happened.
-	_create_story_gate("SeraphinaEncounterGate", Vector2(1650, 1150),
+	_create_story_gate("CommandHallGate", Vector2(1650, 1150),
 		"res://scenes/chapter2/seraphina_encounter.tscn",
-		"Seraphina\n[{interact}] Approach",
-		"", "ch2_seraphina_met", Color(0.85, 0.75, 0.35))
+		"Command Hall\n[{interact}] Enter",
+		"ch2_seraphina_met", "ch2_command_hall_done", Color(0.85, 0.75, 0.35))
+	# The medicine convoy (C2-S06) — on the west road, played here in the region.
+	_create_story_gate("WestRoadGate", Vector2(420, 900), "",
+		"West road\nThe convoy\n[{interact}] Go",
+		"ch2_medicine_quest_active", "ch2_medicine_done", Color(0.45, 0.75, 0.55))
 	# Underground Network — carries the ch2_data_wraith_* branch that
 	# Chapters 4, 5 and 10 read.
 	_create_story_gate("UndergroundGate", Vector2(1150, 1950),
@@ -575,12 +582,15 @@ func _place_story_gates() -> void:
 	_create_story_gate("ClockTowerGate", Vector2(2950, 620),
 		"res://scenes/chapter2/clock_tower.tscn",
 		"Clock Tower\n[{interact}] Ascend",
-		"", "ch2_clock_tower_complete", Color(0.75, 0.55, 0.25))
+		"ch2_arena_bronze_complete", "ch2_clock_tower_complete", Color(0.75, 0.55, 0.25))
 
 
 func _create_story_gate(gate_name: String, pos: Vector2, scene_path: String,
 		label_text: String, requires_flag: String, completed_flag: String,
 		marker_color: Color) -> void:
+	# Already placed (this is re-run after conversations that unlock gates).
+	if has_node(gate_name):
+		return
 	# Already done — don't place it at all.
 	if completed_flag != "" and GameManager.has_flag(completed_flag):
 		return
@@ -615,6 +625,22 @@ func _create_story_gate(gate_name: String, pos: Vector2, scene_path: String,
 
 
 func _interact_story(gate: Area2D) -> void:
+	if _city_busy:
+		return
+	if gate.name == "WestRoadGate":
+		await _run_convoy(gate)
+		return
+	if gate.name == "ClockTowerGate":
+		# The evening bell is the convoy's deadline: warn before going up.
+		if not GameManager.has_flag("ch2_medicine_done") and not GameManager.has_flag("ch2_tower_go_now"):
+			await _run_city(CITY_DLG, "tower_warning")
+			if not is_inside_tree() or not GameManager.has_flag("ch2_tower_go_now"):
+				return
+		if not GameManager.has_flag("ch2_tower_bell_stopped"):
+			await _run_city(CLOCK_DLG, "bell")
+			if not is_inside_tree(): return
+			if not GameManager.has_flag("ch2_medicine_done"):
+				GameManager.set_story_flag("ch2_medicine_late", true)
 	var scene_path: String = gate.get_meta("scene_path", "")
 	if scene_path.is_empty():
 		return
@@ -833,7 +859,7 @@ func _on_interact_exited(body: Node2D, target: Area2D, type: String) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not event.is_action_pressed("interact"):
+	if not event.is_action_pressed("interact") or _city_busy:
 		return
 
 	# Priority: story > boss > arena > farming > npc > lore > shop
@@ -857,6 +883,12 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _interact_npc(npc: Area2D) -> void:
 	var npc_name: String = npc.get_meta("npc_name", "NPC")
+	var dlg_node: String = npc.get_meta("dlg", "")
+	if dlg_node != "":
+		await _run_city(CITY_DLG, dlg_node, npc)
+		if not is_inside_tree(): return
+		await _handle_ironhold_side_objective(npc_name)
+		return
 	var dialogue: Array = npc.get_meta("dialogue", [])
 	var idx: int = npc.get_meta("dialogue_index", 0)
 	if dialogue.is_empty():
@@ -1074,6 +1106,74 @@ func _interact_boss(gate: Area2D) -> void:
 		scene_path = "res://scenes/combat/combat_arena.tscn"
 	if has_node("/root/SceneTransitions"):
 		SceneTransitions.change_scene(scene_path, SceneTransitions.TransitionStyle.COMBAT_ENTRY)
+
+
+## ═══════════════════════════════════════════════════════════════════════════
+## CHAPTER 2 DIALOGUE (dialogue/ch2/ironhold_city.dlg, clock_tower.dlg)
+## ═══════════════════════════════════════════════════════════════════════════
+
+var _city_busy := false
+var _fade: ColorRect = null
+
+func _run_city(file: String, node: String, npc: Area2D = null) -> void:
+	_city_busy = true
+	GameManager.change_state(GameManager.GameState.DIALOGUE)
+	if npc and has_node("/root/AssetManager"):
+		AssetManager.play_v2_npc_anim(npc, "talk")
+	await DialogueManager.run(file, node, _on_city_event)
+	if not is_inside_tree(): return
+	if npc and is_instance_valid(npc) and has_node("/root/AssetManager"):
+		AssetManager.play_v2_npc_anim(npc, "idle")
+	GameManager.change_state(GameManager.GameState.EXPLORATION)
+	_city_busy = false
+	_place_story_gates()   # e.g. the west road appears once Rem asks for the convoy
+
+## C2-S06: the escort. Early = before the arena trial is done; on time =
+## before the bell; late = after it (already set when the bell rang).
+func _run_convoy(gate: Area2D) -> void:
+	await _run_city(CITY_DLG, "convoy")
+	if not is_inside_tree(): return
+	if not GameManager.has_flag("ch2_medicine_late"):
+		if GameManager.has_flag("ch2_arena_bronze_complete"):
+			GameManager.set_story_flag("ch2_medicine_on_time", true)
+		else:
+			GameManager.set_story_flag("ch2_medicine_early", true)
+	if is_instance_valid(gate):
+		gate.queue_free()
+	_current_interact.erase("story")
+
+func _on_city_event(event: String) -> void:
+	var parts := event.split(" ", false, 1)
+	match parts[0]:
+		"quest_start", "data_vision_trace":
+			pass
+		"fade_to_road":
+			await _fade_to(1.0, 0.5)
+			await _fade_to(0.0, 0.5)
+		"convoy_ambush", "bell_thirteen":
+			if _camera:
+				var t := create_tween()
+				for i in 4:
+					t.tween_property(_camera, "offset", Vector2(randf_range(-7, 7), randf_range(-5, 5)), 0.05)
+				t.tween_property(_camera, "offset", Vector2.ZERO, 0.08)
+				await t.finished
+		_:
+			print("[IRONHOLD] unhandled dialogue event: %s" % event)
+
+func _fade_to(alpha: float, seconds: float) -> void:
+	if _fade == null:
+		var layer := CanvasLayer.new()
+		layer.layer = 95
+		add_child(layer)
+		_fade = ColorRect.new()
+		_fade.color = Color.BLACK
+		_fade.set_anchors_preset(Control.PRESET_FULL_RECT)
+		_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_fade.modulate.a = 0.0
+		layer.add_child(_fade)
+	var t := create_tween()
+	t.tween_property(_fade, "modulate:a", alpha, seconds)
+	await t.finished
 
 
 ## ═══════════════════════════════════════════════════════════════════════════

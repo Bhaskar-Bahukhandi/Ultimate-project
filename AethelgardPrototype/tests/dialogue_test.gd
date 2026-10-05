@@ -208,7 +208,9 @@ func _test_all_dialogue_files_parse() -> void:
 ## story/VOICE_GUIDE.md §5. Authored dialogue only: dialogue/_extracted is old
 ## source material and is exempt.
 const QUESTION_OPENER := "^(What|Why|Where|Who|Whose|How|When|Which|Did|Does|Is|Are|Was|Were|Can|Could|Would|Should|Have you|Has)\\b"
-const BANNED_TICS := ["better answer", "good answer", "both are true", "that sentence"]
+## Regexes, case-insensitive. "Better answer." grades Kaelen; "until there's a
+## better answer" doesn't, so the grading forms only count at the start of a line.
+const BANNED_TICS := ["^(better|good) answer\b", "\bboth (are|can be) true\b", "\bthat sentence\b"]
 const FLAT_REGISTER_MIN_LINES := 15   # a file this long with no contractions reads robotic
 
 func _test_voice_lint() -> void:
@@ -217,6 +219,7 @@ func _test_voice_lint() -> void:
 	var key_hint := RegEx.create_from_string("\\[(F|E|J|K|Q|C|X|R|M|I|L|TAB|Tab|ESC|Esc|SPACE|Space|Shift|SHIFT|ENTER|Enter|WASD|A/D|F/E)\\]|Press (SPACE|Space|ESC|Esc|TAB|Tab|ENTER|Enter)\\b")
 	var contraction := RegEx.create_from_string("[A-Za-z](n't|'s|'re|'ll|'m|'ve|'d)\\b")
 	var speakers: Dictionary = get_root().get_node("DialogueManager").SPEAKER_COLORS
+	var tic_res: Array = BANNED_TICS.map(func(p): return RegEx.create_from_string(p))
 	var unasked: Array[String] = []
 	var tics: Array[String] = []
 	var keys: Array[String] = []
@@ -253,9 +256,9 @@ func _test_voice_lint() -> void:
 					# "Have you seen my sword? It's wood." is fine: the question is marked.
 					if question.search(text) and not ("?" in text or text.ends_with("!") or text.ends_with("—") or text.ends_with("…") or text.ends_with("...")):
 						unasked.append(at)
-					for tic in BANNED_TICS:
-						if text.to_lower().contains(tic):
-							tics.append("%s \"%s\"" % [at, tic])
+					for tic in tic_res:
+						if tic.search(text.to_lower()):
+							tics.append("%s \"%s\"" % [at, tic.get_pattern()])
 					if key_hint.search(text):
 						keys.append(at)
 		if spoken >= FLAT_REGISTER_MIN_LINES and contracted == 0:

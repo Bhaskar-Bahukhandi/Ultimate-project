@@ -118,6 +118,24 @@ const SPEAKER_COLORS: Dictionary = {
 	"Child": Color(1.0, 0.8, 0.5),
 	"Mother": Color(0.85, 0.75, 0.6),
 	"Farmer": Color(0.6, 0.8, 0.3),
+	# Chapter 2 rewrite (dialogue/ch2)
+	"Paladin": Color(0.75, 0.7, 0.55),
+	"Gate Officer": Color(0.55, 0.55, 0.65),
+	"Clerk": Color(0.6, 0.6, 0.55),
+	"Rook": Color(0.85, 0.7, 0.35),
+	"Brask": Color(0.6, 0.62, 0.7),
+	"Rem": Color(0.55, 0.85, 0.75),
+	"Preacher": Color(0.8, 0.6, 0.45),
+	"Citizen": Color(0.65, 0.65, 0.65),
+	"Nori": Color(0.75, 0.68, 0.5),
+	"Garro": Color(0.8, 0.5, 0.2),
+	"Sol": Color(0.9, 0.8, 0.45),
+	"Dice Host": Color(0.85, 0.4, 0.5),
+	"Doss": Color(0.7, 0.6, 0.4),
+	"Ina": Color(1.0, 0.8, 0.5),
+	"Worker": Color(0.6, 0.6, 0.62),
+	"Iven": Color(0.6, 0.7, 0.95),
+	"The Minute Hand": Color(0.7, 0.6, 0.3),
 }
 
 
@@ -578,6 +596,7 @@ func _run_builtin_event(event: String, file_path: String) -> bool:
 				var value: int = int(GameManager.relationships.get(who, 0)) + int(parts[2])
 				GameManager.relationships[who] = value
 				GameManager.set_story_flag("%s_trust_high" % who, value >= TRUST_HIGH)
+				GameManager.set_story_flag("%s_trust_low" % who, value < 0)
 			return true
 		"pause":
 			var seconds := 1.0

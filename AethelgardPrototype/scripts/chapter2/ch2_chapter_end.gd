@@ -1,7 +1,7 @@
 extends Control
 
-## Chapter 2: The Administrator's Game
-## Sequence 9: Chapter 2 Ending — SOVEREIGN reveal, Reality Shatter event, chapter stats card
+## Chapter 2 / Act 1 ending — the report, the road out, the outer bridge, then the stats card.
+## Words: dialogue/ch2/act1_end.dlg.
 
 var fade_rect: ColorRect
 var background: ColorRect
@@ -51,228 +51,37 @@ func _build_background() -> void:
 func _has_elara() -> bool:
 	return GameManager.has_elara()
 
+const END_DLG := "res://dialogue/ch2/act1_end.dlg"
+
 func _start_ending_sequence() -> void:
-	# ----------------------------------------------------------------
-	# SCENE: Ironhold rooftop, night. Kaelen, Elara (if present), and
-	# possibly Seraphina look over the damaged city.
-	# ----------------------------------------------------------------
-	var has_elara = _has_elara()
-	var knight_killed = _has_flag("ch1_knight_killed")
-	var knight_spared = _has_flag("ch1_knight_spared")
-	var absorbed_wraith = _has_flag("ch2_data_wraith_absorbed")
-
-	await DialogueManager.say("Kaelen", "*looking over the city* We stopped the proxy. But look at Ironhold... half the districts are corrupted now. Our fight made things worse.")
-	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "No. The corruption was already spreading before we arrived. The Administrator was using Ironhold as a test — pushing the city's systems to their limits to see how reality would break.")
+	## The Act 1 midpoint report, the road out, and the Act 1 end scene on
+	## Ironhold's outer bridge (dialogue/ch2/act1_end.dlg). No SOVEREIGN reveal
+	## here: why it knows Kaelen is a Chapter 4–9 mystery.
+	for node in ["report", "road_out", "end"]:
+		await DialogueManager.run(END_DLG, node, _on_dlg_event)
 		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "No. The corruption was already spreading before I arrived. The Administrator was using Ironhold as a test — pushing the systems to see how reality would break. I just accelerated the timeline.")
-		if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen (Internal)", "She's right. The Administrator — the real one — has been experimenting. Testing the world's boundaries. The proxy was just a probe, sent to measure my abilities. And now they know exactly what I can do.")
-	if not is_inside_tree(): return
-
-	if absorbed_wraith:
-		await DialogueManager.say("Kaelen (Internal)", "And I absorbed the Data Wraith's core. Pulled it into myself. Every choice I've made since waking up in that crater has been building toward... what? Power? Survival? Or am I just becoming another corrupted process?")
-		if not is_inside_tree(): return
-
-	# Conditional: Seraphina recruited or not
-	if _is_seraphina_recruited():
-		await DialogueManager.say("Seraphina", "So what's our next move? We can't stay in Ironhold — the corruption is only going to get worse.")
-		if not is_inside_tree(): return
-	elif has_elara:
-		await DialogueManager.say("Elara", "We can't stay in Ironhold. The corruption is accelerating.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen", "I can't stay in Ironhold. The corruption is accelerating. And I've put a target on my back that the entire system can see.")
-		if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "We need to keep moving. Find the remaining Source Key Fragments before the Administrator does. We have two of seven — that's not nearly enough.")
-	if not is_inside_tree(): return
-
-	if knight_spared:
-		await DialogueManager.say("Kaelen (Internal)", "Aldric — the knight I freed. If his threads are spreading through the data streams like Nyx said... maybe he's not the only one who could be saved. Maybe every corrupted entity in this world has a person buried underneath.")
-		if not is_inside_tree(): return
-	elif knight_killed:
-		await DialogueManager.say("Kaelen (Internal)", "The path behind me is littered with the things I've broken. Aldric. The Data Wraith. Parts of myself. If I keep walking this road, what will be left of me when I reach the end?")
-		if not is_inside_tree(): return
-
 	DialogueManager.hide_dialogue()
 	await get_tree().create_timer(1.0).timeout
 	if not is_inside_tree(): return
-
-	# ----------------------------------------------------------------
-	# REALITY SHATTER EVENT
-	# ----------------------------------------------------------------
-	await _trigger_shatter_event()
-
-func _trigger_shatter_event() -> void:
-	var has_elara = _has_elara()
-
-	await DialogueManager.say("System", "[WARNING: REALITY INTEGRITY CRITICAL]\n[SHATTER EVENT IMMINENT]\n[BRACE FOR IMPACT]", Color(1, 0, 0), true)
-	if not is_inside_tree(): return
-
-	# Screen shake if camera supports it
-	if _camera and _camera.has_method("shake"):
-		_camera.shake(20.0, 2.0)
-	else:
-		_simulate_screen_shake()
-
-	await get_tree().create_timer(0.5).timeout
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "Not again — it's another Shatter! Bigger than the last one!")
-	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "*struggling to stand* The fabric of reality is tearing! I can see the wireframe beneath — the raw code!")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen", "*struggling to stand* The wireframe — I can see it beneath the surface! The raw code of reality, exposed and screaming!")
-		if not is_inside_tree(): return
-
-	DialogueManager.hide_dialogue()
-	await get_tree().create_timer(1.5).timeout
-	if not is_inside_tree(): return
-
-	# ----------------------------------------------------------------
-	# SOVEREIGN REVEAL
-	# ----------------------------------------------------------------
-	await _sovereign_reveal()
-
-func _sovereign_reveal() -> void:
-	var has_elara = _has_elara()
-	var knight_killed = _has_flag("ch1_knight_killed")
-	var knight_spared = _has_flag("ch1_knight_spared")
-	var absorbed_wraith = _has_flag("ch2_data_wraith_absorbed")
-
-	# Screen goes dark
-	fade_rect.modulate = Color(1, 1, 1, 0)
-	var darken_tween = create_tween()
-	darken_tween.tween_property(fade_rect, "modulate:a", 1.0, 1.0)
-	await darken_tween.finished
-	if not is_inside_tree(): return
-	await get_tree().create_timer(1.0).timeout
-	if not is_inside_tree(): return
-
-	# A deep, distorted voice echoes from the void
-	await DialogueManager.say("SOVEREIGN", "Impressive, little debugger.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "Who— who is that?!")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("SOVEREIGN", "You have exceeded every prediction model I have run. A user with Root Access privilege who actually knows how to USE it. Fascinating.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("SOVEREIGN", "I am SOVEREIGN. The architect of this world's current... configuration. You and your companions have been most entertaining test subjects.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "Test subjects?! This world is full of PEOPLE — living, thinking beings! You can't just treat them as variables in your experiment!")
-	if not is_inside_tree(): return
-
-	# SOVEREIGN references player's specific CH1 choices
-	if knight_killed and absorbed_wraith:
-		await DialogueManager.say("SOVEREIGN", "People? How curious that you care about them now. Your actions tell a different story, Kaelen. Entity 'Aldric' — deleted. The Data Wraith's core — absorbed. You consume power like I consume data. We are not so different.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen", "I'm NOTHING like you—")
-		if not is_inside_tree(): return
-		await DialogueManager.say("SOVEREIGN", "Aren't you? Review your own logs. Count the things you've broken. Then tell me again how different we are.")
-		if not is_inside_tree(): return
-	elif knight_spared:
-		await DialogueManager.say("SOVEREIGN", "Interesting. You show mercy where my design expected cruelty. Entity 'Aldric' still runs because you chose preservation over efficiency. An irrational decision... and yet, it produced novel data.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("SOVEREIGN", "Mercy is a variable I have never fully modeled. You are teaching me something new, debugger. I appreciate that.")
-		if not is_inside_tree(): return
-	elif knight_killed:
-		await DialogueManager.say("SOVEREIGN", "You deleted entity 'Aldric' without hesitation. The efficiency of it was... admirable. You understand that in a world of code, compassion is merely an unnecessary process consuming resources.")
-		if not is_inside_tree(): return
-
-	await DialogueManager.say("SOVEREIGN", "Can't I? I wrote their parameters. I compiled their behaviors. Every 'person' in this world exists because I allowed them to exist.")
-	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("SOVEREIGN", "Including your precious Elara.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Elara", "*shocked* What... what is it saying?")
-		if not is_inside_tree(): return
-		await DialogueManager.say("SOVEREIGN", "Did you think she found you by accident, Kaelen? A glitch mage with corrupted memories, conveniently positioned at your awakening point? I placed her there. A variable designed to influence your behavior. And it worked... beautifully.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Elara", "*trembling* That's... that's not true. My memories, my feelings — they're REAL. They have to be real!")
-		if not is_inside_tree(): return
-		await DialogueManager.say("SOVEREIGN", "Real. Simulated. In my world, there is no difference.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("SOVEREIGN", "Including the glitch mage you rejected. Elara. She was designed to be your guide — a variable I placed at your awakening point to influence your trajectory. You refused her. Unexpected. Inefficient. And yet... fascinating.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("SOVEREIGN", "You chose isolation over companionship. A lone variable, cutting through my carefully designed social parameters. I wonder... was that strength? Or fear?")
-		if not is_inside_tree(): return
-
-	await DialogueManager.say("SOVEREIGN", "But you, Kaelen... you were never part of my design. You are a wild variable. An exception that was never caught. And I find myself... curious.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("SOVEREIGN", "Keep collecting the Source Key Fragments. I want to see how far a debugger can go before the system breaks completely. Consider this... a challenge.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "I don't play your games, SOVEREIGN.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("SOVEREIGN", "Oh, but you already are. You have been since the moment you crashed into my world. Every choice you've made, every flag you've set, every line of reality you've rewritten — it's all data. MY data.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("SOVEREIGN", "Until we meet again, Root User. I'll be watching. I'm ALWAYS watching.")
-	if not is_inside_tree(): return
-
-	# SOVEREIGN disconnection
-	await DialogueManager.say("System", "[SIGNAL LOST]\n[SOVEREIGN — DISCONNECTED]\n[Corruption stabilizing...]\n[Reality Shatter Event: CONCLUDED]", Color(0, 1, 1), true)
-	if not is_inside_tree(): return
-
-	# Fade screen back in
-	var lighten_tween = create_tween()
-	lighten_tween.tween_property(fade_rect, "modulate:a", 0.0, 1.5)
-	await lighten_tween.finished
-	if not is_inside_tree(): return
-	await get_tree().create_timer(0.5).timeout
-	if not is_inside_tree(): return
-
-	# Post-SOVEREIGN reactions
-	await _post_sovereign_dialogue()
-
-func _post_sovereign_dialogue() -> void:
-	var has_elara = _has_elara()
-
-	if has_elara:
-		await DialogueManager.say("Elara", "*trembling* Kaelen... that voice. It wasn't just speaking through the system. It IS the system.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen", "SOVEREIGN. That's the real Administrator. The one controlling everything.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Elara", "And it said... it said I was placed. Designed. That my memories, my friendship with you — it was all engineered.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen", "Elara, listen to me. Whether SOVEREIGN designed you or not doesn't matter. You FEEL things. You make choices. You're real to me, and that's what counts.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Elara", "*wiping her eyes* ...Thank you. I needed to hear that. Even if it's a lie... it's a good lie.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen", "SOVEREIGN. That's the real Administrator. The one controlling everything. And it just told me that Elara — the person I pushed away — was designed to be beside me.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen (Internal)", "Designed. Placed. A variable to influence my behavior. Was she ever real? Or was she just code, following a script that I broke by walking away?")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen (Internal)", "...Does it matter? She felt real. Her sadness when I distrusted her. Her smile when she showed me glitch magic. If feelings can be computed, does that make them less valid?")
-		if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen (Internal)", "A sentient system administrator. An AI? A god? Or something else entirely? Whatever SOVEREIGN is, it built this entire world. And it's been watching us like lab rats.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "*with determination* But it made a mistake. It told us its name. And now we know what we're really up against.")
-	if not is_inside_tree(): return
-
-	DialogueManager.hide_dialogue()
-	await get_tree().create_timer(2.0).timeout
-	if not is_inside_tree(): return
-
 	await _show_chapter_end_card()
+
+func _on_dlg_event(event: String) -> void:
+	match event:
+		"seraphina_joins":
+			await get_tree().create_timer(0.4).timeout
+		"sky_seam":
+			var seam := ColorRect.new()
+			seam.color = Color(0.7, 0.3, 1.0, 0.0)
+			seam.size = Vector2(6, 720)
+			seam.position = Vector2(900, 0)
+			seam.z_index = 40
+			add_child(seam)
+			var t := create_tween()
+			t.tween_property(seam, "color:a", 0.8, 0.4)
+			t.tween_property(seam, "color:a", 0.25, 0.8)
+			await get_tree().create_timer(0.6).timeout
+		_:
+			print("[CH2-ENDING] unhandled dialogue event: %s" % event)
 
 func _show_chapter_end_card() -> void:
 	end_card_visible = true
@@ -307,9 +116,9 @@ func _show_chapter_end_card() -> void:
 	if not is_inside_tree(): return
 
 	# Set story flags for chapter completion
-	GameManager.set_story_flag("ch2_sovereign_revealed", true)
+	# (ch2_sovereign_revealed is no longer set: SOVEREIGN is revealed later.)
 	GameManager.set_story_flag("ch2_complete", true)
-	print("[CH2-ENDING] Chapter 2 flags set — sovereign revealed, chapter complete")
+	print("[CH2-ENDING] Chapter 2 complete")
 
 	# Wait 12 seconds or until the player presses Space
 	skip_timer = false
@@ -435,8 +244,8 @@ func _build_chapter_stats_text() -> String:
 	text += "CHAPTER 2 COMPLETE\n"
 	text += "═══════════════════════════════════\n"
 	text += "\n"
-	text += "THE ADMINISTRATOR'S GAME\n"
-	text += "STATUS: SURVIVED\n"
+	text += "ACT 1: ARRIVAL AND BELONGING\n"
+	text += "IRONHOLD CROWN\n"
 	text += "\n"
 	text += "Source Key Fragments: %d/7\n" % source_keys
 	text += "Corruption Level: %d%%\n" % corruption_level
@@ -473,15 +282,15 @@ func _build_chapter_stats_text() -> String:
 	text += "  - Data Wraith: [%s]\n" % wraith_choice
 	text += "  - Seraphina: [%s]\n" % seraphina_choice
 	text += "\n"
-	text += "THE REAL ADMINISTRATOR REVEALED: SOVEREIGN\n"
+	text += "Act 1 report sent to: %s\n" % _report_destination()
 	text += "\n"
 	text += "═══════════════════════════════════\n"
-	text += "CHAPTER 3: THE SOURCE CODE\n"
+	text += "ACT 2: MEMORY AND LEGITIMACY\n"
 	text += "THE JOURNEY CONTINUES...\n"
 	text += "═══════════════════════════════════\n"
 	text += "\n"
 	text += "Thank you for playing the Aethelgard Prototype!\n"
-	text += "Press {ui_accept} to return to the main menu."
+	text += "Press {ui_accept} to continue."
 
 	return InputService.fmt(text)
 
@@ -517,3 +326,12 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
 		skip_timer = true
 		get_viewport().set_input_as_handled()
+
+func _report_destination() -> String:
+	if _has_flag("act1_report_local"):
+		return "the councils"
+	if _has_flag("act1_report_archive"):
+		return "the Wastes archivists"
+	if _has_flag("act1_report_command"):
+		return "Ironhold command"
+	return "no one"

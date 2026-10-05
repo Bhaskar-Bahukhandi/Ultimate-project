@@ -167,6 +167,7 @@ silently erases the main plot. Every deadline is signposted.
 | Event | Window | Outcomes (flags) | Signposted where |
 |---|---|---|---|
 | Ch1 north bridge | Until dark, day 1 | `ch1_bridge_saved` / `ch1_bridge_evacuated` / `ch1_bridge_fell` | Bran tells you, plus the quest log (`ch1/north_field.dlg`) |
+| Ch2 medicine convoy | Until the evening bell, when the Clock Tower stops | `ch2_medicine_early` (before the arena bronze bracket) / `_on_time` / `_late` | Rem, Seraphina in the Command Hall, and a warning at the tower gate with a chance to turn back |
 
 ### Chapter 1 flags (written by `dialogue/ch1/*.dlg`)
 
@@ -188,6 +189,30 @@ silently erases the main plot. Every deadline is signposted.
 | `source_key_fragment_1` | Fragment One (`do fragment_acquired 1` → `GameManager.collect_source_key(1)`) | Pause menu, progression |
 | `ch1_oakhaven_warned_villagers` / `_warned_leaders` / `_left_quietly` | Village meeting | Chapter 8 |
 | `ch1_elara_joined` | Elara packs | Party |
+
+### Chapter 2 flags (written by `dialogue/ch2/*.dlg` and the Ironhold scenes)
+
+| Flag | Set when | Read by |
+|---|---|---|
+| `ch2_seraphina_met`, `ch2_ironhold_entered` | The convoy on the road, then the gate | Region gates, later chapters |
+| `ch2_seraphina_truth` / `_cautious` / `_showoff` | Command Hall disclosure | Seraphina, Brask, later chapters |
+| `ch2_command_hall_done`, `ch2_arena_unlocked` | After the Command Hall | Region gates |
+| `ch2_medicine_quest_active` / `_done` / `_early` / `_on_time` / `_late` | Rem, the convoy, the bell | Rem, the Proxy fight, the Act 1 end |
+| `ch2_seraphina_186_told` | Seraphina tells Kaelen the count | The wall scene |
+| `ch2_arena_bronze_complete` (`ch2_arena_complete` = gold) | Arena brackets | The Clock Tower gate |
+| `ch2_tower_bell_stopped`, `ch2_clock_tower_complete`, `ch2_clockwork_automaton_defeated` | The Clock Tower | Region, later chapters |
+| `ch2_shift_rescue_now` / `_scout_first` / `_sealed`, `ch2_underground_unlocked` | The missing shift | The Underground, city stability |
+| `ch2_data_wraith_restored` / `_destroyed` / `_absorbed` (+ `_defeated`) | The Wraith choice | Chapters 4, 5, 7, 10 |
+| `ch2_administrator_proxy_defeated` | The Proxy | City stability |
+| `source_key_fragment_2` | Fragment Two (`do fragment_acquired 2`) | Progression |
+| `ch2_city_stable` | Computed before Seraphina decides | Her decision |
+| `ch2_seraphina_recruited` / `_stayed` / `_rejected` (+ legacy markers) | She decides (not a menu) | Later chapters |
+| `act1_report_local` / `_archive` / `_command` | Who gets the report | Faction reputation seed |
+| `act1_pace_early` / `_on_time` / `_late` | The road to the Wastes | Act 2 arrival |
+| `ch2_complete` | The Act 1 card | Everything after |
+
+Seeds placed for later: `ch2_tower_secret_mark` (Kaito's map mark), Rook's caravan, and the
+Flight 707 manifest (side arc 05).
 
 ## 6. Story+ (PM 1116–1128, 20180–23270)
 

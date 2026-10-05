@@ -54,9 +54,9 @@ func _has_elara() -> bool:
 func _has_flag(flag_name: String) -> bool:
 	return GameManager.has_flag(flag_name)
 
-func _entry_dialogue() -> void:
-	var has_elara = _has_elara()
+const UG_DLG := "res://dialogue/ch2/underground.dlg"
 
+func _entry_dialogue() -> void:
 	# PASS-34 FIX: Auto-save checkpoint on dungeon entry
 	GameManager.auto_save()
 	if OS.is_debug_build():
@@ -67,28 +67,25 @@ func _entry_dialogue() -> void:
 		SideQuestManager.discover_quest("ironhold_underground_data")
 		SideQuestManager.start_quest("ironhold_underground_data")
 
-	await DialogueManager.say("Kaelen", "This is it. The old process threads beneath Ironhold. The air is thick with corrupted data — I can feel it buzzing against my skin.")
-	if not is_inside_tree(): return
+	await DialogueManager.run(UG_DLG, "entry", _on_ug_event)
 
-	if has_elara:
-		await DialogueManager.say("Elara", "Be careful. The corruption is much stronger down here. These old threads were abandoned for a reason — they were too unstable to maintain.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen (Internal)", "Abandoned process threads. In software terms, these are orphaned subroutines — code that's still running but disconnected from the main loop. They evolve on their own, mutating without oversight.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Elara", "The Source Key Fragment should be in the deepest chamber. But there will be guardians — corrupted processes that protect the old data stores.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "Abandoned process threads. In software terms, these are orphaned subroutines — code that's still running but disconnected from the main loop. Mutating without oversight for who knows how long.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen (Internal)", "No Elara to watch my back. No one to explain the dangers ahead. Just me, Root Access, and whatever horrors are festering in this digital graveyard.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen", "The Source Key Fragment should be in the deepest chamber. That's what Seraphina said... and what Pip confirmed. Time to earn it.")
-		if not is_inside_tree(): return
-
-	await DialogueManager.say("System", "[WARNING: ENTERING DEPRECATED ZONE]\n[Corruption density: HIGH]\n[System monitoring: OFFLINE]\n[Proceed with caution]", Color(1, 0.5, 0), true)
-	if not is_inside_tree(): return
-
-	DialogueManager.hide_dialogue()
+func _on_ug_event(event: String) -> void:
+	var parts := event.split(" ", false, 1)
+	match parts[0]:
+		"lights_flicker", "wraith_hostile", "wraith_unstable", "wraith_split", "wraith_ends":
+			if camera and camera.has_method("shake"):
+				camera.shake(5.0, 0.3)
+			await get_tree().create_timer(0.35).timeout
+		"data_vision_wraith", "kaelen_writes_name":
+			await get_tree().create_timer(0.5).timeout
+		"root_edit":
+			GameManager.add_glitch_corruption(3.0)
+		"absorb_wraith":
+			GameManager.add_glitch_corruption(5.0)
+			if camera and camera.has_method("shake"):
+				camera.shake(10.0, 0.8)
+		_:
+			print("[CH2-UNDERGROUND] unhandled dialogue event: %s" % event)
 
 func _build_underground_environment() -> void:
 	## Build the underground dungeon
@@ -332,8 +329,8 @@ func _spawn_data_wraith() -> void:
 	add_child(boss)
 
 func _create_puzzles() -> void:
-	## Create data routing puzzle in puzzle chamber
-	# Simple trigger-based puzzle: player activates nodes in correct order
+	## A routing junction in the puzzle chamber, where the first stuck workers
+	## are; then the approach to the Wraith (C2-S12), where the lights speak.
 	var puzzle_trigger = Area2D.new()
 	puzzle_trigger.name = "PuzzleTrigger"
 	puzzle_trigger.position = Vector2(1700, 460)
@@ -353,6 +350,17 @@ func _create_puzzles() -> void:
 	puzzle_trigger.body_entered.connect(_on_puzzle_trigger)
 	add_child(puzzle_trigger)
 
+	var approach := Area2D.new()
+	approach.name = "WraithApproach"
+	approach.position = Vector2(2450, 420)
+	var a_col := CollisionShape2D.new()
+	var a_shape := CircleShape2D.new()
+	a_shape.radius = 90.0
+	a_col.shape = a_shape
+	approach.add_child(a_col)
+	approach.body_entered.connect(_on_wraith_approach)
+	add_child(approach)
+
 func _on_puzzle_trigger(body) -> void:
 	if not body.is_in_group("player") or _puzzle_solved:
 		return
@@ -367,167 +375,43 @@ func _on_puzzle_trigger(body) -> void:
 	if has_node("/root/SideQuestManager") and SideQuestManager.is_quest_active("ironhold_underground_data"):
 		SideQuestManager.advance_quest("ironhold_underground_data")
 
-	await DialogueManager.say("Kaelen", "A data routing node. If I redirect this process thread... it should open the path to the deeper chambers.")
+	await DialogueManager.run(UG_DLG, "workers", _on_ug_event)
 	if not is_inside_tree(): return
-	await DialogueManager.say("System", "[DATA PIPE RE-ROUTED]\n[Access to Deep Chamber: GRANTED]", Color(0, 1, 0), true)
+	await DialogueManager.run(UG_DLG, "routing", _on_ug_event)
+
+var _wraith_approached := false
+
+func _on_wraith_approach(body) -> void:
+	if not body.is_in_group("player") or _wraith_approached:
+		return
+	_wraith_approached = true
+	await DialogueManager.run(UG_DLG, "wraith_lights", _on_ug_event)
 	if not is_inside_tree(): return
-	DialogueManager.hide_dialogue()
+	await DialogueManager.run(UG_DLG, "recognition", _on_ug_event)
 
 func _on_data_wraith_defeated() -> void:
-	## Data Wraith mini-boss defeated — expanded with Elara branching
+	## B03 down; C2-S13 the choice (restore / destroy / absorb). Fragment Two
+	## comes later, after the Administrator Proxy (C2-S15).
 	data_wraith_defeated = true
 	GameManager.set_story_flag("ch2_data_wraith_defeated", true)
 	GameManager.auto_save()  # Autosave on boss defeat
-	GameManager.collect_source_key(2)
-	var has_elara = _has_elara()
 
 	await get_tree().create_timer(1.0).timeout
 	if not is_inside_tree(): return
 
-	await DialogueManager.say("Kaelen", "*breathing heavily* That thing... it was a corrupted system process. A piece of the world's infrastructure that went rogue.")
-	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "And look — it was guarding this.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen", "Wait... it was guarding something. Beneath the remains — there.")
-		if not is_inside_tree(): return
-
-	# Boss loot: Phantom Cloak armor
-	await DialogueManager.say("System", "[ITEM ACQUIRED: PHANTOM CLOAK]\n[Woven from purified process threads]", Color(0, 1, 1))
-	if not is_inside_tree(): return
-
+	# Boss loot: Phantom Cloak armour
 	if Inventory and Inventory.has_method("add_item"):
 		Inventory.add_item("data_wraith_phantom_cloak", 1)
 		Inventory.add_gold(600)
-
-	await DialogueManager.say("Kaelen", "Armour stitched from the Data Wraith's own threads... the code still pulses inside it.")
+	await DialogueManager.say("System", "[ITEM ACQUIRED: PHANTOM CLOAK]", Color(0, 1, 1), true)
 	if not is_inside_tree(): return
 
-	if has_elara:
-		# Elara's arm reaction to the residual corruption energy
-		await DialogueManager.say("Elara", "*clutching her arm* Aagh! The residual corruption energy — it's reacting to my glitch magic! The corruption in my arm is—")
-		if not is_inside_tree(): return
-		if camera and camera.has_method("shake"):
-			camera.shake(8.0, 0.5)
-		await DialogueManager.say("Kaelen", "Elara! Are you okay?!")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Elara", "*through gritted teeth* I'm... fine. The Wraith's corruption resonates with glitch energy. My arm has been partially corrupted since I was born — or compiled, I suppose. Wearing its remnants amplifies it.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Elara", "It hurts, but it also... I can feel the world's code more clearly. The data structures, the object hierarchies. It's like my perception just got an upgrade.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen", "The Wraith's residual energy... it's flowing into me. My Root Access is absorbing it.")
-		if not is_inside_tree(): return
-		if camera and camera.has_method("shake"):
-			camera.shake(6.0, 0.4)
-		await DialogueManager.say("System", "[ROOT ACCESS AMPLIFIED]\n[Corruption resonance detected]\n[Perception expanded: +15% data structure visibility]", Color(0, 1, 0.5), true)
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen (Internal)", "It hurts. Like a migraine made of static. But I can see farther now — deeper into the code. Everything is sharper.")
-		if not is_inside_tree(): return
-
-	# Player choice: restore, destroy, or absorb the Data Wraith
-	await _data_wraith_choice()
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "Let's get back to the surface. We've grown stronger — that's what matters.")
+	await DialogueManager.run(UG_DLG, "choice", _on_ug_event)
 	if not is_inside_tree(): return
 
 	GameManager.set_story_flag("ch2_underground_complete", true)
 	DialogueManager.hide_dialogue()
 
-	# Return to city
 	await get_tree().create_timer(1.5).timeout
 	if not is_inside_tree(): return
 	SceneTransitions.change_scene("res://scenes/regions/ironhold_region.tscn")
-
-func _data_wraith_choice() -> void:
-	## Choice: restore, destroy, or absorb the data wraith's core — using show_choices()
-	var has_elara = _has_elara()
-
-	if has_elara:
-		await DialogueManager.say("Elara", "Wait — the Data Wraith's core is still intact. It's corrupted, but the original process is still in there. We could...")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Elara", "We could try to restore it. Purify the corruption and let the process thread run clean again. Or we could destroy it completely — make sure it never comes back.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen", "The Data Wraith's core is still intact. Pulsing with corrupted data. I can feel the original process buried underneath the corruption... still trying to run.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen (Internal)", "Three options. Purify it — restore the original process. Destroy it — end it permanently. Or... absorb it. Pull its power directly into Root Access. More corruption, but more power too.")
-		if not is_inside_tree(): return
-
-	var choice = await DialogueManager.show_choices(
-		"What do you do with the Data Wraith's core?",
-		[
-			"Restore it — purify the corruption and let the process run",
-			"Destroy it — eliminate the corrupted process permanently",
-			"Absorb it — pull its power into Root Access"
-		],
-		"Kaelen"
-	)
-	if not is_inside_tree(): return
-
-	match choice:
-		0:  # Restore
-			GameManager.set_story_flag("ch2_data_wraith_restored", true)
-			await DialogueManager.say("Kaelen", "*using Root Access to purify the core* ...Cleaning corruption flags... restoring original parameters... done.")
-			if not is_inside_tree(): return
-			await DialogueManager.say("System", "[PROCESS THREAD RESTORED]\n[Status: CLEAN]\n[The data wraith dissolves into pure light]", Color(0, 1, 0.5), true)
-			if not is_inside_tree(): return
-			if has_elara:
-				await DialogueManager.say("Elara", "You chose to heal instead of destroy. That says something about you, Kaelen.")
-				if not is_inside_tree(): return
-				GameManager.relationships["elara"] = GameManager.relationships.get("elara", 0) + 3
-			else:
-				await DialogueManager.say("Kaelen (Internal)", "Mercy. Again. The knight. Now this process. Am I choosing compassion... or am I afraid of what destruction does to my corruption meter?")
-				if not is_inside_tree(): return
-				await DialogueManager.say("System", "[KARMIC THREAD DETECTED]\n[Pattern: Preservation]\n[System Administrator notation: Subject favors restoration]", Color(0.5, 0.8, 1), true)
-				if not is_inside_tree(): return
-
-		1:  # Destroy
-			GameManager.set_story_flag("ch2_data_wraith_destroyed", true)
-			await DialogueManager.say("Kaelen", "*crushing the core* Some things are too broken to fix. Better to end it cleanly.")
-			if not is_inside_tree(): return
-			await DialogueManager.say("System", "[PROCESS THREAD TERMINATED]\n[Core destroyed]\n[Corruption +2%]", Color(1, 0.5, 0), true)
-			if not is_inside_tree(): return
-			GameManager.add_glitch_corruption(2.0)
-			if has_elara:
-				await DialogueManager.say("Elara", "*quietly* ...Was that mercy? Or convenience?")
-				if not is_inside_tree(): return
-			else:
-				await DialogueManager.say("Kaelen (Internal)", "Gone. Permanently. Another deletion added to my growing list. The system is keeping count... and so am I.")
-				if not is_inside_tree(): return
-
-		2:  # Absorb
-			GameManager.set_story_flag("ch2_data_wraith_absorbed", true)
-			GameManager.add_glitch_corruption(5.0)
-			await DialogueManager.say("Kaelen", "*reaching into the core with Root Access* I'm not destroying it or saving it. I'm TAKING it.")
-			if not is_inside_tree(): return
-			await DialogueManager.say("System", "[ROOT ACCESS: ABSORBING PROCESS CORE]\n[WARNING: Corruption surge — +5%]\n[WARNING: Power level significantly increased]\n[WARNING: System Administrator alert threshold breached]", Color(1, 0, 0), true)
-			if not is_inside_tree(): return
-			if camera and camera.has_method("shake"):
-				camera.shake(10.0, 0.8)
-			await DialogueManager.say("Kaelen", "*gasping* The power... I can feel every process thread in this sector. Every data pipe, every packet. It's overwhelming.")
-			if not is_inside_tree(): return
-			if has_elara:
-				await DialogueManager.say("Elara", "*stepping back, horrified* Kaelen... your eyes. They're flickering. The corruption — you just jumped five percent in one moment! What have you DONE?!")
-				if not is_inside_tree(): return
-				await DialogueManager.say("Elara", "You're not healing the world or ending its pain. You're CONSUMING it. That's what the Administrator does. Is that what you want to become?")
-				if not is_inside_tree(): return
-				GameManager.relationships["elara"] = GameManager.relationships.get("elara", 0) - 5
-			else:
-				await DialogueManager.say("Kaelen (Internal)", "Power. Raw, unfiltered system power flowing through me. The corruption surged — 5% in a heartbeat — but the clarity... I can see EVERYTHING down here. Every wall, every data pipe, every hidden pathway.")
-				if not is_inside_tree(): return
-				await DialogueManager.say("Kaelen (Internal)", "This is dangerous. I know it's dangerous. But alone in the dark, with no allies and no guide... power is the only currency that matters.")
-				if not is_inside_tree(): return
-			await DialogueManager.say("System", "[ROOT ACCESS CAPACITY: EXPANDED]\n[New ability unlocked: PROCESS ABSORPTION]\n[The System Administrator has taken notice]", Color(1, 0.3, 0.3), true)
-			if not is_inside_tree(): return
-
-		_:
-			GameManager.set_story_flag("ch2_data_wraith_restored", true)
-			await DialogueManager.say("System", "[CHOICE RESOLUTION FALLBACK]\n[Defaulting to restoration path to preserve narrative continuity.]", Color(0, 1, 0.5), true)
-			if not is_inside_tree(): return
-			# BUG-21-29: Removed duplicate is_inside_tree() guard
-
-	DialogueManager.hide_dialogue()

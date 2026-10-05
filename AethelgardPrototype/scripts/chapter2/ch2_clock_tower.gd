@@ -69,46 +69,10 @@ func _ready() -> void:
 	if not is_inside_tree(): return
 	await _entry_dialogue()
 
+const TOWER_DLG := "res://dialogue/ch2/clock_tower.dlg"
+
 func _entry_dialogue() -> void:
-	var has_elara = _has_elara()
-
-	await DialogueManager.say("Kaelen", "This is the Clock Tower — the beating heart of Ironhold. Every tick of every clock in the city is synchronized from here.")
-	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "More than that. The Clock Tower controls Ironhold's tick rate — the fundamental speed at which this region of the world processes. If someone tampered with it...")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "The Clock Tower controls Ironhold's tick rate — the fundamental speed at which this region processes. If someone tampered with it, the entire city would desync.")
-		if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen (Internal)", "Tick rate. In engine terms, that's the server's update frequency. If someone is manipulating the Clock Tower, they're essentially overclocking or throttling the entire region. That would explain the time distortions refugees reported at the gate.")
-	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "Can you feel it? The air is thick with temporal variance. Some areas of the tower run faster, others slower. The Administration's chronometers are failing.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen", "*stepping through the threshold* The air feels... thick. Like walking through syrup in some spots. Temporal variance — some pockets are running fast, others dragging. No one to watch my back in here.")
-		if not is_inside_tree(): return
-
-	await DialogueManager.say("System", "[ENTERING: CLOCK TOWER — CENTRAL CHRONOMETRY]\n[Tick Rate Anomalies: DETECTED]\n[Temporal Stability: 34%]\n[Authorization: OVERRIDDEN]", Color(1, 0.7, 0.2), true)
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "Thirty-four percent temporal stability. That means time itself is fractured in here. We need to ascend to the top — that's where the master regulator will be.")
-	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "And whatever is corrupting it. Be ready for anything, Kaelen. The clockwork guardians won't let us pass easily.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "Whatever is corrupting this place is at the top. And I'll have to fight through the guardians alone. Root Access will have to be enough.")
-		if not is_inside_tree(): return
-		if _has_flag("ch2_data_wraith_absorbed"):
-			await DialogueManager.say("System", "[ROOT ACCESS: WRAITH ABSORPTION RESONATING WITH TEMPORAL FIELD]\n[Additional capability: TEMPORAL DRAIN — available in combat]", Color(0.8, 0.4, 1.0), true)
-			if not is_inside_tree(): return
-
-	DialogueManager.hide_dialogue()
+	await DialogueManager.run(TOWER_DLG, "entry")
 
 func _build_tower_environment() -> void:
 	## Build the vertical clock tower dungeon
@@ -452,49 +416,8 @@ func _on_mid_trigger(body) -> void:
 	_mid_dungeon_dialogue()
 
 func _mid_dungeon_dialogue() -> void:
-	## Discovery dialogue on floor 3 — Administrator corruption revealed
-	var has_elara = _has_elara()
-
-	await DialogueManager.say("Kaelen", "Wait. Look at these data streams running through the walls. They're not just clock signals — there's something else encoded in them.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("System", "[ANALYZING DATA STREAM...]\n[Hidden payload detected]\n[Type: ADMINISTRATIVE OVERRIDE COMMANDS]\n[Origin: EXTERNAL — NOT IRONHOLD]", Color(1, 0.3, 0.3), true)
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "Administrative override commands. Someone is piggybacking on the clock tower's tick-rate signal to inject commands into Ironhold's core processes.")
-	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "That's... that's how they're doing it. The corruption isn't random — it's deliberate. Someone is USING the clock tower to rewrite Ironhold from the inside.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen", "It's not random. None of it was random. Someone is deliberately USING this tower to rewrite the entire city from the inside out.")
-		if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen (Internal)", "Injecting commands through the timing signal. It's elegant and terrifying — like hiding malware in a system clock's interrupt handler. Every process in the city syncs to this tower, so every process receives the payload.")
-	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "The Administrator. It has to be. They're not just monitoring Ironhold — they're actively corrupting it. Rewriting the citizens, the guards, the infrastructure. Turning the city into something... else.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "The Administrator. Not just watching — actively rewriting. Citizens, guards, infrastructure — all being converted into something the Administrator needs. And no one here understands what's happening to them.")
-		if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "Then the automaton at the top isn't just a guardian — it's a relay. A corrupted process amplifying the Administrator's signal. We have to shut it down.")
-	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "*gripping her staff* Then we climb. And we break whatever is at the top of this tower.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen", "*clenching fists* Then I climb. And I break whatever is waiting at the top.")
-		if not is_inside_tree(): return
-		if _has_flag("ch1_knight_killed"):
-			await DialogueManager.say("Kaelen (Internal)", "Another thing to destroy. I'm getting good at that. Maybe too good.")
-			if not is_inside_tree(): return
-
-	DialogueManager.hide_dialogue()
+	## Floor 3: the scratched map mark (a seed for later).
+	await DialogueManager.run(TOWER_DLG, "mid")
 
 func _on_boss_trigger(body) -> void:
 	if not body.is_in_group("player") or _pre_boss_done:
@@ -503,35 +426,10 @@ func _on_boss_trigger(body) -> void:
 	_pre_boss_dialogue()
 
 func _pre_boss_dialogue() -> void:
-	## Dialogue before the Clockwork Automaton fight
-	var has_elara = _has_elara()
+	## B02 The Minute Hand, before the fight.
 	GameManager.change_state(GameManager.GameState.COMBAT)
-
-	await DialogueManager.say("Kaelen", "There it is. The Clockwork Automaton — the master regulator of the tower. And it's been completely corrupted.")
+	await DialogueManager.run(TOWER_DLG, "pre_boss")
 	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "Look at its core. That's not standard clockwork energy — it's Administrator code. Purple and black, threaded through every gear. The Automaton has been reprogrammed.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "The core... that's not normal clockwork energy. Purple and black corruption threads through every gear. Administrator code — this thing has been completely reprogrammed. And I have to fight it alone.")
-		if not is_inside_tree(): return
-
-	await DialogueManager.say("System", "[BOSS ENCOUNTER: CLOCKWORK AUTOMATON]\n[Class: Corrupted Temporal Relay]\n[Threat Level: SEVERE]\n[Phases: 3 — Gear Assault / Temporal Shockwave / Core Overload]", Color(1, 0.5, 0), true)
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "Three-phase combat pattern. Predictable gears first, then it speeds up. If we can survive long enough, it should expose its core. That's our window.")
-	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "I'll channel what temporal energy I can to slow its attacks. You find the opening. Together, Kaelen — we can do this.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen", "*activating Root Access* No backup. No partner. Just me and whatever I've become since I arrived in this world.")
-		if not is_inside_tree(): return
-		if _has_flag("ch2_data_wraith_absorbed"):
-			await DialogueManager.say("System", "[ROOT ACCESS: WRAITH ABSORPTION AMPLIFYING]\n[Temporal Drain: READY]\n[Warning: Extended use will increase corruption]\n[Current Corruption: %d%%]" % int(GameManager.glitch_meter), Color(0.8, 0.4, 1.0), true)
-			if not is_inside_tree(): return
 
 	# Camera shake for dramatic boss intro
 	if camera and camera.has_method("shake"):
@@ -553,39 +451,28 @@ func body_position_or_default() -> Vector2:
 	return player_node.global_position if player_node else Vector2(400, FLOOR_Y[5] + 60)
 
 func _on_boss_phase_changed(new_phase: int) -> void:
-	## React to boss phase transitions with screen effects and dialogue
-	var has_elara = _has_elara()
+	## The Minute Hand speaks in system tone; one bark per phase.
 	if camera and camera.has_method("shake"):
 		camera.shake(12.0, 0.6)
-
+	var bark := ""
 	match new_phase:
 		2:
-			if has_elara:
-				await DialogueManager.say("Elara", "It's accelerating! The temporal field around it just doubled — watch for shockwaves!")
-				if not is_inside_tree(): return
-			else:
-				await DialogueManager.say("Kaelen", "It's speeding up! The temporal field just doubled — shockwaves incoming!")
-				if not is_inside_tree(): return
-			DialogueManager.hide_dialogue()
+			bark = "bark_replay"    # it starts replaying your last combo
 		3:
-			await DialogueManager.say("Kaelen", "The core! It's destabilizing — the corruption can't hold. One more push!")
-			if not is_inside_tree(): return
-			if has_elara:
-				await DialogueManager.say("Elara", "Now, Kaelen! Strike while the core is exposed!")
-				if not is_inside_tree(): return
-			else:
-				await DialogueManager.say("Kaelen", "*gathering Root Access energy* NOW. While it's open!")
-				if not is_inside_tree(): return
-			DialogueManager.hide_dialogue()
+			bark = "bark_correct"
+	if bark == "":
+		return
+	var line: Dictionary = DialogueManager.line_of(TOWER_DLG, bark)
+	if line.is_empty():
+		return
+	DialogueManager.say(line["speaker"], line["text"], Color(-1, -1, -1), true)
 
 func _on_automaton_defeated() -> void:
-	## Clockwork Automaton boss defeated — major story progression
+	## B02 down: half the tower back, then C2-S11 — the missing shift.
 	automaton_defeated = true
-	var has_elara = _has_elara()
 	GameManager.set_story_flag("ch2_clockwork_automaton_defeated", true)
 	GameManager.auto_save()  # Autosave on boss defeat
 
-	# Screen flash on defeat
 	var flash = ColorRect.new()
 	flash.color = Color(1, 0.9, 0.6, 0.8)
 	flash.size = Vector2(1280, 720)
@@ -601,73 +488,12 @@ func _on_automaton_defeated() -> void:
 	await get_tree().create_timer(2.0).timeout
 	if not is_inside_tree(): return
 
-	# Post-boss dialogue — major story revelation
-	await DialogueManager.say("Kaelen", "*breathing heavily* It's down. The master regulator is destroyed.")
+	# victory → missing_shift → unlock (sets ch2_clock_tower_complete and ch2_underground_unlocked)
+	await DialogueManager.run(TOWER_DLG, "victory")
 	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "And look — the override signal! It's collapsing! The data streams are clearing!")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen", "*looking up* The override signal... it's collapsing. The data streams running through the walls are clearing.")
-		if not is_inside_tree(): return
-
-	await DialogueManager.say("System", "[CLOCKWORK AUTOMATON: OFFLINE]\n[Administrative Override Signal: SEVERED]\n[Ironhold Tick Rate: STABILIZING]\n[Corruption injection: HALTED — LOCALLY]", Color(0, 1, 0.5), true)
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "Locally. That's the key word. We stopped the signal HERE, but the Administrator is broadcasting from somewhere else. Other cities, other regions — they're all still being corrupted.")
-	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "*staring at exposed data streams* Kaelen, look at this. The override commands — I can read fragments of them now that the relay is down.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Elara", "These aren't just corruption payloads. They're REWRITE orders. The Administrator isn't breaking things — it's rebuilding them. Recompiling cities, NPCs, entire ecosystems into something new.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen", "*examining the exposed data streams* Now that the relay is down, I can read fragments of the override commands. These aren't just corruption payloads...")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen", "They're REWRITE orders. The Administrator isn't breaking things — it's rebuilding them. Recompiling cities, NPCs, ecosystems into something entirely new. Something it needs.")
-		if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen (Internal)", "Recompilation. The Administrator is actively corrupting cities — not destroying them, but transforming them. Converting them into infrastructure for something larger. A network. A system within the system.")
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "The Administrator is actively corrupting cities across Aethelgard. Ironhold was just one node. If this signal was relayed from the tower to every process in the city, then every major city must have a similar relay.")
-	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "Then destroying one relay isn't enough. We need to find the source — the Administrator itself. And to do that, we need more Source Key Fragments. They're the only things that can unlock the deeper layers of the system.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen", "How many do we have now?")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Elara", "Two of seven. But each one we collect makes us more visible to the Administrator. Destroying this relay just sent up a flare. It knows we're here now.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen", "Destroying one relay isn't enough. I need the source — the Administrator itself. And the Source Key Fragments are the only way to unlock the deeper system layers.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen (Internal)", "Two of seven fragments collected. Each one makes me more visible. And destroying this relay just sent up a flare the size of a supernova. The Administrator knows exactly where I am now.")
-		if not is_inside_tree(): return
-		if _has_flag("ch1_knight_killed") and _has_flag("ch2_data_wraith_absorbed"):
-			await DialogueManager.say("Kaelen (Internal)", "Knight deleted. Wraith absorbed. Relay destroyed. I'm leaving a trail of destruction across this world. Is that what Root Access is turning me into? Or is that just... me?")
-			if not is_inside_tree(): return
-
-	await DialogueManager.say("System", "[WARNING: ADMINISTRATIVE AWARENESS ELEVATED]\n[Threat response protocols: ACTIVATING]\n[The 72-hour countdown accelerates — remaining time: REDUCED]", Color(1, 0, 0), true)
-	if not is_inside_tree(): return
-
-	await DialogueManager.say("Kaelen", "The countdown we picked up at the gate — it just got worse. The Administrator knows we're here now.")
-	if not is_inside_tree(): return
-
-	if has_elara:
-		await DialogueManager.say("Elara", "Then we'd better make those hours count. Let's get back to Ironhold — the city should be recovering now that the corruption signal is cut. But we need to prepare for what's coming.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen", "Then every hour counts. Ironhold should be recovering now. Time to get back and prepare for what's coming next.")
-		if not is_inside_tree(): return
-
 	GameManager.set_story_flag("ch2_clock_tower_complete", true)
 	DialogueManager.hide_dialogue()
 
-	# Return to Ironhold
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(1.5).timeout
 	if not is_inside_tree(): return
 	SceneTransitions.change_scene("res://scenes/regions/ironhold_region.tscn")

@@ -1,0 +1,58 @@
+# C2-S05 / C2-S08 — Command Hall, and the arena invitation.
+# Source: Production Master 2.1, lines 2227–2326.
+# Scene: scenes/chapter2/seraphina_encounter.tscn (the story gate "Command Hall").
+# Seraphina is Knight-Commander, not ruler: Brask sits on the same council and
+# makes stability's case without being a caricature.
+
+~ start
+do hall
+Brask: Another outsider.
+Seraphina: He's from further away than usual.
+Brask: That isn't a recommendation.
+Elara: He survived Oakhaven.
+Brask: So did Oakhaven. Most places survive their first visitor.
+Brask: What do you want with Ironhold?
+? Kaelen (Internal): How much do I tell a room full of soldiers?
+- The truth. The Source Key, and what Root Access lets me do. => truth
+- Enough. The Fracture patterns point at Ironhold. => cautious
+- I'll show you. (Edit the practice construct.) => showoff
+
+~ truth
+set ch2_seraphina_truth
+do trust seraphina 10
+Kaelen: There's a key in seven pieces. I found one under Oakhaven. And I can change things. Edit them. It costs me something, and I don't fully understand what.
+Brask: That's either the most dangerous thing anyone's said in this hall, or the most honest.
+Seraphina: You told them more in two minutes than you told me.
+Kaelen: You were holding a spear.
+Seraphina: I'm still holding a spear.
+=> invitation
+
+~ cautious
+set ch2_seraphina_cautious
+Kaelen: The Fracture moves in patterns. The patterns point here. I'd like to know why before it arrives.
+Brask: That's a soldier's answer. I don't trust soldiers' answers. I've given too many.
+Seraphina: You left out the important part.
+Kaelen: I'm learning the local customs.
+=> invitation
+
+~ showoff
+set ch2_seraphina_showoff
+do trust seraphina -10
+do root_edit construct
+# The training construct bows to the council. Nobody in the hall moves.
+Brask: Put it back.
+Seraphina: That's useful.
+Kaelen: You sound almost impressed.
+Seraphina: I'm concerned. It sounds similar from the outside.
+=> invitation
+
+# C2-S08 — the arena trial.
+~ invitation
+Seraphina: There's an arena trial. Win enough rounds and command trusts you near the lower city.
+Kaelen: Why does winning a fight get me into the sewers?
+Seraphina: Tradition.
+Kaelen: That isn't an explanation.
+Seraphina: It's the explanation that survived.
+Seraphina: One more thing. Rem, at the infirmary, needs hands. There's fever in the lower city, and the medicine's stuck out west.
+set ch2_command_hall_done
+set ch2_arena_unlocked

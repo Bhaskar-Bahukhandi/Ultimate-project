@@ -1,0 +1,242 @@
+# C2-S04 / S06 / S07 and the Ironhold ambient + camp conversations.
+# Source: Production Master 2.1, lines 2206–2306, 2719–2848.
+# Scene: scenes/regions/ironhold_region.tscn. One node per NPC; the
+# dispatcher nodes pick a line by story state, so each visit says something new.
+# Source fix: the old "Engineer Mira" is gone (Mira Chen is Kaelen's Earth
+# contact), and Seraphina no longer lectures about Root Access before meeting him.
+
+# ── Rook (market) — C2-S07 ─────────────────────────────────────────────────
+
+~ rook
+[if not ch2_rook_met] => rook_first
+[if not ch2_market_visited] => rook_market
+=> rook_repeat
+
+~ rook_first
+set ch2_rook_met
+Rook: You're the one the Commander walked through the gate. People are already guessing what you cost her.
+Kaelen: Cost her?
+Rook: Credibility, mostly. Rook. I move things from where they're cheap to where they aren't.
+=> rook_market
+
+~ rook_market
+set ch2_market_visited
+Rook: First rule. Buy low.
+Kaelen: Sell high.
+Rook: You've got markets where you come from.
+Kaelen: Unfortunately.
+Rook: Then you know the real first rule.
+Kaelen: There's always a fee.
+# He smiles like he didn't mean to.
+Rook: I might like you. Don't let it go to your head.
+Rook: Prices here move with the roads, the season, and who's been nice to whom. The auction board's over there if you want to lose money slowly. Nobody makes you bid.
+[if ch2_medicine_quest_active and not ch2_medicine_done] Rook: And don't buy healing resin today. If that convoy's late, whoever's holding resin gets rich off sick people. This city remembers who did that.
+
+~ rook_repeat
+[if not ch2_medicine_done] Rook: Resin's still climbing. Somebody's praying that convoy's late.
+[if ch2_medicine_done] Rook: Convoy came in, resin dropped, and three men I can't stand lost a fortune. Best day I've had all month.
+
+# ── The street — C2-S04 ────────────────────────────────────────────────────
+
+~ preacher
+[if ch2_administrator_proxy_defeated] => preacher_after_proxy
+Preacher: The tower counts our sins! Every stroke of that bell, another one written down!
+Citizen: It counts minutes.
+Preacher: Same thing, if you're late enough.
+
+~ preacher_after_proxy
+Citizen: They say the Proxy kept crime down.
+Citizen: It kept people down.
+Preacher: Then what was it counting all those years?
+
+~ garro
+Garro: Root Access can't sharpen steel.
+Kaelen: I didn't say it could.
+Garro: Good. I've got enough competition.
+
+~ sol
+Sol: Lot twelve! One compass, from before the Fracture!
+Kaelen: Does it work?
+Sol: It points somewhere. That's more than most of us can say.
+
+~ dice
+Dice Host: Dice? Three silver a throw. House is honest. Mostly.
+Elara: No.
+Kaelen: I didn't say anything.
+Elara: Your face did.
+
+~ doss
+[if ch2_medicine_done] Doss: Resin! Cheap! Cheaper! Please!
+[if not ch2_medicine_done] Doss: Healing resin, last few jars! Price goes up every hour that convoy's out, so buy now!
+
+~ paladins
+[if ch2_data_wraith_restored] => paladins_restored
+[if ch2_data_wraith_destroyed] => paladins_destroyed
+Paladin: The Commander slept. I saw it.
+Nori: Prove it.
+Paladin: Her eyes were closed.
+Seraphina: I blinked.
+[if ch2_underground_unlocked] Nori: Lower streets are sealed past the market stairs. If you're going down, don't go down alone.
+
+~ paladins_restored
+Worker: Iven woke up this morning.
+Nori: Which Iven?
+Worker: That's the problem.
+
+~ paladins_destroyed
+Rem: The tunnels are quiet now.
+Rem: I thought quiet would feel better than this.
+
+# ── Healer Rem and the medicine convoy — C2-S06 (time-sensitive) ──────────
+# Deadline: the evening bell. In this build the bell is the Clock Tower
+# stopping (clock_tower.dlg "bell"), which happens when the player goes up the
+# tower. Early = before the arena's bronze bracket is won; on time = before the bell;
+# late = after it (the region sets ch2_medicine_early / _on_time / _late).
+
+~ rem
+[if ch2_medicine_done] => rem_after
+[if ch2_medicine_quest_active] => rem_waiting
+Rem: You're the Commander's outsider. Good. I need somebody who isn't on a duty roster.
+Rem: There's fever in the lower city. The medicine's on a convoy out west, stuck behind a fractured road.
+Kaelen: How long have you got?
+Rem: Until the evening bell. After that the gates close, and the fever does what it likes.
+? Kaelen (Internal): The convoy.
+- I'll go now. => rem_go_now
+- I'll get there. Soon. => rem_later
+
+~ rem_go_now
+set ch2_medicine_quest_active
+do quest_start medicine_convoy
+Rem: West road. Take the Commander if she'll come. She always comes.
+
+~ rem_later
+set ch2_medicine_quest_active
+do quest_start medicine_convoy
+Rem: "Soon" is a word I hear a lot in here. West road. Before the bell.
+
+~ rem_waiting
+Rem: Evening bell. West road. I'm not going to keep saying it nicely.
+
+~ rem_after
+[if ch2_medicine_early] Rem: You got it here early. If this city does something stupid tonight, I'll have beds to spare.
+[if ch2_medicine_on_time] Rem: In time. That's all I ask of anyone.
+[if ch2_medicine_late] Rem: It came. After the bell. Tomas and the Wren girl are still burning up. Don't apologise to me. Apologise to them when they can hear you.
+Kaelen: What do you call those blue potions?
+Rem: Breath.
+Kaelen: That's a better name than ours.
+
+# The escort, on the west road (region story gate). Seraphina counts.
+~ convoy
+do fade_to_road
+Seraphina: Forty-two.
+Kaelen: You keep counting.
+Seraphina: Forty-two people. Six wagons.
+Kaelen: People first.
+Seraphina: People first. Wagons second.
+Kaelen: You did that on the plane.
+Seraphina: Don't.
+Kaelen: Sorry.
+# She nods. She doesn't stop counting.
+do convoy_ambush
+Seraphina: Forty-two. All of them.
+[if ch2_seraphina_truth] => convoy_count
+=> convoy_done
+
+~ convoy_count
+Seraphina: I counted then, too. On the plane. Afterwards.
+Seraphina: I stopped at one hundred and eighty-six.
+# Kaelen says nothing. It's the right thing to say.
+Seraphina: There were more.
+set ch2_seraphina_186_told
+=> convoy_done
+
+~ convoy_done
+set ch2_medicine_done
+do trust seraphina 10
+
+# ── Seraphina off duty (city NPC) and the camp conversations ──────────────
+
+~ seraphina
+[if not ch2_ks_01_done] => ks_01
+[if not ch2_es_01_done] => es_01
+[if ch2_medicine_done and not ch2_ks_02_done] => ks_02
+[if ch2_arena_bronze_complete and not ch2_es_02_done] => es_02
+[if ch2_clock_tower_complete and not ch2_ks_03_done] => ks_03
+[if ch2_clock_tower_complete and not ch2_es_03_done] => es_03
+=> seraphina_idle
+
+~ ks_01
+set ch2_ks_01_done
+Kaelen: Do you remember the impact?
+Seraphina: Yes.
+Kaelen: I don't.
+Seraphina: Don't be jealous.
+
+~ ks_02
+set ch2_ks_02_done
+Seraphina: You had coffee.
+Kaelen: On the plane?
+Seraphina: Before boarding. You spilled it down your sleeve.
+Kaelen: That's a weirdly specific thing to remember.
+Seraphina: I spent the first hour of the flight trying not to look at the stain.
+
+~ ks_03
+set ch2_ks_03_done
+Kaelen: Why a paladin?
+Seraphina: The armour was available.
+Kaelen: That's it?
+Seraphina: At first. Then people started listening to me.
+Kaelen: Why?
+Seraphina: Because I knew what to do when people were frightened. It turns out panic sounds the same under any sky.
+
+~ es_01
+set ch2_es_01_done
+Seraphina: Your arm's getting worse.
+Elara: Everyone's so observant lately.
+Seraphina: I was trained.
+Elara: To watch arms?
+Seraphina: To watch people pretending they're fine.
+# Elara looks away.
+Elara: That's dangerous training.
+
+~ es_02
+set ch2_es_02_done
+Elara: Flight attendant.
+Seraphina: Yes.
+Elara: You served food. In the sky.
+Seraphina: Among other things.
+Elara: And then you became Knight-Commander.
+Seraphina: Career change.
+Elara: That isn't a career change. I don't think there's a word for what that is.
+
+~ es_03
+set ch2_es_03_done
+Seraphina: Is he always like this?
+Elara: Kaelen?
+Seraphina: Who else?
+Elara: Worse when he's scared.
+Kaelen: I can hear you, you know.
+Elara: See?
+
+~ seraphina_idle
+[if ch2_administrator_proxy_defeated] Seraphina: Brask wants a report on the Proxy. I've written "it was running the city" three times. He keeps sending it back.
+[if not ch2_administrator_proxy_defeated] Seraphina: If you're looking for trouble, the market has it cheaper. If you're looking for me, I'm here until the next bell.
+
+~ ina
+Ina: Knight-Commander!
+Seraphina: Off duty.
+Ina: But are you still a knight?
+Seraphina: Unfortunately.
+
+~ vex
+Vex: Arena's open! Bring your teeth, take home fewer!
+
+# Before the Clock Tower: the convoy's deadline is the bell (fair warning).
+~ tower_warning
+Seraphina: The convoy's still out on the west road. When that tower rings again, the gates close behind it.
+? Kaelen (Internal): Go up anyway?
+- Not yet. The convoy first. => END
+- We go up now. => tower_go
+
+~ tower_go
+set ch2_tower_go_now
