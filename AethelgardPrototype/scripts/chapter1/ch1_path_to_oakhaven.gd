@@ -51,12 +51,13 @@ func _ready() -> void:
 
 	# Build procedural forest path environment
 	_build_environment()
+	_widen_environment(240.0)
 
 	# Connect apply button
 	if apply_button:
 		apply_button.pressed.connect(_on_root_access_apply)
 	
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.3, false).timeout
 	if not is_inside_tree(): return
 	transition.transition_in(ScreenTransition.TransitionType.FADE, 1.5)
 	await transition.transition_finished
@@ -273,7 +274,9 @@ func _walk(kaelen_x: float, elara_x: float) -> void:
 	await _beats([{"type": "parallel", "beats": [
 		{"type": "character_move", "character": "Kaelen", "target": Vector2(kaelen_x, 420), "duration": 1.6},
 		{"type": "character_move", "character": "Elara", "target": Vector2(elara_x, 420), "duration": 1.6},
-		{"type": "camera_move", "target": Vector2((kaelen_x + elara_x) * 0.5, 360), "duration": 1.6},
+		# Same duration and curve as the characters: the camera used to ease in on
+		# its own timing, so the pair seemed to drift backwards, then catch up.
+		{"type": "camera_move", "target": Vector2((kaelen_x + elara_x) * 0.5, 360), "duration": 1.6, "trans": Tween.TRANS_SINE},
 	]}])
 
 func _on_dlg_event(event: String) -> void:
@@ -282,14 +285,14 @@ func _on_dlg_event(event: String) -> void:
 			_cart = _add_prop("Cart", Vector2(820, 395), Vector2(80, 44), Color(0.36, 0.24, 0.12))
 			flash_overlay.color = Color(0.5, 0.0, 0.6, 0.5)
 			flash_overlay.modulate.a = 0.7
-			await get_tree().create_timer(0.15).timeout
+			await get_tree().create_timer(0.15, false).timeout
 			if not is_inside_tree(): return
 			flash_overlay.modulate.a = 0.0
 			var t := create_tween()
 			t.tween_property(_cart, "position:y", 470.0, 0.6).set_trans(Tween.TRANS_BACK)
 			await t.finished
 		"elara_glances", "elara_looks_at_arm":
-			await get_tree().create_timer(0.5).timeout
+			await get_tree().create_timer(0.5, false).timeout
 		"unlock_data_vision":
 			_show_data_vision_labels()
 		"guardian_attacks":
@@ -310,7 +313,7 @@ func _on_dlg_event(event: String) -> void:
 			var k = characters_layer.get_node_or_null("Kaelen")
 			if k:
 				k.modulate = Color(1, 0.2, 1)
-				await get_tree().create_timer(0.05).timeout
+				await get_tree().create_timer(0.05, false).timeout
 				if is_instance_valid(k):
 					k.modulate = Color.WHITE
 		_:
@@ -376,9 +379,12 @@ func _run_root_access_panel() -> void:
 		tutorial_prompt.text = "ROOT ACCESS\nChange what it's defending against, or turn its aggression down, then Apply.\nEvery edit costs corruption. You can also just fight it."
 	if _target_filter:
 		_target_filter.grab_focus()
+	# Scene timers in this file are pausable (create_timer(t, false)): with the
+	# default, the 180 s give-up kept counting under the pause menu and the
+	# panel could vanish while the player was away.
 	var waited := 0.0
 	while not guardian_resolved:
-		await get_tree().create_timer(0.1).timeout
+		await get_tree().create_timer(0.1, false).timeout
 		if not is_inside_tree(): return
 		waited += 0.1
 		if waited > 180.0:   # nobody at the keyboard: fight it, no edit made
@@ -436,7 +442,7 @@ func _on_root_access_apply() -> void:
 	var aggression: float = aggression_spinbox.value if aggression_spinbox else 1.0
 	if filter_changed:
 		_root_choice = "filter"
-	elif aggression <= 0.1:
+	elif aggression < 1.0:   # any turn-down counts; it used to need 0.1 or less
 		_root_choice = "calm"
 	else:
 		if tutorial_prompt:
@@ -465,10 +471,10 @@ func _stage_guardian_fight() -> void:
 		camera.shake(6.0, 0.2)
 		flash_overlay.color = Color(1, 1, 1, 0.4)
 		flash_overlay.modulate.a = 0.5
-		await get_tree().create_timer(0.1).timeout
+		await get_tree().create_timer(0.1, false).timeout
 		if not is_inside_tree(): return
 		flash_overlay.modulate.a = 0.0
-		await get_tree().create_timer(0.35).timeout
+		await get_tree().create_timer(0.35, false).timeout
 		if not is_inside_tree(): return
 	if _guardian:
 		var t := create_tween()
@@ -489,7 +495,7 @@ func transition_to_oakhaven() -> void:
 		camera.disable_letterbox(0.4)
 		await transition.transition_out(ScreenTransition.TransitionType.FADE, 1.5)
 		if not is_inside_tree(): return
-		await get_tree().create_timer(0.3).timeout
+		await get_tree().create_timer(0.3, false).timeout
 		if not is_inside_tree(): return
 	else:
 		# Fallback fade if transition node doesn't exist
@@ -510,7 +516,7 @@ func _on_custom_effect(effect_name: String, parameters: Dictionary) -> void:
 		"glitch_screen":
 			glitch_overlay.visible = true
 			glitch_overlay.color = Color(0.5, 1.0, 0.5, 0.4)
-			await get_tree().create_timer(parameters.get("duration", 0.3)).timeout
+			await get_tree().create_timer(parameters.get("duration", 0.3), false).timeout
 			if not is_inside_tree(): return
 			glitch_overlay.visible = false
 		_:
@@ -520,3 +526,25 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
 		if root_access_tutorial_active:
 			return  # Don't skip during tutorial
+
+
+## The forest is painted for one 1280-wide screen at x = 0, but the camera
+## pans past it on the walks and shakes past its edges, which showed the old
+## fixed daytime BackgroundLayer as a bright strip at the side of the screen.
+## Stretch every full-width band (sky, treeline, ground, path) by `margin` on
+## both sides so the camera always lands on painted forest.
+func _widen_environment(margin: float) -> void:
+	var env := get_node_or_null("Environment") as Control
+	if not env:
+		return
+	for child in env.get_children():
+		var c := child as Control
+		if c == null:
+			continue
+		if c.anchor_right == 1.0 and c.anchor_bottom == 1.0:   # the full-screen sky
+			c.set_anchors_preset(Control.PRESET_TOP_LEFT)
+			c.position = Vector2(-margin, -margin)
+			c.size = Vector2(1280.0 + margin * 2.0, 720.0 + margin * 2.0)
+		elif is_zero_approx(c.position.x) and is_equal_approx(c.size.x, 1280.0):
+			c.position.x = -margin
+			c.size.x = 1280.0 + margin * 2.0

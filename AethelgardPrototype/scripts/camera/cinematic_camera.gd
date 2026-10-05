@@ -113,15 +113,22 @@ func _process(delta) -> void:
 	if _trauma > 0.001:
 		_apply_trauma_shake(delta)
 
-## Move camera to position over time
-func move_to(pos: Vector2, duration: float = 1.0) -> void:
+## Move camera to position over time. With `trans` (a Tween.TRANS_* value) the
+## move is a tween of exactly `duration` with that curve, so the camera stays in
+## step with characters moved by the same cutscene beat; without it, smooth
+## cameras ease in exponentially (and finish whenever they arrive).
+## Bounds (set_bounds) apply to the destination, not just the final frame, so a
+## pan can't overshoot past the bounds and snap back.
+func move_to(pos: Vector2, duration: float = 1.0, trans: int = -1) -> void:
+	pos = _clamp_to_bounds(pos)
 	target_position = pos
-	is_moving = true
+	is_moving = smooth_enabled and trans < 0
 	
-	if not smooth_enabled:
-		# Tween for non-smooth movement
+	if not smooth_enabled or trans >= 0:
 		var tween = create_tween()
-		tween.tween_property(self, "global_position", pos, duration)
+		var step := tween.tween_property(self, "global_position", pos, duration)
+		if trans >= 0:
+			step.set_trans(trans)
 		await tween.finished
 		if not is_inside_tree(): return
 		camera_move_finished.emit()

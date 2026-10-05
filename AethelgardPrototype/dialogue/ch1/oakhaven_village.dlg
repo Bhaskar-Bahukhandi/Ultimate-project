@@ -3,7 +3,7 @@
 # in before anything threatens it. Each node is one NPC or moment; the
 # farmers' argument sets up the uphill water in C1-S05, and the child sets up
 # "Uncle Aldric" in C1-S08.
-# rhythm: clipped old_fen
+# rhythm: clipped old_fen old_fen_repeat
 # (Old Fen speaks in as few words as he can get away with. That's him.)
 
 ~ chicken
@@ -57,6 +57,32 @@ Child: You found it! You actually found it! Are you a knight?
 Kaelen: No. I just look like I lost a fight with one.
 Child: My uncle Aldric's a knight. He's away right now. He's going to come back.
 set ch1_child_sword_returned
+
+# ── Second visits: everyone has something, nobody goes silent ─────────────
+
+~ lost_sword_waiting
+Child: I was playing by the south fence, near the field path. It might be there. It might be anywhere.
+
+~ child_repeat
+Child: I'm going to show Uncle Aldric the sword the second he's back. He'll say it's a good one.
+
+~ farmers_repeat
+[if not ch1_north_field_helped] Tull: Still uphill. I've checked it twice and I'm going to check it again.
+[if not ch1_north_field_helped] Wenna: He's been checking it all morning. The beans don't care either way.
+[if ch1_north_field_helped] Wenna: Water's going downhill again. Tull's very upset about being right.
+[if ch1_north_field_helped] Tull: I'm not upset. I'm vindicated. It's a different feeling.
+
+~ wenna_repeat
+Wenna: Don't take sides in this, love. He remembers sides. He remembers them for years.
+
+~ old_fen_repeat
+Old Fen: Still new.
+
+~ jessa_repeat
+Jessa: If Elara ever hands you a plant, water it. And don't ask it anything.
+
+~ mother_repeat
+Mother: One Pebbles. I counted this morning. I count every morning now.
 
 # ── Free roam: repeat visits, the shop, the market stone, Bran's post ─────
 

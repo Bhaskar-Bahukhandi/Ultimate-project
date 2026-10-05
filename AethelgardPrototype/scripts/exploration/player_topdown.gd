@@ -1,8 +1,8 @@
 extends CharacterBody2D
 
 ## Top-down exploration player controller
-## Mechanics: Move (WASD), Sprint (Shift, 1.8x), Interact (E/F), 
-##            Data Vision Toggle (Tab), Combat Trigger (J)
+## Mechanics: move, sprint (1.8x), interact, Data Vision toggle, combat trigger.
+## The interact target is the nearest object that can still respond; see _can_target().
 
 const SPEED = 150.0
 const SPRINT_SPEED = 270.0  # 1.8x base speed
@@ -135,63 +135,112 @@ func _create_data_vision_overlay() -> void:
 	data_vision_overlay.add_child(overlay_rect)
 
 func _on_interactable_nearby(area) -> void:
-	if area.is_in_group("interactable") or area.is_in_group("npc"):
-		nearby_interactable = area
-		if area not in nearby_interactables:
-			nearby_interactables.append(area)
-		_update_interaction_prompt()
+	if area not in nearby_interactables:
+		nearby_interactables.append(area)
+	_refresh_interaction_target()
 
 func _on_body_nearby(body) -> void:
-	if body.is_in_group("interactable") or body.is_in_group("npc"):
-		nearby_interactable = body
-		if body not in nearby_interactables:
-			nearby_interactables.append(body)
-		_update_interaction_prompt()
-	elif body.is_in_group("enemy"):
-		nearby_interactable = body
-		if body not in nearby_interactables:
-			nearby_interactables.append(body)
-		_update_interaction_prompt()
+	if body not in nearby_interactables:
+		nearby_interactables.append(body)
+	_refresh_interaction_target()
 
 func _on_interactable_left(area) -> void:
 	nearby_interactables.erase(area)
-	if nearby_interactable == area:
-		nearby_interactable = nearby_interactables.back() if nearby_interactables.size() > 0 else null
-	_update_interaction_prompt()
+	_refresh_interaction_target()
 
 func _on_body_left(body) -> void:
 	nearby_interactables.erase(body)
-	if nearby_interactable == body:
-		nearby_interactable = nearby_interactables.back() if nearby_interactables.size() > 0 else null
-	_update_interaction_prompt()
+	_refresh_interaction_target()
 
 func _on_input_device_changed(_device: StringName) -> void:
+	_prompt_key = ""
 	_update_interaction_prompt()
 
+## Something counts as a target only while pressing interact would actually do
+## something: it has interact(player), an "interact_handler" meta (a Callable
+## taking the player), or an _on_<name>_interaction handler in its scene.
+## An object (or its scene) can say "not any more":
+##   - the object defines can_interact(player) -> bool, or
+##   - the scene defines _can_interact_with(node) -> bool, or
+##   - the object leaves the "interactable"/"npc" group.
+## Objects with no interact() and no _on_<name>_interaction handler in the
+## scene never count: they used to show a prompt and answer "Nothing interesting
+## happens".
+func _can_target(node) -> bool:
+	if not is_instance_valid(node) or not node.is_inside_tree():
+		return false
+	if node.is_in_group("enemy"):
+		return true
+	if not (node.is_in_group("interactable") or node.is_in_group("npc")):
+		return false
+	if node.has_method("can_interact") and not node.can_interact(self):
+		return false
+	var scene := get_parent()
+	if scene and scene.has_method("_can_interact_with") and not scene._can_interact_with(node):
+		return false
+	return node.has_method("interact") or node.has_meta("interact_handler") or _scene_handler(node) != ""
+
+func _scene_handler(node) -> String:
+	## "OldFen" is handled by _on_oldfen_interaction or _on_old_fen_interaction.
+	var scene := get_parent()
+	if not scene:
+		return ""
+	for name_form in [String(node.name).to_lower(), String(node.name).to_snake_case()]:
+		var method := "_on_%s_interaction" % name_form
+		if scene.has_method(method):
+			return method
+	return ""
+
+## The nearest valid target, recomputed every physics frame (the list is a
+## handful of nodes), so a used-up object loses its prompt immediately instead
+## of when the player walks away.
+func _refresh_interaction_target() -> void:
+	var best = null
+	var best_dist := INF
+	for node in nearby_interactables.duplicate():
+		if not is_instance_valid(node):
+			nearby_interactables.erase(node)
+			continue
+		if not _can_target(node):
+			continue
+		var dist := global_position.distance_squared_to(node.global_position)
+		if dist < best_dist:
+			best_dist = dist
+			best = node
+	nearby_interactable = best
+	_update_interaction_prompt()
+
+var _prompt_key := ""   # what the prompt currently shows, so it isn't rebuilt every frame
+
 func _update_interaction_prompt() -> void:
-	## Show/hide the interaction prompt based on nearby objects
+	## Show/hide the interaction prompt based on the current target
 	if not interaction_prompt:
 		return
-	
-	if nearby_interactable:
-		interaction_prompt.visible = true
-		if nearby_interactable.is_in_group("enemy"):
-			interaction_prompt.text = InputService.fmt("[{attack}] Attack")
-			interaction_prompt.add_theme_color_override("font_color", Color(1.0, 0.3, 0.3))
-		elif nearby_interactable.is_in_group("npc"):
-			interaction_prompt.text = InputService.fmt("[{interact}] Talk  [{root_access}] Inspect")
-			interaction_prompt.add_theme_color_override("font_color", Color(0.6, 1.0, 0.6))
-		else:
-			interaction_prompt.text = InputService.fmt("[{interact}] Interact  [{root_access}] Inspect")
-			interaction_prompt.add_theme_color_override("font_color", Color(1.0, 1.0, 0.6))
-		
-		# Add Data Vision hint if DV is unlocked
-		if GameManager.story_flags.get("ch1_data_vision_unlocked", false) and not data_vision_active:
-			interaction_prompt.text += InputService.fmt("\n[{data_vision}] Data Vision")
-	else:
+	var talking: bool = has_node("/root/DialogueManager") and DialogueManager.is_active
+	var key := "" if talking or not nearby_interactable else "%d:%s" % [nearby_interactable.get_instance_id(), data_vision_active]
+	if key == _prompt_key:
+		return
+	_prompt_key = key
+	if key == "":
 		interaction_prompt.visible = false
+		return
+	interaction_prompt.visible = true
+	if nearby_interactable.is_in_group("enemy"):
+		interaction_prompt.text = InputService.fmt("[{attack}] Attack")
+		interaction_prompt.add_theme_color_override("font_color", Color(1.0, 0.3, 0.3))
+	elif nearby_interactable.is_in_group("npc"):
+		interaction_prompt.text = InputService.fmt("[{interact}] Talk")
+		interaction_prompt.add_theme_color_override("font_color", Color(0.6, 1.0, 0.6))
+	else:
+		interaction_prompt.text = InputService.fmt("[{interact}] Interact")
+		interaction_prompt.add_theme_color_override("font_color", Color(1.0, 1.0, 0.6))
+	# Add Data Vision hint if DV is unlocked
+	if GameManager.story_flags.get("ch1_data_vision_unlocked", false) and not data_vision_active:
+		interaction_prompt.text += InputService.fmt("
+[{data_vision}] Data Vision")
 
 func _physics_process(delta: float) -> void:
+	_refresh_interaction_target()
 	# Freeze movement while dialogue is active
 	if has_node("/root/DialogueManager") and DialogueManager.is_active:
 		velocity = Vector2.ZERO
@@ -288,11 +337,18 @@ func _interact_with(interactable) -> void:
 	if interactable.has_method("interact"):
 		interactable.interact(self)
 		return
+
+	# Priority 2: an explicit handler set by the scene (see _can_target)
+	if interactable.has_meta("interact_handler"):
+		var handler: Callable = interactable.get_meta("interact_handler")
+		if handler.is_valid():
+			handler.call(self)
+			return
 	
-	# Priority 2: Send interaction signal to parent scene
-	var parent = get_parent()
-	if parent.has_method("_on_" + interactable.name.to_lower() + "_interaction"):
-		parent.call("_on_" + interactable.name.to_lower() + "_interaction", self)
+	# Priority 3: Send interaction signal to parent scene
+	var handler := _scene_handler(interactable)
+	if handler != "":
+		get_parent().call(handler, self)
 	else:
 		# Fallback: show a message if DialogueManager is available
 		if has_node("/root/DialogueManager"):

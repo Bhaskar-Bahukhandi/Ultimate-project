@@ -247,7 +247,7 @@ func handle_camera_move(beat: Dictionary) -> void:
 		return
 	var target = beat.get("target", Vector2.ZERO)
 	var duration = beat.get("duration", 1.0)
-	camera.move_to(target, duration)
+	camera.move_to(target, duration, int(beat.get("trans", -1)))   # "trans": a Tween.TRANS_* curve
 	await camera.camera_move_finished
 	if not is_inside_tree(): return
 

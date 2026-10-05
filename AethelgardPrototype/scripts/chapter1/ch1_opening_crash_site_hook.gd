@@ -145,18 +145,43 @@ func _create_inspect_points() -> void:
 		_add_world_label(p["label"], p["pos"] + Vector2(-40, 14), 10, Color(0.85, 0.82, 0.72))
 
 
-func _nearest_inspect_point() -> Dictionary:
+## What pressing interact would do right now: the nearest of the fused metal
+## (until found), the road east (once found) and any inspect point not looked at
+## yet. {} when nothing is in reach. The prompt and _input both use this, so the
+## prompt only shows when the key will do something.
+func _current_target() -> Dictionary:
+	var best := {}
+	var best_dist := INF
+	var here: Vector2 = _player.global_position
+	if not _signal_found and here.distance_to(SIGNAL_POS) <= SIGNAL_INTERACTION_RANGE:
+		best = {"kind": "signal", "text": "[{interact}] Look"}
+		best_dist = here.distance_to(SIGNAL_POS)
+	if _signal_found and here.distance_to(EXIT_POS) <= EXIT_INTERACTION_RANGE and here.distance_to(EXIT_POS) < best_dist:
+		best = {"kind": "exit", "text": "[{interact}] Go east"}
+		best_dist = here.distance_to(EXIT_POS)
 	for p in INSPECT_POINTS:
-		if _player.global_position.distance_to(p["pos"]) <= INSPECT_RANGE:
-			return p
-	return {}
+		var d := here.distance_to(p["pos"])
+		if not _inspected.has(p["node"]) and d <= INSPECT_RANGE and d < best_dist:
+			best = {"kind": "inspect", "point": p, "text": "[{interact}] Look"}
+			best_dist = d
+	return best
+
+
+## The crash site picks its own targets (above); the player's generic targeting
+## (player_topdown.gd) would otherwise also grab the fused metal's big area and
+## steal presses meant for a closer inspect point.
+func _can_interact_with(_node: Node) -> bool:
+	return false
 
 
 func _inspect(p: Dictionary) -> void:
-	var first_time: bool = not _inspected.has(p["node"])
+	if _inspected.has(p["node"]):
+		return
 	_inspected[p["node"]] = true
-	if first_time:
-		_run_dialogue(CRASH_DLG, p["node"])
+	var marker := get_node_or_null("Inspect_%s" % p["node"]) as CanvasItem
+	if marker:
+		marker.modulate.a = 0.35   # looked at: still there, clearly done
+	_run_dialogue(CRASH_DLG, p["node"])
 
 
 func _process(_delta: float) -> void:
@@ -170,18 +195,17 @@ func _input(event: InputEvent) -> void:
 		return
 	if not (event.is_action_pressed("interact") or event.is_action_pressed("root_access")):
 		return
-	if not _signal_found and _player.global_position.distance_to(SIGNAL_POS) <= SIGNAL_INTERACTION_RANGE:
-		_on_signalfragment_interaction(_player)
-		get_viewport().set_input_as_handled()
-		return
-	if _signal_found and _player.global_position.distance_to(EXIT_POS) <= EXIT_INTERACTION_RANGE:
-		_complete_opening_hook()
-		get_viewport().set_input_as_handled()
-		return
-	var p := _nearest_inspect_point()
-	if not p.is_empty():
-		_inspect(p)
-		get_viewport().set_input_as_handled()
+	var target := _current_target()
+	match target.get("kind", ""):
+		"signal":
+			_on_signalfragment_interaction(_player)
+		"exit":
+			_complete_opening_hook()
+		"inspect":
+			_inspect(target["point"])
+		_:
+			return
+	get_viewport().set_input_as_handled()
 
 
 func _build_environment() -> void:
@@ -433,24 +457,12 @@ func _sync_opening_interaction_prompt() -> void:
 	var player_prompt := _player.get_node_or_null("InteractionPrompt") as Label
 	if not player_prompt:
 		return
-	var prompt_text := ""
-	if _dialogue_busy:
-		prompt_text = ""
-	elif not _signal_found and _player.global_position.distance_to(SIGNAL_POS) <= SIGNAL_INTERACTION_RANGE:
-		prompt_text = "[{interact}] Look"
-	elif _signal_found and _player.global_position.distance_to(EXIT_POS) <= EXIT_INTERACTION_RANGE:
-		prompt_text = "[{interact}] Go east"
-	elif not _nearest_inspect_point().is_empty():
-		prompt_text = "[{interact}] Look"
-	else:
-		var nearby: Variant = _player.get("nearby_interactable")
-		if nearby is Node and nearby.has_meta("opening_prompt_text"):
-			prompt_text = str(nearby.get_meta("opening_prompt_text"))
-	if prompt_text != "":
-		player_prompt.text = InputService.fmt(prompt_text)
-		player_prompt.visible = true
-	elif not _player.get("nearby_interactable"):
+	var target := {} if _dialogue_busy or _exit_started else _current_target()
+	if target.is_empty():
 		player_prompt.visible = false
+		return
+	player_prompt.text = InputService.fmt(target["text"])
+	player_prompt.visible = true
 
 
 func _sync_world_prompt_visibility() -> void:

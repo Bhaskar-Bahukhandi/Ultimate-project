@@ -186,11 +186,13 @@ func _set_up_villagers() -> void:
 	_retarget_npc("NPCs/Child", "Child", Vector2(1050, 950), _on_child_interaction)
 	_retarget_npc("NPCs/Elara", "Elara", Vector2(700, 900), _on_elara_interaction)
 	_relabel("NPCs/Apothecary", "Mara's")
+	_bind_talk(get_node_or_null("NPCs/Apothecary"), _on_apothecary_interaction)
 	_relabel("NPCs/AuctionTerminal", "Whispering Stone")
+	_bind_talk(get_node_or_null("NPCs/AuctionTerminal"), _on_auction_interaction)
 	_relabel("NPCs/CorruptedBoar", "North field")
 	# New faces from the rewrite.
-	_spawn_npc("Wenna", Vector2(345, 1100), Color(0.7, 0.8, 0.45), Callable())
-	_spawn_npc("Mother", Vector2(1100, 950), Color(0.85, 0.75, 0.6), Callable())
+	_spawn_npc("Wenna", Vector2(345, 1100), Color(0.7, 0.8, 0.45), _on_wenna_interaction)
+	_spawn_npc("Mother", Vector2(1100, 950), Color(0.85, 0.75, 0.6), _on_mother_interaction)
 	_spawn_npc("Old Fen", Vector2(820, 760), Color(0.7, 0.68, 0.6), _on_old_fen_interaction)
 	_spawn_npc("Jessa", Vector2(1150, 640), Color(0.75, 0.6, 0.8), _on_jessa_interaction)
 	var chicken := ColorRect.new()
@@ -208,8 +210,20 @@ func _retarget_npc(path: String, label: String, pos: Vector2, handler: Callable)
 	npc.position = pos
 	npc.set_meta("display_name", label)
 	_relabel(path, label)
-	if not npc.body_entered.is_connected(handler):
-		npc.body_entered.connect(handler)
+	_bind_talk(npc, handler)
+
+## Villagers talk when the player presses interact, never just because the
+## player walked past (that used to start conversations by accident). The
+## player's targeting (player_topdown.gd) calls the "interact_handler" meta.
+## Walk-in triggers are kept only for story beats (boar, bridge) and pickups.
+func _bind_talk(npc: Area2D, handler: Callable) -> void:
+	if not npc:
+		return
+	npc.add_to_group("npc")
+	npc.add_to_group("interactable")
+	npc.set_meta("interact_handler", handler)
+	if npc.body_entered.is_connected(handler):
+		npc.body_entered.disconnect(handler)
 
 func _relabel(path: String, text: String) -> void:
 	var l := get_node_or_null(path + "/Label") as Label
@@ -238,8 +252,7 @@ func _spawn_npc(npc_name: String, pos: Vector2, color: Color, handler: Callable)
 	label.add_theme_font_size_override("font_size", 11)
 	npc.add_child(label)
 	if handler.is_valid():
-		npc.add_to_group("interactable")
-		npc.body_entered.connect(handler)
+		_bind_talk(npc, handler)
 	get_node("NPCs").add_child(npc)
 	return npc
 
@@ -269,17 +282,34 @@ func _afternoon_beat_done() -> void:
 		if is_inside_tree() and not _busy():
 			await _run_north_field()
 
-func _on_farmer_interaction(body) -> void:
-	if _can_talk(body) and await _run_once("oakhaven_village", "farmers"):
+## First conversation: the scene (and a step toward the alarm). After that,
+## a repeat line, so nobody goes silent while still showing "Talk".
+func _talk(first: String, repeat: String) -> void:
+	if await _run_once("oakhaven_village", first):
 		await _afternoon_beat_done()
+	else:
+		await _run("oakhaven_village", repeat)
+
+func _on_farmer_interaction(body) -> void:
+	if _can_talk(body):
+		await _talk("farmers", "farmers_repeat")
+
+func _on_wenna_interaction(body) -> void:
+	# Wenna is half of the farmers' argument: first time, it's that scene.
+	if _can_talk(body):
+		await _talk("farmers", "wenna_repeat")
 
 func _on_old_fen_interaction(body) -> void:
-	if _can_talk(body) and await _run_once("oakhaven_village", "old_fen"):
-		await _afternoon_beat_done()
+	if _can_talk(body):
+		await _talk("old_fen", "old_fen_repeat")
 
 func _on_jessa_interaction(body) -> void:
-	if _can_talk(body) and await _run_once("oakhaven_village", "jessa"):
-		await _afternoon_beat_done()
+	if _can_talk(body):
+		await _talk("jessa", "jessa_repeat")
+
+func _on_mother_interaction(body) -> void:
+	if _can_talk(body):
+		await _run("oakhaven_village", "mother_repeat")
 
 func _on_child_interaction(body) -> void:
 	if not _can_talk(body):
@@ -288,8 +318,10 @@ func _on_child_interaction(body) -> void:
 		await _afternoon_beat_done()
 	elif await _run_once("oakhaven_village", "lost_sword"):
 		_spawn_sword_pickup()
-	elif _sword_pickup == null and GameManager.has_flag("ch1_child_sword_found"):
-		await _run_once("oakhaven_village", "lost_sword_found")
+	elif not GameManager.has_flag("ch1_child_sword_found"):
+		await _run("oakhaven_village", "lost_sword_waiting")
+	elif not await _run_once("oakhaven_village", "lost_sword_found"):
+		await _run("oakhaven_village", "child_repeat")
 
 func _spawn_sword_pickup() -> void:
 	if _sword_pickup:

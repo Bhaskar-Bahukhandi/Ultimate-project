@@ -45,8 +45,9 @@ func _ready() -> void:
 
 	# Build procedural forest environment
 	_build_environment()
+	_widen_environment(64.0)
 
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.3, false).timeout
 	if not is_inside_tree(): return
 	
 	# Fade in from the previous glitch transition
@@ -219,10 +220,10 @@ func _on_dlg_event(event: String) -> void:
 			await _beats([{"type": "character_enter", "character": "Elara", "position": Vector2(780, 420), "from": "right", "duration": 0.8}])
 		"kaelen_lowers_sword", "kaelen_reaches_for_sword":
 			_nudge("Kaelen", Vector2(0, 6))
-			await get_tree().create_timer(0.3).timeout
+			await get_tree().create_timer(0.3, false).timeout
 		"elara_lowers_bow", "elara_raises_bow":
 			_nudge("Elara", Vector2(0, 4) if event == "elara_lowers_bow" else Vector2(0, -4))
-			await get_tree().create_timer(0.3).timeout
+			await get_tree().create_timer(0.3, false).timeout
 		_:
 			if not event.begins_with("objective "):
 				print("[CH1-SEQ2] unhandled dialogue event: %s" % event)
@@ -250,7 +251,7 @@ func _stage_slime_fight() -> void:
 	camera.shake(6.0, 0.25)
 	flash_overlay.color = Color(1, 1, 1, 0.5)
 	flash_overlay.modulate.a = 0.6
-	await get_tree().create_timer(0.08).timeout
+	await get_tree().create_timer(0.08, false).timeout
 	if not is_inside_tree(): return
 	flash_overlay.modulate.a = 0.0
 	var origin := _slime.position
@@ -267,7 +268,7 @@ func _stage_slime_fight() -> void:
 		t.tween_property(shard, "position", shard.position + Vector2(randf_range(-60, 60), randf_range(-50, 10)), 0.6)
 		t.tween_property(shard, "modulate:a", 0.0, 0.6)
 		t.chain().tween_callback(shard.queue_free)
-	await get_tree().create_timer(0.7).timeout
+	await get_tree().create_timer(0.7, false).timeout
 
 func transition_to_path() -> void:
 	## Transition to Sequence 3: Path to Oakhaven — Combat Tutorial
@@ -280,7 +281,7 @@ func transition_to_path() -> void:
 	camera.disable_letterbox(0.4)
 	await transition.transition_out(ScreenTransition.TransitionType.FADE, 1.5)
 	if not is_inside_tree(): return
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.3, false).timeout
 	if not is_inside_tree(): return
 	
 	SceneTransitions.change_scene("res://scenes/chapter1/path_to_oakhaven.tscn")
@@ -294,11 +295,11 @@ func _on_custom_effect(effect_name: String, _parameters: Dictionary) -> void:
 				static_particles.emitting = true
 			flash_overlay.color = Color(0.6, 0.0, 0.8, 0.5)
 			flash_overlay.modulate.a = 0.4
-			await get_tree().create_timer(0.2).timeout
+			await get_tree().create_timer(0.2, false).timeout
 			if not is_inside_tree(): return
 			flash_overlay.modulate.a = 0.0
 			if static_particles:
-				await get_tree().create_timer(0.3).timeout
+				await get_tree().create_timer(0.3, false).timeout
 				if not is_inside_tree(): return
 				static_particles.emitting = false
 		"elara_model_glitch":
@@ -307,12 +308,12 @@ func _on_custom_effect(effect_name: String, _parameters: Dictionary) -> void:
 			if elara_node:
 				var original_scale = elara_node.scale
 				elara_node.scale = Vector2(0.3, 5.0)  # Stretch infinitely on Y
-				await get_tree().create_timer(0.08).timeout
+				await get_tree().create_timer(0.08, false).timeout
 				if not is_inside_tree(): return
 				elara_node.scale = original_scale
 				# Quick color flash
 				elara_node.modulate = Color(1, 0, 1, 1)
-				await get_tree().create_timer(0.05).timeout
+				await get_tree().create_timer(0.05, false).timeout
 				if not is_inside_tree(): return
 				elara_node.modulate = Color.WHITE
 		_:
@@ -320,3 +321,25 @@ func _on_custom_effect(effect_name: String, _parameters: Dictionary) -> void:
 
 # BUG-21-28: Removed empty _input() that only contained pass
 # BUG-21-30: Removed orphaned _on_skip_pressed() — never connected to any signal
+
+
+## The forest is painted for one 1280-wide screen at x = 0, but the camera
+## pans past it on the walks and shakes past its edges, which showed the old
+## fixed daytime BackgroundLayer as a bright strip at the side of the screen.
+## Stretch every full-width band (sky, treeline, ground, path) by `margin` on
+## both sides so the camera always lands on painted forest.
+func _widen_environment(margin: float) -> void:
+	var env := get_node_or_null("Environment") as Control
+	if not env:
+		return
+	for child in env.get_children():
+		var c := child as Control
+		if c == null:
+			continue
+		if c.anchor_right == 1.0 and c.anchor_bottom == 1.0:   # the full-screen sky
+			c.set_anchors_preset(Control.PRESET_TOP_LEFT)
+			c.position = Vector2(-margin, -margin)
+			c.size = Vector2(1280.0 + margin * 2.0, 720.0 + margin * 2.0)
+		elif is_zero_approx(c.position.x) and is_equal_approx(c.size.x, 1280.0):
+			c.position.x = -margin
+			c.size.x = 1280.0 + margin * 2.0

@@ -285,18 +285,6 @@ horizontal_alignment = 1
 
 [node name="Triggers" type="Node2D" parent="."]
 
-[node name="ApothecaryTrigger" type="Area2D" parent="Triggers"]
-position = Vector2(550, 530)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/ApothecaryTrigger"]
-shape = SubResource("trigger_col")
-
-[node name="AuctionTrigger" type="Area2D" parent="Triggers"]
-position = Vector2(1900, 680)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/AuctionTrigger"]
-shape = SubResource("trigger_col")
-
 [node name="BoarTrigger" type="Area2D" parent="Triggers"]
 position = Vector2(1440, 1400)
 
@@ -579,7 +567,5 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[connection signal="body_entered" from="Triggers/ApothecaryTrigger" to="." method="_on_apothecary_interaction"]
-[connection signal="body_entered" from="Triggers/AuctionTrigger" to="." method="_on_auction_interaction"]
 [connection signal="body_entered" from="Triggers/BoarTrigger" to="." method="_on_boar_trigger"]
 [connection signal="body_entered" from="Triggers/BridgeTrigger" to="." method="_on_bridge_trigger"]

@@ -64,6 +64,12 @@ var _tab_hold_time: float = 0.0
 ## starts within this many seconds of the previous one returning. Consecutive
 ## `await say()` calls start in the same frame, so they never trip it.
 const AUTO_HIDE_GRACE: float = 0.25
+## Inside a .dlg run, short staged beats ("do kaelen_lowers_sword", 0.3–0.8 s)
+## sit between lines. With the 0.25 s grace the box closed and reopened around
+## each of them (a visible blink, plus the close/open sounds). Long beats
+## (walks, fades) still close it.
+const AUTO_HIDE_GRACE_IN_RUN: float = 0.9
+var _runs_active := 0
 
 const SPEAKER_COLORS: Dictionary = {
 	"Kaelen": Color(0.9, 0.95, 1.0),
@@ -289,7 +295,7 @@ func _say_line(speaker: String, text: String, color: Color, auto_advance: bool) 
 func _schedule_auto_hide(seq: int) -> void:
 	if not is_inside_tree():
 		return
-	await get_tree().create_timer(AUTO_HIDE_GRACE).timeout
+	await get_tree().create_timer(AUTO_HIDE_GRACE_IN_RUN if _runs_active > 0 else AUTO_HIDE_GRACE).timeout
 	if not is_inside_tree() or seq != _line_seq:
 		return
 	if _awaiting_choice or _is_typing or not is_active:
@@ -326,6 +332,7 @@ func is_skip_requested() -> bool:
 ## Completely reset all dialogue state. Call before scene transitions.
 func force_reset() -> void:
 	_run_gen += 1  # stop any .dlg run still in progress
+	_runs_active = 0
 	_line_seq += 1  # Cancel any pending auto-hide from the previous scene
 	_hide_immediate()
 	is_active = false
@@ -471,7 +478,11 @@ func run(file_path: String, node: String = "start", on_event: Callable = Callabl
 	var owns_hook := scene != null and not scene.tree_exiting.is_connected(cancel)
 	if owns_hook:
 		scene.tree_exiting.connect(cancel, CONNECT_ONE_SHOT)
+	_runs_active += 1
 	var result: Dictionary = await _run_impl(file_path, node, on_event, gen)
+	_runs_active = maxi(_runs_active - 1, 0)
+	if _runs_active == 0:
+		_schedule_auto_hide(_line_seq)   # the run is over: close at the normal pace
 	if owns_hook and is_instance_valid(scene) and scene.tree_exiting.is_connected(cancel):
 		scene.tree_exiting.disconnect(cancel)
 	return result

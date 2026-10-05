@@ -36,6 +36,8 @@ func _run() -> void:
 	await _test_aldric_kill_route()
 	await _test_aldric_purge_route()
 	await _test_village_afternoon()
+	await _test_crash_site_interactions()
+	await _test_village_interactions()
 	Engine.time_scale = 1.0
 	print("")
 	print("CH1 RESULT: %d passed, %d failed" % [_passes, _failures.size()])
@@ -246,3 +248,104 @@ func _test_village_afternoon() -> void:
 	await _idle(s)
 	_check(_saw("So you're the crater.") and gm.has_flag("ch1_mara_met"), "Mara's shop opens with her rewritten lines")
 	_driving = false
+
+
+## Puts the top-down player at `pos` and lets physics catch up (area enter/exit,
+## the per-frame target refresh in player_topdown.gd).
+func _place(player: Node2D, pos: Vector2) -> void:
+	player.global_position = pos
+	for i in 4:
+		await physics_frame
+	await process_frame
+
+
+func _test_crash_site_interactions() -> void:
+	print("[Crash site: prompts only where the key does something]")
+	_gm().reset_game()
+	_seen_text.clear()
+	_start([])
+	change_scene_to_file(HOOK)
+	for i in 4:
+		await process_frame
+	var hook := current_scene
+	var deadline := Time.get_ticks_msec() + 30000
+	while hook._dialogue_busy and Time.get_ticks_msec() < deadline:
+		await process_frame
+	var player: Node2D = hook._player
+	var prompt := player.get_node("InteractionPrompt") as Label
+	var card: Dictionary = hook.INSPECT_POINTS.filter(func(p): return p["node"] == "safety_card")[0]
+	await _place(player, card["pos"])
+	_check(hook._current_target().get("kind", "") == "inspect" and prompt.visible, "next to the torn card: a Look prompt")
+	_check(player.nearby_interactable == null, "the fused metal's big area no longer steals the press (it's %s from the card)" % int(card["pos"].distance_to(hook.SIGNAL_POS)))
+	hook._inspect(card)
+	await process_frame
+	_check(not prompt.visible, "the prompt is hidden while the card's line plays")
+	while hook._dialogue_busy and Time.get_ticks_msec() < deadline:
+		await process_frame
+	await process_frame
+	_check(_saw("In the unlikely event"), "the torn card plays its own line, not the fused metal's")
+	var after: Dictionary = hook._current_target()
+	_check(after.get("point", {}).get("node", "") != "safety_card", "after looking, the card is no longer a target (now: %s)" % after.get("kind", "nothing"))
+	var before := _seen_text.size()
+	hook._inspect(card)
+	await process_frame
+	_check(_seen_text.size() == before and not hook._dialogue_busy, "a second look at the card does nothing (and nothing pretends it will)")
+	# The sky point is far from everything else: once used, no prompt at all.
+	var sky: Dictionary = hook.INSPECT_POINTS.filter(func(p): return p["node"] == "sky")[0]
+	await _place(player, sky["pos"])
+	hook._inspect(sky)
+	await process_frame
+	while hook._dialogue_busy and Time.get_ticks_msec() < deadline:
+		await process_frame
+	await process_frame
+	_check(hook._current_target().is_empty() and not prompt.visible, "standing at a used point with nothing else in reach: no prompt")
+	_driving = false
+
+
+func _test_village_interactions() -> void:
+	print("[Oakhaven: villagers wait for the key, and always answer]")
+	_gm().reset_game()
+	_seen_text.clear()
+	gm_flag_trusted()
+	_start([])
+	change_scene_to_file(VILLAGE)
+	for i in 4:
+		await process_frame
+	var s := current_scene
+	var deadline := Time.get_ticks_msec() + 60000
+	while not s._entrance_done and Time.get_ticks_msec() < deadline:
+		await process_frame
+	await process_frame
+	var player: Node2D = s.get_node("Player")
+	var jessa: Node2D = s.get_node("NPCs/Jessa")
+	var dm := _dm()
+	await _place(player, jessa.global_position + Vector2(0, 20))
+	for i in 10:
+		await physics_frame
+	_check(not dm.is_active and not s.in_dialogue, "walking up to Jessa doesn't start a conversation by itself")
+	_check(player.nearby_interactable == jessa and (player.get_node("InteractionPrompt") as Label).visible, "standing by Jessa: she's the target and the prompt shows")
+	player._interact_with(player.nearby_interactable)
+	await process_frame
+	while s._busy() and Time.get_ticks_msec() < deadline:
+		await process_frame
+	_check(_saw("Plants don't ask"), "pressing interact plays Jessa's first conversation")
+	player._interact_with(jessa)
+	await process_frame
+	while s._busy() and Time.get_ticks_msec() < deadline:
+		await process_frame
+	_check(_saw("water it"), "talking to her again gives a repeat line, not silence")
+	var silent: Array = []
+	for npc in s.get_node("NPCs").get_children():
+		if npc.is_in_group("npc") and not npc.has_meta("interact_handler"):
+			silent.append(npc.name)
+	_check(silent.is_empty(), "every villager in the npc group has something to say %s" % [silent])
+	var walk_ins: Array = []
+	for npc in s.get_node("NPCs").get_children():
+		if npc is Area2D and npc.has_meta("interact_handler") and npc.body_entered.is_connected(npc.get_meta("interact_handler")):
+			walk_ins.append(npc.name)
+	_check(walk_ins.is_empty(), "no villager talks on walk-in %s" % [walk_ins])
+	_driving = false
+
+
+func gm_flag_trusted() -> void:
+	_gm().set_story_flag("ch1_elara_trusted", true)
