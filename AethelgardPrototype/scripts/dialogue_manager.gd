@@ -629,6 +629,9 @@ func _build_choice_buttons(choices: Array) -> void:
 	_choice_container.offset_bottom = -200
 	_choice_container.offset_left = 80
 	_choice_container.offset_right = -80
+	# Three options plus the header need more than the 140 px slot. Grow upward,
+	# so the list never covers the dialogue box below it (it used to grow down).
+	_choice_container.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	_choice_container.add_theme_constant_override("separation", 8)
 	_ui_layer.add_child(_choice_container)
 

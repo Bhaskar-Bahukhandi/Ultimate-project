@@ -3,6 +3,44 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-05 — Screenshot tour: the game, actually rendered
+
+Every earlier test ran `--headless`, with no renderer: it proved flags and flow, never what's on
+screen. `tests/run_screenshots.ps1` runs `tests/screenshot_tour.gd` with a real renderer (a game
+window opens for about two minutes; audio is muted; user:// is isolated as in the other tests).
+
+- **Shots:** the 17 Act 1 scenes, the pause screen, the Controls screen, and, for each of the 19
+  authored `.dlg` files, its longest line and its longest choice in the real dialogue box. 49 in
+  all.
+- **Checked automatically:**
+  - the dialogue box and choice list stay on screen;
+  - the choices don't cover the box;
+  - no option is wider than the screen;
+  - no frame is one flat colour.
+  Exit code 1 if anything is found.
+- **Output:** `run_artifacts/screenshots/<timestamp>/` (git-ignored; a `.gdignore` keeps Godot
+  from importing the PNGs), with one PNG per shot, `contact_scenes.png`, `contact_dialogue.png`,
+  `report.md` and `tour.log`. Use `-Only main_menu,ch2_,dlg_ch1` for a subset.
+
+**Bugs it found, both fixed:**
+- **Every 3+ option choice covered the speaker's name.** The choice list sat in a 140 px slot,
+  needed about 180 px, and grew *downward* into the dialogue box. It now grows upward
+  (`dialogue_manager.gd`).
+- **New Game kept the old "ACTIVE QUESTS" panel.** `SideQuestManager.reset()` cleared the quests
+  but never refreshed its HUD, so after quitting to the menu and starting over, the previous
+  quest stayed on screen. It now refreshes on reset.
+
+**Seen but not fixed (listed for later):**
+- Hardcoded key hints the input guard misses: "[Hold ESC to skip]" in the cutscene scripts, the
+  world map footer, and the combat arena help.
+- Overlapping HUD elements: two HUDs drawn over each other in the Chapter 2 side-scrollers, and
+  "HP: 84/100" over its bar in the village.
+- "[Hold Tab to skip]" sits under the objective tracker.
+- The bottom-left HUD is hidden behind the dialogue box.
+- On exit, a rendered run (a plain game boot too, not just the tour) reports "1 RID allocations
+  … Texture … leaked at exit". Something global keeps a texture alive past renderer shutdown.
+  It's harmless at quit, but worth finding.
+
 ## 2026-10-05 — Breathing pass on the prologue and Chapters 1–2
 
 Too many lines were one to three words, so conversations read like ping-pong. Every authored

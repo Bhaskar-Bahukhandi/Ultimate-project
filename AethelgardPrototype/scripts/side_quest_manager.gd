@@ -184,6 +184,10 @@ func reset() -> void:
 			"current_step": 0,
 			"data": {},
 		}
+	# Without this, New Game after quitting to the menu kept showing the old
+	# "ACTIVE QUESTS" panel (found by tests/screenshot_tour.gd).
+	if _hud_tracker:
+		_update_hud_tracker()
 
 
 # ══════════════════════════════════════════════════════════════════════
