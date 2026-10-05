@@ -380,10 +380,10 @@ func _ch1_poke() -> void:
 	if s == null or _st().is_transitioning:
 		return
 	var p := s.scene_file_path
-	if p == PATH_SCENE and s.get("root_access_tutorial_active") and not s.get("slime_hacked"):
-		var spin = s.get("elasticity_spinbox")
+	if p == PATH_SCENE and s.get("root_access_tutorial_active") and not s.get("guardian_resolved"):
+		var spin = s.get("aggression_spinbox")
 		if spin:
-			spin.value = 0.0  # the tutorial's intended answer
+			spin.value = 0.0  # one of the two valid edits: turn the guardian's aggression down
 		s._on_root_access_apply()
 	elif p == VILLAGE_SCENE and not s.get("in_dialogue") and Time.get_ticks_msec() >= _next_bridge_poke_ms:
 		_next_bridge_poke_ms = Time.get_ticks_msec() + 1000

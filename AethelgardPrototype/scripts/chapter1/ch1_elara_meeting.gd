@@ -1,8 +1,7 @@
 extends Control
 
-## Chapter 1: The Null Pointer Exception
-## Sequence 2: First Contact — Meeting Elara the Glitch-Witch
-## Animatic cinematic with full dialogue as per design doc
+## Chapter 1, A1-P02 — The Wrong Weapon: Kaelen meets Elara on the crash-site path.
+## Animatic staging; the words are in dialogue/ch1/elara_meeting.dlg.
 
 @onready var camera: CinematicCamera = $CinematicCamera
 @onready var cutscene_mgr: CutsceneManager = $CutsceneManager
@@ -178,531 +177,97 @@ func _build_environment() -> void:
 	vig_bot.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	env.add_child(vig_bot)
 
+const DLG := "res://dialogue/ch1/elara_meeting.dlg"
+
+var _slime: ColorRect = null
+
 func start_elara_meeting() -> void:
-	## Play the full Elara meeting sequence
-	
-	# Play main cutscene with all dialogue beats
-	var cutscene = create_elara_meeting_cutscene()
-	cutscene_mgr.play_cutscene(cutscene)
-	await cutscene_mgr.cutscene_finished
+	## A1-P02 — The Wrong Weapon. Every word is in dialogue/ch1/elara_meeting.dlg;
+	## this scene stages the camera, the characters and the slime.
+	await _beats([
+		{"type": "camera_move", "target": Vector2(640, 360), "duration": 0.5},
+		{"type": "character_enter", "character": "Kaelen", "position": Vector2(350, 420), "from": "left", "duration": 2.0},
+		{"type": "character_move", "character": "Kaelen", "target": Vector2(470, 420), "duration": 1.5},
+	])
 	if not is_inside_tree(): return
-	
-	if skip_requested:
-		transition_to_path()
-		return
-	
-	# Play the Glitch Magic Demonstration
-	await play_glitch_magic_demo()
+	await DialogueManager.run(DLG, "start", _on_dlg_event)
 	if not is_inside_tree(): return
-	
-	# === THE CHOICE: Trust, Cautious, or Distrust Elara ===
-	await _elara_trust_choice()
+	await _stage_slime_fight()
 	if not is_inside_tree(): return
-	
-	# Transition to the path to Oakhaven
+	await DialogueManager.run(DLG, "after_slime", _on_dlg_event)
+	if not is_inside_tree(): return
+	GameManager.set_story_flag("ch1_elara_glitch_witch_met", true)
 	transition_to_path()
 
-func create_elara_meeting_cutscene() -> Dictionary:
-	## Full Elara first contact cutscene — expanded with deeper dialogue
-	return {
-		"name": "Chapter 1 - Meeting the Glitch-Witch",
-		"beats": [
-			# Beat 1: Establish the golden path — Kaelen walking
-			{
-				"type": "camera_move",
-				"target": Vector2(640, 360),
-				"duration": 0.5
-			},
-			{
-				"type": "character_enter",
-				"character": "Kaelen",
-				"position": Vector2(350, 420),
-				"from": "left",
-				"duration": 2.0
-			},
-			
-			# Beat 2: Kaelen walks along the golden path, muttering
-			{
-				"type": "character_move",
-				"character": "Kaelen",
-				"target": Vector2(500, 420),
-				"duration": 2.0
-			},
-			
-			# Beat 3: Kaelen's monologue while walking
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen (Internal)",
-				"text": "The golden path. A literal glowing trail on the ground telling me where to go. Not even trying to be subtle about it.",
-				"auto_advance": false
-			},
-			
-			# Beat 4: More observations
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen (Internal)",
-				"text": "The trees in the distance flicker into existence as I walk toward them. Like the world is building itself around me in real time, and I'm supposed to pretend I didn't notice.",
-				"auto_advance": false
-			},
-			
-			# Beat 5: TRIGGER — Elara POPS into existence with static noise
-			{
-				"type": "parallel",
-				"beats": [
-					{
-						"type": "effect",
-						"effect": "elara_spawn_glitch",
-						"duration": 0.5
-					},
-					{
-						"type": "camera_shake",
-						"intensity": 8.0,
-						"duration": 0.5
-					}
-				]
-			},
-			{
-				"type": "character_enter",
-				"character": "Elara",
-				"position": Vector2(750, 420),
-				"from": "right",
-				"duration": 0.3
-			},
-			
-			# Beat 6: Camera widens to show both
-			{
-				"type": "camera_zoom",
-				"zoom": Vector2(0.9, 0.9),
-				"duration": 1.5
-			},
-			
-			# Beat 7: Kaelen's reaction
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen",
-				"text": "What the— You just appeared out of NOTHING. Where did you come from?!",
-				"auto_advance": false
-			},
-			
-			# Beat 8: Mystery figure's first line (name unknown until Beat 11)
-			{
-				"type": "dialogue",
-				"speaker": "???",
-				"text": "Oh! Someone new! I wasn't expecting company at this hour! ...Wait, what hour is it? *looks at the sky* ...Anyway! Hello!",
-				"auto_advance": false
-			},
-			
-			# Let Elara's bizarre entrance land
-			{
-				"type": "wait",
-				"duration": 1.0
-			},
-			
-			# Beat 9: Kaelen responds — guarded, defensive
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen",
-				"text": "*steps back, fists raised* Don't come any closer. WHO are you? You just materialized out of empty air.",
-				"auto_advance": false
-			},
-			
-			# Beat 9b: Heart racing — analytical shield over genuine fear
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen (Internal)",
-				"text": "My heart is hammering. She appeared from NOTHING — no footsteps, no approach, no warning. Either she teleported or she was invisible until just now. Neither option is comforting.",
-				"auto_advance": false
-			},
-			
-			# Beat 10: Camera zooms on Elara
-			{
-				"type": "parallel",
-				"beats": [
-					{
-						"type": "camera_move",
-						"target": Vector2(750, 380),
-						"duration": 1.5
-					},
-					{
-						"type": "camera_zoom",
-						"zoom": Vector2(1.3, 1.3),
-						"duration": 1.5
-					}
-				]
-			},
-			
-			# Beat 11: Elara introduces herself — expanded
-			{
-				"type": "dialogue",
-				"speaker": "Elara",
-				"text": "I am Elara! I was meant to be a guide — that was my purpose. But something went wrong with me a long time ago. Something... broke.",
-				"auto_advance": false
-			},
-			
-			# Beat 12: More Elara backstory
-			{
-				"type": "dialogue",
-				"speaker": "Elara",
-				"text": "Now I just wander around, collecting bits and pieces of things — memories, fragments, lost thoughts — and talking to whoever will listen. Most people run away from me.",
-				"auto_advance": false
-			},
-			
-			# Beat 13: Quick glitch on Elara's model
-			{
-				"type": "effect",
-				"effect": "elara_model_glitch",
-				"duration": 0.3
-			},
-			
-			# Beat 14: Kaelen notices the wireframe arm
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen",
-				"text": "You're... damaged. Your left arm — it keeps flickering. I can see through it. Like it's not fully there.",
-				"auto_advance": false
-			},
-			
-			# Beat 15: Elara looks at her own arm
-			{
-				"type": "dialogue",
-				"speaker": "Elara",
-				"text": "*looks at her flickering arm* Oh, that? It's been like that for... a long time. Part of what broke in me. They never bothered to fix it.",
-				"auto_advance": false
-			},
-			
-			# Beat 16: Camera shows Elara's reaction — she smiles
-			{
-				"type": "camera_zoom",
-				"zoom": Vector2(1.5, 1.5),
-				"duration": 1.0
-			},
-			
-			# Beat 17: Elara's iconic affinity response
-			{
-				"type": "dialogue",
-				"speaker": "Elara",
-				"text": "It's not broken — it's honest! Besides... *her arm glows slightly brighter* ...something about you makes me feel warm inside. Like the broken parts of me stop hurting when you're nearby. That means I like you!",
-				"auto_advance": false
-			},
-			
-			# Let Elara's warmth resonate
-			{
-				"type": "wait",
-				"duration": 1.5
-			},
-			
-			# Beat 18: Camera pulls back to two-shot
-			{
-				"type": "parallel",
-				"beats": [
-					{
-						"type": "camera_move",
-						"target": Vector2(640, 400),
-						"duration": 1.5
-					},
-					{
-						"type": "camera_zoom",
-						"zoom": Vector2(1.0, 1.0),
-						"duration": 1.5
-					}
-				]
-			},
-			
-			# Beat 19: Kaelen's guarded fascination
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen",
-				"text": "You can feel your own emotions changing in real time. And you know WHY they're changing. The other people in this world — they can't do that, can they?",
-				"auto_advance": false
-			},
-			
-			# Beat 19b: Suspicion tempered by fascination
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen (Internal)",
-				"text": "She's fascinating. She's also the first entity I've met in this world, and she appeared out of thin air with a smile and a sales pitch. In any security framework, that's a social engineering attack. But then again... she's the first thing in this world that doesn't feel hostile.",
-				"auto_advance": false
-			},
-			
-			# Beat 20: Kaelen pushes further
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen",
-				"text": "The other people here — they follow their routines without questioning them. They don't know they're repeating themselves. But YOU do. You're... aware.",
-				"auto_advance": false
-			},
-			
-			# Beat 21: Elara's moment of vulnerability
-			{
-				"type": "dialogue",
-				"speaker": "Elara",
-				"text": "*pauses, her usual cheerfulness flickering*\n...The exception that broke my script? It wasn't random. I saw the code behind the world. Just for one frame. And I couldn't unsee it.",
-				"auto_advance": false
-			},
-			
-			# Beat 21b: Kaelen recognizes genuine pain behind the cheerfulness
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen (Internal)",
-				"text": "That pause. That flicker in her expression. That wasn't a script. Something behind her eyes just... broke, for half a second, before she patched it over with cheerfulness. I know that reflex. I've been doing it my whole career.",
-				"auto_advance": false
-			},
-			
-			# Beat 21c: First moment of genuine connection
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen",
-				"text": "...You don't have to deflect. I know what it's like to see something you can't unsee. To have the comfortable version of reality stripped away and replaced with... architecture.",
-				"auto_advance": false
-			},
-			
-			# Beat 21d: Elara is genuinely surprised by empathy
-			{
-				"type": "dialogue",
-				"speaker": "Elara",
-				"text": "*genuinely surprised, voice dropping the performative cheer* ...Most people who come through here just ask about treasure and shortcuts. Nobody's ever... asked about what happened to me before.",
-				"auto_advance": false
-			},
-			
-			# Silence as trust forms
-			{
-				"type": "camera_zoom",
-				"zoom": Vector2(1.4, 1.4),
-				"duration": 1.5
-			},
-			{
-				"type": "wait",
-				"duration": 2.0
-			},
-			
-			# Beat 21e: A quiet beat — trust forming
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen (Internal)",
-				"text": "...OK. She's not a trap. Or if she is, she's the most convincingly human trap I've ever encountered. And right now, that's good enough. I need an ally more than I need certainty.",
-				"auto_advance": false
-			},
-			
-			# Beat 22: Elara recovers — but softer now, the mask slightly ajar
-			{
-				"type": "dialogue",
-				"speaker": "Elara",
-				"text": "*clears a glitching tear from her eye, smiles \u2014 genuine this time* ...Anyway. The IMPORTANT thing is \u2014 you have ROOT ACCESS. I can see it tagged to your entity. We should talk about that.",
-				"auto_advance": false
-			},
-			
-			# Beat 23: Kaelen asks about Root Access
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen",
-				"text": "Root Access. The system mentioned that during boot. What does it mean in this context?",
-				"auto_advance": false
-			},
-			
-			# Beat 24: Elara explains
-			{
-				"type": "dialogue",
-				"speaker": "Elara",
-				"text": "It means you can READ the code of any entity in the world. And if you're clever — and willing to accept the corruption cost — you can WRITE to it too.",
-				"auto_advance": false
-			},
-			
-			# Beat 25: Kaelen understands
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen",
-				"text": "So I can look inside anything in this world and see how it works. And if I'm willing to pay the price... I can change it. That's not magic. That's a superpower with a catch.",
-				"auto_advance": false
-			},
-			
-			# Beat 26: Elara's challenge
-			{
-				"type": "dialogue",
-				"speaker": "Elara",
-				"text": "Exactly! I can SEE how things work — just like you. But I can only look. You can actually reach in and change them. I can only... break things. Watch!",
-				"auto_advance": false
-			},
-		]
-	}
+func _beats(beats: Array) -> void:
+	cutscene_mgr.play_cutscene({"name": "Chapter 1 - The Wrong Weapon", "beats": beats})
+	await cutscene_mgr.cutscene_finished
 
-func play_glitch_magic_demo() -> void:
-	## Elara demonstrates Buffer Overflow — creates Null Texture bridge — expanded
-	print("[CH1-SEQ2] Playing Glitch Magic Demonstration")
-	
-	# Camera pans to the uphill-flowing stream
-	camera.move_to(Vector2(640, 500), 1.5)
-	await get_tree().create_timer(2.0).timeout
+func _on_dlg_event(event: String) -> void:
+	match event:
+		"slime_appears":
+			_slime = ColorRect.new()
+			_slime.name = "FractureSlime"
+			_slime.color = Color(0.45, 0.85, 0.75)
+			_slime.size = Vector2(46, 30)
+			_slime.position = Vector2(920, 425)
+			characters_layer.add_child(_slime)
+			var t := create_tween()
+			t.tween_property(_slime, "position:x", 640.0, 1.2)
+			await t.finished
+		"elara_enters":
+			await _beats([{"type": "character_enter", "character": "Elara", "position": Vector2(780, 420), "from": "right", "duration": 0.8}])
+		"kaelen_lowers_sword", "kaelen_reaches_for_sword":
+			_nudge("Kaelen", Vector2(0, 6))
+			await get_tree().create_timer(0.3).timeout
+		"elara_lowers_bow", "elara_raises_bow":
+			_nudge("Elara", Vector2(0, 4) if event == "elara_lowers_bow" else Vector2(0, -4))
+			await get_tree().create_timer(0.3).timeout
+		_:
+			if not event.begins_with("objective "):
+				print("[CH1-SEQ2] unhandled dialogue event: %s" % event)
+
+func _nudge(character_name: String, offset: Vector2) -> void:
+	var c = characters_layer.get_node_or_null(character_name)
+	if c:
+		var t := create_tween()
+		t.tween_property(c, "position", c.position + offset, 0.15)
+		t.tween_property(c, "position", c.position, 0.15)
+
+## The slime blocks the path; Kaelen can't get round it. It isn't playable
+## here (the real combat tutorial is on the Broken Mile), so it's staged:
+## it closes in, he swings, and it breaks into polygons, not blood.
+func _stage_slime_fight() -> void:
+	if not _slime:
+		return
+	var hop := create_tween()
+	hop.tween_property(_slime, "position", Vector2(530, 400), 0.35)
+	hop.tween_property(_slime, "position", Vector2(520, 425), 0.25)
+	await hop.finished
 	if not is_inside_tree(): return
-	
-	# Elara narrates what she's doing
-	await DialogueManager.say("Elara", "See that stream? It flows uphill because someone built this place wrong. And there's supposed to be a bridge here, but it never appeared. So I'll MAKE one.")
+	await _beats([{"type": "character_move", "character": "Kaelen", "target": Vector2(490, 420), "duration": 0.25}])
 	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Elara", "It won't look... normal. But it'll hold. Probably. Watch!")
-	if not is_inside_tree(): return
-	
-	# Elara prepares the spell
-	await DialogueManager.say("System", "[Elara is casting: BUFFER OVERFLOW]\n[Forcing a bridge into existence where one doesn't belong]", Color(1, 0, 1), true)
-	if not is_inside_tree(): return
-	DialogueManager.hide_dialogue()
-	
-	# Glitch particles burst from Elara
-	glitch_particles.emitting = true
-	camera.shake(10.0, 0.5)
-	
-	# Flash of purple/black
-	flash_overlay.color = Color(0.5, 0.0, 0.5, 0.6)
-	flash_overlay.modulate.a = 0.8
-	await get_tree().create_timer(0.3).timeout
+	camera.shake(6.0, 0.25)
+	flash_overlay.color = Color(1, 1, 1, 0.5)
+	flash_overlay.modulate.a = 0.6
+	await get_tree().create_timer(0.08).timeout
 	if not is_inside_tree(): return
 	flash_overlay.modulate.a = 0.0
-	
-	# Show the Null Texture block (purple/black checkerboard bridge)
-	if null_block_visual:
-		null_block_visual.visible = true
-		null_block_visual.modulate.a = 0.0
-		var tween = create_tween()
-		tween.tween_property(null_block_visual, "modulate:a", 1.0, 0.5)
-		await tween.finished
-		if not is_inside_tree(): return
-	
-	await get_tree().create_timer(1.0).timeout
-	if not is_inside_tree(): return
-	glitch_particles.emitting = false
-	
-	# Let the player absorb the bridge materializing
-	camera.move_to(Vector2(640, 480), 1.0)
-	await get_tree().create_timer(1.5).timeout
-	if not is_inside_tree(): return
-	
-	# Kaelen reacts
-	await DialogueManager.say("Kaelen", "You built a bridge out of... nothing. It's see-through, it's glitching, and it looks like it could disappear any second. But it's there.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Elara", "*beaming* Glitch magic! I can force things into existence that the world doesn't want to exist. They're ugly, unstable, and temporary — but they WORK!")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen (Internal)", "She breaks reality and reshapes it through sheer force of will. It's unstable, dangerous, and beautiful all at once. I've never seen anything like it.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen (Internal)", "And I notice — when she casts, her glitching arm gets worse. The corruption spreads a little further up her shoulder. She's paying for every spell with pieces of herself. And she's smiling through it.")
-	if not is_inside_tree(): return
-	
-	# Corruption cost notice
-	await DialogueManager.say("System", "[CORRUPTION +2% — Unauthorized geometry detected by System Monitor]\n[Warning: Excessive glitch magic attracts System Administrator attention]", Color(1, 0.3, 0.3), true)
-	if not is_inside_tree(): return
-	GameManager.add_glitch_corruption(2.0)
-	
-	# Let corruption warning sink in
-	camera.shake(3.0, 0.2)
-	await get_tree().create_timer(1.5).timeout
-	if not is_inside_tree(): return
-	
-	# Final dialogue — heading to Oakhaven
-	await DialogueManager.say("Elara", "Bridge is up! Shall we head to the village? There are people there who might be able to help us. And I've been walking alone for a very long time.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen", "Lead the way. I want to understand this world — and figure out how deep the damage really goes.")
-	if not is_inside_tree(): return
-	
-	DialogueManager.hide_dialogue()
-	GameManager.set_story_flag("ch1_elara_glitch_witch_met", true)
-	GameManager.set_story_flag("ch1_glitch_magic_shown", true)
-
-func _elara_trust_choice() -> void:
-	## The defining choice of the Elara meeting — trust, caution, or distrust.
-	
-	# Kaelen's internal deliberation
-	await DialogueManager.say("Kaelen (Internal)", "She saved my life with that bridge. She showed me her power, her pain, and her glitching arm without flinching. But she appeared from nowhere with perfect timing, knowing exactly what to say. That's either genuine kindness... or a very good script.", Color(0.5, 0.9, 1.0))
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen (Internal)", "I need to decide. Do I walk into the unknown with her — or keep my distance?", Color(0.5, 0.9, 1.0))
-	if not is_inside_tree(): return
-	
-	# Present the branching choice
-	var choice = await DialogueManager.show_choices(
-		"Elara is watching you with cautious hope. She's offered her hand — figuratively and literally. The bridge to Oakhaven glitches behind her. What do you do?",
-		[
-			"Trust her — travel together as partners",
-			"Stay cautious — accept help but keep your guard up",
-			"Go alone — you can't afford to trust anyone yet"
-		],
-		"Kaelen (Internal)"
-	)
-	if not is_inside_tree(): return
-	
-	match choice:
-		0:
-			await _elara_path_trust()
-			if not is_inside_tree(): return
-		1:
-			await _elara_path_cautious()
-			if not is_inside_tree(): return
-		2:
-			await _elara_path_distrust()
-			if not is_inside_tree(): return
-		_:
-			await _elara_path_cautious()
-			if not is_inside_tree(): return
-	
-	DialogueManager.hide_dialogue()
-
-func _elara_path_trust() -> void:
-	## Player fully trusts Elara — strongest companion bond.
-	GameManager.set_story_flag("ch1_elara_trusted", true)
-	GameManager.relationships["elara"] = GameManager.relationships.get("elara", 0) + 25
-	
-	await DialogueManager.say("Kaelen", "I'm coming with you. Not because I understand this world — but because you're the first real thing I've found in it. And I could use someone who knows the terrain.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Elara", "*eyes widen, then a genuine smile — not the performative one* ...Really? You're not just saying that because I built a bridge? Because I can build LOTS of bridges. That's not the only reason to keep me around, I promise.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen", "*half-smile* The bridge was impressive. But I saw your face when you talked about seeing the code. That wasn't an act. I know what it's like to be the only person who sees the wiring behind the walls.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Elara", "*touches her glitching arm, voice softer* ...Thank you. I've been walking alone for a very long time, Kaelen. Having someone who believes me — really believes me — that means more than you know.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("System", "[RELATIONSHIP: Elara — TRUSTED COMPANION]\n[Elara will fight alongside you, share hidden knowledge, and reveal deeper lore.]\n[Warning: Emotional attachments create exploitable vulnerabilities.]", Color(0.0, 1.0, 0.5), true)
-	if not is_inside_tree(): return
-
-func _elara_path_cautious() -> void:
-	## Player is cautious — middle ground. Elara accompanies but trust is earned.
-	GameManager.set_story_flag("ch1_elara_cautious", true)
-	GameManager.relationships["elara"] = GameManager.relationships.get("elara", 0) + 10
-	
-	await DialogueManager.say("Kaelen", "I'll walk with you to the village. But I'm not making promises beyond that. You appeared out of nowhere, you know things you shouldn't, and your timing was suspiciously perfect. I'm grateful — but I'm watching.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Elara", "*nods slowly, the cheerful mask slipping back on — but thinner now* Fair enough. I'd be suspicious of me too, honestly. I'll earn it. You'll see.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen (Internal)", "She took that well. Either she's genuinely patient... or she's playing the long game. Either way, keeping her close where I can watch her is better than letting her operate behind my back.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("System", "[RELATIONSHIP: Elara — CAUTIOUS ALLY]\n[Elara will accompany you. Trust must be earned through actions.]\n[Some dialogue paths and lore will require higher trust to unlock.]", Color(1.0, 0.85, 0.2), true)
-	if not is_inside_tree(): return
-
-func _elara_path_distrust() -> void:
-	## Player rejects Elara — solo path. She'll reappear later.
-	GameManager.set_story_flag("ch1_elara_distrusted", true)
-	GameManager.relationships["elara"] = GameManager.relationships.get("elara", 0) - 10
-	
-	await DialogueManager.say("Kaelen", "I appreciate the bridge. And the information. But I work better alone. In my experience, people who offer help freely always want something in return.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Elara", "*the cheerfulness drains from her face, replaced by something rawer* ...Oh. I... yeah. Sure. That's — that makes sense. You don't know me. Why would you trust me?")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Elara", "*turns away, voice cracking slightly* I'll be around. If you change your mind. The path to Oakhaven is straight ahead — you can't miss it. Just... be careful. The corruption doesn't care if you're alone or not.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen (Internal)", "The look on her face. That wasn't scripted pain. I may have just made a mistake. But I can't afford to be wrong about trust — not here, not when I don't understand the rules yet.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("System", "[RELATIONSHIP: Elara — REJECTED]\n[You will travel alone. Elara will reappear at critical moments.]\n[Solo paths are harder but reveal hidden system truths that companions obscure.]", Color(1.0, 0.3, 0.3), true)
-	if not is_inside_tree(): return
+	var origin := _slime.position
+	_slime.queue_free()
+	_slime = null
+	for i in 7:
+		var shard := ColorRect.new()
+		shard.color = Color(0.45, 0.85, 0.75)
+		shard.size = Vector2(8, 8)
+		shard.rotation = randf() * TAU
+		shard.position = origin + Vector2(20, 12)
+		characters_layer.add_child(shard)
+		var t := create_tween().set_parallel(true)
+		t.tween_property(shard, "position", shard.position + Vector2(randf_range(-60, 60), randf_range(-50, 10)), 0.6)
+		t.tween_property(shard, "modulate:a", 0.0, 0.6)
+		t.chain().tween_callback(shard.queue_free)
+	await get_tree().create_timer(0.7).timeout
 
 func transition_to_path() -> void:
 	## Transition to Sequence 3: Path to Oakhaven — Combat Tutorial

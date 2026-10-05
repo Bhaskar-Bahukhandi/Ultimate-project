@@ -3,6 +3,39 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-05 — Chapter 1 plays the rewritten story, start to finish
+
+New Game now runs entirely on the new dialogue, from the crash site to the Chapter 1 ending.
+- **Elara meeting:** the sword, the slime that breaks into polygons, "Hands where I can see them",
+  and the first-truth choice. The glitch-bridge demo is gone; Elara's first spell is now the cart.
+- **Broken Mile:** the flickering tree, the passenger manifest, the cart and Elara's arm (ask, or
+  say nothing), Data Vision labels, and the guardian.
+  - **First Root Access edit:** change its target filter from ALL to FRACTURE_ENTITIES, turn its
+    aggression down, or refuse and fight. Each choice gets its own reaction.
+- **Oakhaven:**
+  - **Arrival:** Bran and the road ledger (the Northfall entry), then stew at Elara's, with each
+    question asked once.
+  - **A normal afternoon:** Old Fen, Jessa, Tull and Wenna's water argument, Pebbles the chicken,
+    the child's lost wooden sword ("my uncle Aldric's a knight"), Mara's shop and the Whispering
+    Stone.
+  - **The alarm** comes after three conversations, or sooner if you walk to the north field or
+    the bridge. Then the uphill water (two edits or digging by hand) and the boar (fight, calm it
+    or rebuild its nest).
+  - **The bridge deadline:** fix it, keep people off it, or leave it.
+- **Aldric:**
+  - **Fight:** "Uncle Aldric!" and "Someone who should be dead", then the fight with barks taken
+    from the data file.
+  - **Decision:** kill (and how Kaelen owns it), spare, or purge (with a confirmation).
+- **The chapter close:** Fragment One's memory flash, the bridge falling if you didn't fix it
+  (whether anyone was hurt depends on whether you warned them), the village meeting (tell everyone,
+  tell the council, or say it's handled), and Elara packing. The joining line depends on her trust.
+- **Staged for now:** the boar, the guardian, the slime and the shrine are still staged, not
+  playable fights or rooms.
+- **Fixed:** in the village, walking to the bridge between two north-field conversations could
+  leave the village mid-sequence.
+- **Tests:** `tests/chapter1_route_test.gd` (33 checks, in CI) plays New Game through the Chapter 1
+  ending on two choice paths, plus a free-roam afternoon.
+
 ## 2026-10-05 — New story source; prologue and Chapter 1 rewritten
 
 - **Story source adopted:** `story/source/PRODUCTION_MASTER_2.1.md` (your general story and flow).

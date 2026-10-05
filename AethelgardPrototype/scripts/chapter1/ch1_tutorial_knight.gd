@@ -85,35 +85,11 @@ const HUD_TUTORIAL_TEXT: String = "HUD Guide:\n[color=#ff4444]Red Bar[/color] = 
 var _hud_tutorial_shown: bool = false
 var _tutorial_skip_requested: bool = false
 
-# ─── DIALOGUE DATA ──────────────────────────────────────────────────────
-var intro_dialogues: Array[Dictionary] = [
-	{"speaker": "???", "text": "Another consciousness drifts into my patrol zone…\nYou should not be here, anomaly.", "duration": 3.5},
-	{"speaker": "Kaelen (Internal)", "text": "A knight? No — its edges are glitching.\n This thing is part of the system.", "duration": 3.5},
-	{"speaker": "Corrupted Sentinel", "text": "Directive: PURGE UNAUTHORISED PROCESSES.\nPrepare for deletion.", "duration": 3.0},
-]
-
-var phase2_dialogue: Dictionary = {
-	"speaker": "Corrupted Sentinel", "text": "You persist… Increasing threat level.\nProtocol: AGGRESSIVE COUNTERMEASURE.", "duration": 3.0
-}
-
-var phase3_dialogue: Dictionary = {
-	"speaker": "Corrupted Sentinel", "text": "ERR—ERROR… My directives… they're C-CORRUPTED—\nI can't… stop…!", "duration": 3.0
-}
-
-var rage_dialogue: Dictionary = {
-	"speaker": "Corrupted Sentinel", "text": "N-NO MORE RESTRAINT… THE CORRUPTION DEMANDS\nDESTRUCTION! I WILL END YOU!", "duration": 3.0
-}
-
-var phase4_dialogue: Dictionary = {
-	"speaker": "Elara", "text": "Its control loop is exposed! Open Root Access\nwith [{root_access}] and disable its attack flag!", "duration": 4.0
-}
-
-var victory_dialogues: Array[Dictionary] = [
-	{"speaker": "Corrupted Sentinel", "text": "…thank you.  The corruption… it made me…\nI was a guardian once.  Not a monster.", "duration": 3.5},
-	{"speaker": "Kaelen", "text": "What happened to you?", "duration": 2.0},
-	{"speaker": "Corrupted Sentinel", "text": "The Source Code… fractured.  Everything broke.\nTake my blade. You'll need it… for what comes next.", "duration": 4.0},
-	{"speaker": "System", "text": "[Corrupted Knight's Blade obtained!]\n+500 Gold  •  +200 XP  •  Level Up!", "duration": 3.5},
-]
+# ─── DIALOGUE (dialogue/ch1/) ───────────────────────────────────────────
+const ALDRIC_DLG := "res://dialogue/ch1/aldric.dlg"
+const FRAGMENT_DLG := "res://dialogue/ch1/fragment_one.dlg"
+const NORTH_FIELD_DLG := "res://dialogue/ch1/north_field.dlg"
+var _card_layer: CanvasLayer = null
 
 # ======================================================================
 #  READY — Build the entire arena
@@ -938,16 +914,8 @@ func _start_intro() -> void:
 	if has_node("/root/MusicManager"):
 		MusicManager.play_track("dialogue")
 
-	# Play intro dialogues, then start combat
-	_dialogue_queue = intro_dialogues.duplicate()
-	_dialogue_active = false
-	_advance_dialogue()
-
-	# Wait for all dialogues to finish, then begin combat
-	if not is_inside_tree(): return
-	await get_tree().create_timer(
-		_total_dialogue_duration(intro_dialogues) + 0.5
-	).timeout
+	# C1-S08 — Aldric Returns (aldric.dlg), then the fight.
+	await DialogueManager.run(ALDRIC_DLG, "start", _on_dlg_event)
 	if not is_inside_tree(): return
 	_begin_combat()
 
@@ -993,6 +961,14 @@ func _begin_combat() -> void:
 # ======================================================================
 #  DIALOGUE SYSTEM (lightweight, non-blocking during combat)
 # ======================================================================
+## A one-line bubble from aldric.dlg that doesn't pause the fight.
+func _bark(node: String, duration: float = 3.0) -> void:
+	var line: Dictionary = DialogueManager.line_of(ALDRIC_DLG, node)
+	if line.is_empty():
+		return
+	_dialogue_queue = [{"speaker": line["speaker"], "text": line["text"], "duration": duration}]
+	_advance_dialogue()
+
 func _advance_dialogue() -> void:
 	if _dialogue_queue.is_empty():
 		dialogue_box.visible = false
@@ -1026,16 +1002,14 @@ func _on_boss_phase_changed(new_phase: int) -> void:
 	_set_arena_pressure_phase(new_phase)
 	match new_phase:
 		2:   # Phase 2 — Aggression ramps up
-			_dialogue_queue = [phase2_dialogue]
-			_advance_dialogue()
+			_bark("bark_stay_back")
 			# Brief hitstop + orange flash for dramatic phase shift
 			if has_node("/root/CombatFX"):
 				CombatFX.apply_hitstop(0.15)
 			if has_node("/root/SceneTransitions"):
 				SceneTransitions.boss_phase_flash(Color(1.0, 0.6, 0.0))
 		3:   # Phase 3 — Corruption intensifies
-			_dialogue_queue = [phase3_dialogue]
-			_advance_dialogue()
+			_bark("bark_human_run")
 			# Dramatic slowdown + purple corruption flash
 			if has_node("/root/CombatFX"):
 				CombatFX.apply_hitstop(0.2)
@@ -1048,8 +1022,7 @@ func _on_boss_phase_changed(new_phase: int) -> void:
 				tween.tween_property(get_child(0), "color",
 					Color(0.14, 0.04, 0.08), 2.0).set_trans(Tween.TRANS_SINE)
 		35:  # RAGE PHASE — Maximum intensity
-			_dialogue_queue = [rage_dialogue]
-			_advance_dialogue()
+			_bark("bark_gate")
 			# Heavy hitstop + massive shake for the rage entrance
 			if has_node("/root/CombatFX"):
 				CombatFX.apply_hitstop(0.25)
@@ -1080,12 +1053,7 @@ func _on_root_access_triggered() -> void:
 	if boss:
 		boss.velocity = Vector2.ZERO
 		boss.set_physics_process(false)
-	_dialogue_queue = [{
-		"speaker": "Elara",
-		"text": "The control loop is exposed. Root Access is open.\nClick Disable Attack Directive to end the fight.",
-		"duration": 3.4
-	}]
-	_advance_dialogue()
+	_bark("bark_root_hint", 3.4)
 	_show_root_access_panel()
 	if has_node("/root/SceneTransitions"):
 		SceneTransitions.flash(Color(0.0, 1.0, 0.0, 0.8), 0.5)
@@ -1158,19 +1126,8 @@ func _on_boss_defeated() -> void:
 	if has_node("/root/VFXLibrary") and player:
 		VFXLibrary.spawn_status_indicator("VICTORY", player.global_position + Vector2(0, -84), self, true)
 
-	# Play initial victory dialogue using the timer system
-	_dialogue_queue = victory_dialogues.duplicate()
-	_advance_dialogue()
-
-	# Wait for timer dialogues to finish, then show the branching choice
-	var wait_time = _total_dialogue_duration(victory_dialogues) + 1.0
-	await get_tree().create_timer(wait_time).timeout
-	if not is_inside_tree(): return
-	dialogue_box.visible = false
-
-	# --- EXPANDED POST-BATTLE STORY + KILL/SPARE CHOICE ---
-	await _play_post_battle_choice()
-	if not is_inside_tree(): return
+	# C1-S09 onward: the decision, Fragment One, the meeting, Elara joins.
+	await _play_aldric_decision()
 
 func _on_boss_health_changed(new_health: float, max_hp: float) -> void:
 	if boss_hp_bar:
@@ -1293,284 +1250,149 @@ func _reset_boss_for_retry() -> void:
 		boss.set_physics_process(true)
 
 # ======================================================================
-#  POST-BATTLE NARRATIVE + KILL/SPARE CHOICE
+#  ALDRIC: THE DECISION, FRAGMENT ONE, THE VILLAGE MEETING (C1-S09 to S12)
 # ======================================================================
-func _play_post_battle_choice() -> void:
-	## Extended post-boss narrative with branching kill/spare decision
-	
-	# The knight has fallen — use DialogueManager for the deep narrative
-	await DialogueManager.say("Kaelen", "*breathing hard, staring at the fallen knight* ...It stopped fighting. The corruption is still writhing across its armor, but its sword arm dropped. It's... looking at me.")
+## After the fight: kill / spare / purge (aldric.dlg), then the shrine and
+## Fragment One, the bridge news if it fell, Oakhaven's meeting, and Elara
+## packing (fragment_one.dlg). Then the Chapter 1 ending (shatter_transition).
+func _play_aldric_decision() -> void:
+	_dialogue_queue.clear()
+	if dialogue_box:
+		dialogue_box.visible = false
+	_dialogue_active = false
+	await DialogueManager.run(ALDRIC_DLG, "decision", _on_dlg_event)
 	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Corrupted Sentinel", "*voice glitching, fragments of a gentler tone underneath* ...You... did not simply overpower me. You found... the code beneath the commands. You reached INSIDE me and turned off the thing that... that MADE me hurt you.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen", "You're not just a boss fight. You're a person. Trapped in a loop, forced to attack anyone who crosses this bridge.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Corrupted Sentinel", "*shudders, corruption flickering violently* Four hundred... and twelve cycles. I have stood at this bridge and fought every traveler who tried to cross. Not because I wanted to. Because the directive COMPELLED me. Like a hand around my throat, squeezing every time I tried to resist.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen (Internal)", "Four hundred and twelve times. He's been stuck in this fight for four hundred and twelve iterations. And every single time, he dies or the challenger dies. An endless loop of violence with no exit condition. Until now.", Color(0.5, 0.9, 1.0))
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Corrupted Sentinel", "*reaches toward Kaelen with a trembling hand* The corruption in me... it's deep. Woven into my core code. Even with the attack directive disabled, I can feel it trying to reassert itself. Trying to make me raise my sword again.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Corrupted Sentinel", "I have two requests, and... I've never been able to make requests before. The directive never allowed it. But right now, in this gap you've created — I can think. I can CHOOSE. And I'm terrified it won't last.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen", "What do you need?")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Corrupted Sentinel", "First — take my blade. The Corrupted Knight's Blade. It will serve you better than it served me. It carries the weight of four hundred cycles of combat, and that weight translates to power.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Corrupted Sentinel", "Second... *voice drops to a whisper* ...I need you to decide what happens next. The corruption will reassert itself. Minutes, maybe. When it does, the directive will reactivate, and I'll be forced to fight the next person who crosses this bridge. Another cycle. Another four hundred fights.")
-	if not is_inside_tree(): return
-	
-	# Dramatic pause — let the gravity of the situation land
-	DialogueManager.hide_dialogue()
-	await get_tree().create_timer(2.5).timeout
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Corrupted Sentinel", "*looks directly at Kaelen* You can end me. One strike. The corruption dies with my process. The bridge will be free. No more cycles. No more forced battles. I'd be... at peace.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Corrupted Sentinel", "Or you can spare me. Walk away. And hope that the gap you created lasts long enough for me to... to find another way. But I won't lie to you — I don't know if it will. I've never been free before. I don't know how long freedom lasts in a world that doesn't want it to exist.")
-	if not is_inside_tree(): return
-	
-	# Check if Elara is with us
-	var has_elara = GameManager.story_flags.get("ch1_elara_trusted", false) or GameManager.story_flags.get("ch1_elara_cautious", false)
-	
-	if has_elara:
-		await DialogueManager.say("Elara", "*quiet, her flickering arm trembling* Kaelen... I've watched this knight fight and die and reset more times than I can count. He never asked for any of this. Whatever you decide, I'll stand by it. But this is YOUR choice.")
-		if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen (Internal)", "End his suffering permanently, or gamble on a freedom that might not last. The engineer in me says terminating a corrupted process is the safest option. But the human in me... the human in me is standing in front of a person who just tasted freedom for the first time in four hundred cycles and is asking me if he gets to keep it.", Color(0.5, 0.9, 1.0))
-	if not is_inside_tree(): return
-	
-	# THE CHOICE
-	var choice = await DialogueManager.show_choices(
-		"The Corrupted Sentinel kneels before you, his sword arm limp, his red visor dimming. The corruption writhes beneath his armor like something alive, fighting to regain control. His eyes — real eyes, buried beneath the glitch — are looking at you with something you've never seen in this world before: hope.",
-		[
-			"Spare the Knight — let him live free",
-			"End his suffering — a mercy strike",
-			"Try to purge the corruption with Root Access"
-		],
-		"Kaelen (Internal)"
-	)
-	if not is_inside_tree(): return
-	
-	DialogueManager.hide_dialogue()
-	await get_tree().create_timer(0.5).timeout
-	if not is_inside_tree(): return
-	
-	match choice:
-		0:
-			await _spare_knight()
-			if not is_inside_tree(): return
-		1:
-			await _kill_knight()
-			if not is_inside_tree(): return
-		2:
-			await _purge_knight()
-			if not is_inside_tree(): return
-		_:
-			await _spare_knight()
-			if not is_inside_tree(): return
-	
-	# Give loot regardless of choice
+	_apply_aldric_consequences()
 	_give_loot()
 	GameManager.set_story_flag("ch1_tutorial_knight_defeated", true)
-	# Award Source Key Fragment #1
-	GameManager.collect_source_key(1)
-	
-	# Transition after the choice plays out
-	await get_tree().create_timer(2.0).timeout
+
+	await _location_card("Under the old gate")
+	if not is_inside_tree(): return
+	await DialogueManager.run(FRAGMENT_DLG, "fragment", _on_dlg_event)
+	if not is_inside_tree(): return
+
+	# The bridge deadline was "until dark". If it wasn't fixed, it's gone now.
+	var bridge_seen := GameManager.has_flag("ch1_bridge_repair_accepted") or GameManager.has_flag("ch1_bridge_evacuated") \
+		or GameManager.has_flag("ch1_bridge_ignored")
+	if bridge_seen and not GameManager.has_flag("ch1_bridge_saved"):
+		GameManager.set_story_flag("ch1_bridge_fell", true)
+		await _location_card("Oakhaven, after dark")
+		if not is_inside_tree(): return
+		await DialogueManager.run(NORTH_FIELD_DLG, "bridge_fell", _on_dlg_event)
+		if not is_inside_tree(): return
+	else:
+		await _location_card("Oakhaven, after dark")
+		if not is_inside_tree(): return
+
+	await DialogueManager.run(FRAGMENT_DLG, "meeting", _on_dlg_event)
+	if not is_inside_tree(): return
+	await DialogueManager.run(FRAGMENT_DLG, "joins", _on_dlg_event)
+	if not is_inside_tree(): return
+	await get_tree().create_timer(1.0).timeout
 	if not is_inside_tree(): return
 	SceneTransitions.change_scene("res://scenes/chapter1/shatter_transition.tscn", SceneTransitions.TransitionStyle.SHATTER)
 
-func _spare_knight() -> void:
-	## Player spares the knight — hopeful path, lower corruption, knight may return later
-	GameManager.set_story_flag("ch1_knight_spared", true)
-	print("[CHOICE] Player spared the Tutorial Knight")
-	# Notify player of gameplay consequences
-	if has_node("/root/ChoiceConsequences"):
-		ChoiceConsequences.apply_choice_buff("ch1_knight_spared")
-	
-	await DialogueManager.say("Kaelen", "*sheathes his weapon and extends a hand to the knight* I'm not going to kill someone who just asked me for mercy. You spent four hundred cycles trapped in a prison. You deserve the chance to find out what freedom feels like.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Corrupted Sentinel", "*stares at the extended hand, trembling* ...You're the first. In all those cycles, every opponent who beat me tried to land the killing blow for the XP. You're the first one who... *voice breaks*")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen", "Then let's make it count. Stand up, soldier.")
-	if not is_inside_tree(): return
-	
-	# The knight rises — visibly struggling against the corruption
-	await DialogueManager.say("Corrupted Sentinel", "*pulls himself up, corruption flickering but not reasserting* Thank you. I will hold this bridge — but as a guardian, not a jailer. If anyone crosses who needs help, I'll send them your way.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Corrupted Sentinel", "*presses the blade into Kaelen's hands* Take the blade. It's yours now. And... if the corruption takes me again, if I lose myself and become the monster once more — don't hesitate next time. Promise me that.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen", "...I promise. But I think you're stronger than you know.")
-	if not is_inside_tree(): return
-	
-	var has_elara = GameManager.story_flags.get("ch1_elara_trusted", false) or GameManager.story_flags.get("ch1_elara_cautious", false)
-	if has_elara:
-		await DialogueManager.say("Elara", "*wiping her eyes, smiling through tears* ...That was the bravest thing I've ever seen anyone do in this world. Most people don't even see the NPCs as people. You just gave one his life back.")
-		if not is_inside_tree(): return
-		GameManager.relationships["elara"] = GameManager.relationships.get("elara", 0) + 15
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "No one to tell me whether that was brave or stupid. But the way his hand stopped trembling when I pulled him up... that's not something a 'corrupted process' does. That's a person remembering what hope feels like.", Color(0.5, 0.9, 1.0))
-		if not is_inside_tree(): return
+## Mechanical consequences of the choice (story consequences are flags the
+## .dlg already set).
+func _apply_aldric_consequences() -> void:
+	var buff := ""
+	if GameManager.has_flag("ch1_knight_killed"):
+		GameManager.add_glitch_corruption(5.0)
+		buff = "ch1_knight_killed"
+	elif GameManager.has_flag("ch1_root_purge"):
+		GameManager.add_glitch_corruption(8.0)
+		buff = "ch1_root_purge_used"
+	elif GameManager.has_flag("ch1_knight_spared"):
+		buff = "ch1_knight_spared"
+	if buff != "" and has_node("/root/ChoiceConsequences"):
+		ChoiceConsequences.apply_choice_buff(buff)
 
-	# System reaction — the world acknowledges mercy
-	await DialogueManager.say("System", "[CORRUPTED SENTINEL: DIRECTIVE SUSPENDED]\n[Status: UNBOUND — Free Agent]\n[Corruption: Contained but present]\n[The bridge is now open. The knight remembers your name.]", Color(0.0, 1.0, 0.5), true)
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen (Internal)", "One person freed from one loop. In a world with thousands of loops and millions of trapped souls, it's barely a drop in the ocean. But it's a start. And starts matter.", Color(0.5, 0.9, 1.0))
-	if not is_inside_tree(): return
-	
-	DialogueManager.hide_dialogue()
+func _on_dlg_event(event: String) -> void:
+	var parts := event.split(" ", false, 1)
+	match parts[0]:
+		"elara_goes_still", "child_runs_inside", "kaelen_freezes", "kaelen_raises_weapon", "elara_packs", "village_gathers", "elara_watches", "kaelen_recoils", "flash_ends":
+			await get_tree().create_timer(0.4).timeout
+		"aldric_approaches":
+			if boss:
+				var t := create_tween()
+				t.tween_property(boss, "global_position:x", BOSS_SPAWN.x - 120.0, 1.2)
+				await t.finished
+		"aldric_visor_glitch", "aldric_eye_clears", "memory_flash", "touch_fragment":
+			if has_node("/root/SceneTransitions"):
+				SceneTransitions.flash(Color(1, 1, 1, 0.6), 0.25)
+			await get_tree().create_timer(0.3).timeout
+		"directive_surge", "directive_returns", "villagers_panic":
+			if has_node("/root/CombatFX"):
+				CombatFX.apply_screen_shake(9.0, 0.35)
+			await get_tree().create_timer(0.35).timeout
+		"start_boss":
+			pass   # _start_intro starts combat when the run ends
+		"aldric_kneels":
+			if boss:
+				boss.modulate = Color(0.7, 0.7, 0.75)
+		"show_directive_tree", "root_purge":
+			if root_access_panel:
+				root_access_panel.visible = true
+			if has_node("/root/CombatFX"):
+				CombatFX.apply_screen_shake(6.0, 0.4)
+			await get_tree().create_timer(0.8).timeout
+			if root_access_panel:
+				root_access_panel.visible = false
+		"kaelen_strikes":
+			if has_node("/root/CombatFX"):
+				CombatFX.apply_screen_shake(14.0, 0.3)
+			if boss:
+				var t := create_tween()
+				t.tween_property(boss, "modulate:a", 0.0, 1.5)
+				await t.finished
+		"aldric_restrained":
+			if boss:
+				boss.modulate = Color(0.55, 0.55, 0.6)
+		"open_shrine_gate":
+			if has_node("/root/SceneTransitions"):
+				SceneTransitions.flash(Color(0.9, 0.85, 0.5, 0.5), 0.4)
+		"fragment_acquired":
+			GameManager.collect_source_key(int(parts[1]) if parts.size() > 1 else 1)
+			if has_node("/root/VFXLibrary") and player:
+				VFXLibrary.spawn_status_indicator("SOURCE KEY 1/7", player.global_position + Vector2(0, -90), self, true)
+		"elara_joins_party":
+			pass   # Elara is already travelling with Kaelen; ch1_elara_joined marks it
+		_:
+			print("[TUTORIAL KNIGHT] unhandled dialogue event: %s" % event)
 
-func _kill_knight() -> void:
-	## Player kills the knight — pragmatic/dark path, more corruption, haunting consequences
-	GameManager.set_story_flag("ch1_knight_killed", true)
-	GameManager.add_glitch_corruption(5.0)
-	print("[CHOICE] Player killed the Tutorial Knight. Corruption +5%%")
-	if has_node("/root/ChoiceConsequences"):
-		ChoiceConsequences.apply_choice_buff("ch1_knight_killed")
-	
-	await DialogueManager.say("Kaelen", "*grips the sword tighter, voice flat* ...You said it yourself. The corruption will come back. Minutes, maybe. And then another four hundred cycles of this. Another four hundred people forced to fight you, hurt you, kill you, and you come back and do it all again.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen", "I'm not going to let that happen. Not to you, and not to the next traveler who walks across this bridge. This ends now.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Corrupted Sentinel", "*closes his eyes, a strange peace settling over his glitching features* ...Thank you. I hoped you'd say that. Not because I want to die — because for the first time in four hundred cycles, the choice is mine. And I choose... to stop.")
-	if not is_inside_tree(): return
-	
-	# The strike
-	DialogueManager.hide_dialogue()
-	await get_tree().create_timer(1.0).timeout
-	if not is_inside_tree(): return
-	
-	# Camera shake + flash for the killing blow
-	if camera:
-		var shake_tween = create_tween()
-		shake_tween.tween_property(camera, "offset", Vector2(-15, 0), 0.03)
-		shake_tween.tween_property(camera, "offset", Vector2(15, 0), 0.03)
-		shake_tween.tween_property(camera, "offset", Vector2(0, -10), 0.03)
-		shake_tween.tween_property(camera, "offset", Vector2.ZERO, 0.1)
-	
-	# Boss visual shatters
-	if boss:
-		var shatter_tween = create_tween()
-		shatter_tween.tween_property(boss, "modulate:a", 0.0, 1.5)
-	
-	await get_tree().create_timer(2.0).timeout
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Corrupted Sentinel", "*as his form dissolves into fragments of light* ...my name... was Aldric. Before the corruption. Before the loop. I was a guardian named Aldric... and I chose to rest.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen (Internal)", "Aldric. He had a name. Not 'Corrupted Sentinel,' not 'Tutorial Knight,' not 'Boss #1.' A name. Aldric. And now there's nothing left of him but fragments of light and a blade that still carries his weight.", Color(0.5, 0.9, 1.0))
-	if not is_inside_tree(): return
-	
-	# System reaction — corruption spike
-	await DialogueManager.say("System", "[ENTITY TERMINATED: CORRUPTED_SENTINEL_01 (ALDRIC)]\n[Process fully purged — NO RESPAWN]\n[CORRUPTION +5% — Forceful termination detected]\n[Warning: The System Administrator has been notified of entity deletion]", Color(1.0, 0.3, 0.0), true)
-	if not is_inside_tree(): return
-	
-	var has_elara = GameManager.story_flags.get("ch1_elara_trusted", false) or GameManager.story_flags.get("ch1_elara_cautious", false)
-	if has_elara:
-		await DialogueManager.say("Elara", "*long silence, looking at the space where the knight stood* ...You did what he asked. That's not nothing. But, Kaelen — the System noticed. Deleting an entity isn't the same as defeating one. It leaves a scar in the code that draws attention.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Elara", "...I'm not judging you. I'm just... making sure you know what it costs.")
-		if not is_inside_tree(): return
-		GameManager.relationships["elara"] = GameManager.relationships.get("elara", 0) - 5
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "Nobody here to tell me I did the wrong thing. Or the right thing. Just silence where Aldric used to be — and a corruption spike that says the System doesn't care about mercy, only deletion. I'll carry this one alone.", Color(0.5, 0.9, 1.0))
-		if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen (Internal)", "Aldric is gone. Really gone. Not looping, not resetting, not waiting for the next cycle. Just... gone. I freed him the only way I could. But the System flagged it as destruction, not mercy. And the corruption in my own data just jumped. There's always a price.", Color(0.5, 0.9, 1.0))
-	if not is_inside_tree(): return
-	
-	DialogueManager.hide_dialogue()
-
-func _purge_knight() -> void:
-	## Player attempts to purge the corruption with Root Access — risky/creative path
-	GameManager.set_story_flag("ch1_knight_spared", true)
-	GameManager.set_story_flag("ch1_root_purge", true)
-	GameManager.add_glitch_corruption(8.0)
-	print("[CHOICE] Player attempted Root Access purge on knight. Corruption +8%%")
-	if has_node("/root/ChoiceConsequences"):
-		ChoiceConsequences.apply_choice_buff("ch1_root_purge_used")
-	
-	await DialogueManager.say("Kaelen", "There's a third option. If I can disable your attack directive, maybe I can go deeper. Strip the corruption out of your code entirely. Not just disable it — REMOVE it.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Corrupted Sentinel", "*alarm and hope warring in his voice* That's... that's never been attempted. The corruption is woven into my core processes. Trying to remove it could crash my entire entity. Or worse — spread it to YOU.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen", "I was a systems architect for AetherCorp. I spent ten years debugging systems that other engineers said were unfixable. *cracks knuckles* Let me try.")
-	if not is_inside_tree(): return
-	
-	# Show Root Access panel briefly as a visual
-	root_access_panel.visible = true
-	await get_tree().create_timer(0.5).timeout
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("System", "[ROOT ACCESS: DEEP SCAN — CORRUPTED_SENTINEL_01]\n[Corruption threads found: 847]\n[Core integrity: 23%]\n[WARNING: Deep purge will cause MASSIVE corruption blowback]\n[CORRUPTION +8% if proceeding]", Color(1.0, 0.0, 0.0), true)
-	if not is_inside_tree(): return
-	
-	root_access_panel.visible = false
-	
-	# Kaelen pushes through anyway
-	await DialogueManager.say("Kaelen (Internal)", "847 corruption threads. Woven through every function, every subroutine, every memory he has. This is going to hurt. Both of us. But if I can pull this off...", Color(0.5, 0.9, 1.0))
-	if not is_inside_tree(): return
-	
-	# Major camera shake + glitch effects during the purge
-	if camera:
-		var shake_tween = create_tween()
-		for i in range(8):
-			shake_tween.tween_property(camera, "offset", Vector2(randf_range(-10, 10), randf_range(-10, 10)), 0.05)
-		shake_tween.tween_property(camera, "offset", Vector2.ZERO, 0.1)
-	
-	await get_tree().create_timer(1.5).timeout
-	if not is_inside_tree(): return
-	
-	# Partial success — corruption reduced but not eliminated
-	await DialogueManager.say("Corrupted Sentinel", "*screaming, then gasping as the corruption loosens its grip* I can... I can THINK. The whispers... they're quieter! Not gone, but... I can hear my OWN thoughts over them for the first time in cycles!")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen", "*wiping blood from his nose — the corruption blowback hit hard* I couldn't get all of it. 847 threads — I cleared maybe 600. The rest are too deep, too intertwined with your core processes. Pulling them would erase your memories.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Corrupted Sentinel", "*stands tall, less corruption flickering across his armor* You gave me back my mind. Not all of it — but enough. Enough to remember that my name is Aldric. Enough to CHOOSE. *salutes* I will guard this bridge as Aldric, not as a corrupted puppet. You have my word.")
-	if not is_inside_tree(): return
-	
-	# System reaction
-	await DialogueManager.say("System", "[ROOT ACCESS DEEP PURGE: PARTIAL SUCCESS]\n[Corruption threads removed: 623/847]\n[Entity status: RECOVERING — Directive: SELF-DETERMINED]\n[CORRUPTION +8% — Blowback absorbed by user]\n[WARNING: System Administrator attention SIGNIFICANTLY increased]", Color(1.0, 0.6, 0.0), true)
-	if not is_inside_tree(): return
-	
-	var has_elara = GameManager.story_flags.get("ch1_elara_trusted", false) or GameManager.story_flags.get("ch1_elara_cautious", false)
-	if has_elara:
-		await DialogueManager.say("Elara", "*staring at Kaelen with a mix of awe and fear* You just... reached into a corrupted entity and tore the corruption OUT. With your bare hands. I've never seen anyone do that. The cost was enormous, but...")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Elara", "...Kaelen, do you understand what this means? If you can purge corruption from entities, you might be able to purge it from REGIONS. From the entire world. That's not just Root Access. That's... that's something else entirely.")
-		if not is_inside_tree(): return
-		GameManager.relationships["elara"] = GameManager.relationships.get("elara", 0) + 20
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "I just ripped 623 corruption threads out of a living being with my bare hands. My nose is bleeding and I can taste copper. But if I can do this to ONE entity... what about a whole region? What about the entire world? The cost nearly killed me — but the POSSIBILITY...", Color(0.5, 0.9, 1.0))
-		if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen (Internal)", "Eight percent corruption. My vision is blurry and there's a ringing in my ears that won't stop. But Aldric is standing under his own power, looking at the sky like he's seeing it for the first time. That's worth eight percent. That's worth a lot more than eight percent.", Color(0.5, 0.9, 1.0))
-	if not is_inside_tree(): return
-	
-	DialogueManager.hide_dialogue()
+## A black card with a place name, for scenes there's no set for yet. Sits
+## under the dialogue box (layer 100), over the arena.
+func _location_card(text: String) -> void:
+	if _card_layer == null:
+		_card_layer = CanvasLayer.new()
+		_card_layer.layer = 95
+		add_child(_card_layer)
+		var black := ColorRect.new()
+		black.name = "Black"
+		black.color = Color.BLACK
+		black.set_anchors_preset(Control.PRESET_FULL_RECT)
+		black.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		black.modulate.a = 0.0
+		_card_layer.add_child(black)
+		var label := Label.new()
+		label.name = "Place"
+		label.set_anchors_preset(Control.PRESET_CENTER_TOP)
+		label.position = Vector2(0, 200)
+		label.size = Vector2(ARENA_WIDTH, 40)
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.add_theme_font_size_override("font_size", 22)
+		label.add_theme_color_override("font_color", Color(0.85, 0.85, 0.9))
+		_card_layer.add_child(label)
+	var black_rect := _card_layer.get_node("Black") as ColorRect
+	var place := _card_layer.get_node("Place") as Label
+	place.text = text
+	place.modulate.a = 0.0
+	var t := create_tween()
+	t.tween_property(black_rect, "modulate:a", 1.0, 0.6)
+	t.tween_property(place, "modulate:a", 1.0, 0.4)
+	t.tween_interval(1.0)
+	t.tween_property(place, "modulate:a", 0.0, 0.4)
+	await t.finished
 
 # ======================================================================
 #  LOOT

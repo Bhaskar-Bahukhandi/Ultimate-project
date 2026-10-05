@@ -129,3 +129,25 @@ Bran: Huh. It's holding. That's going in the ledger.
 Bran: Heard it go about an hour ago.
 [if ch1_bridge_evacuated] Bran: Nobody was on it. That's your doing, that part.
 [if not ch1_bridge_evacuated] Bran: Tobb's cart was halfway over. He's all right. The cart isn't, and neither's his leg.
+
+# The staged boar fight (no side-scroll arena for it yet).
+~ boar_fight_staged
+do boar_charge
+System: CORRUPTED BOAR — CHARGING.
+Elara: It can't turn once it's running! Jump it!
+do boar_stunned
+Elara: Now, while it's dizzy! Jump, then {move_down} and {attack} on its back!
+do boar_pogo
+do boar_charge
+Elara: Again! I'll wall it in!
+do boar_pogo
+System: ELITE DEFEATED.
+Kaelen: ...It was still trying to get back to the nest.
+Elara: I know.
+
+# Kaelen stayed in the village. Time passes; the field gets closed without him.
+~ field_refused_aftermath
+do time_passes
+Mara: They got it closed. Bran's lads, the Pell boys, and half a fence.
+Mara: Jory's arm's broken. He'll live.
+set ch1_north_field_injuries

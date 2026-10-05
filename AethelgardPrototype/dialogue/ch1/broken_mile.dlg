@@ -97,6 +97,16 @@ do kaelen_hand_glitch
 # His hand glitches for one frame. He notices. She notices. Neither says
 # anything. Leave the silence.
 
+# The player turned the aggression multiplier down instead of the filter.
+~ root_used_calm
+set ch1_root_first_edit
+Elara: What did you do?
+Kaelen: Turned it down. All the way down.
+Elara: It's just... standing there.
+Kaelen: It's still guarding the nest. It just doesn't care anymore.
+Elara: I'm not sure that's kinder.
+do kaelen_hand_glitch
+
 # The player won the fight without editing. Root stays discovered but unused.
 ~ root_refused
 set ch1_root_discovered_unused

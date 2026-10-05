@@ -185,7 +185,7 @@ silently erases the main plot. Every deadline is signposted.
 | `ch1_boar_fought` / `_calmed` / `_nest_rebuilt` | The boar | Mara's line |
 | `ch1_knight_killed` / `ch1_knight_spared` / `ch1_root_purge` | Aldric decision | Chapters 1–10 |
 | `ch1_aldric_kill_owned` / `_justified` / `_unsure` | How Kaelen explains a kill | Later Elara and Aldric lines |
-| `source_key_fragment_1` | Fragment One | Pause menu, progression |
+| `source_key_fragment_1` | Fragment One (`do fragment_acquired 1` → `GameManager.collect_source_key(1)`) | Pause menu, progression |
 | `ch1_oakhaven_warned_villagers` / `_warned_leaders` / `_left_quietly` | Village meeting | Chapter 8 |
 | `ch1_elara_joined` | Elara packs | Party |
 

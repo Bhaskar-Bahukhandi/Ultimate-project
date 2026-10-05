@@ -1,8 +1,7 @@
 extends Control
 
-## Chapter 1: The Null Pointer Exception
-## Sequence 3: Path to Oakhaven — Data Vision + Root Access Combat Tutorial
-## Animatic cinematic that transitions into interactive Root Access tutorial
+## Chapter 1, A1-P03 to A1-P06 — the Broken Mile: Data Vision, the first Root Access
+## edit, the rest stop and the first sight of Oakhaven. Words: dialogue/ch1/broken_mile.dlg.
 
 @onready var camera: CinematicCamera = $CinematicCamera
 @onready var cutscene_mgr: CutsceneManager = $CutsceneManager
@@ -16,14 +15,13 @@ extends Control
 @onready var data_vision_overlay = $EffectsLayer/DataVisionOverlay
 @onready var root_access_panel = $UILayer/RootAccessPanel
 @onready var code_panel = $UILayer/RootAccessPanel/MarginContainer/VBox/CodePanel
-@onready var elasticity_spinbox = $UILayer/RootAccessPanel/MarginContainer/VBox/PropertyList/ElasticityRow/SpinBox
+@onready var aggression_spinbox = $UILayer/RootAccessPanel/MarginContainer/VBox/PropertyList/ElasticityRow/SpinBox  # node keeps its old name
 @onready var apply_button = $UILayer/RootAccessPanel/MarginContainer/VBox/ApplyButton
 @onready var tutorial_prompt = $UILayer/TutorialPrompt
 
 var cinematic_active = true
 var skip_requested = false
 var root_access_tutorial_active = false
-var slime_hacked = false
 var _ambient_tweens: Array[Tween] = []
 
 func _exit_tree() -> void:
@@ -205,693 +203,277 @@ func _build_environment() -> void:
 	vig_bot.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	env.add_child(vig_bot)
 
+const DLG := "res://dialogue/ch1/broken_mile.dlg"
+
+## How the player dealt with the guardian: "filter" (edited what it defends
+## against), "calm" (turned its aggression down) or "fight" (no Root edit).
+var _root_choice := ""
+var guardian_resolved := false
+var _target_filter: OptionButton = null
+var _guardian: ColorRect = null
+var _cart: ColorRect = null
+
 func start_path_sequence() -> void:
-	## Play Data Vision tutorial + Slime encounter with Root Access
-	
-	var has_elara = GameManager.story_flags.get("ch1_elara_trusted", false) or GameManager.story_flags.get("ch1_elara_cautious", false)
-	
-	# Part 1: Walking + Data Vision demonstration
-	var cutscene
-	if has_elara:
-		cutscene = create_path_cutscene()
-	else:
-		cutscene = create_solo_path_cutscene()
-	cutscene_mgr.play_cutscene(cutscene)
-	await cutscene_mgr.cutscene_finished
+	## A1-P03 to A1-P06 — the Broken Mile. The words are all in
+	## dialogue/ch1/broken_mile.dlg; this scene stages it and runs the first
+	## Root Access edit.
+	await _beats([
+		{"type": "camera_move", "target": Vector2(640, 360), "duration": 0.5},
+		{"type": "parallel", "beats": [
+			{"type": "character_enter", "character": "Kaelen", "position": Vector2(300, 420), "from": "left", "duration": 2.0},
+			{"type": "character_enter", "character": "Elara", "position": Vector2(380, 420), "from": "left", "duration": 2.5},
+		]},
+	])
 	if not is_inside_tree(): return
-	
-	if skip_requested:
-		await transition_to_oakhaven()
-		return
-	
-	# Part 2: Data Vision activation
-	await play_data_vision_sequence()
+	_flicker_tree()
+	await _say_node("tree_flicker")
 	if not is_inside_tree(): return
-	
-	# Part 3: Slime encounter + Root Access tutorial
-	await play_slime_encounter()
+	await _walk(520, 600)
 	if not is_inside_tree(): return
-	
-	# Part 4: Root Access interactive tutorial
-	await play_root_access_tutorial()
+	await _say_node("walk_manifest")
 	if not is_inside_tree(): return
-	
-	# Part 5: Post-hack dialogue
-	await play_post_hack_dialogue()
+	await _say_node("cart")
 	if not is_inside_tree(): return
-	
-	# Transition to Oakhaven Village
+	await _say_node("data_vision")
+	if not is_inside_tree(): return
+	await _walk(600, 680)
+	if not is_inside_tree(): return
+	await _say_node("guardian_intro")
+	if not is_inside_tree(): return
+	await _say_node("guardian_directive")   # opens Root Access and waits for the player
+	if not is_inside_tree(): return
+	match _root_choice:
+		"filter":
+			await _guardian_turns_away()
+			if not is_inside_tree(): return
+			await _say_node("root_used")
+		"calm":
+			await _say_node("root_used_calm")
+		_:
+			await _stage_guardian_fight()
+			if not is_inside_tree(): return
+			await _say_node("root_refused")
+	if not is_inside_tree(): return
+	await _walk(760, 840)
+	if not is_inside_tree(): return
+	await _say_node("rest_stop")
+	if not is_inside_tree(): return
+	await _say_node("ridge")
+	if not is_inside_tree(): return
 	transition_to_oakhaven()
 
-func create_path_cutscene() -> Dictionary:
-	## Walking dialogue between Kaelen and Elara on the path — expanded
-	return {
-		"name": "Chapter 1 - Path to Oakhaven",
-		"beats": [
-			# Beat 1: Wide shot — establishing the forest path
-			{
-				"type": "camera_move",
-				"target": Vector2(640, 360),
-				"duration": 0.5
-			},
-			
-			# Beat 2: Kaelen and Elara enter walking together
-			{
-				"type": "parallel",
-				"beats": [
-					{
-						"type": "character_enter",
-						"character": "Kaelen",
-						"position": Vector2(300, 420),
-						"from": "left",
-						"duration": 2.0
-					},
-					{
-						"type": "character_enter",
-						"character": "Elara",
-						"position": Vector2(380, 420),
-						"from": "left",
-						"duration": 2.5
-					}
-				]
-			},
-			
-			# Beat 3: Walk forward together
-			{
-				"type": "parallel",
-				"beats": [
-					{
-						"type": "character_move",
-						"character": "Kaelen",
-						"target": Vector2(500, 420),
-						"duration": 3.0
-					},
-					{
-						"type": "character_move",
-						"character": "Elara",
-						"target": Vector2(580, 420),
-						"duration": 3.0
-					},
-					{
-						"type": "camera_move",
-						"target": Vector2(540, 360),
-						"duration": 3.0
-					}
-				]
-			},
-			
-			# Beat 4: Kaelen's observation about the world
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen",
-				"text": "Some of these rocks are see-through from certain angles. Like only the front side was finished and nobody bothered with the back.",
-				"auto_advance": false
-			},
-			
-			# Beat 5: Kaelen notices things shifting
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen",
-				"text": "And that boulder — it was a blurry blob two seconds ago, and when I looked at it, it just SNAPPED into sharp detail. No gradual change. Just... pop.",
-				"auto_advance": false
-			},
-			
-			# Beat 6: Elara's warning about the environment
-			{
-				"type": "dialogue",
-				"speaker": "Elara",
-				"text": "The trees have ears here, Kaelen. And some of the rocks... they listen. Be careful what you say out loud — not everything that looks like scenery IS just scenery.",
-				"auto_advance": false
-			},
-			
-			# Beat 7: Kaelen's reaction
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen",
-				"text": "The scenery is eavesdropping? That's... actually terrifying. Back home, we could barely get our phones to understand us, and here the ROCKS are spying on people.",
-				"auto_advance": false
-			},
-			
-			# Beat 8: Elara elaborates on the System
-			{
-				"type": "dialogue",
-				"speaker": "Elara",
-				"text": "The System Administrator doesn't just run this world. It WATCHES. Every change you make, every ability you use — there's something recording all of it. Always.",
-				"auto_advance": false
-			},
-			
-			# Weight of surveillance
-			{
-				"type": "camera_shake",
-				"intensity": 3.0,
-				"duration": 0.3
-			},
-			{
-				"type": "wait",
-				"duration": 1.5
-			},
-			
-			# Beat 9: Kaelen notices the repetition
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen (Internal)",
-				"text": "Fourteen identical bushes, just rotated so they don't look the same. They do, though. *half-smile* ...Reminds me of every project I ever crunched on. Cutting corners to meet a deadline.",
-				"auto_advance": false
-			},
-			
-			# Beat 10: Continue walking — camera tracks
-			{
-				"type": "parallel",
-				"beats": [
-					{
-						"type": "character_move",
-						"character": "Kaelen",
-						"target": Vector2(600, 420),
-						"duration": 2.5
-					},
-					{
-						"type": "character_move",
-						"character": "Elara",
-						"target": Vector2(680, 420),
-						"duration": 2.5
-					},
-					{
-						"type": "camera_move",
-						"target": Vector2(640, 360),
-						"duration": 2.5
-					}
-				]
-			},
-			
-			# Beat 11: Elara asks about Kaelen's world
-			{
-				"type": "dialogue",
-				"speaker": "Elara",
-				"text": "What was YOUR world like? Before the crash, I mean. Were there... limits? Edges? Places where the world just... stopped?",
-				"auto_advance": false
-			},
-			
-			# Beat 12: Kaelen answers thoughtfully
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen",
-				"text": "No edges you could see. But we had our own kind of limits — deadlines that crushed people, jobs that asked you to do the same thing every day and call it progress. Our world had its own kind of broken. It just hid it better.",
-				"auto_advance": false
-			},
-			
-			# Beat 13: Elara's fascination
-			{
-				"type": "dialogue",
-				"speaker": "Elara",
-				"text": "A world without rules written underneath everything... I can't imagine it. How do you fix things when you can't see what's broken underneath?",
-				"auto_advance": false
-			},
-			
-			# Beat 14: Kaelen — bittersweet answer
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen",
-				"text": "Badly. We argue about whose fault it is, write reports nobody reads, and rebrand the chaos every few years so it sounds like we're doing it on purpose.",
-				"auto_advance": false
-			},
-			
-			# Bittersweet humor settling + tone shift
-			{
-				"type": "wait",
-				"duration": 1.5
-			},
-			{
-				"type": "camera_zoom",
-				"zoom": Vector2(1.1, 1.1),
-				"duration": 1.0
-			},
-			
-			# Beat 15: Elara stops — senses something
-			{
-				"type": "dialogue",
-				"speaker": "Elara",
-				"text": "*stops walking* Hold on. Something's changing in you. I can feel it — like a door just opened somewhere inside your mind. A new ability is waking up.",
-				"auto_advance": false
-			},
-			
-			# Beat 16: Camera focuses on Kaelen as HUD element appears
-			{
-				"type": "camera_move",
-				"target": Vector2(600, 340),
-				"duration": 0.8
-			},
-			
-			# Beat 17: System prompt — Data Vision unlock
-			{
-				"type": "dialogue",
-				"speaker": "System",
-				"text": "[DATA VISION — UNLOCKED]\n[Toggle: L3 / TAB]\n[See the truth beneath the surface — hidden paths, enemy weaknesses, and secrets the world tries to keep from you.]",
-				"auto_advance": true,
-				"duration": 3.5
-			},
-			
-			# Beat 18: Elara explains Data Vision
-			{
-				"type": "dialogue",
-				"speaker": "Elara",
-				"text": "Data Vision! It's like... you know how I can sometimes see beneath the surface of things? This is the stable version of that. Hidden doors, enemy weaknesses, traps — everything the world doesn't want you to see.",
-				"auto_advance": false
-			},
-			
-			# Beat 19: Kaelen's reaction
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen",
-				"text": "A way to see the truth underneath everything. That's... actually the first thing in this world that makes me feel like I have some control. Like I can finally understand what's really happening around me.",
-				"auto_advance": false
-			},
-			
-			# Beat 20: Elara's warning about overuse
-			{
-				"type": "dialogue",
-				"speaker": "Elara",
-				"text": "Just don't use it for too long. The more you look beneath the surface, the more the System Administrator notices you looking. And you don't want its full attention.",
-				"auto_advance": false
-			},
-		]
-	}
+func _say_node(node: String) -> void:
+	await DialogueManager.run(DLG, node, _on_dlg_event)
 
-func create_solo_path_cutscene() -> Dictionary:
-	## Solo walking cutscene when player distrusted Elara — lonelier, introspective
-	return {
-		"name": "Chapter 1 - Solo Path to Oakhaven",
-		"beats": [
-			{
-				"type": "camera_move",
-				"target": Vector2(640, 360),
-				"duration": 0.5
-			},
-			{
-				"type": "character_enter",
-				"character": "Kaelen",
-				"position": Vector2(300, 420),
-				"from": "left",
-				"duration": 2.0
-			},
-			{
-				"type": "character_move",
-				"character": "Kaelen",
-				"target": Vector2(500, 420),
-				"duration": 3.0
-			},
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen (Internal)",
-				"text": "Alone. The forest is quiet — too quiet. Without Elara filling the silence, every snap of a twig and every rustle of leaves sounds like something following me.",
-				"auto_advance": false
-			},
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen (Internal)",
-				"text": "Did I make the right call? She seemed genuine. But genuine is easy to fake when someone needs something from you. In my line of work, the most convincing voices were always the ones with hidden agendas.",
-				"auto_advance": false
-			},
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen (Internal)",
-				"text": "The rocks here are see-through from the back. Fourteen identical bushes. The trees pop into detail when I look at them. This world is a rush job held together with duct tape and good intentions.",
-				"auto_advance": false
-			},
-			{
-				"type": "character_move",
-				"character": "Kaelen",
-				"target": Vector2(600, 420),
-				"duration": 2.5
-			},
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen (Internal)",
-				"text": "Elara said the trees have ears. That the System Administrator watches everything. If she was telling the truth about THAT, then going solo means I'm harder to track but I have no one covering my blind spots.",
-				"auto_advance": false
-			},
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen (Internal)",
-				"text": "If she was lying... well, then I'm exactly where I should be. On my own, trusting my own instincts, not relying on someone I met twenty minutes ago in a world where nothing is what it seems.",
-				"auto_advance": false
-			},
-			{
-				"type": "camera_shake",
-				"intensity": 3.0,
-				"duration": 0.3
-			},
-			{
-				"type": "wait",
-				"duration": 1.5
-			},
-			{
-				"type": "camera_zoom",
-				"zoom": Vector2(1.1, 1.1),
-				"duration": 1.0
-			},
-			{
-				"type": "dialogue",
-				"speaker": "System",
-				"text": "[ANOMALY SCAN: New ability detected in user process]\n[DATA VISION — UNLOCKED]\n[Toggle: L3 / TAB]\n[See the truth beneath the surface]",
-				"auto_advance": true,
-				"duration": 3.5
-			},
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen",
-				"text": "A new ability? Data Vision... the system just handed me the ability to see beneath the surface. Either this is a standard progression reward, or someone wants me to see what's really happening here.",
-				"auto_advance": false
-			},
-			{
-				"type": "dialogue",
-				"speaker": "Kaelen (Internal)",
-				"text": "No guide to explain it. No friendly voice walking me through. Just me and a new set of eyes. ...Fine. I've learned harder things on my own. Let's see what this world is hiding.",
-				"auto_advance": false
-			},
-		]
-	}
+func _beats(beats: Array) -> void:
+	cutscene_mgr.play_cutscene({"name": "Chapter 1 - The Broken Mile", "beats": beats})
+	await cutscene_mgr.cutscene_finished
 
-func play_data_vision_sequence() -> void:
-	## Activate Data Vision mode — expanded visual/dialogue shift
-	print("[CH1-SEQ3] Activating Data Vision")
-	
-	var has_elara = GameManager.story_flags.get("ch1_elara_trusted", false) or GameManager.story_flags.get("ch1_elara_cautious", false)
-	
-	GameManager.set_story_flag("ch1_data_vision_unlocked", true)
-	
-	# Flash to indicate mode change
-	flash_overlay.color = Color(0.0, 0.8, 0.0, 0.3)
-	flash_overlay.modulate.a = 0.5
-	await get_tree().create_timer(0.2).timeout
-	if not is_inside_tree(): return
-	
-	# Enable Data Vision overlay (green wireframe schematic)
+func _walk(kaelen_x: float, elara_x: float) -> void:
+	await _beats([{"type": "parallel", "beats": [
+		{"type": "character_move", "character": "Kaelen", "target": Vector2(kaelen_x, 420), "duration": 1.6},
+		{"type": "character_move", "character": "Elara", "target": Vector2(elara_x, 420), "duration": 1.6},
+		{"type": "camera_move", "target": Vector2((kaelen_x + elara_x) * 0.5, 360), "duration": 1.6},
+	]}])
+
+func _on_dlg_event(event: String) -> void:
+	match event:
+		"elara_casts_cart":
+			_cart = _add_prop("Cart", Vector2(820, 395), Vector2(80, 44), Color(0.36, 0.24, 0.12))
+			flash_overlay.color = Color(0.5, 0.0, 0.6, 0.5)
+			flash_overlay.modulate.a = 0.7
+			await get_tree().create_timer(0.15).timeout
+			if not is_inside_tree(): return
+			flash_overlay.modulate.a = 0.0
+			var t := create_tween()
+			t.tween_property(_cart, "position:y", 470.0, 0.6).set_trans(Tween.TRANS_BACK)
+			await t.finished
+		"elara_glances", "elara_looks_at_arm":
+			await get_tree().create_timer(0.5).timeout
+		"unlock_data_vision":
+			_show_data_vision_labels()
+		"guardian_attacks":
+			_guardian = _add_prop("Guardian", Vector2(1100, 392), Vector2(78, 56), Color(0.32, 0.26, 0.2))
+			var t := create_tween()
+			t.tween_property(_guardian, "position:x", 800.0, 0.8).set_trans(Tween.TRANS_EXPO)
+			await t.finished
+			if not is_inside_tree(): return
+			camera.shake(7.0, 0.3)
+		"show_directive":
+			flash_overlay.color = Color(0.0, 1.0, 0.4, 0.35)
+			flash_overlay.modulate.a = 0.6
+			var t := create_tween()
+			t.tween_property(flash_overlay, "modulate:a", 0.0, 0.4)
+		"root_access_open":
+			await _run_root_access_panel()
+		"kaelen_hand_glitch":
+			var k = characters_layer.get_node_or_null("Kaelen")
+			if k:
+				k.modulate = Color(1, 0.2, 1)
+				await get_tree().create_timer(0.05).timeout
+				if is_instance_valid(k):
+					k.modulate = Color.WHITE
+		_:
+			if not (event.begins_with("objective ") or event.begins_with("journal ")):
+				print("[CH1-SEQ3] unhandled dialogue event: %s" % event)
+
+func _add_prop(prop_name: String, pos: Vector2, size: Vector2, color: Color) -> ColorRect:
+	var r := ColorRect.new()
+	r.name = prop_name
+	r.position = pos
+	r.size = size
+	r.color = color
+	characters_layer.add_child(r)
+	return r
+
+func _flicker_tree() -> void:
+	var tree := _add_prop("FlickerTree", Vector2(700, 230), Vector2(40, 190), Color(0.1, 0.2, 0.06))
+	var t := create_tween()
+	for i in 3:
+		t.tween_property(tree, "color", Color(0.16, 0.08, 0.04), 0.08)
+		t.tween_interval(0.25)
+		t.tween_property(tree, "color", Color(0.1, 0.2, 0.06), 0.08)
+		t.tween_interval(0.4)
+
+## Data Vision is observation, not authority: labels, nothing editable.
+func _show_data_vision_labels() -> void:
 	data_vision_overlay.visible = true
-	var tween = create_tween()
-	tween.tween_property(data_vision_overlay, "modulate:a", 0.6, 1.0)
-	await tween.finished
-	if not is_inside_tree(): return
-	
-	flash_overlay.modulate.a = 0.0
-	
-	# Kaelen's first impression
-	await DialogueManager.say("Kaelen", "Oh. Oh, that's... I can see everything. The hidden barriers, the danger zones, the traps waiting to spring. This world has been hiding SO much from me.")
-	if not is_inside_tree(): return
-	
-	# Let the player absorb Data Vision's impact
-	camera.shake(3.0, 0.2)
-	await get_tree().create_timer(1.5).timeout
-	if not is_inside_tree(): return
-	
-	# Show floating object tags
-	await DialogueManager.say("Data Vision", "[Rock — Solid, harmless]\n[Tree — LISTENING — reports to System Administrator]\n[Hidden Door detected — locked — requires a KEY FRAGMENT to open]", Color(0.0, 1.0, 0.0))
-	if not is_inside_tree(): return
-	
-	# Kaelen spots the hidden door
-	await DialogueManager.say("Kaelen", "There's a hidden door here. Locked — needs some kind of key. I'll remember that. This vision is already worth more than any weapon.")
-	if not is_inside_tree(): return
-	
-	# More Data Vision tags — enemy detection
-	await DialogueManager.say("Data Vision", "[HOSTILE DETECTED — 40 meters ahead]\n[Green Slime — Health: 30 — Weak, bouncy]\n[Weakness: Its bounce can be CHANGED through Root Access]", Color(0.0, 1.0, 0.0))
-	if not is_inside_tree(): return
-	
-	# Elara's guidance (or solo deduction)
-	if has_elara:
-		await DialogueManager.say("Elara", "See that marker on the slime? 'Root Access compatible' — that means you can reach inside it and change what makes it tick. Most simple creatures have at least one thing you can alter.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "'Root Access compatible.' That marker on the slime — it means I can reach inside it and change its properties. The system WANTS me to experiment with this. Why? What's it grooming me for?", Color(0.5, 0.9, 1.0))
-		if not is_inside_tree(): return
-	
-	# System Monitor notice
-	await DialogueManager.say("System", "[Data Vision has been active for a while]\n[System Administrator awareness: LOW]\n[Consider turning it off to stay under the radar]", Color(1.0, 0.5, 0.0), true)
-	if not is_inside_tree(): return
-	
-	# Kaelen deactivates
-	await DialogueManager.say("Kaelen", "Right. The longer I look, the more attention I draw. I'll save this for when I really need it.")
-	if not is_inside_tree(): return
-	
-	# Disable Data Vision
-	DialogueManager.hide_dialogue()
-	tween = create_tween()
-	tween.tween_property(data_vision_overlay, "modulate:a", 0.0, 0.8)
-	await tween.finished
-	if not is_inside_tree(): return
-	data_vision_overlay.visible = false
+	data_vision_overlay.modulate.a = 0.0
+	var box := VBoxContainer.new()
+	box.name = "DataVisionTags"
+	box.position = Vector2(860, 300)
+	characters_layer.add_child(box)
+	for tag in ["PROPERTY: STABILITY 12%", "TAG: ROAD_OBSTRUCTION", "OWNER: LEGACY_MAINT"]:
+		var l := Label.new()
+		l.text = tag
+		l.add_theme_color_override("font_color", Color(0.3, 1.0, 0.5))
+		l.add_theme_font_size_override("font_size", 13)
+		box.add_child(l)
+	var t := create_tween()
+	t.tween_property(data_vision_overlay, "modulate:a", 0.5, 0.6)
+	t.tween_interval(5.0)
+	t.tween_property(data_vision_overlay, "modulate:a", 0.0, 0.8)
+	t.parallel().tween_property(box, "modulate:a", 0.0, 0.8)
+	t.tween_callback(func(): data_vision_overlay.visible = false)
+	t.tween_callback(box.queue_free)
 
-func play_slime_encounter() -> void:
-	## Green Slime appears blocking the path — expanded encounter
-	print("[CH1-SEQ3] Slime encounter begins")
-	
-	# Camera shakes as slime appears
-	camera.shake(5.0, 0.3)
-	
-	# Slime enters from right
-	var slime_node = characters_layer.get_node_or_null("GreenSlime")
-	if not slime_node:
-		# Create placeholder slime
-		slime_node = ColorRect.new()
-		slime_node.name = "GreenSlime"
-		slime_node.color = Color(0.2, 0.8, 0.2)
-		slime_node.size = Vector2(60, 40)
-		slime_node.position = Vector2(900, 410)
-		characters_layer.add_child(slime_node)
-	
-	slime_node.visible = true
-	var tween = create_tween()
-	tween.tween_property(slime_node, "position", Vector2(700, 410), 1.5)
-	await tween.finished
-	if not is_inside_tree(): return
-	
-	# Camera focuses on slime
-	camera.move_to(Vector2(700, 380), 1.0)
-	await get_tree().create_timer(1.5).timeout
-	if not is_inside_tree(): return
-	
-	# Kaelen's initial reaction
-	await DialogueManager.say("Kaelen", "It hasn't noticed me yet. It's just... bouncing there. Going nowhere. Doesn't look dangerous, but nothing in this world is what it seems.")
-	if not is_inside_tree(): return
-	
-	# Slime hop animation
-	var hop_tween = create_tween()
-	hop_tween.tween_property(slime_node, "position:y", 380.0, 0.3)
-	hop_tween.tween_property(slime_node, "position:y", 410.0, 0.3)
-	await hop_tween.finished
-	if not is_inside_tree(): return
-	
-	# Elara's comment (or solo observation)
-	var has_elara_slime = GameManager.story_flags.get("ch1_elara_trusted", false) or GameManager.story_flags.get("ch1_elara_cautious", false)
-	if has_elara_slime:
-		await DialogueManager.say("Elara", "Don't underestimate them. The deeper the corruption runs in an area, the stronger they get. And you stirred things up just by crossing that bridge.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "It doesn't look threatening, but I've been a game designer long enough to know that the tutorial enemies exist to teach you something. The question is: what lesson is this slime supposed to teach?", Color(0.5, 0.9, 1.0))
-		if not is_inside_tree(): return
-	
-	# Kaelen considers options
-	await DialogueManager.say("Kaelen (Internal)", "I could fight this thing head-on — hit it until it stops moving. The classic approach. But Root Access lets me look inside it and change the rules. Why fight fair when I can fight smart?")
-	if not is_inside_tree(): return
-	
-	# Elara encourages Root Access (or solo approach)
-	if has_elara_slime:
-		await DialogueManager.say("Elara", "This is a good time to practice Root Access. Focus on the slime and you should be able to see what makes it work. Look for something you can change.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("System", "[SUGGESTION: Use ROOT ACCESS on the target]\n[Focus on the entity to view modifiable properties]\n[Modify a core property to neutralize the threat]", Color(0.0, 1.0, 1.0), true)
-		if not is_inside_tree(): return
-	
-	# Kaelen prepares
-	await DialogueManager.say("Kaelen", "Alright. Let me concentrate... I can feel it — like pulling back a curtain. I can see what this thing is made of.")
-	if not is_inside_tree(): return
-	
-	# Another slime hop
-	DialogueManager.hide_dialogue()
-	hop_tween = create_tween()
-	hop_tween.tween_property(slime_node, "position:y", 385.0, 0.25)
-	hop_tween.tween_property(slime_node, "position:y", 410.0, 0.25)
-	await hop_tween.finished
-	if not is_inside_tree(): return
-	
-	await get_tree().create_timer(0.5).timeout
-	if not is_inside_tree(): return
+# ── The first Root Access edit (A1-P04) ───────────────────────────────────
+# The guardian's directive is DEFEND NEST with TARGET FILTER: ALL and a null
+# nest. Safe edits: the target filter and the aggression multiplier. The
+# player may also refuse and just fight it.
 
-func play_root_access_tutorial() -> void:
-	## Interactive Root Access tutorial — player modifies slime's elasticity
-	print("[CH1-SEQ3] Root Access Tutorial begins")
-	
-	# System pause — freeze frame effect
-	await DialogueManager.say("System", "[ROOT ACCESS — ENABLED]\n[TARGET: Green Slime]\n[You can see its inner workings. Find what makes it bounce — and take it away.]", Color.RED, true)
-	if not is_inside_tree(): return
-	
-	# Elara coaching (or system guide)
-	var has_elara_ra = GameManager.story_flags.get("ch1_elara_trusted", false) or GameManager.story_flags.get("ch1_elara_cautious", false)
-	if has_elara_ra:
-		await DialogueManager.say("Elara", "See that panel? When you focus on a creature with Root Access, you can see what drives it. This slime's whole existence is built around bouncing — its 'elasticity.' Set that to zero and...")
-		if not is_inside_tree(): return
-	
-	# Kaelen understands
-	await DialogueManager.say("Kaelen", "Take away its ability to bounce. No spring, no jump, no attack. It just... collapses. That's almost too clean.")
-	if not is_inside_tree(): return
-	
-	# System warning about corruption cost
-	await DialogueManager.say("System", "[WARNING: Every change you make through Root Access has a cost]\n[Each edit adds CORRUPTION to your body]\n[Too much corruption, and you won't survive]", Color(1.0, 0.5, 0.0), true)
-	if not is_inside_tree(): return
-	
-	# Kaelen acknowledges the risk
-	await DialogueManager.say("Kaelen (Internal)", "So every time I rewrite something in this world, it rewrites something in me. Power with a price tag. Nothing is free — not here, not anywhere.")
-	if not is_inside_tree(): return
-	
-	DialogueManager.hide_dialogue()
-	
-	# Check if UI elements exist — if not, auto-complete the tutorial
+func _run_root_access_panel() -> void:
+	_root_choice = ""
+	guardian_resolved = false
 	if not root_access_panel or not apply_button:
-		print("[CH1-SEQ3] Root Access UI not found — auto-completing tutorial")
-		await get_tree().create_timer(1.0).timeout
-		if not is_inside_tree(): return
-		await DialogueManager.say("System", "[Elasticity set to 0.0 — Slime neutralized]", Color(0.0, 1.0, 0.5), true)
-		if not is_inside_tree(): return
-		DialogueManager.hide_dialogue()
-		slime_hacked = true
-		GameManager.add_glitch_corruption(10.0)
+		_root_choice = "fight"   # no UI: treat as fought normally
 		return
-	
-	# Show the tutorial prompt
-	if tutorial_prompt:
-		tutorial_prompt.visible = true
-		tutorial_prompt.text = "ROOT ACCESS TUTORIAL:\nOpen the Inspector panel below.\nSet 'elasticity' to 0.0 to remove the slime's bounce.\nPress [APPLY] to make the change."
-	
-	# Show Inspector Window (Root Access Panel)
+	_configure_root_access_panel()
 	root_access_panel.visible = true
 	root_access_tutorial_active = true
-	
-	# Set code panel text
-	if code_panel:
-		code_panel.text = "Green Slime — Properties:\n\n  [Changeable] elasticity = 1.0\n  [Changeable] is_hostile = true\n\n  (Read-only)\n  health = 30\n  awareness_range = 5.0\n  behavior = bounce"
-	
-	# Set spinbox defaults
-	if elasticity_spinbox:
-		elasticity_spinbox.value = 1.0
-		elasticity_spinbox.min_value = 0.0
-		elasticity_spinbox.max_value = 5.0
-		elasticity_spinbox.step = 0.1
-	
-	# Wait for player to apply the hack — with safety timeout
-	var wait_time = 0.0
-	while not slime_hacked:
+	if tutorial_prompt:
+		tutorial_prompt.visible = true
+		tutorial_prompt.text = "ROOT ACCESS\nChange what it's defending against, or turn its aggression down, then Apply.\nEvery edit costs corruption. You can also just fight it."
+	if _target_filter:
+		_target_filter.grab_focus()
+	var waited := 0.0
+	while not guardian_resolved:
 		await get_tree().create_timer(0.1).timeout
 		if not is_inside_tree(): return
-		wait_time += 0.1
-		if wait_time > 120.0:  # 2-minute safety timeout
-			print("[CH1-SEQ3] Root Access tutorial timed out — auto-completing")
-			slime_hacked = true
-			GameManager.add_glitch_corruption(10.0)
-			break
-	
-	# Tutorial complete
-	if root_access_panel:
-		root_access_panel.visible = false
+		waited += 0.1
+		if waited > 180.0:   # nobody at the keyboard: fight it, no edit made
+			_root_choice = "fight"
+			guardian_resolved = true
+	root_access_panel.visible = false
+	root_access_tutorial_active = false
 	if tutorial_prompt:
 		tutorial_prompt.visible = false
-	root_access_tutorial_active = false
+
+func _configure_root_access_panel() -> void:
+	var title := root_access_panel.get_node_or_null("MarginContainer/VBox/Title") as Label
+	if title:
+		title.text = "// ROOT ACCESS — Mosswood Guardian"
+	if code_panel:
+		code_panel.text = "DIRECTIVE: DEFEND NEST\nNEST_REFERENCE: null\n\n  [editable] target_filter\n  [editable] aggression_multiplier\n  (locked) health\n  (locked) nest_reference"
+	var row_label := root_access_panel.get_node_or_null("MarginContainer/VBox/PropertyList/ElasticityRow/Label") as Label
+	if row_label:
+		row_label.text = "aggression_multiplier"
+	if aggression_spinbox:
+		aggression_spinbox.min_value = 0.0
+		aggression_spinbox.max_value = 3.0
+		aggression_spinbox.step = 0.1
+		aggression_spinbox.value = 1.0
+	var props = root_access_panel.get_node_or_null("MarginContainer/VBox/PropertyList")
+	if props and _target_filter == null:
+		var row := HBoxContainer.new()
+		row.name = "TargetFilterRow"
+		var l := Label.new()
+		l.text = "target_filter"
+		l.custom_minimum_size = Vector2(170, 0)
+		row.add_child(l)
+		_target_filter = OptionButton.new()
+		_target_filter.add_item("ALL", 0)
+		_target_filter.add_item("FRACTURE_ENTITIES", 1)
+		row.add_child(_target_filter)
+		props.add_child(row)
+		props.move_child(row, 0)
+	if _target_filter:
+		_target_filter.select(0)
+	var vbox = root_access_panel.get_node_or_null("MarginContainer/VBox")
+	if vbox and not vbox.has_node("FightButton"):
+		var fight := Button.new()
+		fight.name = "FightButton"
+		fight.text = "Don't edit it. Fight."
+		fight.pressed.connect(_on_root_access_refused)
+		vbox.add_child(fight)
 
 func _on_root_access_apply() -> void:
-	## Player applied the root access hack
-	# slime_hacked: the panel stays up until the tutorial loop polls (0.1 s);
-	# repeat clicks in that window used to charge +10% corruption each.
-	if not root_access_tutorial_active or slime_hacked:
+	# guardian_resolved: the panel stays up until the wait loop polls (0.1 s);
+	# repeat clicks in that window used to charge corruption each time.
+	if not root_access_tutorial_active or guardian_resolved:
 		return
-	
-	var new_elasticity = 1.0
-	if elasticity_spinbox:
-		new_elasticity = elasticity_spinbox.value
-	
-	# Check if player set elasticity to 0
-	if new_elasticity <= 0.1:
-		slime_hacked = true
-		print("[CH1-SEQ3] Root Access: Elasticity set to %.1f — CORRECT!" % new_elasticity)
-		
-		# Corruption cost
-		GameManager.add_glitch_corruption(10.0)
+	var filter_changed := _target_filter != null and _target_filter.selected == 1
+	var aggression: float = aggression_spinbox.value if aggression_spinbox else 1.0
+	if filter_changed:
+		_root_choice = "filter"
+	elif aggression <= 0.1:
+		_root_choice = "calm"
 	else:
-		# Give hint
 		if tutorial_prompt:
-			tutorial_prompt.text = "HINT: Set elasticity to 0.0 to prevent the slime from bouncing back."
+			tutorial_prompt.text = "Nothing changed yet. Edit target_filter or aggression_multiplier, then Apply."
+		return
+	guardian_resolved = true
+	GameManager.add_glitch_corruption(10.0)
+	GameManager.set_story_flag("ch1_slime_root_access_tutorial", true)  # legacy name: first Root edit done
 
-func play_post_hack_dialogue() -> void:
-	## Post-hack sequence — slime splats flat — expanded aftermath
-	
-	# Animate slime flattening (splatting)
-	var slime_node = characters_layer.get_node_or_null("GreenSlime")
-	if slime_node:
-		# Slime tries to hop but splats flat
-		var tween = create_tween()
-		tween.tween_property(slime_node, "position:y", 395.0, 0.2)
-		tween.tween_property(slime_node, "position:y", 430.0, 0.1)
-		# Flatten it
-		tween.tween_property(slime_node, "scale", Vector2(2.5, 0.1), 0.2)
-		await tween.finished
+func _on_root_access_refused() -> void:
+	if not root_access_tutorial_active or guardian_resolved:
+		return
+	_root_choice = "fight"
+	guardian_resolved = true
+
+func _guardian_turns_away() -> void:
+	if not _guardian:
+		return
+	var t := create_tween()
+	t.tween_property(_guardian, "position:x", 1150.0, 1.0)
+	t.parallel().tween_property(_guardian, "modulate:a", 0.0, 1.0)
+	await t.finished
+
+func _stage_guardian_fight() -> void:
+	for i in 3:
+		camera.shake(6.0, 0.2)
+		flash_overlay.color = Color(1, 1, 1, 0.4)
+		flash_overlay.modulate.a = 0.5
+		await get_tree().create_timer(0.1).timeout
 		if not is_inside_tree(): return
-	
-	# Camera slight shake on impact
-	camera.shake(3.0, 0.2)
-	
-	await get_tree().create_timer(0.5).timeout
-	if not is_inside_tree(): return
-	
-	# Kaelen's reaction line
-	await DialogueManager.say("Kaelen", "It tried to bounce back up and just... collapsed. Without that spring, it's nothing. It couldn't even move toward me.")
-	if not is_inside_tree(): return
-	
-	# Slime dissolution VFX
-	if slime_node:
-		var dissolve_tween = create_tween()
-		dissolve_tween.tween_property(slime_node, "modulate:a", 0.0, 1.5)
-		# Don't await — let it dissolve during dialogue
-	
-	# Elara impressed (or solo reflection)
-	var has_elara_post = GameManager.story_flags.get("ch1_elara_trusted", false) or GameManager.story_flags.get("ch1_elara_cautious", false)
-	if has_elara_post:
-		await DialogueManager.say("Elara", "Not bad for your first time! Most people just hit things until they stop moving. You're already thinking differently!")
+		flash_overlay.modulate.a = 0.0
+		await get_tree().create_timer(0.35).timeout
 		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "First Root Access hack — successful. The system rewarded me for doing it, which means this is the INTENDED path. They want anomalies to learn this ability. But why?", Color(0.5, 0.9, 1.0))
-		if not is_inside_tree(): return
-	
-	# Kaelen reflects on the ethical dimension
-	await DialogueManager.say("Kaelen (Internal)", "I just reached inside a living creature and took away the one thing that defined it. In my old job, we'd call that a 'feature removal.' Here, it felt more like surgery without anesthesia.")
-	if not is_inside_tree(): return
-	
-	# The question that will echo later
-	await DialogueManager.say("Kaelen (Internal)", "The slime dissolved. No cry, no struggle. It just... stopped existing. I wonder if it felt anything. I wonder if that should bother me more than it does.")
-	if not is_inside_tree(): return
-	
-	# Ethical weight of Root Access — let it breathe
-	DialogueManager.hide_dialogue()
-	await get_tree().create_timer(2.0).timeout
-	if not is_inside_tree(): return
-	
-	# Corruption system notice
-	await DialogueManager.say("System", "[ROOT ACCESS TUTORIAL — COMPLETE]\n[Variables modified: 1 (elasticity: 1.0 → 0.0)]\n[CORRUPTION: +10%%]\n[Total CORRUPTION: %.0f%%]" % GameManager.glitch_meter, Color(1.0, 0.3, 0.3), true)
-	if not is_inside_tree(): return
-	
-	# Loot / reward
-	await DialogueManager.say("System", "[LOOT: +15 MEMORY FRAGMENTS]\n[ITEM ACQUIRED: Slime Core (crafting material)]\n[Root Access proficiency: NOVICE]", Color(0.0, 1.0, 0.5), true)
-	if not is_inside_tree(): return
-	
-	GameManager.set_story_flag("ch1_slime_root_access_tutorial", true)
-	GameManager.set_story_flag("root_access_unlocked", true)
-	
-	# Elara points ahead (or solo observation)
-	if has_elara_post:
-		await DialogueManager.say("Elara", "Oakhaven is just ahead. Don't let the cozy village look fool you — the people there have their own stories. And the shopkeeper drives a hard bargain.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen", "A village full of people living in a world that's falling apart, and they don't even know it. ...Lead the way, Elara.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "A warm glow through the trees. The path widens, the air shifts from wild to settled. Village ahead. People — trapped in their loops, oblivious to the cracks in their reality. But people nonetheless. And right now, I need supplies more than I need solitude.", Color(0.5, 0.9, 1.0))
-		if not is_inside_tree(): return
-	
-	DialogueManager.hide_dialogue()
+	if _guardian:
+		var t := create_tween()
+		t.tween_property(_guardian, "modulate:a", 0.0, 0.8)
+		await t.finished
 
 var _is_transitioning_to_oakhaven: bool = false
 

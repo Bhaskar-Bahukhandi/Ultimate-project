@@ -32,6 +32,10 @@ Aldric: STAY BACK.
 ~ bark_gate
 Aldric: GATE.
 
+# Phase 4: his control loop is exposed and Root Access opens.
+~ bark_root_hint
+Elara: His directive's showing! Root Access — {root_access} — shut it off!
+
 # Rare. These are the man under the directive.
 ~ bark_human_run
 Aldric: ...Run.
@@ -105,6 +109,8 @@ Elara: Then that's what you say first. Before you do it.
 ~ purge_confirm
 set ch1_root_purge
 set ch1_root_purge_used
+# He lives: older scenes read "Aldric alive" as ch1_knight_spared.
+set ch1_knight_spared
 do root_purge aldric
 do pause 2.0
 Aldric: ...Elara.

@@ -47,8 +47,41 @@ Kaelen: What does it look like?
 Child: Like a sword.
 Kaelen: ...Right. I'll keep an eye out.
 
+~ lost_sword_found_pickup
+Kaelen (Internal): A wooden sword. Good one, too.
+
 ~ lost_sword_found
 Child: You found it! Are you a knight?
 Kaelen: No. I just look like I lost a fight with one.
 Child: My uncle Aldric's a knight. He's away.
 set ch1_child_sword_returned
+
+# ── Free roam: repeat visits, the shop, the market stone, Bran's post ─────
+
+~ mara_repeat
+Mara: Back again? Good. Buy something or carry something, love. Pick one.
+
+~ whispering_stone
+Kaelen: What is this thing?
+Elara: The Whispering Stone. Prices, mostly.
+Kaelen (Internal): Numbers crawling up a rock. Grain in Ironhold, iron in places I've never heard of. It's a live market feed, carved into stone.
+Kaelen: Does anybody actually use it?
+Elara: Rook does, when he comes through. Everyone else just argues with it.
+set ch1_auction_house_visited
+
+~ whispering_stone_repeat
+Kaelen (Internal): Bread's up two coppers since this morning.
+
+~ bran_repeat_field
+Bran: North field first, lad. Then we'll talk about roads.
+
+~ bran_repeat_road
+Bran: Bridge is south. Have a look at it before you go anywhere.
+
+# Data Vision secret under Bran's gatepost.
+~ guard_post_secret
+System: TRACE: EVACUATION_RIGHTS.CLAUSE — DISABLED.
+Kaelen (Internal): Someone switched off a rule about leaving. A long time ago. Right under Bran's gatepost.
+
+~ elara_repeat
+Elara: Go on, have a look around. I'll be here, pretending I'm not watching you.

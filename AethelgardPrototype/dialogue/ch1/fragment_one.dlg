@@ -20,7 +20,8 @@ Elara: Kaelen?
 Kaelen: I've been here before.
 Elara: In this shrine?
 Kaelen: No. Under it. Something under it.
-set source_key_fragment_1
+# The scene awards it (GameManager.collect_source_key sets source_key_fragment_1
+# and counts it; setting the flag here would stop it counting).
 do fragment_acquired 1
 
 # C1-S11: Oakhaven wants to know what happened.

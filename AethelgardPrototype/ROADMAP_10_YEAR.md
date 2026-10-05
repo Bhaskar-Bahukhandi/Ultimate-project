@@ -223,10 +223,11 @@ playthrough log.
   - Production Master 2.1 was adopted as the story source; its canon is in `story/STORY_BIBLE.md`.
   - Voice sheets plus an automatic voice lint.
   - The prologue and Chapter 1 are rewritten as 10 `.dlg` files, and the crash site plays them.
+  - **Chapter 1 fully wired** (2026-10-05); `tests/chapter1_route_test.gd` checks it end to end.
   - Still to do:
-    - Wire the remaining Chapter 1 scenes (Elara meeting, Broken Mile, Oakhaven, Aldric) to their
-      `.dlg` files. This needs scene work: inspect points, a guardian and a boar fight, and the
-      bridge deadline on the WorldClock.
+    - Make the boar, the guardian and the opening slime real side-scroll fights.
+    - Build Elara's house and the shrine as rooms.
+    - Move the bridge deadline onto the WorldClock (fixing it is instant today).
     - Then Chapter 2 onward, in the same voice.
 - [ ] **Stats model:** `final = base + level + training + Σ modifiers`. Decided 2026-10-04: DEF is
   mitigation (`×100/(100+DEF)`, done); MP pays for spells and healing, regenerating ~2/s (done); Soul

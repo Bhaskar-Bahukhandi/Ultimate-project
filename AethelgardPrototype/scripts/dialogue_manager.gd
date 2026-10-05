@@ -462,6 +462,20 @@ func run(file_path: String, node: String = "start", on_event: Callable = Callabl
 var _run_gen := 0   # bumped by force_reset(); runs from an older generation stop
 
 
+## The first spoken line of a node, for scenes that show barks their own way
+## (combat bubbles that mustn't pause the fight). Text is token-expanded.
+## Returns {"speaker", "text"}, or {} if the node or line doesn't exist.
+func line_of(file_path: String, node: String) -> Dictionary:
+	var script = DialogueScriptRes.load_file(file_path)
+	if not script.errors.is_empty() or not script.nodes.has(node):
+		push_warning("[Dialogue] %s has no node '%s'" % [file_path, node])
+		return {}
+	for step in script.nodes[node]:
+		if step["type"] == "line":
+			return {"speaker": step["speaker"], "text": InputService.fmt(step["text"])}
+	return {}
+
+
 func _cancel_run(gen: int) -> void:
 	if gen == _run_gen:
 		force_reset()
