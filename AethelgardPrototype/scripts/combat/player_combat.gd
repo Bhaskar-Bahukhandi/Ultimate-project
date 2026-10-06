@@ -83,7 +83,8 @@ const AIR_ATTACK_RANGE = 100.0
 const AIR_ATTACK_DAMAGE_MULT = 1.15
 
 # ── Input Buffering ──────────────────────────────────────────────────────
-const ATTACK_BUFFER_FRAMES = 8
+const ATTACK_BUFFER_FRAMES = 12   # 0.2 s: longer than a dash (0.18 s), so a press early in a dash still lands
+const MELEE_BEHIND_TOLERANCE = 16.0
 const DASH_BUFFER_FRAMES = 6
 const SPELL_BUFFER_FRAMES = 6
 
@@ -640,7 +641,10 @@ func _handle_jump() -> void:
 
 	# Ground jump (coyote + buffer)
 	var can_jump = is_on_floor() or coyote_timer > 0.0
-	if jump_buffer_timer > 0.0 and can_jump and not is_attacking and not is_defending and not is_healing:
+	# Attack recovery can be cancelled into a jump (ATTACK_CANCEL_INTO_JUMP); the
+	# old "not is_attacking" check blocked it, so the cancel below never ran.
+	var attack_allows_jump := not is_attacking or (ATTACK_CANCEL_INTO_JUMP and can_cancel_attack)
+	if jump_buffer_timer > 0.0 and can_jump and attack_allows_jump and not is_defending and not is_healing:
 		velocity.y = JUMP_VELOCITY
 		jump_buffer_timer = 0.0
 		coyote_timer = 0.0
@@ -740,7 +744,13 @@ func _handle_attack() -> void:
 	# charging and flashing forever. Drop it, like other blocked attack presses.
 	if is_charging and not Input.is_action_pressed("attack") and not Input.is_action_just_released("attack"):
 		_cancel_charge()
-	if is_dashing or is_defending or is_healing or is_casting:
+	if is_dashing:
+		# Remembered for DASH_CANCEL_INTO_ATTACK (_end_dash); dropping it meant
+		# the dash-into-attack cancel never happened.
+		if attack_pressed:
+			_buffer_attack_input()
+		return
+	if is_defending or is_healing or is_casting:
 		if attack_pressed:
 			_metric_inc("ignored_recovery")
 		return
@@ -797,7 +807,9 @@ func _get_enemies_in_melee_hitbox(center_offset: Vector2, size: Vector2, debug_c
 	params.shape = shape
 	params.transform = Transform2D(0.0, global_position + center_offset)
 	params.collide_with_bodies = true
-	params.collide_with_areas = true
+	# Bodies only: every enemy also carries a large detection Area2D and an
+	# attack Area2D, which would count as "touching" from far away.
+	params.collide_with_areas = false
 	params.collision_mask = 0xFFFFFFFF
 	params.exclude = [get_rid()]
 
@@ -806,7 +818,10 @@ func _get_enemies_in_melee_hitbox(center_offset: Vector2, size: Vector2, debug_c
 	for hit in hits:
 		var collider = hit.get("collider")
 		var enemy = _resolve_enemy_collider(collider)
-		if enemy and hit_rect.has_point(enemy.global_position) and _enemy_matches_melee_hitbox(enemy, center_offset, enemies):
+		# The box touching the enemy's body is a hit. It used to also need the
+		# enemy's origin point inside the box, so swings that visibly connected
+		# with the edge of a big body (bosses) missed.
+		if enemy and _enemy_matches_melee_hitbox(enemy, center_offset, enemies):
 			enemies.append(enemy)
 
 	if enemies.is_empty():
@@ -823,9 +838,11 @@ func _get_enemies_in_melee_hitbox(center_offset: Vector2, size: Vector2, debug_c
 func _enemy_matches_melee_hitbox(enemy, center_offset: Vector2, already_hit: Array) -> bool:
 	if enemy in already_hit or not enemy.has_method("take_damage"):
 		return false
-	if center_offset.x > 0.0 and enemy.global_position.x < global_position.x:
+	# Don't hit enemies behind you, but an enemy standing on top of you (its
+	# centre a few pixels behind yours) is still in front of the swing.
+	if center_offset.x > 0.0 and enemy.global_position.x < global_position.x - MELEE_BEHIND_TOLERANCE:
 		return false
-	if center_offset.x < 0.0 and enemy.global_position.x > global_position.x:
+	if center_offset.x < 0.0 and enemy.global_position.x > global_position.x + MELEE_BEHIND_TOLERANCE:
 		return false
 	return true
 

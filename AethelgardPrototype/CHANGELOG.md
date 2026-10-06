@@ -3,6 +3,49 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-06 — Combat feel and world collision (user decisions 1 and 2)
+
+**Combat feel** (player_combat.gd, combat_effects.gd):
+- **Generous player hits.** A swing hits when it touches the enemy's *body*. Before, the enemy's
+  origin point also had to be inside the box, so swings that visibly connected with a big
+  enemy's edge (bosses) missed.
+  - Only bodies count. Every enemy also carries a large detection area and an attack area, which
+    would otherwise count as touching from far away.
+  - An enemy standing on top of the player (centre up to 16 px behind) can still be hit.
+  - Enemy hits on the player are unchanged, so enemies don't reach further.
+- **Jump-cancel works.** Jumping during attack recovery cancels into the jump, as
+  `ATTACK_CANCEL_INTO_JUMP` intended. A `not is_attacking` check used to block it.
+- **Dash into attack works.** An attack pressed during a dash is buffered and comes out when the
+  dash ends (`DASH_CANCEL_INTO_ATTACK`). Before, it was dropped.
+  - The attack buffer is now 12 frames (0.2 s), longer than a dash (0.18 s).
+- **Hit-pause no longer stacks.** One hit sends two or three hit-pause requests (the hit's weight,
+  the combo step, a kill), and they used to add up to 0.25 s. Now the longest single request
+  wins, so a kill still feels heavier than a jab, without the stutter.
+- **Tests:** five new checks in `tests/combat_fixes_test.gd`; four of them fail on the old code.
+
+**Collision for drawn obstacles** (the regions, the overworld and the village). These maps had no
+solid objects at all, and 100% of each map was walkable. Now:
+- **Oakhaven region:** building footprints, the well, and trunks for the forest and southern-woods
+  trees.
+- **Ironhold:** building footprints and the rusted machinery.
+- **Overworld:** tree trunks, and the river, except at the bridge.
+- **Oakhaven village:** footprints for the apothecary and auction-house buildings, and the well.
+
+**How the shapes are chosen:**
+- Buildings block on their lower 60%, so the roof can overlap a player walking behind them.
+- Trees block on the trunk.
+- Only drawn things get collision. The V3 hedge and roof props stay walk-through while their art
+  is archived, so there are no invisible walls.
+
+**New `tests/reachability_test.gd` (in CI):**
+- It maps every spot the player's real collision shape fits (a 16 px grid, using the physics
+  engine) and flood-fills from the spawn point.
+- It checks that the player spawns in free space and that every NPC, shop, lore point, gate, exit
+  and story trigger can still be touched.
+- Maps with randomly placed trees are tested on three loads.
+- A built-in control walls Jessa in on purpose and must be caught.
+- Result: everything reachable on every load, and no sealed-off pockets.
+
 ## 2026-10-06 — Code audit: everything that runs up to the end of Chapter 2
 
 **Scope:** every script reachable in the prologue and Chapters 1–2 was read in full.

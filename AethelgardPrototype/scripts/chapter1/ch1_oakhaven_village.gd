@@ -63,6 +63,7 @@ func _ready() -> void:
 		GameManager.add_gold(100 - current_gold)
 
 	_create_map_boundaries()
+	_add_building_collision()
 	_set_up_villagers()
 
 	if shop_panel:
@@ -458,6 +459,20 @@ func _create_map_boundaries() -> void:
 	_add_boundary(Vector2(0, map_size.y), Vector2(map_size.x, 50))
 	_add_boundary(Vector2(-50, 0), Vector2(50, map_size.y))
 	_add_boundary(Vector2(map_size.x, 0), Vector2(50, map_size.y))
+
+## The buildings and the well were drawn but had no collision, so the player
+## walked straight through them. Buildings block on their lower part (the roof
+## can overlap a player walking behind); read from the scene so they stay in
+## sync with it. tests/reachability_test.gd checks every villager, the shop
+## counter, the Whispering Stone and the story triggers stay reachable.
+func _add_building_collision() -> void:
+	for building_name in ["ApothecaryBuilding", "AuctionHouseBuilding"]:
+		var b := get_node_or_null(building_name) as Control
+		if b:
+			_add_boundary(b.position + Vector2(0, b.size.y * 0.4), Vector2(b.size.x, b.size.y * 0.6))
+	var well := get_node_or_null("WellCenter") as Control
+	if well:
+		_add_boundary(well.position, well.size)
 
 func _add_boundary(pos: Vector2, size: Vector2) -> void:
 	var static_body = StaticBody2D.new()

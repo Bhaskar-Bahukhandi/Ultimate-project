@@ -95,6 +95,10 @@ jobs:
         working-directory: ${{ env.PROJECT_DIR }}
         run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/combat_fixes_test.gd
 
+      - name: Reachability (collision never walls off an NPC, shop, gate or trigger)
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/reachability_test.gd
+
       - name: Phase 0 regression tests
         working-directory: ${{ env.PROJECT_DIR }}
         timeout-minutes: 30

@@ -183,6 +183,7 @@ func _build_region_environment() -> void:
 	well.position = Vector2(1040, 1000)
 	well.z_index = -10
 	add_child(well)
+	_add_solid(Rect2(well.position, well.size), "WellSolid")
 
 	# ── Eastern Fields ──
 	var east_fields = ColorRect.new()
@@ -207,6 +208,7 @@ func _build_region_environment() -> void:
 		tree.position = Vector2(randi_range(2220, 3050), randi_range(220, 1350))
 		tree.z_index = -15
 		add_child(tree)
+		_add_solid(_trunk_footprint(tree.position, tree.size), "ForestTrunk%d" % i)
 
 	# ── Southern Woods ──
 	var south_woods = ColorRect.new()
@@ -222,6 +224,7 @@ func _build_region_environment() -> void:
 		tree.position = Vector2(randi_range(420, 1550), randi_range(1420, 1950))
 		tree.z_index = -15
 		add_child(tree)
+		_add_solid(_trunk_footprint(tree.position, tree.size), "SouthWoodsTrunk%d" % i)
 
 	# ── Paths connecting areas ──
 	# Village → Fields path
@@ -259,6 +262,7 @@ func _create_building(bname: String, pos: Vector2, bsize: Vector2, color: Color)
 	building.position = pos
 	building.z_index = -12
 	add_child(building)
+	_add_solid(_building_footprint(pos, bsize), "%sFootprint" % building.name)
 	var wall_skirt = ColorRect.new()
 	wall_skirt.name = "WallSkirt"
 	wall_skirt.color = Color(color.r * 0.68, color.g * 0.62, color.b * 0.54, 0.94)
@@ -1171,3 +1175,31 @@ func _update_ui() -> void:
 		else:
 			_zone_label.text = "%s  (Lv %d)" % [zone_name, rec]
 			_zone_label.add_theme_color_override("font_color", Color(0.9, 0.9, 0.8))
+
+
+# ── Solid obstacles ───────────────────────────────────────────────────────
+# Top-down collision for what's drawn, so the player can't walk through it.
+# Only drawn things get collision (no invisible walls: the V3 hedge and roof
+# props stay walk-through while their art is archived). Buildings block on
+# their lower part, so the roof can overlap a player walking behind them;
+# trees block on their trunk. tests/reachability_test.gd checks that every
+# NPC, shop, gate and trigger stays reachable.
+
+func _add_solid(rect: Rect2, solid_name: String) -> void:
+	var body := StaticBody2D.new()
+	body.name = solid_name
+	body.position = rect.get_center()
+	var col := CollisionShape2D.new()
+	var shape := RectangleShape2D.new()
+	shape.size = rect.size
+	col.shape = shape
+	body.add_child(col)
+	add_child(body)
+
+
+func _building_footprint(pos: Vector2, bsize: Vector2) -> Rect2:
+	return Rect2(pos.x, pos.y + bsize.y * 0.4, bsize.x, bsize.y * 0.6)
+
+
+func _trunk_footprint(pos: Vector2, canopy: Vector2) -> Rect2:
+	return Rect2(pos.x + canopy.x * 0.5 - 5.0, pos.y + canopy.y - 8.0, 10.0, 10.0)

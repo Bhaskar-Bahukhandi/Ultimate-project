@@ -95,8 +95,9 @@ func _process(delta: float) -> void:
 func apply_hitstop(duration: float = 0.1) -> void:
 	## Freeze the game briefly for impact feel.
 	if is_hitstop_active:
-		# Stack: extend current hitstop slightly (caps at 0.25s)
-		hitstop_timer = min(hitstop_timer + duration * 0.5, 0.25)
+		# One hit sends two or three requests (the hit's weight, the combo step,
+		# a kill); adding them up stuttered for up to 0.25 s. Keep the longest.
+		hitstop_timer = min(max(hitstop_timer, duration), 0.25)
 		# If new hit is heavier, deepen the freeze
 		var new_scale = remap(duration, 0.03, 0.20, 0.08, 0.01)
 		new_scale = clamp(new_scale, 0.01, 0.08)

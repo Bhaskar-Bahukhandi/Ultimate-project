@@ -5,7 +5,11 @@ extends SceneTree
 ##   - placeholder rectangles flip around their centre (they used to flip
 ##     around the top-left corner, drawing the body a full width off its box);
 ##   - the top-down player moves in floating mode (grounded mode snagged on
-##     corners).
+##     corners);
+##   - combat feel (the user's decision 1): melee hits count when the swing
+##     touches the enemy's body, recovery cancels into a jump, an attack pressed
+##     mid-dash is remembered, and hit-pause takes the longest request instead
+##     of adding them up.
 ## Run: tests/run_phase0_tests.ps1 -Script res://tests/combat_fixes_test.gd
 
 const TOWER := "res://scenes/chapter2/clock_tower.tscn"
@@ -26,6 +30,7 @@ func _run() -> void:
 		quit(2)
 		return
 	await _test_speed_multiplier()
+	await _test_combat_feel()
 	await _test_topdown_motion_mode()
 	print("")
 	print("COMBAT FIXES RESULT: %d passed, %d failed" % [_passes, _failures.size()])
@@ -137,3 +142,100 @@ func _test_topdown_motion_mode() -> void:
 	await _frames(10)
 	var player := current_scene.get_node("Player") as CharacterBody2D
 	_check(player.motion_mode == CharacterBody2D.MOTION_MODE_FLOATING, "top-down player uses floating motion mode")
+
+
+## A stand-in enemy: a body of `width` x 40 at `pos`, plus (optionally) a big
+## detection-style Area2D like EnemyBase builds.
+func _dummy_enemy(stage: Node, pos: Vector2, width: float, detection_radius: float = 0.0) -> CharacterBody2D:
+	var src := GDScript.new()
+	src.source_code = "extends CharacterBody2D
+var hits := 0
+func take_damage(_a = 0, _b = null, _c = null) -> void:
+	hits += 1
+"
+	src.reload()
+	var e := CharacterBody2D.new()
+	e.set_script(src)
+	e.add_to_group("enemies")
+	e.collision_layer = 4
+	var col := CollisionShape2D.new()
+	var box := RectangleShape2D.new()
+	box.size = Vector2(width, 40)
+	col.shape = box
+	col.position = Vector2(0, -20)
+	e.add_child(col)
+	if detection_radius > 0.0:
+		var area := Area2D.new()
+		var circle := CollisionShape2D.new()
+		var c := CircleShape2D.new()
+		c.radius = detection_radius
+		circle.shape = c
+		area.add_child(circle)
+		e.add_child(area)
+	e.position = pos
+	stage.add_child(e)
+	return e
+
+
+func _test_combat_feel() -> void:
+	print("[combat feel: overlap hits, jump-cancel, dash buffer, hit-pause]")
+	get_root().get_node("GameManager").reset_game()
+	var player := _bare_stage()
+	await _frames(20)
+	get_root().get_node("DialogueManager").force_reset()
+	var stage := current_scene
+	var at := player.global_position
+	var reach := Vector2(48, 0)          # a swing box 64 wide, centred 48 px ahead
+	var size := Vector2(64, 48)
+	# A 160-wide boss whose centre (at +130) is outside the box but whose body
+	# (from +50) overlaps it: the swing visibly connects, so it must hit.
+	var boss := _dummy_enemy(stage, at + Vector2(130, 0), 160.0)
+	# A small enemy far away whose 140 px detection circle reaches the box.
+	var far := _dummy_enemy(stage, at + Vector2(200, 0), 20.0, 140.0)
+	await _frames(3)
+	var hit: Array = player._get_enemies_in_melee_hitbox(reach + Vector2(0, -20), size)
+	_check(boss in hit, "a swing that touches a big enemy's body hits it (its centre is outside the box)")
+	_check(not far in hit, "an enemy only 'touched' through its detection area is not hit")
+	boss.queue_free()
+	far.queue_free()
+	await _frames(2)
+
+	# Jump-cancel: in attack recovery, a jump press jumps and ends the attack.
+	player.velocity = Vector2.ZERO
+	player.is_attacking = true
+	player.attack_recovery_timer = 0.15
+	await physics_frame
+	Input.action_press("jump")
+	await physics_frame
+	await physics_frame
+	Input.action_release("jump")
+	_check(player.velocity.y < 0.0 and not player.is_attacking, "jumping during attack recovery cancels into the jump (vy %.0f, attacking %s)" % [player.velocity.y, player.is_attacking])
+	await _frames(60)
+
+	# Dash buffer: an attack pressed mid-dash is remembered, and comes out as
+	# the dash ends (DASH_CANCEL_INTO_ATTACK), the way a player would do it.
+	player.is_attacking = false
+	player.attack_cooldown = 0.0
+	var before: Dictionary = player.get_combat_attack_metrics()
+	Input.action_press("sprint")
+	await physics_frame
+	Input.action_release("sprint")
+	await physics_frame
+	var was_dashing: bool = player.is_dashing
+	Input.action_press("attack")
+	await physics_frame
+	Input.action_release("attack")
+	await _frames(20)   # the dash (0.18 s) ends
+	var after: Dictionary = player.get_combat_attack_metrics()
+	var buffered := int(after.get("buffered_combo", 0)) - int(before.get("buffered_combo", 0))
+	var started := int(after.get("started", 0)) - int(before.get("started", 0))
+	_check(was_dashing and buffered >= 1 and started >= 1, "an attack pressed mid-dash is buffered and comes out after the dash (dashing %s, buffered %d, started %d)" % [was_dashing, buffered, started])
+	await _frames(40)
+
+	# Hit-pause: two requests in one hit keep the longer, not the sum.
+	var fx := get_root().get_node("CombatFX")
+	fx.apply_hitstop(0.04)
+	fx.apply_hitstop(0.13)
+	var t: float = fx.hitstop_timer
+	_check(absf(t - 0.13) < 0.005, "two hit-pause requests keep the longest (%.3f s, not 0.105 or 0.17)" % t)
+	await _frames(30)

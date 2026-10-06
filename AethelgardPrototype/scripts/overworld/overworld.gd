@@ -182,6 +182,9 @@ func _build_overworld_environment() -> void:
 	river.position = Vector2(1600, 0)
 	river.z_index = -6
 	add_child(river)
+	# The water blocks; the bridge (y 370-440, below) is the crossing.
+	_add_solid(Rect2(1600, 0, 25, 370), "RiverNorth")
+	_add_solid(Rect2(1600, 440, 25, 160), "RiverSouth")
 
 	# Bridge over river on the road
 	var bridge = ColorRect.new()
@@ -207,6 +210,7 @@ func _spawn_trees(origin: Vector2, area: Vector2, count: int, color: Color) -> v
 		trunk.position = Vector2(tree.size.x / 2 - 2, tree.size.y)
 		tree.add_child(trunk)
 		add_child(tree)
+		_add_solid(Rect2(tree.position + Vector2(tree.size.x * 0.5 - 5.0, tree.size.y - 4.0), Vector2(10, 12)), "TreeTrunk")
 
 
 ## ═══════════════════════════════════════════════════════════════════════════
@@ -642,3 +646,17 @@ func _on_rest_point_entered(body: Node2D, rp: Area2D) -> void:
 func _on_rest_point_exited(body: Node2D, rp: Area2D) -> void:
 	if body.is_in_group("player") and _near_rest_point == rp:
 		_near_rest_point = null
+
+
+## Top-down collision for drawn obstacles (trees, the river). Trees block on
+## the trunk. tests/reachability_test.gd checks every gate stays reachable.
+func _add_solid(rect: Rect2, solid_name: String) -> void:
+	var body := StaticBody2D.new()
+	body.name = solid_name
+	body.position = rect.get_center()
+	var col := CollisionShape2D.new()
+	var shape := RectangleShape2D.new()
+	shape.size = rect.size
+	col.shape = shape
+	body.add_child(col)
+	add_child(body)
