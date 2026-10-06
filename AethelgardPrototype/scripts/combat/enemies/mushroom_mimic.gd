@@ -148,10 +148,18 @@ func _attack_behavior(delta: float) -> void:
 
 ## Override die to release healing spores
 func die() -> void:
+	if current_state == State.DEAD:
+		return
 	# Release healing spores on death — rewards player for killing it
 	var players = get_tree().get_nodes_in_group("player")
 	for p in players:
-		if is_instance_valid(p) and has_node("/root/GameManager"):
+		if is_instance_valid(p) and p.has_method("heal"):
+			# heal() keeps the player's live HP and the saved stat in step; writing
+			# only the stat was overwritten by the player's next hit.
+			p.heal(_death_heal_amount)
+			if has_node("/root/VFXLibrary"):
+				VFXLibrary.spawn_pickup_text("+%d HP" % int(_death_heal_amount), global_position + Vector2(0, -40), get_parent(), Color(0.2, 1.0, 0.3))
+		elif is_instance_valid(p) and has_node("/root/GameManager"):
 			GameManager.player_stats["hp"] = mini(
 				GameManager.player_stats.get("hp", 100) + int(_death_heal_amount),
 				GameManager.player_stats.get("max_hp", 100)

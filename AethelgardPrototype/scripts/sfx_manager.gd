@@ -893,7 +893,10 @@ func play(sfx_name: String, pitch_variation: float = 0.0) -> void:
 
 	# Sync volume from MusicManager if available
 	if has_node("/root/MusicManager"):
-		_sfx_volume = MusicManager.get_sfx_volume()
+		var synced_volume: float = MusicManager.get_sfx_volume()
+		if not is_equal_approx(synced_volume, _sfx_volume):
+			_cache.clear()  # cached samples have the old volume baked in
+		_sfx_volume = synced_volume
 
 	var pitch_mult = 1.0
 	if pitch_variation > 0.0:
@@ -921,7 +924,7 @@ func play(sfx_name: String, pitch_variation: float = 0.0) -> void:
 	player.stream = audio
 	player.volume_db = 0.0  # volume baked into waveform samples
 	player.bus = "SFX" if AudioServer.get_bus_index("SFX") >= 0 else "Master"  # Pass 53: Route to SFX bus
-	player.pitch_scale = pitch_mult if (pitch_variation > 0.0 and cache_key == "") else 1.0
+	player.pitch_scale = 1.0  # pitch_mult is already baked into the synthesized frequencies
 	add_child(player)
 	player.play()
 	player.finished.connect(player.queue_free)
@@ -941,13 +944,14 @@ func play_positional(sfx_name: String, world_pos: Vector2, listener_pos: Vector2
 		return
 	var falloff = 1.0 - (dist / max_dist)
 	# Pass 53: Apply falloff on the AudioStreamPlayer instead of mutating shared _sfx_volume
+	var count_before = get_child_count()
 	play(sfx_name)
-	# Find last-spawned player and apply distance attenuation
-	for i in range(get_child_count() - 1, -1, -1):
-		var child = get_child(i)
+	# Attenuate only the player this call spawned; play() can bail out (cap, unknown
+	# name), and then the last child is some other sound that is already playing.
+	if get_child_count() > count_before:
+		var child = get_child(get_child_count() - 1)
 		if child is AudioStreamPlayer:
 			child.volume_db += linear_to_db(maxf(falloff, 0.01))
-			break
 
 
 ## Play a random variant of a base SFX (e.g. "sword_swing" → _2, _3).

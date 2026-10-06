@@ -172,7 +172,7 @@ func _start_drop_attack() -> void:
 	# Move above player
 	global_position.x = player_pos.x
 
-	await get_tree().create_timer(0.4).timeout
+	await get_tree().create_timer(0.4, false).timeout
 	if not is_inside_tree() or current_state == State.DEAD:
 		_is_dropping = false
 		return
@@ -189,7 +189,7 @@ func _start_drop_attack() -> void:
 	velocity.y = _drop_attack_speed
 
 	# Check for hit after landing
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	_is_dropping = false
 
 	if not is_inside_tree() or current_state == State.DEAD:
@@ -226,7 +226,7 @@ func _teleport_behind_player() -> void:
 		var tw = create_tween()
 		tw.tween_property(sprite, "modulate:a", 0.0, 0.1)
 
-	await get_tree().create_timer(0.15).timeout
+	await get_tree().create_timer(0.15, false).timeout
 	if not is_inside_tree() or current_state == State.DEAD:
 		return
 
@@ -290,7 +290,8 @@ func _drop_web_trap() -> void:
 				body.take_damage(5.0)
 	)
 
-	# Auto-destroy
-	await get_tree().create_timer(6.0).timeout
-	if is_instance_valid(web):
-		web.queue_free()
+	# Auto-destroy. The web times itself out: an await here never resumed if the
+	# spider died first, so its webs stayed on the floor slowing the player forever.
+	var expire := web.create_tween()
+	expire.tween_interval(6.0)
+	expire.tween_callback(web.queue_free)

@@ -50,6 +50,7 @@ var _boss_attack_cooldown: float = 1.15
 var _boss_combo_count: int = 0
 var _boss_max_combo: int = 2
 var _attack_active: bool = false
+var _attack_gen: int = 0
 var _stagger_active: bool = false
 var _slam_wave_active: bool = false
 var _charge_rushing: bool = false
@@ -306,6 +307,11 @@ func _boss_attack(_delta: float) -> void:
 
 func _execute_boss_attack() -> void:
 	_attack_active = true
+	# Phase changes, flinches and guard counters clear _attack_active to cancel an
+	# attack, but its coroutine keeps running. If a newer attack has started by
+	# the time it finishes, it must not clear that attack's flag or combo count.
+	_attack_gen += 1
+	var gen := _attack_gen
 	var attack = _pick_attack()
 	_phase_attack_count += 1
 
@@ -329,6 +335,8 @@ func _execute_boss_attack() -> void:
 
 	if not is_inside_tree() or current_state == State.DEAD:
 		_attack_active = false
+		return
+	if gen != _attack_gen:
 		return
 
 	_boss_combo_count += 1
@@ -448,19 +456,19 @@ func _attack_slash() -> void:
 		get_node("Sprite").modulate = Color(1.0, 0.6, 0.3)
 	_status_text("SLASH", global_position + Vector2(0, -62), false)
 	_front_warning_facing(slash_facing, slash_size, slash_y_offset, Color(1.0, 0.55, 0.15, 0.34), 0.22)
-	await get_tree().create_timer(0.22).timeout
+	await get_tree().create_timer(0.22, false).timeout
 	if not _safe(): return
 	if has_node("Sprite"):
 		get_node("Sprite").modulate = Color.WHITE if not _is_enraged else Color(1.5, 0.3, 0.3)
 	velocity.x = slash_facing * 230.0
 	_sfx("sword_swing", 0.1)
-	await get_tree().create_timer(0.10).timeout
+	await get_tree().create_timer(0.10, false).timeout
 	if not _safe():
 		return
 	if _deal_boss_slash_damage(slash_facing, slash_size, slash_y_offset, contact_damage):
 		_on_attack_connected(6.0, 0.10)
 	velocity.x = 0.0
-	await get_tree().create_timer(0.24).timeout
+	await get_tree().create_timer(0.24, false).timeout
 
 
 func _attack_low_sweep() -> void:
@@ -471,13 +479,13 @@ func _attack_low_sweep() -> void:
 		get_node("Sprite").modulate = Color(0.35, 0.9, 1.0)
 	_front_warning(Vector2(attack_range * 1.55, 42.0), -6.0, Color(0.25, 0.95, 1.0, 0.38), 0.30)
 	_sfx("heavy_windup", 0.12)
-	await get_tree().create_timer(0.30).timeout
+	await get_tree().create_timer(0.30, false).timeout
 	if not _safe():
 		return
 	var dir = direction_to_player()
 	velocity.x = dir.x * 170.0
 	_sfx("sword_swing", 0.08)
-	await get_tree().create_timer(0.08).timeout
+	await get_tree().create_timer(0.08, false).timeout
 	if not _safe():
 		return
 	if _deal_boss_low_sweep_damage(attack_range * 1.45, contact_damage * 0.9):
@@ -485,7 +493,7 @@ func _attack_low_sweep() -> void:
 	velocity.x = 0.0
 	if has_node("Sprite"):
 		get_node("Sprite").modulate = Color.WHITE if not _is_enraged else Color(1.5, 0.3, 0.3)
-	await get_tree().create_timer(0.40).timeout
+	await get_tree().create_timer(0.40, false).timeout
 
 
 func _attack_overhead_slam() -> void:
@@ -495,14 +503,14 @@ func _attack_overhead_slam() -> void:
 		get_node("Sprite").modulate = Color(1.0, 0.25, 0.2)
 	_front_warning(Vector2(attack_range * 1.2, 110.0), -30.0, Color(1.0, 0.1, 0.08, 0.35), 0.42)
 	_sfx("heavy_windup")
-	await get_tree().create_timer(0.42).timeout
+	await get_tree().create_timer(0.42, false).timeout
 	if not _safe():
 		return
 	var dir = direction_to_player()
 	velocity.x = dir.x * 250.0
 	_sfx("sword_slam")
 	_screen_shake(10.0, 0.2)
-	await get_tree().create_timer(0.14).timeout
+	await get_tree().create_timer(0.14, false).timeout
 	if not _safe():
 		return
 	if _deal_boss_melee_damage(attack_range * 1.15, contact_damage * 1.5, "boss_slam", 88.0, -28.0, 0.12):
@@ -511,7 +519,7 @@ func _attack_overhead_slam() -> void:
 	velocity.x = 0.0
 	if has_node("Sprite"):
 		get_node("Sprite").modulate = Color.WHITE if not _is_enraged else Color(1.5, 0.3, 0.3)
-	await get_tree().create_timer(0.52).timeout
+	await get_tree().create_timer(0.52, false).timeout
 
 
 func _attack_charge() -> void:
@@ -521,7 +529,7 @@ func _attack_charge() -> void:
 	if has_node("Sprite"):
 		get_node("Sprite").modulate = Color(1.0, 0.45, 0.15)
 	_front_warning(Vector2(attack_range * 2.1, 58.0), -28.0, Color(1.0, 0.45, 0.0, 0.36), 0.34)
-	await get_tree().create_timer(0.34).timeout
+	await get_tree().create_timer(0.34, false).timeout
 	if not _safe():
 		return
 	_charge_rushing = true
@@ -529,19 +537,19 @@ func _attack_charge() -> void:
 	velocity.x = dir.x * 430.0
 	velocity.y = -100.0
 	_sfx("dash", 0.15)
-	await get_tree().create_timer(0.16).timeout
+	await get_tree().create_timer(0.16, false).timeout
 	if not _safe():
 		_charge_rushing = false
 		return
 	if _deal_boss_melee_damage(attack_range * 1.35, contact_damage * 1.3, "boss_charge", 58.0, -28.0, 0.10):
 		_on_attack_connected(12.0, 0.16)
 	_screen_shake(8.0, 0.15)
-	await get_tree().create_timer(0.20).timeout
+	await get_tree().create_timer(0.20, false).timeout
 	velocity.x = 0.0
 	_charge_rushing = false
 	if has_node("Sprite"):
 		get_node("Sprite").modulate = Color.WHITE if not _is_enraged else Color(1.5, 0.3, 0.3)
-	await get_tree().create_timer(0.34).timeout
+	await get_tree().create_timer(0.34, false).timeout
 
 
 func _attack_shield_bash() -> void:
@@ -553,11 +561,11 @@ func _attack_shield_bash() -> void:
 	velocity.x = 0.0
 	_front_warning(Vector2(attack_range * 0.9, 88.0), -30.0, Color(0.85, 0.85, 1.0, 0.32), 0.18)
 	_sfx("shield_hit")
-	await get_tree().create_timer(0.18).timeout
+	await get_tree().create_timer(0.18, false).timeout
 	if not _safe():
 		return
 	velocity.x = dir.x * 240.0
-	await get_tree().create_timer(0.08).timeout
+	await get_tree().create_timer(0.08, false).timeout
 	if not _safe():
 		return
 	if _deal_boss_melee_damage(attack_range * 0.75, contact_damage * 0.8, "boss_bash", 72.0, -28.0, 0.10):
@@ -572,7 +580,7 @@ func _attack_shield_bash() -> void:
 		if player.has_method("apply_knockback") and not defensive_answer:
 			player.apply_knockback(kb_dir * 200.0)
 	velocity.x = 0.0
-	await get_tree().create_timer(0.50 if defensive_answer else 0.42).timeout
+	await get_tree().create_timer(0.50 if defensive_answer else 0.42, false).timeout
 
 
 func _attack_teleport_slash() -> void:
@@ -590,7 +598,7 @@ func _attack_teleport_slash() -> void:
 	if has_node("Sprite"):
 		get_node("Sprite").modulate = Color(0.85, 0.45, 1.0)
 	_front_warning(Vector2(attack_range, 96.0), -32.0, Color(0.8, 0.25, 1.0, 0.36), 0.34)
-	await get_tree().create_timer(0.34).timeout
+	await get_tree().create_timer(0.34, false).timeout
 	if not _safe():
 		return
 	if _deal_boss_melee_damage(attack_range * 0.95, contact_damage * 1.2, "boss_teleport_slash", 82.0, -30.0, 0.11):
@@ -598,7 +606,7 @@ func _attack_teleport_slash() -> void:
 	_sfx("sword_swing")
 	if has_node("Sprite"):
 		get_node("Sprite").modulate = Color.WHITE if not _is_enraged else Color(1.5, 0.3, 0.3)
-	await get_tree().create_timer(0.32).timeout
+	await get_tree().create_timer(0.32, false).timeout
 
 
 func _attack_shockwave() -> void:
@@ -607,18 +615,18 @@ func _attack_shockwave() -> void:
 	_status_text("AIR", global_position + Vector2(0, -62), false)
 	_spawn_attack_warning(Vector2(0, -6.0), Vector2(310, 46), Color(0.95, 0.15, 0.95, 0.32), 0.46)
 	_sfx("heavy_windup")
-	await get_tree().create_timer(0.46).timeout
+	await get_tree().create_timer(0.46, false).timeout
 	if not _safe():
 		return
 	velocity.y = 800.0
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.3, false).timeout
 	if not _safe():
 		return
 	if _deal_grounded_wave_damage(155.0, contact_damage * 1.45, "boss_shockwave"):
 		_on_attack_connected(10.0, 0.16)
 	_screen_shake(18.0, 0.4)
 	_vfx("vfx_hit_spark", global_position + Vector2(0, 10))
-	await get_tree().create_timer(0.48).timeout
+	await get_tree().create_timer(0.48, false).timeout
 
 
 # ── Slam wave helper ────────────────────────────────────────────────────
@@ -641,7 +649,7 @@ func _attack_corrupt_rift() -> void:
 		target_offset = (player.global_position - global_position).clamp(Vector2(-150, -80), Vector2(150, 20))
 	_spawn_attack_warning(target_offset, Vector2(76, 130), Color(0.95, 0.05, 1.0, 0.42), 0.38)
 	_spawn_attack_warning(Vector2(-target_offset.x * 0.55, -30.0), Vector2(58, 104), Color(0.45, 0.15, 1.0, 0.25), 0.38)
-	await get_tree().create_timer(0.38).timeout
+	await get_tree().create_timer(0.38, false).timeout
 	if not _safe():
 		return
 	var hit_primary := _deal_boss_rift_damage(target_offset, Vector2(76, 130), contact_damage * 1.15)
@@ -651,7 +659,7 @@ func _attack_corrupt_rift() -> void:
 	_vfx("vfx_glitch_sparkle", global_position + target_offset)
 	if has_node("Sprite"):
 		get_node("Sprite").modulate = Color.WHITE if not _is_enraged else Color(1.5, 0.3, 0.3)
-	await get_tree().create_timer(0.44).timeout
+	await get_tree().create_timer(0.44, false).timeout
 
 func _spawn_slam_wave() -> void:
 	if _slam_wave_active:
@@ -669,7 +677,7 @@ func _spawn_slam_wave() -> void:
 	var elapsed = 0.0
 	var wave_has_hit: bool = false
 	while elapsed < wave_duration:
-		await get_tree().create_timer(0.05).timeout
+		await get_tree().create_timer(0.05, false).timeout
 		if not is_inside_tree():
 			_slam_wave_active = false
 			return
@@ -1158,7 +1166,7 @@ func take_damage(amount: float, knockback_source: Vector2 = Vector2.ZERO) -> voi
 		velocity.x = move_toward(velocity.x, 0.0, 300.0)
 		_attack_active = false
 		_charge_rushing = false
-		await get_tree().create_timer(0.2).timeout
+		await get_tree().create_timer(0.2, false).timeout
 		if not is_inside_tree() or not is_instance_valid(self):
 			return
 		_stagger_active = false
@@ -1170,7 +1178,7 @@ func take_damage(amount: float, knockback_source: Vector2 = Vector2.ZERO) -> voi
 			var spr = get_node("Sprite")
 			var orig = spr.modulate
 			spr.modulate = Color(1.0, 0.4, 0.4)
-			await get_tree().create_timer(0.08).timeout
+			await get_tree().create_timer(0.08, false).timeout
 			if is_inside_tree() and is_instance_valid(self) and is_instance_valid(spr):
 				spr.modulate = orig
 	# Phase 3+: no flinch
@@ -1213,7 +1221,7 @@ func die() -> void:
 	_tween_die()
 	_vfx("vfx_enemy_death", global_position)
 
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0, false).timeout
 	if is_inside_tree() and is_instance_valid(self):
 		queue_free()
 

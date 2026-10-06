@@ -10,6 +10,7 @@ var _credits_vbox: VBoxContainer = null
 var _scroll_tween: Tween = null
 var _is_showing: bool = false
 var _skip_label: Label = null
+var _fade_out_tween: Tween = null
 
 # Credits data — sections with headers and entries
 const CREDITS_DATA: Array = [
@@ -99,6 +100,10 @@ func _ready() -> void:
 func show_credits(return_to_menu: bool = true) -> void:
 	if _is_showing:
 		return
+	# Reopened during the previous fade-out: that fade's callback would free
+	# the new panel and pop the context.
+	if _fade_out_tween and _fade_out_tween.is_valid():
+		_fade_out_tween.kill()
 	# Credits sit above everything (non-exclusive) and pause the game.
 	ContextStack.push(&"credits", self, true, true, false)
 	_is_showing = true
@@ -206,13 +211,19 @@ var _scroll_active: bool = false
 func _start_scroll(return_to_menu: bool) -> void:
 	_return_to_menu = return_to_menu
 	_scroll_position = 0.0
-	_scroll_active = true
+	# Scrolling starts only once the height is measured: with _scroll_active set
+	# before the wait, _process compared against a height of 0 and ended the
+	# credits on the first frame.
+	_scroll_active = false
 	# Wait a frame for layout to resolve
 	await get_tree().process_frame
 	await get_tree().process_frame
+	if not _is_showing or not is_instance_valid(_credits_vbox) or not is_instance_valid(_scroll_container):
+		return
 	_total_scroll_height = _credits_vbox.size.y - _scroll_container.size.y
 	if _total_scroll_height <= 0:
 		_total_scroll_height = 2000.0
+	_scroll_active = true
 
 	# Play credits music
 	if has_node("/root/MusicManager"):
@@ -250,6 +261,7 @@ func _finish_credits() -> void:
 	# Fade out
 	if _panel and is_instance_valid(_panel):
 		var fade = create_tween()
+		_fade_out_tween = fade
 		fade.tween_property(_panel, "modulate:a", 0.0, 0.8)
 		fade.tween_callback(func():
 			if _panel and is_instance_valid(_panel):

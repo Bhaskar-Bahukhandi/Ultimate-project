@@ -255,6 +255,8 @@ func _end_shake() -> void:
 
 func spawn_damage_number(damage: float, pos: Vector2, is_critical: bool = false) -> void:
 	## Create a floating damage number at the given world position.
+	if has_node("/root/GameManager") and not GameManager.get_accessibility("show_damage_numbers", true):
+		return
 	var scene_root = get_tree().current_scene
 	if not scene_root:
 		return
@@ -368,8 +370,8 @@ func apply_hit_effects(damage: float, hit_position: Vector2, is_heavy_hit: bool 
 		shake_power *= 1.5
 	apply_screen_shake(shake_power, 0.25)
 
-	# Damage number with auto-critical styling
-	spawn_damage_number(damage, hit_position, is_heavy_hit or damage > 30)
+	# No damage number here: every caller (player_combat.gd) spawns its own,
+	# coloured one, so this drew a second number on every hit.
 
 	# Zoom pulse on heavy hits
 	if is_heavy_hit or damage > 35:

@@ -144,6 +144,7 @@ func start_arena(tier: String) -> void:
 				return
 		return
 
+	current_mode = ArenaMode.STANDARD
 	current_tier = tier
 	total_waves = info["waves"]
 	current_wave = 0
@@ -156,7 +157,7 @@ func start_arena(tier: String) -> void:
 		if not is_inside_tree():
 			return
 
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0, false).timeout
 	if not is_inside_tree():
 		return
 	_start_next_wave()
@@ -231,7 +232,7 @@ func start_time_attack(tier: String) -> void:
 		if not is_inside_tree(): return
 
 	_is_processing_timer = true
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	if not is_inside_tree(): return
 	_start_next_wave()
 
@@ -280,7 +281,7 @@ func start_endurance() -> void:
 		await DialogueManager.say("Vex", "ENDURANCE MODE! How long can you survive? The crowd wants to know!")
 		if not is_inside_tree(): return
 
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0, false).timeout
 	if not is_inside_tree(): return
 	_start_next_wave()
 
@@ -342,8 +343,9 @@ func _start_next_wave() -> void:
 				randf_range(arena_bounds.position.x, arena_bounds.position.x + arena_bounds.size.x),
 				arena_bounds.position.y
 			)
+			if not arena_active: return
 			_spawn_enemy(etype, pos)
-			await get_tree().create_timer(0.25).timeout
+			await get_tree().create_timer(0.25, false).timeout
 			if not is_inside_tree(): return
 		return
 
@@ -373,13 +375,16 @@ func _start_next_wave() -> void:
 	# Spawn enemies
 	var types: Array = info["enemy_types"]
 	for i in count:
+		# Stop spawning into an arena that was aborted or timed out mid-wave.
+		if not arena_active:
+			return
 		var etype: String = types[randi() % types.size()]
 		var pos = Vector2(
 			randf_range(arena_bounds.position.x, arena_bounds.position.x + arena_bounds.size.x),
 			arena_bounds.position.y
 		)
 		_spawn_enemy(etype, pos)
-		await get_tree().create_timer(0.3).timeout
+		await get_tree().create_timer(0.3, false).timeout
 		if not is_inside_tree():
 			return
 
@@ -387,7 +392,7 @@ func _start_next_wave() -> void:
 	if enemies_alive <= 0:
 		push_warning("[ARENA] All enemies failed to spawn — skipping wave")
 		all_enemies_cleared.emit()
-		await get_tree().create_timer(1.0).timeout
+		await get_tree().create_timer(1.0, false).timeout
 		if not is_inside_tree():
 			return
 		_start_next_wave()
@@ -508,15 +513,8 @@ func _setup_enemy_visual(enemy: EnemyBase, etype: String) -> void:
 	col.position = Vector2(0, -vis_size.y * 0.5)
 	enemy.add_child(col)
 
-	# Health bar
-	var hb = ProgressBar.new()
-	hb.name = "HealthBar"
-	hb.size = Vector2(vis_size.x + 10, 6)
-	hb.position = Vector2(-vis_size.x * 0.5 - 5, -vis_size.y - 10)
-	hb.value = 100.0
-	hb.show_percentage = false
-	hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	enemy.add_child(hb)
+	# Health bar: EnemyBase._setup_health_bar() already built "HealthBar" in _ready.
+	# A second bar added here got auto-renamed and was never updated (stuck at 100%).
 
 
 # ═════════════════════════════════════════════════════════════════════════
@@ -524,6 +522,8 @@ func _setup_enemy_visual(enemy: EnemyBase, etype: String) -> void:
 # ═════════════════════════════════════════════════════════════════════════
 
 func _on_enemy_died() -> void:
+	if not arena_active:
+		return
 	enemies_alive -= 1
 	if enemies_alive <= 0:
 		all_enemies_cleared.emit()
@@ -536,15 +536,15 @@ func _on_enemy_died() -> void:
 
 		wave_completed.emit(current_wave)
 
-		# Per-wave bonus
-		var info: Dictionary = TIER_DATA[current_tier]
+		# Per-wave bonus (endurance has no TIER_DATA entry; it pays per wave in _start_next_wave)
+		var info: Dictionary = TIER_DATA.get(current_tier, {})
 		if _has_gm():
-			if info["xp_bonus"] > 0:
+			if info.get("xp_bonus", 0) > 0:
 				GameManager.add_xp(info["xp_bonus"])
-			if info["gold_bonus"] > 0:
+			if info.get("gold_bonus", 0) > 0:
 				GameManager.add_gold(info["gold_bonus"])
 
-		await get_tree().create_timer(2.0).timeout
+		await get_tree().create_timer(2.0, false).timeout
 		if not is_inside_tree():
 			return
 		_start_next_wave()

@@ -22,7 +22,7 @@ func _ready() -> void:
 
 	_build_background()
 
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	if not is_inside_tree(): return
 	await _start_sequence()
 	if not is_inside_tree(): return
@@ -176,9 +176,9 @@ func _on_dlg_event(event: String) -> void:
 			var t := create_tween()
 			t.tween_property(flash, "color:a", 0.0, 0.5)
 			t.tween_callback(flash.queue_free)
-			await get_tree().create_timer(0.4).timeout
+			await get_tree().create_timer(0.4, false).timeout
 		"flash_ends", "upper_wall":
-			await get_tree().create_timer(0.4).timeout
+			await get_tree().create_timer(0.4, false).timeout
 		"fragment_acquired":
 			GameManager.collect_source_key(int(parts[1]) if parts.size() > 1 else 2)
 		_:
@@ -208,7 +208,7 @@ func _mark_seraphina_route() -> void:
 		LoreJournal.discover("ironhold_seraphina_route_marker")
 
 func _sequence_complete() -> void:
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0, false).timeout
 	if not is_inside_tree(): return
 	DialogueManager.hide_dialogue()
 	var fade = ColorRect.new()

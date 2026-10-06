@@ -25,8 +25,14 @@ var _zone_label: Label = null
 var _stats_hud: Label = null
 var _lore_items_placed: Array[Node2D] = []
 var _npcs: Array[Node2D] = []
-var _near_boss_gate: bool = false
-var _near_farming_zone: Area2D = null
+
+## Interactables (NPCs, lore, shops, gate, herb patch, secrets) the player is
+## standing in. Interact acts on the nearest one, the same rule as
+## player_topdown.gd, so overlapping circles can't leave a dead prompt or hide
+## a shop behind an NPC. Each area carries an "interact_type" meta.
+var _overlapping: Array = []
+var _focused: Area2D = null
+var _interacting: bool = false
 
 # ── NPC Data ────────────────────────────────────────────────────────────
 const NPC_DATA: Array = [
@@ -89,6 +95,7 @@ func _process(_delta: float) -> void:
 		return
 	_update_zone(_player.global_position)
 	_clamp_player()
+	_update_focus()
 	_update_ui()
 
 
@@ -466,26 +473,9 @@ func _create_npc(data: Dictionary) -> Node2D:
 	npc.set_meta("npc_name", data["name"])
 	npc.set_meta("dialogue", data["dialogue"])
 	npc.set_meta("dialogue_index", 0)
-	npc.body_entered.connect(_on_npc_body_entered.bind(npc))
-	npc.body_exited.connect(_on_npc_body_exited.bind(npc))
+	_watch(npc, "npc")
 
 	return npc
-
-var _near_npc: Area2D = null
-
-func _on_npc_body_entered(body: Node2D, npc: Area2D) -> void:
-	if body.is_in_group("player"):
-		_near_npc = npc
-		var prompt = npc.get_node_or_null("Prompt")
-		if prompt:
-			prompt.visible = true
-
-func _on_npc_body_exited(body: Node2D, npc: Area2D) -> void:
-	if body.is_in_group("player") and _near_npc == npc:
-		_near_npc = null
-		var prompt = npc.get_node_or_null("Prompt")
-		if prompt:
-			prompt.visible = false
 
 
 ## ═══════════════════════════════════════════════════════════════════════════
@@ -536,26 +526,9 @@ func _create_lore_item(data: Dictionary) -> Node2D:
 	lore.set_meta("lore_id", data["id"])
 	lore.set_meta("lore_title", data["title"])
 	lore.set_meta("lore_text", data["text"])
-	lore.body_entered.connect(_on_lore_nearby.bind(lore))
-	lore.body_exited.connect(_on_lore_left.bind(lore))
+	_watch(lore, "lore")
 
 	return lore
-
-var _near_lore: Area2D = null
-
-func _on_lore_nearby(body: Node2D, lore: Area2D) -> void:
-	if body.is_in_group("player"):
-		_near_lore = lore
-		var prompt = lore.get_node_or_null("Prompt")
-		if prompt:
-			prompt.visible = true
-
-func _on_lore_left(body: Node2D, lore: Area2D) -> void:
-	if body.is_in_group("player") and _near_lore == lore:
-		_near_lore = null
-		var prompt = lore.get_node_or_null("Prompt")
-		if prompt:
-			prompt.visible = false
 
 
 ## ═══════════════════════════════════════════════════════════════════════════
@@ -611,22 +584,17 @@ func _place_boss_gate() -> void:
 	gate.add_child(shape)
 
 	gate.body_entered.connect(_on_boss_gate_entered)
-	gate.body_exited.connect(_on_boss_gate_exited)
+	_watch(gate, "boss")
 	add_child(gate)
 
 
 func _on_boss_gate_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
-		_near_boss_gate = true
-		# Show level warning
+		# Show level warning (cleared once the player has levelled past it)
 		var warning = get_node_or_null("TutorialKnightGate/BossWarning")
 		var player_level = GameManager.player_stats.get("level", 1)
-		if warning and player_level < 3:
-			warning.text = "!! Your Lv %d — Boss Lv 5 !!" % player_level
-
-func _on_boss_gate_exited(body: Node2D) -> void:
-	if body.is_in_group("player"):
-		_near_boss_gate = false
+		if warning:
+			warning.text = "!! Your Lv %d — Boss Lv 5 !!" % player_level if player_level < 3 else ""
 
 
 ## ═══════════════════════════════════════════════════════════════════════════
@@ -649,21 +617,20 @@ func _create_shop_trigger(shop_name: String, pos: Vector2, shop_type: String) ->
 	shape.shape = rect
 	trigger.add_child(shape)
 
+	# Shops had no prompt, so nothing told the player they could open one here.
+	var prompt = Label.new()
+	prompt.name = "Prompt"
+	InputService.bind_text(prompt, "[{interact}] Shop")
+	prompt.add_theme_font_size_override("font_size", 7)
+	prompt.add_theme_color_override("font_color", Color(1.0, 0.9, 0.4))
+	prompt.position = Vector2(-15, 16)
+	prompt.visible = false
+	trigger.add_child(prompt)
+
 	trigger.set_meta("shop_type", shop_type)
 	trigger.set_meta("shop_name", shop_name)
-	trigger.body_entered.connect(_on_shop_entered.bind(trigger))
-	trigger.body_exited.connect(_on_shop_exited.bind(trigger))
+	_watch(trigger, "shop")
 	add_child(trigger)
-
-var _near_shop: Area2D = null
-
-func _on_shop_entered(body: Node2D, trigger: Area2D) -> void:
-	if body.is_in_group("player"):
-		_near_shop = trigger
-
-func _on_shop_exited(body: Node2D, trigger: Area2D) -> void:
-	if body.is_in_group("player") and _near_shop == trigger:
-		_near_shop = null
 
 
 ## ═══════════════════════════════════════════════════════════════════════════
@@ -693,8 +660,6 @@ const OAKHAVEN_SECRETS: Array = [
 		"text": "A developer's debug log wedged behind the village well:\n'The forest entities were supposed to be friendly. Something in the root branch corrupted their behavior trees.'"
 	},
 ]
-
-var _near_secret: Area2D = null
 
 func _place_secrets() -> void:
 	for data in OAKHAVEN_SECRETS:
@@ -735,14 +700,7 @@ func _create_secret(data: Dictionary) -> Area2D:
 	secret.add_child(shape)
 
 	secret.set_meta("secret_data", data)
-	secret.body_entered.connect(func(b):
-		if b.is_in_group("player"):
-			_near_secret = secret
-	)
-	secret.body_exited.connect(func(b):
-		if b.is_in_group("player") and _near_secret == secret:
-			_near_secret = null
-	)
+	_watch(secret, "secret")
 	return secret
 
 
@@ -796,7 +754,7 @@ func _collect_secret(secret: Area2D) -> void:
 		LoreJournal.record_find(data["id"], data.get("title", "Secret"), data.get("text", ""))
 
 	# Remove the secret pickup
-	_near_secret = null
+	_overlapping.erase(secret)
 	secret.queue_free()
 
 
@@ -872,39 +830,81 @@ func _on_overworld_exit_entered(body: Node2D) -> void:
 ## INPUT — Interact with NPCs, lore, shops, boss gate
 ## ═══════════════════════════════════════════════════════════════════════════
 
+func _watch(area: Area2D, type: String) -> void:
+	area.set_meta("interact_type", type)
+	area.body_entered.connect(_on_interact_entered.bind(area))
+	area.body_exited.connect(_on_interact_exited.bind(area))
+
+
+func _on_interact_entered(body: Node2D, area: Area2D) -> void:
+	if body.is_in_group("player") and area not in _overlapping:
+		_overlapping.append(area)
+
+
+func _on_interact_exited(body: Node2D, area: Area2D) -> void:
+	if body.is_in_group("player"):
+		_overlapping.erase(area)
+
+
+func _is_talking() -> bool:
+	return _interacting or (has_node("/root/DialogueManager") and DialogueManager.is_active)
+
+
+## Pick the nearest overlapped area and show only its prompt. No prompt while
+## an interaction or dialogue is running.
+func _update_focus() -> void:
+	var best: Area2D = null
+	if not _is_talking():
+		var best_dist := INF
+		for area in _overlapping.duplicate():
+			if not is_instance_valid(area) or not area.is_inside_tree():
+				_overlapping.erase(area)
+				continue
+			var dist := _player.global_position.distance_squared_to(area.global_position)
+			if dist < best_dist:
+				best_dist = dist
+				best = area
+	if best == _focused:
+		return
+	if is_instance_valid(_focused):
+		var old_prompt = _focused.get_node_or_null("Prompt")
+		if old_prompt:
+			old_prompt.visible = false
+	_focused = best
+	if _focused:
+		var new_prompt = _focused.get_node_or_null("Prompt")
+		if new_prompt:
+			new_prompt.visible = true
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if not event.is_action_pressed("interact"):
 		return
-
-	# Boss gate
-	if _near_boss_gate:
-		_enter_boss_arena()
+	# One interaction at a time: pressing interact mid-line used to start a
+	# second say() over the running one.
+	if _is_talking():
 		return
-
-	# NPC interaction
-	if _near_npc and is_instance_valid(_near_npc):
-		_interact_with_npc(_near_npc)
+	_update_focus()
+	var target := _focused
+	if not is_instance_valid(target):
 		return
-
-	# Lore item
-	if _near_lore and is_instance_valid(_near_lore):
-		_interact_with_lore(_near_lore)
-		return
-
-	# Shop
-	if _near_shop and is_instance_valid(_near_shop):
-		_interact_with_shop(_near_shop)
-		return
-
-	# Optional farming access
-	if _near_farming_zone and is_instance_valid(_near_farming_zone):
-		_interact_with_farming_zone(_near_farming_zone)
-		return
-
-	# Hidden secret
-	if _near_secret and is_instance_valid(_near_secret):
-		_collect_secret(_near_secret)
-		return
+	get_viewport().set_input_as_handled()
+	_interacting = true
+	_update_focus()
+	match target.get_meta("interact_type", ""):
+		"boss":
+			await _enter_boss_arena()
+		"npc":
+			await _interact_with_npc(target)
+		"lore":
+			await _interact_with_lore(target)
+		"shop":
+			_interact_with_shop(target)
+		"farm":
+			await _interact_with_farming_zone(target)
+		"secret":
+			await _collect_secret(target)
+	_interacting = false
 
 
 func _interact_with_npc(npc: Area2D) -> void:
@@ -1026,25 +1026,8 @@ func _place_farming_zone() -> void:
 	circle.radius = 58.0
 	shape.shape = circle
 	marker.add_child(shape)
-	marker.body_entered.connect(_on_farming_zone_entered.bind(marker))
-	marker.body_exited.connect(_on_farming_zone_exited.bind(marker))
+	_watch(marker, "farm")
 	add_child(marker)
-
-
-func _on_farming_zone_entered(body: Node2D, marker: Area2D) -> void:
-	if body.is_in_group("player"):
-		_near_farming_zone = marker
-		var prompt = marker.get_node_or_null("Prompt")
-		if prompt:
-			prompt.visible = true
-
-
-func _on_farming_zone_exited(body: Node2D, marker: Area2D) -> void:
-	if body.is_in_group("player") and _near_farming_zone == marker:
-		_near_farming_zone = null
-		var prompt = marker.get_node_or_null("Prompt")
-		if prompt:
-			prompt.visible = false
 
 
 func _interact_with_farming_zone(marker: Area2D) -> void:

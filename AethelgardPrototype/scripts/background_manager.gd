@@ -112,8 +112,9 @@ func _ready() -> void:
 
 func has_real_asset(bg_key: String) -> bool:
 	## Check if a real background PNG exists for this location
+	# ResourceLoader, not FileAccess: exported builds have no source .png files.
 	if bg_key in BG_ASSETS:
-		return FileAccess.file_exists(BG_ASSETS[bg_key])
+		return ResourceLoader.exists(BG_ASSETS[bg_key])
 	return false
 
 func get_real_texture(bg_key: String) -> Texture2D:
@@ -777,7 +778,8 @@ func _gen_ironhold_city() -> Control:
 			Vector2(randf_range(100, _viewport_size.x - 200), randf_range(_viewport_size.y * 0.3, _viewport_size.y * 0.5)),
 			Vector2(40, 40))
 		var gw = c.create_tween().set_loops()
-		gw.tween_property(gear, "rotation", TAU, randf_range(8, 15))
+		# from(0): without it every loop after the first tweens TAU -> TAU and the gear stops.
+		gw.tween_property(gear, "rotation", TAU, randf_range(8, 15)).from(0.0)
 	
 	# Cyan process thread glows
 	for i in range(4):
@@ -862,7 +864,7 @@ func _gen_ironhold_clock_tower() -> Control:
 	for gp in gear_positions:
 		var gear = _add_rect(c, pal["copper"].darkened(0.3), gp, Vector2(30, 30))
 		var gear_tw = c.create_tween().set_loops()
-		gear_tw.tween_property(gear, "rotation", TAU, randf_range(6, 12))
+		gear_tw.tween_property(gear, "rotation", TAU, randf_range(6, 12)).from(0.0)
 	
 	# Platform hints
 	for i in range(4):

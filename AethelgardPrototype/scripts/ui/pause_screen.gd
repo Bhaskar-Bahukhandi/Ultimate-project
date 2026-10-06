@@ -48,6 +48,10 @@ const ControlsMenu := preload("res://scripts/ui/controls_menu.gd")
 var is_paused: bool = false
 var pause_blocked: bool = false  # Block pausing during cutscenes
 
+# Footer buttons that open sub-panels; focus returns here when those close.
+var _options_btn: Button = null
+var _menu_btn: Button = null
+
 # ===========================
 # Ability/Function definitions
 # ===========================
@@ -128,8 +132,17 @@ func _input(event: InputEvent) -> void:
 			# take the key instead of closing pause underneath it.
 			if is_paused and ContextStack.top() != &"pause":
 				return
+			# Options / Main Menu confirm sit on top of pause without a context:
+			# Esc closes that panel first, not the whole menu.
+			if is_paused and _close_subpanel():
+				get_viewport().set_input_as_handled()
+				return
+			var was_paused := is_paused
 			toggle_pause()
-			get_viewport().set_input_as_handled()
+			# Consume the press only if pause actually opened or closed. A refused
+			# open (status window etc. on top) leaves the key for that menu.
+			if is_paused != was_paused:
+				get_viewport().set_input_as_handled()
 
 func toggle_pause() -> void:
 	if not is_paused:
@@ -461,15 +474,13 @@ func _refresh_functions_tab() -> void:
 	for child in ability_list.get_children():
 		child.queue_free()
 	
-	# Check unlock status from GameManager flags
-	if GameManager.story_flags.get("ch1_data_vision_unlocked", false):
-		abilities["data_vision"]["unlocked"] = true
-	if GameManager.story_flags.get("root_access_unlocked", false):
-		abilities["root_access"]["unlocked"] = true
-		abilities["perfect_delete"]["unlocked"] = true
-	if GameManager.story_flags.get("ch1_tutorial_knight_defeated", false):
-		abilities["garbage_collection"]["unlocked"] = true
-		abilities["pogo_strike"]["unlocked"] = true
+	# Check unlock status from GameManager flags. Assigned (not only set true)
+	# each time: this autoload outlives New Game and loading an earlier save.
+	var flags = GameManager.story_flags
+	abilities["data_vision"]["unlocked"] = flags.get("ch1_data_vision_unlocked", false)
+	abilities["perfect_delete"]["unlocked"] = flags.get("root_access_unlocked", false)
+	abilities["garbage_collection"]["unlocked"] = flags.get("ch1_tutorial_knight_defeated", false)
+	abilities["pogo_strike"]["unlocked"] = flags.get("ch1_tutorial_knight_defeated", false)
 	
 	for key in abilities:
 		var ability = abilities[key]
@@ -1117,6 +1128,7 @@ func _build_pause_ui() -> void:
 	options_btn.add_theme_font_size_override("font_size", 12)
 	options_btn.pressed.connect(_open_pause_options)
 	action_row.add_child(options_btn)
+	_options_btn = options_btn
 
 	var feedback_btn = Button.new()
 	feedback_btn.text = "  Feedback  "
@@ -1138,6 +1150,7 @@ func _build_pause_ui() -> void:
 	menu_btn.add_theme_color_override("font_color", Color(1.0, 0.6, 0.3))
 	menu_btn.pressed.connect(_return_to_main_menu)
 	action_row.add_child(menu_btn)
+	_menu_btn = menu_btn
 
 	var footer = Label.new()
 	InputService.bind_text(footer, "[{pause_menu}] Resume  |  [{ui_left}/{ui_right}] Switch Tabs  |  [{ui_accept}] Select")
@@ -1305,6 +1318,7 @@ func _build_pause_options() -> void:
 	vbox.add_child(close_btn)
 
 	add_child(_pause_options_panel)
+	mv_slider.grab_focus()
 
 	# Animate in
 	_pause_options_panel.modulate.a = 0.0
@@ -1319,6 +1333,25 @@ func _close_pause_options() -> void:
 		var tw = create_tween()
 		tw.tween_property(_pause_options_panel, "modulate:a", 0.0, 0.15)
 		tw.tween_callback(_pause_options_panel.queue_free)
+	_refocus(_options_btn)
+
+## Close the Options panel or the Main Menu confirm if one is open.
+## Returns true if something was closed.
+func _close_subpanel() -> bool:
+	if _confirm_menu_panel and is_instance_valid(_confirm_menu_panel) \
+			and not _confirm_menu_panel.is_queued_for_deletion():
+		_confirm_menu_panel.queue_free()
+		_refocus(_menu_btn)
+		return true
+	if _pause_options_visible:
+		_close_pause_options()
+		return true
+	return false
+
+## Give focus back to the button that opened a sub-panel (gamepad users).
+func _refocus(btn: Control) -> void:
+	if btn and is_instance_valid(btn) and btn.is_visible_in_tree():
+		btn.grab_focus()
 
 # ======================================================================
 #  RETURN TO MAIN MENU
@@ -1383,6 +1416,11 @@ func _return_to_main_menu() -> void:
 		ContextStack.clear_time_scale()
 		if _confirm_menu_panel and is_instance_valid(_confirm_menu_panel):
 			_confirm_menu_panel.queue_free()
+		# Leave the run behind, as game over does: otherwise its state (e.g. the
+		# corruption overlay at >= 25%) kept showing over the title screen. Every
+		# way back in from the menu loads from disk or starts fresh anyway.
+		if has_node("/root/GameManager"):
+			GameManager.reset_game()
 		if has_node("/root/SceneTransitions"):
 			SceneTransitions.change_scene("res://scenes/main_menu.tscn")
 		else:
@@ -1396,10 +1434,13 @@ func _return_to_main_menu() -> void:
 	no_btn.pressed.connect(func():
 		if _confirm_menu_panel and is_instance_valid(_confirm_menu_panel):
 			_confirm_menu_panel.queue_free()
+		_refocus(_menu_btn)
 	)
 	btn_row.add_child(no_btn)
 
 	add_child(_confirm_menu_panel)
+	# Default to the safe choice for keyboard / gamepad.
+	no_btn.grab_focus()
 
 	_confirm_menu_panel.modulate.a = 0.0
 	var tw = create_tween()

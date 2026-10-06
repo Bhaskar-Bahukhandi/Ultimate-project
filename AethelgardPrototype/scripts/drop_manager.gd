@@ -432,7 +432,9 @@ func _play_pickup_animation(pickup: Node2D) -> void:
 	if area:
 		area.set_deferred("monitoring", false)
 	
-	var tween = create_tween()
+	# Bound to the pickup, not to this autoload, so a scene change mid-animation
+	# frees the tween along with the pickup.
+	var tween = pickup.create_tween()
 	tween.set_parallel(true)
 	tween.tween_property(pickup, "scale", Vector2(0.1, 0.1), 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
 	tween.tween_property(pickup, "modulate:a", 0.0, 0.2)

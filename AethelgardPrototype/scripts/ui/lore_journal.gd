@@ -21,6 +21,7 @@ class LoreEntry:
 var _entries: Dictionary = {}  # id -> LoreEntry
 var _discovered_ids: Array[String] = []
 var _journal_panel: Control = null
+var _scroll: ScrollContainer = null
 var _is_open: bool = false
 
 
@@ -35,6 +36,13 @@ func _input(event: InputEvent) -> void:
 		# Modal: the journal key or cancel closes it, and nothing reaches the game underneath.
 		if event.is_action_pressed("lore_journal") or event.is_action_pressed("ui_cancel"):
 			close_journal()
+		elif is_instance_valid(_scroll):
+			# Keys and pad input are swallowed below, so the list never got them:
+			# scroll it here for keyboard / gamepad players.
+			if event.is_action_pressed("ui_down", true):
+				_scroll.scroll_vertical += 48
+			elif event.is_action_pressed("ui_up", true):
+				_scroll.scroll_vertical -= 48
 		if event is InputEventKey or event is InputEventJoypadButton or event is InputEventJoypadMotion:
 			get_viewport().set_input_as_handled()
 		return
@@ -259,6 +267,7 @@ func _build_journal_ui() -> void:
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vbox.add_child(scroll)
+	_scroll = scroll
 
 	var list = VBoxContainer.new()
 	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL

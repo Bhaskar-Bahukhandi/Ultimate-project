@@ -117,7 +117,7 @@ func _begin_counter() -> void:
 	_sfx("enemy_attack")
 	_deal_damage_in_range(attack_range * 1.3, contact_damage * _counter_damage_mult)
 
-	await get_tree().create_timer(_counter_window).timeout
+	await get_tree().create_timer(_counter_window, false).timeout
 	if not is_inside_tree() or current_state == State.DEAD:
 		return
 	velocity.x = 0.0

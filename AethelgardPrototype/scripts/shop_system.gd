@@ -203,6 +203,7 @@ var _current_shop_type: String = ""
 # ── Hover tracking ──
 var _hovered_row: Control = null
 var _hover_tween: Tween = null
+var _fade_tween: Tween = null  # close fade; killed if the shop reopens before it ends
 
 func _ready() -> void:
 	process_mode = PROCESS_MODE_ALWAYS
@@ -521,7 +522,10 @@ func open_shop(shop_type: String = "apothecary") -> void:
 	_update_gold_display()
 	_populate_items(shop_type)
 	
-	# Show with animation
+	# Show with animation. A close fade still running would hide the shop
+	# again while it's open (and the game paused).
+	if _fade_tween and _fade_tween.is_valid():
+		_fade_tween.kill()
 	_ui_layer.visible = true
 	_panel.modulate.a = 0.0
 	_panel.scale = Vector2(0.9, 0.9)
@@ -538,7 +542,8 @@ func open_shop(shop_type: String = "apothecary") -> void:
 
 	# Focus first buy button for keyboard/gamepad navigation
 	await get_tree().process_frame
-	_grab_first_item_focus()
+	if _is_open:
+		_grab_first_item_focus()
 
 func close_shop() -> void:
 	## Close the shop UI.
@@ -555,25 +560,35 @@ func close_shop() -> void:
 	# Closing the context resumes the tree (unless another menu still pauses it)
 	ContextStack.pop(&"shop")
 
-	var tween = create_tween()
-	tween.tween_property(_panel, "modulate:a", 0.0, 0.15)
-	tween.tween_callback(_hide_shop)
-	
+	_fade_tween = create_tween()
+	_fade_tween.tween_property(_panel, "modulate:a", 0.0, 0.15)
+	_fade_tween.tween_callback(_hide_shop)
+
 	shop_closed.emit()
 
-func _grab_first_item_focus() -> void:
-	## Focus the first buy/sell button for keyboard/gamepad navigation.
+func _row_buttons() -> Array:
+	## Enabled buy/sell buttons of the current rows (rows being freed are skipped).
+	var result: Array = []
 	if not _item_container:
-		return
+		return result
 	for child in _item_container.get_children():
 		# Look for PanelContainer rows containing HBoxContainers with Buttons
-		if child is PanelContainer:
+		if child is PanelContainer and not child.is_queued_for_deletion():
 			for sub in child.get_children():
 				if sub is HBoxContainer:
 					for btn in sub.get_children():
 						if btn is Button and not btn.disabled:
-							btn.grab_focus()
-							return
+							result.append(btn)
+	return result
+
+func _grab_first_item_focus(index: int = 0) -> void:
+	## Focus a buy/sell button (the first by default) for keyboard/gamepad navigation.
+	var buttons := _row_buttons()
+	if buttons.is_empty():
+		if _close_btn and _is_open:
+			_close_btn.grab_focus()
+		return
+	buttons[clampi(index, 0, buttons.size() - 1)].grab_focus()
 
 func _hide_shop() -> void:
 	_ui_layer.visible = false
@@ -928,10 +943,9 @@ func _buy_item(item_id: String) -> void:
 		SFXManager.play("shop_buy")
 	item_purchased.emit(item_id, price)
 	GameManager.stats["items_found"] = GameManager.stats.get("items_found", 0) + 1
-	
+
 	# Refresh display
-	_update_gold_display()
-	_refresh_items()
+	_refresh_after_trade()
 
 ## ─── SELL LOGIC ──────────────────────────────────────────────────────
 
@@ -972,9 +986,17 @@ func _sell_item(item_id: String, sell_price: int) -> void:
 	if has_node("/root/SFXManager"):
 		SFXManager.play("shop_sell")
 	item_sold.emit(item_id, sell_price)
-	
+
+	_refresh_after_trade()
+
+func _refresh_after_trade() -> void:
+	## Rebuild the list after a buy/sell. The pressed button is freed with its
+	## row, so put keyboard/gamepad focus back on the same position in the list.
+	var focus_index := _row_buttons().find(get_viewport().gui_get_focus_owner())
 	_update_gold_display()
 	_refresh_items()
+	if focus_index >= 0:
+		_grab_first_item_focus(focus_index)
 
 ## ─── HOVER / TOOLTIP ─────────────────────────────────────────────────
 
@@ -1156,7 +1178,9 @@ func _show_shop_toast(msg: String, color: Color = Color.WHITE) -> void:
 	lbl.set_anchors_preset(Control.PRESET_CENTER_TOP)
 	lbl.offset_top = 80
 	lbl.z_index = 200
-	add_child(lbl)
+	# On the shop's layer: as a child of this plain Node it drew on layer 0,
+	# behind the shop overlay.
+	_ui_layer.add_child(lbl)
 	var tw = create_tween()
 	tw.tween_property(lbl, "offset_top", 50, 1.2)
 	tw.parallel().tween_property(lbl, "modulate:a", 0.0, 1.2)

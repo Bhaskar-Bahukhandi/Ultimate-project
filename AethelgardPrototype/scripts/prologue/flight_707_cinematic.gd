@@ -50,7 +50,7 @@ func _ready() -> void:
 	camera.make_current()
 	
 	# Wait a moment then start
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	if not is_inside_tree(): return
 	await start_cinematic_prologue()
 	if not is_inside_tree(): return
@@ -69,7 +69,7 @@ func start_cinematic_prologue() -> void:
 	await title_tween.finished
 	if not is_inside_tree(): return
 	
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(2.0, false).timeout
 	if not is_inside_tree(): return
 	
 	# Fade out title
@@ -83,6 +83,11 @@ func start_cinematic_prologue() -> void:
 	await transition.transition_finished
 	if not is_inside_tree(): return
 	
+	# A skip during the title must not start the cutscene (it blocks pause and
+	# sets the CUTSCENE state) while the scene is being swapped out.
+	if skip_requested:
+		return
+
 	# Play main cutscene
 	var cutscene = create_prologue_cutscene()
 	cutscene_mgr.play_cutscene(cutscene)
@@ -433,6 +438,9 @@ func _play_optional_flight_observations() -> void:
 
 		var choice := await DialogueManager.show_choices("The cabin is quiet for one last minute. What does Kaelen notice?", options, "Kaelen")
 		if not is_inside_tree(): return
+		# -1 = the box was reset (a skip); don't treat it as picking option 0.
+		if choice < 0 or skip_requested:
+			break
 		var key := keys[clampi(choice, 0, keys.size() - 1)]
 		if key == "continue":
 			break
@@ -491,19 +499,19 @@ func play_crash_buildup() -> void:
 		if i >= 2:
 			trigger_glitch_particles()
 		
-		await get_tree().create_timer(0.5).timeout
+		await get_tree().create_timer(0.5, false).timeout
 		if not is_inside_tree(): return
 		toggle_glitch_overlay(false)
-		await get_tree().create_timer(0.3).timeout
+		await get_tree().create_timer(0.3, false).timeout
 		if not is_inside_tree(): return
 	
 	# System messages
 	show_system_dialogue("CRITICAL ERROR: REALITY.DLL NOT RESPONDING")
-	await get_tree().create_timer(1.5).timeout
+	await get_tree().create_timer(1.5, false).timeout
 	if not is_inside_tree(): return
 	
 	show_system_dialogue("ATTEMPTING EMERGENCY RESTART...")
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0, false).timeout
 	if not is_inside_tree(): return
 	
 	# Massive shake with all particles
@@ -513,12 +521,12 @@ func play_crash_buildup() -> void:
 	
 	# Flash to white
 	flash_screen(Color.WHITE, 0.5)
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	if not is_inside_tree(): return
 	
 	# Everything glitches out
 	toggle_glitch_overlay(true)
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0, false).timeout
 	if not is_inside_tree(): return
 
 func show_dialogue(speaker: String, text: String) -> void:
@@ -569,14 +577,14 @@ func flash_screen(color: Color, duration: float) -> void:
 func trigger_turbulence_particles() -> void:
 	## Trigger turbulence sparks effect
 	turbulence_sparks.emitting = true
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0, false).timeout
 	if not is_inside_tree(): return
 	turbulence_sparks.emitting = false
 
 func trigger_glitch_particles() -> void:
 	## Trigger glitch particles effect
 	glitch_particles.emitting = true
-	await get_tree().create_timer(1.5).timeout
+	await get_tree().create_timer(1.5, false).timeout
 	if not is_inside_tree(): return
 	glitch_particles.emitting = false
 
@@ -594,14 +602,14 @@ func transition_to_crash() -> void:
 	if not is_inside_tree(): return
 	
 	GameManager.set_story_flag("plane_crash_completed", true)  # Canonical flag for prologue completion
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	if not is_inside_tree(): return
 	
 	SceneTransitions.change_scene("res://scenes/prologue/crash_sequence.tscn")
 
 func _build_skip_hint() -> void:
 	_skip_hint = Label.new()
-	_skip_hint.text = "Hold ESC to Skip Prologue"
+	_skip_hint.text = InputService.fmt("Hold {ui_cancel} to Skip Prologue")
 	_skip_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_skip_hint.add_theme_font_size_override("font_size", 14)
 	_skip_hint.add_theme_color_override("font_color", Color(0.5, 0.5, 0.6, 0.6))
@@ -639,7 +647,7 @@ func _process_skip(delta: float) -> void:
 	else:
 		_skip_hold_timer = 0.0
 		if _skip_hint:
-			_skip_hint.text = "Hold ESC to Skip Prologue"
+			_skip_hint.text = InputService.fmt("Hold {ui_cancel} to Skip Prologue")
 			_skip_hint.add_theme_color_override("font_color", Color(0.5, 0.5, 0.6, 0.6))
 
 func _process(delta: float) -> void:
@@ -651,6 +659,7 @@ func _on_skip_to_gameplay() -> void:
 		return
 	prologue_active = false
 	skip_requested = true
+	_is_transitioning = true   # stop_cutscene() resumes start_cinematic_prologue(); keep it from also heading to the crash scene
 	set_process(false)
 	cutscene_mgr.stop_cutscene()
 	if _skip_hint:
@@ -675,7 +684,7 @@ func _on_custom_effect(effect_name: String, parameters: Dictionary) -> void:
 	match effect_name:
 		"glitch_screen":
 			toggle_glitch_overlay(true)
-			await get_tree().create_timer(parameters.get("duration", 0.3)).timeout
+			await get_tree().create_timer(parameters.get("duration", 0.3), false).timeout
 			if not is_inside_tree(): return
 			toggle_glitch_overlay(false)
 		"trigger_turbulence_light":

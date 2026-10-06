@@ -65,7 +65,7 @@ func _ready() -> void:
 	_setup_root_access()
 
 	# Entry dialogue
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	if not is_inside_tree(): return
 	await _entry_dialogue()
 
@@ -157,7 +157,9 @@ func _create_gear_decorations() -> void:
 		# Rotate gears continuously
 		var speed = randf_range(0.3, 1.2) * (1.0 if randi() % 2 == 0 else -1.0)
 		var tween = create_tween().set_loops()
-		tween.tween_property(gear, "rotation", TAU * sign(speed), abs(4.0 / speed))
+		# from(0): a looped tweener re-reads its start value each loop, so
+		# without it the gear turned once (0 → TAU) and then stood still.
+		tween.tween_property(gear, "rotation", TAU * sign(speed), abs(4.0 / speed)).from(0.0)
 
 func _create_time_zones() -> void:
 	## Create temporal anomaly zones that affect player speed
@@ -254,8 +256,9 @@ func _create_moving_platform(start: Vector2, end: Vector2, cycle_time: float) ->
 
 	add_child(platform)
 
-	# Animate movement
-	var tween = create_tween().set_loops()
+	# Animate movement. A physics body must move in the physics step, or
+	# whatever stands on it jitters or falls through.
+	var tween = create_tween().set_loops().set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
 	tween.tween_property(platform, "position", end, cycle_time * 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tween.tween_property(platform, "position", start, cycle_time * 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	_moving_platforms.append(platform)
@@ -362,27 +365,15 @@ func _spawn_clockwork_automaton() -> void:
 	col.position = Vector2(0, -40)
 	boss.add_child(col)
 
-	# Health bar
-	var hp_bar = ProgressBar.new()
-	hp_bar.name = "HealthBar"
-	hp_bar.size = Vector2(70, 8)
-	hp_bar.position = Vector2(-35, -95)
-	hp_bar.value = 100
-	hp_bar.show_percentage = false
-	boss.add_child(hp_bar)
+	# No health bar here: EnemyBase builds the boss's bar (boss-styled, named,
+	# kept in sync). A second one made here sat on top of it.
 
 	# BUG-21-20: Guard signal connections with has_signal check
 	if boss.has_signal("boss_defeated"):
 		boss.boss_defeated.connect(_on_automaton_defeated)
 	if boss.has_signal("phase_changed"):
 		boss.phase_changed.connect(_on_boss_phase_changed)
-	if boss.has_signal("health_changed"):
-		boss.health_changed.connect(_on_automaton_health_changed.bind(hp_bar))
 	add_child(boss)
-
-func _on_automaton_health_changed(new_hp: float, max_hp: float, bar: ProgressBar) -> void:
-	if is_instance_valid(bar) and max_hp > 0.0:
-		bar.value = (new_hp / max_hp) * 100.0
 
 func _create_floor_triggers() -> void:
 	## Create triggers for mid-dungeon dialogue and boss arena entry
@@ -437,13 +428,13 @@ func _pre_boss_dialogue() -> void:
 		camera.shake(10.0, 0.8)
 
 	DialogueManager.hide_dialogue()
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0, false).timeout
 	if not is_inside_tree(): return
 
 	# Pan camera to boss briefly
 	if camera and camera.has_method("pan_to"):
 		camera.pan_to(Vector2(400, FLOOR_Y[5] - 70), 1.0)
-		await get_tree().create_timer(1.5).timeout
+		await get_tree().create_timer(1.5, false).timeout
 		if not is_inside_tree(): return
 		if player_node:
 			camera.pan_to(body_position_or_default(), 0.8)
@@ -486,7 +477,7 @@ func _on_automaton_defeated() -> void:
 	if camera and camera.has_method("shake"):
 		camera.shake(15.0, 1.0)
 
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(2.0, false).timeout
 	if not is_inside_tree(): return
 
 	# victory → missing_shift → unlock (sets ch2_clock_tower_complete and ch2_underground_unlocked)
@@ -495,6 +486,6 @@ func _on_automaton_defeated() -> void:
 	GameManager.set_story_flag("ch2_clock_tower_complete", true)
 	DialogueManager.hide_dialogue()
 
-	await get_tree().create_timer(1.5).timeout
+	await get_tree().create_timer(1.5, false).timeout
 	if not is_inside_tree(): return
 	SceneTransitions.change_scene("res://scenes/regions/ironhold_region.tscn")

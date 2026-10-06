@@ -171,8 +171,17 @@ func _ready() -> void:
 
 func _on_story_flag_updated(flag_name: String, value: bool) -> void:
 	if not value:
-		# A cleared flag must also clear the buff it granted.
+		# A cleared flag must also clear the buff it granted, and the party
+		# member it added (a stale member also blocked Lone Wolf's solo XP).
 		remove_choice_buff(flag_name)
+		match flag_name:
+			"ch2_seraphina_recruited":
+				party_combat_members.erase("seraphina")
+			"ch3_lyra_recruited":
+				party_combat_members.erase("lyra")
+			"ch1_elara_trusted", "ch1_elara_cautious":
+				if not GameManager.has_elara():
+					party_combat_members.erase("elara")
 		return
 	if CHOICE_BUFFS.has(flag_name):
 		apply_choice_buff(flag_name)
@@ -422,6 +431,19 @@ func apply_chapter_start_supplies() -> void:
 # NOTIFICATIONS
 # ══════════════════════════════════════════════════════════════════════
 
+var _notification_layer: CanvasLayer = null
+
+## Screen-space parent for notifications. They used to be added straight to the
+## root viewport, where the region's Camera2D transform applied to them, so the
+## screen positions below landed somewhere in the world, usually off-screen.
+func _get_notification_layer() -> CanvasLayer:
+	if not is_instance_valid(_notification_layer):
+		_notification_layer = CanvasLayer.new()
+		_notification_layer.name = "ChoiceNotifications"
+		_notification_layer.layer = 95  # Above the quest tracker (90), below dialogue (100)
+		add_child(_notification_layer)
+	return _notification_layer
+
 func _show_buff_notification(buff: Dictionary) -> void:
 	## Show a floating notification when a buff is applied
 	var notif = Label.new()
@@ -434,7 +456,7 @@ func _show_buff_notification(buff: Dictionary) -> void:
 
 	var viewport = get_viewport()
 	if viewport and viewport.get_window():
-		get_tree().root.add_child(notif)
+		_get_notification_layer().add_child(notif)
 		var tw = create_tween()
 		tw.tween_property(notif, "position:y", 550, 2.0).set_trans(Tween.TRANS_SINE)
 		tw.parallel().tween_property(notif, "modulate:a", 0.0, 2.0).set_delay(3.0)
@@ -449,7 +471,7 @@ func _show_supply_notification(text: String) -> void:
 	notif.position = Vector2(300, 620)
 	notif.z_index = 100
 
-	get_tree().root.add_child(notif)
+	_get_notification_layer().add_child(notif)
 	var tw = create_tween()
 	tw.tween_property(notif, "position:y", 560, 1.5)
 	tw.parallel().tween_property(notif, "modulate:a", 0.0, 2.0).set_delay(3.5)

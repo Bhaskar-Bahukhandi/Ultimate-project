@@ -43,7 +43,8 @@ var shop_items = [
 ]
 
 func _ready() -> void:
-	process_mode = Node.PROCESS_MODE_ALWAYS
+	# Left pausable on purpose: PROCESS_MODE_ALWAYS here let the player (which
+	# inherits it) walk and talk under the pause menu and the shop.
 	GameManager.change_state(GameManager.GameState.EXPLORATION)
 	GameManager.set_story_flag("ch1_oakhaven_entered", true)
 	if not GameManager.glitch_meter_changed.is_connected(_on_glitch_meter_changed):
@@ -77,7 +78,7 @@ func _ready() -> void:
 	_update_gold_display()
 	_update_glitch_display()
 
-	await get_tree().create_timer(1.2).timeout
+	await get_tree().create_timer(1.2, false).timeout
 	if not is_inside_tree(): return
 	await _play_entrance()
 
@@ -114,16 +115,16 @@ func _on_dlg_event(event: String) -> void:
 	var parts := event.split(" ", false, 1)
 	match parts[0]:
 		"bran_opens_ledger", "ledger_entry_highlight", "elara_serves_stew", "elara_stands", "elara_sees_him_look", "dig_channel", "boar_nest_anchor":
-			await get_tree().create_timer(0.35).timeout
+			await get_tree().create_timer(0.35, false).timeout
 		"gate_opens", "start_boar_fight", "quest_start", "objective", "journal":
 			pass
 		"chicken_duplicate":
 			_flash_second_chicken()
 		"bell_alarm", "boar_charge", "boar_pogo":
 			_shake(9.0 if parts[0] != "bell_alarm" else 5.0)
-			await get_tree().create_timer(0.4).timeout
+			await get_tree().create_timer(0.4, false).timeout
 		"boar_stunned":
-			await get_tree().create_timer(0.3).timeout
+			await get_tree().create_timer(0.3, false).timeout
 		"fracture_spreads":
 			_flash(Color(0.55, 0.0, 0.7, 0.35))
 		"root_edit":
@@ -131,7 +132,7 @@ func _on_dlg_event(event: String) -> void:
 			_flash(Color(0.0, 1.0, 0.5, 0.3))
 		"time_passes":
 			await _fade(1.0, 0.8)
-			await get_tree().create_timer(0.6).timeout
+			await get_tree().create_timer(0.6, false).timeout
 			await _fade(0.0, 0.8)
 		_:
 			print("[OAKHAVEN] unhandled dialogue event: %s" % event)
@@ -278,7 +279,7 @@ func _can_talk(body: Node) -> bool:
 func _afternoon_beat_done() -> void:
 	_afternoon_beats += 1
 	if _afternoon_beats >= ALARM_AFTER_BEATS and not _alarm_done and is_inside_tree():
-		await get_tree().create_timer(1.5).timeout
+		await get_tree().create_timer(1.5, false).timeout
 		if is_inside_tree() and not _busy():
 			await _run_north_field()
 

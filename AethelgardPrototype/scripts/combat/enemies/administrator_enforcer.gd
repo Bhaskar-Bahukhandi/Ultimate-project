@@ -73,6 +73,7 @@ func _start_glow_pulse() -> void:
 
 
 func _exit_tree() -> void:
+	super._exit_tree()  # disconnects GameManager.difficulty_adjusted
 	if _glow_tween and _glow_tween.is_valid():
 		_glow_tween.kill()
 

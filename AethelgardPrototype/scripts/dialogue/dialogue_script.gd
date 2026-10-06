@@ -118,7 +118,7 @@ func _parse_step(line: String, line_no: int) -> Dictionary:
 		var body := line.substr(4).strip_edges()
 		var value := true
 		if body.contains("="):
-			var parts := body.split("=", false, 1)
+			var parts := body.split("=", true, 1)   # keep empty parts: "set flag =" must report, not index past the end
 			body = parts[0].strip_edges()
 			var v := parts[1].strip_edges().to_lower()
 			if v not in ["true", "false"]:

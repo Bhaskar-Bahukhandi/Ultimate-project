@@ -91,15 +91,18 @@ func _ground_slam() -> void:
 	# Telegraph — raise arms (visual cue)
 	if has_node("Sprite"):
 		var sprite = get_node("Sprite")
+		# Relative to the sprite's own y: a placeholder rect sits at y = -height,
+		# and returning it to an absolute 0 sank it into the floor for good.
+		var base_y: float = sprite.position.y
 		var tw = create_tween()
-		tw.tween_property(sprite, "position:y", -15.0, 0.4)
-		tw.tween_property(sprite, "position:y", 0.0, 0.1)
+		tw.tween_property(sprite, "position:y", base_y - 15.0, 0.4)
+		tw.tween_property(sprite, "position:y", base_y, 0.1)
 
 	_sfx("heavy_windup")
 	_status_text("!", global_position + Vector2(0, -50), false)
 
 	# Wind-up pause
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	if not is_inside_tree() or current_state == State.DEAD:
 		_is_slamming = false
 		return
@@ -113,7 +116,7 @@ func _ground_slam() -> void:
 	_deal_damage_in_range(_slam_range, _slam_damage)
 
 	# Shockwave — wider but weaker
-	await get_tree().create_timer(0.1).timeout
+	await get_tree().create_timer(0.1, false).timeout
 	if not is_inside_tree() or current_state == State.DEAD:
 		_is_slamming = false
 		return
@@ -123,7 +126,7 @@ func _ground_slam() -> void:
 	_vfx("vfx_hit_spark", global_position + Vector2(60, 10))
 
 	# Recovery
-	await get_tree().create_timer(0.8).timeout
+	await get_tree().create_timer(0.8, false).timeout
 	if not is_inside_tree() or current_state == State.DEAD:
 		_is_slamming = false
 		return

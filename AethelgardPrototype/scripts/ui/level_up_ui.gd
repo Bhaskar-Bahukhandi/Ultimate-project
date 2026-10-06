@@ -21,6 +21,7 @@ var _popup_stats: Label
 var _popup_continue: Label
 var _popup_visible: bool = false
 var _popup_timer: float = 0.0
+var _popup_tween: Tween = null
 
 # Animation
 var _xp_display_value: float = 0.0  # Smoothly animated XP bar
@@ -125,6 +126,11 @@ func _build_xp_bar() -> void:
 
 func _on_game_state_changed(_new_state: int) -> void:
 	_update_xp_bar_visibility()
+	# New Game / loading a save change level and XP without an XP gain, which
+	# left the bar and "Lv." label showing the previous run.
+	_level_label.text = "Lv.%d" % GameManager.player_stats.get("level", 1)
+	_update_xp_bar_smooth()
+	_update_xp_label()
 
 
 func _update_xp_bar_visibility() -> void:
@@ -261,10 +267,11 @@ func _on_player_leveled_up(new_level: int) -> void:
 	_popup_visible = true
 	_popup_timer = POPUP_DURATION
 	SFXManager.play("level_up")
-	
-	var tween = create_tween().set_parallel(true)
-	tween.tween_property(_popup_panel, "modulate", Color(1, 1, 1, 1), 0.3).set_ease(Tween.EASE_OUT)
-	tween.tween_property(_popup_panel, "scale", Vector2(1, 1), 0.4).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+
+	_kill_popup_tween()
+	_popup_tween = create_tween().set_parallel(true)
+	_popup_tween.tween_property(_popup_panel, "modulate", Color(1, 1, 1, 1), 0.3).set_ease(Tween.EASE_OUT)
+	_popup_tween.tween_property(_popup_panel, "scale", Vector2(1, 1), 0.4).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
 	
 	# Flash XP bar gold
 	var bar_tween = create_tween()
@@ -282,9 +289,15 @@ func _on_player_leveled_up(new_level: int) -> void:
 func _dismiss_popup() -> void:
 	_popup_visible = false
 	SFXManager.play("ui_confirm")
-	var tween = create_tween()
-	tween.tween_property(_popup_panel, "modulate", Color(1, 1, 1, 0), 0.25)
-	tween.tween_callback(func(): _popup_panel.visible = false)
+	_kill_popup_tween()
+	_popup_tween = create_tween()
+	_popup_tween.tween_property(_popup_panel, "modulate", Color(1, 1, 1, 0), 0.25)
+	_popup_tween.tween_callback(func(): _popup_panel.visible = false)
+
+## A new level-up during the dismiss fade must not be hidden by that fade's callback.
+func _kill_popup_tween() -> void:
+	if _popup_tween and _popup_tween.is_valid():
+		_popup_tween.kill()
 
 # ==========================================================================
 # XP BAR UPDATE

@@ -137,7 +137,7 @@ func _perform_pounce() -> void:
 	velocity.x = 0.0
 
 	# Brief telegraph
-	await get_tree().create_timer(0.12).timeout
+	await get_tree().create_timer(0.12, false).timeout
 	if not is_inside_tree() or current_state == State.DEAD:
 		_is_pouncing = false
 		return
@@ -147,7 +147,7 @@ func _perform_pounce() -> void:
 	velocity.y = -200.0
 	_sfx("enemy_pounce", 0.1)
 
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.3, false).timeout
 	if not is_inside_tree() or current_state == State.DEAD:
 		_is_pouncing = false
 		return

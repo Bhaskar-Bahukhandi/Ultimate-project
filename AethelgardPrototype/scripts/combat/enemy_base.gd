@@ -13,25 +13,34 @@ signal died
 signal health_changed(new_health: float, max_health: float)
 
 # ── Hackable Exports ──────────────────────────────────────────────────────
+## True only inside apply_hack(). The setters below also run for subclasses'
+## own stat writes and for _apply_level_scaling(), which marked every enemy as
+## hacked (pink tint, "HACKED: ..." popups) the moment it spawned.
+var _applying_hack: bool = false
+
 @export var movement_speed: float = 100.0:
 	set(value):
 		movement_speed = clampf(value, 0.0, 500.0)
-		_on_property_hacked("movement_speed")
+		if _applying_hack:
+			_on_property_hacked("movement_speed")
 
 @export var gravity_scale: float = 1.0:
 	set(value):
 		gravity_scale = clampf(value, -2.0, 3.0)
-		_on_property_hacked("gravity_scale")
+		if _applying_hack:
+			_on_property_hacked("gravity_scale")
 
 @export var elasticity: float = 1.0:
 	set(value):
 		elasticity = clampf(value, 0.0, 5.0)
-		_on_property_hacked("elasticity")
+		if _applying_hack:
+			_on_property_hacked("elasticity")
 
 @export var is_hostile: bool = true:
 	set(value):
 		is_hostile = value
-		_on_property_hacked("is_hostile")
+		if _applying_hack:
+			_on_property_hacked("is_hostile")
 
 @export var max_health: float = 50.0
 @export var contact_damage: float = 10.0
@@ -266,6 +275,9 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
+	# Ticked here, not in _ai_behavior(): every subclass but one overrides that
+	# without calling super, so their dodge never came off cooldown after the first.
+	_dodge_cooldown = maxf(0.0, _dodge_cooldown - delta)
 	_ai_behavior(delta)
 	move_and_slide()
 	_sync_animation_to_state()
@@ -291,7 +303,6 @@ func _ai_behavior(delta: float) -> void:
 		return
 
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
-	_dodge_cooldown = maxf(0.0, _dodge_cooldown - delta)
 
 	match current_state:
 		State.IDLE:
@@ -384,7 +395,9 @@ func _state_chase(delta: float) -> void:
 	# Face player
 	if has_node("Sprite"):
 		var spr = get_node("Sprite")
-		if spr is Sprite2D:
+		# AnimatedSprite2D too: _sync_animation_to_state() also flips it with
+		# flip_h, and a negative scale on top turned it back to face away.
+		if spr is Sprite2D or spr is AnimatedSprite2D:
 			spr.flip_h = dir.x < 0.0
 		else:
 			if spr is Control:
@@ -426,7 +439,7 @@ func _begin_telegraph() -> void:
 
 	if has_node("Sprite"):
 		var sprite = get_node("Sprite")
-		var orig_color = sprite.modulate
+		var orig_color = _sprite_rest_modulate(sprite)
 		# BUG 9 FIX: Kill previous telegraph tween before creating a new one
 		if _telegraph_tween and _telegraph_tween.is_valid():
 			_telegraph_tween.kill()
@@ -850,7 +863,7 @@ func take_damage(amount: float, knockback_source: Vector2 = Vector2.ZERO) -> voi
 			if has_node("Sprite"):
 				var spr = get_node("Sprite")
 				spr.modulate.a = 0.4
-				await get_tree().create_timer(0.2).timeout
+				await get_tree().create_timer(0.2, false).timeout
 				if is_instance_valid(self) and is_inside_tree() and has_node("Sprite"):
 					get_node("Sprite").modulate.a = 1.0
 		else:
@@ -867,7 +880,7 @@ func _apply_hitstun(amount: float) -> void:
 
 	var stun_time = clampf(amount * 0.008, 0.15, 0.5)
 	# BUG 10 FIX: Don't disable physics_process — gravity still needed for airborne enemies
-	await get_tree().create_timer(stun_time).timeout
+	await get_tree().create_timer(stun_time, false).timeout  # paused with the game
 	if not is_inside_tree() or not is_instance_valid(self):
 		return
 	if current_state == State.DEAD:
@@ -882,7 +895,7 @@ func _play_hit_flash() -> void:
 	if not has_node("Sprite"):
 		return
 	var sprite = get_node("Sprite")
-	var original_color = sprite.modulate
+	var original_color = _sprite_rest_modulate(sprite)
 
 	if sprite.has_meta("flash_tween"):
 		var old_tween: Tween = sprite.get_meta("flash_tween")
@@ -894,6 +907,22 @@ func _play_hit_flash() -> void:
 	flash_tween.tween_property(sprite, "modulate", Color(5.0, 5.0, 5.0, 1.0), 0.02)
 	flash_tween.tween_property(sprite, "modulate", Color(1.5, 0.3, 0.3, 1.0), 0.05)
 	flash_tween.tween_property(sprite, "modulate", original_color, 0.12).set_trans(Tween.TRANS_SINE)
+
+
+## Colour a hit flash, telegraph or hurt tween fades back to. While one of those is
+## still running, sprite.modulate is the flash colour itself, and fading "back" to it
+## left enemies stuck red or orange after rapid hits; so reuse the colour recorded
+## the last time the sprite was at rest (which keeps state tints such as a block).
+func _sprite_rest_modulate(sprite: CanvasItem) -> Color:
+	var busy := TweenAnimator.is_animating(sprite)
+	if _telegraph_tween and _telegraph_tween.is_valid():
+		busy = true
+	var flash = sprite.get_meta("flash_tween", null)
+	if flash is Tween and flash.is_valid():
+		busy = true
+	if not busy or not sprite.has_meta("rest_modulate"):
+		sprite.set_meta("rest_modulate", sprite.modulate)
+	return sprite.get_meta("rest_modulate")
 
 
 func die() -> void:
@@ -960,7 +989,7 @@ func stagger(duration: float = 1.0) -> void:
 
 	_vfx("vfx_hit_spark", global_position + Vector2(0, -15))
 
-	await get_tree().create_timer(duration).timeout
+	await get_tree().create_timer(duration, false).timeout
 	if not is_inside_tree() or not is_instance_valid(self):
 		return
 	_stun_active = false
@@ -1065,14 +1094,18 @@ func get_hackable_properties() -> Dictionary:
 
 func apply_hack(property_name: String, new_value: Variant) -> void:
 	match property_name:
-		"movement_speed":
-			movement_speed = clampf(float(new_value), HACK_SPEED_RANGE.x, HACK_SPEED_RANGE.y)
-		"gravity_scale":
-			gravity_scale = clampf(float(new_value), HACK_GRAVITY_RANGE.x, HACK_GRAVITY_RANGE.y)
-		"elasticity":
-			elasticity = float(new_value)
-		"is_hostile":
-			is_hostile = bool(new_value)
+		"movement_speed", "gravity_scale", "elasticity", "is_hostile":
+			_applying_hack = true
+			match property_name:
+				"movement_speed":
+					movement_speed = clampf(float(new_value), HACK_SPEED_RANGE.x, HACK_SPEED_RANGE.y)
+				"gravity_scale":
+					gravity_scale = clampf(float(new_value), HACK_GRAVITY_RANGE.x, HACK_GRAVITY_RANGE.y)
+				"elasticity":
+					elasticity = float(new_value)
+				"is_hostile":
+					is_hostile = bool(new_value)
+			_applying_hack = false
 		"current_health":
 			if is_in_group("boss"):
 				push_warning("Root Access: boss HP is not hackable")
@@ -1724,6 +1757,8 @@ func _status_text(text: String, pos: Vector2, is_positive: bool = false) -> void
 func _tween_hurt() -> void:
 	## Safe wrapper for TweenAnimator.play_hurt (static class, always available).
 	var target: CanvasItem = get_node("Sprite") if has_node("Sprite") else self
+	# Fade back to the same colour as the hit flash (see _sprite_rest_modulate).
+	TweenAnimator._set_base_modulate(target, _sprite_rest_modulate(target))
 	TweenAnimator.play_hurt(target)
 
 
@@ -1771,5 +1806,8 @@ func spawn_in() -> void:
 ## behind) the enemy, so attacks hit behind it.
 func _side(dir: Vector2) -> float:
 	if absf(dir.x) < 0.001:
-		return -1.0 if has_node("Sprite") and get_node("Sprite").scale.x < 0.0 else 1.0
+		var spr = get_node_or_null("Sprite")
+		# Placeholders face left with a negative scale, textured sprites with flip_h.
+		var facing_left: bool = spr != null and (spr.scale.x < 0.0 or ("flip_h" in spr and spr.flip_h))
+		return -1.0 if facing_left else 1.0
 	return signf(dir.x)

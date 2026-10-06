@@ -56,7 +56,7 @@ func _ready() -> void:
 
 	# Opening dialogue on first visit
 	if not GameManager.has_flag("ch2_market_visited"):
-		await get_tree().create_timer(0.5).timeout
+		await get_tree().create_timer(0.5, false).timeout
 		if not is_inside_tree(): return
 		await _first_visit_dialogue()
 		if not is_inside_tree(): return
@@ -85,7 +85,7 @@ func _check_story_state() -> void:
 	# Trigger admin boss event if conditions met (takes priority over seraphina)
 	if _admin_boss_triggered:
 		_admin_triggered = true  # BUG-21-16: mark as fired
-		await get_tree().create_timer(1.5).timeout
+		await get_tree().create_timer(1.5, false).timeout
 		if not is_inside_tree(): return
 		_trigger_administrator_arrival()
 		return
@@ -93,7 +93,7 @@ func _check_story_state() -> void:
 	# Trigger Seraphina encounter
 	if _seraphina_encounter_ready:
 		_seraphina_triggered = true  # BUG-21-16: mark as fired
-		await get_tree().create_timer(1.0).timeout
+		await get_tree().create_timer(1.0, false).timeout
 		if not is_inside_tree(): return
 		_trigger_seraphina_encounter()
 		return
@@ -332,8 +332,9 @@ func _create_district_triggers() -> void:
 	_create_trigger_area("arena_entrance", Vector2(1950, 280), 60.0)
 	# Clock Tower entrance
 	_create_trigger_area("clock_tower_entrance", Vector2(1240, 350), 50.0)
-	# Underground entrance (hidden)
-	if _underground_unlocked:
+	# Underground entrance (hidden). Reads the flag itself: _check_story_state()
+	# (which sets _underground_unlocked) only runs after the triggers are built.
+	if GameManager.has_flag("ch2_seraphina_met"):
 		_create_trigger_area("underground_entrance", Vector2(900, 1400), 40.0)
 
 func _create_trigger_area(trigger_name: String, pos: Vector2, radius: float) -> void:
@@ -645,7 +646,7 @@ func _trigger_seraphina_encounter() -> void:
 	await DialogueManager.say("Vex", "Wait wait wait! Before you go anywhere — there's someone who wants to meet our newest arena star!", Color(-1, -1, -1), true)
 	if not is_inside_tree(): return
 	DialogueManager.hide_dialogue()
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	if not is_inside_tree(): return
 	SceneTransitions.change_scene("res://scenes/chapter2/seraphina_encounter.tscn")
 
@@ -655,7 +656,7 @@ func _trigger_administrator_arrival() -> void:
 	if not is_inside_tree(): return
 	if camera and camera.has_method("shake"):
 		camera.shake(15.0, 1.0)
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(2.0, false).timeout
 	if not is_inside_tree(): return
 	DialogueManager.hide_dialogue()
 	SceneTransitions.change_scene("res://scenes/chapter2/administrator_boss.tscn", SceneTransitions.TransitionStyle.COMBAT_ENTRY)

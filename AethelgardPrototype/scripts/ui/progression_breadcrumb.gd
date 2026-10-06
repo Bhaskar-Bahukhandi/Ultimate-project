@@ -89,29 +89,41 @@ const OBJECTIVES: Array = [
 		"region": "overworld",
 		"target": Vector2(800, 400),
 	},
+	# Same order as the Ironhold region's gates: the Clock Tower gate opens
+	# after the arena's bronze bracket, and the tower unlocks the Underground
+	# (ch2_underground_unlocked), whose clearing opens the Proxy gate. Targets
+	# are those gates' positions in ironhold_region.gd.
 	{
-		"blocker": "ch2_data_wraith_defeated",
+		"blocker": "ch2_arena_bronze_complete",
 		"required": "ch2_ironhold_entered",
-		"text": "Investigate the Underground Network",
-		"hint": "The underground passages hide the Data Wraith — Rec. Lv 7",
+		"text": "Win the Arena's Bronze bracket",
+		"hint": "The Clock Tower stays sealed until you've proven yourself in the Arena",
 		"region": "ironhold",
-		"target": Vector2(1200, 2000),
+		"target": Vector2(1850, 1020),
 	},
 	{
 		"blocker": "ch2_clockwork_automaton_defeated",
-		"required": "ch2_data_wraith_defeated",
+		"required": "ch2_arena_bronze_complete",
 		"text": "Ascend the Clock Tower",
 		"hint": "The Clockwork Automaton guards the upper floors — Rec. Lv 9",
 		"region": "ironhold",
-		"target": Vector2(3100, 400),
+		"target": Vector2(2950, 620),
+	},
+	{
+		"blocker": "ch2_data_wraith_defeated",
+		"required": "ch2_clockwork_automaton_defeated",
+		"text": "Investigate the Underground Network",
+		"hint": "The underground passages hide the Data Wraith — Rec. Lv 7",
+		"region": "ironhold",
+		"target": Vector2(1150, 1950),
 	},
 	{
 		"blocker": "ch2_administrator_proxy_defeated",
-		"required": "ch2_clockwork_automaton_defeated",
+		"required": "ch2_data_wraith_defeated",
 		"text": "Defeat the Administrator Proxy",
 		"hint": "Deep in the underground, a proxy of the Administrator awaits — Rec. Lv 11",
 		"region": "ironhold",
-		"target": Vector2(1400, 2200),
+		"target": Vector2(1300, 2100),
 	},
 	{
 		"blocker": "ch2_complete",
@@ -541,20 +553,11 @@ func _process(_delta: float) -> void:
 
 
 func _angle_to_arrow(angle: float) -> String:
-	# Map angle to 8-directional arrow
-	if angle >= -0.39 and angle < 0.39:
-		return "→"
-	elif angle >= 0.39 and angle < 1.18:
-		return "↘"
-	elif angle >= 1.18 and angle < 1.96:
-		return "↓"
-	elif angle >= 1.96 or angle < -1.96:
-		return "←"
-	elif angle >= -1.96 and angle < -1.18:
-		return "↗"  # Actually NW but using ↖ → ↗
-	elif angle >= -1.18 and angle < -0.39:
-		return "↑"
-	return "→"
+	# Map angle to 8-directional arrow. Screen y points down, so a positive
+	# angle is below the player. (The old table showed ↗ for straight up and ↑
+	# for up-right, and had no ↙/↖.)
+	var arrows := ["→", "↘", "↓", "↙", "←", "↖", "↑", "↗"]
+	return arrows[posmod(roundi(angle / (PI / 4.0)), 8)]
 
 
 func _get_player() -> Node2D:

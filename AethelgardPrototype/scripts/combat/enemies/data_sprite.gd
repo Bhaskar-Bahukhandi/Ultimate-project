@@ -182,17 +182,23 @@ func _animate_fallback_bolt(bolt: Node, dir: Vector2) -> void:
 	var speed = _bolt_speed
 	var damage = _bolt_damage
 	var lifetime = 0.0
+	# This coroutine drives the bolt and never resumes once the sprite is freed,
+	# which left the bolt frozen in mid-air; take it along instead.
+	tree_exiting.connect(bolt.queue_free, CONNECT_ONE_SHOT)
 
 	while lifetime < 3.0 and is_instance_valid(bolt):
-		bolt.position += dir * speed * get_process_delta_time()
-		lifetime += get_process_delta_time()
+		# process_frame keeps firing while the game is paused; hold the bolt
+		# still then instead of letting it fly on and hit the paused player.
+		if can_process():
+			bolt.position += dir * speed * get_process_delta_time()
+			lifetime += get_process_delta_time()
 
-		var player = find_player()
-		if player and player.has_method("take_damage"):
-			if bolt.global_position.distance_to(player.global_position) < 20.0:
-				player.take_damage(damage, bolt.global_position, enemy_name, "ranged")
-				bolt.queue_free()
-				break
+			var player = find_player()
+			if player and player.has_method("take_damage"):
+				if bolt.global_position.distance_to(player.global_position) < 20.0:
+					player.take_damage(damage, bolt.global_position, enemy_name, "ranged")
+					bolt.queue_free()
+					break
 
 		await get_tree().process_frame
 		if not is_inside_tree():
@@ -271,6 +277,9 @@ func _perform_split() -> void:
 		# Set clone flag and reduced stats via meta (will be applied in _ready)
 		clone.set_meta("is_clone", true)
 		clone.set_meta("pending_zone_level", zone_level)
+		# Nothing reads that meta; set the level itself so _ready() scales the clone
+		# by zone like its parent (as combat_arena does for spawned enemies).
+		clone.zone_level = zone_level
 
 		if get_parent():
 			get_parent().add_child(clone)

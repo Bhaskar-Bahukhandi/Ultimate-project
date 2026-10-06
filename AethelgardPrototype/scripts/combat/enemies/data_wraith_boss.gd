@@ -146,7 +146,7 @@ func _corruption_lunge() -> void:
 	velocity.y = -50.0
 	_vfx("vfx_glitch_sparkle", global_position)
 
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.3, false).timeout
 	if not _safe():
 		is_attacking = false
 		return
@@ -173,7 +173,7 @@ func _spawn_corruption_field() -> void:
 	_status_text("CORRUPTION ZONE!", player.global_position + Vector2(0, -60), false)
 
 	for i in 5:
-		await get_tree().create_timer(0.6).timeout
+		await get_tree().create_timer(0.6, false).timeout
 		if not _safe():
 			if is_instance_valid(field):
 				field.queue_free()
@@ -220,6 +220,10 @@ func _fire_tendril(direction: Vector2) -> void:
 	var speed = 250.0
 	var elapsed = 0.0
 	while elapsed < 2.0 and is_instance_valid(tendril) and _safe():
+		# process_frame keeps firing while the tree is paused; hold the tendril still.
+		if get_tree().paused:
+			await get_tree().process_frame
+			continue
 		tendril.global_position += direction * speed * get_process_delta_time()
 		elapsed += get_process_delta_time()
 		var player = find_player()
@@ -277,7 +281,7 @@ func die() -> void:
 	for i in 5:
 		var offset = Vector2(randf_range(-30, 30), randf_range(-40, 10))
 		_vfx("vfx_enemy_death", global_position + offset)
-		await get_tree().create_timer(0.2).timeout
+		await get_tree().create_timer(0.2, false).timeout
 		if not is_inside_tree():
 			return
 	super.die()

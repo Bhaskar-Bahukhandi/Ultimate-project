@@ -121,6 +121,11 @@ func _determine_combat_state() -> String:
 	# Attacking
 	if _get_flag("is_attacking"):
 		var step = _get_var("combo_step", 1)
+		# player_combat resets combo_step to 0 as soon as the third hit starts, so
+		# 0 while attacking is the finisher (charged/up/down slashes request their
+		# own visual above). Clamping 0 to 1 played slash_1 for the finisher.
+		if step <= 0:
+			step = 3
 		return "attack%d" % clampi(step, 1, 3)
 	
 	# Dashing

@@ -3,6 +3,117 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-06 — Code audit: everything that runs up to the end of Chapter 2
+
+**Scope:** every script reachable in the prologue and Chapters 1–2 was read in full.
+- That is 89 scripts, about 54,000 lines: the autoloads, the Ch1–2 scenes, the regions, and the
+  shared combat, dialogue, UI, audio and saving code.
+- The scope was mapped from scene references, `res://` paths and `class_name` references.
+- The review ran in 10 parallel batches of related files. Every reported defect was checked
+  against its callers before it was fixed.
+- Cross-batch issues were resolved by the lead.
+- 70 files changed. Only clear defects were fixed; design and balance questions are listed at the
+  end.
+
+**Pause.** Over 200 scripted waits kept running under the pause menu. Some examples:
+- boss attacks landed on a paused player;
+- the end-of-chapter scenes changed scene while paused;
+- the combo meter dropped while you sat in the pause menu.
+
+All of these now pause with the game. Two related problems are fixed too:
+- the Oakhaven village scene ran during pause, so you could walk around under the menu;
+- boss projectile loops kept moving while paused.
+
+**Soft-locks and stuck states:**
+- **Dialogue:** a line could wait forever on a hidden box after a scene reset.
+- **Cutscene skip:**
+  - the skipped cutscene's leftover beats ran, then ended the *next* cutscene early;
+  - fades after a skip were invisible.
+- **Root Access:** in the Underground it opened and closed instantly.
+- **Shop:** reopening it quickly left it invisible with the game paused.
+- **Pause menu:** Esc closed the whole menu from Options, and the sub-panel then reappeared later.
+- **Charge attack:** it got stuck on, flashing, if released during a dash.
+
+**Combat:**
+- **Spawn state:**
+  - every enemy spawned marked "hacked" (pink tint and HACKED popups);
+  - most enemies could only dodge once per life.
+- **Tints:**
+  - enemies got stuck red or orange after quick hits;
+  - interrupted animations left sprites drifting off their bodies.
+- **Bodies and leftover objects:**
+  - slimes and rats shrank or squashed for good;
+  - webs and gears froze in mid-air after their enemy died.
+- **Double counting:**
+  - two damage numbers per hit, and the combo counter drawn twice over the health bars;
+  - boss kills counted twice;
+  - duplicate boss health bars, one of which never moved;
+  - the knight's attacks could stack.
+- **Player HUD:**
+  - the XP bar was always empty;
+  - the HP bar showed values far from real HP;
+  - the MP bar could stay red;
+  - the hurt flash never showed.
+- **Combat VFX** never spawned.
+- **Boss "rage" music** could never play.
+- **Arena:**
+  - an arena death never recorded the loss;
+  - Endurance mode could crash.
+- **Random encounters:** steps were counted during dialogue and scene transitions, and the danger
+  overlay stayed lit afterwards.
+
+**Saving and state:**
+- **Bad saves:** a save made mid-scene-change wrote an unresumable file over the good one.
+- **Load crashes:** a malformed save could crash loading.
+- **Quests restarted:** talking to Garro or Iris again reset their quest to step 0.
+- **Lost gear:** swapping equipment could destroy the old item.
+- **Quit-to-menu** now clears the run, so the corruption overlay no longer shows over the title.
+- **Lost Proxy flag:** skipping the Proxy victory scene could lose the "Proxy defeated" flag, which
+  wrongly kept Seraphina behind.
+- **Stale UI after New Game or load:**
+  - the level-up UI showed the previous run;
+  - Functions-tab unlocks carried over.
+
+**World and UI:**
+- **Region interaction:** in Oakhaven and Ironhold, the nearest NPC, shop or lore point now gets
+  the prompt. Overlapping NPCs used to leave dead prompts and hide the shops.
+- **F mid-dialogue** started a second conversation, and on the overworld it re-ran a save.
+- **Breadcrumb:** the arrow pointed the wrong way, and the Chapter 2 objective order contradicted
+  the gates.
+- **Credits** never rolled.
+- **Completion bars** were always empty.
+- **Gamepad:** focus was lost in several menus, and the lore journal couldn't be scrolled with a
+  pad or the keyboard.
+- **Text speed** setting was never loaded back.
+- **Hardcoded key names** are now tokens: world map, status window, combat tutorial, death tips
+  and every hold-to-skip hint. The skip hints name the right key, `{ui_cancel}`, not `{skip}`.
+- **Audio:**
+  - starting a track during a fade-out silenced it;
+  - the SFX volume slider didn't reach cached sounds;
+  - pitch variation was applied twice.
+- **Exported builds:** two more art checks that would always fail in an export now work.
+
+**Visible changes to judge in play:**
+- the red hurt flash now appears;
+- glitch flashes last their full intended 0.15–0.5 s;
+- SFX pitch variation is about half of what it was before;
+- enemies dodge on their 2 s cooldown instead of only once;
+- the arena's retry-HP easing (after 3 attempts) now turns on;
+- Perfect Delete on a boss is refused instead of wasting a charge.
+
+**Decisions left for the user, not changed:**
+- hit generosity, attack and jump buffering, and hitstop stacking;
+- building and prop collision in the regions and on the overworld;
+- the Chapter 1 shatter scene text, which predates the rewrite;
+- stale Chapter 1 breadcrumb objectives;
+- quest rewards that name items and charms that don't exist, and two quests that can't complete;
+- NG+ stacking choice buffs every cycle;
+- screen-flash VFX that never show;
+- the `fragment_4` achievement threshold;
+- the `null_potion` description contradicting its effect.
+
+**Unused code (noted, not deleted):** the InteractionPrompt and ObjectPool autoloads.
+
 ## 2026-10-06 — Playtest fixes: interaction, forest, fights, collision
 
 These come from the first human playtest of Act 1. Each was traced to its cause in code before

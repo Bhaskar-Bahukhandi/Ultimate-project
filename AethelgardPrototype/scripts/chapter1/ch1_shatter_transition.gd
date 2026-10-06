@@ -45,7 +45,7 @@ func _ready() -> void:
 	if chapter_end_card:
 		chapter_end_card.visible = false
 	
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.3, false).timeout
 	if not is_inside_tree(): return
 	transition.transition_in(ScreenTransition.TransitionType.FADE, 1.0)
 	await transition.transition_finished
@@ -57,29 +57,30 @@ func _ready() -> void:
 func start_shatter_sequence() -> void:
 	## Full Shatter transition sequence
 	
+	# (cinematic_active turns false when the player holds to skip; stop here then)
 	# Part 1: Kaelen steps onto the bridge
 	await play_bridge_approach()
-	if not is_inside_tree(): return
+	if not is_inside_tree() or not cinematic_active: return
 	
 	# Part 2: Environmental shift begins
 	await play_environmental_shift()
-	if not is_inside_tree(): return
+	if not is_inside_tree() or not cinematic_active: return
 	
 	# Part 3: THE SHATTER — glass breaking effect
 	await play_the_shatter()
-	if not is_inside_tree(): return
+	if not is_inside_tree() or not cinematic_active: return
 	
 	# Let the world reconstruction sink in
-	await get_tree().create_timer(2.5).timeout
-	if not is_inside_tree(): return
+	await get_tree().create_timer(2.5, false).timeout
+	if not is_inside_tree() or not cinematic_active: return
 	
 	# Part 4: Kaelen's dialogue
 	await play_post_shatter_dialogue()
-	if not is_inside_tree(): return
+	if not is_inside_tree() or not cinematic_active: return
 	
 	# Let Chapter 1's themes settle before end card
-	await get_tree().create_timer(3.0).timeout
-	if not is_inside_tree(): return
+	await get_tree().create_timer(3.0, false).timeout
+	if not is_inside_tree() or not cinematic_active: return
 	
 	# Part 5: Chapter 1 End Card
 	await play_chapter_end_card()
@@ -235,7 +236,7 @@ func play_environmental_shift() -> void:
 
 	# Feel the world changing
 	camera.shake(4.0, 0.5)
-	await get_tree().create_timer(1.5).timeout
+	await get_tree().create_timer(1.5, false).timeout
 	if not is_inside_tree(): return
 
 	# Kaelen notices physical sensations
@@ -263,7 +264,7 @@ func play_the_shatter() -> void:
 	
 	# Step 1: FREEZE — screen holds
 	# (In a real implementation, we'd capture the viewport texture)
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0, false).timeout
 	if not is_inside_tree(): return
 	
 	# Step 2: Glass cracking sound + visual
@@ -288,11 +289,11 @@ func play_the_shatter() -> void:
 		if glitch_overlay:
 			glitch_overlay.visible = true
 			glitch_overlay.color = Color(randf_range(0.3, 1.0), randf_range(0.3, 1.0), randf_range(0.3, 1.0), 0.7)
-		await get_tree().create_timer(0.06).timeout
+		await get_tree().create_timer(0.06, false).timeout
 		if not is_inside_tree(): return
 		if glitch_overlay:
 			glitch_overlay.visible = false
-		await get_tree().create_timer(0.04).timeout
+		await get_tree().create_timer(0.04, false).timeout
 		if not is_inside_tree(): return
 	
 	flash_overlay.modulate.a = 0.0
@@ -300,7 +301,7 @@ func play_the_shatter() -> void:
 	# Step 4: Black screen momentarily
 	flash_overlay.color = Color.BLACK
 	flash_overlay.modulate.a = 1.0
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0, false).timeout
 	if not is_inside_tree(): return
 	
 	# Step 5: Reveal — new perspective (side-scrolling world peek)
@@ -321,7 +322,7 @@ func play_the_shatter() -> void:
 	if shatter_effect:
 		shatter_effect.visible = false
 	
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0, false).timeout
 	if not is_inside_tree(): return
 	
 	GameManager.set_story_flag("ch1_shatter_witnessed", true)
@@ -359,7 +360,7 @@ func play_post_shatter_dialogue() -> void:
 	# Absorb the new world — slow camera pan
 	DialogueManager.hide_dialogue()
 	camera.move_to(Vector2(640, 320), 2.0)
-	await get_tree().create_timer(2.5).timeout
+	await get_tree().create_timer(2.5, false).timeout
 	if not is_inside_tree(): return
 	
 	if has_elara:
@@ -393,7 +394,7 @@ func play_post_shatter_dialogue() -> void:
 		if not is_inside_tree(): return
 	
 	# Weight of the Tutorial Knight's gratitude
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(2.0, false).timeout
 	if not is_inside_tree(): return
 	
 	# Village reflection — branches based on warn/leave choice
@@ -432,19 +433,10 @@ func play_chapter_end_card() -> void:
 	if not is_inside_tree(): return
 	
 	# Build chapter end card text
-	var knight_killed = GameManager.story_flags.get("ch1_knight_killed", false)
-	var knight_spared = GameManager.story_flags.get("ch1_knight_spared", false)
-	var knight_purged = GameManager.story_flags.get("ch1_root_purge", false)
 	var has_elara = GameManager.story_flags.get("ch1_elara_trusted", false) or GameManager.story_flags.get("ch1_elara_cautious", false)
 	var warned_village = GameManager.story_flags.get("ch1_oakhaven_warned_villagers", false)
 	
-	var knight_status = "DEFEATED"
-	if knight_purged:
-		knight_status = "ROOT PURGED"
-	elif knight_spared:
-		knight_status = "FREED"
-	elif knight_killed:
-		knight_status = "SLAIN"
+	var knight_status = _knight_status()
 	
 	var companion_status = "Elara — ALLIED" if has_elara else "SOLO PATH"
 	var village_status = "Warned" if warned_village else "Left in silence"
@@ -506,13 +498,14 @@ func play_chapter_end_card() -> void:
 	# ── Demo-mode gate: show "Get Full Game" screen instead of Ch2 ──
 	if GameManager.DEMO_MODE:
 		await DialogueManager.say("System", "Chapter 1 Complete — Demo Ended!", Color(0.0, 1.0, 0.6), false)
-		if not is_inside_tree(): return
+		if not is_inside_tree() or not cinematic_active: return
 		_show_demo_end_screen()
 		return
 
 	# Wait for the player to advance (jump / accept)
 	await DialogueManager.say("System", InputService.fmt("Chapter 1 Complete. Press [{jump}] to continue to Chapter 2..."), Color(0.6, 0.8, 1.0), false)
-	if not is_inside_tree(): return
+	if not is_inside_tree() or not cinematic_active: return  # skipped: _on_skip_cutscene already changed scene
+	cinematic_active = false  # no hold-to-skip during the final fade (it would change scene twice)
 
 	# Proceed to Chapter 2: The Administrator's Game
 	print("[CH1] CHAPTER 1 COMPLETE — Transitioning to Chapter 2")
@@ -522,6 +515,15 @@ func play_chapter_end_card() -> void:
 	await transition.transition_out(ScreenTransition.TransitionType.FADE, 2.0)
 	if not is_inside_tree(): return
 	SceneTransitions.change_scene("res://scenes/chapter2/ironhold_gate.tscn", SceneTransitions.TransitionStyle.SHATTER)
+
+func _knight_status() -> String:
+	if GameManager.story_flags.get("ch1_root_purge", false):
+		return "ROOT PURGED"
+	if GameManager.story_flags.get("ch1_knight_spared", false):
+		return "FREED"
+	if GameManager.story_flags.get("ch1_knight_killed", false):
+		return "SLAIN"
+	return "DEFEATED"
 
 func _grant_aldric_outcome_reward(knight_status: String) -> String:
 	if GameManager.has_flag("ch1_aldric_outcome_reward_claimed"):
@@ -591,7 +593,7 @@ func _show_skip_hint() -> void:
 		_skip_hint.visible = true
 		return
 	_skip_hint = Label.new()
-	_skip_hint.text = "[Hold ESC to skip]  ░░░░░░░░░░"
+	_skip_hint.text = InputService.fmt("[Hold {ui_cancel} to skip]  %s") % "░".repeat(10)
 	_skip_hint.add_theme_font_size_override("font_size", 14)
 	_skip_hint.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0, 0.7))
 	_skip_hint.add_theme_constant_override("outline_size", 2)
@@ -609,7 +611,7 @@ func _update_skip_hint() -> void:
 	var progress = clampf(_skip_hold_timer / SKIP_HOLD_DURATION, 0.0, 1.0)
 	var filled = int(progress * 10)
 	var bar = "█".repeat(filled) + "░".repeat(10 - filled)
-	_skip_hint.text = "[Hold ESC to skip]  %s" % bar
+	_skip_hint.text = InputService.fmt("[Hold {ui_cancel} to skip]  %s") % bar
 
 func _hide_skip_hint() -> void:
 	if _skip_hint and is_instance_valid(_skip_hint):
@@ -625,6 +627,7 @@ func _on_skip_cutscene() -> void:
 	GameManager.set_story_flag("ch1_shatter_witnessed", true)
 	GameManager.set_story_flag("ch1_complete", true)
 	GameManager.current_chapter = 2
+	_grant_aldric_outcome_reward(_knight_status())  # the end card grants it on the full path
 	if GameManager.DEMO_MODE:
 		_show_demo_end_screen()
 		return

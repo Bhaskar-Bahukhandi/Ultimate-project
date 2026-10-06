@@ -54,10 +54,6 @@ var _player: CharacterBody2D = null
 var _camera: Camera2D = null
 var _zone_label: Label = null
 var _stats_hud: Label = null
-var _near_npc: Area2D = null
-var _near_lore: Area2D = null
-var _near_shop: Area2D = null
-var _near_boss: Dictionary = {}  # gate_name -> Area2D
 
 
 func _ready() -> void:
@@ -87,6 +83,7 @@ func _process(_delta: float) -> void:
 		return
 	_update_zone(_player.global_position)
 	_clamp_player()
+	_update_focus()
 	_update_ui()
 
 
@@ -498,6 +495,15 @@ func _create_shop(shop_name: String, pos: Vector2, shop_type: String) -> void:
 	rect.size = Vector2(40, 30)
 	shape.shape = rect
 	trigger.add_child(shape)
+	# Shops had no prompt, so nothing told the player they could open one here.
+	var prompt = Label.new()
+	prompt.name = "Prompt"
+	InputService.bind_text(prompt, "[{interact}] Shop")
+	prompt.add_theme_font_size_override("font_size", 7)
+	prompt.add_theme_color_override("font_color", Color(1.0, 0.9, 0.4))
+	prompt.position = Vector2(-15, 16)
+	prompt.visible = false
+	trigger.add_child(prompt)
 	trigger.set_meta("shop_type", shop_type)
 	trigger.set_meta("shop_name", shop_name)
 	trigger.body_entered.connect(func(b): _on_interact_entered(b, trigger, "shop"))
@@ -795,7 +801,7 @@ func _interact_secret(secret: Area2D) -> void:
 	if has_node("/root/LoreJournal"):
 		LoreJournal.record_find(data["id"], data.get("title", "Secret"), data.get("text", ""))
 
-	_current_interact.erase("secret")
+	_overlapping.erase(secret)
 	secret.queue_free()
 
 
@@ -841,44 +847,87 @@ func _on_overworld_exit(body: Node2D) -> void:
 ## UNIFIED INTERACTION SYSTEM
 ## ═══════════════════════════════════════════════════════════════════════════
 
-var _current_interact: Dictionary = {}  # type -> Area2D
+## Everything the player is standing in. Interact acts on the nearest one, the
+## same rule as player_topdown.gd: one slot per type used to leave a dead
+## prompt when circles overlapped (Rook/Garro/Doss, Seraphina/Ina) and let NPC
+## priority hide the shops next to them. The type rides on an "interact_type" meta.
+var _overlapping: Array = []
+var _focused: Area2D = null
+var _interacting := false
 
 func _on_interact_entered(body: Node2D, target: Area2D, type: String) -> void:
-	if body.is_in_group("player"):
-		_current_interact[type] = target
-		var prompt = target.get_node_or_null("Prompt")
-		if prompt:
-			prompt.visible = true
+	if body.is_in_group("player") and target not in _overlapping:
+		target.set_meta("interact_type", type)
+		_overlapping.append(target)
 
-func _on_interact_exited(body: Node2D, target: Area2D, type: String) -> void:
-	if body.is_in_group("player") and _current_interact.get(type) == target:
-		_current_interact.erase(type)
-		var prompt = target.get_node_or_null("Prompt")
-		if prompt:
-			prompt.visible = false
+func _on_interact_exited(body: Node2D, target: Area2D, _type: String) -> void:
+	if body.is_in_group("player"):
+		_overlapping.erase(target)
+
+
+func _is_talking() -> bool:
+	return _interacting or _city_busy or (has_node("/root/DialogueManager") and DialogueManager.is_active)
+
+
+## Pick the nearest overlapped area and show only its prompt. No prompt while
+## an interaction or dialogue is running.
+func _update_focus() -> void:
+	var best: Area2D = null
+	if not _is_talking():
+		var best_dist := INF
+		for area in _overlapping.duplicate():
+			if not is_instance_valid(area) or not area.is_inside_tree() or area.is_queued_for_deletion():
+				_overlapping.erase(area)
+				continue
+			var dist := _player.global_position.distance_squared_to(area.global_position)
+			if dist < best_dist:
+				best_dist = dist
+				best = area
+	if best == _focused:
+		return
+	if is_instance_valid(_focused):
+		var old_prompt = _focused.get_node_or_null("Prompt")
+		if old_prompt:
+			old_prompt.visible = false
+	_focused = best
+	if _focused:
+		var new_prompt = _focused.get_node_or_null("Prompt")
+		if new_prompt:
+			new_prompt.visible = true
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not event.is_action_pressed("interact") or _city_busy:
+	if not event.is_action_pressed("interact"):
 		return
-
-	# Priority: story > boss > arena > farming > npc > lore > shop
-	if _current_interact.has("story"):
-		_interact_story(_current_interact["story"])
-	elif _current_interact.has("boss"):
-		_interact_boss(_current_interact["boss"])
-	elif _current_interact.has("arena"):
-		_interact_arena()
-	elif _current_interact.has("farm"):
-		_interact_farming_zone(_current_interact["farm"])
-	elif _current_interact.has("npc"):
-		_interact_npc(_current_interact["npc"])
-	elif _current_interact.has("lore"):
-		_interact_lore(_current_interact["lore"])
-	elif _current_interact.has("shop"):
-		_interact_shop(_current_interact["shop"])
-	elif _current_interact.has("secret"):
-		_interact_secret(_current_interact["secret"])
+	# One interaction at a time: interact pressed during a lore line, a secret
+	# or the arena menu used to start a second say() over the running one.
+	if _is_talking():
+		return
+	_update_focus()
+	var target := _focused
+	if not is_instance_valid(target):
+		return
+	get_viewport().set_input_as_handled()
+	_interacting = true
+	_update_focus()
+	match target.get_meta("interact_type", ""):
+		"story":
+			await _interact_story(target)
+		"boss":
+			await _interact_boss(target)
+		"arena":
+			await _interact_arena()
+		"farm":
+			await _interact_farming_zone(target)
+		"npc":
+			await _interact_npc(target)
+		"lore":
+			await _interact_lore(target)
+		"shop":
+			_interact_shop(target)
+		"secret":
+			await _interact_secret(target)
+	_interacting = false
 
 
 func _interact_npc(npc: Area2D) -> void:
@@ -1140,7 +1189,7 @@ func _run_convoy(gate: Area2D) -> void:
 			GameManager.set_story_flag("ch2_medicine_early", true)
 	if is_instance_valid(gate):
 		gate.queue_free()
-	_current_interact.erase("story")
+	_overlapping.erase(gate)
 
 func _on_city_event(event: String) -> void:
 	var parts := event.split(" ", false, 1)

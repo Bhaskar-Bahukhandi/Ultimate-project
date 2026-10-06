@@ -21,6 +21,7 @@ var quests: Dictionary = {}  # quest_id → {state, current_step, data}
 var secrets_found: Array[String] = []
 var _notification_queue: Array[Dictionary] = []
 var _processing_notification: bool = false
+var _notification_layer: CanvasLayer = null
 
 # ── Quest Definitions ─────────────────────────────────────────────────
 const QUEST_DATABASE: Dictionary = {
@@ -178,6 +179,8 @@ func reset() -> void:
 	## Reset all quest and secret state (used by reset_game and NG+).
 	quests.clear()
 	secrets_found.clear()
+	# Popups still queued from the previous run must not play in the new one.
+	_notification_queue.clear()
 	for quest_id in QUEST_DATABASE:
 		quests[quest_id] = {
 			"state": QuestState.HIDDEN,
@@ -223,8 +226,15 @@ func start_quest(quest_id: String) -> void:
 		return
 	if quests[quest_id]["state"] == QuestState.HIDDEN:
 		discover_quest(quest_id)
+		if quests[quest_id]["state"] == QuestState.HIDDEN:
+			return  # requires_flag not met
 	if quests[quest_id]["state"] == QuestState.COMPLETED:
 		return  # PASS-35 FIX: Don't restart completed quests
+	# Callers start quests on every scene entry / NPC talk (Underground Network
+	# _ready, Garro, Iris); restarting reset the progress to step 0 and replayed
+	# the "QUEST STARTED" popups each time.
+	if quests[quest_id]["state"] == QuestState.ACTIVE:
+		return
 	quests[quest_id]["state"] = QuestState.ACTIVE
 	quests[quest_id]["current_step"] = 0
 	print("[SIDE QUEST] Started: %s" % QUEST_DATABASE[quest_id]["name"])
@@ -276,6 +286,11 @@ func complete_quest(quest_id: String) -> void:
 		var boosts: Dictionary = rewards["stat_boost"]
 		for s in boosts:
 			GameManager.player_stats[s] = GameManager.player_stats.get(s, 0) + boosts[s]
+			# attack/defense are recomputed from base_* on every equipment, level
+			# or corruption change, which erased a boost written only here.
+			if s in ["attack", "defense"]:
+				var base_key: String = "base_" + s
+				GameManager.player_stats[base_key] = GameManager.player_stats.get(base_key, 0) + boosts[s]
 	if rewards.has("relationship") and GameManager:
 		var rels: Dictionary = rewards["relationship"]
 		for r in rels:
@@ -536,7 +551,14 @@ func _process_notification_queue() -> void:
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	notif.add_child(label)
 
-	get_tree().root.add_child(notif)
+	# On a CanvasLayer: added straight to the root viewport, the region's
+	# Camera2D transform applied and the popup landed off-screen in the world.
+	if not is_instance_valid(_notification_layer):
+		_notification_layer = CanvasLayer.new()
+		_notification_layer.name = "QuestNotifications"
+		_notification_layer.layer = 95  # Above the tracker (90), below dialogue (100)
+		add_child(_notification_layer)
+	_notification_layer.add_child(notif)
 	if has_node("/root/SFXManager"):
 		SFXManager.play("ui_select")
 	var tw = create_tween()
@@ -559,11 +581,27 @@ func get_save_data() -> Dictionary:
 	}
 
 func load_save_data(data: Dictionary) -> void:
-	if data.has("quests"):
-		quests = data["quests"]
-	# Merge any new quests from QUEST_DATABASE that didn't exist in the save
-	for quest_id in QUEST_DATABASE:
-		if quest_id not in quests:
-			quests[quest_id] = {"state": QuestState.HIDDEN, "current_step": 0, "data": {}}
-	if data.has("secrets_found"):
-		secrets_found.assign(data["secrets_found"])
+	# Start from all-HIDDEN, so quests new since the save exist and nothing from
+	# the session before the load survives.
+	reset()
+	var saved_quests = data.get("quests", {})
+	if saved_quests is Dictionary:
+		for quest_id in saved_quests:
+			var entry = saved_quests[quest_id]
+			# A quest this build no longer defines would crash the tracker and the
+			# quest log (they index QUEST_DATABASE by every active id).
+			if not QUEST_DATABASE.has(quest_id) or not entry is Dictionary:
+				continue
+			var entry_data = entry.get("data", {})
+			quests[quest_id] = {
+				"state": int(entry.get("state", QuestState.HIDDEN)),
+				"current_step": int(entry.get("current_step", 0)),
+				"data": entry_data if entry_data is Dictionary else {},
+			}
+	var saved_secrets = data.get("secrets_found", [])
+	if saved_secrets is Array:
+		for secret_id in saved_secrets:
+			if secret_id is String and SECRETS_DATABASE.has(secret_id) and secret_id not in secrets_found:
+				secrets_found.append(secret_id)
+	# The tracker otherwise kept showing the pre-load quests until the next update.
+	_update_hud_tracker()

@@ -83,7 +83,7 @@ const SKIP_HOLD_DURATION: float = 1.0
 
 func _build_skip_hint() -> void:
 	_skip_hint = Label.new()
-	_skip_hint.text = "Hold ESC to Skip to Chapter 1"
+	_skip_hint.text = InputService.fmt("Hold {ui_cancel} to Skip to Chapter 1")
 	_skip_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_skip_hint.add_theme_font_size_override("font_size", 14)
 	_skip_hint.add_theme_color_override("font_color", Color(0.5, 0.5, 0.6, 0.6))
@@ -113,7 +113,8 @@ func _process(delta) -> void:
 	else:
 		_skip_hold_timer = 0.0
 		if _skip_hint:
-			_skip_hint.text = "Hold ESC to skip"
+			# The hold is read from ui_cancel (Esc / pad B), not the `skip` action.
+			_skip_hint.text = InputService.fmt("Hold {ui_cancel} to skip")
 			_skip_hint.add_theme_color_override("font_color", Color(0.5, 0.5, 0.6, 0.6))
 	
 	# Gradually increase glitch intensity through phases

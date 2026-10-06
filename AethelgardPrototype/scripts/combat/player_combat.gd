@@ -136,9 +136,10 @@ const LANDING_RECOVERY_TIME = 0.06
 # ── Death Tips ────────────────────────────────────────────────────────────
 const DEATH_TIPS: Dictionary = {
 	"default": [
-		"Use Dash (Shift) for i-frames to dodge through attacks.",
-		"Focus Heal (C) restores HP using MP.",
-		"Parry (F) just before impact for COUNTER opportunities.",
+		# {action} tokens: DialogueManager.say() runs InputService.fmt on the text.
+		"Use Dash ({sprint}) for i-frames to dodge through attacks.",
+		"Focus Heal ({heal}) restores HP using MP.",
+		"Parry ({defend}) just before impact for COUNTER opportunities.",
 	],
 	"boss": [
 		"Study the boss telegraph — colored flash means an attack is coming.",
@@ -150,12 +151,12 @@ const DEATH_TIPS: Dictionary = {
 		"Jump and air-attack to approach from above.",
 	],
 	"swarm": [
-		"Use Desolate Dive (S+Spell) to hit all nearby enemies.",
+		"Use Desolate Dive ({move_down}+{spell}) to hit all nearby enemies.",
 		"Pogo strike (down-attack mid-air) to bounce over groups.",
 	],
 	"heavy_hit": [
 		"That was a charged attack — watch for the red telegraph glow.",
-		"Block (hold G) reduces heavy hit damage by 50%.",
+		"Block (hold {defend}) reduces heavy hit damage by 70%.",
 	],
 	"corruption": [
 		"Buy Glitch Stabilizers from shops to reduce corruption.",
@@ -285,8 +286,9 @@ var _charge_indicator: ProgressBar
 var _level_label: Label
 var _soul_flashing: bool = false
 var _hp_display_value: float = 0.0
+var _hp_bar_tween: Tween = null
+var _xp_bar: ProgressBar = null
 var _danger_overlay: ColorRect = null
-var _combo_mult_hud: Label = null
 
 # Cached script
 var _cached_projectile_script: GDScript = null
@@ -541,7 +543,6 @@ func _physics_process(delta: float) -> void:
 		_anim_controller.update_animation(delta)
 
 	_update_danger_overlay()
-	_update_combo_mult_hud()
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -734,6 +735,11 @@ func _handle_attack() -> void:
 	var attack_pressed := Input.is_action_just_pressed("attack")
 	if attack_pressed:
 		_metric_inc("attempted")
+	# A charge released while another action blocked this handler (dash, block,
+	# heal, cast, an attack, dialogue) never saw its release event, so it stayed
+	# charging and flashing forever. Drop it, like other blocked attack presses.
+	if is_charging and not Input.is_action_pressed("attack") and not Input.is_action_just_released("attack"):
+		_cancel_charge()
 	if is_dashing or is_defending or is_healing or is_casting:
 		if attack_pressed:
 			_metric_inc("ignored_recovery")
@@ -764,6 +770,18 @@ func _handle_attack() -> void:
 		charged_attack_ready = false
 		_set_sprite_color(Color.WHITE)
 		_update_charge_indicator()
+
+
+## Abandon a charge without attacking: clears the charge state, the ready flash
+## and the charge bar.
+func _cancel_charge() -> void:
+	var was_flashing := charged_attack_ready
+	is_charging = false
+	charge_timer = 0.0
+	charged_attack_ready = false
+	if was_flashing:
+		_set_sprite_color(Color.WHITE)
+	_update_charge_indicator()
 
 
 func _get_enemies_in_melee_hitbox(center_offset: Vector2, size: Vector2, debug_color: Color = Color(1.0, 0.85, 0.2, 0.2)) -> Array:
@@ -921,7 +939,7 @@ func _perform_combo_attack() -> void:
 
 	var slash_offset = Vector2(45.0 * facing, -10.0)
 	_vfx("vfx_slash_arc", global_position + slash_offset)
-	await get_tree().create_timer(startup).timeout
+	await get_tree().create_timer(startup, false).timeout
 	# Interrupted (e.g. by take_damage) — do not resolve this attack any further.
 	if _attack_token != my_token:
 		return
@@ -980,7 +998,7 @@ func _perform_combo_attack() -> void:
 		if parry_counter_active:
 			parry_counter_active = false
 
-	await get_tree().create_timer(active_window).timeout
+	await get_tree().create_timer(active_window, false).timeout
 	# Interrupted (e.g. by take_damage) — do not resolve this attack any further.
 	if _attack_token != my_token:
 		return
@@ -988,7 +1006,7 @@ func _perform_combo_attack() -> void:
 		return
 	can_cancel_attack = true
 	attack_recovery_timer = recovery
-	await get_tree().create_timer(recovery).timeout
+	await get_tree().create_timer(recovery, false).timeout
 	# Interrupted (e.g. by take_damage) — do not resolve this attack any further.
 	if _attack_token != my_token:
 		return
@@ -1030,7 +1048,7 @@ func _perform_charged_attack() -> void:
 	_metric_attack_window("charged_slash", CHARGED_ATTACK_STARTUP, CHARGED_ATTACK_ACTIVE, CHARGED_ATTACK_RECOVERY, CHARGED_ATTACK_STARTUP + CHARGED_ATTACK_ACTIVE)
 
 	velocity.x = facing * 90.0
-	await get_tree().create_timer(CHARGED_ATTACK_STARTUP).timeout
+	await get_tree().create_timer(CHARGED_ATTACK_STARTUP, false).timeout
 	# Interrupted (e.g. by take_damage) — do not resolve this attack any further.
 	if _attack_token != my_token:
 		return
@@ -1067,7 +1085,7 @@ func _perform_charged_attack() -> void:
 	if hit_count > 0:
 		_screen_shake(18.0, 0.3)
 
-	await get_tree().create_timer(CHARGED_ATTACK_ACTIVE).timeout
+	await get_tree().create_timer(CHARGED_ATTACK_ACTIVE, false).timeout
 	# Interrupted (e.g. by take_damage) — do not resolve this attack any further.
 	if _attack_token != my_token:
 		return
@@ -1075,7 +1093,7 @@ func _perform_charged_attack() -> void:
 		return
 	can_cancel_attack = true
 	attack_recovery_timer = CHARGED_ATTACK_RECOVERY
-	await get_tree().create_timer(CHARGED_ATTACK_RECOVERY).timeout
+	await get_tree().create_timer(CHARGED_ATTACK_RECOVERY, false).timeout
 	# Interrupted (e.g. by take_damage) — do not resolve this attack any further.
 	if _attack_token != my_token:
 		return
@@ -1135,7 +1153,7 @@ func _start_dash() -> void:
 func _spawn_dash_ghost(delay: float) -> void:
 	if not is_inside_tree():
 		return
-	await get_tree().create_timer(delay).timeout
+	await get_tree().create_timer(delay, false).timeout
 	if not is_inside_tree():
 		return
 
@@ -1200,7 +1218,7 @@ func _start_parry() -> void:
 	parry_cooldown_timer = PARRY_COOLDOWN
 
 	_set_sprite_color(Color(0.3, 1.0, 0.5))
-	await get_tree().create_timer(pw).timeout  # Pass 57: Use computed pw instead of raw constant
+	await get_tree().create_timer(pw, false).timeout  # Pass 57: Use computed pw instead of raw constant
 	if not is_inside_tree():
 		return
 	if is_instance_valid(self):
@@ -1319,7 +1337,7 @@ func _cast_vengeful_spirit() -> void:
 	_vfx("vfx_glitch_sparkle", global_position + Vector2(20.0 * facing_direction, 0.0))
 	_set_sprite_color(Color(0.6, 0.8, 1.0))
 
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.3, false).timeout
 	if not is_inside_tree():
 		return
 	is_casting = false
@@ -1375,7 +1393,8 @@ func _create_spell_projectile() -> Area2D:
 				CombatFX.apply_hit_effects(damage, body.global_position, true)
 			if has_node("/root/VFXLibrary"):
 				VFXLibrary.spawn("vfx_hit_spark", body.global_position, get_parent())
-				VFXLibrary.spawn_damage_number(int(damage), body.global_position + Vector2(0, -30), get_parent(), true, Color(0.4, 0.8, 1.0))
+			# Through the wrapper so the "show damage numbers" setting applies.
+			_spawn_damage_number(int(damage), body.global_position + Vector2(0, -30), true, Color(0.4, 0.8, 1.0))
 			projectile.queue_free()
 	)
 
@@ -1464,7 +1483,7 @@ func _cast_desolate_dive() -> void:
 	invulnerable = true
 	invuln_timer = 0.3
 
-	await get_tree().create_timer(0.4).timeout
+	await get_tree().create_timer(0.4, false).timeout
 	if not is_inside_tree():
 		return
 	is_casting = false
@@ -1512,7 +1531,7 @@ func _cast_howling_wraiths() -> void:
 				_spawn_damage_number(int(dmg), enemy.global_position + Vector2(0, -30), true, Color(0.8, 0.5, 1.0))
 
 	_set_sprite_color(Color(0.8, 0.5, 1.0))
-	await get_tree().create_timer(0.35).timeout
+	await get_tree().create_timer(0.35, false).timeout
 	if not is_inside_tree():
 		return
 	is_casting = false
@@ -1578,7 +1597,7 @@ func _complete_heal() -> void:
 
 	_set_sprite_color(Color(0.5, 1.5, 0.5))
 	_screen_shake(3.0, 0.1)
-	await get_tree().create_timer(0.12).timeout
+	await get_tree().create_timer(0.12, false).timeout
 	if not is_inside_tree():
 		return
 	_set_sprite_color(Color.WHITE)
@@ -1623,7 +1642,7 @@ func _handle_flee_combat() -> void:
 		# Brief invuln then exit combat
 		invulnerable = true
 		invuln_timer = 1.0
-		await get_tree().create_timer(0.5).timeout
+		await get_tree().create_timer(0.5, false).timeout
 		if not is_inside_tree():
 			return
 		RandomEncounterSystem.end_encounter(false)
@@ -1632,7 +1651,7 @@ func _handle_flee_combat() -> void:
 		_flee_cooldown = 2.0
 		# Enemies get a free hit window — flash warning
 		_set_sprite_color(Color(1.0, 0.5, 0.5))
-		await get_tree().create_timer(0.2).timeout
+		await get_tree().create_timer(0.2, false).timeout
 		if not is_inside_tree():
 			return
 		_set_sprite_color(Color.WHITE)
@@ -1669,7 +1688,7 @@ func _perform_upslash() -> void:
 	_request_combat_visual("upslash", attack_cooldown)
 	_vfx("vfx_slash_arc", global_position + Vector2(0, -50))
 	_metric_attack_window("upslash", UPSLASH_STARTUP, UPSLASH_ACTIVE, UPSLASH_RECOVERY, UPSLASH_STARTUP + UPSLASH_ACTIVE)
-	await get_tree().create_timer(UPSLASH_STARTUP).timeout
+	await get_tree().create_timer(UPSLASH_STARTUP, false).timeout
 	# Interrupted (e.g. by take_damage) — do not resolve this attack any further.
 	if _attack_token != my_token:
 		return
@@ -1698,7 +1717,7 @@ func _perform_upslash() -> void:
 		if has_node("/root/CombatFX"):
 			CombatFX.apply_hitstop(0.06)
 
-	await get_tree().create_timer(UPSLASH_ACTIVE).timeout
+	await get_tree().create_timer(UPSLASH_ACTIVE, false).timeout
 	# Interrupted (e.g. by take_damage) — do not resolve this attack any further.
 	if _attack_token != my_token:
 		return
@@ -1706,7 +1725,7 @@ func _perform_upslash() -> void:
 		return
 	can_cancel_attack = true
 	attack_recovery_timer = UPSLASH_RECOVERY
-	await get_tree().create_timer(UPSLASH_RECOVERY).timeout
+	await get_tree().create_timer(UPSLASH_RECOVERY, false).timeout
 	# Interrupted (e.g. by take_damage) — do not resolve this attack any further.
 	if _attack_token != my_token:
 		return
@@ -1785,9 +1804,11 @@ func _flash_mp_bar() -> void:
 	var fill := _mp_bar.get_theme_stylebox("fill") as StyleBoxFlat
 	if fill == null:
 		return
-	var normal := fill.bg_color
+	# Restore the HUD's MP colour, not the current one: a second flash inside the
+	# 0.25 s window used to capture red as "normal" and leave the bar red.
+	var normal := Color(0.2, 0.7, 1.0)
 	fill.bg_color = Color(1.0, 0.2, 0.2)
-	await get_tree().create_timer(0.25).timeout
+	await get_tree().create_timer(0.25, false).timeout
 	if is_instance_valid(self) and fill:
 		fill.bg_color = normal
 
@@ -1807,7 +1828,7 @@ func _flash_soul_bar() -> void:
 		flash_style.bg_color = Color(1.0, 0.2, 0.2)
 		flash_style.set_corner_radius_all(3)
 		_soul_bar.add_theme_stylebox_override("fill", flash_style)
-		await get_tree().create_timer(0.15).timeout
+		await get_tree().create_timer(0.15, false).timeout
 		if not is_inside_tree():
 			return
 		if is_instance_valid(self) and _soul_bar:
@@ -1866,9 +1887,7 @@ func take_damage(amount: float, source_position: Vector2 = Vector2.ZERO, source_
 	combo_step = 0
 	combo_timer = 0.0
 	attack_cooldown = 0.0
-	is_charging = false
-	charge_timer = 0.0
-	charged_attack_ready = false
+	_cancel_charge()  # also hides the charge bar, which used to stay on screen
 	is_casting = false
 	cast_lock_timer = 0.0
 
@@ -1984,7 +2003,7 @@ func _on_successful_parry(damage: float, _source_position: Vector2) -> void:
 	invulnerable = true
 	invuln_timer = 0.4
 
-	await get_tree().create_timer(0.12).timeout
+	await get_tree().create_timer(0.12, false).timeout
 	if not is_inside_tree():
 		return
 	if is_instance_valid(self):
@@ -2012,7 +2031,7 @@ func die() -> void:
 		GameJuice.slowmo_moment(0.8, 0.2)
 	_screen_shake(25.0, 0.6)
 
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0, false).timeout
 	if not is_inside_tree():
 		return
 	if bool(get_meta("local_boss_retry_enabled", false)):
@@ -2025,7 +2044,7 @@ func _on_death_complete() -> void:
 	GameManager.add_death_corruption()
 
 	if GameManager.glitch_meter >= 100.0:
-		await get_tree().create_timer(0.5).timeout
+		await get_tree().create_timer(0.5, false).timeout
 		if not is_inside_tree():
 			return
 		if has_node("/root/SceneTransitions"):
@@ -2048,11 +2067,11 @@ func _on_death_complete() -> void:
 			return
 		DialogueManager.hide_dialogue()
 	else:
-		await get_tree().create_timer(2.0).timeout
+		await get_tree().create_timer(2.0, false).timeout
 		if not is_inside_tree():
 			return
 
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	if not is_inside_tree():
 		return
 
@@ -2111,7 +2130,7 @@ func _flash_red() -> void:
 		return
 	var sprite = _sprite
 	sprite.modulate = Color.RED
-	await get_tree().create_timer(0.1).timeout
+	await get_tree().create_timer(0.1, false).timeout
 	if not is_inside_tree() or not is_instance_valid(sprite):
 		return
 	sprite.modulate = Color.WHITE
@@ -2483,11 +2502,13 @@ func _build_combat_hud() -> void:
 	var xp_bar = ProgressBar.new()
 	xp_bar.name = "XPBar"
 	xp_bar.custom_minimum_size = Vector2(180, 8)
-	var max_xp = GameManager.player_stats.get("xp_to_next", 100)
-	var cur_xp = GameManager.player_stats.get("current_xp", 0)
-	xp_bar.max_value = max_xp
-	xp_bar.value = cur_xp
+	# player_stats has no "xp_to_next"/"current_xp" keys (the bar was always
+	# empty); show progress through the current level instead.
+	xp_bar.max_value = 1.0
+	xp_bar.step = 0.0
+	xp_bar.value = GameManager.get_xp_progress()
 	xp_bar.show_percentage = false
+	_xp_bar = xp_bar
 	var xp_bg = StyleBoxFlat.new()
 	xp_bg.bg_color = Color(0.08, 0.06, 0.02, 0.85)
 	xp_bg.set_corner_radius_all(2)
@@ -2498,22 +2519,23 @@ func _build_combat_hud() -> void:
 	xp_bar.add_theme_stylebox_override("fill", xp_fill)
 	hp_container.add_child(xp_bar)
 
-	# Combo indicator
+	# Combo (attack chain step) and charge indicators sit in the same column,
+	# below the bars. Fixed positions (y 130/152) drew them over the MP/SOUL bars.
+	# Hit count, damage multiplier and style rank are GameJuice's combo HUD.
 	_combo_indicator = Label.new()
 	_combo_indicator.text = ""
 	_combo_indicator.add_theme_color_override("font_color", Color(1.0, 0.85, 0.3))
 	_combo_indicator.add_theme_font_size_override("font_size", 14)
-	_combo_indicator.position = Vector2(20, 130)
 	_combo_indicator.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_hud_layer.add_child(_combo_indicator)
+	hp_container.add_child(_combo_indicator)
 
 	# Charge indicator
 	_charge_indicator = ProgressBar.new()
 	_charge_indicator.custom_minimum_size = Vector2(120, 8)
+	_charge_indicator.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	_charge_indicator.max_value = CHARGED_ATTACK_TIME
 	_charge_indicator.value = 0
 	_charge_indicator.show_percentage = false
-	_charge_indicator.position = Vector2(20, 152)
 	_charge_indicator.visible = false
 	var charge_bg = StyleBoxFlat.new()
 	charge_bg.bg_color = Color(0.1, 0.1, 0.1, 0.7)
@@ -2523,7 +2545,7 @@ func _build_combat_hud() -> void:
 	charge_fill.bg_color = Color(1.0, 0.8, 0.2)
 	charge_fill.set_corner_radius_all(2)
 	_charge_indicator.add_theme_stylebox_override("fill", charge_fill)
-	_hud_layer.add_child(_charge_indicator)
+	hp_container.add_child(_charge_indicator)
 
 	# Top-right: stats (responsive positioning)
 	var stats_container = VBoxContainer.new()
@@ -2610,11 +2632,14 @@ func _add_action_button(parent: HBoxContainer, label_text: String, action: Strin
 func _update_hud() -> void:
 	if _hp_bar:
 		_hp_bar.max_value = max_health
-		# Smooth HP bar lerp for visual polish
-		_hp_display_value = lerpf(_hp_display_value, current_health, 0.15)
-		if absf(_hp_display_value - current_health) < 0.5:
+		# Smooth HP bar for visual polish. This runs only on events, so the old
+		# per-call lerp (starting from 0) left the bar far from the real HP.
+		if _hp_display_value != current_health:
 			_hp_display_value = current_health
-		_hp_bar.value = _hp_display_value
+			if _hp_bar_tween and _hp_bar_tween.is_valid():
+				_hp_bar_tween.kill()
+			_hp_bar_tween = _hp_bar.create_tween()
+			_hp_bar_tween.tween_property(_hp_bar, "value", current_health, 0.15)
 		var hp_pct = current_health / max_health if max_health > 0.0 else 1.0
 		var fill_style = _hp_bar.get_theme_stylebox("fill") as StyleBoxFlat
 		if fill_style:
@@ -2635,6 +2660,8 @@ func _update_hud() -> void:
 		_soul_bar.value = current_soul
 	if _soul_label:
 		_soul_label.text = "%d / %d" % [int(current_soul), int(MAX_SOUL)]
+	if _xp_bar:
+		_xp_bar.value = GameManager.get_xp_progress()
 	if _corruption_label:
 		_corruption_label.text = "Corruption: %.0f%%" % GameManager.glitch_meter
 		_corruption_label.add_theme_color_override("font_color", Color(1.0, 0.3, 0.3) if GameManager.glitch_meter > 50.0 else Color(0.8, 0.6, 1.0))
@@ -2717,40 +2744,3 @@ func _update_danger_overlay() -> void:
 		_danger_overlay.color = Color(0.8, 0.0, 0.0, pulse)
 	else:
 		_danger_overlay.color.a = 0.0
-
-
-# ══════════════════════════════════════════════════════════════════════════
-# COMBO MULTIPLIER HUD
-# ══════════════════════════════════════════════════════════════════════════
-
-func _setup_combo_mult_hud() -> void:
-	_combo_mult_hud = Label.new()
-	_combo_mult_hud.name = "ComboMultHUD"
-	_combo_mult_hud.text = ""
-	_combo_mult_hud.add_theme_font_size_override("font_size", 16)
-	_combo_mult_hud.add_theme_color_override("font_color", Color(1.0, 0.6, 0.2))
-	_combo_mult_hud.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.7))
-	_combo_mult_hud.add_theme_constant_override("shadow_offset_x", 1)
-	_combo_mult_hud.add_theme_constant_override("shadow_offset_y", 1)
-	_combo_mult_hud.position = Vector2(20, 170)
-	_combo_mult_hud.modulate.a = 0.0
-	_combo_mult_hud.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	if _hud_layer:
-		_hud_layer.add_child(_combo_mult_hud)
-
-
-func _update_combo_mult_hud() -> void:
-	if not _combo_mult_hud:
-		_setup_combo_mult_hud()
-	var mult = _get_combo_multiplier()
-	if mult > 1.0:
-		_combo_mult_hud.text = "DMG x%.2f" % mult
-		_combo_mult_hud.modulate.a = 1.0
-		if mult >= 2.0:
-			_combo_mult_hud.add_theme_color_override("font_color", Color(1.0, 0.2, 0.2))
-		elif mult >= 1.5:
-			_combo_mult_hud.add_theme_color_override("font_color", Color(1.0, 0.5, 0.1))
-		else:
-			_combo_mult_hud.add_theme_color_override("font_color", Color(1.0, 0.7, 0.2))
-	else:
-		_combo_mult_hud.modulate.a = 0.0

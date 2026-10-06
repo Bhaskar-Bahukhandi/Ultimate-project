@@ -115,12 +115,19 @@ static func create_trigger(cutscene_data: Dictionary, trigger_size: Vector2 = Ve
 ## ─── PLAY CUTSCENE ───────────────────────────────────────────────────
 
 var _pre_cutscene_state: int = -1  # GameState before cutscene started
+## Bumped by play_cutscene() and stop_cutscene(). A skipped cutscene's coroutine
+## sees a newer generation and exits without running more beats or emitting
+## cutscene_finished a second time (which would end the next cutscene early).
+var _play_gen: int = 0
+var _beat_tweens: Array = []
 
 func play_cutscene(cutscene_data: Dictionary) -> void:
 	if is_playing:
 		push_warning("Cutscene already playing!")
 		return
-	
+
+	_play_gen += 1
+	var gen := _play_gen
 	is_playing = true
 	current_cutscene = cutscene_data
 	current_beat_index = 0
@@ -140,14 +147,21 @@ func play_cutscene(cutscene_data: Dictionary) -> void:
 	
 	await process_beats()
 	if not is_inside_tree(): return
-	
+	if gen != _play_gen: return  # skipped: stop_cutscene() already cleaned up and emitted
+
 	# Auto-save if this was a chapter transition cutscene
 	if cutscene_data.get("auto_save", false) and has_node("/root/GameManager"):
 		GameManager.auto_save()
-	
+
 	# Restore input
 	_unblock_input()
-	
+	_restore_game_state()
+
+	is_playing = false
+	cutscene_finished.emit()
+	print("[CUTSCENE] Finished")
+
+func _restore_game_state() -> void:
 	# Restore game state to what it was before the cutscene (default to EXPLORATION)
 	if has_node("/root/GameManager"):
 		var restore_state = _pre_cutscene_state if _pre_cutscene_state >= 0 else GameManager.GameState.EXPLORATION
@@ -156,24 +170,21 @@ func play_cutscene(cutscene_data: Dictionary) -> void:
 			restore_state = GameManager.GameState.EXPLORATION
 		GameManager.change_state(restore_state)
 		_pre_cutscene_state = -1
-	
-	is_playing = false
-	cutscene_finished.emit()
-	print("[CUTSCENE] Finished")
 
 ## ─── PROCESS BEATS ───────────────────────────────────────────────────
 
 func process_beats() -> void:
+	var gen := _play_gen
 	var beats = current_cutscene.get("beats", [])
-	
+
 	for i in range(beats.size()):
-		if not is_playing or paused:
+		if not is_playing or paused or gen != _play_gen:
 			break
-		
+
 		current_beat_index = i
 		var beat = beats[i]
 		await process_beat(beat)
-		if not is_inside_tree(): return
+		if not is_inside_tree() or gen != _play_gen: return
 		beat_finished.emit(beat.get("name", "beat_%d" % i))
 
 func process_beat(beat: Dictionary) -> void:
@@ -236,7 +247,7 @@ func process_beat(beat: Dictionary) -> void:
 			await handle_call_method(beat)
 		_:
 			push_warning("[CUTSCENE] Unknown beat type: %s" % beat_type)
-			await get_tree().create_timer(0.1).timeout
+			await get_tree().create_timer(0.1, false).timeout
 	
 	if not is_inside_tree(): return
 
@@ -297,7 +308,7 @@ func handle_character_enter(beat: Dictionary) -> void:
 	var walk_dir = (position - start_pos).normalized()
 	_start_walk_anim(character, walk_dir)
 	
-	var tween = create_tween()
+	var tween = _beat_tween()
 	tween.tween_property(character, "position", position, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	tween.tween_property(character, "modulate:a", 1.0, duration * 0.5)
 	await tween.finished
@@ -330,7 +341,7 @@ func handle_character_exit(beat: Dictionary) -> void:
 	var walk_dir = (target_pos - character.position).normalized()
 	_start_walk_anim(character, walk_dir)
 	
-	var tween = create_tween()
+	var tween = _beat_tween()
 	tween.set_parallel(true)
 	tween.tween_property(character, "position", target_pos, duration)
 	tween.tween_property(character, "modulate:a", 0.0, duration)
@@ -352,7 +363,7 @@ func handle_character_move(beat: Dictionary) -> void:
 	var walk_dir = (target - character.position).normalized()
 	_start_walk_anim(character, walk_dir)
 	
-	var tween = create_tween()
+	var tween = _beat_tween()
 	tween.tween_property(character, "position", target, duration).set_trans(Tween.TRANS_SINE)
 	await tween.finished
 	if not is_inside_tree(): return
@@ -374,7 +385,7 @@ func handle_dialogue(beat: Dictionary) -> void:
 
 func handle_wait(beat: Dictionary) -> void:
 	var duration = beat.get("duration", 1.0)
-	await get_tree().create_timer(duration).timeout
+	await get_tree().create_timer(duration, false).timeout
 	if not is_inside_tree(): return
 
 func handle_parallel(beat: Dictionary) -> void:
@@ -382,6 +393,7 @@ func handle_parallel(beat: Dictionary) -> void:
 	if sub_beats.size() == 0:
 		return
 	# Run all sub-beats concurrently using signal-based completion tracking
+	var gen := _play_gen
 	var counter = [sub_beats.size()]  # Use array to avoid confusable capture reassignment
 	var timeout_elapsed = 0.0
 	var MAX_PARALLEL_TIMEOUT = 30.0  # Safety: 30 second max
@@ -390,9 +402,9 @@ func handle_parallel(beat: Dictionary) -> void:
 		_run_parallel_beat(sub_beat, func(): counter[0] -= 1)
 	# Poll until all sub-beats complete
 	while counter[0] > 0:
-		await get_tree().create_timer(0.05).timeout
+		await get_tree().create_timer(0.05, false).timeout
 		if not is_inside_tree(): return
-		if not is_playing:  # Cutscene was skipped
+		if not is_playing or gen != _play_gen:  # Cutscene was skipped
 			return
 		timeout_elapsed += 0.05
 		if timeout_elapsed >= MAX_PARALLEL_TIMEOUT:
@@ -419,15 +431,15 @@ func handle_effect(beat: Dictionary) -> void:
 				if not is_inside_tree(): return
 		"glitch_screen":
 			custom_effect.emit("glitch_screen", beat)
-			await get_tree().create_timer(duration).timeout
+			await get_tree().create_timer(duration, false).timeout
 			if not is_inside_tree(): return
 		"trigger_turbulence_light":
 			custom_effect.emit("trigger_turbulence_light", beat)
-			await get_tree().create_timer(duration).timeout
+			await get_tree().create_timer(duration, false).timeout
 			if not is_inside_tree(): return
 		_:
 			custom_effect.emit(effect_type, beat)
-			await get_tree().create_timer(duration).timeout
+			await get_tree().create_timer(duration, false).timeout
 			if not is_inside_tree(): return
 
 func handle_fade(beat: Dictionary) -> void:
@@ -440,7 +452,7 @@ func handle_fade(beat: Dictionary) -> void:
 	_fade_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	var target_alpha = 1.0 if fade_type == "out" else 0.0
-	var tween = create_tween()
+	var tween = _beat_tween()
 	tween.tween_property(_fade_overlay, "color:a", target_alpha, duration)
 	await tween.finished
 	if not is_inside_tree(): return
@@ -490,7 +502,7 @@ func handle_audio(beat: Dictionary) -> void:
 		"stop_bgm":
 			var fade_out = beat.get("fade_out", 0.0)
 			if fade_out > 0 and _audio_player.playing:
-				var tween = create_tween()
+				var tween = _beat_tween()
 				tween.tween_property(_audio_player, "volume_db", -40.0, fade_out)
 				await tween.finished
 				if not is_inside_tree(): return
@@ -517,7 +529,7 @@ func handle_audio(beat: Dictionary) -> void:
 	# Audio beats are instant unless they have a wait
 	var wait = beat.get("wait", 0.0)
 	if wait > 0:
-		await get_tree().create_timer(wait).timeout
+		await get_tree().create_timer(wait, false).timeout
 		if not is_inside_tree(): return
 
 ## ─── NEW BEAT: TINT (CanvasModulate) ─────────────────────────────────
@@ -535,7 +547,7 @@ func handle_tint(beat: Dictionary) -> void:
 		get_tree().current_scene.add_child(_canvas_modulate)
 	
 	if clear:
-		var tween = create_tween()
+		var tween = _beat_tween()
 		tween.tween_property(_canvas_modulate, "color", Color.WHITE, duration)
 		await tween.finished
 		if not is_inside_tree(): return
@@ -546,7 +558,7 @@ func handle_tint(beat: Dictionary) -> void:
 		var target_color = beat.get("color", Color(0.5, 0.5, 0.8))
 		if target_color is Array:
 			target_color = Color(target_color[0], target_color[1], target_color[2])
-		var tween = create_tween()
+		var tween = _beat_tween()
 		tween.tween_property(_canvas_modulate, "color", target_color, duration)
 		await tween.finished
 		if not is_inside_tree(): return
@@ -573,7 +585,7 @@ func handle_npc_walk(beat: Dictionary) -> void:
 	var dir = (target - character.position).normalized()
 	_start_walk_anim(character, dir)
 	
-	var tween = create_tween()
+	var tween = _beat_tween()
 	tween.tween_property(character, "position", target, duration).set_trans(Tween.TRANS_LINEAR)
 	await tween.finished
 	if not is_inside_tree(): return
@@ -649,7 +661,7 @@ func handle_camera_follow(beat: Dictionary) -> void:
 	
 	var duration = beat.get("duration", -1.0)
 	if duration > 0:
-		await get_tree().create_timer(duration).timeout
+		await get_tree().create_timer(duration, false).timeout
 		if not is_inside_tree(): return
 		camera.stop_follow()
 
@@ -713,15 +725,15 @@ func handle_background(beat: Dictionary) -> void:
 	if color:
 		var bg = get_tree().current_scene.get_node_or_null("Background")
 		if bg and bg is ColorRect:
-			var tween = create_tween()
+			var tween = _beat_tween()
 			tween.tween_property(bg, "color", color, duration)
 			await tween.finished
 			if not is_inside_tree(): return
 		else:
-			await get_tree().create_timer(duration).timeout
+			await get_tree().create_timer(duration, false).timeout
 			if not is_inside_tree(): return
 	else:
-		await get_tree().create_timer(0.1).timeout
+		await get_tree().create_timer(0.1, false).timeout
 		if not is_inside_tree(): return
 
 ## ─── EXTENDED BEAT: TITLE CARD ───────────────────────────────────────
@@ -764,7 +776,7 @@ func handle_title_card(beat: Dictionary) -> void:
 		vbox.add_child(sub_label)
 	
 	## Animate: fade in → hold → fade out
-	var tween = create_tween()
+	var tween = _beat_tween()
 	tween.tween_property(title_label, "modulate:a", 1.0, 0.8).set_trans(Tween.TRANS_SINE)
 	if vbox.get_child_count() > 1:
 		tween.tween_property(vbox.get_child(1), "modulate:a", 1.0, 0.6).set_trans(Tween.TRANS_SINE)
@@ -878,9 +890,12 @@ func create_flash_effect(color: Color, duration: float):
 	flash.color = color
 	flash.size = get_viewport().get_visible_rect().size
 	flash.modulate.a = 0.0
-	get_tree().root.add_child(flash)
+	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# On the screen-space fade layer: a Control under the root is drawn in world
+	# space (offset by the camera) and outlives a scene change.
+	_fade_layer.add_child(flash)
 	
-	var tween = create_tween()
+	var tween = _beat_tween()
 	tween.tween_property(flash, "modulate:a", 0.8, duration * 0.3)
 	tween.tween_property(flash, "modulate:a", 0.0, duration * 0.7)
 	await tween.finished
@@ -895,18 +910,40 @@ var _skip_hold_timer: float = 0.0
 var _skip_holding: bool = false
 var _skip_hint: Label = null
 
+## Beat tweens are tracked so a skip can snap them to their end values.
+func _beat_tween() -> Tween:
+	for i in range(_beat_tweens.size() - 1, -1, -1):
+		if not _beat_tweens[i].is_valid():
+			_beat_tweens.remove_at(i)
+	var tween := create_tween()
+	_beat_tweens.append(tween)
+	return tween
+
 func stop_cutscene() -> void:
+	var was_playing := is_playing
+	_play_gen += 1  # the running play_cutscene() coroutine exits without emitting again
 	is_playing = false
 	_skip_holding = false
 	_skip_hold_timer = 0.0
 	_hide_skip_hint()
+	# Snap in-flight beat tweens to their end (characters land on their targets,
+	# title cards and flashes free themselves) instead of leaving them mid-way.
+	for tw in _beat_tweens.duplicate():
+		if tw.is_valid():
+			tw.custom_step(3600.0)
+	_beat_tweens.clear()
+	if was_playing and current_cutscene.get("auto_save", false) and has_node("/root/GameManager"):
+		GameManager.auto_save()
 	_unblock_input()
 	# Force-reset dialogue to prevent orphaned dialogue boxes after ESC skip
 	if has_node("/root/DialogueManager"):
 		DialogueManager.force_reset()
-	# Clean up fade overlay so screen isn't stuck dark after skip
+	# Clean up fade overlay so screen isn't stuck dark after skip. Clear the
+	# colour alpha that fade beats animate: zeroing modulate.a instead hid every
+	# later fade in this scene.
 	if _fade_overlay and is_instance_valid(_fade_overlay):
-		_fade_overlay.modulate.a = 0.0
+		_fade_overlay.color.a = 0.0
+		_fade_overlay.visible = false
 	# Reset canvas modulate tint
 	if _canvas_modulate and is_instance_valid(_canvas_modulate):
 		_canvas_modulate.color = Color.WHITE
@@ -915,7 +952,11 @@ func stop_cutscene() -> void:
 		var tw = create_tween()
 		tw.tween_property(_audio_player, "volume_db", -40.0, 0.5)
 		tw.tween_callback(_audio_player.stop)
-	cutscene_finished.emit()
+	# Only a cutscene that was actually playing has a state to restore and a
+	# caller awaiting cutscene_finished.
+	if was_playing:
+		_restore_game_state()
+		cutscene_finished.emit()
 
 func pause_cutscene() -> void:
 	paused = true
@@ -952,7 +993,7 @@ func _show_skip_hint() -> void:
 		_skip_hint.visible = true
 		return
 	_skip_hint = Label.new()
-	_skip_hint.text = "[Hold ESC to skip]  ░░░░░░░░░░"
+	_skip_hint.text = InputService.fmt("[Hold {ui_cancel} to skip]") + "  ░░░░░░░░░░"
 	_skip_hint.add_theme_font_size_override("font_size", 14)
 	_skip_hint.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0, 0.7))
 	_skip_hint.add_theme_constant_override("outline_size", 2)
@@ -973,7 +1014,7 @@ func _update_skip_hint() -> void:
 	var progress = clampf(_skip_hold_timer / SKIP_HOLD_DURATION, 0.0, 1.0)
 	var filled = int(progress * 10)
 	var bar = "█".repeat(filled) + "░".repeat(10 - filled)
-	_skip_hint.text = "[Hold ESC to skip]  %s" % bar
+	_skip_hint.text = InputService.fmt("[Hold {ui_cancel} to skip]") + "  " + bar
 
 func _hide_skip_hint() -> void:
 	if _skip_hint and is_instance_valid(_skip_hint):

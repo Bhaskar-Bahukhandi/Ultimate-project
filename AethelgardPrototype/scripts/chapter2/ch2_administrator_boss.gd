@@ -39,7 +39,7 @@ func _ready() -> void:
 	_setup_root_access()
 
 	# Entry sequence
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	if not is_inside_tree(): return
 	await _entry_dialogue()
 
@@ -243,7 +243,7 @@ func _entry_dialogue() -> void:
 	if not is_inside_tree(): return
 	DialogueManager.hide_dialogue()
 
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0, false).timeout
 	if not is_inside_tree(): return
 	_spawn_boss()
 
@@ -385,20 +385,22 @@ func _on_boss_defeated() -> void:
 	## B04 down. Then Fragment Two, the wall, and Seraphina's decision.
 	arena_running = false
 	_boss_defeated = true
-	if has_node("/root/GameManager"):
-		GameManager.end_boss_fight()
+	# The boss's die() already calls GameManager.end_boss_fight(); calling it
+	# here too counted the kill twice.
+	# Set the defeat flag now, not after the victory dialogue: the autosave
+	# below and an ESC skip of the post-fight scene both used to lose it.
+	GameManager.set_story_flag("ch2_administrator_proxy_defeated", true)
 	GameManager.auto_save()  # Autosave on boss defeat
 	GameManager.add_glitch_corruption(8.0)
 
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(2.0, false).timeout
 	if not is_inside_tree(): return
 
-	await DialogueManager.run(PROXY_DLG, "victory")   # sets ch2_administrator_proxy_defeated
+	await DialogueManager.run(PROXY_DLG, "victory")
 	if not is_inside_tree(): return
-	GameManager.set_story_flag("ch2_administrator_proxy_defeated", true)
 	DialogueManager.hide_dialogue()
 
-	await get_tree().create_timer(1.5).timeout
+	await get_tree().create_timer(1.5, false).timeout
 	if not is_inside_tree(): return
 	SceneTransitions.change_scene("res://scenes/chapter2/seraphina_choice.tscn")
 

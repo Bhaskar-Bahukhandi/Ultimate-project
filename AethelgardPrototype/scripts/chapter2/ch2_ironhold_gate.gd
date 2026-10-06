@@ -34,7 +34,7 @@ func _ready() -> void:
 	camera.make_current()
 
 	# Fade in
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.3, false).timeout
 	if not is_inside_tree(): return
 	transition.transition_in(ScreenTransition.TransitionType.FADE, 1.5)
 	await transition.transition_finished
@@ -59,7 +59,7 @@ func start_gate_sequence() -> void:
 	for node in ["road", "horizon", "commander", "gate"]:
 		await DialogueManager.run(DLG, node, _on_dlg_event)
 		if not is_inside_tree(): return
-	await get_tree().create_timer(0.6).timeout
+	await get_tree().create_timer(0.6, false).timeout
 	if not is_inside_tree(): return
 	await _transition_to_city()
 
@@ -76,7 +76,7 @@ func _beats(beats: Array) -> void:
 func _on_dlg_event(event: String) -> void:
 	match event:
 		"kaelen_stops", "seraphina_grip", "kaelen_still", "queues":
-			await get_tree().create_timer(0.5).timeout
+			await get_tree().create_timer(0.5, false).timeout
 		"walk_on":
 			await _beats([{"type": "parallel", "beats": [
 				{"type": "character_move", "character": "Kaelen", "target": Vector2(520, 450), "duration": 1.4},
@@ -84,7 +84,7 @@ func _on_dlg_event(event: String) -> void:
 			]}])
 		"ironhold_reveal":
 			camera.move_to(Vector2(640, 300), 2.0)
-			await get_tree().create_timer(2.2).timeout
+			await get_tree().create_timer(2.2, false).timeout
 		"convoy_passes":
 			camera.shake(3.0, 0.4)
 			for i in 3:
@@ -96,7 +96,7 @@ func _on_dlg_event(event: String) -> void:
 				var t := create_tween()
 				t.tween_property(wagon, "position:x", -200.0 + i * 110, 3.5)
 				t.tween_callback(wagon.queue_free)
-			await get_tree().create_timer(1.0).timeout
+			await get_tree().create_timer(1.0, false).timeout
 		"seraphina_helmet_off":
 			await _beats([{"type": "character_enter", "character": "Seraphina", "position": Vector2(760, 450), "from": "right", "duration": 0.9}])
 			if flash_overlay:

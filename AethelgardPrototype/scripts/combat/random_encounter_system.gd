@@ -422,6 +422,9 @@ func _process(delta: float) -> void:
 		if _in_encounter and has_node("/root/GameManager") and GameManager.current_state == GameManager.GameState.EXPLORATION:
 			push_warning("[ENCOUNTER] Safety reset: _in_encounter was stuck true while in EXPLORATION state")
 			_in_encounter = false
+			# e.g. the player died mid-run: a leftover farming zone would turn the
+			# next ordinary random encounter into a "farming" run.
+			_pending_farming_zone.clear()
 		return
 	if not has_node("/root/GameManager"):
 		return
@@ -446,6 +449,15 @@ func _process(delta: float) -> void:
 	# Ignore teleports / large position changes
 	if dist > 200.0:
 		return
+	# No steps while a menu blocks gameplay (ContextStack.gameplay_blocked()
+	# covers random encounters), during dialogue, or mid scene transition:
+	# a cutscene moving the player could otherwise start a fight, and
+	# SceneTransitions drops a second change_scene, which left the encounter
+	# flagged with no arena loaded.
+	if ContextStack.gameplay_blocked() \
+			or (has_node("/root/DialogueManager") and DialogueManager.is_active) \
+			or (has_node("/root/SceneTransitions") and SceneTransitions.is_transitioning):
+		return
 
 	_distance_accumulator += dist
 	while _distance_accumulator >= STEP_DISTANCE:
@@ -469,6 +481,7 @@ func set_zone(zone_id: String) -> void:
 	current_zone_id = zone_id
 	steps_since_last_encounter = 0
 	_roll_next_encounter_distance()
+	_update_warning_hud(0.0)  # steps were reset; don't carry a lit warning into a safe zone
 	if OS.is_debug_build():
 		var zone_name = ZONE_DATA.get(zone_id, {}).get("name", zone_id)
 		print("[ENCOUNTER] Zone changed: %s" % zone_name)
@@ -498,6 +511,12 @@ func _trigger_encounter() -> void:
 	_in_encounter = true
 	steps_since_last_encounter = 0
 	_roll_next_encounter_distance()
+	# The warning only ever emits at >= 50 % danger, so nothing cleared it after
+	# the fight started: "!!! DANGER !!!" stayed on screen (layer 90) through
+	# combat and back in the region.
+	_update_warning_hud(0.0)
+	# Random encounters are never farming runs.
+	_pending_farming_zone.clear()
 
 	# Save player position for return
 	var players = get_tree().get_nodes_in_group("player")
@@ -550,6 +569,7 @@ func start_farming_encounter(
 	_in_encounter = true
 	steps_since_last_encounter = 0
 	_roll_next_encounter_distance()
+	_update_warning_hud(0.0)
 	_current_encounter_type = EncounterType.COMBAT
 	encounter_type_rolled.emit(_current_encounter_type)
 	_player_return_position = return_position
@@ -615,8 +635,10 @@ func _trigger_combat_encounter(table: Array, zone: Dictionary) -> void:
 		pending_encounter["farming_zone_name"] = _pending_farming_zone.get("name", "")
 	GameManager.set_meta("pending_encounter", pending_encounter)
 
+	# Before either branch: left in EXPLORATION, _process's safety reset would
+	# clear _in_encounter before the arena loads.
+	GameManager.change_state(GameManager.GameState.COMBAT)
 	if has_node("/root/SceneTransitions"):
-		GameManager.change_state(GameManager.GameState.COMBAT)
 		SceneTransitions.change_scene("res://scenes/combat/combat_arena.tscn", SceneTransitions.TransitionStyle.COMBAT_ENTRY)
 	else:
 		get_tree().change_scene_to_file("res://scenes/combat/combat_arena.tscn")
@@ -655,8 +677,8 @@ func _trigger_ambush_encounter(table: Array, zone: Dictionary) -> void:
 		"reward_mult": 1.5,  # 50% bonus rewards for surviving an ambush
 	})
 
+	GameManager.change_state(GameManager.GameState.COMBAT)
 	if has_node("/root/SceneTransitions"):
-		GameManager.change_state(GameManager.GameState.COMBAT)
 		SceneTransitions.change_scene("res://scenes/combat/combat_arena.tscn", SceneTransitions.TransitionStyle.COMBAT_ENTRY)
 	else:
 		get_tree().change_scene_to_file("res://scenes/combat/combat_arena.tscn")
@@ -834,6 +856,10 @@ func _roll_encounter(table: Array, zone: Dictionary) -> Array[Dictionary]:
 func on_encounter_enemy_killed(enemy_type: String, enemy_level: int) -> void:
 	if not _in_encounter:
 		return
+	# Victory already triggered: a late or duplicate kill report would run
+	# _on_encounter_victory() again, paying out and changing scene twice.
+	if _enemies_alive <= 0:
+		return
 
 	var base = ENEMY_BASE_STATS.get(enemy_type, {"xp": 10, "gold": 5})
 	var level_mult = 1.0 + (enemy_level - 1) * 0.15
@@ -894,9 +920,13 @@ func _on_encounter_victory() -> void:
 
 	encounter_finished.emit(true, total_xp, total_gold)
 
-	# Brief delay then return to exploration
-	await get_tree().create_timer(1.5).timeout
+	# Brief delay then return to exploration (pausable: this autoload is
+	# PROCESS_MODE_ALWAYS, and a pause menu opened here must hold the return)
+	await get_tree().create_timer(1.5, false).timeout
 	if not is_inside_tree():
+		return
+	# A successful flee in the meantime already ended the encounter and left.
+	if not _in_encounter:
 		return
 
 	_return_to_exploration()

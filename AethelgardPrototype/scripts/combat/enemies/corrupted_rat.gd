@@ -40,6 +40,9 @@ func _ai_behavior(delta: float) -> void:
 	_burrow_timer += delta
 
 	if _is_burrowed:
+		# Underground it is invisible and intangible; keep the base class's
+		# contact-damage check from hurting a player who walks over the spot.
+		_contact_cooldown = maxf(_contact_cooldown, 0.1)
 		return  # Don't process AI while underground
 
 	match current_state:
@@ -108,7 +111,7 @@ func _perform_lunge() -> void:
 		tw.tween_property(sprite, "modulate", Color(1.0, 0.7, 0.2), 0.08)
 		tw.tween_property(sprite, "modulate", Color.WHITE, 0.07)
 
-	await get_tree().create_timer(0.30).timeout
+	await get_tree().create_timer(0.30, false).timeout
 	if not is_inside_tree() or current_state == State.DEAD:
 		_is_lunging = false
 		return
@@ -119,7 +122,7 @@ func _perform_lunge() -> void:
 	velocity.y = -80.0
 	_sfx("enemy_lunge", 0.1)
 
-	await get_tree().create_timer(_lunge_duration).timeout
+	await get_tree().create_timer(_lunge_duration, false).timeout
 	if not is_inside_tree() or current_state == State.DEAD:
 		_is_lunging = false
 		return
@@ -150,9 +153,13 @@ func _start_burrow() -> void:
 	# Visual: sink into ground
 	if has_node("Sprite"):
 		var sprite = get_node("Sprite")
+		# Remember the real height: the textured rat is scaled to size, and
+		# emerging to an absolute scale.y of 1.0 left it squashed.
+		if not sprite.has_meta("burrow_rest_scale_y"):
+			sprite.set_meta("burrow_rest_scale_y", sprite.scale.y)
 		var tw = create_tween()
 		tw.tween_property(sprite, "modulate:a", 0.0, 0.25)
-		tw.parallel().tween_property(sprite, "scale:y", 0.1, 0.25)
+		tw.parallel().tween_property(sprite, "scale:y", sprite.get_meta("burrow_rest_scale_y") * 0.1, 0.25)
 
 	velocity = Vector2.ZERO
 	set_collision_layer_value(3, false)  # Become intangible
@@ -160,7 +167,7 @@ func _start_burrow() -> void:
 	if has_node("/root/VFXLibrary"):
 		VFXLibrary.spawn_status_indicator("*burrows*", global_position + Vector2(0, -20), get_parent(), false)
 
-	await get_tree().create_timer(_burrow_duration).timeout
+	await get_tree().create_timer(_burrow_duration, false).timeout
 	if not is_inside_tree() or current_state == State.DEAD:
 		_is_burrowed = false
 		return
@@ -186,7 +193,7 @@ func _emerge_from_burrow() -> void:
 		var sprite = get_node("Sprite")
 		var tw = create_tween()
 		tw.tween_property(sprite, "modulate:a", 1.0, 0.15)
-		tw.parallel().tween_property(sprite, "scale:y", 1.0, 0.15)
+		tw.parallel().tween_property(sprite, "scale:y", sprite.get_meta("burrow_rest_scale_y", 1.0), 0.15)
 
 	set_collision_layer_value(3, true)  # Become tangible again
 	_is_burrowed = false

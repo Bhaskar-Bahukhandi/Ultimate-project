@@ -140,7 +140,7 @@ func _input(event) -> void:
 			get_viewport().set_input_as_handled()
 			return
 	# Root Access toggle
-	if event.is_action_pressed("root_access") and boss and boss.has_method("get_hackable_properties"):
+	if event.is_action_pressed("root_access") and not combat_ended and boss and boss.has_method("get_hackable_properties"):
 		if "phase_4_locked" in boss and boss.phase_4_locked:
 			root_access_panel.visible = not root_access_panel.visible
 			get_viewport().set_input_as_handled()
@@ -632,6 +632,7 @@ func _build_ui() -> void:
 	dialogue_box.add_theme_stylebox_override("panel", panel_style)
 
 	var vbox = VBoxContainer.new()
+	vbox.name = "VBoxContainer"   # _show_dialogue finds the speaker label by path
 	dialogue_box.add_child(vbox)
 
 	var speaker_label = Label.new()
@@ -759,7 +760,9 @@ func _on_disable_attack_directive_pressed() -> void:
 	_complete_root_access_shutdown()
 
 func _on_hack_hostile_toggled(enabled: bool) -> void:
-	if boss:
+	if boss and boss.has_method("apply_hack"):
+		boss.apply_hack("is_hostile", enabled)   # the hack path shows the HACKED feedback
+	elif boss:
 		boss.is_hostile = enabled
 
 # ======================================================================
@@ -1086,7 +1089,7 @@ func _complete_root_access_shutdown() -> void:
 		VFXLibrary.spawn_status_indicator("DIRECTIVE DISABLED", boss.global_position + Vector2(0, -96), self, true)
 	if has_node("/root/CombatFX"):
 		CombatFX.apply_hitstop(0.10)
-	await get_tree().create_timer(0.35).timeout
+	await get_tree().create_timer(0.35, false).timeout
 	if not is_inside_tree():
 		return
 	if boss and boss.has_method("hack_disable_attacking"):
@@ -1099,7 +1102,9 @@ func _on_boss_defeated() -> void:
 	if combat_ended:
 		return
 	combat_ended = true
-	if has_node("/root/GameManager"):
+	# The knight's die() already ends the fight (and counts the kill); only a
+	# defeat that skipped die(), like the Root Access shutdown, still needs it.
+	if has_node("/root/GameManager") and GameManager.boss_fight_active:
 		GameManager.end_boss_fight()
 	GameManager.auto_save()  # Autosave on boss defeat
 
@@ -1160,7 +1165,7 @@ func _on_player_died() -> void:
 	if has_node("/root/VFXLibrary") and player:
 		VFXLibrary.spawn_status_indicator("RETRY", player.global_position + Vector2(0, -70), self, false)
 
-	await get_tree().create_timer(1.05, true, false, true).timeout
+	await get_tree().create_timer(1.05, false, false, true).timeout
 	if not is_inside_tree():
 		return
 
@@ -1288,7 +1293,7 @@ func _play_aldric_decision() -> void:
 	if not is_inside_tree(): return
 	await DialogueManager.run(FRAGMENT_DLG, "joins", _on_dlg_event)
 	if not is_inside_tree(): return
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0, false).timeout
 	if not is_inside_tree(): return
 	SceneTransitions.change_scene("res://scenes/chapter1/shatter_transition.tscn", SceneTransitions.TransitionStyle.SHATTER)
 
@@ -1311,7 +1316,7 @@ func _on_dlg_event(event: String) -> void:
 	var parts := event.split(" ", false, 1)
 	match parts[0]:
 		"elara_goes_still", "child_runs_inside", "kaelen_freezes", "kaelen_raises_weapon", "elara_packs", "village_gathers", "elara_watches", "kaelen_recoils", "flash_ends":
-			await get_tree().create_timer(0.4).timeout
+			await get_tree().create_timer(0.4, false).timeout
 		"aldric_approaches":
 			if boss:
 				var t := create_tween()
@@ -1320,11 +1325,11 @@ func _on_dlg_event(event: String) -> void:
 		"aldric_visor_glitch", "aldric_eye_clears", "memory_flash", "touch_fragment":
 			if has_node("/root/SceneTransitions"):
 				SceneTransitions.flash(Color(1, 1, 1, 0.6), 0.25)
-			await get_tree().create_timer(0.3).timeout
+			await get_tree().create_timer(0.3, false).timeout
 		"directive_surge", "directive_returns", "villagers_panic":
 			if has_node("/root/CombatFX"):
 				CombatFX.apply_screen_shake(9.0, 0.35)
-			await get_tree().create_timer(0.35).timeout
+			await get_tree().create_timer(0.35, false).timeout
 		"start_boss":
 			pass   # _start_intro starts combat when the run ends
 		"aldric_kneels":
@@ -1335,7 +1340,7 @@ func _on_dlg_event(event: String) -> void:
 				root_access_panel.visible = true
 			if has_node("/root/CombatFX"):
 				CombatFX.apply_screen_shake(6.0, 0.4)
-			await get_tree().create_timer(0.8).timeout
+			await get_tree().create_timer(0.8, false).timeout
 			if root_access_panel:
 				root_access_panel.visible = false
 		"kaelen_strikes":

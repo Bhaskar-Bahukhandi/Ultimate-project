@@ -479,6 +479,8 @@ var _active_effect_count: int = 0
 var _cached_scale_curve: Curve = null
 # PERF: Gradient cache keyed by (color_start, color_end) to avoid per-spawn Gradient+Point creation
 var _gradient_cache: Dictionary = {}
+# Status indicators on screen: "parent_id|text|cell" -> label instance id
+var _live_indicators: Dictionary = {}
 
 func _can_add_effect_now(parent: Node) -> bool:
 	return parent and is_instance_valid(parent) and parent.is_inside_tree() and parent.is_node_ready()
@@ -596,7 +598,9 @@ func _spawn_particles(config: Dictionary, pos: Vector2, parent: Node) -> CPUPart
 	_add_effect_child(parent, particles)
 
 	if particles.one_shot:
-		var timer = parent.get_tree().create_timer(config.get("lifetime", 0.5) + 0.3)
+		# Own tree: the parent may not be in the tree yet (deferred add above).
+		# Pausable, like the particles, so a pause doesn't cut the effect short.
+		var timer = get_tree().create_timer(config.get("lifetime", 0.5) + 0.3, false)
 		timer.timeout.connect(func():
 			if is_instance_valid(particles):
 				particles.queue_free()
@@ -666,7 +670,7 @@ func _spawn_vertical_arc(config: Dictionary, pos: Vector2, parent: Node) -> Node
 	return container
 
 ## Beam effect with bright inner core
-func _spawn_beam(config: Dictionary, pos: Vector2, parent: Node) -> Node2D:
+func _spawn_beam(config: Dictionary, pos: Vector2, parent: Node) -> ColorRect:
 	var color: Color = config.get("color", Color(0, 1, 0.5))
 	var width: int = config.get("width", 4)
 	var duration: float = config.get("duration", 0.5)
@@ -794,7 +798,7 @@ func _spawn_shatter(config: Dictionary, pos: Vector2, parent: Node) -> Node2D:
 		tw.tween_property(frag, "modulate:a", 0.0, duration * 0.8).set_delay(duration * 0.2)
 		tw.tween_property(frag, "scale", Vector2(0.3, 0.3), duration * 0.7).set_delay(duration * 0.3)
 
-	var cleanup_timer = parent.get_tree().create_timer(duration + 0.1)
+	var cleanup_timer = get_tree().create_timer(duration + 0.1, false)
 	cleanup_timer.timeout.connect(func():
 		if is_instance_valid(container):
 			container.queue_free()
@@ -972,6 +976,20 @@ func spawn_status_indicator(text: String, pos: Vector2, parent: Node, is_buff: b
 	label.add_theme_font_size_override("font_size", 14)
 	label.add_theme_constant_override("outline_size", 2)
 	label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.7))
+
+	# Same text at the same spot (save-button spam, repeated alerts) replaces the
+	# copy still on screen instead of stacking unreadable duplicates.
+	var key: String = "%d|%s|%s" % [parent.get_instance_id(), text, Vector2i((pos / 16.0).round())]
+	var prev_id: int = _live_indicators.get(key, 0)
+	var prev = instance_from_id(prev_id) if prev_id != 0 else null
+	if prev is Node and not prev.is_queued_for_deletion():
+		prev.queue_free()
+	var label_id: int = label.get_instance_id()
+	_live_indicators[key] = label_id
+	label.tree_exiting.connect(func():
+		if _live_indicators.get(key, 0) == label_id:
+			_live_indicators.erase(key)
+	)
 
 	var animate_label = func() -> void:
 		if not is_instance_valid(label):

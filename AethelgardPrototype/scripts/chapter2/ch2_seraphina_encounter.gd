@@ -29,7 +29,7 @@ func _ready() -> void:
 	camera.smooth_enabled = true
 	camera.make_current()
 
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.3, false).timeout
 	if not is_inside_tree(): return
 	transition.transition_in(ScreenTransition.TransitionType.FADE, 1.0)
 	await transition.transition_finished
@@ -56,7 +56,7 @@ func start_seraphina_sequence() -> void:
 	if not is_inside_tree(): return
 	await DialogueManager.run(DLG, "start", _on_dlg_event)
 	if not is_inside_tree(): return
-	await get_tree().create_timer(0.8).timeout
+	await get_tree().create_timer(0.8, false).timeout
 	if not is_inside_tree(): return
 	await _return_to_city()
 
@@ -79,7 +79,7 @@ func _on_dlg_event(event: String) -> void:
 
 func _return_to_city() -> void:
 	DialogueManager.hide_dialogue()
-	await transition.transition_out(ScreenTransition.TransitionType.FADE, 1.0) if transition else await get_tree().create_timer(1.0).timeout
+	await transition.transition_out(ScreenTransition.TransitionType.FADE, 1.0) if transition else await get_tree().create_timer(1.0, false).timeout
 	if not is_inside_tree(): return
 	SceneTransitions.change_scene("res://scenes/regions/ironhold_region.tscn")
 

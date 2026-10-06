@@ -240,8 +240,7 @@ func _update_interaction_prompt() -> void:
 		interaction_prompt.add_theme_color_override("font_color", Color(1.0, 1.0, 0.6))
 	# Add Data Vision hint if DV is unlocked
 	if GameManager.story_flags.get("ch1_data_vision_unlocked", false) and not data_vision_active:
-		interaction_prompt.text += InputService.fmt("
-[{data_vision}] Data Vision")
+		interaction_prompt.text += InputService.fmt("\n[{data_vision}] Data Vision")
 
 func _physics_process(delta: float) -> void:
 	_refresh_interaction_target()

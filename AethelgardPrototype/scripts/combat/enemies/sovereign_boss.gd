@@ -258,7 +258,7 @@ func _phase1_attack() -> void:
 	if dist < attack_range:
 		# Melee slash
 		_telegraph_flash(Color(1, 0.8, 0.2), 0.3)
-		await get_tree().create_timer(0.3).timeout
+		await get_tree().create_timer(0.3, false).timeout
 		if not is_inside_tree() or current_state == State.DEAD:
 			is_attacking = false
 			return
@@ -313,7 +313,7 @@ func _reality_gravity_shift() -> void:
 		VFXLibrary.spawn_status_indicator("GRAVITY ALTERED!", global_position + Vector2(0, -80), get_parent(), false)
 
 	# Reset after duration
-	await get_tree().create_timer(4.0).timeout
+	await get_tree().create_timer(4.0, false).timeout
 	if not is_inside_tree():
 		return
 	for p in get_tree().get_nodes_in_group("player"):
@@ -333,7 +333,7 @@ func _reality_speed_lock() -> void:
 			if has_node("/root/VFXLibrary"):
 				VFXLibrary.spawn_status_indicator("SPEED LOCKED!", p.global_position + Vector2(0, -60), get_parent(), false)
 
-			await get_tree().create_timer(3.0).timeout
+			await get_tree().create_timer(3.0, false).timeout
 			if not is_inside_tree(): return
 			if is_instance_valid(p) and "movement_speed" in p:
 				p.movement_speed = original_speed
@@ -368,6 +368,9 @@ func _reality_damage_zone() -> void:
 
 	if get_parent():
 		get_parent().add_child(zone)
+	# Tracked so die() frees it: if the boss is freed before the 5 s wait below
+	# ends, nothing else removes the zone and it stays in the scene.
+	_track_proj(zone)
 
 	# Damage on contact
 	zone.body_entered.connect(func(body):
@@ -379,7 +382,7 @@ func _reality_damage_zone() -> void:
 		VFXLibrary.spawn_status_indicator("HAZARD ZONE!", zone.global_position + Vector2(0, -30), get_parent(), false)
 
 	# Remove after 5 seconds
-	await get_tree().create_timer(5.0).timeout
+	await get_tree().create_timer(5.0, false).timeout
 	if is_instance_valid(zone):
 		zone.queue_free()
 
@@ -480,7 +483,7 @@ func _phase4_root_override() -> void:
 	# Visual: dramatic charging
 	_telegraph_flash(Color(1, 0, 0), 0.6)
 
-	await get_tree().create_timer(0.8).timeout
+	await get_tree().create_timer(0.8, false).timeout
 	if not is_inside_tree() or current_state == State.DEAD:
 		is_attacking = false
 		return
@@ -498,7 +501,7 @@ func _phase4_root_override() -> void:
 	# Fire burst of bolts after failed override
 	for i in range(3):
 		_fire_system_bolt()
-		await get_tree().create_timer(0.2).timeout
+		await get_tree().create_timer(0.2, false).timeout
 		if not is_inside_tree() or current_state == State.DEAD:
 			break
 
@@ -519,11 +522,11 @@ func _phase5_attack() -> void:
 				if not is_inside_tree() or current_state == State.DEAD:
 					break
 				_fire_system_bolt()
-				await get_tree().create_timer(0.15).timeout
+				await get_tree().create_timer(0.15, false).timeout
 		1:
 			# Teleport + melee combo
 			await _sovereign_teleport()
-			await get_tree().create_timer(0.3).timeout
+			await get_tree().create_timer(0.3, false).timeout
 			if is_inside_tree() and current_state != State.DEAD:
 				var combo_size := Vector2(attack_range * 1.5, 104.0)
 				var combo_facing := signf(direction_to_player().x)
@@ -558,7 +561,7 @@ func _system_crash_wave() -> void:
 	_announce("SYSTEM CRASH WAVE!")
 
 	_telegraph_flash(Color(1, 1, 1), 0.5)
-	await get_tree().create_timer(0.6).timeout
+	await get_tree().create_timer(0.6, false).timeout
 	if not is_inside_tree() or current_state == State.DEAD:
 		return
 
@@ -584,7 +587,7 @@ func _system_crash_wave() -> void:
 	)
 
 	# Damage players caught in the wave
-	await get_tree().create_timer(0.25).timeout
+	await get_tree().create_timer(0.25, false).timeout
 	if not is_inside_tree():
 		return
 	var players = get_tree().get_nodes_in_group("player")
@@ -652,7 +655,13 @@ func _fire_system_bolt() -> void:
 			bolt.queue_free()
 	)
 
-	_active_projs.append(bolt)
+	_track_proj(bolt)
+
+
+func _track_proj(node: Node) -> void:
+	# Drop freed entries so the list doesn't grow for the whole fight.
+	_active_projs = _active_projs.filter(func(p): return is_instance_valid(p))
+	_active_projs.append(node)
 
 
 func _sovereign_teleport() -> void:
@@ -670,7 +679,7 @@ func _sovereign_teleport() -> void:
 		var tw = create_tween()
 		tw.tween_property(sprite, "modulate:a", 0.0, 0.1)
 
-	await get_tree().create_timer(0.15).timeout
+	await get_tree().create_timer(0.15, false).timeout
 	if not is_inside_tree() or current_state == State.DEAD:
 		return
 
@@ -743,6 +752,8 @@ func die() -> void:
 
 	# Set chapter 3 complete flags
 	if has_node("/root/GameManager"):
+		# Pairs with start_boss_fight() in _ready (as the other bosses do).
+		GameManager.end_boss_fight()
 		GameManager.set_story_flag("ch3_sovereign_defeated", true)
 		GameManager.set_story_flag("ch3_complete", true)
 

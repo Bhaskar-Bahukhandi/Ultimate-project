@@ -105,10 +105,15 @@ func _perform_hop() -> void:
 	## Landing squash visual
 	if has_node("Sprite"):
 		var sprite = get_node("Sprite")
+		# Squash relative to the sprite's own scale: the textured slime is scaled
+		# to size (e.g. 1.5x), and ending on an absolute 1.0 shrank it for good.
+		if not sprite.has_meta("hop_rest_scale"):
+			sprite.set_meta("hop_rest_scale", sprite.scale)
+		var rest: Vector2 = sprite.get_meta("hop_rest_scale")
 		var tw = create_tween()
-		tw.tween_property(sprite, "scale", Vector2(1.3, 0.7), 0.08)
-		tw.tween_property(sprite, "scale", Vector2(0.8, 1.2), 0.1)
-		tw.tween_property(sprite, "scale", Vector2(1.0, 1.0), 0.12)
+		tw.tween_property(sprite, "scale", rest * Vector2(1.3, 0.7), 0.08)
+		tw.tween_property(sprite, "scale", rest * Vector2(0.8, 1.2), 0.1)
+		tw.tween_property(sprite, "scale", rest, 0.12)
 
 
 func _perform_pounce() -> void:
@@ -119,7 +124,7 @@ func _perform_pounce() -> void:
 	if has_node("Sprite"):
 		get_node("Sprite").modulate = Color(1.0, 0.75, 0.35)
 
-	await get_tree().create_timer(_pounce_windup).timeout
+	await get_tree().create_timer(_pounce_windup, false).timeout
 	if not _safe():
 		_is_pouncing = false
 		return
@@ -130,9 +135,9 @@ func _perform_pounce() -> void:
 	_sfx("enemy_hop", 0.15)
 	if has_node("Sprite"):
 		get_node("Sprite").modulate = Color.WHITE
-	_deal_damage_in_attack_hitbox(Vector2(dir.x * 48.0, -18.0), Vector2(96.0, 58.0), contact_damage * 1.25, "slime_pounce", 0.18)
+	_deal_damage_in_attack_hitbox(Vector2(_side(dir) * 48.0, -18.0), Vector2(96.0, 58.0), contact_damage * 1.25, "slime_pounce", 0.18)
 
-	await get_tree().create_timer(0.18).timeout
+	await get_tree().create_timer(0.18, false).timeout
 	if not _safe():
 		_is_pouncing = false
 		return

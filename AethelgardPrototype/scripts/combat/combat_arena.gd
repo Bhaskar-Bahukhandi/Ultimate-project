@@ -80,6 +80,7 @@ var _is_boss_fight: bool = false
 var _boss_node: EnemyBase = null
 var _boss_id: String = ""
 var _boss_initial_hp: float = 0.0  # Track boss max HP for partial reward calc
+var _perfect_delete_busy: bool = false
 
 
 # ═════════════════════════════════════════════════════════════════════════
@@ -163,7 +164,7 @@ func _ready() -> void:
 	else:
 		push_error("[COMBAT] No enemy node at 'Enemies/TutorialSlime'")
 
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	if not is_inside_tree():
 		return
 	_show_combat_tutorial()
@@ -322,7 +323,7 @@ func _start_random_encounter() -> void:
 		return
 
 	# Show brief encounter start text
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.3, false).timeout
 	if not is_inside_tree():
 		return
 	if _has_dm() and not _encounter_enemies.is_empty():
@@ -447,7 +448,7 @@ func _start_boss_fight(boss_id: String) -> void:
 			player.died.connect(_on_player_died_in_boss)
 
 	# Boss intro
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	if not is_inside_tree():
 		return
 	var boss_name: String = boss_id.replace("_", " ").capitalize()
@@ -479,7 +480,7 @@ func _on_boss_died() -> void:
 
 	if has_node("/root/VFXLibrary"):
 		VFXLibrary.spawn_pickup_text("+%d XP" % xp, Vector2(640, 340), self, Color(0.5, 0.8, 1.0))
-		await get_tree().create_timer(0.3).timeout
+		await get_tree().create_timer(0.3, false).timeout
 		if not is_inside_tree():
 			return
 		VFXLibrary.spawn_pickup_text("+%d Gold" % gold, Vector2(640, 360), self, Color(1, 0.85, 0.1))
@@ -487,7 +488,7 @@ func _on_boss_died() -> void:
 	# Award boss-specific unique equipment drop
 	_award_boss_drop(_boss_id)
 
-	await get_tree().create_timer(1.5).timeout
+	await get_tree().create_timer(1.5, false).timeout
 	if not is_inside_tree():
 		return
 
@@ -531,10 +532,14 @@ func _on_player_died_in_boss() -> void:
 		var current_hp: float = _boss_node.get("current_health") if _boss_node.get("current_health") != null else 0.0
 		hp_pct_removed = clampf(1.0 - (current_hp / _boss_initial_hp), 0.0, 1.0)
 
-	# Determine boss phase reached (multi-phase bosses expose _current_phase)
+	# Determine boss phase reached. No boss defines _current_phase; the arena
+	# bosses expose `phase`, so best_phase was always 1 and the retry HP
+	# mercy in GameManager.get_boss_retry_hp_fraction() could never apply.
 	var phase_reached: int = 1
 	if is_instance_valid(_boss_node):
 		var boss_phase = _boss_node.get("_current_phase")
+		if boss_phase == null:
+			boss_phase = _boss_node.get("phase")
 		if boss_phase != null:
 			phase_reached = int(boss_phase)
 
@@ -579,17 +584,17 @@ func _award_boss_drop(boss_id: String) -> void:
 			if Inventory.ITEMS.has(item_id):
 				item_name = Inventory.ITEMS[item_id].get("name", item_name)
 			if has_node("/root/VFXLibrary"):
-				await get_tree().create_timer(0.4).timeout
+				await get_tree().create_timer(0.4, false).timeout
 				if not is_inside_tree():
 					return
 				VFXLibrary.spawn_pickup_text(
 					"BOSS DROP: %s" % item_name,
 					Vector2(640, 380), self, Color(1.0, 0.85, 0.2))
 			if _has_dm():
-				await get_tree().create_timer(0.5).timeout
+				await get_tree().create_timer(0.5, false).timeout
 				if not is_inside_tree():
 					return
-				await DialogueManager.say("LOOT", "Obtained: %s\n%s" % [item_name, Inventory.ITEMS.get(item_id, {}).get("description", "")])
+				await DialogueManager.say("System", "Obtained: %s\n%s" % [item_name, Inventory.ITEMS.get(item_id, {}).get("description", "")])
 			break  # One drop per kill
 
 
@@ -648,8 +653,8 @@ func _setup_sprites() -> void:
 
 func _show_combat_tutorial() -> void:
 	if _has_dm():
-		await DialogueManager.say("System",
-			"WASD/Arrows — Move | SPACE — Jump | J — Attack\nE — Root Access (Hack) | X — Perfect Delete (3 uses)")
+		await DialogueManager.say("System", InputService.fmt(
+			"{move} — Move | {jump} — Jump | {attack} — Attack\n{root_access} — Root Access (Hack) | {perfect_delete} — Perfect Delete (3 uses)"))
 		if not is_inside_tree():
 			return
 
@@ -772,6 +777,11 @@ func _use_perfect_delete() -> void:
 	if not _has_gm():
 		return
 
+	# A second press during the 0.6 s dissolve spent another charge on the same
+	# target (and in encounters reported its kill twice).
+	if _perfect_delete_busy:
+		return
+
 	if GameManager.perfect_delete_charges <= 0:
 		_status_text("NO CHARGES!", Vector2(640, 300))
 		return
@@ -779,7 +789,10 @@ func _use_perfect_delete() -> void:
 	# Find target based on mode
 	var target: EnemyBase = null
 	if _is_boss_fight:
-		target = _boss_node
+		# Nothing below removes a boss (only the slime or an encounter enemy), so
+		# this used to spend a charge for no effect. Bosses can't be deleted.
+		_status_text("BOSS IMMUNE!", Vector2(640, 300))
+		return
 	elif _is_random_encounter:
 		var closest_dist: float = INF
 		for e in _encounter_enemies:
@@ -796,23 +809,28 @@ func _use_perfect_delete() -> void:
 		return
 
 	if GameManager.use_perfect_delete():
+		_perfect_delete_busy = true
 		if has_node("/root/VFXLibrary"):
 			VFXLibrary.spawn("vfx_perfect_delete", target.global_position, self)
 			VFXLibrary.spawn("vfx_data_dissolve", target.global_position, self)
 		if has_node("/root/CombatFX"):
 			CombatFX.apply_screen_shake(30.0, 0.5)
 			CombatFX.apply_hitstop(0.3)
-		if has_node("/root/TweenAnimator"):
-			TweenAnimator.play_die(target)
+		# TweenAnimator is a static class, not an autoload: the old
+		# has_node("/root/TweenAnimator") guard was always false.
+		var die_target: CanvasItem = target.get_node("Sprite") if target.has_node("Sprite") else target
+		TweenAnimator.play_die(die_target)
 
-		await get_tree().create_timer(0.6).timeout
+		await get_tree().create_timer(0.6, false).timeout
+		_perfect_delete_busy = false
 		if not is_inside_tree():
 			return
 
 		# Handle death: in encounter mode, trigger the died signal so
-		# RandomEncounterSystem tracks the kill
+		# RandomEncounterSystem tracks the kill (unless it already died on its
+		# own during the wait, which reported the kill already)
 		if _is_random_encounter:
-			if is_instance_valid(target) and target.has_signal("died"):
+			if is_instance_valid(target) and target.has_signal("died") and target.current_state != EnemyBase.State.DEAD:
 				if target.has_method("_award_death_rewards"):
 					target._award_death_rewards()  # Ensure XP/gold/loot before freeing
 				target.died.emit()
@@ -823,7 +841,7 @@ func _use_perfect_delete() -> void:
 				slime.queue_free()
 			slime = null
 
-		await get_tree().create_timer(0.5).timeout
+		await get_tree().create_timer(0.5, false).timeout
 		if not is_inside_tree():
 			return
 		_victory()
@@ -837,7 +855,7 @@ func _use_perfect_delete() -> void:
 
 func _on_slime_died() -> void:
 	tutorial_complete = true
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	if not is_inside_tree():
 		return
 	_victory()
@@ -875,12 +893,12 @@ func _victory() -> void:
 
 	if has_node("/root/VFXLibrary"):
 		VFXLibrary.spawn_pickup_text("+50 XP", Vector2(640, 340), self, Color(0.5, 0.8, 1.0))
-		await get_tree().create_timer(0.3).timeout
+		await get_tree().create_timer(0.3, false).timeout
 		if not is_inside_tree():
 			return
 		VFXLibrary.spawn_pickup_text("+10 Gold", Vector2(640, 360), self, Color(1, 0.85, 0.1))
 
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0, false).timeout
 	if not is_inside_tree():
 		return
 	if has_node("/root/SceneTransitions"):

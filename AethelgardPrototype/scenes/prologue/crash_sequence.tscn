@@ -90,6 +90,3 @@ wait_time = 0.05
 [node name="SequenceTimer" type="Timer" parent="."]
 wait_time = 4.0
 one_shot = true
-
-[connection signal="timeout" from="AnimationTimer" to="." method="_on_animation_timer_timeout"]
-[connection signal="timeout" from="SequenceTimer" to="." method="_on_sequence_timer_timeout"]

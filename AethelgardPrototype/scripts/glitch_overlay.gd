@@ -30,6 +30,10 @@ var _chroma_blue: ColorRect = null
 # Screen tear simulation
 var _tear_rects: Array[ColorRect] = []
 const MAX_TEARS: int = 3
+# flash_glitch/trigger_glitch end time. Until then the throttled per-level
+# updates leave the shader, noise and chroma layers alone; otherwise they reset
+# them within ~66 ms and the flash never lasts its requested duration.
+var _flash_until_msec: int = 0
 
 func _ready() -> void:
 	layer = 95  # Below dialogue (100) but above most game elements
@@ -94,16 +98,26 @@ func _process(delta) -> void:
 		_update_cooldown = 0.066  # ~15fps throttle
 		if not has_node("/root/GameManager"):
 			return
+		var flashing = _is_flashing()
 		_update_shader()
 		_update_corruption_warning()
 		_update_edge_vignette()
 		_update_scanlines()
-		_update_noise_rects()
-		_update_chromatic_layers()
+		if not flashing:
+			_update_noise_rects()
+			_update_chromatic_layers()
 		_update_tear_rects()
+
+func _is_flashing() -> bool:
+	return Time.get_ticks_msec() < _flash_until_msec
+
+func _start_flash(duration: float) -> void:
+	_flash_until_msec = maxi(_flash_until_msec, Time.get_ticks_msec() + int(duration * 1000.0))
 
 func _update_shader() -> void:
 	if not _shader_loaded or not shader_material or not color_rect:
+		return
+	if _is_flashing():
 		return
 
 	var corruption = GameManager.glitch_meter / 100.0
@@ -149,6 +163,9 @@ func _update_corruption_warning() -> void:
 	elif corruption >= 50.0:
 		var t = Time.get_ticks_msec() / 1000.0
 		_corruption_warning.modulate.a = 0.75 + sin(t * 2.0) * 0.2
+	else:
+		# Clear any pulse/flicker alpha left over from a higher band.
+		_corruption_warning.modulate.a = 1.0
 
 func _on_glitch_meter_changed(_value: float) -> void:
 	_update_shader()
@@ -156,6 +173,7 @@ func _on_glitch_meter_changed(_value: float) -> void:
 # ── Public API — Triggered Glitch Effects ────────────────────────────
 
 func flash_glitch(duration: float = 0.2) -> void:
+	_start_flash(duration)
 	if _shader_loaded and color_rect:
 		color_rect.visible = true
 		shader_material.set_shader_parameter("corruption", 0.8)
@@ -172,6 +190,7 @@ func flash_glitch(duration: float = 0.2) -> void:
 	_flash_noise_burst(duration)
 
 func trigger_glitch(duration: float = 0.5, intensity: float = 0.6) -> void:
+	_start_flash(duration)
 	if _shader_loaded and color_rect:
 		color_rect.visible = true
 		shader_material.set_shader_parameter("corruption", intensity)

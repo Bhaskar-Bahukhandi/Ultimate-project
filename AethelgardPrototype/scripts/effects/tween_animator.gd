@@ -118,6 +118,21 @@ static func _get_base_modulate(sprite: CanvasItem) -> Color:
 static func _set_base_modulate(sprite: CanvasItem, c: Color) -> void:
 	_base_modulates[sprite.get_instance_id()] = c
 
+## True while a tracked animation (one-shot or looping) is running on the node.
+static func is_animating(node: Node) -> bool:
+	var tween = _active_tweens.get(node.get_instance_id())
+	return tween != null and tween.is_valid()
+
+## Rest x for animations that move the sprite sideways, recorded once per node.
+## Reading position.x at call time made an interrupted lunge or hurt shake (hit
+## mid-attack, a cancel) the new rest, so the sprite drifted a little more each time.
+static func _get_rest_x(sprite: CanvasItem) -> float:
+	if sprite is CollisionObject2D:
+		return sprite.position.x  # a body moves; only child visuals have a fixed rest
+	if not sprite.has_meta("_tween_rest_x"):
+		sprite.set_meta("_tween_rest_x", sprite.position.x)
+	return sprite.get_meta("_tween_rest_x")
+
 
 
 static func _get_base_y(sprite: CanvasItem) -> float:
@@ -182,6 +197,7 @@ static func play_idle(sprite: CanvasItem) -> Tween:
 	_kill_existing(sprite)
 	var base_y = _get_base_y(sprite)
 	_get_base_scale(sprite)
+	sprite.position.x = _get_rest_x(sprite)  # undo a lunge cut short by this state change
 	sprite.position.y = base_y
 	sprite.rotation = 0.0
 	sprite.scale = bs
@@ -208,6 +224,7 @@ static func play_run(sprite: CanvasItem, direction: float = 1.0) -> Tween:
 	var dir_sign = sign(direction) if direction != 0 else 1.0
 	sprite.scale = Vector2(abs(bs.x) * dir_sign, abs(bs.y))
 	var base_y = _get_base_y(sprite)
+	sprite.position.x = _get_rest_x(sprite)  # undo a lunge cut short by this state change
 	sprite.position.y = base_y
 	var tween = sprite.create_tween().set_loops()
 	# Step 1: Push off -- squash, lean forward
@@ -295,8 +312,8 @@ static func play_attack_combo(sprite: CanvasItem, direction: float = 1.0, combo_
 	var arm = sprite.get_node_or_null("Arm")
 	var trail = sprite.get_node_or_null("WeaponTrail")
 	var ds = sign(direction) if direction != 0 else 1.0
-	var base_x = sprite.position.x
-	var base_y = sprite.position.y
+	var base_x = _get_rest_x(sprite)
+	var base_y = _get_base_y(sprite)
 	_get_base_scale(sprite)
 	var tween = sprite.create_tween()
 
@@ -384,7 +401,7 @@ static func play_attack_combo(sprite: CanvasItem, direction: float = 1.0, combo_
 static func play_upslash(sprite: CanvasItem, direction: float = 1.0) -> Tween:
 	_kill_existing(sprite)
 	var ds = sign(direction) if direction != 0 else 1.0
-	var base_y = sprite.position.y
+	var base_y = _get_base_y(sprite)
 	_get_base_scale(sprite)
 	var tween = sprite.create_tween()
 	# Crouch before upswing
@@ -408,7 +425,7 @@ static func play_upslash(sprite: CanvasItem, direction: float = 1.0) -> Tween:
 static func play_charged_attack(sprite: CanvasItem, direction: float = 1.0) -> Tween:
 	_kill_existing(sprite)
 	var ds = sign(direction) if direction != 0 else 1.0
-	var base_x = sprite.position.x
+	var base_x = _get_rest_x(sprite)
 	_get_base_scale(sprite)
 	var tween = sprite.create_tween()
 	# Big crouch wind-up
@@ -480,7 +497,7 @@ static func play_spell_cast(sprite: CanvasItem, spell_type: String = "default") 
 static func play_air_attack(sprite: CanvasItem, direction: float = 1.0) -> Tween:
 	_kill_existing(sprite)
 	var ds = sign(direction) if direction != 0 else 1.0
-	var base_y = sprite.position.y
+	var base_y = _get_base_y(sprite)
 	_get_base_scale(sprite)
 	var tween = sprite.create_tween()
 	# Wind-up arc
@@ -503,8 +520,10 @@ static func play_air_attack(sprite: CanvasItem, direction: float = 1.0) -> Tween
 ## Hurt -- dramatic white flash + red pulse + violent knockback shake + squash
 static func play_hurt(sprite: CanvasItem) -> Tween:
 	_kill_existing(sprite)
-	var original_modulate = sprite.modulate
-	var original_pos = sprite.position
+	# Rest values, not the current ones: a hit landing mid-shake or mid-flash
+	# otherwise kept the sprite offset and tinted for good.
+	var original_modulate = _get_base_modulate(sprite)
+	var original_pos = Vector2(_get_rest_x(sprite), sprite.position.y)
 	_get_base_scale(sprite)
 	var tween = sprite.create_tween()
 
@@ -821,7 +840,7 @@ static func play_knight_idle(sprite: CanvasItem) -> Tween:
 static func play_knight_slash(sprite: CanvasItem) -> Tween:
 	_kill_existing(sprite)
 	var sword = sprite.get_node_or_null("Sword")
-	var base_x = sprite.position.x
+	var base_x = _get_rest_x(sprite)
 	_get_base_scale(sprite)
 	var tween = sprite.create_tween()
 	# Heavy wind-up

@@ -26,6 +26,8 @@ func _ready() -> void:
 	# Replace placeholder sprite with real player art
 	if player_node:
 		AssetManager.replace_player_sprite(player_node, "combat")
+		if player_node.has_signal("died"):
+			player_node.died.connect(_on_player_died)
 
 	# Discover arena side quests
 	if has_node("/root/SideQuestManager"):
@@ -39,7 +41,7 @@ func _ready() -> void:
 	_setup_root_access()
 
 	# Arena intro
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	if not is_inside_tree(): return
 	await _show_tier_selection()
 
@@ -274,7 +276,7 @@ func _show_tier_selection() -> void:
 	if not is_inside_tree(): return
 	DialogueManager.hide_dialogue()
 
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0, false).timeout
 	if not is_inside_tree(): return
 	arena_running = true
 	arena_mgr.start_arena(current_tier)
@@ -286,7 +288,7 @@ func _on_arena_victory(tier: String) -> void:
 	print("[CH2-ARENA] Victory in %s tier!" % tier)
 	_update_hud()
 
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(2.0, false).timeout
 	if not is_inside_tree(): return
 
 	# Set tier completion flag
@@ -332,6 +334,17 @@ func _sync_crafting_materials() -> void:
 	if has_node("/root/CraftingSystem"):
 		CraftingSystem.get_recipes()
 
+## A death in the arena revives the player in the last village (player_combat),
+## so the arena's own defeat flow (ArenaManager.abort_arena) never ran: the
+## loss wasn't recorded and the win streak never reset.
+func _on_player_died() -> void:
+	if not arena_running:
+		return
+	arena_running = false
+	if is_instance_valid(arena_mgr):
+		arena_mgr.arena_active = false   # stop the spawn loop; the scene is about to change
+	GameManager.record_arena_loss()
+
 func _on_arena_defeat() -> void:
 	## Called when player is defeated
 	arena_running = false
@@ -339,7 +352,7 @@ func _on_arena_defeat() -> void:
 	print("[CH2-ARENA] Defeat in arena")
 	_update_hud()
 
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(2.0, false).timeout
 	if not is_inside_tree(): return
 	await DialogueManager.run(ARENA_DLG, "again_after_loss")
 	if not is_inside_tree(): return
@@ -405,5 +418,7 @@ func _input(event) -> void:
 			arena_mgr.start_arena(current_tier)
 		elif event.is_action_pressed("ui_cancel"):
 			_return_to_city()
+			get_viewport().set_input_as_handled()   # Esc is also pause_menu
 	elif event.is_action_pressed("ui_cancel") and not arena_running and not _in_results:
 		_return_to_city()
+		get_viewport().set_input_as_handled()

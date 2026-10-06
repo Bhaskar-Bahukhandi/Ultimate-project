@@ -32,8 +32,11 @@ func _ready() -> void:
 		print("[STATUS] Status window system initialized")
 
 func _unhandled_input(event) -> void:
-	# Use _unhandled_input so other UI elements get priority
-	if event.is_action_pressed("status_window"):
+	# Use _unhandled_input so other UI elements get priority.
+	# Pause (Esc / Start) is refused while this is open and passes the key on:
+	# close the window so that press isn't simply lost.
+	if event.is_action_pressed("status_window") \
+			or (status_open and event.is_action_pressed("pause_menu")):
 		toggle_status()
 		get_viewport().set_input_as_handled()
 
@@ -289,7 +292,7 @@ func _build_status_ui() -> void:
 	# Close button
 	close_btn = Button.new()
 	close_btn.name = "CloseButton"
-	close_btn.text = "[ I ] CLOSE STATUS WINDOW"
+	InputService.bind_text(close_btn, "[ {status_window} ] CLOSE STATUS WINDOW")
 	close_btn.add_theme_font_size_override("font_size", 12)
 	close_btn.add_theme_color_override("font_color", Color(0.0, 1.0, 0.4))
 	var btn_style = StyleBoxFlat.new()

@@ -417,7 +417,7 @@ func equip_item(item_id: String, slot: String) -> bool:
 	
 	# Unequip current item in slot
 	if equipment[slot]:
-		add_item(equipment[slot], 1)
+		_return_equipped_item(equipment[slot])
 	
 	# Equip new item
 	equipment[slot] = item_id
@@ -445,7 +445,7 @@ func unequip_item(slot: String) -> bool:
 	var item_id = equipment[slot]
 	equipment[slot] = null
 	if ITEMS.has(item_id):
-		add_item(item_id, 1)
+		_return_equipped_item(item_id)
 	else:
 		push_warning("[INVENTORY] Equipped item missing from database, clearing slot: " + str(item_id))
 
@@ -458,6 +458,13 @@ func unequip_item(slot: String) -> bool:
 	_apply_equipment_bonuses()
 	
 	return true
+
+## Put an unequipped item back in the bag. Not add_item(): gear has
+## max_stack 1, and a second copy bought or crafted while this one was equipped
+## made add_item() refuse, so swapping or unequipping destroyed the item.
+func _return_equipped_item(item_id: String) -> void:
+	items[item_id] = int(items.get(item_id, 0)) + 1
+	item_added.emit(item_id, 1)
 
 func _apply_equipment_bonuses() -> void:
 	## Calculate and apply total equipment bonuses to player stats.

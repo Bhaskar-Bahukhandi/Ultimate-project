@@ -57,7 +57,7 @@ func _ready() -> void:
 	# Build procedural environment (visible after fade-in)
 	_build_environment()
 
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	if not is_inside_tree(): return
 	await start_sequence()
 	if not is_inside_tree(): return
@@ -233,7 +233,7 @@ func start_sequence() -> void:
 	title_tween.tween_property(subtitle, "modulate:a", 1.0, 1.5)
 	await title_tween.finished
 	if not is_inside_tree(): return
-	await get_tree().create_timer(2.5).timeout
+	await get_tree().create_timer(2.5, false).timeout
 	if not is_inside_tree(): return
 	
 	# Fade out title
@@ -329,7 +329,7 @@ func _play_glitch_memory_combat() -> void:
 		SFXManager.play("glitch_trigger")
 
 	DialogueManager.hide_dialogue()
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	if not is_inside_tree(): return
 
 	# Build the memory combat arena overlay
@@ -344,7 +344,7 @@ func _play_glitch_memory_combat() -> void:
 	# Wait for combat to finish (enemy defeated or timeout)
 	var timeout_timer: float = 30.0
 	while _memory_combat_active and timeout_timer > 0:
-		await get_tree().create_timer(0.1).timeout
+		await get_tree().create_timer(0.1, false).timeout
 		if not is_inside_tree(): return
 		timeout_timer -= 0.1
 
@@ -372,7 +372,7 @@ func _play_glitch_memory_combat() -> void:
 		if not is_inside_tree(): return
 
 	DialogueManager.hide_dialogue()
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	if not is_inside_tree(): return
 
 func _build_memory_arena() -> void:
@@ -455,7 +455,8 @@ func _build_memory_arena() -> void:
 	_memory_combat_container.add_child(_memory_hint_label)
 
 	# Pulsing enemy glow
-	var enemy_pulse = create_tween().set_loops()
+	# Bound to the enemy so the endless loop dies with it in _destroy_memory_arena
+	var enemy_pulse = _memory_enemy_node.create_tween().set_loops()
 	_ambient_tweens.append(enemy_pulse)
 	enemy_pulse.tween_property(_memory_enemy_node, "modulate:a", 0.5, 0.8).set_trans(Tween.TRANS_SINE)
 	enemy_pulse.tween_property(_memory_enemy_node, "modulate:a", 1.0, 0.8).set_trans(Tween.TRANS_SINE)
@@ -637,7 +638,7 @@ func play_internal_monologue() -> void:
 		await typewrite_text(boot_text, line["text"], line["color"], 0.04)
 		if not is_inside_tree(): return
 		boot_text.text += "\n"
-		await get_tree().create_timer(line["delay"]).timeout
+		await get_tree().create_timer(line["delay"], false).timeout
 		if not is_inside_tree(): return
 	
 	boot_text.visible = false
@@ -654,17 +655,17 @@ func play_bsod_crash() -> void:
 	boot_text.add_theme_color_override("font_color", Color.WHITE)
 	boot_text.text = "SYSTEM_CRASH_DUMP\n\n*** STOP: 0x0000007E\n\nREALITY.DLL - Address 0x004F3A\n\nBeginning dump of physical memory...\nPhysical memory dump complete.\n\nContact your System Administrator."
 	
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(2.0, false).timeout
 	if not is_inside_tree(): return
 	
 	# Screen tear effect — rapid horizontal glitch flashes
 	for i in range(8):
 		glitch_overlay.visible = true
 		glitch_overlay.color = Color(randf(), randf(), randf(), 0.7)
-		await get_tree().create_timer(0.05).timeout
+		await get_tree().create_timer(0.05, false).timeout
 		if not is_inside_tree(): return
 		glitch_overlay.visible = false
-		await get_tree().create_timer(0.03).timeout
+		await get_tree().create_timer(0.03, false).timeout
 		if not is_inside_tree(): return
 	
 	# Absolute silence — snap to black
@@ -672,7 +673,7 @@ func play_bsod_crash() -> void:
 	boot_text.visible = false
 	glitch_overlay.visible = false
 	
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(2.0, false).timeout
 	if not is_inside_tree(): return
 
 func play_ui_boot_sequence() -> void:
@@ -698,11 +699,11 @@ func play_ui_boot_sequence() -> void:
 		await typewrite_text(boot_text, line["text"], line["color"], 0.03)
 		if not is_inside_tree(): return
 		boot_text.text += "\n"
-		await get_tree().create_timer(line["delay"]).timeout
+		await get_tree().create_timer(line["delay"], false).timeout
 		if not is_inside_tree(): return
 	
 	# Brief pause then fade out boot text
-	await get_tree().create_timer(1.5).timeout
+	await get_tree().create_timer(1.5, false).timeout
 	if not is_inside_tree(): return
 	var tween = create_tween()
 	tween.tween_property(boot_text, "modulate:a", 0.0, 1.0)
@@ -738,7 +739,7 @@ func show_status_window() -> void:
 	# Camera shake on snap
 	camera.shake(5.0, 0.3)
 	
-	await get_tree().create_timer(4.0).timeout
+	await get_tree().create_timer(4.0, false).timeout
 	if not is_inside_tree(): return
 	
 	# Fade out status window
@@ -1110,7 +1111,7 @@ func typewrite_text(label: Label, text: String, color: Color, speed: float = 0.0
 			label.text = current + text
 			return
 		label.text = current + text.substr(0, i + 1)
-		await get_tree().create_timer(speed).timeout
+		await get_tree().create_timer(speed, false).timeout
 		if not is_inside_tree(): return
 
 func transition_to_elara_meeting() -> void:
@@ -1134,7 +1135,7 @@ func transition_to_elara_meeting() -> void:
 	GameManager.current_region = ""
 	GameManager.player_overworld_position = Vector2(400, 400)  # Near Oakhaven gate
 	GameManager.change_state(GameManager.GameState.EXPLORATION)
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.3, false).timeout
 	if not is_inside_tree(): return
 	
 	SceneTransitions.change_scene("res://scenes/chapter1/elara_meeting.tscn")
@@ -1148,7 +1149,7 @@ func _on_custom_effect(effect_name: String, parameters: Dictionary) -> void:
 				SFXManager.play("glitch_surge")
 			glitch_overlay.visible = true
 			glitch_overlay.color = Color(0.5, 1.0, 0.5, 0.4)
-			await get_tree().create_timer(parameters.get("duration", 0.3)).timeout
+			await get_tree().create_timer(parameters.get("duration", 0.3), false).timeout
 			if not is_inside_tree(): return
 			glitch_overlay.visible = false
 		"show_golden_path":
@@ -1160,7 +1161,7 @@ func _on_custom_effect(effect_name: String, parameters: Dictionary) -> void:
 				_ambient_tweens.append(gp_pulse)
 				gp_pulse.tween_property(gp, "modulate:a", 0.5, 2.0).set_trans(Tween.TRANS_SINE).set_delay(1.5)
 				gp_pulse.tween_property(gp, "modulate:a", 1.0, 2.0).set_trans(Tween.TRANS_SINE)
-			await get_tree().create_timer(parameters.get("duration", 1.5)).timeout
+			await get_tree().create_timer(parameters.get("duration", 1.5), false).timeout
 			if not is_inside_tree(): return
 		_:
 			print("[CH1 CUSTOM EFFECT] Unhandled: %s" % effect_name)

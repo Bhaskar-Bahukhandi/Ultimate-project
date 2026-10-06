@@ -362,6 +362,7 @@ var _procedural_timer = 0.0
 var _procedural_note_index = 0
 var _procedural_active = false
 var _fade_tween: Tween = null
+var _stopping = false  ## A fade-out is running; its callback will _force_stop()
 
 ## Multi-voice bookkeeping: voice_name → current note index / timer
 var _voice_note_indices: Dictionary = {}
@@ -494,8 +495,9 @@ func _get_boss_hp_ratio() -> float:
 	if bosses.is_empty():
 		return 1.0
 	var boss = bosses[0]
-	if "health" in boss and "max_health" in boss and boss.max_health > 0:
-		return boss.health / boss.max_health
+	# EnemyBase stores HP in current_health (there is no `health` property).
+	if "current_health" in boss and "max_health" in boss and float(boss.max_health) > 0.0:
+		return float(boss.current_health) / float(boss.max_health)
 	return 1.0
 
 ## Disable dynamic music (for scenes that manage their own music)
@@ -515,11 +517,15 @@ func set_dynamic_override(enabled: bool = true) -> void:
 
 ## Play a named music track. Crossfades if already playing something else.
 func play_track(track_name: String, fade_in: bool = true) -> void:
-	if track_name == _current_track and _is_playing:
+	if track_name == _current_track and _is_playing and not _stopping:
 		return
 	if not TRACKS.has(track_name):
 		push_warning("MusicManager: Unknown track '%s'" % track_name)
 		return
+	# Cancel a pending fade-out, or its _force_stop callback silences this track.
+	if _stopping and _fade_tween:
+		_fade_tween.kill()
+	_stopping = false
 
 	var track: Dictionary = TRACKS[track_name]
 	_current_track = track_name
@@ -784,6 +790,7 @@ func _generate_note_pcm(frequency: float, wave_type: String, _duration: float, n
 
 func _fade_out_and_stop() -> void:
 	_procedural_active = false
+	_stopping = true
 	# Pass 53: Also fade out any lingering procedural note players
 	for child in get_children():
 		if child is AudioStreamPlayer and child != _music_player:
@@ -800,6 +807,7 @@ func _fade_out_and_stop() -> void:
 func _force_stop() -> void:
 	_music_player.stop()
 	_is_playing = false
+	_stopping = false
 	_procedural_active = false
 	_current_track = ""
 	_voice_note_indices.clear()

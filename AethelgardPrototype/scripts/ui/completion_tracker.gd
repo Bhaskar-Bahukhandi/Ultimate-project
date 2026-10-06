@@ -105,6 +105,9 @@ func _build_ui() -> void:
 	var bg := ColorRect.new()
 	bg.color = Color(0, 0, 0, 0.75)
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	# The backdrop stops mouse clicks, so they never reach _unhandled_input:
+	# close on a click here ("any button to close").
+	bg.gui_input.connect(_on_backdrop_input)
 	add_child(bg)
 
 	# Panel
@@ -210,22 +213,21 @@ func _add_progress_bar(parent: Control, pct: float, color: Color) -> void:
 	track.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	parent.add_child(track)
 
-	# Fill — use deferred sizing after layout
+	# Fill — anchored to a fraction of the track, so it follows the track's
+	# width once the containers lay it out. (It used to be sized from a
+	# `resized` signal connected after the only resize, and stayed 0 wide.)
 	var fill := ColorRect.new()
 	fill.color = color
 	fill.color.a = 0.85
-	fill.custom_minimum_size = Vector2(0, 12)
-	fill.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	fill.anchor_right = clampf(pct, 0.0, 1.0)
+	fill.anchor_bottom = 1.0
+	fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	track.add_child(fill)
-	# Set fill width after one frame so track has its actual size
-	fill.set_meta("_pct", pct)
-	fill.resized.connect(_on_fill_resized.bind(fill))
 
-func _on_fill_resized(fill: ColorRect) -> void:
-	var pct: float = fill.get_meta("_pct", 0.0)
-	var parent_w: float = fill.get_parent().size.x
-	fill.size = Vector2(parent_w * pct, 12)
-	fill.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+func _on_backdrop_input(event: InputEvent) -> void:
+	if _visible and event is InputEventMouseButton and event.pressed:
+		hide_tracker()
+		get_viewport().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not _visible:

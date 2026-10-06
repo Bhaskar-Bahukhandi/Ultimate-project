@@ -360,6 +360,11 @@ func _on_gate_body_exited(body: Node2D, gate: Area2D) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact"):
+		# Interact isn't a dialogue key: pressed during the rest / lock / level
+		# warning line it used to rest (and save) again or start a second
+		# region transition on top of the running one.
+		if has_node("/root/DialogueManager") and DialogueManager.is_active:
+			return
 		# Check if player is near a rest point first
 		if _near_rest_point and is_instance_valid(_near_rest_point):
 			_rest_at_point()

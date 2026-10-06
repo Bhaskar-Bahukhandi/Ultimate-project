@@ -25,6 +25,8 @@ const PHASE2_HP_PCT = 0.65
 const PHASE3_HP_PCT = 0.30
 
 const PHASE_COOLDOWNS = { 1: 2.5, 2: 1.8, 3: 2.2 }
+const PHASE_TRANSITION_COOLDOWN: float = 0.5
+var _phase_transition_timer: float = PHASE_TRANSITION_COOLDOWN
 
 # ── Intro tracking ──────────────────────────────────────────────────────
 var _intro_played: bool = false
@@ -170,11 +172,15 @@ func _ai_behavior(delta: float) -> void:
 	if max_health <= 0.0:
 		return
 	var hp_pct = current_health / max_health
-	# Check lower phases first so a large hit doesn't skip phases
-	if hp_pct <= PHASE2_HP_PCT and phase < 2:
-		_enter_phase(2)
-	elif hp_pct <= PHASE3_HP_PCT and phase < 3:
-		_enter_phase(3)
+	# Check lower phases first so a large hit doesn't skip phases. One hit that
+	# crosses both thresholds used to fire phase 2 and phase 3 on consecutive
+	# frames (two transition juices and two barks at once); space them out.
+	_phase_transition_timer += delta
+	if _phase_transition_timer >= PHASE_TRANSITION_COOLDOWN:
+		if hp_pct <= PHASE2_HP_PCT and phase < 2:
+			_enter_phase(2)
+		elif hp_pct <= PHASE3_HP_PCT and phase < 3:
+			_enter_phase(3)
 
 	attack_timer += delta
 
@@ -199,6 +205,7 @@ func _ai_behavior(delta: float) -> void:
 
 func _enter_phase(new_phase: int) -> void:
 	phase = new_phase
+	_phase_transition_timer = 0.0
 	phase_changed.emit(new_phase)
 	is_attacking = false
 	attack_timer = 0.0
@@ -309,10 +316,10 @@ func _phase3() -> void:
 
 func _hammer_swing() -> void:
 	velocity.x = 0.0
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	if not _safe(): return
 	velocity.x = direction_to_player().x * 200.0
-	await get_tree().create_timer(0.25).timeout
+	await get_tree().create_timer(0.25, false).timeout
 	if not _safe(): return
 	_deal_melee(contact_damage, 70.0)
 	velocity.x = 0.0
@@ -320,10 +327,10 @@ func _hammer_swing() -> void:
 func _rapid_swing() -> void:
 	for i in 2:
 		velocity.x = 0.0
-		await get_tree().create_timer(0.25).timeout
+		await get_tree().create_timer(0.25, false).timeout
 		if not _safe(): return
 		velocity.x = direction_to_player().x * 250.0
-		await get_tree().create_timer(0.15).timeout
+		await get_tree().create_timer(0.15, false).timeout
 		if not _safe(): return
 		_deal_melee(contact_damage * 0.7, 70.0)
 	velocity.x = 0.0
@@ -339,7 +346,7 @@ func _gear_barrage() -> void:
 		if not player: break
 		var dir = (player.global_position - global_position).normalized()
 		_spawn_gear(dir.rotated((i - 1) * 0.2), 220.0)
-		await get_tree().create_timer(0.3).timeout
+		await get_tree().create_timer(0.3, false).timeout
 		if not _safe(): return
 
 func _gear_storm() -> void:
@@ -351,10 +358,10 @@ func _gear_storm() -> void:
 
 func _stomp() -> void:
 	velocity.y = -400.0
-	await get_tree().create_timer(0.6).timeout
+	await get_tree().create_timer(0.6, false).timeout
 	if not _safe(): return
 	velocity.y = 700.0
-	await get_tree().create_timer(0.4).timeout
+	await get_tree().create_timer(0.4, false).timeout
 	if not _safe(): return
 	_deal_melee(contact_damage * 1.2, 100.0)
 	_screen_shake(10.0, 0.2)
@@ -362,10 +369,10 @@ func _stomp() -> void:
 
 func _shockwave() -> void:
 	velocity.y = -500.0
-	await get_tree().create_timer(0.6).timeout
+	await get_tree().create_timer(0.6, false).timeout
 	if not _safe(): return
 	velocity.y = 800.0
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.3, false).timeout
 	if not _safe(): return
 	_deal_melee(contact_damage * 1.5, 150.0)
 	_screen_shake(16.0, 0.35)
@@ -374,10 +381,10 @@ func _shockwave() -> void:
 
 func _overcharge_slam() -> void:
 	velocity.y = -600.0
-	await get_tree().create_timer(0.7).timeout
+	await get_tree().create_timer(0.7, false).timeout
 	if not _safe(): return
 	velocity.y = 900.0
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.3, false).timeout
 	if not _safe(): return
 	_deal_melee(contact_damage * 2.0, 180.0)
 	_screen_shake(22.0, 0.5)
@@ -385,11 +392,11 @@ func _overcharge_slam() -> void:
 
 func _charge() -> void:
 	velocity.x = 0.0
-	await get_tree().create_timer(0.6).timeout
+	await get_tree().create_timer(0.6, false).timeout
 	if not _safe(): return
 	velocity.x = direction_to_player().x * 400.0
 	velocity.y = -100.0
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	if not _safe(): return
 	_deal_melee(contact_damage * 1.3, 80.0)
 	_screen_shake(8.0, 0.15)
@@ -397,7 +404,7 @@ func _charge() -> void:
 
 func _desperate_swing() -> void:
 	velocity.x = direction_to_player().x * 100.0
-	await get_tree().create_timer(0.4).timeout
+	await get_tree().create_timer(0.4, false).timeout
 	if not _safe(): return
 	_deal_melee(contact_damage * 0.4, 60.0)
 	velocity.x = 0.0
@@ -425,7 +432,7 @@ func _pulse_core_warning() -> void:
 			var tw = create_tween()
 			tw.tween_property(get_node("Sprite"), "modulate", Color(1.5, 0.8, 0.2), 0.2)
 			tw.tween_property(get_node("Sprite"), "modulate", Color(1.0, 0.5, 0.0), 0.2)
-		await get_tree().create_timer(0.4).timeout
+		await get_tree().create_timer(0.4, false).timeout
 		if not is_inside_tree(): return
 
 func _close_core() -> void:
@@ -459,6 +466,10 @@ func _spawn_gear(direction: Vector2, speed: float) -> void:
 
 	var elapsed = 0.0
 	while elapsed < 3.0 and is_instance_valid(gear) and _safe():
+		# process_frame keeps firing while the tree is paused; hold the gear still.
+		if get_tree().paused:
+			await get_tree().process_frame
+			continue
 		gear.global_position += direction * speed * get_process_delta_time()
 		gear.rotation += 10.0 * get_process_delta_time()
 		elapsed += get_process_delta_time()
@@ -522,7 +533,7 @@ func die() -> void:
 	for i in 8:
 		var offset = Vector2(randf_range(-40, 40), randf_range(-50, 10))
 		_vfx("vfx_enemy_death", global_position + offset)
-		await get_tree().create_timer(0.15).timeout
+		await get_tree().create_timer(0.15, false).timeout
 		if not is_inside_tree():
 			return
 	super.die()

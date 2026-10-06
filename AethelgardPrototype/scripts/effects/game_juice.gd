@@ -74,6 +74,9 @@ const COMBO_TIERS = [
 	{"threshold": 30, "name": "GODLIKE", "color": Color(1.0, 1.0, 1.0)},
 ]
 
+## Top of the combo HUD (hit count, multiplier, rank, decay bar).
+const COMBO_UI_TOP := 262.0
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_combo_ui()
@@ -85,6 +88,11 @@ func _process(delta: float) -> void:
 	# (The old time_scale "fail-safe" lived here. It reset any slow-mo it didn't
 	# own — killing wobble and dramatic slow-mo after one frame. ContextStack now
 	# owns Engine.time_scale; every effect requests and releases its own speed.)
+	# This node runs while paused (for its slow-mo tweens), but the combo and
+	# i-frame timers must not: opening the pause menu used to drop the combo
+	# (and its damage multiplier) after 3 s.
+	if get_tree().paused:
+		return
 
 	# Combo decay
 	if _combo_count > 0:
@@ -152,15 +160,17 @@ func on_player_hurt(_player: Node2D, damage: float = 0.0) -> void:
 	# ── Red screen flash proportional to damage (Hollow Knight hit feedback) ──
 	var flash_alpha = clampf(remap(damage, 5.0, 50.0, 0.12, 0.35), 0.1, 0.4)
 	if has_node("/root/VFXLibrary"):
-		var scene_root = get_tree().current_scene
-		if scene_root:
-			# Pass 55 H-06: Reuse a single overlay instead of creating per-hit
-			if not is_instance_valid(_hurt_overlay):
-				_hurt_overlay = ColorRect.new()
-				_hurt_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
-				_hurt_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
-				_hurt_overlay.z_index = 92
-				scene_root.add_child(_hurt_overlay)
+		# Pass 55 H-06: Reuse a single overlay instead of creating per-hit.
+		# It lives on our own CanvasLayer: added to the Node2D scene root, a
+		# full-rect Control has no parent rect, so it was 0x0 and never showed.
+		if not is_instance_valid(_hurt_overlay) and _combo_ui:
+			_hurt_overlay = ColorRect.new()
+			_hurt_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+			_hurt_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			_hurt_overlay.color = Color(1.0, 0.1, 0.05, 0.0)
+			_combo_ui.add_child(_hurt_overlay)
+			_combo_ui.move_child(_hurt_overlay, 0)  # under the combo labels
+		if is_instance_valid(_hurt_overlay):
 			_hurt_overlay.color = Color(1.0, 0.1, 0.05, flash_alpha)
 			if _hurt_tween and _hurt_tween.is_valid():
 				_hurt_tween.kill()
@@ -451,6 +461,7 @@ func flash_invincibility(sprite: Node, duration: float = 1.0) -> void:
 		_iframe_sprites.erase(id)
 
 	var tw = create_tween()
+	tw.set_pause_mode(Tween.TWEEN_PAUSE_STOP)  # freeze with the game, like the i-frame timer in _process
 	tw.set_loops(int(duration / 0.1))
 	tw.tween_property(sprite, "modulate:a", 0.15, 0.05)
 	tw.tween_property(sprite, "modulate:a", 1.0, 0.05)
@@ -488,6 +499,9 @@ func _drop_combo() -> void:
 			_combo_label.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
 			if _drop_tween and _drop_tween.is_valid():
 				_drop_tween.kill()
+			# _update_combo_ui() above already hid the label; show it again so
+			# the fade-out is visible.
+			_combo_label.modulate.a = 1.0
 			_drop_tween = create_tween()
 			_drop_tween.tween_property(_combo_label, "modulate:a", 0.0, 0.4).set_trans(Tween.TRANS_QUAD)
 
@@ -560,6 +574,10 @@ func _build_combo_ui() -> void:
 	_combo_ui.layer = 95
 	_combo_ui.name = "ComboUILayer"
 	add_child(_combo_ui)
+	# Combos only build in side-scroll combat, where player_combat.gd's HUD column
+	# (HP/MP/SOUL/XP bars, chain step, charge bar) fills the top-left down to
+	# about y 250. The old y 100-188 drew these labels over those bars.
+	var top := COMBO_UI_TOP
 
 	# Combo count label
 	_combo_label = Label.new()
@@ -569,7 +587,7 @@ func _build_combo_ui() -> void:
 	_combo_label.add_theme_color_override("font_color", Color(1, 0.85, 0.2))
 	_combo_label.add_theme_constant_override("outline_size", 3)
 	_combo_label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.85))
-	_combo_label.position = Vector2(20, 100)
+	_combo_label.position = Vector2(20, top)
 	_combo_label.modulate.a = 0.0
 	_combo_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_combo_ui.add_child(_combo_label)
@@ -582,7 +600,7 @@ func _build_combo_ui() -> void:
 	_combo_mult_label.add_theme_color_override("font_color", Color(1, 0.6, 0.2))
 	_combo_mult_label.add_theme_constant_override("outline_size", 2)
 	_combo_mult_label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.7))
-	_combo_mult_label.position = Vector2(20, 140)
+	_combo_mult_label.position = Vector2(20, top + 40)
 	_combo_mult_label.modulate.a = 0.0
 	_combo_mult_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_combo_ui.add_child(_combo_mult_label)
@@ -595,7 +613,7 @@ func _build_combo_ui() -> void:
 	_combo_tier_label.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8))
 	_combo_tier_label.add_theme_constant_override("outline_size", 2)
 	_combo_tier_label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.7))
-	_combo_tier_label.position = Vector2(20, 162)
+	_combo_tier_label.position = Vector2(20, top + 62)
 	_combo_tier_label.modulate.a = 0.0
 	_combo_tier_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_combo_ui.add_child(_combo_tier_label)
@@ -604,7 +622,7 @@ func _build_combo_ui() -> void:
 	_combo_timer_bg = ColorRect.new()
 	_combo_timer_bg.color = Color(0.15, 0.15, 0.15, 0.5)
 	_combo_timer_bg.size = Vector2(120, 4)
-	_combo_timer_bg.position = Vector2(20, 184)
+	_combo_timer_bg.position = Vector2(20, top + 84)
 	_combo_timer_bg.modulate.a = 0.0
 	_combo_timer_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_combo_ui.add_child(_combo_timer_bg)
@@ -612,7 +630,7 @@ func _build_combo_ui() -> void:
 	_combo_timer_bar = ColorRect.new()
 	_combo_timer_bar.color = Color(1, 0.85, 0.2, 0.8)
 	_combo_timer_bar.size = Vector2(120, 4)
-	_combo_timer_bar.position = Vector2(20, 184)
+	_combo_timer_bar.position = Vector2(20, top + 84)
 	_combo_timer_bar.modulate.a = 0.0
 	_combo_timer_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_combo_ui.add_child(_combo_timer_bar)
@@ -633,6 +651,9 @@ func _update_combo_ui() -> void:
 		return
 
 	if _combo_label:
+		# A drop fade still running would keep forcing the new combo's label to 0.
+		if _drop_tween and _drop_tween.is_valid():
+			_drop_tween.kill()
 		_combo_label.text = "%d HIT" % _combo_count if _combo_count < 10 else "%d HITS!" % _combo_count
 		_combo_label.modulate.a = 1.0
 

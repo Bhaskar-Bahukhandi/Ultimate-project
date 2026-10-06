@@ -142,6 +142,14 @@ const SPEAKER_COLORS: Dictionary = {
 	"Worker": Color(0.6, 0.6, 0.62),
 	"Iven": Color(0.6, 0.7, 0.95),
 	"The Minute Hand": Color(0.7, 0.6, 0.3),
+	# Oakhaven region villagers (scripts/regions/oakhaven_region.gd NPC_DATA) and
+	# the legacy prologue's intercom line: they spoke with the fallback colour.
+	"Elder Rowan": Color(0.7, 0.7, 0.8),
+	"Farmer Thom": Color(0.6, 0.8, 0.3),
+	"Child Pip": Color(1.0, 0.8, 0.5),
+	"Guard Alaric": Color(0.5, 0.6, 0.7),
+	"Apothecary Iris": Color(0.5, 0.85, 0.6),
+	"Pilot (Intercom)": Color(0.7, 0.75, 0.85),
 }
 
 
@@ -151,6 +159,11 @@ const SPEAKER_COLORS: Dictionary = {
 
 func _ready() -> void:
 	process_mode = PROCESS_MODE_ALWAYS
+	# The main menu's Text Speed slider saves here; without this read the
+	# setting reset to the default on every launch.
+	var cfg := ConfigFile.new()
+	if cfg.load("user://audio_settings.cfg") == OK:
+		TYPE_SPEED = float(cfg.get_value("gameplay", "text_speed", TYPE_SPEED))
 	_build_ui()
 	_hide_immediate()
 	_last_scene = get_tree().current_scene
@@ -200,6 +213,9 @@ func _say_line(speaker: String, text: String, color: Color, auto_advance: bool) 
 		if not SPEAKER_COLORS.has(speaker):
 			push_warning("[DialogueManager] Unknown speaker '%s' — using default color. Add to SPEAKER_COLORS." % speaker)
 
+	# force_reset() bumps _run_gen. A line that was reset must return instead of
+	# re-arming its advance wait on a hidden box (where no input can reach it).
+	var gen := _run_gen
 	is_active = true
 	if not _is_visible:
 		_show_panel()
@@ -240,6 +256,8 @@ func _say_line(speaker: String, text: String, color: Color, auto_advance: bool) 
 		await get_tree().create_timer(delay).timeout
 		if not is_inside_tree():
 			return
+	if gen != _run_gen:
+		return
 
 	_text_label.visible_characters = -1
 	_is_typing = false
@@ -263,7 +281,7 @@ func _say_line(speaker: String, text: String, color: Color, auto_advance: bool) 
 			if _skip_all_requested:
 				break
 			await get_tree().process_frame
-			if not is_inside_tree():
+			if not is_inside_tree() or gen != _run_gen:
 				return
 			elapsed += get_process_delta_time()
 			if Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("jump"):
@@ -280,7 +298,7 @@ func _say_line(speaker: String, text: String, color: Color, auto_advance: bool) 
 	_advance_requested = false
 	while not _advance_requested and not _skip_all_requested:
 		await get_tree().process_frame
-		if not is_inside_tree():
+		if not is_inside_tree() or gen != _run_gen:
 			return
 
 	if has_node("/root/SFXManager"):
@@ -379,6 +397,7 @@ func _show_choices_impl(prompt: String, choices: Array, speaker: String) -> int:
 		push_warning("[DIALOGUE] show_choices() called with empty choices")
 		return 0
 
+	var gen := _run_gen   # see _say_line
 	is_active = true
 	_awaiting_choice = true
 	_choice_result = -1
@@ -418,6 +437,8 @@ func _show_choices_impl(prompt: String, choices: Array, speaker: String) -> int:
 		await get_tree().create_timer(delay).timeout
 		if not is_inside_tree():
 			return -1
+	if gen != _run_gen:
+		return -1   # reset while the prompt typed: don't build buttons on a closed box
 	_text_label.visible_characters = -1
 	_is_typing = false
 

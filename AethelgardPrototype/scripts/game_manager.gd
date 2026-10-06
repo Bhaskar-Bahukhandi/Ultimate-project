@@ -570,6 +570,9 @@ func start_new_game_plus() -> void:
 	player_stats["gold"] = carry_gold
 	unlocked_charms = carry_charms
 	equipped_charms = carry_equipped
+	# reset_game() put the encounter rate back to 1.0; a carried Null Cloak needs it again.
+	if "null_cloak" in equipped_charms and has_node("/root/RandomEncounterSystem"):
+		RandomEncounterSystem.apply_encounter_rate_modifier(2.0)
 	arena_stats = carry_arena
 	stats = carry_stats
 	stats["death_count"] = 0  # Reset per-cycle deaths
@@ -1429,7 +1432,9 @@ func save_game(slot: int = 0) -> bool:
 		_defer_save(slot)
 		return false
 	var scene_path: String = get_tree().current_scene.scene_file_path if is_instance_valid(get_tree().current_scene) else ""
-	if scene_path in NON_RESUMABLE_SCENES:
+	# No scene (mid change_scene_to_file) is as unresumable as the list below:
+	# such a save loads into nothing, and it would replace the good one.
+	if scene_path.is_empty() or scene_path in NON_RESUMABLE_SCENES:
 		push_warning("[SAVE] Refused: cannot resume from %s" % scene_path)
 		_is_saving = false
 		return false
@@ -1565,7 +1570,7 @@ func load_game(slot: int = 0, _recovering: bool = false) -> bool:
 	data.erase("_checksum")  # Strip internal field before restoring
 	clear_transient_metas()  # Hand-offs from the session before the load don't apply
 	# Version check and migration
-	var save_version: String = data.get("version", "0.0.0")
+	var save_version: String = str(data.get("version", "0.0.0"))
 	if save_version != SAVE_VERSION:
 		if save_version in COMPATIBLE_SAVE_VERSIONS:
 			push_warning("[LOAD] Migrating save from v%s to v%s" % [save_version, SAVE_VERSION])
@@ -1583,20 +1588,20 @@ func load_game(slot: int = 0, _recovering: bool = false) -> bool:
 	glitch_meter = float(data.get("glitch_meter", 0.0))
 	corruption_level = int(data.get("corruption_level", 0))
 	perfect_delete_charges = int(data.get("perfect_delete_charges", 3))
-	perfect_delete_used = data.get("perfect_delete_used", false)
+	perfect_delete_used = _loaded_bool(data, "perfect_delete_used", false)
 	playtime_seconds = float(data.get("playtime_seconds", 0.0))
 	current_chapter = int(data.get("current_chapter", 1))
 	source_key_count = int(data.get("source_key_count", 0))
 	normalize_source_key_progression()
-	speedrun_active = data.get("speedrun_active", false)
+	speedrun_active = _loaded_bool(data, "speedrun_active", false)
 	_dda_performance_score = float(data.get("dda_performance_score", 50.0))
 	_dda_recent_deaths = float(data.get("dda_recent_deaths", 0.0))
 	_dda_recent_kills = int(data.get("dda_recent_kills", 0))
 	_dda_window_timer = 0.0
 	_admin_spawn_cooldown = 0.0
 	# Restore region/overworld data
-	current_region = data.get("current_region", "")
-	free_travel_story_scene = data.get("free_travel_story_scene", "")
+	current_region = str(data.get("current_region", ""))
+	free_travel_story_scene = str(data.get("free_travel_story_scene", ""))
 	ng_plus_cycle = int(data.get("ng_plus_cycle", 0))
 	ng_plus_available = story_flags.get("ch10_complete", false)
 	var saved_ow_pos = data.get("player_overworld_position", {})
@@ -1629,6 +1634,10 @@ func load_game(slot: int = 0, _recovering: bool = false) -> bool:
 		for charm_id in saved_equipped:
 			if charm_id is String and is_charm_unlocked(charm_id):
 				equipped_charms.append(charm_id)
+	# The encounter rate is only set by equip/unequip/rest, so without this the
+	# session before the load decided whether Null Cloak was in effect.
+	if has_node("/root/RandomEncounterSystem"):
+		RandomEncounterSystem.apply_encounter_rate_modifier(2.0 if "null_cloak" in equipped_charms else 1.0)
 	# Restore inventory with validation
 	if has_node("/root/Inventory"):
 		var saved_items = data.get("inventory_items", {})
@@ -1671,7 +1680,10 @@ func load_game(slot: int = 0, _recovering: bool = false) -> bool:
 		var saved_sq = data.get("side_quests", {})
 		if saved_sq is Dictionary and not saved_sq.is_empty():
 			SideQuestManager.load_save_data(saved_sq)
-		# Older saves without side quest data — quests stay hidden (no migration needed)
+		else:
+			# Older saves without side quest data — quests stay hidden (no migration
+			# needed), but the session before the load must not leak its quests in.
+			SideQuestManager.reset()
 	# Restore LoreJournal (discovered lore entries)
 	if has_node("/root/LoreJournal"):
 		var saved_lore = data.get("lore_journal", {})
@@ -1680,7 +1692,7 @@ func load_game(slot: int = 0, _recovering: bool = false) -> bool:
 	_apply_corruption_effects()
 	glitch_meter_changed.emit(glitch_meter)
 	corruption_level_changed.emit(corruption_level)
-	var saved_scene: String = _sanitize_free_travel_loaded_scene(data.get("current_scene", ""))
+	var saved_scene: String = _sanitize_free_travel_loaded_scene(str(data.get("current_scene", "")))
 	var state_changes_before_scene := _state_change_count
 	if saved_scene and ResourceLoader.exists(saved_scene):
 		if has_node("/root/SceneTransitions"):
@@ -1836,6 +1848,9 @@ func reset_game() -> void:
 		if Inventory.has_method("add_starting_items"):
 			Inventory.add_starting_items()
 	boss_checkpoints.clear()
+	# load_game() resets these too; a boss fight quit to the menu left them set.
+	boss_fight_active = false
+	boss_fight_hits_taken = 0
 	if has_node("/root/SideQuestManager"):
 		SideQuestManager.reset()
 	# These three kept state across a "New Game": boss mercy-HP checkpoints, the
@@ -1860,13 +1875,22 @@ func reset_game() -> void:
 # UTILITY
 # ══════════════════════════════════════════════════════════════════════════
 
-func _merge_dict(base: Dictionary, overlay: Dictionary, preserve_extra_keys: bool = false) -> Dictionary:
+## `overlay` is untyped on purpose: it comes straight from save JSON, and a
+## typed parameter would turn a malformed section into a runtime error instead
+## of falling back to the defaults below.
+func _merge_dict(base: Dictionary, overlay: Variant, preserve_extra_keys: bool = false) -> Dictionary:
 	if not overlay is Dictionary:
 		return base
 	for key in overlay:
 		if base.has(key) or preserve_extra_keys:
 			base[key] = overlay[key]
 	return base
+
+## A bool field from save data; anything that isn't a bool gives `default`
+## (assigning it to a typed bool var would be a runtime error).
+func _loaded_bool(data: Dictionary, key: String, default: bool) -> bool:
+	var value: Variant = data.get(key, default)
+	return value if value is bool else default
 
 func _calculate_save_checksum(data: Dictionary) -> int:
 	## Hash a canonical save payload so JSON parse numeric/order changes do not false-fail.
@@ -1924,6 +1948,8 @@ func _read_valid_save(path: String) -> Variant:
 
 func _save_checksum_ok(data: Dictionary) -> bool:
 	var saved_checksum = data.get("_checksum", -1)
+	if not (saved_checksum is int or saved_checksum is float):
+		return false  # Comparing a non-number with -1 below would be a runtime error
 	if saved_checksum == -1:
 		return true  # Saves from before checksums existed
 	var payload := data.duplicate(true)
@@ -2138,7 +2164,10 @@ func _save_difficulty_setting() -> void:
 func _load_difficulty_setting() -> void:
 	var config = ConfigFile.new()
 	if config.load("user://game_settings.cfg") == OK:
-		selected_difficulty = config.get_value("gameplay", "difficulty", Difficulty.NORMAL) as Difficulty
+		# Clamped: an out-of-range value would index past DIFFICULTY_NAMES/MULTS.
+		var saved_difficulty = config.get_value("gameplay", "difficulty", Difficulty.NORMAL)
+		if saved_difficulty is int and saved_difficulty >= 0 and saved_difficulty < DIFFICULTY_NAMES.size():
+			selected_difficulty = saved_difficulty as Difficulty
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -2151,6 +2180,9 @@ var _save_indicator_layer: CanvasLayer = null
 func _build_autosave_indicator() -> void:
 	_save_indicator_layer = CanvasLayer.new()
 	_save_indicator_layer.layer = 100
+	# Quick Save happens from the pause menu; a pausable fade stayed stuck on
+	# "Saving..." until the game was unpaused.
+	_save_indicator_layer.process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(_save_indicator_layer)
 	_save_indicator = Label.new()
 	_save_indicator.text = "  Saving...  "

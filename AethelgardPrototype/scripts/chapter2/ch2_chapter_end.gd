@@ -34,16 +34,18 @@ func _ready() -> void:
 
 func _build_background() -> void:
 	# Full black background
+	# set_anchors_and_offsets_preset(), not `anchors_preset =`: on a Control made
+	# in code the property is ignored (layout mode is Position), leaving size 0.
 	background = ColorRect.new()
 	background.color = Color(0.02, 0.02, 0.05)
-	background.anchors_preset = Control.PRESET_FULL_RECT
+	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(background)
 
 	# Fade rect covering screen for transitions
 	fade_rect = ColorRect.new()
 	fade_rect.color = Color.BLACK
-	fade_rect.anchors_preset = Control.PRESET_FULL_RECT
+	fade_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	fade_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	fade_rect.z_index = 50
 	add_child(fade_rect)
@@ -61,14 +63,14 @@ func _start_ending_sequence() -> void:
 		await DialogueManager.run(END_DLG, node, _on_dlg_event)
 		if not is_inside_tree(): return
 	DialogueManager.hide_dialogue()
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0, false).timeout
 	if not is_inside_tree(): return
 	await _show_chapter_end_card()
 
 func _on_dlg_event(event: String) -> void:
 	match event:
 		"seraphina_joins":
-			await get_tree().create_timer(0.4).timeout
+			await get_tree().create_timer(0.4, false).timeout
 		"sky_seam":
 			var seam := ColorRect.new()
 			seam.color = Color(0.7, 0.3, 1.0, 0.0)
@@ -79,7 +81,7 @@ func _on_dlg_event(event: String) -> void:
 			var t := create_tween()
 			t.tween_property(seam, "color:a", 0.8, 0.4)
 			t.tween_property(seam, "color:a", 0.25, 0.8)
-			await get_tree().create_timer(0.6).timeout
+			await get_tree().create_timer(0.6, false).timeout
 		_:
 			print("[CH2-ENDING] unhandled dialogue event: %s" % event)
 
@@ -89,7 +91,7 @@ func _show_chapter_end_card() -> void:
 	# Full black background for the card
 	var card_bg = ColorRect.new()
 	card_bg.color = Color.BLACK
-	card_bg.anchors_preset = Control.PRESET_FULL_RECT
+	card_bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	card_bg.z_index = 80
 	card_bg.name = "ChapterEndCard"
 	add_child(card_bg)
@@ -102,7 +104,7 @@ func _show_chapter_end_card() -> void:
 	label.text = stats_text
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.anchors_preset = Control.PRESET_FULL_RECT
+	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	label.add_theme_font_size_override("font_size", 20)
 	label.add_theme_color_override("font_color", Color(0.85, 0.9, 1.0))
 	label.z_index = 81
@@ -124,7 +126,7 @@ func _show_chapter_end_card() -> void:
 	skip_timer = false
 	var wait_elapsed: float = 0.0
 	while wait_elapsed < 12.0 and not skip_timer:
-		await get_tree().create_timer(0.1).timeout
+		await get_tree().create_timer(0.1, false).timeout
 		if not is_inside_tree(): return
 		wait_elapsed += 0.1
 
@@ -136,7 +138,7 @@ func _show_chapter_end_card() -> void:
 	await out_tween.finished
 	if not is_inside_tree(): return
 
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0, false).timeout
 	if not is_inside_tree(): return
 
 	# Auto-save the completed state before returning to menu

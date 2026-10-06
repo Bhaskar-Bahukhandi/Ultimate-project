@@ -33,7 +33,14 @@ func _ready() -> void:
 	transition_rect.size = get_viewport_rect().size
 	transition_rect.modulate.a = 0.0
 	transition_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(transition_rect)
+	# Screen space: drawn on the world canvas, the rect moved and scaled with the
+	# Camera2D, so a fade after a camera pan left part of the screen uncovered.
+	# Layer 1 keeps the old stacking: above the world, under the scene's layers.
+	var overlay_layer := CanvasLayer.new()
+	overlay_layer.name = "TransitionLayer"
+	overlay_layer.layer = 1
+	add_child(overlay_layer)
+	overlay_layer.add_child(transition_rect)
 	
 	# Ensure this is on top
 	z_index = 1000
@@ -209,7 +216,7 @@ func glitch_out(duration: float) -> void:
 	for i in range(10):
 		transition_rect.modulate.a = randf_range(0.3, 0.9)
 		transition_rect.color = Color(randf(), randf(), randf())
-		await get_tree().create_timer(duration / 10.0).timeout
+		await get_tree().create_timer(duration / 10.0, false).timeout
 		if not is_inside_tree(): return
 	
 	transition_rect.color = transition_color
@@ -220,7 +227,7 @@ func glitch_in(duration: float) -> void:
 	for i in range(10):
 		transition_rect.modulate.a = randf_range(0.3, 0.9)
 		transition_rect.color = Color(randf(), randf(), randf())
-		await get_tree().create_timer(duration / 10.0).timeout
+		await get_tree().create_timer(duration / 10.0, false).timeout
 		if not is_inside_tree(): return
 	
 	transition_rect.color = transition_color
@@ -234,7 +241,7 @@ func shatter_out(duration: float) -> void:
 	for i in range(15):
 		transition_rect.modulate.a = float(i) / 15.0
 		transition_rect.color = colors[i % colors.size()]
-		await get_tree().create_timer(step).timeout
+		await get_tree().create_timer(step, false).timeout
 		if not is_inside_tree(): return
 	transition_rect.color = transition_color
 	transition_rect.modulate.a = 1.0
@@ -245,7 +252,7 @@ func shatter_in(duration: float) -> void:
 	for i in range(15):
 		transition_rect.modulate.a = 1.0 - (float(i) / 15.0)
 		transition_rect.color = colors[i % colors.size()]
-		await get_tree().create_timer(step).timeout
+		await get_tree().create_timer(step, false).timeout
 		if not is_inside_tree(): return
 	transition_rect.color = transition_color
 	transition_rect.modulate.a = 0.0
@@ -271,7 +278,7 @@ func diamond_out(duration: float) -> void:
 		var progress = float(i + 1) / float(steps)
 		transition_rect.pivot_offset = get_viewport_rect().size * 0.5
 		transition_rect.scale = Vector2(progress, progress)
-		await get_tree().create_timer(step_time).timeout
+		await get_tree().create_timer(step_time, false).timeout
 		if not is_inside_tree(): return
 	transition_rect.scale = Vector2.ONE
 	transition_rect.modulate.a = 1.0
@@ -285,7 +292,7 @@ func diamond_in(duration: float) -> void:
 		transition_rect.modulate.a = progress
 		transition_rect.pivot_offset = get_viewport_rect().size * 0.5
 		transition_rect.scale = Vector2(progress, progress).clamp(Vector2(0.01, 0.01), Vector2.ONE)
-		await get_tree().create_timer(step_time).timeout
+		await get_tree().create_timer(step_time, false).timeout
 		if not is_inside_tree(): return
 	transition_rect.scale = Vector2.ONE
 	transition_rect.modulate.a = 0.0

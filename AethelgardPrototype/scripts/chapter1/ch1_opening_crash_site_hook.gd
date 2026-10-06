@@ -319,7 +319,8 @@ func _create_signal_fragment() -> void:
 	_signal_visual = visual
 	var marker := _add_world_label("Fused metal", SIGNAL_POS + Vector2(-28, -58), 12, Color(0.88, 1.0, 1.0))
 	marker.name = "SignalImportanceMarker"
-	_signal_prompt_label = _add_world_label(InputService.fmt("[{interact}] look"), SIGNAL_POS + Vector2(-42, 42), 11, Color(0.86, 0.95, 1.0))
+	_signal_prompt_label = _add_world_label("", SIGNAL_POS + Vector2(-42, 42), 11, Color(0.86, 0.95, 1.0))
+	InputService.bind_text(_signal_prompt_label, "[{interact}] look")  # follows keyboard/pad switches
 	_signal_prompt_label.name = "SignalInteractPrompt"
 	_signal_prompt_label.visible = false
 	_signal_success_label = _add_world_label("EAST", SIGNAL_POS + Vector2(-48, 42), 11, Color(0.62, 1.0, 0.72))
@@ -614,7 +615,7 @@ func _complete_opening_hook() -> void:
 		GameManager.change_state(GameManager.GameState.EXPLORATION)
 	_restore_global_breadcrumb()
 	_refresh_global_breadcrumb()
-	await get_tree().create_timer(0.45).timeout
+	await get_tree().create_timer(0.45, false).timeout
 	if not is_inside_tree():
 		return
 	if has_node("/root/SceneTransitions"):

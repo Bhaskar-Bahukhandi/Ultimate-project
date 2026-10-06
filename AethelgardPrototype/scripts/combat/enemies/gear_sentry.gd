@@ -91,7 +91,7 @@ func _start_fire_pattern() -> void:
 func _fire_single() -> void:
 	# Telegraph: flash red briefly
 	_telegraph_flash()
-	await get_tree().create_timer(0.4).timeout
+	await get_tree().create_timer(0.4, false).timeout
 	if not is_inside_tree() or current_state == State.DEAD:
 		return
 	_spawn_gear_projectile(direction_to_player())
@@ -100,20 +100,20 @@ func _fire_single() -> void:
 func _fire_burst() -> void:
 	_is_firing = true
 	_telegraph_flash()
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.3, false).timeout
 
 	for i in range(_max_burst):
 		if not is_inside_tree() or current_state == State.DEAD:
 			break
 		_spawn_gear_projectile(direction_to_player())
-		await get_tree().create_timer(_burst_delay).timeout
+		await get_tree().create_timer(_burst_delay, false).timeout
 
 	_is_firing = false
 
 
 func _fire_spread() -> void:
 	_telegraph_flash()
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	if not is_inside_tree() or current_state == State.DEAD:
 		return
 
@@ -183,7 +183,9 @@ func _gear_projectile_lifetime(proj: Area2D) -> void:
 	# Move projectile manually via a tween
 	if is_instance_valid(proj):
 		var end_pos = proj.global_position + vel * lifetime
-		var tw = create_tween()
+		# Owned by the projectile: a tween on the sentry died with it, leaving
+		# its gears frozen in mid-air for the rest of the scene.
+		var tw = proj.create_tween()
 		tw.tween_property(proj, "global_position", end_pos, lifetime)
 		tw.tween_callback(func():
 			if is_instance_valid(proj):

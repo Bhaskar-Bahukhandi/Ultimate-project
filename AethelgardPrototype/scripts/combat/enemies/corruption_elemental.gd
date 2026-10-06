@@ -177,7 +177,7 @@ func _start_explosion() -> void:
 	if has_node("/root/VFXLibrary"):
 		VFXLibrary.spawn_status_indicator("!! DETONATING !!", global_position + Vector2(0, -70), get_parent(), false)
 
-	await get_tree().create_timer(0.8).timeout
+	await get_tree().create_timer(0.8, false).timeout
 	if not is_inside_tree() or current_state == State.DEAD:
 		return
 

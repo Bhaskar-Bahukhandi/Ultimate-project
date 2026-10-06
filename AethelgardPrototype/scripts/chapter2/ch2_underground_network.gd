@@ -44,7 +44,7 @@ func _ready() -> void:
 	_setup_root_access()
 
 	# Entry dialogue
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	if not is_inside_tree(): return
 	await _entry_dialogue()
 
@@ -75,9 +75,9 @@ func _on_ug_event(event: String) -> void:
 		"lights_flicker", "wraith_hostile", "wraith_unstable", "wraith_split", "wraith_ends":
 			if camera and camera.has_method("shake"):
 				camera.shake(5.0, 0.3)
-			await get_tree().create_timer(0.35).timeout
+			await get_tree().create_timer(0.35, false).timeout
 		"data_vision_wraith", "kaelen_writes_name":
-			await get_tree().create_timer(0.5).timeout
+			await get_tree().create_timer(0.5, false).timeout
 		"root_edit":
 			GameManager.add_glitch_corruption(3.0)
 		"absorb_wraith":
@@ -217,7 +217,7 @@ func _on_corruption_zone_entered(body) -> void:
 		# BUG-21-15: Guard autoload call
 		if has_node("/root/VFXLibrary"):
 			VFXLibrary.spawn_status_indicator("CORRUPTION +1%", body.global_position + Vector2(0, -40), self, false)
-		await get_tree().create_timer(3.0).timeout
+		await get_tree().create_timer(3.0, false).timeout
 		if not is_inside_tree(): return
 		_corruption_cooldown = false
 
@@ -247,6 +247,9 @@ func _input(event) -> void:
 			var enemy = _root_access_panel.get_nearest_enemy(player_node.global_position)
 			if enemy:
 				_root_access_panel.open(enemy, 2.0)
+		# Unhandled, the same press reached the panel's _unhandled_input, which
+		# closed it again straight after it opened.
+		get_viewport().set_input_as_handled()
 
 func _spawn_enemy_at(enemy_type: String, pos: Vector2) -> void:
 	## Spawn a regular enemy — uses AssetManager for sprites with ColorRect fallback
@@ -316,14 +319,8 @@ func _spawn_data_wraith() -> void:
 	col.position = Vector2(0, -35)
 	boss.add_child(col)
 
-	# Health bar
-	var hp_bar = ProgressBar.new()
-	hp_bar.name = "HealthBar"
-	hp_bar.size = Vector2(60, 8)
-	hp_bar.position = Vector2(-30, -80)
-	hp_bar.value = 100
-	hp_bar.show_percentage = false
-	boss.add_child(hp_bar)
+	# No health bar here: EnemyBase builds the boss's bar (boss-styled, named,
+	# kept in sync). A second one made here sat on top of it.
 
 	boss.boss_defeated.connect(_on_data_wraith_defeated)
 	add_child(boss)
@@ -396,7 +393,7 @@ func _on_data_wraith_defeated() -> void:
 	GameManager.set_story_flag("ch2_data_wraith_defeated", true)
 	GameManager.auto_save()  # Autosave on boss defeat
 
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0, false).timeout
 	if not is_inside_tree(): return
 
 	# Boss loot: Phantom Cloak armour
@@ -412,6 +409,6 @@ func _on_data_wraith_defeated() -> void:
 	GameManager.set_story_flag("ch2_underground_complete", true)
 	DialogueManager.hide_dialogue()
 
-	await get_tree().create_timer(1.5).timeout
+	await get_tree().create_timer(1.5, false).timeout
 	if not is_inside_tree(): return
 	SceneTransitions.change_scene("res://scenes/regions/ironhold_region.tscn")

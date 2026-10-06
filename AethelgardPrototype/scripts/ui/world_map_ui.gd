@@ -266,7 +266,9 @@ func _build_map_ui() -> void:
 
 	# Controls
 	var controls = Label.new()
-	controls.text = "[←/→] Select   [F/Enter] Travel   [M/Esc] Close"
+	# The primary actions _input() reads (ui_left/right, ui_accept and
+	# ui_cancel also work but aren't bound on every device).
+	InputService.bind_text(controls, "[{move_lr}] Select   [{interact}] Travel   [{world_map}] Close")
 	controls.add_theme_font_size_override("font_size", 10)
 	controls.add_theme_color_override("font_color", Color(0.45, 0.45, 0.5))
 	controls.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

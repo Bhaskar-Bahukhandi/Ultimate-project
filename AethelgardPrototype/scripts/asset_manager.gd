@@ -925,18 +925,18 @@ func build_animated_sprite_from_sheet(texture: Texture2D, anim_defs: Dictionary,
 	## texture: The full sprite sheet
 	## anim_defs: Dictionary of { anim_name: { frames, row, speed, loop } }
 	## frame_width/height: Size of each individual frame in the sheet
-	var anim_sprite = AnimatedSprite2D.new()
-	var sprite_frames = SpriteFrames.new()
-	
-	# Remove the default animation
-	if sprite_frames.has_animation("default"):
-		sprite_frames.remove_animation("default")
-	
 	var sheet_img = texture.get_image()
 	if not sheet_img:
 		push_warning("[AssetManager] Cannot get Image from texture for sheet slicing")
 		return null
-	
+
+	var anim_sprite = AnimatedSprite2D.new()
+	var sprite_frames = SpriteFrames.new()
+
+	# Remove the default animation
+	if sprite_frames.has_animation("default"):
+		sprite_frames.remove_animation("default")
+
 	for anim_name in anim_defs:
 		var def = anim_defs[anim_name]
 		var frame_count: int = def.get("frames", 4)
@@ -1012,9 +1012,10 @@ func try_build_animated_player(context: String) -> AnimatedSprite2D:
 		frame_w = 16
 		frame_h = 24
 	
-	if not FileAccess.file_exists(sheet_path):
+	# ResourceLoader, not FileAccess: exported builds have no source .png files.
+	if not ResourceLoader.exists(sheet_path):
 		return null
-	
+
 	var tex = load(sheet_path)
 	if not tex:
 		return null
@@ -2009,36 +2010,42 @@ func play_enemy_anim(enemy_node: Node, anim_name: String) -> void:
 # VFX SPRITE SYSTEM — Real VFX using Kenney particle pack
 # =========================================================================
 
+## Sorted VFX asset keys for a category. Assets are lazy-loaded, so this reads
+## ASSET_PATHS: loaded_assets only holds textures something already requested.
+func _vfx_keys(category: String) -> Array:
+	var prefix = "vfx_" + category + "_"
+	var keys: Array = []
+	for key in ASSET_PATHS:
+		if key.begins_with(prefix) and is_asset_available(key):
+			keys.append(key)
+	keys.sort()
+	return keys
+
 ## Get a random VFX texture from a category
 func get_random_vfx(category: String) -> Texture2D:
-	var prefix = "vfx_" + category + "_"
-	var available_keys: Array = []
-	for key in loaded_assets:
-		if key.begins_with(prefix):
-			available_keys.append(key)
+	var available_keys = _vfx_keys(category)
 	if available_keys.is_empty():
 		return null
-	return loaded_assets[available_keys[randi() % available_keys.size()]]
+	return get_sprite(available_keys[randi() % available_keys.size()])
 
 ## Create a VFX sprite node (e.g., for slash, smoke, magic effects)
 func create_vfx_sprite(category: String, size: Vector2 = Vector2(64, 64), idx: int = -1) -> Sprite2D:
-	var prefix = "vfx_" + category + "_"
-	var available_keys: Array = []
-	for key in loaded_assets:
-		if key.begins_with(prefix):
-			available_keys.append(key)
-	
+	var available_keys = _vfx_keys(category)
+
 	if available_keys.is_empty():
 		return null
-	
+
 	var key: String
 	if idx >= 0 and idx < available_keys.size():
 		key = available_keys[idx]
 	else:
 		key = available_keys[randi() % available_keys.size()]
-	
+
+	var tex = get_sprite(key)
+	if not tex:
+		return null
 	var sprite = Sprite2D.new()
-	sprite.texture = loaded_assets[key]
+	sprite.texture = tex
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	sprite.name = "VFX_" + category
 	
@@ -2051,17 +2058,12 @@ func create_vfx_sprite(category: String, size: Vector2 = Vector2(64, 64), idx: i
 
 ## Create an animated VFX sequence cycling through category textures
 func create_vfx_animated(category: String, size: Vector2 = Vector2(64, 64), fps: float = 12.0, do_loop: bool = false) -> AnimatedSprite2D:
-	var prefix = "vfx_" + category + "_"
 	var textures: Array = []
-	# Sort keys to ensure frame order
-	var sorted_keys: Array = []
-	for key in loaded_assets:
-		if key.begins_with(prefix):
-			sorted_keys.append(key)
-	sorted_keys.sort()
-	
-	for key in sorted_keys:
-		textures.append(loaded_assets[key])
+	# Keys come back sorted, which keeps frame order
+	for key in _vfx_keys(category):
+		var tex = get_sprite(key)
+		if tex:
+			textures.append(tex)
 	
 	if textures.is_empty():
 		return null
@@ -2095,8 +2097,9 @@ func spawn_oneshot_vfx(parent: Node, category: String, pos: Vector2, size: Vecto
 	var vfx = create_vfx_animated(category, size, fps, false)
 	if not vfx:
 		return
-	vfx.global_position = pos
+	# Add first: global_position set outside the tree ignores the parent's transform.
 	parent.add_child(vfx)
+	vfx.global_position = pos
 	vfx.play("play")
 	vfx.animation_finished.connect(func(): vfx.queue_free())
 

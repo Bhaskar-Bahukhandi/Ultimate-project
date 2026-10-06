@@ -17,6 +17,8 @@ var _drain_tick_timer: float = 0.0
 var _dda_applied: bool = false
 var _drain_tick_interval: float = 0.5
 var _float_offset: float = 0.0
+## Contact damage after level/NG+/difficulty scaling, restored on each solidify.
+var _corporeal_contact_damage: float = 14.0
 
 
 func _ready() -> void:
@@ -35,6 +37,7 @@ func _ready() -> void:
 	if not _dda_applied and has_node("/root/GameManager"):
 		_soul_drain_damage *= GameManager.get_difficulty_multiplier()
 		_dda_applied = true
+	_corporeal_contact_damage = contact_damage
 	_enter_ethereal()
 
 
@@ -108,7 +111,8 @@ func _enter_corporeal() -> void:
 	_phase = Phase.CORPOREAL
 	_phase_timer = 0.0
 	_drain_tick_timer = 0.0
-	contact_damage = 14.0  # Restore contact damage when corporeal
+	# Restore the scaled value; a literal 14 dropped zone/NG+ scaling after the first phase.
+	contact_damage = _corporeal_contact_damage
 
 	if has_node("Sprite"):
 		var sprite = get_node("Sprite")
