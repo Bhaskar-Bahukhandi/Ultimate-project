@@ -10,14 +10,20 @@
 # project, not this one. Resolving to the script's own location first would
 # override them. So, in order:
 #   1. cwd holds project.yaml   -> cwd   (a project root)
-#   2. cwd holds .claude/       -> cwd   (a project root not yet configured)
+#   2. cwd holds .claude/settings.json or .claude/hooks/
+#                               -> cwd   (a project root not yet configured)
 #   3. CLAUDE_PROJECT_DIR       -> that  (populated in the hook environment)
 #   4. this script's location   -> <root>/.claude/hooks/../.. by construction
 # Rule 4 always works and needs no environment at all; rules 1-2 stop it from
 # overriding a caller that legitimately means somewhere else.
 #
 # NOT an upward search: that resolves a nested project to its parent's config.
-if [ -f "project.yaml" ] || [ -d ".claude" ]; then
+#
+# A bare .claude/ is NOT a root marker. On 2026-10-18 a `memory: project`
+# subagent started with cwd AethelgardPrototype/ left an empty
+# .claude/agent-memory/writer/ there 0.75 s before SubagentStart fired, rule 2
+# took it for a root, and the hooks grew AethelgardPrototype/production/.
+if [ -f "project.yaml" ] || [ -f ".claude/settings.json" ] || [ -d ".claude/hooks" ]; then
   CCGS_ROOT="$PWD"
 elif [ -n "${CLAUDE_PROJECT_DIR:-}" ] && [ -d "${CLAUDE_PROJECT_DIR}" ]; then
   CCGS_ROOT="$CLAUDE_PROJECT_DIR"
