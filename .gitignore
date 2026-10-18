@@ -27,3 +27,12 @@ AethelgardPrototype/run_artifacts/
 .mono/
 data_*/
 mono_crash.*.json
+
+# === Claude Code Game Studios (framework) ===
+.claude/settings.local.json
+CLAUDE.local.md
+project.local.yaml
+production/session-logs/
+production/session-state/
+.claude/agent-memory/
+docs/consistency-failures.md
