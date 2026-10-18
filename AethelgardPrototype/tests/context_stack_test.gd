@@ -4,6 +4,7 @@ extends SceneTree
 ## Run: tests/run_phase0_tests.ps1 -Script res://tests/context_stack_test.gd
 
 const REGION_SCENE := "res://scenes/regions/fractured_wastes_region.tscn"
+const PAUSE_WRITER := "res://scripts/core/context_stack.gd"
 
 var _passes := 0
 var _failures: Array[String] = []
@@ -26,6 +27,7 @@ func _run() -> void:
 	await _test_owner_scene_change()
 	await _test_juice_and_hitstop()
 	await _test_journal_and_shop()
+	_test_single_pause_writer()
 	print("")
 	print("CONTEXT RESULT: %d passed, %d failed" % [_passes, _failures.size()])
 	for f in _failures:
@@ -197,3 +199,30 @@ func _test_journal_and_shop() -> void:
 	_check(not shop._is_open and closed[0], "refused shop still emits shop_closed (no softlock for awaiting callers)")
 	shop.shop_closed.disconnect(on_closed)
 	cs.clear()
+
+
+## ContextStack must stay the only writer of SceneTree.paused (plan Day 0001, Block C).
+## Matches `.paused =` only: a bare `paused =` is a script's own variable
+## (e.g. CutsceneManager.paused), not the tree's.
+func _test_single_pause_writer() -> void:
+	print("[single pause writer]")
+	var re := RegEx.create_from_string("\\.paused\\s*=(?!=)")
+	var writers: Array[String] = []
+	for path in _gd_files("res://scripts"):
+		var lines := FileAccess.get_file_as_string(path).split("\n")
+		for i in lines.size():
+			if re.search(lines[i].split("#")[0]) != null:
+				writers.append("%s:%d" % [path, i + 1])
+	var others := writers.filter(func(w: String) -> bool: return not w.begins_with(PAUSE_WRITER + ":"))
+	_check(not writers.is_empty() and others.is_empty(),
+		"only ContextStack writes get_tree().paused (others: %s)" % [others])
+
+
+func _gd_files(dir: String) -> Array[String]:
+	var out: Array[String] = []
+	for f in DirAccess.get_files_at(dir):
+		if f.ends_with(".gd"):
+			out.append(dir.path_join(f))
+	for d in DirAccess.get_directories_at(dir):
+		out.append_array(_gd_files(dir.path_join(d)))
+	return out
