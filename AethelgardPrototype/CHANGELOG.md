@@ -3,6 +3,23 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-18 — Test layout (Y1-P0-T02)
+
+- **Suites moved to `tests/integration/<system>/`:** `project/load_all`, `dialogue/dialogue`,
+  `core/context_stack`, `input/input`, `story/chapter1_route` and `chapter2_route`,
+  `combat/combat_fixes`, `level/reachability`, `playthrough/phase0_blockers` (each `*_test.gd`
+  with its `.uid`). The runners, the screenshot tour and `fixtures/` stay in `tests/`.
+  - All nine are integration tests: each uses autoloads, waits on frames or reads files.
+    `tests/unit/<system>/` is for pure tests, and appears with the first one.
+  - Run any suite with `tests/run_phase0_tests.ps1 -Script res://tests/integration/<system>/<name>_test.gd`.
+    `run_tests.sh` with no argument still runs the Phase 0 suite.
+- **New `tests/integration/meta/test_layout_test.gd`** (in CI): fails if a suite sits directly
+  under `tests/`, a folder name has capitals, a suite has no `.uid`, or a suite is missing from
+  `run_all_tests.ps1` or `ci.yml`. Checked to fail on probe files.
+- `tests/run_all_tests.ps1` (the local all-suites runner) is now in git.
+- Check counts are unchanged by the move (full run: layout 6, load_all 206, dialogue 47,
+  context 33, input 52, chapter 1 46, chapter 2 49, combat 10, reach 21, phase0 81).
+
 ## 2026-10-06 — Combat feel and world collision (user decisions 1 and 2)
 
 **Combat feel** (player_combat.gd, combat_effects.gd):

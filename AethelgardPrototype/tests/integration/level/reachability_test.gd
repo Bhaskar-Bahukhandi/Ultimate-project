@@ -6,7 +6,7 @@ extends SceneTree
 ## touched from a reachable spot. Written before building/prop collision was
 ## added, so that collision can't silently wall off a door or an NPC.
 ## Maps with randomly placed props are loaded several times.
-## Run: tests/run_phase0_tests.ps1 -Script res://tests/reachability_test.gd
+## Run: tests/run_phase0_tests.ps1 -Script res://tests/integration/level/reachability_test.gd
 
 const MAPS := [
 	{"path": "res://scenes/chapter1/oakhaven_village.tscn", "size": Vector2(2500, 2000), "loads": 1},

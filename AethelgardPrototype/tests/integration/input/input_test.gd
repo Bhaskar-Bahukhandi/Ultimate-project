@@ -1,7 +1,7 @@
 extends SceneTree
 ## Tests for InputService (bindings, rebinding, persistence, prompts, device
 ## switching), the Controls screen, and a guard against new hardcoded keys.
-## Run: tests/run_phase0_tests.ps1 -Script res://tests/input_test.gd
+## Run: tests/run_phase0_tests.ps1 -Script res://tests/integration/input/input_test.gd
 
 const REGION_SCENE := "res://scenes/regions/fractured_wastes_region.tscn"
 

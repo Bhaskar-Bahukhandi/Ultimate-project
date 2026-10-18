@@ -10,7 +10,7 @@ extends SceneTree
 ##     touches the enemy's body, recovery cancels into a jump, an attack pressed
 ##     mid-dash is remembered, and hit-pause takes the longest request instead
 ##     of adding them up.
-## Run: tests/run_phase0_tests.ps1 -Script res://tests/combat_fixes_test.gd
+## Run: tests/run_phase0_tests.ps1 -Script res://tests/integration/combat/combat_fixes_test.gd
 
 const TOWER := "res://scenes/chapter2/clock_tower.tscn"
 const VILLAGE := "res://scenes/chapter1/oakhaven_village.tscn"

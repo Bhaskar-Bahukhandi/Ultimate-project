@@ -4,7 +4,7 @@
 #   powershell -File tests/run_phase0_tests.ps1
 #   powershell -File tests/run_phase0_tests.ps1 -Script res://docs/visual_review/phase10mm/phase10mm_validation.gd
 param(
-    [string]$Script = "res://tests/phase0_blockers_test.gd"
+    [string]$Script = "res://tests/integration/playthrough/phase0_blockers_test.gd"
 )
 $ErrorActionPreference = "Stop"
 $project = Split-Path -Parent $PSScriptRoot

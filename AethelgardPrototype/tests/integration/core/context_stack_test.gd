@@ -1,7 +1,7 @@
 extends SceneTree
 ## Tests for ContextStack — the single owner of pause, open menus and
 ## Engine.time_scale — and for the bugs it replaces (review R1).
-## Run: tests/run_phase0_tests.ps1 -Script res://tests/context_stack_test.gd
+## Run: tests/run_phase0_tests.ps1 -Script res://tests/integration/core/context_stack_test.gd
 
 const REGION_SCENE := "res://scenes/regions/fractured_wastes_region.tscn"
 const PAUSE_WRITER := "res://scripts/core/context_stack.gd"

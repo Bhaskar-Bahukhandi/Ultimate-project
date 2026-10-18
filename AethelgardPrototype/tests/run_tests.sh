@@ -3,9 +3,9 @@
 # counterpart of run_phase0_tests.ps1), so real save files are never touched.
 # Usage (from AethelgardPrototype/):
 #   GODOT=/path/to/godot tests/run_tests.sh                       # Phase 0 suite
-#   GODOT=/path/to/godot tests/run_tests.sh res://tests/load_all_test.gd
+#   GODOT=/path/to/godot tests/run_tests.sh res://tests/integration/project/load_all_test.gd
 set -euo pipefail
-script="${1:-res://tests/phase0_blockers_test.gd}"
+script="${1:-res://tests/integration/playthrough/phase0_blockers_test.gd}"
 godot="${GODOT:-godot}"
 project="$(cd "$(dirname "$0")/.." && pwd)"
 

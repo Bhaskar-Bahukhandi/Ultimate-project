@@ -21,6 +21,7 @@ AethelgardPrototype/run_artifacts/
 
 # Logs from local tool / Godot runs (CI keeps its own).
 *.log
+!production/qa/evidence/**/*.log
 
 # Mono/.NET generated files for Godot C# projects.
 .mono/

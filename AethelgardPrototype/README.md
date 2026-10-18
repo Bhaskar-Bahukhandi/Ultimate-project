@@ -60,11 +60,11 @@ your real saves are never touched.
 ```bash
 # Windows (from AethelgardPrototype/)
 powershell -File tests/run_phase0_tests.ps1                                    # Phase 0 suite (~10 min)
-powershell -File tests/run_phase0_tests.ps1 -Script res://tests/load_all_test.gd
+powershell -File tests/run_phase0_tests.ps1 -Script res://tests/integration/project/load_all_test.gd
 
 # Linux / macOS
 GODOT=/path/to/godot tests/run_tests.sh
-GODOT=/path/to/godot tests/run_tests.sh res://tests/load_all_test.gd
+GODOT=/path/to/godot tests/run_tests.sh res://tests/integration/project/load_all_test.gd
 ```
 
 CI (`.github/workflows/ci.yml`, at the repository root) runs the same checks on every push and
@@ -81,7 +81,7 @@ ContextStack, input and Chapter 1–2 route tests, the Phase 0 suite, and `git d
 | `shaders/` | Glitch, CRT and other screen effects. |
 | `dialogue/` | All dialogue as `.dlg` text files (format: `story/DIALOGUE_FORMAT.md`). `dialogue/_extracted/` is the old in-code dialogue, kept as rewrite material. |
 | `story/` | Story bible, voice guide, act outlines, dialogue format. `story/source/` holds the full story master (source material; the bible says what's adopted). |
-| `tests/` | Headless tests and runners (`chapter1_route_test.gd`, `chapter2_route_test.gd`, `input_test.gd`, `context_stack_test.gd`, `dialogue_test.gd`, `phase0_blockers_test.gd`, `load_all_test.gd`). |
+| `tests/` | Runners (`run_all_tests.ps1`, `run_phase0_tests.ps1`, `run_tests.sh`, `run_screenshots.ps1`), the screenshot tour and `fixtures/`. Suites live in `tests/integration/<system>/` (`project/load_all_test.gd`, `dialogue/`, `core/context_stack_test.gd`, `input/`, `story/chapter1_route_test.gd` and `chapter2_route_test.gd`, `combat/`, `level/reachability_test.gd`, `playthrough/phase0_blockers_test.gd`); `tests/unit/<system>/` holds pure unit tests once they exist. |
 | `tools/` | Dev tools, e.g. `extract_dialogue.gd`. Not exported. |
 | `docs/` | Art-pipeline and gameplay-audit history (not exported). |
 

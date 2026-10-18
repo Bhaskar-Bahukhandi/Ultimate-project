@@ -1,7 +1,7 @@
 extends SceneTree
 ## Tests for the .dlg dialogue format: parser, validator, DialogueManager.run(),
 ## and that every .dlg file in res://dialogue parses cleanly.
-## Run: tests/run_phase0_tests.ps1 -Script res://tests/dialogue_test.gd
+## Run: tests/run_phase0_tests.ps1 -Script res://tests/integration/dialogue/dialogue_test.gd
 
 const FIXTURE := "res://tests/fixtures/sample.dlg"
 

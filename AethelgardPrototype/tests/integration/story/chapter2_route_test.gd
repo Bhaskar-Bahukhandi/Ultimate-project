@@ -5,7 +5,7 @@ extends SceneTree
 ## Combat itself is skipped (the arena bracket and boss deaths are called
 ## directly); everything around it is real. A fake player answers choices
 ## from a pick list (default: first option).
-## Run: tests/run_phase0_tests.ps1 -Script res://tests/chapter2_route_test.gd
+## Run: tests/run_phase0_tests.ps1 -Script res://tests/integration/story/chapter2_route_test.gd
 
 const GATE := "res://scenes/chapter2/ironhold_gate.tscn"
 const REGION := "res://scenes/regions/ironhold_region.tscn"

@@ -3,7 +3,7 @@ extends SceneTree
 ## dialogue/ch1): crash site → Elara → Broken Mile → Oakhaven → Aldric →
 ## Fragment One → village meeting → Elara joins → the Chapter 1 ending.
 ## A fake player answers every choice from a pick list (default: first option).
-## Run: tests/run_phase0_tests.ps1 -Script res://tests/chapter1_route_test.gd
+## Run: tests/run_phase0_tests.ps1 -Script res://tests/integration/story/chapter1_route_test.gd
 
 const HOOK := "res://scenes/chapter1/opening_crash_site_hook.tscn"
 const ELARA := "res://scenes/chapter1/elara_meeting.tscn"
