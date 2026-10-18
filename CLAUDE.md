@@ -58,6 +58,14 @@ after it runs `project.yaml` holds the real values.
 
 ## Coordination Rules
 
+- **Spawn `memory: project` agents from the repo root.** Claude Code creates
+  `.claude/agent-memory/<agent>/` under the session's current working directory
+  at spawn (observed 2026-10-18; the docs are silent on the base). A Bash `cd`
+  left in effect, such as into `AethelgardPrototype/`, strands the agent's memory
+  in a stray `.claude/` there. `settings.json` sets
+  `CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR=1` so the shell returns to the root
+  after each command; still never leave a `cd` in effect before spawning.
+
 @.claude/docs/coordination-rules.md
 
 ## Collaboration Protocol
