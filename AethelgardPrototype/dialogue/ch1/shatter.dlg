@@ -1,14 +1,24 @@
 # C1 end: the Shatter. The last scene of Chapter 1.
 # Kaelen and Elara come through onto the Ironhold side, see the city, look back
 # at Oakhaven (Aldric first, then the village meeting), and turn toward Ironhold.
-# Replaces play_post_shatter_dialogue() in scripts/chapter1/ch1_shatter_transition.gd.
-# Entry node: start.
+# Replaces the inline lines of play_bridge_approach(), play_environmental_shift(),
+# play_the_shatter() and play_post_shatter_dialogue() in
+# scripts/chapter1/ch1_shatter_transition.gd.
 # Elara is always with Kaelen here (elara_meeting.dlg keeps her in every branch),
 # so there is no solo branch. She uses his name.
 # It's night: Tobb is asleep (fragment_one.dlg) and after_kill says "It's not morning".
 #
+# Nodes the scene runs one at a time, between its own effects, in this order:
+#   bridge       Kaelen and Elara walk onto the bridge (after they enter, before mid-bridge).
+#   shift        the colour drains and the boundary starts to go.
+#   reconstruct  one System line while the screen is black, after the break.
+#   start        post-shatter entry (everything from here on runs as one dialogue).
+# Nothing before the break mentions weight; "start" opens on it.
+#
 # Scene events (the scene implements these):
-#   do pan_ironhold   camera pans over the city; hide the dialogue box. NEW.
+#   do desaturate     start the colour drain. NEW. Must land before Kaelen's grey-lamps line.
+#   do shake          short camera shake. NEW. Must land before "The bridge is still here."
+#   do pan_ironhold   camera pans over the city; hide the dialogue box.
 #   do look_back      Kaelen turns toward Oakhaven. Once per path, in the Aldric node.
 #   do pause 2.0      built in.
 #
@@ -22,6 +32,34 @@
 #      ch1_oakhaven_warned_leaders, then ch1_oakhaven_left_quietly, else
 #      village_none. fragment_one.dlg sets exactly one, so the order only matters
 #      for old or broken saves.
+
+# ── Before the break ──────────────────────────────────────────────────────
+
+~ bridge
+Kaelen: Halfway across, the oak just stops. It's steel from there on, riveted to the planks like somebody ran out of trees.
+Elara: Oakhaven ends where the oak does. Don't ask me who decided that.
+Kaelen (Internal): Someone did decide it. Nothing that grows or rusts ends in a line this straight.
+Elara: Stay close when we cross. If I tell you to keep walking, keep walking.
+Kaelen: Okay. It's a bridge. People cross bridges all the time, and almost none of them fall off.
+=> END
+
+~ shift
+do desaturate
+Kaelen: The lamps back in Oakhaven were yellow a second ago. Now they're grey. Everything's going grey.
+System: SYSTEM TRACE: REGION BOUNDARY — OAKHAVEN REACH / IRONHOLD CROWN.
+Elara: Here it comes. Feel how warm it's getting? That's the other side breathing on us.
+Kaelen: It's not just warm. There's a hum under everything, like a wire that's about to go.
+do shake
+Kaelen: The bridge is still here. You're still here. I'd really like both of those to stay true.
+Elara: Then stop talking and walk. Eyes on my back, not over the side.
+=> END
+
+# The screen is black. The world speaking, not a greeting.
+~ reconstruct
+System: SYSTEM TRACE: RECONSTRUCTION COMPLETE. REGION: IRONHOLD CROWN.
+=> END
+
+# ── After the break ───────────────────────────────────────────────────────
 
 ~ start
 Kaelen (Internal): Everything's heavier. My boots, my arms, the sword. Like the ground just remembered I'm standing on it.
