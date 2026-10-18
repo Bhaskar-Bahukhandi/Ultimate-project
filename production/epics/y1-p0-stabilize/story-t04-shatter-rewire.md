@@ -2,12 +2,12 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-T04 (`production/plan/_source/Y1-P0.json#Y1-P0-T04`)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Feature
 > **Type**: Integration
 > **Estimate**: 2 days
 > **Manifest Version**: N/A — `docs/architecture/control-manifest.md` does not exist
-> **Last Updated**: 2026-10-18
+> **Last Updated**: 2026-10-19
 
 ## Context
 
@@ -134,7 +134,7 @@ The existing writes in `ch1_shatter_transition.gd` (`ch1_shatter_witnessed`, `ch
 **Required evidence**: `tests/integration/story/chapter1_route_test.gd` (extended) passing, with a log
 in `production/qa/evidence/2026-10-shatter/`; the three PNGs in AC-11.
 
-**Status**: [ ] Not yet created
+**Status**: [x] Created — chapter1_route_test.gd (154/0), production/qa/evidence/2026-10-shatter/
 
 ---
 
@@ -143,3 +143,16 @@ in `production/qa/evidence/2026-10-shatter/`; the three PNGs in AC-11.
 - Depends on: Y1-P0-T02 (done), Y1-P0-T03 (done), Y1-P0-S02 shatter text (approved and lint-green
   2026-10-18, `45e90d0` + `efe1861`). There are no story files for these; their status is in `production/sprint-status.yaml`.
 - Unlocks: Y1-P0-S08, Y1-P0-T13a
+
+---
+
+## Completion Notes
+**Completed**: 2026-10-19
+**Criteria**: 12/12 passing. DEFERRED: the *feel* of `look_back`, shake and pan timing (AC-2) needs a human playtest (S07 / T15).
+**Deviations**:
+- NOT ASSESSED: GDD / ADR / TR-registry traceability (none exist for this story); judged against decision 3B and the ACs, no deviation found.
+- ADVISORY: AC-11 evidence files are named `ch1_shatter_{kill,spare,purge}.png` (tour stop ids), not `{kill,spare,purge}.png`.
+- Pre-existing, sent to S05 (user, 2026-10-18): `play_chapter_end_card` awaits check only `is_inside_tree()` (late skip can leave a stray "Press jump" box over ironhold_gate); end card prints "SOLO PATH" when no Elara flag is set.
+**Test Evidence**: Integration — `AethelgardPrototype/tests/integration/story/chapter1_route_test.gd` (run green 154/0 on 2026-10-18); full suite 10/10, 979 s (`production/qa/evidence/2026-10-shatter/run_all.log`); live-renderer shots `production/qa/evidence/2026-10-shatter/ch1_shatter_{kill,spare,purge}.png`. Watched fail: cancelled purge, skip (20 checks), source scan (on a copy), shake, ok=false.
+**Code Review**: Complete — /code-review APPROVED WITH SUGGESTIONS after one fix round; LP-CODE-REVIEW APPROVE; QL-TEST-COVERAGE GAPS (advisory).
+**Follow-up (untested or weakly tested, recommend a follow-up story)**: G1 node order; G2 black screen during `reconstruct`; G3 "each effect exists once" (true in code today, :195/:198/:203/:208); G4 skip during non-dialogue effects; G5 effect checks on spare/purge; G6 reward-once for spare/purge/none; G7 pan box check passes via 0.9 s auto-hide; G8 drain-await-before-return not isolated; G9 unknown-event warning not asserted; G11 no negative assertions in the routing matrix; G12 single-run reliability. LP warnings: `run()` results discarded (add a `_run_node()` helper that push_errors on ok=false); tour/tests use DialogueManager private fields (add a public test seam); inline effect numbers; `SHATTER_DLG` defined twice. Side finding (unverified): suite time_scale drops 4.0 → 1.0 after the first scene change.
