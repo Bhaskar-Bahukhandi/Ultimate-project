@@ -1,0 +1,2836 @@
+{
+ "phase_id": "Y1-P4",
+ "phase_title": "Open-world tech + tools",
+ "goal": "Oakhaven and Ironhold form one seamlessly streamed world with simulation LOD, authored content flows through six editor tools, cinematics run on skippable timelines with a defined camera language, and telemetry, crash reporting, localization and an accessibility baseline are in place for the public demo year.",
+ "exit_criteria": [
+  "Walking R1 -> seam -> R2 at sprint never exceeds 2 ms of streaming cost per frame (CI traversal bot + manual real-renderer check)",
+  "Ironhold runs as RegionBase chunks; Act 1 bot completes in the streamed world; no ColorRect world geometry in R1/R2 (lint)",
+  "Sim LOD: active-vs-distant determinism test and the 7-day two-region run pass in CI",
+  "Quest editor (with timing fields), schedule editor, item/recipe editor, economy dashboard, storyline coverage viewer and difficulty panel each have a doc and a tool test",
+  "Telemetry and crash reporting are opt-in, write nothing without consent (test), and the endpoint decision is an ADR",
+  "All Act 1 .dlg lines have IDs; pseudo-loc screenshots clean; zh-CN sample renders with no missing glyphs",
+  "Accessibility baseline options implemented and reviewed with screenshots",
+  "Chapter 1-2 key cinematics run on timelines with skip tests; cutscene_director/cinematic_camera no longer used by Chapters 1-2"
+ ],
+ "tasks": [
+  {
+   "id": "Y1-P4-T01",
+   "stream": "primary",
+   "title": "Write the world streaming ADR",
+   "why": "§12.5 one continuous streamed world; budgets: streaming hitches < 2 ms",
+   "tags": [
+    "architecture",
+    "openworld",
+    "performance",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Streaming and simulation-LOD decisions",
+     "steps": [
+      "/architecture-decision 'World streaming': world grid of 32x32-tile chunks across regions, global chunk coordinates, region = a named rectangle of chunks",
+      "Decide load radius (proposal 1 ring visible + 1 ring preload), unload hysteresis, threaded loading via ResourceLoader.load_threaded_request, max 1 chunk instantiation per frame",
+      "Decide simulation LOD tiers: active (on-screen), near (loaded, off-screen), far (unloaded, schedule-only), distant town (coarse tick every in-game hour)",
+      "Budgets: hitch < 2 ms per frame from streaming, N simulated NPCs per chunk (proposal 8), memory ceiling per loaded ring"
+     ],
+     "done": "docs/architecture/adr-world-streaming.md accepted by the user"
+    }
+   ],
+   "edge_cases": [
+    "Teleport (fast travel) to a far chunk: synchronous load behind a fade is allowed, documented"
+   ],
+   "evidence": "docs/architecture/adr-world-streaming.md"
+  },
+  {
+   "id": "Y1-P4-T02",
+   "stream": "primary",
+   "title": "Build the production chunk streamer",
+   "why": "§5 Months 10-12 world streaming; promotes the Y1-P3 loader v0",
+   "tags": [
+    "code",
+    "openworld",
+    "performance",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "WorldGrid and global coordinates",
+     "steps": [
+      "scripts/world/world_grid.gd: maps global chunk coords -> chunk scene path via data/world/world_manifest.tres (regions R1, R2 registered)",
+      "Convert Oakhaven's r1_c<x>_<y> chunks to global coords; keep a region lookup",
+      "Floating origin not needed at this size: confirm max coordinates stay well inside float precision and record it",
+      "Unit tests: coord <-> path, region lookup at borders"
+     ],
+     "done": "WorldGrid tests green"
+    },
+    {
+     "focus": "Threaded load queue with a per-frame budget",
+     "steps": [
+      "scripts/world/chunk_streamer.gd replaces chunk_loader.gd: priority queue by distance and movement direction",
+      "load_threaded_request + poll; instantiate at most 1 chunk per frame; add_child spread over frames if a chunk has > 200 nodes",
+      "Instrument: time spent in streamer per frame into a ring buffer for the perf overlay",
+      "Test: walking at sprint speed never reaches an unloaded chunk edge"
+     ],
+     "done": "Sprint-walk test green"
+    },
+    {
+     "focus": "Unload, pooling and entity hand-off",
+     "steps": [
+      "Unload with hysteresis (2 chunks beyond radius for 3 s); chunk-local entities serialize their state before free",
+      "Entities crossing chunk borders reparent to the new chunk's entity container",
+      "LRU cache of 4 packed scenes to avoid reloading on back-and-forth",
+      "Test: walk a square loop 20 times, node count returns to baseline (no leaks)"
+     ],
+     "done": "Leak test green"
+    },
+    {
+     "focus": "Perf overlay and the streaming budget check",
+     "steps": [
+      "Debug overlay (DebugTestMode): loaded chunks, queue length, ms per frame in streamer, sim NPC count",
+      "/perf-profile walking Oakhaven end to end at sprint; record max streaming cost",
+      "Fix anything over 2 ms",
+      "Screenshot of the overlay at a region border"
+     ],
+     "done": "Max streaming cost < 2 ms recorded; production/qa/evidence/y1p4/streaming_overlay.png"
+    }
+   ],
+   "edge_cases": [
+    "Player spawned by load-game into a chunk that is not loaded yet",
+    "Direction reversal at full sprint",
+    "Chunk scene missing from the manifest (log, solid fallback wall, no fall-through)"
+   ],
+   "evidence": "tests/integration/world/test_streaming.gd; production/qa/evidence/y1p4/streaming_overlay.png; production/qa/perf/y1p4_streaming.md"
+  },
+  {
+   "id": "Y1-P4-T03",
+   "stream": "primary",
+   "title": "Persist chunk-local state across streaming and saves",
+   "why": "R4 SaveService; a streamed world must remember opened chests and moved props",
+   "tags": [
+    "code",
+    "save",
+    "openworld",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "ChunkState store",
+     "steps": [
+      "scripts/world/chunk_state_store.gd: per-chunk dictionary of entity id -> state (opened, collected, position) written on unload and read on load",
+      "Persistent entity ids stamped by an editor tool (stable across edits)",
+      "SaveService block 'world_chunks' with versioning; migration from the Y1-P3 schema",
+      "Test: open a chest, walk away until unloaded, return: still open"
+     ],
+     "done": "Chest persistence test green"
+    },
+    {
+     "focus": "Save/load at chunk borders",
+     "steps": [
+      "Save on a chunk border and load: player and nearby entities restored once",
+      "Corrupt world_chunks block falls back to defaults with a warning",
+      "Test with the NPC memory and market blocks together",
+      "Update the save schema doc"
+     ],
+     "done": "Border save test green"
+    }
+   ],
+   "edge_cases": [
+    "Duplicate entity id after copy-pasting a chunk in the editor (tool must detect)",
+    "Entity moved into a chunk that is then deleted from the manifest"
+   ],
+   "evidence": "tests/integration/save/test_chunk_state.gd"
+  },
+  {
+   "id": "Y1-P4-T04",
+   "stream": "primary",
+   "title": "Make a seamless boundary between Oakhaven and Ironhold",
+   "why": "§5 'a seamless boundary between 2 regions'; P1/P7a no loading screens",
+   "tags": [
+    "code",
+    "openworld",
+    "audio",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Region hand-off",
+     "steps": [
+      "RegionBase enter/exit fired by chunk region lookup, not by trigger areas",
+      "Seam chunks from the secondary stream registered in the world manifest between R1 and R2",
+      "Region-specific systems (music set, ambience, NPC tier tables, market id) switch on hand-off",
+      "Test: walking across the seam fires exit(R1) then enter(R2) once"
+     ],
+     "done": "Hand-off test green"
+    },
+    {
+     "focus": "Audio and lighting crossfade across the seam",
+     "steps": [
+      "MusicService crossfades over the seam distance instead of on a single tick",
+      "Ambience crossfade and daylight curve per region",
+      "No hitch: perf capture while crossing",
+      "Screenshot at the seam midpoint"
+     ],
+     "done": "production/qa/evidence/y1p4/seam_midpoint.png"
+    },
+    {
+     "focus": "Seam edge cases and bot traversal",
+     "steps": [
+      "Bot walks back and forth over the seam 50 times: no duplicate enter events, no music stutter",
+      "Combat started on the seam picks the terrain context of the start tile",
+      "Save on the seam and load",
+      "Quest timing continues across regions"
+     ],
+     "done": "Seam bot test green"
+    }
+   ],
+   "edge_cases": [
+    "Rapid oscillation across the seam line",
+    "Fast travel arrives exactly on the seam"
+   ],
+   "evidence": "tests/integration/world/test_region_seam.gd"
+  },
+  {
+   "id": "Y1-P4-T05",
+   "stream": "primary",
+   "title": "Implement simulation LOD for NPCs and the market",
+   "why": "§12.3 'off-screen NPCs only advance their schedule; distant towns update at a coarse tick'",
+   "tags": [
+    "code",
+    "npc",
+    "economy",
+    "performance",
+    "time"
+   ],
+   "days": [
+    {
+     "focus": "LOD tiers for NPCs",
+     "steps": [
+      "scripts/npc/sim_lod.gd assigns active/near/far per NPC from chunk distance",
+      "Active: full actor; near: schedule + simple straight-line moves, no animation; far: schedule state only, no node",
+      "Promotion from far to active places the NPC where its schedule says at that time",
+      "Test: an NPC promoted at 14:00 stands at its 14:00 location"
+     ],
+     "done": "Promotion test green"
+    },
+    {
+     "focus": "Coarse tick for distant towns and the market",
+     "steps": [
+      "Distant region NPCs and market agents update once per in-game hour",
+      "Market price updates for the inactive region batch-processed on its coarse tick",
+      "Determinism: same save + same clock gives the same state whether the region was active or distant",
+      "Test: run R2 distant for 3 in-game days vs active for 3 days; compare state hashes"
+     ],
+     "done": "Active-vs-distant determinism test green"
+    },
+    {
+     "focus": "Budgets and caps",
+     "steps": [
+      "Cap simulated NPCs per chunk (ADR value); overflow NPCs queue",
+      "Measure sim cost with 30 NPCs across two regions",
+      "Debug overlay counts per tier",
+      "Fix anything over budget"
+     ],
+     "done": "Perf numbers recorded"
+    },
+    {
+     "focus": "LOD integration tests",
+     "steps": [
+      "Headless 7-day run with both regions: every NPC hits every schedule location (active or not)",
+      "NPC memory facts written while far are visible when met",
+      "Auction lots in R1 resolve while the player is in R2",
+      "Add the run to CI"
+     ],
+     "done": "7-day LOD run in CI"
+    }
+   ],
+   "edge_cases": [
+    "Clock jump of 24 h while an NPC is mid-promotion",
+    "Player follows an NPC across the seam"
+   ],
+   "evidence": "tests/integration/npc/test_sim_lod.gd; production/qa/perf/y1p4_sim_lod.md"
+  },
+  {
+   "id": "Y1-P4-T06",
+   "stream": "primary",
+   "title": "Add streaming performance tests to CI",
+   "why": "§13 risk 'open-world streaming performance'; performance tests in CI",
+   "tags": [
+    "tests",
+    "performance",
+    "openworld"
+   ],
+   "days": [
+    {
+     "focus": "Traversal bot and frame-time capture",
+     "steps": [
+      "tests/perf/traversal_bot.gd walks a fixed path across 20+ chunks including the seam at sprint speed",
+      "Captures per-frame time, streamer ms, sim ms into CSV",
+      "Runs headless with a dummy renderer for logic timing (note: not a visual perf proxy)",
+      "Baseline values stored in tests/perf/baselines.json"
+     ],
+     "done": "Bot produces CSV"
+    },
+    {
+     "focus": "Regression thresholds",
+     "steps": [
+      "CI fails if streamer p99 > 2 ms or sim p99 above baseline +25%",
+      "Document how to update baselines deliberately",
+      "Separate real-renderer perf check documented as a manual step before each gate",
+      "First CI run green"
+     ],
+     "done": "Perf job green in CI"
+    }
+   ],
+   "edge_cases": [
+    "CI machine slower than dev machine: thresholds relative to a calibration loop"
+   ],
+   "evidence": "tests/perf/traversal_bot.gd; CI log"
+  },
+  {
+   "id": "Y1-P4-T07",
+   "stream": "primary",
+   "title": "Migrate Ironhold as the second region",
+   "why": "§5 'Migrate Ironhold as the second region (proves the pipeline repeats)'",
+   "tags": [
+    "code",
+    "openworld",
+    "level",
+    "npc"
+   ],
+   "days": [
+    {
+     "focus": "Ironhold chunk scenes from the secondary-stream layout",
+     "steps": [
+      "Instance authored r2 chunks into the world manifest; RegionBase for R2",
+      "Interactables for every NPC, shop, lore point, gate and exit that scripts/regions/ironhold_region.gd builds today (38 ColorRect uses)",
+      "TileSet collision replaces code-built footprints and rusted machinery blockers",
+      "reachability_test on R2"
+     ],
+     "done": "Every former R2 interaction point reachable"
+    },
+    {
+     "focus": "Ironhold story hooks",
+     "steps": [
+      "Move Chapter 2 entry points (ch2_ironhold_gate.gd, ch2_ironhold_city.gd, ch2_arena_district.gd) onto R2 Interactables",
+      "Fix §4.6: admin gate requires its prerequisites and is not replayable on free-travel revisits (no 1200 XP re-grant, no chapter rollback)",
+      "Medicine convoy timing on the WorldClock (ch2_medicine_early/_on_time/_late) via QuestDef",
+      "chapter2_route_test re-run"
+     ],
+     "done": "chapter2_route passes on R2; gate replay regression test added"
+    },
+    {
+     "focus": "Ironhold NPCs on the sim",
+     "steps": [
+      "Seraphina, Brask, Rem and the R2 merchant get schedules/memory/barks from the secondary stream",
+      "Ironhold market instance (separate prices and seasonality)",
+      "Sim LOD tiers apply",
+      "Debug overlay check"
+     ],
+     "done": "R2 NPCs live on schedules"
+    },
+    {
+     "focus": "Ironhold enemies on EnemyDef",
+     "steps": [
+      "Port clockwork_soldier.gd and gear_sentry.gd to EnemyDef + EnemyController with capabilities from root-access.md",
+      "Arena chunk set for an industrial biome (secondary-stream chunks) added to the ArenaBuilder",
+      "Replays for one fight each",
+      "Update docs/architecture/enemy-migration-list.md"
+     ],
+     "done": "Two R2 enemy types on the new stack"
+    },
+    {
+     "focus": "Feature flag, comparison and rollback",
+     "steps": [
+      "Flag world.ironhold_v2 with the old region scene as rollback for one phase",
+      "Old-vs-new screenshots in the same spots; live viewport, not headless",
+      "Screenshot tour on both",
+      "Write docs/art_pipeline/import_report_ironhold.md (ComfyUI used: No for PAE assets; accepted baseline status)"
+     ],
+     "done": "production/qa/evidence/y1p4/ironhold_old_vs_new_*.png"
+    }
+   ],
+   "edge_cases": [
+    "Accepted Ironhold baseline must stay as fallback until the user accepts the PAE version",
+    "Ch2 scene that expects the old node paths"
+   ],
+   "evidence": "tests/chapter2_route_test.gd; tests/reachability_test.gd; production/qa/evidence/y1p4/ironhold_old_vs_new_*.png"
+  },
+  {
+   "id": "Y1-P4-T08",
+   "stream": "primary",
+   "title": "Retire the old Ironhold builder",
+   "why": "R6/R7: one owner per concern; delete what is superseded",
+   "tags": [
+    "cleanup",
+    "code",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Route regression on the new region",
+     "steps": [
+      "Run chapter2_route_test with fast/slow/out-of-order timing profiles on R2",
+      "Seraphina choice and Proxy flag regressions (2026-10-06 lost-flag fix) still pass",
+      "Free-travel revisit test: no rewards re-granted",
+      "Bot New Game -> end of Act 1 across the seam"
+     ],
+     "done": "Act 1 bot completes in the streamed world"
+    },
+    {
+     "focus": "Delete code-built Ironhold",
+     "steps": [
+      "After user approval, delete the world-building code in scripts/regions/ironhold_region.gd and its ColorRect builders",
+      "no-code-geometry lint extended to R2",
+      "Remove the world.ironhold_v2 flag",
+      "CHANGELOG draft"
+     ],
+     "done": "Lint green for R1 and R2"
+    }
+   ],
+   "edge_cases": [
+    "Late-game revisit hubs (late_revisit_hub.gd) that reference Ironhold node names"
+   ],
+   "evidence": "CI log; lint output"
+  },
+  {
+   "id": "Y1-P4-T09",
+   "stream": "primary",
+   "title": "Connect world enemies to generated arenas",
+   "why": "§12.5 combat transition: visible enemies, shatter transition, arena from terrain, return to the same position",
+   "tags": [
+    "code",
+    "combat",
+    "openworld",
+    "cinematics"
+   ],
+   "days": [
+    {
+     "focus": "Visible world enemies and the shatter transition",
+     "steps": [
+      "World enemy actors (top-down) carry an EnemyDef group id; contact starts CombatEncounter with TerrainContext from the contact tile",
+      "Shatter transition (existing ch1_shatter_transition.gd look) under 1 s with no loading screen (P1); arena built during the transition",
+      "World state frozen and preserved (clock paused per ContextStack rules during combat? follow the time GDD)",
+      "Measure transition time"
+     ],
+     "done": "Transition < 1 s measured"
+    },
+    {
+     "focus": "Return and despawn rules",
+     "steps": [
+      "Return to the exact world position; defeated world enemy despawns and stays down until its respawn rule",
+      "Flee returns with a short invulnerability window in the world",
+      "Random encounter system steps disabled where visible enemies exist (retire step counting in streamed regions)",
+      "Tests for victory, defeat, flee"
+     ],
+     "done": "Three return-path tests green"
+    }
+   ],
+   "edge_cases": [
+    "Contact on the region seam",
+    "Two world enemies touched on the same frame (one encounter with both)",
+    "Contact during a dialogue"
+   ],
+   "evidence": "tests/integration/combat/test_world_to_arena.gd"
+  },
+  {
+   "id": "Y1-P4-T10",
+   "stream": "primary",
+   "title": "Build the world map with fog of war and waystations",
+   "why": "§12.5 map with fog of war, fast travel between discovered waystations",
+   "tags": [
+    "code",
+    "openworld",
+    "ui"
+   ],
+   "days": [
+    {
+     "focus": "Fog of war and map rendering",
+     "steps": [
+      "Map texture per region from the secondary-stream map art; fog revealed per chunk visited",
+      "Fog state saved in SaveService",
+      "Replace scripts/ui/world_map_ui.gd drawing with the new map scene (modal ContextStack context kept)",
+      "Gamepad pan/zoom"
+     ],
+     "done": "production/qa/evidence/y1p4/world_map_fog.png"
+    },
+    {
+     "focus": "Waystations and fast travel",
+     "steps": [
+      "Waystation Interactable discovers on use; fast travel only between discovered ones",
+      "Fast travel advances the WorldClock by travel time (P7f: time matters) and shows the cost first",
+      "Synchronous load behind a fade (ADR exception)",
+      "Tests: undiscovered blocked; clock advanced; quests with deadlines warn before travel"
+     ],
+     "done": "Fast-travel tests green"
+    }
+   ],
+   "edge_cases": [
+    "Fast travel that would break a deadline: warn, not block",
+    "Map opened during combat (refused)"
+   ],
+   "evidence": "tests/integration/world/test_fast_travel.gd"
+  },
+  {
+   "id": "Y1-P4-T11",
+   "stream": "primary",
+   "title": "Build the quest editor with timing fields",
+   "why": "§5 tools 'quest editor with timing fields'",
+   "tags": [
+    "tools",
+    "quests",
+    "time",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Editor plugin shell and quest list",
+     "steps": [
+      "addons/aethelgard_tools/plugin.cfg with a bottom-panel 'Quests'",
+      "List data/quests/*.tres with search and filters by region, type, timing type",
+      "Create/duplicate/rename with id validation (R1-SQ-01 pattern)",
+      "Undo/redo via EditorUndoRedoManager"
+     ],
+     "done": "Quest list panel works with undo"
+    },
+    {
+     "focus": "Step graph and conditions",
+     "steps": [
+      "Edit steps, objectives, conditions (FlagRegistry flags from a picker, never free text)",
+      "Rewards via RewardLedger ids and ItemDB pickers",
+      "Dialogue node links (.dlg file + node picker)",
+      "Validation markers per step"
+     ],
+     "done": "Edit a quest end to end without touching .tres by hand"
+    },
+    {
+     "focus": "Timing fields and signposting checks",
+     "steps": [
+      "Timing editor: window (start/end day), deadline (days, leniency preview per difficulty), order (refs), duration (fast/slow thresholds)",
+      "Signposting requirement: a warning flag or line must exist before any close; editor blocks saving otherwise",
+      "Calendar preview: shows the quest's window on the 28-day month",
+      "Pace value effects field (early/on-time/late)"
+     ],
+     "done": "production/qa/evidence/y1p4/quest_editor_timing.png"
+    },
+    {
+     "focus": "Validation and tests",
+     "steps": [
+      "Validate all quests: every read flag has a writer (StoryGraph boot validation), every reward exists",
+      "Tool test: create R1-TQ-03 test quest, save, load in game, complete with the bot",
+      "Write docs/tools/quest_editor.md",
+      "Delete scripts/side_quest_manager.gd quest tables for migrated quests"
+     ],
+     "done": "Validation passes on all quests; doc written"
+    }
+   ],
+   "edge_cases": [
+    "Quest referencing a deleted flag",
+    "Order quest referencing itself",
+    "Two editors open on one quest file"
+   ],
+   "evidence": "tests/tools/test_quest_editor.gd; production/qa/evidence/y1p4/quest_editor_timing.png"
+  },
+  {
+   "id": "Y1-P4-T12",
+   "stream": "primary",
+   "title": "Build the NPC schedule editor",
+   "why": "§5 tools 'NPC schedule editor'; §12.3",
+   "tags": [
+    "tools",
+    "npc",
+    "time",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Timeline view",
+     "steps": [
+      "Bottom panel 'Schedules': 24-hour timeline per NPC with day masks (weekday, market day, festival)",
+      "Drag entries to change hours; snap to 15 in-game minutes",
+      "Marker picker from the region scene",
+      "Undo/redo"
+     ],
+     "done": "Edit a schedule visually"
+    },
+    {
+     "focus": "Validation and preview",
+     "steps": [
+      "Check every hour covered, markers exist, paths exist on the nav mesh",
+      "Preview: simulate a day at 60x in the editor viewport for one region",
+      "Memory fact list editor per NPC with tier capacity check",
+      "Bark context editor"
+     ],
+     "done": "production/qa/evidence/y1p4/schedule_editor.png"
+    },
+    {
+     "focus": "Tests and docs",
+     "steps": [
+      "Tool test: edit Mara's market-day entry; game reflects it",
+      "Validation over all NPCs in R1 and R2",
+      "docs/tools/schedule_editor.md",
+      "Fix any invalid schedule found"
+     ],
+     "done": "All schedules valid"
+    }
+   ],
+   "edge_cases": [
+    "Schedule gap between 23:45 and 00:00",
+    "Marker renamed in the scene"
+   ],
+   "evidence": "tests/tools/test_schedule_editor.gd; production/qa/evidence/y1p4/schedule_editor.png"
+  },
+  {
+   "id": "Y1-P4-T13",
+   "stream": "primary",
+   "title": "Build the item and recipe editor",
+   "why": "§5 tools 'item and recipe editor'; §12.9 450 items need tooling",
+   "tags": [
+    "tools",
+    "items",
+    "economy",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Item table view",
+     "steps": [
+      "Bottom panel 'Items': sortable table of ItemDB (id, rarity, slot, value, modifiers, icon)",
+      "Bulk edit selected rows; icon preview from the registry",
+      "Id rules and duplicate detection",
+      "Undo/redo"
+     ],
+     "done": "Edit 10 items in one pass"
+    },
+    {
+     "focus": "Recipe editor and value rules live",
+     "steps": [
+      "Recipe view with input pickers and output",
+      "Live check: output value vs 90% of inputs at current base prices",
+      "Sell-price rule preview (<= 40% of buy)",
+      "Where-used panel: which recipes, shops, loot tables, quests use an item"
+     ],
+     "done": "production/qa/evidence/y1p4/item_recipe_editor.png"
+    },
+    {
+     "focus": "CSV export/import and tests",
+     "steps": [
+      "CSV export/import for spreadsheet balancing (round-trip lossless)",
+      "Tool test: CSV round-trip of the full DB is byte-identical",
+      "docs/tools/item_editor.md",
+      "Run /balance-check on the exported CSV"
+     ],
+     "done": "CSV round-trip test green"
+    }
+   ],
+   "edge_cases": [
+    "CSV with a renamed column",
+    "Deleting an item that a recipe uses (blocked with where-used list)"
+   ],
+   "evidence": "tests/tools/test_item_editor.gd; production/qa/evidence/y1p4/item_recipe_editor.png"
+  },
+  {
+   "id": "Y1-P4-T14",
+   "stream": "primary",
+   "title": "Build the economy dashboard",
+   "why": "§5 tools 'economy dashboard (price history, sources and sinks)'",
+   "tags": [
+    "tools",
+    "economy",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Data capture",
+     "steps": [
+      "Market and gold ledger write daily snapshots (in-game day) to a ring buffer saved with the game and to the sim CSV",
+      "Snapshot: per-commodity price, volume, gold by source and sink",
+      "Headless sim writes the same format",
+      "Unit test on snapshot format"
+     ],
+     "done": "Snapshots recorded"
+    },
+    {
+     "focus": "Dashboard panel",
+     "steps": [
+      "Editor panel 'Economy': price history chart per commodity, gold supply line, sources vs sinks stacked bars",
+      "Load from a save file or a sim CSV",
+      "Bounds overlay from the economy design",
+      "Highlight days breaking bounds"
+     ],
+     "done": "production/qa/evidence/y1p4/economy_dashboard.png"
+    },
+    {
+     "focus": "Two-region comparison and docs",
+     "steps": [
+      "Compare R1 vs R2 markets side by side; arbitrage between towns flagged if a round trip profits beyond the design margin",
+      "Run the 100-day sim for both regions and review",
+      "docs/tools/economy_dashboard.md",
+      "Hand findings to the secondary stream for tuning"
+     ],
+     "done": "Inter-town arbitrage check runs"
+    }
+   ],
+   "edge_cases": [
+    "Save from an older version without snapshots",
+    "Commodity added mid-run"
+   ],
+   "evidence": "production/qa/evidence/y1p4/economy_dashboard.png; tests/tools/test_economy_snapshots.gd"
+  },
+  {
+   "id": "Y1-P4-T15",
+   "stream": "primary",
+   "title": "Build the storyline coverage viewer",
+   "why": "§5 tools 'storyline coverage viewer'; §12.2 bot proves storylines reachable",
+   "tags": [
+    "tools",
+    "story",
+    "tests",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "StoryGraph visualisation",
+     "steps": [
+      "Editor panel 'Storylines': StoryGraph nodes, flags and axis values as a graph (GraphEdit)",
+      "Colour by reachability from the last bot run",
+      "Filter by act, axis, timing flag",
+      "Click a node to open the .dlg or quest"
+     ],
+     "done": "Act 1 graph renders"
+    },
+    {
+     "focus": "Coverage from bot runs",
+     "steps": [
+      "Bot runs write coverage files (flags set, endings composed, timing flags)",
+      "Viewer merges runs: which axis combinations and timing branches were reached",
+      "Matrix view for the slice's 36 ending combinations",
+      "Unreached items listed with the nearest reached predecessor"
+     ],
+     "done": "production/qa/evidence/y1p4/storyline_coverage.png"
+    },
+    {
+     "focus": "CI hook and docs",
+     "steps": [
+      "CI publishes the coverage summary as an artifact",
+      "Fail CI if a previously reached storyline becomes unreachable",
+      "docs/tools/storyline_coverage.md",
+      "Run on Act 1 and record coverage"
+     ],
+     "done": "Coverage summary in CI"
+    }
+   ],
+   "edge_cases": [
+    "Flag written only by a deleted scene",
+    "Bot run from an older build mixed with a new one (reject)"
+   ],
+   "evidence": "production/qa/evidence/y1p4/storyline_coverage.png; CI artifact"
+  },
+  {
+   "id": "Y1-P4-T16",
+   "stream": "primary",
+   "title": "Build the difficulty tuning panel",
+   "why": "§5 tools 'difficulty tuning panel'; P6",
+   "tags": [
+    "tools",
+    "difficulty",
+    "combat",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Profile and encounter tuning panel",
+     "steps": [
+      "Editor panel 'Difficulty': edit the 5 DifficultyProfile .tres side by side with the §12.1 reference column",
+      "Per-encounter overrides (telegraph mult, damage) with a diff view",
+      "Validator: stats never touch windows; Hell parry stays 2 frames unless an ADR changes it",
+      "Undo/redo"
+     ],
+     "done": "Profiles editable with validation"
+    },
+    {
+     "focus": "Replay-backed checks",
+     "steps": [
+      "'Run replays' button runs the combat replay suite against edited values",
+      "Show which replays break and why",
+      "Log changes with a reason field to design/balance/difficulty_changes.md",
+      "docs/tools/difficulty_panel.md"
+     ],
+     "done": "production/qa/evidence/y1p4/difficulty_panel.png"
+    }
+   ],
+   "edge_cases": [
+    "Edit that breaks a Hell boundary replay must show a clear warning"
+   ],
+   "evidence": "tests/tools/test_difficulty_panel.gd; production/qa/evidence/y1p4/difficulty_panel.png"
+  },
+  {
+   "id": "Y1-P4-T17",
+   "stream": "primary",
+   "title": "Add opt-in telemetry",
+   "why": "§5 'opt-in telemetry'; §13 economy and time risks need data from EA",
+   "tags": [
+    "code",
+    "systems",
+    "legal",
+    "tools"
+   ],
+   "days": [
+    {
+     "focus": "Consent and local event queue",
+     "steps": [
+      "First-launch consent screen (off by default) with the secondary-stream copy; change any time in options",
+      "scripts/telemetry/telemetry.gd: typed events from the taxonomy, no personal data, random install id resettable by the player",
+      "Events queue to user://telemetry/ when consented; nothing written when not",
+      "Tests: no file writes without consent"
+     ],
+     "done": "No-consent test green"
+    },
+    {
+     "focus": "Transport and endpoint decision",
+     "steps": [
+      "/architecture-decision for the endpoint (self-hosted vs a service; check current terms and data-protection rules before choosing; no endpoint hardcoded until decided)",
+      "HTTPRequest batch upload with retry/backoff; drop after N days",
+      "Settings to view and delete local data",
+      "Test with a local mock server on localhost"
+     ],
+     "done": "Upload works against a local mock only"
+    },
+    {
+     "focus": "Gameplay events",
+     "steps": [
+      "Events: session start/end, death (encounter id, difficulty), quest timing outcome, economy daily summary, crash marker",
+      "Sampling for high-frequency events",
+      "Dashboard import into the economy dashboard format",
+      "Privacy review against the secondary-stream checklist"
+     ],
+     "done": "Events visible in a local test dump"
+    }
+   ],
+   "edge_cases": [
+    "Player withdraws consent with queued events (delete them)",
+    "Offline machine for weeks (queue cap)"
+   ],
+   "evidence": "tests/unit/telemetry/test_consent.gd; docs/architecture/adr-telemetry-endpoint.md"
+  },
+  {
+   "id": "Y1-P4-T18",
+   "stream": "primary",
+   "title": "Add opt-in crash reporting",
+   "why": "§5 'crash reporting'; Gate 4 crash-free >= 99.5% needs measurement",
+   "tags": [
+    "code",
+    "release",
+    "tools"
+   ],
+   "days": [
+    {
+     "focus": "Crash detection and local report",
+     "steps": [
+      "Session marker file at start, removed on clean quit; marker present at next launch = previous crash",
+      "Collect the last Godot log from user://logs, build id, OS, GPU name; strip user paths",
+      "Show 'The game closed unexpectedly' with options: view report, send (only if telemetry consent), dismiss",
+      "Test by forcing a crash in a debug build"
+     ],
+     "done": "Forced crash produces a local report"
+    },
+    {
+     "focus": "Send path and symbols",
+     "steps": [
+      "Send through the telemetry transport once its endpoint is decided; until then copy-to-clipboard / save file",
+      "Build id in every report; keep export builds' .pck hashes in production/builds/index.md",
+      "Script error capture via push_error hooks where possible",
+      "docs/release/crash_reporting.md"
+     ],
+     "done": "Report flow documented and tested"
+    }
+   ],
+   "edge_cases": [
+    "Crash during the crash report screen",
+    "Log file locked by another process"
+   ],
+   "evidence": "tests/integration/telemetry/test_crash_marker.gd; docs/release/crash_reporting.md"
+  },
+  {
+   "id": "Y1-P4-T19",
+   "stream": "primary",
+   "title": "Build the localization pipeline",
+   "why": "§5 'localization pipeline (string tables)'; dialogue still-to-do 'ID-stamping tool and string-table export'",
+   "tags": [
+    "code",
+    "localization",
+    "tools",
+    "dialogue"
+   ],
+   "days": [
+    {
+     "focus": "ID stamping and extraction",
+     "steps": [
+      "tools/dlg_stamp_ids.gd: add [#id] to every .dlg line lacking one, stable and unique; dry-run mode",
+      "Extend the existing .dlg extractor to write a string table (key, source text, context, speaker, max length)",
+      "UI strings: grep for hardcoded text in scenes/scripts; move to tr() keys",
+      "Tests: stamping is idempotent"
+     ],
+     "done": "All Act 1 .dlg lines have IDs"
+    },
+    {
+     "focus": "Translation format and runtime",
+     "steps": [
+      "Choose CSV or gettext PO (ADR); generate translations in Godot's import format",
+      "DialogueManager looks up by line id with English fallback",
+      "Locale switch in options at runtime; text reflows",
+      "Test: switching locale mid-dialogue shows the next line in the new locale"
+     ],
+     "done": "Runtime locale switch works"
+    },
+    {
+     "focus": "Pseudo-localization",
+     "steps": [
+      "Enable Godot pseudolocalization settings (verify option names in 4.6 docs) with expansion ~30% and accents",
+      "Screenshot every slice screen in pseudo-loc",
+      "Fix overflow and clipped text",
+      "Tests for missing keys (fail CI on missing keys in en)"
+     ],
+     "done": "production/qa/evidence/y1p4/pseudoloc_*.png"
+    },
+    {
+     "focus": "Pipeline docs and CI",
+     "steps": [
+      "CI step: extract, diff against the last table, report new/changed strings",
+      "String freeze rule for future demo builds",
+      "docs/localization/pipeline.md",
+      "/localize scan to confirm no hardcoded strings remain in the slice"
+     ],
+     "done": "CI string report in place"
+    }
+   ],
+   "edge_cases": [
+    "Line edited after translation (mark stale)",
+    "{action} tokens inside translated text",
+    "Plural forms"
+   ],
+   "evidence": "tests/unit/localization/test_dlg_ids.gd; production/qa/evidence/y1p4/pseudoloc_*.png"
+  },
+  {
+   "id": "Y1-P4-T20",
+   "stream": "primary",
+   "title": "Add CJK font coverage",
+   "why": "§3 EN + Simplified Chinese at 1.0; §5 'CJK font coverage'",
+   "tags": [
+    "code",
+    "localization",
+    "ui"
+   ],
+   "days": [
+    {
+     "focus": "Font fallback chain",
+     "steps": [
+      "Add a licensed Simplified Chinese font (an OFL font such as Noto Sans SC; keep its licence file) as a fallback on the Theme's fonts",
+      "Decide pixel-style vs smooth CJK at integer sizes; test 1x and 2x",
+      "Subset strategy to keep export size reasonable (measure)",
+      "Test glyph coverage on a sample zh-CN string table"
+     ],
+     "done": "zh-CN sample renders with no tofu"
+    },
+    {
+     "focus": "Line breaking and layout",
+     "steps": [
+      "Check autowrap for CJK (no spaces) in dialogue, quest log, item text",
+      "Font size and line height rules per locale in the Theme",
+      "Coverage checker script tools/check_glyphs.py over the string table",
+      "Screenshots"
+     ],
+     "done": "production/qa/evidence/y1p4/cjk_dialogue.png"
+    }
+   ],
+   "edge_cases": [
+    "Mixed English item names inside Chinese text",
+    "Full-width punctuation at line start"
+   ],
+   "evidence": "tools/check_glyphs.py report; production/qa/evidence/y1p4/cjk_dialogue.png"
+  },
+  {
+   "id": "Y1-P4-T21",
+   "stream": "primary",
+   "title": "Implement the accessibility baseline",
+   "why": "§5 'accessibility baseline'; Gate 7 accessibility; InputService still-to-do hold/toggle and presets",
+   "tags": [
+    "code",
+    "accessibility",
+    "ui",
+    "ux"
+   ],
+   "days": [
+    {
+     "focus": "Visual options",
+     "steps": [
+      "Text size (3 steps) applied through the Theme",
+      "Colour-blind filters (protan, deutan, tritan) as a screen shader plus palette-aware telegraph colours",
+      "Screen-shake and flash-reduction sliders wired to FeelService and GlitchOverlay",
+      "Minimum brightness floor for night"
+     ],
+     "done": "Visual options apply live"
+    },
+    {
+     "focus": "Input options",
+     "steps": [
+      "Hold vs toggle for block, charge and sprint through InputService modes",
+      "One-handed preset (keyboard left/right) and an accessibility preset",
+      "Latency offset (from Y1-P2) moved into the accessibility page",
+      "Tests: toggle mode cannot leave block stuck after a context change"
+     ],
+     "done": "Input options tests green"
+    },
+    {
+     "focus": "Text and audio options",
+     "steps": [
+      "Dialogue text speed (exists) plus auto-advance and no-timeout guarantee",
+      "Subtitles/captions for barks and important SFX (telegraph captions optional)",
+      "Mono audio option on the Master bus",
+      "Screen-reader readiness note: check Godot 4.5+ AccessKit support for menus (verify in docs) and record the plan"
+     ],
+     "done": "Text/audio options work"
+    },
+    {
+     "focus": "Accessibility review and evidence",
+     "steps": [
+      "/ux-review of the options screens against the secondary-stream spec",
+      "Gamepad-only pass through every option",
+      "Screenshots of each options page",
+      "List gaps for Y7 Beta"
+     ],
+     "done": "production/qa/evidence/y1p4/accessibility_*.png"
+    }
+   ],
+   "edge_cases": [
+    "Text size max with long localized strings",
+    "Colour-blind filter plus night lighting"
+   ],
+   "evidence": "tests/unit/accessibility/test_toggle_modes.gd; production/qa/evidence/y1p4/accessibility_*.png"
+  },
+  {
+   "id": "Y1-P4-T22",
+   "stream": "primary",
+   "title": "Build cutscene timelines to replace coroutine cinematics",
+   "why": "§11 §4.7 'Months 10-12 cutscene timelines'; R2; review §4.7 stop_cutscene emits early",
+   "tags": [
+    "code",
+    "cinematics",
+    "architecture",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Timeline ADR and data model",
+     "steps": [
+      "/architecture-decision: CutsceneTimeline resource (tracks: dialogue node, actor move, actor clip, camera shot, fx, music cue, wait-for-input) vs AnimationPlayer with method tracks; pick one",
+      "Every track has an end state so skip = apply end states in order (idempotent)",
+      "Runs on the fixed tick; pause-safe through ContextStack",
+      "Document which old APIs map to which tracks (cutscene_manager beats, cutscene_director cmds)"
+     ],
+     "done": "docs/architecture/adr-cutscene-timeline.md"
+    },
+    {
+     "focus": "Timeline runner",
+     "steps": [
+      "scripts/cinematics/timeline_runner.gd: play(timeline), skip(), finished emitted exactly once after all tracks end",
+      "GameState never left in CUTSCENE after skip (§4.7)",
+      "Actor bindings by name to scene nodes; missing actor fails loudly in debug",
+      "Unit tests: skip at every track boundary, pause mid-track"
+     ],
+     "done": "Runner tests green"
+    },
+    {
+     "focus": "Timeline editor support",
+     "steps": [
+      "Editor inspector for timelines: track list, frame ruler, preview in the open scene",
+      "Scrub preview without running gameplay code",
+      "Validation: overlapping camera shots, unknown dialogue nodes",
+      "docs/tools/timeline_editor.md"
+     ],
+     "done": "production/qa/evidence/y1p4/timeline_editor.png"
+    },
+    {
+     "focus": "Retire the old cutscene systems",
+     "steps": [
+      "Mark scripts/cutscene/cutscene_manager.gd (1,021 lines) and cutscene_director.gd (892) deprecated; list callers by chapter",
+      "Delete cinematic_vfx.gd if FeelService and timelines cover its uses",
+      "Lint: no new await-based cinematics in scripts/chapter1 or chapter2",
+      "/tech-debt entry for chapters 3-10 still on the old system"
+     ],
+     "done": "Deprecation list and lint in place"
+    }
+   ],
+   "edge_cases": [
+    "Skip pressed during the first frame",
+    "Dialogue choice inside a timeline (timeline waits, choice result branches)",
+    "Scene change requested by a track"
+   ],
+   "evidence": "tests/unit/cinematics/test_timeline_runner.gd; docs/architecture/adr-cutscene-timeline.md"
+  },
+  {
+   "id": "Y1-P4-T23",
+   "stream": "primary",
+   "title": "Port the Chapter 1-2 cinematics to timelines",
+   "why": "Replace the coroutine cinematics where the story starts; R2",
+   "tags": [
+    "code",
+    "cinematics",
+    "story",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Prologue crash site",
+     "steps": [
+      "Convert scripts/chapter1/ch1_opening_crash_site_hook.gd awaits into a timeline from the secondary-stream shot list",
+      "Missing passengers framing (2026-10-05 canon) preserved",
+      "Skip lands at the same state",
+      "chapter1_route_test re-run"
+     ],
+     "done": "Crash-site timeline plays and skips"
+    },
+    {
+     "focus": "Elara meeting",
+     "steps": [
+      "Convert ch1_elara_meeting.gd staging (camera, characters) to a timeline; the slime fight stays an encounter",
+      "Dialogue nodes unchanged",
+      "Skip test",
+      "Screenshot key shots"
+     ],
+     "done": "production/qa/evidence/y1p4/timeline_elara_meeting.png"
+    },
+    {
+     "focus": "Aldric intro and outcomes",
+     "steps": [
+      "Aldric intro and kill/spare/purge outros from design/cinematics/aldric_*.md",
+      "Boss music cues on the timeline",
+      "Skip tests per outcome",
+      "Route test"
+     ],
+     "done": "3 outro timelines pass"
+    },
+    {
+     "focus": "Shatter transition and glitch crater",
+     "steps": [
+      "ch1_shatter_transition.gd and ch1_glitch_crater.gd sequences to timelines",
+      "Fix glitch_overlay flashes limited to 66 ms (§4.7) as a timeline fx track",
+      "Skip tests",
+      "Export tour"
+     ],
+     "done": "Shatter and crater timelines done"
+    },
+    {
+     "focus": "Ironhold arrival",
+     "steps": [
+      "Convert the Ironhold arrival sequence (dialogue/ch2/ironhold_arrival.dlg staging) to a timeline",
+      "Seam-aware: plays when entering R2 the first time",
+      "Skip test",
+      "chapter2_route_test"
+     ],
+     "done": "Ironhold arrival timeline done"
+    }
+   ],
+   "edge_cases": [
+    "Cinematic triggered while a world enemy is chasing (enemy freezes)",
+    "Save requested during a timeline (queued)"
+   ],
+   "evidence": "tests/chapter1_route_test.gd; tests/chapter2_route_test.gd; timeline skip tests"
+  },
+  {
+   "id": "Y1-P4-T24",
+   "stream": "primary",
+   "title": "Implement the cinematic camera language",
+   "why": "§4.7 cinematic_camera bugs (shake decay, move_to/zoom_to ignore duration, ignore_rotation); camera language doc",
+   "tags": [
+    "code",
+    "cinematics",
+    "vfx"
+   ],
+   "days": [
+    {
+     "focus": "CameraDirector and shot types",
+     "steps": [
+      "scripts/cinematics/camera_director.gd: shots (wide, medium, close, two-shot, over-shoulder equivalent in 2D, reveal pan) from design/cinematics/camera_language.md",
+      "Integer zoom levels only; framing rules as data",
+      "move_to/zoom_to honour durations (fix the 39 dead authored durations)",
+      "Dutch angle via rotation only if the art bible allows it at integer scale"
+     ],
+     "done": "Shots play with correct durations"
+    },
+    {
+     "focus": "Gameplay camera rules",
+     "steps": [
+      "Gameplay camera: look-ahead, room bounds per chunk, boss framing that keeps both actors visible",
+      "Shake only through the FeelService component",
+      "Transitions between gameplay camera and timeline shots without pops",
+      "Tests: duration honoured within 1 frame"
+     ],
+     "done": "Camera tests green"
+    },
+    {
+     "focus": "Replace cinematic_camera.gd",
+     "steps": [
+      "Move callers of cinematic_camera.gd to CameraDirector",
+      "Delete earthquake/impact/explosion shake helpers (FeelService events instead)",
+      "Screenshot each shot type",
+      "Update the camera language doc with what was built"
+     ],
+     "done": "production/qa/evidence/y1p4/camera_shots_*.png"
+    }
+   ],
+   "edge_cases": [
+    "Shot target freed mid-move",
+    "Camera bounds smaller than the viewport in a tiny interior"
+   ],
+   "evidence": "tests/unit/cinematics/test_camera_director.gd; production/qa/evidence/y1p4/camera_shots_*.png"
+  },
+  {
+   "id": "Y1-P4-T25",
+   "stream": "primary",
+   "title": "Rebuild the menus as authored scenes",
+   "why": "§11 §4.2 'Months 10-12 authored menus'; UI focus tests",
+   "tags": [
+    "code",
+    "ui",
+    "ux",
+    "cleanup"
+   ],
+   "days": [
+    {
+     "focus": "Main menu and pause as .tscn",
+     "steps": [
+      "Rebuild scripts/main_menu.gd (1,328 lines of code-built UI) as scenes/ui/main_menu.tscn using the Theme",
+      "Pause screen as an authored scene; ContextStack contexts unchanged",
+      "Focus neighbours set in the editor for gamepad",
+      "Delete the code-built layout"
+     ],
+     "done": "Main and pause menus authored"
+    },
+    {
+     "focus": "Options and focus tests",
+     "steps": [
+      "Options screen authored with the accessibility and localization pages",
+      "UI focus test: every control reachable by pad",
+      "Gamepad-only playtest of the menus",
+      "Screenshots"
+     ],
+     "done": "production/qa/evidence/y1p4/menus_*.png"
+    }
+   ],
+   "edge_cases": [
+    "Pad disconnect while in options",
+    "Locale switched in options while the main menu is open"
+   ],
+   "evidence": "tests/ui/test_menu_focus.gd; production/qa/evidence/y1p4/menus_*.png"
+  },
+  {
+   "id": "Y1-P4-T26",
+   "stream": "primary",
+   "title": "Show controller glyph icons in prompts",
+   "why": "InputService still-to-do: glyph icons instead of text labels",
+   "tags": [
+    "code",
+    "ui",
+    "accessibility"
+   ],
+   "days": [
+    {
+     "focus": "Glyph atlas and prompt rendering",
+     "steps": [
+      "Glyph atlas for keyboard keys and Xbox/PlayStation/Nintendo-style layouts from the secondary stream",
+      "InputService bind_text returns an inline image tag for RichTextLabel when glyphs are on",
+      "Text fallback option kept",
+      "Test: prompt updates when the last-used device changes"
+     ],
+     "done": "production/qa/evidence/y1p4/glyph_prompts.png"
+    }
+   ],
+   "edge_cases": [
+    "Unknown pad family (generic glyphs)"
+   ],
+   "evidence": "tests/input_test.gd (glyph cases); production/qa/evidence/y1p4/glyph_prompts.png"
+  },
+  {
+   "id": "Y1-P4-T27",
+   "stream": "primary",
+   "title": "Clean up superseded systems from this phase",
+   "why": "R7; clean project folder",
+   "tags": [
+    "cleanup",
+    "code",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Delete replaced code",
+     "steps": [
+      "Delete cinematic_camera.gd, cutscene_director.gd and cutscene_manager.gd paths used only by Chapters 1-2 (keep for chapters 3-10 with a deprecation header)",
+      "Remove random-encounter step counting from streamed regions",
+      "Delete scripts/overworld/overworld.gd world-building code if the streamed world replaces it (user approval)",
+      "Run the full suite"
+     ],
+     "done": "Deletions listed; suite green"
+    },
+    {
+     "focus": "Docs and debt",
+     "steps": [
+      "Update the ADR index in docs/architecture/README.md",
+      "/tech-debt register refresh",
+      "Update README sections for tools and streaming",
+      "CHANGELOG draft"
+     ],
+     "done": "ADR index and debt register current"
+    }
+   ],
+   "edge_cases": [
+    "A chapter 3-10 scene loading a deleted script (load_all catches it)"
+   ],
+   "evidence": "CI log; docs/architecture/README.md"
+  },
+  {
+   "id": "Y1-P4-T28",
+   "stream": "primary",
+   "title": "Close Year 1: performance, smoke and demo readiness",
+   "why": "§14 quarterly re-plan; Y2-Q1 public demo next",
+   "tags": [
+    "release",
+    "performance",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Performance and export",
+     "steps": [
+      "/perf-profile: R1 -> seam -> R2 walk, a fight, an auction close tick, a timeline",
+      "Real-renderer check on min spec at 60 fps",
+      "tools/export_windows.ps1 release + -Tour",
+      "/smoke-check and /regression-suite"
+     ],
+     "done": "production/qa/perf/y1p4_close.md"
+    },
+    {
+     "focus": "Year 1 milestone review",
+     "steps": [
+      "/milestone-review for Y1-P4 and Year 1 overall",
+      "Demo readiness list for Y2-Q1: what is in, what is missing",
+      "Quarterly re-plan input: measured speed vs budget",
+      "Ask the user before committing"
+     ],
+     "done": "production/milestones/y1_review.md"
+    }
+   ],
+   "edge_cases": [
+    "Export build differs from editor in streaming timing"
+   ],
+   "evidence": "production/milestones/y1_review.md"
+  },
+  {
+   "id": "Y1-P4-T29",
+   "stream": "secondary",
+   "title": "Record the Gate 1 decision and plan the quarter",
+   "why": "§10 G1; §14 at each gate a go / re-scope / pivot ADR",
+   "tags": [
+    "team",
+    "business",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Gate 1 follow-through",
+     "steps": [
+      "Read the Gate 1 report; agree the decision with the user (go / fix-and-rerun / re-scope)",
+      "If fix-and-rerun: move the re-run plan ahead of this phase's tools and say which tasks slip",
+      "Update §3 budget assumptions with the measured cost per asset (proposal, not a rewrite of the roadmap without the user)",
+      "Risk register update"
+     ],
+     "done": "Decision recorded in docs/architecture/adr-gate1-decision.md follow-up section"
+    },
+    {
+     "focus": "July sprint plan",
+     "steps": [
+      "/sprint-plan for July: streaming, Ironhold layout and tileset, seam, cinematics boards",
+      "Evidence checklist for this phase",
+      "Book a streaming-world playtest",
+      "Capacity check against the cost report"
+     ],
+     "done": "production/sprints/2027-07.md"
+    }
+   ],
+   "edge_cases": [
+    "Gate 1 failed on fairness only: plan targeted combat fixes before tools"
+   ],
+   "evidence": "production/sprints/2027-07.md"
+  },
+  {
+   "id": "Y1-P4-T30",
+   "stream": "secondary",
+   "title": "Draw the Ironhold tileset",
+   "why": "Migrate Ironhold as region 2 (proves the pipeline repeats)",
+   "tags": [
+    "art",
+    "assets",
+    "level",
+    "openworld"
+   ],
+   "days": [
+    {
+     "focus": "Industrial ground and street terrain",
+     "steps": [
+      "Cobble, iron grating, soot dirt terrain set per the art bible",
+      "Surface custom data (stone, metal) for footsteps",
+      "Export to assets/art_sources/pae/tiles/ironhold_ground.*",
+      "Log in production/cost/asset_hours.csv"
+     ],
+     "done": "Ground terrain paints without seams"
+    },
+    {
+     "focus": "Ironhold buildings",
+     "steps": [
+      "Walls, roofs, doors for 3 styles (forge hall, tenement, command hall exterior)",
+      "Overhead roof layer and lower-part collision rule",
+      "Collision in .tiles.json",
+      "Export"
+     ],
+     "done": "Buildings assemble"
+    },
+    {
+     "focus": "Machinery, pipes and clockwork props",
+     "steps": [
+      "Rusted machinery, pipes, gears, clock tower base pieces (static; animated gears 4 frames)",
+      "Compare with the accepted Ironhold baseline props",
+      "Collision",
+      "Export"
+     ],
+     "done": "Props reviewed"
+    },
+    {
+     "focus": "Arena chunk tiles for the industrial biome",
+     "steps": [
+      "Side-view tiles for Ironhold arena chunks (floor, catwalk, pipes, gear hazard)",
+      "Match the forest/bridge/cave rules for gaps and ceilings",
+      "Export",
+      "Hand to the arena chunk task"
+     ],
+     "done": "Industrial arena tiles exported"
+    },
+    {
+     "focus": "Ironhold tileset review against the baseline",
+     "steps": [
+      "Side-by-side with the accepted Ironhold baseline in the same spots (live viewport)",
+      "Ask the user whether PAE replaces the baseline (no silent replacement)",
+      "Cost totals vs the Oakhaven tileset",
+      "Note pipeline repeatability findings"
+     ],
+     "done": "production/qa/evidence/y1p4/ironhold_tiles_vs_baseline.png and the user's decision"
+    }
+   ],
+   "edge_cases": [
+    "Accepted baseline stays as fallback until accepted"
+   ],
+   "evidence": "assets/art_sources/pae/tiles/ironhold_*; production/qa/evidence/y1p4/ironhold_tiles_vs_baseline.png"
+  },
+  {
+   "id": "Y1-P4-T31",
+   "stream": "secondary",
+   "title": "Lay out Ironhold as chunks",
+   "why": "§12.5 chunks; R6",
+   "tags": [
+    "level",
+    "openworld"
+   ],
+   "days": [
+    {
+     "focus": "Ironhold chunk map",
+     "steps": [
+      "Map current Ironhold areas (gate, city, arena district, command hall, clock tower entrance, underground entrance) onto a chunk grid",
+      "Every Ch2 story trigger and exit placed",
+      "docs/level/ironhold_chunks.md",
+      "Waystation location"
+     ],
+     "done": "Chunk map approved"
+    },
+    {
+     "focus": "Block-out of city chunks",
+     "steps": [
+      "Block out gate and city chunks",
+      "Interactables for NPCs, shops, auction (Ironhold is a major city: auction house slot), lore",
+      "Navigation polygons",
+      "Reachability"
+     ],
+     "done": "City chunks pass reachability"
+    },
+    {
+     "focus": "Block-out of districts and arena chunks",
+     "steps": [
+      "Arena district and command hall exterior chunks",
+      "Industrial arena chunks (left/mid/right x2) for the ArenaBuilder",
+      "Encounter start tags",
+      "Reachability"
+     ],
+     "done": "District and arena chunks pass"
+    },
+    {
+     "focus": "Dressing pass",
+     "steps": [
+      "Props, machinery, lamps",
+      "Day/night readability",
+      "Screenshots per chunk",
+      "Fix issues"
+     ],
+     "done": "production/qa/evidence/y1p4/ironhold_chunks_*.png"
+    },
+    {
+     "focus": "Ironhold fun and flow walk",
+     "steps": [
+      "Walk every route with no map; note confusing turns",
+      "Add landmarks or signposts",
+      "Time to cross the city at walk and sprint",
+      "Record findings"
+     ],
+     "done": "docs/level/ironhold_flow_notes.md"
+    }
+   ],
+   "edge_cases": [
+    "Story trigger in a dead-end chunk"
+   ],
+   "evidence": "docs/level/ironhold_chunks.md; production/qa/evidence/y1p4/ironhold_chunks_*.png"
+  },
+  {
+   "id": "Y1-P4-T32",
+   "stream": "secondary",
+   "title": "Build the R1-R2 seam chunks",
+   "why": "Seamless boundary between 2 regions",
+   "tags": [
+    "level",
+    "openworld",
+    "art"
+   ],
+   "days": [
+    {
+     "focus": "Seam design",
+     "steps": [
+      "Design 2-3 transition chunks blending Oakhaven farmland into Ironhold outskirts",
+      "Visual blend rules (tiles, props, palette shift)",
+      "One point of interest on the seam (discovery placeholder id R1R2-POI-01)",
+      "Encounter start tags for both biomes"
+     ],
+     "done": "Seam design note"
+    },
+    {
+     "focus": "Seam build and test",
+     "steps": [
+      "Build the seam chunks",
+      "Walk both ways at day and night",
+      "Reachability",
+      "Screenshots"
+     ],
+     "done": "production/qa/evidence/y1p4/seam_chunks.png"
+    }
+   ],
+   "edge_cases": [
+    "Palette jump at the exact border"
+   ],
+   "evidence": "production/qa/evidence/y1p4/seam_chunks.png"
+  },
+  {
+   "id": "Y1-P4-T33",
+   "stream": "secondary",
+   "title": "Draw Seraphina, Brask and two Ironhold NPCs",
+   "why": "Ironhold cast for region 2; NPC sim in R2",
+   "tags": [
+    "art",
+    "animation",
+    "npc"
+   ],
+   "days": [
+    {
+     "focus": "Seraphina top-down set and portrait",
+     "steps": [
+      "Paladin and Knight-Commander read (canon), Flight 707 origin hint per the bible",
+      "idle/walk 4-dir",
+      "Export to assets/art_sources/pae/npcs/seraphina.*",
+      "Portrait set (neutral, guarded, candid)"
+     ],
+     "done": "Seraphina top-down reviewed"
+    },
+    {
+     "focus": "Seraphina side-view clips",
+     "steps": [
+      "side idle, walk, salute/command gesture for cutscenes",
+      "Preview",
+      "Controlled import with fallback",
+      "Live screenshot"
+     ],
+     "done": "production/qa/evidence/y1p4/seraphina_live.png"
+    },
+    {
+     "focus": "Brask set",
+     "steps": [
+      "idle/walk 4-dir and a work/stance loop",
+      "Portrait",
+      "Export to assets/art_sources/pae/npcs/brask.*",
+      "Log in production/cost/asset_hours.csv"
+     ],
+     "done": "Brask complete"
+    },
+    {
+     "focus": "Brask import and review",
+     "steps": [
+      "Controlled import with fallback",
+      "Live screenshot on schedule",
+      "Contact sheet",
+      "Cost totals"
+     ],
+     "done": "production/qa/evidence/y1p4/brask_live.png"
+    },
+    {
+     "focus": "Rem",
+     "steps": [
+      "idle/walk 4-dir (medicine convoy NPC, canon role only)",
+      "Portrait",
+      "Export",
+      "Controlled import"
+     ],
+     "done": "Rem complete"
+    },
+    {
+     "focus": "Ironhold merchant R2-NPC-MERCH-01",
+     "steps": [
+      "idle/walk 4-dir and stall loop",
+      "Distinct from the Oakhaven merchant",
+      "Export and controlled import",
+      "Live screenshot of 4 R2 NPCs"
+     ],
+     "done": "production/qa/evidence/y1p4/ironhold_npcs_live.png"
+    }
+   ],
+   "edge_cases": [
+    "NPC sheet missing a direction: fallback check"
+   ],
+   "evidence": "assets/art_sources/pae/npcs/*; production/qa/evidence/y1p4/*_live.png"
+  },
+  {
+   "id": "Y1-P4-T34",
+   "stream": "secondary",
+   "title": "Draw two Ironhold enemy types",
+   "why": "§3 enemy types; Ironhold enemies on EnemyDef",
+   "tags": [
+    "art",
+    "animation",
+    "combat"
+   ],
+   "days": [
+    {
+     "focus": "Clockwork soldier: idle, walk, telegraph",
+     "steps": [
+      "Spec from scripts/combat/enemies/clockwork_soldier.gd behaviour and the R2 enemy notes",
+      "idle, walk, telegraph clips",
+      "Export to assets/art_sources/pae/enemies/clockwork_soldier.*",
+      "Log in production/cost/asset_hours.csv"
+     ],
+     "done": "Base clips reviewed"
+    },
+    {
+     "focus": "Clockwork soldier: attacks, hurt, death and import",
+     "steps": [
+      "attack clips, hurt, death; rig hitboxes",
+      "Controlled import",
+      "Fight check",
+      "Live screenshot"
+     ],
+     "done": "production/qa/evidence/y1p4/clockwork_soldier_live.png"
+    },
+    {
+     "focus": "Gear sentry: idle, telegraph, fire",
+     "steps": [
+      "Static turret-like enemy: idle, telegraph flash frames, fire, projectile sprite",
+      "Telegraph readable on Hell",
+      "Export to assets/art_sources/pae/enemies/gear_sentry.*",
+      "Rig"
+     ],
+     "done": "Sentry clips reviewed"
+    },
+    {
+     "focus": "Gear sentry: hurt, death and import",
+     "steps": [
+      "hurt, death, broken idle",
+      "Controlled import",
+      "Fight check in an industrial arena",
+      "Live screenshot"
+     ],
+     "done": "production/qa/evidence/y1p4/gear_sentry_live.png"
+    }
+   ],
+   "edge_cases": [
+    "Projectile hard to see against industrial tiles"
+   ],
+   "evidence": "assets/art_sources/pae/enemies/*; production/qa/evidence/y1p4/*_live.png"
+  },
+  {
+   "id": "Y1-P4-T35",
+   "stream": "secondary",
+   "title": "Polish Kaelen and Aldric animation from Gate 1 feedback",
+   "why": "Continuous animation quality; Gate 1 tester notes",
+   "tags": [
+    "animation",
+    "art",
+    "fun"
+   ],
+   "days": [
+    {
+     "focus": "Kaelen polish: movement clips",
+     "steps": [
+      "List tester comments about movement readability",
+      "Redraw the 3 weakest movement clips (identified from the report)",
+      "Re-import with the controlled process",
+      "Before/after contact sheet"
+     ],
+     "done": "production/qa/evidence/y1p4/kaelen_polish_movement.png"
+    },
+    {
+     "focus": "Kaelen polish: attack clips",
+     "steps": [
+      "Redraw the 2 weakest attack clips; keep frame counts unless data changes deliberately",
+      "Re-run combat replays",
+      "Before/after",
+      "Cost log"
+     ],
+     "done": "production/qa/evidence/y1p4/kaelen_polish_attacks.png"
+    },
+    {
+     "focus": "Kaelen polish: hurt and death readability",
+     "steps": [
+      "Improve hurt/death so testers can tell what hit them",
+      "Add an impact frame if needed",
+      "Re-import",
+      "Before/after"
+     ],
+     "done": "production/qa/evidence/y1p4/kaelen_polish_hurt.png"
+    },
+    {
+     "focus": "Aldric polish",
+     "steps": [
+      "Fix the telegraph testers misread most",
+      "Re-import; re-run Aldric replays",
+      "Before/after",
+      "Note for the combat bible"
+     ],
+     "done": "production/qa/evidence/y1p4/aldric_polish.png"
+    }
+   ],
+   "edge_cases": [
+    "Polish that changes active frames: replays must be re-recorded deliberately"
+   ],
+   "evidence": "production/qa/evidence/y1p4/*_polish_*.png"
+  },
+  {
+   "id": "Y1-P4-T36",
+   "stream": "secondary",
+   "title": "Add Kaelen top-down sprint and Elara follow clips",
+   "why": "Open world traversal feel; companion presence",
+   "tags": [
+    "animation",
+    "art",
+    "openworld"
+   ],
+   "days": [
+    {
+     "focus": "Kaelen top-down sprint",
+     "steps": [
+      "sprint (6 frames) for down, up, side",
+      "Dust VFX frames for the start",
+      "Export and controlled import",
+      "Check foot slide"
+     ],
+     "done": "Sprint set live"
+    },
+    {
+     "focus": "Kaelen top-down hurt and pickup",
+     "steps": [
+      "hurt flinch (world enemy contact before the shatter) and pickup for 3 directions",
+      "Export and import",
+      "Hook to the world-enemy contact",
+      "Screenshot"
+     ],
+     "done": "Hurt/pickup live"
+    },
+    {
+     "focus": "Elara follow and idle-wait clips",
+     "steps": [
+      "run 4-dir for catching up, idle-wait fidget",
+      "Export and import",
+      "Check follow at sprint speed",
+      "Screenshot"
+     ],
+     "done": "production/qa/evidence/y1p4/elara_follow.png"
+    }
+   ],
+   "edge_cases": [
+    "Elara catch-up teleport visible on screen"
+   ],
+   "evidence": "assets/art_sources/pae/kaelen/*, assets/art_sources/pae/elara/*"
+  },
+  {
+   "id": "Y1-P4-T37",
+   "stream": "secondary",
+   "title": "Draw 20 Ironhold item icons",
+   "why": "§3 ~450 items over time; Ironhold items",
+   "tags": [
+    "art",
+    "items",
+    "ui"
+   ],
+   "days": [
+    {
+     "focus": "Ironhold equipment icons (10)",
+     "steps": [
+      "Industrial weapons and armor icons matching the new item ids",
+      "Rarity frames",
+      "Export to assets/art_sources/pae/icons/ironhold_equipment.*",
+      "Cost log"
+     ],
+     "done": "10 icons"
+    },
+    {
+     "focus": "Ironhold materials and consumables (10) and import",
+     "steps": [
+      "Materials for the 10 new recipes and consumables",
+      "Controlled import",
+      "Inventory screenshot",
+      "Cost totals"
+     ],
+     "done": "production/qa/evidence/y1p4/ironhold_icons.png"
+    }
+   ],
+   "edge_cases": [
+    "Icon id mismatch with ItemDB (editor where-used check)"
+   ],
+   "evidence": "assets/art_sources/pae/icons/ironhold_*; production/qa/evidence/y1p4/ironhold_icons.png"
+  },
+  {
+   "id": "Y1-P4-T38",
+   "stream": "secondary",
+   "title": "Board the Chapter 1-2 cinematics for the timeline port",
+   "why": "Cinematics; replacing coroutine cinematics",
+   "tags": [
+    "cinematics",
+    "story"
+   ],
+   "days": [
+    {
+     "focus": "Crash site and Elara meeting boards",
+     "steps": [
+      "Shot lists from the current scenes and dialogue/prologue + dialogue/ch1/crash_site.dlg, elara_meeting.dlg",
+      "Shot type, framing, frames, integer zoom per shot",
+      "Skip landing state",
+      "design/cinematics/ch1_crash_site.md, ch1_elara_meeting.md"
+     ],
+     "done": "Two boards ready"
+    },
+    {
+     "focus": "Shatter, crater and Ironhold arrival boards",
+     "steps": [
+      "Boards for the shatter transition, glitch crater and Ironhold arrival",
+      "Glitch fx timing (no more 66 ms caps)",
+      "Music cues",
+      "design/cinematics/*.md"
+     ],
+     "done": "Three boards ready"
+    },
+    {
+     "focus": "Board review against the camera language",
+     "steps": [
+      "Check every board follows camera_language.md",
+      "Cut shots that slow pacing",
+      "Mark accessibility concerns (flashes)",
+      "Hand to primary"
+     ],
+     "done": "Boards approved"
+    }
+   ],
+   "edge_cases": [
+    "Shot requiring a non-integer zoom: redesign"
+   ],
+   "evidence": "design/cinematics/*.md"
+  },
+  {
+   "id": "Y1-P4-T39",
+   "stream": "secondary",
+   "title": "Write the camera language guide",
+   "why": "Cinematic camera language for all future scenes",
+   "tags": [
+    "cinematics",
+    "docs",
+    "art"
+   ],
+   "days": [
+    {
+     "focus": "Shot vocabulary",
+     "steps": [
+      "design/cinematics/camera_language.md: shot types for 2D (wide, medium, close, two-shot, reveal pan, push-in by integer zoom step)",
+      "When to use each: dialogue, reveal, threat, intimacy",
+      "Timing rules in frames",
+      "Examples from Aldric's boards"
+     ],
+     "done": "Vocabulary section done"
+    },
+    {
+     "focus": "Rules and anti-rules",
+     "steps": [
+      "No zoom mid-line; shake only on impacts through FeelService; no flashes above the accessibility limit",
+      "Gameplay camera vs cinematic camera hand-off rules",
+      "Boss framing rules",
+      "Review with one board"
+     ],
+     "done": "Guide complete"
+    }
+   ],
+   "edge_cases": [
+    "Dutch angles with pixel art rotation artefacts"
+   ],
+   "evidence": "design/cinematics/camera_language.md"
+  },
+  {
+   "id": "Y1-P4-T40",
+   "stream": "secondary",
+   "title": "Author the ported cinematics in the timeline editor",
+   "why": "Cinematics production with the new tool",
+   "tags": [
+    "cinematics",
+    "level",
+    "story"
+   ],
+   "days": [
+    {
+     "focus": "Author crash site and Elara meeting timelines",
+     "steps": [
+      "Build both timelines from the boards in the editor",
+      "Tune holds and music cues",
+      "Watch with skip at random points",
+      "Notes for primary"
+     ],
+     "done": "Two timelines authored"
+    },
+    {
+     "focus": "Author Aldric intro/outros",
+     "steps": [
+      "Build intro and three outros",
+      "Check boss music sync",
+      "Skip tests",
+      "Screenshots"
+     ],
+     "done": "Aldric timelines authored"
+    },
+    {
+     "focus": "Author shatter, crater and Ironhold arrival",
+     "steps": [
+      "Build the three timelines",
+      "Flash-reduction check",
+      "Full Act 1 watch-through",
+      "Fix pacing"
+     ],
+     "done": "production/qa/evidence/y1p4/timelines_act1_*.png"
+    }
+   ],
+   "edge_cases": [
+    "Timeline with a missing actor binding after a scene edit"
+   ],
+   "evidence": "production/qa/evidence/y1p4/timelines_act1_*.png"
+  },
+  {
+   "id": "Y1-P4-T41",
+   "stream": "secondary",
+   "title": "Author Ironhold quests and the slice quests in the quest editor",
+   "why": "Tool adoption; quest content as data",
+   "tags": [
+    "quests",
+    "time",
+    "tools"
+   ],
+   "days": [
+    {
+     "focus": "Migrate R1 quests into the editor",
+     "steps": [
+      "Move R1-TQ-01, R1-TQ-02 and the existing Oakhaven side quests into data via the quest editor",
+      "Fix quests that named non-existent rewards (2026-10-06 note)",
+      "Validation passes",
+      "Bot check"
+     ],
+     "done": "R1 quests in the editor format"
+    },
+    {
+     "focus": "Ironhold quests including the medicine convoy timing",
+     "steps": [
+      "Ch2 medicine convoy (window until the evening bell) with signposting per the bible",
+      "Existing Ironhold side quests (Garro, Iris per current code) migrated",
+      "Validation",
+      "Bot fast/slow profiles"
+     ],
+     "done": "R2 quests validated"
+    }
+   ],
+   "edge_cases": [
+    "Quest that could not complete before (2026-10-06 note): fix or remove with the user's OK"
+   ],
+   "evidence": "data/quests/*.tres; validation log"
+  },
+  {
+   "id": "Y1-P4-T42",
+   "stream": "secondary",
+   "title": "Author Ironhold NPC schedules",
+   "why": "§12.3; schedule editor adoption",
+   "tags": [
+    "npc",
+    "time",
+    "tools"
+   ],
+   "days": [
+    {
+     "focus": "Schedules for Seraphina, Brask, Rem and the merchant",
+     "steps": [
+      "Author in the schedule editor; market day for Ironhold differs from Oakhaven",
+      "Command Hall hours, arena district hours",
+      "Validation",
+      "Preview a day at 60x"
+     ],
+     "done": "4 schedules valid"
+    },
+    {
+     "focus": "Memory facts and barks for R2",
+     "steps": [
+      "Facts and barks per NPC (Act 1 flags: Seraphina truth/cautious/showoff etc.)",
+      "Write dialogue/ch2/barks_town.dlg with IDs",
+      "Voice lint",
+      "In-game check"
+     ],
+     "done": "R2 barks pass lint"
+    }
+   ],
+   "edge_cases": [
+    "Seraphina's schedule during Chapter 2 story beats (story overrides schedule)"
+   ],
+   "evidence": "data/npc/r2_*.tres; dialogue/ch2/barks_town.dlg"
+  },
+  {
+   "id": "Y1-P4-T43",
+   "stream": "secondary",
+   "title": "Add 20 Ironhold items with the item editor",
+   "why": "§12.9 itemization growth",
+   "tags": [
+    "items",
+    "economy",
+    "tools"
+   ],
+   "days": [
+    {
+     "focus": "Ironhold equipment entries",
+     "steps": [
+      "10 equipment items in the item editor with modifiers and values",
+      "Weapon classes that use existing overlay sheets",
+      "Where-used check",
+      "CSV export for review"
+     ],
+     "done": "10 items added"
+    },
+    {
+     "focus": "Ironhold materials and consumables",
+     "steps": [
+      "10 materials/consumables",
+      "Market commodities for Ironhold",
+      "/balance-check on the CSV",
+      "Fix outliers"
+     ],
+     "done": "20 items balanced"
+    }
+   ],
+   "edge_cases": [
+    "Item value that makes inter-town arbitrage profitable"
+   ],
+   "evidence": "data/items/r2_*.tres; balance-check notes"
+  },
+  {
+   "id": "Y1-P4-T44",
+   "stream": "secondary",
+   "title": "Add 10 Ironhold recipes",
+   "why": "Crafting depth; §12.6 value rule",
+   "tags": [
+    "items",
+    "economy"
+   ],
+   "days": [
+    {
+     "focus": "Recipe design",
+     "steps": [
+      "10 recipes using R1 + R2 materials (cross-region crafting reason to travel)",
+      "Value rule live check in the editor",
+      "Forge quality effects",
+      "Document in design/items/r2_recipes.md"
+     ],
+     "done": "10 recipes designed"
+    },
+    {
+     "focus": "Recipe test and economy check",
+     "steps": [
+      "Add to the crafter profile in the economy sim",
+      "Run 100 days; check bounds",
+      "Adjust",
+      "Hand to primary if a rule is missing"
+     ],
+     "done": "Sim within bounds"
+    }
+   ],
+   "edge_cases": [
+    "Recipe chain that loops value (A -> B -> A)"
+   ],
+   "evidence": "design/items/r2_recipes.md; sim CSV"
+  },
+  {
+   "id": "Y1-P4-T45",
+   "stream": "secondary",
+   "title": "Tune the economy with the dashboard",
+   "why": "§13 economy exploit risk; Gate 1 economy criterion carried to two towns",
+   "tags": [
+    "economy",
+    "tools",
+    "time"
+   ],
+   "days": [
+    {
+     "focus": "Two-town 100-day review",
+     "steps": [
+      "Run the sim for both towns; review price history and sources/sinks",
+      "Identify the top 3 drifts",
+      "Adjust seasonality, clamps, fees",
+      "Record changes with reasons"
+     ],
+     "done": "design/economy/tuning_log.md entry"
+    },
+    {
+     "focus": "Inter-town trade and auction pressure",
+     "steps": [
+      "Check town-to-town arbitrage margins against the design",
+      "Auction fee and bidder budgets for Ironhold",
+      "Re-run sim",
+      "Update bounds in CI if justified"
+     ],
+     "done": "Sim green after tuning"
+    }
+   ],
+   "edge_cases": [
+    "Tuning that makes legitimate trading pointless"
+   ],
+   "evidence": "design/economy/tuning_log.md"
+  },
+  {
+   "id": "Y1-P4-T46",
+   "stream": "secondary",
+   "title": "Tune difficulty from Gate 1 data",
+   "why": "P6; Gate 1 fairness results",
+   "tags": [
+    "difficulty",
+    "combat",
+    "tools"
+   ],
+   "days": [
+    {
+     "focus": "Encounter tuning",
+     "steps": [
+      "Use the Gate 1 death data per difficulty to adjust encounter overrides in the tuning panel",
+      "Never widen Hell windows without an ADR",
+      "Run the replays",
+      "Log reasons"
+     ],
+     "done": "design/balance/difficulty_changes.md entries"
+    },
+    {
+     "focus": "Verification session",
+     "steps": [
+      "Play the four Ch1 fights on Easy and Hard after tuning",
+      "Compare TTK with the targets",
+      "Fairness self-rating",
+      "Note for the next external playtest"
+     ],
+     "done": "Verification notes"
+    }
+   ],
+   "edge_cases": [
+    "Tuning one difficulty breaks another's replay"
+   ],
+   "evidence": "design/balance/difficulty_changes.md"
+  },
+  {
+   "id": "Y1-P4-T47",
+   "stream": "secondary",
+   "title": "Map Act 1 into the storyline coverage viewer",
+   "why": "§12.2 storylines bot-verified before content",
+   "tags": [
+    "story",
+    "tools",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Act 1 axis and flag map",
+     "steps": [
+      "Tag Act 1 flags with axis relevance (axis placeholders until the Y2 route architecture)",
+      "Mark timing flags (bridge, convoy)",
+      "Run the bot profiles",
+      "Read the coverage"
+     ],
+     "done": "Act 1 coverage reviewed"
+    },
+    {
+     "focus": "Gaps and fixes",
+     "steps": [
+      "List unreached flags or endings",
+      "Decide: bot gap, real dead content, or design gap",
+      "Fix or file",
+      "Record in docs/story/coverage_act1.md"
+     ],
+     "done": "Coverage gaps resolved or filed"
+    }
+   ],
+   "edge_cases": [
+    "Flag only reachable via a debug menu"
+   ],
+   "evidence": "docs/story/coverage_act1.md"
+  },
+  {
+   "id": "Y1-P4-T48",
+   "stream": "secondary",
+   "title": "Scan for hardcoded strings and freeze the slice text",
+   "why": "§5 localization pipeline; /localize",
+   "tags": [
+    "localization",
+    "dialogue",
+    "ui"
+   ],
+   "days": [
+    {
+     "focus": "/localize scan",
+     "steps": [
+      "Run /localize over scripts and scenes for the slice",
+      "List hardcoded strings per file",
+      "Fix the easy ones (move to keys)",
+      "Hand code-heavy ones to primary"
+     ],
+     "done": "Scan report in docs/localization/scan_2027-08.md"
+    },
+    {
+     "focus": "Slice string freeze and review",
+     "steps": [
+      "Freeze the slice string table for the demo",
+      "Review context notes and max lengths",
+      "Mark lines that need translator notes (wordplay, glitch text)",
+      "Archive the frozen table"
+     ],
+     "done": "Frozen table committed-ready"
+    }
+   ],
+   "edge_cases": [
+    "Glitch text that is intentionally corrupted (translator note)"
+   ],
+   "evidence": "docs/localization/scan_2027-08.md"
+  },
+  {
+   "id": "Y1-P4-T49",
+   "stream": "secondary",
+   "title": "Prepare Simplified Chinese translation",
+   "why": "§3 EN + Simplified Chinese at 1.0",
+   "tags": [
+    "localization",
+    "business",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Translation route research",
+     "steps": [
+      "List options (freelance translator, agency, community) and check current rates and terms yourself; record sources, no assumed prices",
+      "Requirements: game experience, glossary use, review pass",
+      "Budget question for the user (self-funded until Gate 2)",
+      "docs/localization/zh_cn_plan.md"
+     ],
+     "done": "Options documented with sources"
+    },
+    {
+     "focus": "Glossary and style notes",
+     "steps": [
+      "Glossary of fixed terms (Root Access, Source Key, Null Court, Glitch Arts, SOVEREIGN, region names) with notes",
+      "Character voice notes per speaker for the translator",
+      "Do-not-translate list",
+      "docs/localization/glossary.md"
+     ],
+     "done": "Glossary v1"
+    },
+    {
+     "focus": "Pseudo-loc screenshot review",
+     "steps": [
+      "Review the pseudo-localized screenshots from primary",
+      "List overflow and clipping issues",
+      "Check CJK sample rendering",
+      "File fixes"
+     ],
+     "done": "Review notes filed"
+    }
+   ],
+   "edge_cases": [
+    "Term with a double meaning in the story"
+   ],
+   "evidence": "docs/localization/zh_cn_plan.md, glossary.md"
+  },
+  {
+   "id": "Y1-P4-T50",
+   "stream": "secondary",
+   "title": "Write the accessibility spec",
+   "why": "Accessibility baseline; Gate 7",
+   "tags": [
+    "accessibility",
+    "ux",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Accessibility options spec",
+     "steps": [
+      "/ux-design accessibility spec: visual, input, text, audio options with defaults",
+      "Map each to the combat accessibility spec from Y1-P2",
+      "Gaps that need later work (screen reader, full captions)",
+      "design/ux/accessibility.md"
+     ],
+     "done": "Spec drafted"
+    },
+    {
+     "focus": "Captions and copy",
+     "steps": [
+      "Caption list for important SFX (telegraphs optional)",
+      "Option descriptions in plain language",
+      "Line IDs for localization",
+      "/ux-review"
+     ],
+     "done": "Spec reviewed"
+    }
+   ],
+   "edge_cases": [
+    "Caption overlapping a dialogue box"
+   ],
+   "evidence": "design/ux/accessibility.md"
+  },
+  {
+   "id": "Y1-P4-T51",
+   "stream": "secondary",
+   "title": "Review menus and colour-blind readability",
+   "why": "Accessibility baseline evidence",
+   "tags": [
+    "accessibility",
+    "ux",
+    "art"
+   ],
+   "days": [
+    {
+     "focus": "/ux-review of the new menus",
+     "steps": [
+      "Review main, pause and options against the spec",
+      "Gamepad-only pass",
+      "List issues",
+      "Hand fixes to primary"
+     ],
+     "done": "Review verdict"
+    },
+    {
+     "focus": "Colour-blind review of the PAE palette",
+     "steps": [
+      "Check telegraphs, rarity frames and danger VFX under protan/deutan/tritan filters",
+      "Fix palette entries in the art bible if needed",
+      "Re-export affected assets list",
+      "Screenshots"
+     ],
+     "done": "production/qa/evidence/y1p4/colourblind_review_*.png"
+    }
+   ],
+   "edge_cases": [
+    "Rarity communicated only by colour"
+   ],
+   "evidence": "production/qa/evidence/y1p4/colourblind_review_*.png"
+  },
+  {
+   "id": "Y1-P4-T52",
+   "stream": "secondary",
+   "title": "Define the telemetry taxonomy and privacy copy",
+   "why": "Opt-in telemetry; legal groundwork",
+   "tags": [
+    "legal",
+    "docs",
+    "systems"
+   ],
+   "days": [
+    {
+     "focus": "Event taxonomy",
+     "steps": [
+      "docs/telemetry/taxonomy.md: every event, fields, why we need it, retention",
+      "No personal data; install id resettable",
+      "Map to questions (deaths per encounter, timing outcomes, economy health)",
+      "Sampling plan"
+     ],
+     "done": "Taxonomy v1"
+    },
+    {
+     "focus": "Consent and privacy copy",
+     "steps": [
+      "Consent screen text and options text",
+      "Privacy notice draft in plain language",
+      "Data deletion instructions",
+      "Line IDs for localization"
+     ],
+     "done": "Copy ready for the UI"
+    },
+    {
+     "focus": "Rules check",
+     "steps": [
+      "Check current data-protection rules relevant to the players you will reach (e.g. GDPR in the EU) and Steam's current rules for data collection; record sources",
+      "List what needs legal review before the public demo",
+      "Do not finalize without that review",
+      "docs/legal/telemetry_checklist.md"
+     ],
+     "done": "Checklist with sources"
+    }
+   ],
+   "edge_cases": [
+    "Player under the age the rules care about"
+   ],
+   "evidence": "docs/telemetry/taxonomy.md; docs/legal/telemetry_checklist.md"
+  },
+  {
+   "id": "Y1-P4-T53",
+   "stream": "secondary",
+   "title": "Make two Ironhold music tracks",
+   "why": "Adaptive music for region 2",
+   "tags": [
+    "music",
+    "audio"
+   ],
+   "days": [
+    {
+     "focus": "Ironhold city track stems",
+     "steps": [
+      "Compose base, melody, percussion stems in a key that can crossfade from Oakhaven at the seam",
+      "Loop points",
+      "Export with provenance",
+      "Test in MusicService"
+     ],
+     "done": "City track loops"
+    },
+    {
+     "focus": "Ironhold city night variant",
+     "steps": [
+      "Night variant",
+      "Day/night crossfade",
+      "Export",
+      "Test"
+     ],
+     "done": "Night variant crossfades"
+    },
+    {
+     "focus": "Industrial combat track",
+     "steps": [
+      "Combat stems for industrial arenas",
+      "Layer switching",
+      "Export",
+      "Test in fights"
+     ],
+     "done": "Combat track works"
+    },
+    {
+     "focus": "Mix and seam check",
+     "steps": [
+      "Loudness match with Oakhaven tracks",
+      "Seam crossfade listen test both directions",
+      "Fix",
+      "Update ASSET_SOURCES.md"
+     ],
+     "done": "Ironhold music mixed"
+    }
+   ],
+   "edge_cases": [
+    "Crossfade during a timeline music cue (timeline wins)"
+   ],
+   "evidence": "assets/audio/music/ironhold_*; assets/ASSET_SOURCES.md"
+  },
+  {
+   "id": "Y1-P4-T54",
+   "stream": "secondary",
+   "title": "Produce ~40 Ironhold SFX",
+   "why": "§3 ~900 SFX over the project; region 2",
+   "tags": [
+    "audio",
+    "assets"
+   ],
+   "days": [
+    {
+     "focus": "Enemy SFX",
+     "steps": [
+      "clockwork soldier (steps, telegraph, attack, hurt, death), gear sentry (charge, fire, hit, break)",
+      "Telegraph sounds lead attacks",
+      "Provenance",
+      "Test in fights"
+     ],
+     "done": "Enemy SFX in the bank"
+    },
+    {
+     "focus": "World SFX",
+     "steps": [
+      "metal footsteps, steam vents, gears, forge hammers, doors",
+      "Surface mapping for the Ironhold tileset",
+      "Provenance",
+      "Test in Ironhold"
+     ],
+     "done": "World SFX in the bank"
+    },
+    {
+     "focus": "UI and economy SFX for Ironhold",
+     "steps": [
+      "auction gavel variant, shop bell, coins",
+      "Waystation and fast-travel sounds",
+      "Provenance",
+      "Test"
+     ],
+     "done": "UI SFX in the bank"
+    },
+    {
+     "focus": "Count, mix and voice limits",
+     "steps": [
+      "Count ~40 new entries",
+      "Bus levels and voice limits",
+      "Listen pass in a busy scene",
+      "Update ASSET_SOURCES.md"
+     ],
+     "done": "~40 SFX added"
+    }
+   ],
+   "edge_cases": [
+    "Loud ambience masking telegraphs (duck ambience in combat)"
+   ],
+   "evidence": "data/audio/sfx_bank.tres; assets/ASSET_SOURCES.md"
+  },
+  {
+   "id": "Y1-P4-T55",
+   "stream": "secondary",
+   "title": "Make ambience beds and the seam crossfade",
+   "why": "Living world audio; seamless regions",
+   "tags": [
+    "audio",
+    "openworld"
+   ],
+   "days": [
+    {
+     "focus": "Ambience beds",
+     "steps": [
+      "Ironhold day/night beds; seam bed",
+      "Loop points",
+      "Provenance",
+      "Test across the seam"
+     ],
+     "done": "Beds loop"
+    },
+    {
+     "focus": "Seam audio pass",
+     "steps": [
+      "Tune crossfade distances with primary",
+      "Walk both ways at day and night",
+      "Fix gaps or doubling",
+      "Record a capture"
+     ],
+     "done": "Seam audio approved"
+    }
+   ],
+   "edge_cases": [
+    "Standing still on the seam (no flapping)"
+   ],
+   "evidence": "assets/audio/ambience/*"
+  },
+  {
+   "id": "Y1-P4-T56",
+   "stream": "secondary",
+   "title": "Review fun after Gate 1",
+   "why": "Fun factor; Gate 1 feedback",
+   "tags": [
+    "fun",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Fun review from tester data",
+     "steps": [
+      "Group Gate 1 comments into 'loved', 'confused', 'bored', 'frustrated'",
+      "Pick the top 5 fun opportunities (not just fixes)",
+      "Write design/fun/y1p4_fun_review.md",
+      "Hand to primary as backlog items"
+     ],
+     "done": "Fun review written"
+    },
+    {
+     "focus": "Prototype one fun improvement",
+     "steps": [
+      "Choose one improvement (e.g. a discovery reward or a combat feel tweak) and prototype it with primary's tools",
+      "Play it for 30 minutes",
+      "Keep or drop with a reason",
+      "Log it"
+     ],
+     "done": "One improvement decided"
+    }
+   ],
+   "edge_cases": [
+    "Improvement that adds scope without a budget: put on the Y2 list"
+   ],
+   "evidence": "design/fun/y1p4_fun_review.md"
+  },
+  {
+   "id": "Y1-P4-T57",
+   "stream": "secondary",
+   "title": "Playtest the streamed two-region world",
+   "why": "Open world feel; seam quality",
+   "tags": [
+    "fun",
+    "openworld",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Internal streaming playtest",
+     "steps": [
+      "Play R1 -> seam -> R2 -> back for an hour with fast travel and fights",
+      "Note hitches, pop-in, lost NPCs",
+      "/playtest-report",
+      "Bug triage"
+     ],
+     "done": "production/playtests/2027-09_streaming.md"
+    },
+    {
+     "focus": "Small external playtest (3 testers)",
+     "steps": [
+      "Same protocol as Gate 1 but focused on the world (only with the user's OK on recruiting)",
+      "Ask: did the world feel continuous?",
+      "Report",
+      "Top issues to primary"
+     ],
+     "done": "production/playtests/2027-09_world_external.md"
+    }
+   ],
+   "edge_cases": [
+    "Tester with a slower PC: note specs"
+   ],
+   "evidence": "production/playtests/2027-09_*.md"
+  },
+  {
+   "id": "Y1-P4-T58",
+   "stream": "secondary",
+   "title": "Draft the Y2-Q1 public demo scope",
+   "why": "§6 Y2-Q1 demo: prologue, Oakhaven, Ironhold, market and auction, 2 minigames, time-sensitive quests",
+   "tags": [
+    "release",
+    "business",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Demo scope and gaps",
+     "steps": [
+      "List what the demo needs from §6 and what exists now",
+      "Gap list: second minigame, Ironhold auction, demo end screen",
+      "Risks for itch.io then Steam Next Fest (check current Next Fest rules and dates yourself)",
+      "production/demo/scope_draft.md"
+     ],
+     "done": "Scope draft for the Y2-Q1 plan"
+    }
+   ],
+   "edge_cases": [
+    "Demo spoiling the Act 1 ending"
+   ],
+   "evidence": "production/demo/scope_draft.md"
+  },
+  {
+   "id": "Y1-P4-T59",
+   "stream": "secondary",
+   "title": "Tidy the asset folders",
+   "why": "Clean project folder; AGENTS.md rules",
+   "tags": [
+    "assets",
+    "cleanup",
+    "art"
+   ],
+   "days": [
+    {
+     "focus": "Archive superseded art",
+     "steps": [
+      "Apply the approved keep/archive/delete list for generated, generated_v2, generated_v3 (never the accepted baselines or locked V3 props)",
+      "Move review-only material under assets/art_sources",
+      "Re-import and run load_all and the tour",
+      "Fallback/rollback check"
+     ],
+     "done": "Folders tidied; tour passes"
+    },
+    {
+     "focus": "Root clutter",
+     "steps": [
+      "Handle the root PNGs referenced by asset_manager (P before ch 1.png etc.) once no code uses them (user approval)",
+      "Retire Mysprites/ and duplicate context files if the user agreed in Y1-P0",
+      "Update .gitignore and export filters",
+      "git status clean of stray files"
+     ],
+     "done": "Root folder clean"
+    }
+   ],
+   "edge_cases": [
+    "A deleted file still referenced by a chapter 3-10 scene (load_all catches)"
+   ],
+   "evidence": "git diff --stat; load_all log"
+  },
+  {
+   "id": "Y1-P4-T60",
+   "stream": "secondary",
+   "title": "Audit asset naming and budgets",
+   "why": "/asset-audit; asset quality",
+   "tags": [
+    "assets",
+    "art",
+    "performance"
+   ],
+   "days": [
+    {
+     "focus": "Asset audit",
+     "steps": [
+      "/asset-audit over assets/pae and assets/audio",
+      "Naming, sizes, formats, orphaned assets",
+      "Fix naming issues",
+      "Record budgets (texture memory per region)"
+     ],
+     "done": "docs/art_pipeline/asset_audit_2027-09.md"
+    }
+   ],
+   "edge_cases": [
+    "Orphan asset that a timeline references by string"
+   ],
+   "evidence": "docs/art_pipeline/asset_audit_2027-09.md"
+  },
+  {
+   "id": "Y1-P4-T61",
+   "stream": "secondary",
+   "title": "Draw the world map and travel icons",
+   "why": "Map with fog of war and waystations",
+   "tags": [
+    "art",
+    "ui",
+    "openworld"
+   ],
+   "days": [
+    {
+     "focus": "Region map art: Oakhaven",
+     "steps": [
+      "Paint the R1 map at map scale in the art bible style",
+      "Landmarks matching the chunks",
+      "Export",
+      "Check with fog"
+     ],
+     "done": "R1 map done"
+    },
+    {
+     "focus": "Region map art: Ironhold and the seam",
+     "steps": [
+      "Paint R2 and the seam",
+      "Consistent scale",
+      "Export",
+      "Check with fog"
+     ],
+     "done": "production/qa/evidence/y1p4/world_map_art.png"
+    },
+    {
+     "focus": "Map and waystation icons",
+     "steps": [
+      "Icons: waystation, shop, auction, quest, deadline marker, player",
+      "Colour-blind safe shapes",
+      "Export",
+      "Test on the map"
+     ],
+     "done": "Icons live on the map"
+    }
+   ],
+   "edge_cases": [
+    "Icon overlap at minimum zoom"
+   ],
+   "evidence": "production/qa/evidence/y1p4/world_map_art.png"
+  },
+  {
+   "id": "Y1-P4-T62",
+   "stream": "secondary",
+   "title": "Run the August and September sprint reviews",
+   "why": "§14 monthly milestone review",
+   "tags": [
+    "team",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "August sprint plan",
+     "steps": [
+      "/sprint-status July and /sprint-plan August: tools, telemetry, localization",
+      "Re-forecast",
+      "Risk update",
+      "Energy and hours log"
+     ],
+     "done": "production/sprints/2027-08.md"
+    },
+    {
+     "focus": "September sprint plan",
+     "steps": [
+      "/sprint-status August and /sprint-plan September: accessibility, timelines, camera, close",
+      "Carry-overs",
+      "Demo scope check",
+      "Risk update"
+     ],
+     "done": "production/sprints/2027-09.md"
+    },
+    {
+     "focus": "Year 1 retrospective",
+     "steps": [
+      "/retrospective for Y1-P4 and Year 1",
+      "Measured speed vs budget per stream",
+      "What to change for Y2",
+      "Input to the quarterly re-plan"
+     ],
+     "done": "production/retros/y1.md"
+    }
+   ],
+   "edge_cases": [
+    "Year 1 overran: propose cuts from the §2 cut order, not overtime"
+   ],
+   "evidence": "production/sprints/2027-08.md, 2027-09.md; production/retros/y1.md"
+  },
+  {
+   "id": "Y1-P4-T63",
+   "stream": "secondary",
+   "title": "Draw controller glyphs",
+   "why": "Glyph icons for prompts",
+   "tags": [
+    "art",
+    "ui",
+    "accessibility"
+   ],
+   "days": [
+    {
+     "focus": "Glyph atlas",
+     "steps": [
+      "Original pixel glyphs for keyboard keys, mouse, and generic face/shoulder/trigger/stick buttons in Xbox-, PlayStation- and Nintendo-style layouts (original art, no copied logos)",
+      "Readable at 1x",
+      "Export atlas and mapping",
+      "Hand to primary"
+     ],
+     "done": "Glyph atlas delivered"
+    }
+   ],
+   "edge_cases": [
+    "Trademark concern on layout symbols: keep generic shapes; check current platform guidelines before release"
+   ],
+   "evidence": "assets/ui/glyphs/*"
+  }
+ ]
+}

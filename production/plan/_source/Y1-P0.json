@@ -1,0 +1,1382 @@
+{
+ "phase_id": "Y1-P0",
+ "phase_title": "Stabilize",
+ "goal": "A human and the bot can play New Game to the credits with no softlock, the repo is clean and off OneDrive, every open audit decision is closed, and the storyline, time and difficulty designs are drafted.",
+ "exit_criteria": [
+  "Human playthrough New Game \u2192 credits on an exported build with 0 softlocks, logged in production/qa/playtest-2026-11-phase0.md",
+  "tests/integration/playthrough/full_playthrough_test.gd reaches the credits in CI",
+  "Repo root holds no tmpclaude-*-cwd or nul files; tests live under tests/unit and tests/integration with CI green",
+  "All 7 open audit decisions (shatter text, breadcrumbs, quests, NG+, flashes, fragment_4, null_potion) recorded and implemented",
+  "Every Act 1 side quest completes in act1_quests_completable_test",
+  "Slime, guardian and boar are playable side-scroll fights; Elara's house and the shrine are rooms",
+  "Review findings exist as GitHub issues (with user OK) and Conventional Commits hook is active",
+  "design/gdd/storyline-axes.md, time-model.md and difficulty-profiles.md drafted and reviewed"
+ ],
+ "tasks": [
+  {
+   "id": "Y1-P0-T01",
+   "stream": "primary",
+   "title": "Clean the junk out of the repo root",
+   "why": "ROADMAP \u00a75 Months 1\u20132 production hygiene; a clean project folder before anything else moves",
+   "tags": [
+    "cleanup",
+    "tools"
+   ],
+   "days": [
+    {
+     "focus": "Delete the 34 tmpclaude-*-cwd files and the reserved-name `nul` file, and stop them coming back",
+     "steps": [
+      "List the root with `ls -a`; confirm the 34 `tmpclaude-*-cwd` files are untracked (`git status --porcelain`) and none is referenced anywhere (`git grep tmpclaude`)",
+      "Show the user the deletion list and ask before removing; delete with `rm tmpclaude-*-cwd` from Git Bash",
+      "Delete `nul` with the extended path form (`cmd /c del \"\\\\?\\%CD%\\nul\"`), since Windows treats NUL as a device name",
+      "Add `tmpclaude-*-cwd` and `/nul` to the root `.gitignore` (already modified on this branch: review its current diff first)",
+      "Commit as `chore: remove stray temp files from repo root` after the user approves"
+     ],
+     "done": "Repo root lists only .claude, .git*, .vscode, AethelgardPrototype, CLAUDE.md, design, design_archive, docs, production, project.yaml; `git status` clean for those paths"
+    }
+   ],
+   "edge_cases": [
+    "`nul` survives a normal `rm` on Windows and needs the \\\\?\\ prefix",
+    "A tmpclaude file is still held open by a running Claude Code session: close sessions first",
+    ".gitignore pattern must not hide a real file named like `null.gd`"
+   ],
+   "evidence": "`git status` output and the root listing pasted into production/session-logs/session-log.md; commit hash"
+  },
+  {
+   "id": "Y1-P0-T02",
+   "stream": "primary",
+   "title": "Move the tests into tests/unit and tests/integration",
+   "why": "CLAUDE.md test-root rule (tests/unit/[system], tests/integration/[system]); CI must keep running every suite",
+   "tags": [
+    "tests",
+    "cleanup",
+    "tools"
+   ],
+   "days": [
+    {
+     "focus": "Plan the new test layout and every path that points at a test",
+     "steps": [
+      "Classify the 9 suites: unit = context_stack, input, dialogue; integration = load_all, phase0_blockers, chapter1_route, chapter2_route, combat_fixes, reachability",
+      "Grep for every reference: `.github/workflows/ci.yml` (9 `run_tests.sh res://tests/...` steps), `tests/run_all_tests.ps1` $suites, `tests/run_tests.sh`, `tests/run_phase0_tests.ps1`, `tests/run_screenshots.ps1`, `tools/export_windows.ps1`, README and CHANGELOG",
+      "Decide target names per `.claude/rules/test-standards.md` (`[system]_[feature]_test.gd`), e.g. `tests/integration/story/chapter1_route_test.gd`",
+      "Decide what stays at tests/ root: the runners, `screenshot_tour.gd` and `fixtures/`; write the move table into the session log and get the user's OK on the table"
+     ],
+     "done": "Approved move table (old path \u2192 new path) for 9 suites plus a list of 6+ files that reference them"
+    },
+    {
+     "focus": "Move the suites with git mv, including their .uid files, and fix every path",
+     "steps": [
+      "`git mv` each `*_test.gd` together with its `*_test.gd.uid` into `tests/unit/<system>/` or `tests/integration/<system>/`",
+      "Fix `preload`/`load` paths inside the suites and any `res://tests/fixtures/...` references",
+      "Update `run_all_tests.ps1` $suites and the `run_phase0_tests.ps1` default script path",
+      "Update the 9 CI steps in `.github/workflows/ci.yml` to the new res:// paths",
+      "Run `C:/Godot` console exe with `--headless --import` once so Godot rewrites the uid cache"
+     ],
+     "done": "Every moved suite starts from its new path with `tests/run_phase0_tests.ps1 -Script res://tests/...`"
+    },
+    {
+     "focus": "Prove the layout: all suites green locally and in CI",
+     "steps": [
+      "Run `powershell -File tests/run_all_tests.ps1` and confirm all 9 suites pass with the same check counts as before (e.g. phase0 73, chapter1 33+7, chapter2 49)",
+      "Run `tests/run_screenshots.ps1 -Only main_menu` to confirm the visual tour still finds its runner",
+      "Run `git diff --check`; push the branch only with the user's OK and watch the CI run",
+      "Add a guard to `load_all_test` or a new `tests/unit/meta/test_layout_test.gd` that fails if a `*_test.gd` appears directly under tests/"
+     ],
+     "done": "Local run log shows 9/9 suites passing; CI run green on the branch; layout guard committed"
+    }
+   ],
+   "edge_cases": [
+    "A .uid file left behind makes Godot report a broken uid on import",
+    "Windows path case: `tests/Unit` vs `tests/unit` must not both exist",
+    "`run_tests.sh` with no argument (the phase0 CI step) still resolves its default suite",
+    "Fixtures referenced with relative paths from a suite that moved one level deeper"
+   ],
+   "evidence": "CI run URL plus local `run_all_tests.ps1` log saved to production/qa/evidence/2026-10-test-layout/run_all.log"
+  },
+  {
+   "id": "Y1-P0-T03",
+   "stream": "primary",
+   "title": "Prepare the decision memo for the open audit decisions 3\u20135",
+   "why": "CHANGELOG 2026-10-06 'Decisions left for the user'; collaboration protocol Question \u2192 Options \u2192 Decision",
+   "tags": [
+    "docs",
+    "story",
+    "quests"
+   ],
+   "days": [
+    {
+     "focus": "Write one options table per open decision and get the user's choices",
+     "steps": [
+      "For each item list current behaviour with file:line evidence: shatter text (`scripts/chapter1/ch1_shatter_transition.gd:381` 'Four hundred and twelve iterations'), Ch1 breadcrumbs (`scripts/ui/progression_breadcrumb.gd`), quest rewards and stuck quests (`scripts/side_quest_manager.gd` lines 29\u2013154), NG+ stacking (`scripts/choice_consequences.gd`), screen flashes (`_screen_flash` in `ch3_archive_depths.gd`), `fragment_4` (`scripts/ui/achievements.gd:169` unlocks at 2 fragments), `null_potion` ('Blinds for 5s' in `ch1_oakhaven_village.gd:42`)",
+      "Give 2\u20133 options per item with cost in days and what it touches (story progression, save data, balance)",
+      "Mark which options need explicit approval under AGENTS.md (story progression, save schema, combat)",
+      "Walk the user through the memo; record each decision with date in `docs/decisions/2026-10_audit_decisions_3-5.md` (path confirmed with the user)"
+     ],
+     "done": "Every one of the 7 items has a recorded user decision or an explicit 'defer to phase X'"
+    }
+   ],
+   "edge_cases": [
+    "A decision that changes a flag name must list every .dlg and route test that reads the old name",
+    "User skips an item: re-ask in plain text, do not assume"
+   ],
+   "evidence": "Decision record file with 7 dated decisions"
+  },
+  {
+   "id": "Y1-P0-T04",
+   "stream": "primary",
+   "title": "Rewire the Chapter 1 shatter scene to the rewritten story",
+   "why": "Open decision 3: the shatter scene predates the rewrite (412 iterations, Aldric 'at the bridge', purge path shows the spared lines)",
+   "tags": [
+    "story",
+    "dialogue",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Move the shatter scene's spoken lines out of code and into `dialogue/ch1/shatter.dlg`",
+     "steps": [
+      "Read `ch1_shatter_transition.gd` play_bridge_approach() and the kill/spare/purge branch around lines 335\u2013390",
+      "Load the approved `dialogue/ch1/shatter.dlg` text (drafted in the secondary stream) and check node names against the branch logic",
+      "Replace the inline `DialogueManager.say(...)` calls with `DialogueManager.run(SHATTER_DLG, node)` per branch: `[if ch1_knight_killed]`, `[if ch1_knight_spared]`, `[if ch1_knight_purged]`",
+      "Make sure purge no longer falls into the spared branch: read the actual purge flag name from `dialogue/ch1/aldric.dlg` and STORY_BIBLE \u00a75 Chapter 1 flags"
+     ],
+     "done": "The scene contains no hardcoded story lines; `dialogue_test` voice lint passes on shatter.dlg"
+    },
+    {
+     "focus": "Test the three Aldric outcomes through the shatter scene",
+     "steps": [
+      "Extend `tests/integration/story/chapter1_route_test.gd`: run kill, spare and purge routes and assert the shatter node each one plays",
+      "Assert no line contains '412', 'iterations' or 'at the bridge' for any route",
+      "Run `tests/run_screenshots.ps1 -Only ch1_shatter` and save the shots for the spare and purge lines",
+      "Update CHANGELOG with a short entry; commit `fix(story): shatter scene follows the Ch1 rewrite` with the user's OK"
+     ],
+     "done": "Route test covers 3 outcomes and passes; screenshots retained"
+    }
+   ],
+   "edge_cases": [
+    "Old saves made before the rewrite with neither flag set: the scene must still pick a sensible default node",
+    "Purge confirmation cancelled then spare chosen: only the spare flag may be set",
+    "Skipping the cutscene with hold-to-skip must still set the same flags"
+   ],
+   "evidence": "chapter1_route_test pass log; production/qa/evidence/2026-10-shatter/{kill,spare,purge}.png"
+  },
+  {
+   "id": "Y1-P0-T05",
+   "stream": "primary",
+   "title": "Fix the stale Chapter 1 breadcrumb objectives",
+   "why": "Open decision 3 (stale Ch1 breadcrumbs); every objective must match the rewritten route",
+   "tags": [
+    "story",
+    "ui",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Make every Ch1 breadcrumb match the rewritten beats and test it",
+     "steps": [
+      "Dump the Ch1 objective table from `scripts/ui/progression_breadcrumb.gd` and compare against the route: crash site \u2192 Elara \u2192 Broken Mile \u2192 Oakhaven gate \u2192 stew \u2192 afternoon \u2192 north field \u2192 bridge \u2192 Aldric \u2192 village meeting",
+      "Replace stale entries with the approved strings (secondary stream text) keyed on the existing story flags",
+      "Check the arrow target for each objective points at a node that exists in that scene (the audit fixed direction, not targets)",
+      "Add a check to chapter1_route_test: at each route step the breadcrumb text equals the expected objective"
+     ],
+     "done": "Breadcrumb text matches the route at all 10 Ch1 steps in the test"
+    }
+   ],
+   "edge_cases": [
+    "The alarm can fire early (walking to north field or the bridge): the objective must jump with it",
+    "Loading a save mid-afternoon shows the right objective without replaying"
+   ],
+   "evidence": "chapter1_route_test pass log with the 10 new breadcrumb assertions"
+  },
+  {
+   "id": "Y1-P0-T06",
+   "stream": "primary",
+   "title": "Make the side quests completable and their rewards real",
+   "why": "Open decision 4: rewards naming items/charms that don't exist, ironhold_arena_legend step 5 never advances, Oakhaven quests never advance",
+   "tags": [
+    "quests",
+    "items",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Audit every quest's steps, advance calls and reward IDs",
+     "steps": [
+      "For each of the 14 quests in `SideQuestManager` (oakhaven_lost_memories \u2026 secret_debug_room) list steps and every `advance_quest` call site (`grep -rn advance_quest scripts`)",
+      "Check each reward id against `Inventory` item defs and charm lists: `memory_crystal`, `forge_heart`, `null_heal_potion`, `arena_veteran`, `stabilizer_mk2`, `memory_shard`, `data_ore`, `developer_insight`, plus abilities `echo_sense`, `lyra_power_shot`",
+      "Trace why `ironhold_arena_legend` stops at step 5: compare `arena_manager.gd:599` advance calls with the steps defined at `side_quest_manager.gd:55`",
+      "Write the audit table (quest, steps, advancing sites, missing rewards) into the decision record"
+     ],
+     "done": "Audit table shows, for each quest, whether it can complete and which reward IDs are missing"
+    },
+    {
+     "focus": "Fix the reward IDs and the arena quest per the user's decision",
+     "steps": [
+      "Apply the decided mapping: missing items either point to existing defs or get a minimal def in `inventory_system.gd` (ask first: this is item data)",
+      "Make `grant_rewards` refuse unknown ids with a single `push_error` naming the quest, instead of silently skipping",
+      "Add the missing step-5 advance for `ironhold_arena_legend` at the bracket the quest text names",
+      "Unit test: every reward id in every quest resolves (`tests/unit/quests/side_quest_rewards_test.gd`)"
+     ],
+     "done": "Reward-resolution test passes for all 14 quests; arena legend completes in a scripted run"
+    },
+    {
+     "focus": "Make the Oakhaven quests advance and prove every Act 1 quest can finish",
+     "steps": [
+      "Add the missing `advance_quest` hooks in `scripts/regions/oakhaven_region.gd` / `ch1_oakhaven_village.gd` for oakhaven_lost_memories, oakhaven_corrupted_cellar, oakhaven_herbalist_favor, oakhaven_memory_herb_delivery",
+      "Write `tests/integration/quests/act1_quests_completable_test.gd` that starts, advances and completes each Act 1 quest via the real hooks",
+      "Assert quest HUD shows completion and rewards land once (re-talking to Garro/Iris must not restart, per the audit fix)",
+      "Run the full suite; commit `fix(quests): Act 1 side quests can complete` after user OK"
+     ],
+     "done": "All Act 1 quests complete in the integration test; no unknown reward ids at runtime"
+    }
+   ],
+   "edge_cases": [
+    "Quest completed then save/load: reward must not be granted twice",
+    "Quest started in Ch1 and carried into Ch2 after the region changes",
+    "Inventory full when a reward item is granted",
+    "Removed items referenced by old saves' quest state"
+   ],
+   "evidence": "tests/unit/quests/side_quest_rewards_test.gd and tests/integration/quests/act1_quests_completable_test.gd passing"
+  },
+  {
+   "id": "Y1-P0-T07",
+   "stream": "primary",
+   "title": "Stop NG+ from stacking choice buffs every cycle",
+   "why": "Open decision 5: NG+ stacking; save-affecting change, needs explicit approval",
+   "tags": [
+    "save",
+    "systems",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Make NG+ apply choice buffs once per run and test two cycles",
+     "steps": [
+      "Find where choice buffs are applied on NG+ start (`ChoiceConsequences` and `GameManager.ng_plus_available` / ch10_ending.gd)",
+      "Implement the approved rule (e.g. recompute from flags each run instead of adding to carried stats); get explicit OK before touching carried save data",
+      "Unit test `tests/unit/ngplus/ngplus_buff_stacking_test.gd`: simulate 3 NG+ cycles and assert attack/defense/max_hp equal cycle 1",
+      "Log the before/after stat numbers in the session log"
+     ],
+     "done": "Three simulated NG+ cycles end with identical buff totals"
+    }
+   ],
+   "edge_cases": [
+    "A save from an older NG+ run that already stacked buffs: decide clamp-on-load vs leave (record the decision)",
+    "NG+ started from the Chapter 3 ending path vs the Chapter 10 ending path"
+   ],
+   "evidence": "tests/unit/ngplus/ngplus_buff_stacking_test.gd pass log"
+  },
+  {
+   "id": "Y1-P0-T08",
+   "stream": "primary",
+   "title": "Fix screen flashes, the fragment_4 achievement and the null_potion text",
+   "why": "Open decision 5: screen-flash VFX never show; fragment_4 threshold; null_potion description contradicts its effect",
+   "tags": [
+    "vfx",
+    "items",
+    "ui"
+   ],
+   "days": [
+    {
+     "focus": "Find out why screen flashes never render and fix them",
+     "steps": [
+      "Trace `_screen_flash` in `ch3_archive_depths.gd` and any shared flash in `combat_effects.gd` / `vfx_library.gd`: check CanvasLayer index, modulate alpha, and whether the tween runs while paused",
+      "Fix the root cause in one shared helper rather than per scene",
+      "Run the screenshot tour on the archive scene and capture a frame mid-flash",
+      "Add a headless check that the flash node exists, is visible and has alpha > 0 one frame after the call"
+     ],
+     "done": "Flash visible in a retained screenshot; headless check passes"
+    },
+    {
+     "focus": "Correct the fragment_4 threshold and the null_potion description",
+     "steps": [
+      "Change `achievements.gd:169` so `fragment_4` unlocks at the user's chosen count (rename the id if the decision says so, with a save-compat note)",
+      "Make the `null_potion` desc match its effect in all three places: `ch1_oakhaven_village.gd:42`, `inventory_system.gd:80`, `shop_system.gd:56`, or change the effect if that was the decision",
+      "Add a unit test that the three null_potion definitions agree on desc and effect",
+      "Commit `fix: flashes, fragment_4 achievement, null_potion text`"
+     ],
+     "done": "Achievement unlock test and null_potion consistency test pass"
+    }
+   ],
+   "edge_cases": [
+    "Flash during hitstop or pause: must not freeze on screen",
+    "Players who already unlocked `fragment_4` at 2 fragments keep it",
+    "Accessibility: flash brightness must respect a future reduce-flash option (leave a TODO linked to Y1-P1 accessibility spec)"
+   ],
+   "evidence": "production/qa/evidence/2026-11-flash/archive_flash.png; tests/unit/items/null_potion_consistency_test.gd"
+  },
+  {
+   "id": "Y1-P0-T09",
+   "stream": "primary",
+   "title": "Remove the unused InteractionPrompt and ObjectPool autoloads",
+   "why": "CHANGELOG 2026-10-06 unused code; ROADMAP R7 duplicated systems",
+   "tags": [
+    "cleanup",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Prove the two autoloads are unused, then remove them",
+     "steps": [
+      "`git grep -n \"InteractionPrompt\\|ObjectPool\"` across scripts, scenes and tests; confirm no runtime caller (region prompts use their own nearest-target logic)",
+      "Remove the two lines from `[autoload]` in `project.godot`; move `scripts/ui/interaction_prompt.gd` and `scripts/object_pool.gd` (+ .uid) out only after the user agrees (delete vs archive)",
+      "Run load_all and the two route suites; boot the game to the main menu",
+      "Commit `refactor: drop unused InteractionPrompt and ObjectPool autoloads`"
+     ],
+     "done": "project.godot has 30 autoloads instead of 32; all suites pass"
+    }
+   ],
+   "edge_cases": [
+    "A .tscn that instances interaction_prompt.gd directly (not via autoload)",
+    "Export presets that list the files explicitly"
+   ],
+   "evidence": "load_all_test pass log and the project.godot diff"
+  },
+  {
+   "id": "Y1-P0-T10",
+   "stream": "primary",
+   "title": "Fix log spam, the growing _bound_texts list and the leaked texture RID",
+   "why": "Known leftovers: fallback-slot push_warning spam, input_service `_bound_texts` growth, 'Texture leaked at exit'",
+   "tags": [
+    "code",
+    "performance",
+    "cleanup"
+   ],
+   "days": [
+    {
+     "focus": "Warn once per missing art slot and prune dead bound texts",
+     "steps": [
+      "In `asset_manager.gd` (20 fallback push_warning sites, e.g. lines 992\u20131009) add a `_warned_slots` set so each slot warns once per run",
+      "In `input_service.gd` prune `_bound_texts` entries whose WeakRef is dead inside `_refresh_bound_texts()` and before append at line 277",
+      "Unit test: bind 1,000 labels, free them, refresh, assert `_bound_texts.size() == 0`",
+      "Count warnings in a full chapter1 route run before/after and record the numbers"
+     ],
+     "done": "Route-test log warnings drop to one per slot; bound-text test passes"
+    },
+    {
+     "focus": "Find and fix the texture RID leaked at exit",
+     "steps": [
+      "Boot with a real renderer and `--verbose`, quit from the main menu, capture the 'RID allocations \u2026 leaked at exit' line",
+      "Bisect: disable autoloads in halves (GlitchOverlay, BackgroundManager, AssetManager caches first) until the leak goes",
+      "Free the static/global texture holder on `NOTIFICATION_PREDELETE` or `tree_exiting`",
+      "Re-run a plain boot and the screenshot tour exit; the leak line must be gone"
+     ],
+     "done": "Clean exit log with no leaked RID line, saved as evidence"
+    }
+   ],
+   "edge_cases": [
+    "Weak refs to nodes freed during the same frame as refresh",
+    "Leak only appears after a scene that uses a cached atlas: test boot and tour both"
+   ],
+   "evidence": "tests/unit/input/input_bound_texts_prune_test.gd; production/qa/evidence/2026-11-exit-leak/exit.log"
+  },
+  {
+   "id": "Y1-P0-T11",
+   "stream": "primary",
+   "title": "Close the combat-feel leftovers",
+   "why": "Known leftovers: COMBO label, hitstop paths, double hit sounds, dash i-frames 0.41 s, last-kill slowdown never runs (P2 combat feel; combat change needs approval)",
+   "tags": [
+    "combat",
+    "audio",
+    "fun"
+   ],
+   "days": [
+    {
+     "focus": "Reproduce each leftover and get approval for the fixes",
+     "steps": [
+      "Measure dash invulnerability: log `invulnerable` duration in `player_combat.gd` around lines 190 and 385 against DASH_DURATION 0.18; confirm the 0.41 s figure",
+      "Log every SFX call on one sword hit (player_combat + enemy_base + CombatFX) to find the duplicate hit sound",
+      "List every hitstop entry point (`combat_effects.gd` hitstop, `_force_end_hitstop`, GameJuice) and why `apply_last_kill_slowdown()` (line 493) never shows",
+      "Present the 5 proposed fixes to the user with numbers; record approval (combat is a protected area)"
+     ],
+     "done": "Approved fix list with measured before-values for all 5 items"
+    },
+    {
+     "focus": "Fix the hit sound duplication and the COMBO label",
+     "steps": [
+      "Keep one owner for the hit SFX (decide CombatFX vs enemy_base) and remove the other call",
+      "Rename or restyle the 'COMBO I/II/III' text (`player_combat.gd:2700\u20132706`) so it can't be read as a second hit counter, per the approved option (e.g. 'STRIKE 1/2/3' or a pip row)",
+      "Add a test that one hit produces exactly one hit-SFX request",
+      "Screenshot the new label next to the GameJuice combo counter"
+     ],
+     "done": "One hit = one hit sound in the test; label screenshot retained"
+    },
+    {
+     "focus": "Route all hitstop through one path and make the last-kill slowdown run",
+     "steps": [
+      "Funnel hitstop requests through `CombatFX` \u2192 `ContextStack.request_time_scale(&\"hitstop\")` only; delete parallel paths",
+      "Find why `last_kill` scale is cleared (priority vs hitstop, or scene change) and fix the ordering in ContextStack priorities",
+      "Test: killing the last enemy produces a 0.12 time scale for \u2265 1 frame and returns to 1.0 within 0.2 s",
+      "Run combat_fixes and context_stack suites"
+     ],
+     "done": "Last-kill slowdown observable in a test and in play; single hitstop path"
+    },
+    {
+     "focus": "Set dash i-frames to the approved window and regression-test the lot",
+     "steps": [
+      "Change invulnerability to the approved value (e.g. dash duration + a few frames) using a named constant in `player_combat.gd`",
+      "Add tests to `tests/integration/combat/combat_fixes_test.gd`: i-frame length, one hit sound, last-kill scale, single hitstop request",
+      "Play the Aldric fight and the arena bronze bracket once and note the feel in the session log",
+      "Commit `fix(combat): dash i-frames, hit sounds, hitstop path, last-kill slowdown`"
+     ],
+     "done": "combat_fixes suite passes with 4 new checks; play note written"
+    }
+   ],
+   "edge_cases": [
+    "Dash into a hit at the last i-frame",
+    "Last enemy dies from a DoT while the player is paused",
+    "Two enemies die on the same frame",
+    "Hitstop request during Root Access slow-time"
+   ],
+   "evidence": "tests/integration/combat/combat_fixes_test.gd pass log; production/qa/evidence/2026-11-combat/combo_label.png"
+  },
+  {
+   "id": "Y1-P0-T12",
+   "stream": "primary",
+   "title": "Fix the UI and region leftovers",
+   "why": "Known leftovers: version labels, chapter-end stats card, lore titles as speakers, Ironhold dead fallback, Clock Tower pre_boss trigger off the path",
+   "tags": [
+    "ui",
+    "level",
+    "cleanup"
+   ],
+   "days": [
+    {
+     "focus": "One version string for the whole game",
+     "steps": [
+      "Set `application/config/version` in project.godot to the user's chosen version (e.g. 0.1.x)",
+      "Replace `text = \"v1.0\"` in `scenes/main_menu.tscn:98` and the header in `pause_screen.gd:886` with `ProjectSettings.get_setting(\"application/config/version\")`",
+      "Make `tools/export_windows.ps1` print the version it built",
+      "Test: main menu and pause labels read the same string"
+     ],
+     "done": "Both screens show the same version in screenshots"
+    },
+    {
+     "focus": "Shrink the chapter-end stats card to fit 1280\u00d7720",
+     "steps": [
+      "Measure the card built in `ch2_chapter_end.gd` `_show_chapter_end_card()` (~1000 px tall)",
+      "Lay it out in two columns or a ScrollContainer so it fits inside 720 px with margins",
+      "Screenshot at 1280\u00d7720 and at the smallest window size the game allows",
+      "Check the confirm prompt names the right key via InputService tokens"
+     ],
+     "done": "Card fully visible at 1280\u00d7720 in a retained screenshot"
+    },
+    {
+     "focus": "Stop lore titles being passed as speakers and remove Ironhold's dead fallback",
+     "steps": [
+      "Find every call that sends a lore title into the speaker slot (`lore_journal.gd`, region `_discover_lore` helpers) and route it to a lore popup or a 'Journal' speaker",
+      "Make the dialogue voice lint's unregistered-speaker check cover these runtime calls",
+      "Delete the unreachable fallback branch in `scripts/regions/ironhold_region.gd` (near line 518) after confirming no caller",
+      "Run load_all and chapter2_route"
+     ],
+     "done": "No lore title appears in the name plate; Ironhold region has no dead branch"
+    },
+    {
+     "focus": "Move the Clock Tower pre_boss trigger onto the player's path and verify reachability",
+     "steps": [
+      "Plot the player's path through `ch2_clock_tower.gd` floors and the pre_boss Area2D (`_on_pre_boss` at line 415)",
+      "Move or widen the trigger so it spans the corridor to the Minute Hand (collision-adjacent: ask the user first)",
+      "Add the trigger to `reachability_test.gd` targets and assert the route test sees `pre_boss` before the boss",
+      "Screenshot the tower with the debug shapes visible"
+     ],
+     "done": "pre_boss dialogue plays on every route test run; reachability lists it as touchable"
+    }
+   ],
+   "edge_cases": [
+    "Version label in exported builds reads the same as in the editor",
+    "Stats card with a very long region or flag name",
+    "Player dashes past the pre_boss trigger in one frame"
+   ],
+   "evidence": "production/qa/evidence/2026-11-ui/{menu_version,pause_version,stats_card,clock_tower}.png; reachability_test log"
+  },
+  {
+   "id": "Y1-P0-T13",
+   "stream": "primary",
+   "title": "Turn the slime, the guardian and the boar into real side-scroll fights",
+   "why": "ROADMAP \u00a75 'Make the boar, the guardian and the opening slime real side-scroll fights'; P1 dual perspective (combat change: needs approval)",
+   "tags": [
+    "combat",
+    "story",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Design the three encounters and get approval",
+     "steps": [
+      "Read how each is staged today: `_stage_slime_fight()` in `ch1_elara_meeting.gd:196`, the guardian ColorRect in `ch1_path_to_oakhaven.gd:214`, the boar beats in `ch1_oakhaven_village.gd` (`start_boar_fight`, `boar_charge`, `boar_pogo`, `boar_stunned`)",
+      "Write one-page specs: arena size, enemy script (`slime.gd` exists; guardian and boar need new `enemy_base` subclasses), HP, attacks, win/loss, which story flag each outcome sets",
+      "Keep the non-combat outcomes: guardian filter/aggression edits and refuse-and-fight; boar calm or rebuild-nest bypass the fight",
+      "Show the specs to the user and get explicit OK (combat + story progression)"
+     ],
+     "done": "Three approved encounter specs in docs/decisions"
+    },
+    {
+     "focus": "Build the opening slime fight in the combat arena",
+     "steps": [
+      "Hand off from `elara_meeting` to `scenes/combat/combat_arena.tscn` with the slime spawn and the forest background, then return to the same spot",
+      "Keep the 'breaks into polygons' death beat and Elara's line after it",
+      "Handle player death here as a tutorial retry, not game over",
+      "Run chapter1_route to confirm the flags after the fight are unchanged"
+     ],
+     "done": "Slime fight playable start to finish; route test still green"
+    },
+    {
+     "focus": "Build the Broken Mile guardian fight for the refuse-and-fight branch",
+     "steps": [
+      "Create `scripts/combat/enemies/broken_mile_guardian.gd` from `enemy_base.gd` with 2 attacks and a telegraph",
+      "Only the 'refuse and fight' choice starts the arena; FRACTURE_ENTITIES filter and aggression-down still resolve without combat",
+      "Return to the path with `guardian_resolved = true` and the right reaction node",
+      "Screenshot the fight"
+     ],
+     "done": "Guardian fight reachable only from the fight branch"
+    },
+    {
+     "focus": "Build the north-field boar fight with its two non-violent alternatives",
+     "steps": [
+      "Create `scripts/combat/enemies/field_boar.gd`: charge, stun-on-wall, pogo window (the existing beat names)",
+      "Calm and rebuild-nest choices skip the arena and set their existing flags",
+      "Make sure the bridge deadline keeps running while the boar is handled (no hidden pause)",
+      "Return to the village with the alarm sequence continuing"
+     ],
+     "done": "All three boar outcomes reachable and set the existing flags"
+    },
+    {
+     "focus": "Wire the fights into the transition and pause rules",
+     "steps": [
+      "Make sure each arena entry/exit goes through the existing scene-change path and ContextStack clears slow-mo on return",
+      "Check random encounters can't trigger during these scripted fights",
+      "Check hold-to-skip is not offered inside the fights",
+      "Run the screenshot tour on the three new arenas"
+     ],
+     "done": "Three arenas show in the tour with no overlap problems"
+    },
+    {
+     "focus": "Test the three fights end to end",
+     "steps": [
+      "Extend `chapter1_route_test` with a scripted combat driver (damage the enemy to 0 via its API) for slime, guardian-fight and boar-fight routes",
+      "Assert the alternative branches never load the arena",
+      "Death in each fight returns to a retry with HP restored",
+      "Commit `feat(ch1): slime, guardian and boar are real fights` after approval"
+     ],
+     "done": "Route test covers fight and non-fight branches for all three; retained screenshots"
+    }
+   ],
+   "edge_cases": [
+    "Pausing mid-charge in the boar fight",
+    "Dying to the slime at 1 HP during its death animation",
+    "Saving is blocked inside the arena and allowed after return",
+    "Gamepad-only play through all three fights"
+   ],
+   "evidence": "chapter1_route_test pass log; production/qa/evidence/2026-11-ch1-fights/{slime,guardian,boar}.png"
+  },
+  {
+   "id": "Y1-P0-T14",
+   "stream": "primary",
+   "title": "Extend the playthrough bot from Oakhaven to the credits",
+   "why": "Phase 0 exit: 'the bot passes'; R8 no tests \u2192 bot coverage",
+   "tags": [
+    "tests",
+    "story",
+    "tools"
+   ],
+   "days": [
+    {
+     "focus": "Map the full route and the bot's missing legs",
+     "steps": [
+      "List the scenes from the Act 1 end (`ch2_chapter_end`) through `ch3_ironhold_departure` \u2026 `ch3_ending` \u2192 Chapter 4 \u2026 `ch10_ending` \u2192 `CreditsScreen`",
+      "Note which legs the existing bot v0 and the two route tests already cover",
+      "For each uncovered leg, list the story flag and the scene method the bot must call to advance",
+      "Create `tests/integration/playthrough/full_playthrough_test.gd` skeleton that reuses the route-test helpers"
+     ],
+     "done": "Leg table and an empty bot that runs the covered legs"
+    },
+    {
+     "focus": "Drive Chapters 3\u20136 in the bot",
+     "steps": [
+      "Script the Wastes \u2192 Data Stream \u2192 Archive \u2192 Kaelthas \u2192 ch3_ending legs, auto-advancing dialogue and taking the first choice",
+      "Script Chapters 4\u20136 via their scene entry methods; on any wait > 30 s fail with the scene name and last dialogue node",
+      "Assert `DialogueManager.is_active == false` and ContextStack empty after each scene (R5 check)",
+      "Run and fix only test-side issues; log game-side softlocks as issues"
+     ],
+     "done": "Bot reaches Chapter 7 or reports the exact blocking scene"
+    },
+    {
+     "focus": "Drive Chapters 7\u201310 to the credits and put the bot in CI",
+     "steps": [
+      "Script Chapters 7\u201310 and the credits roll; assert `CreditsScreen` finished and `ng_plus_unlocked` set",
+      "Add the bot to `run_all_tests.ps1` as a Long suite and to `ci.yml`",
+      "Record the bot's wall time; mark it Long so `-Quick` skips it",
+      "Commit `test: playthrough bot reaches the credits`"
+     ],
+     "done": "Bot passes New Game \u2192 credits headless; CI step added"
+    }
+   ],
+   "edge_cases": [
+    "Timed sequences (medicine convoy, bridge) on the bot's default path",
+    "A scene that awaits a real-time timer longer than the test timeout",
+    "Credits skipped vs watched"
+   ],
+   "evidence": "tests/integration/playthrough/full_playthrough_test.gd pass log in CI"
+  },
+  {
+   "id": "Y1-P0-T15",
+   "stream": "primary",
+   "title": "Phase 0 exit: a human plays New Game to the credits",
+   "why": "ROADMAP \u00a75 Months 1\u20132 Exit: a human can play New Game \u2192 credits with no softlock; one playthrough log",
+   "tags": [
+    "tests",
+    "fun",
+    "release"
+   ],
+   "days": [
+    {
+     "focus": "Human playthrough part 1: New Game to the end of Act 1",
+     "steps": [
+      "Build with `tools/export_windows.ps1` and play the exported exe, not the editor",
+      "Play the prologue, Chapter 1 (fight Aldric, spare) and Chapter 2 (truth, medicine on time) on keyboard",
+      "Log every softlock, stuck prompt, visual bug and pacing note with timestamp and screenshot",
+      "File each issue on GitHub (or in the session log if issues aren't set up yet)"
+     ],
+     "done": "Playthrough log for Act 1 with timestamps"
+    },
+    {
+     "focus": "Human playthrough part 2: Chapter 3 to the credits",
+     "steps": [
+      "Continue from the Act 1 save on a gamepad to cover the pad path",
+      "Note where legacy Chapters 4\u201310 break tone or flow (input for the Y2 legacy cleanup), without fixing content",
+      "Confirm credits roll and NG+ unlock is written to the save",
+      "Write the playthrough log with `/playtest-report` into `production/qa/playtest-2026-11-phase0.md`"
+     ],
+     "done": "Full playthrough log; credits reached or the blocking point recorded"
+    },
+    {
+     "focus": "Fix the softlocks the playthrough found and run the exit check",
+     "steps": [
+      "Fix every softlock found (root cause, not a skip button), each with a regression check in the route tests or the bot",
+      "Run `/smoke-check` and the full suite including the bot",
+      "Run `/gate-check` against the Phase 0 exit criteria and record PASS/CONCERNS",
+      "Tick the Phase 0 boxes in ROADMAP \u00a75 that are now done (with user OK)"
+     ],
+     "done": "0 open softlocks; smoke-check and gate-check reports saved"
+    }
+   ],
+   "edge_cases": [
+    "Quit to menu mid-chapter and continue",
+    "Alt-tab and gamepad disconnect during dialogue",
+    "Loading the backup after a forced kill of the process"
+   ],
+   "evidence": "production/qa/playtest-2026-11-phase0.md and production/qa/evidence/2026-11-playthrough/*.png"
+  },
+  {
+   "id": "Y1-P0-S01",
+   "stream": "secondary",
+   "title": "Plan the Phase 0 sprint",
+   "why": "ROADMAP \u00a714 operating rhythm; framework sprint planning",
+   "tags": [
+    "docs",
+    "team"
+   ],
+   "days": [
+    {
+     "focus": "Turn this phase's task list into a 6-week sprint plan",
+     "steps": [
+      "Run `/sprint-plan` with the Phase 0 tasks (primary T01\u2013T15, secondary S01\u2013S16) and the 7-day week with Sunday integration",
+      "Mark the user-decision days (repo hygiene, audit decisions, GitHub issues) so they're not skipped",
+      "Create `production/session-state/active.md` with the sprint goal and the first three tasks",
+      "Note energy/rest checks per ROADMAP \u00a71.1 (burnout risk) in the plan"
+     ],
+     "done": "Sprint plan saved under production/ and active.md started"
+    }
+   ],
+   "edge_cases": [
+    "A user decision not taken by its planned day: the dependent task moves, the plan records it"
+   ],
+   "evidence": "production/sprints/sprint-2026-10-p0.md (path per the framework) and production/session-state/active.md"
+  },
+  {
+   "id": "Y1-P0-S02",
+   "stream": "secondary",
+   "title": "Write the replacement Chapter 1 text: shatter scene, breadcrumbs, item and quest strings",
+   "why": "Open decisions 3\u20135 need new text in the rewrite's voice before primary can wire it",
+   "tags": [
+    "story",
+    "dialogue"
+   ],
+   "days": [
+    {
+     "focus": "Draft `dialogue/ch1/shatter.dlg` in the Chapter 1 voice",
+     "steps": [
+      "Reread `story/VOICE_GUIDE.md` (Kaelen and Elara sheets, \u00a75 rhythm rule) and `dialogue/ch1/aldric.dlg` endings",
+      "Write three nodes: after kill, after spare, after purge, each referring to what actually happened (no '412 iterations', no Aldric 'at the bridge')",
+      "Keep the bridge-materials observation only if it fits the current canon (regions stitched at bridges) and STORY_BIBLE \u00a72",
+      "Run the dialogue voice and rhythm lint on the file; show the draft to the user"
+     ],
+     "done": "shatter.dlg passes lint and the user approves the text"
+    },
+    {
+     "focus": "Write the Ch1 breadcrumb objectives and the fixed item/quest strings",
+     "steps": [
+      "Write 10 objective lines matching the Ch1 route (crash site \u2192 village meeting) in plain imperative form",
+      "Write the null_potion description that matches the decided effect",
+      "Write replacement reward names/descriptions for any quest reward the decision memo keeps",
+      "Add any new flag or string to STORY_BIBLE \u00a75 Chapter 1 flags if the decision added one"
+     ],
+     "done": "String list handed to primary T05/T06/T08 in the decision record"
+    }
+   ],
+   "edge_cases": [
+    "Strings must not hardcode key names (input lint)",
+    "Objective text length fits the tracker at 1280 px"
+   ],
+   "evidence": "dialogue/ch1/shatter.dlg; passing dialogue_test lint; approved string list"
+  },
+  {
+   "id": "Y1-P0-S03",
+   "stream": "secondary",
+   "title": "Start the evidence folder, the session checkpoint and Conventional Commits",
+   "why": "CLAUDE.md: evidence in production/qa/evidence/, active.md checkpoint, Conventional Commits",
+   "tags": [
+    "tools",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Create the evidence and session-state conventions",
+     "steps": [
+      "Create `production/qa/evidence/` with a README naming the folder pattern `YYYY-MM-<topic>/` and what counts as evidence (live viewport vs headless shots, per AGENTS.md)",
+      "Make `tests/run_screenshots.ps1` optionally copy chosen shots there (`-Evidence <topic>`)",
+      "Write the `production/session-state/active.md` template: current task, last green suite, open decisions, next step",
+      "Check .gitignore: evidence is committed, session-state stays ignored as the framework says"
+     ],
+     "done": "Evidence folder and active.md template exist; first evidence copied by script"
+    },
+    {
+     "focus": "Adopt Conventional Commits with a local hook and a CI check",
+     "steps": [
+      "Add `.githooks/commit-msg` that accepts `feat|fix|chore|docs|test|refactor` (+ optional scope) and a body line `Story:`/`Task:` id",
+      "Set `git config core.hooksPath .githooks` (document it in README; ask before changing config)",
+      "Add a CI job that checks PR commit subjects against the same pattern",
+      "Write one example commit for this change and confirm the hook rejects a bad message"
+     ],
+     "done": "Hook rejects 'stuff' and accepts 'chore: add commit-msg hook'; CI job green"
+    }
+   ],
+   "edge_cases": [
+    "Merge commits and revert commits must pass the pattern",
+    "Hook must run under Git Bash on Windows (LF endings)"
+   ],
+   "evidence": ".githooks/commit-msg, production/qa/evidence/README.md, CI run showing the commit check"
+  },
+  {
+   "id": "Y1-P0-S04",
+   "stream": "secondary",
+   "title": "Decide and carry out the repo hygiene calls: OneDrive, LFS, sprite archive, context.txt",
+   "why": "ROADMAP \u00a75 'Your call' items; ROADMAP \u00a714 backups (Git remote + off-site LFS copy)",
+   "tags": [
+    "cleanup",
+    "tools"
+   ],
+   "days": [
+    {
+     "focus": "Decision day: present the four hygiene calls with facts",
+     "steps": [
+      "Measure: `.git` is 176 MB (pack 98 MB); list the largest blobs with `git rev-list --objects --all | git cat-file --batch-check` to see what LFS would move",
+      "Mysprites: confirm it is already out of the repo (moved 2026-10-04 to `Desktop/Aethelgard sprite archive/`); decide keep/back-up/delete the archive and whether to purge it from history",
+      "context.txt: `design_archive/context.txt` vs `design_archive/Blueprint_and_roadmap.txt` differ only in line wrapping (32,925 vs 32,426 bytes); confirm with `diff -w` and propose retiring it",
+      "OneDrive: propose a target path (e.g. `C:/dev/Aethelgard`), and LFS options (track new binaries only vs migrate history, which rewrites history and needs a force-push); check current GitHub LFS quota rules",
+      "Record the user's four decisions"
+     ],
+     "done": "Four dated decisions recorded"
+    },
+    {
+     "focus": "Execution day: move the repo off OneDrive and retire context.txt",
+     "steps": [
+      "Push everything, then `git clone` to the chosen non-OneDrive path (a clone, not a copy, so OneDrive placeholders can't corrupt .git)",
+      "Copy untracked-but-needed files (`.claude/`, `production/`, `project.yaml`) after listing them with the user",
+      "Open the project in Godot 4.6.3 from the new path, run `--headless --import`, then `run_all_tests.ps1`",
+      "Retire `design_archive/context.txt` per the decision; update CLAUDE.md/AGENTS.md paths that name the OneDrive folder (ask first)"
+     ],
+     "done": "All suites green from the new path; old folder left read-only until the user deletes it"
+    },
+    {
+     "focus": "Execution day: set up Git LFS as decided and verify backups",
+     "steps": [
+      "`git lfs install`; add `.gitattributes` LFS rules for *.png, *.wav, *.ogg, *.psd, *.aseprite, *.pae.json-adjacent binaries per the decision",
+      "If history migration was approved: run `git lfs migrate import` on a throwaway clone first, compare sizes, then do it for real and force-push with the user present",
+      "Verify a fresh clone builds and passes load_all",
+      "Write the backup routine (remote + off-site LFS copy + PAE project files) into README"
+     ],
+     "done": "Fresh clone passes load_all; LFS tracking listed by `git lfs track`"
+    }
+   ],
+   "edge_cases": [
+    "Godot `.import` files referencing absolute OneDrive paths",
+    "Long-path issues on the new location (>260 chars)",
+    "CI cache keyed on the old LFS-less checkout"
+   ],
+   "evidence": "Decision record; `git lfs track` output and test log from the new clone"
+  },
+  {
+   "id": "Y1-P0-S05",
+   "stream": "secondary",
+   "title": "Turn every review finding into a GitHub Issue",
+   "why": "ROADMAP \u00a75 hygiene + \u00a711 traceability ('One GitHub Issue per item'); needs the user's OK",
+   "tags": [
+    "docs",
+    "tools"
+   ],
+   "days": [
+    {
+     "focus": "Extract every finding into a reviewable table",
+     "steps": [
+      "Parse `CODE_REVIEW_2026-10-04.md` (\u2248400 findings, C1\u2013C19, R1\u2013R8, \u00a74.1\u20134.7 highs, appendix) into a CSV: id, title, section, severity, file:line, roadmap phase (\u00a711)",
+      "Add the open items from CHANGELOG 2026-10-04..06 ('Seen, not yet fixed', 'Decisions left')",
+      "Mark items already fixed (all C1\u2013C19, the audit fixes) with the commit hash so they're created closed or skipped",
+      "Show the CSV and the label scheme (phase:Y1-P0 \u2026 area:combat etc.) to the user"
+     ],
+     "done": "CSV with every finding and its phase; user reviewed it"
+    },
+    {
+     "focus": "Create the labels, milestones and issues (with explicit OK)",
+     "steps": [
+      "Ask the user for explicit OK to create issues on the GitHub repo",
+      "Create labels and milestones (one per roadmap phase) with `gh label create` / `gh api`",
+      "Create issues in batches of 50 with `gh issue create`, sleeping between batches to respect rate limits",
+      "Write the CSV \u2192 issue-number map back into the CSV"
+     ],
+     "done": "Every open finding has an issue number"
+    },
+    {
+     "focus": "Link the issues back to the plan and triage the first week",
+     "steps": [
+      "Add the issue numbers to ROADMAP \u00a711 rows (with user OK) and to the Phase 0/1 tasks they belong to",
+      "Run `/bug-triage` over the Phase 0 milestone and set priorities",
+      "Close the issues this phase already fixed with a commit reference",
+      "Add an issue template for bugs and for playtest notes"
+     ],
+     "done": "Phase 0 milestone triaged; issue templates in .github/ISSUE_TEMPLATE"
+    }
+   ],
+   "edge_cases": [
+    "Duplicate findings across review sections",
+    "Findings that point at files since deleted",
+    "GitHub API rate limit mid-batch: the script must resume"
+   ],
+   "evidence": "Findings CSV with issue numbers; GitHub milestone view"
+  },
+  {
+   "id": "Y1-P0-S06",
+   "stream": "secondary",
+   "title": "Draft the storyline axes, the time model and the difficulty values",
+   "why": "ROADMAP \u00a75 Months 1\u20132 Design: draft \u00a712.2, \u00a712.4, \u00a712.1 (unchecked)",
+   "tags": [
+    "story",
+    "time",
+    "difficulty",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Storyline axes: map the 27 combinations",
+     "steps": [
+      "Run `/design-system` for 'storyline architecture' using STORY_BIBLE \u00a75 axes (Authority you/shared/none, Faction Hearth/Archive/Continuity, Deleted restore/release/choose) and the four ending families",
+      "List all 27 combinations and mark the invalid ones with a reason, landing on 24 + 3 secret",
+      "Map which existing Act 1 flags (`act1_report_*`, `ch2_seraphina_*`, `ch2_data_wraith_*`) seed which axis",
+      "Save as `design/gdd/storyline-axes.md`"
+     ],
+     "done": "Axis doc with a 27-row table and Act 1 seed mapping"
+    },
+    {
+     "focus": "Storyline axes: side storylines and the ending composer inputs",
+     "steps": [
+      "Assign each of the 12 side storylines to an axis or a timing modifier (arcs 04 faction, 05 FIRST WAKE secret, 06 Continuity/Hearth economics from PM 2612\u20132720)",
+      "Define the composer input record: axis values + companions + regions + timing flags",
+      "Note FIRST WAKE and Crownless are post-1.0 candidates per STORY_BIBLE",
+      "Run `/design-review` on the doc"
+     ],
+     "done": "Design review PASS or a list of concerns"
+    },
+    {
+     "focus": "Time model: WorldClock and quest timing types",
+     "steps": [
+      "Write `design/gdd/time-model.md`: 24 real min per in-game day (tunable), ~28-day month, 4 seasons, pausing rules owned by ContextStack",
+      "Define the 4 timing types (window, deadline, order, duration) as data fields for quests",
+      "Express the two existing timed events in clock terms: Ch1 bridge 'until dark, day 1' and Ch2 medicine 'until the evening bell'",
+      "Define pace values per act (early / on-time / late) and the signposting rule"
+     ],
+     "done": "Time model doc that WorldClock v1 (Y1-P1) can implement directly"
+    },
+    {
+     "focus": "Difficulty values: five profiles as data",
+     "steps": [
+      "Write `design/gdd/difficulty-profiles.md` from \u00a712.1: parry 12/9/6/4/2 frames, i-frames 18/15/12/10/8, telegraph \u00d71.5\u2026\u00d70.7, damage \u00d70.6\u2026\u00d72.0, heals 5\u20261, deadline leniency \u00d71.5\u2026\u00d70.85",
+      "List the current code constants each value replaces (e.g. dash i-frames in `player_combat.gd`) so P2 can wire them",
+      "Define the lower-only mid-run change rule and DDA scope for Beginner/Easy",
+      "Run `/balance-check` on the table for obvious outliers"
+     ],
+     "done": "Difficulty doc with a constants map and balance-check notes"
+    }
+   ],
+   "edge_cases": [
+    "An axis combination that makes a companion impossible must still have a valid ending",
+    "Deadline leniency \u00d70.85 on Hell must not make the Ch1 bridge impossible"
+   ],
+   "evidence": "design/gdd/storyline-axes.md, design/gdd/time-model.md, design/gdd/difficulty-profiles.md with /design-review results"
+  },
+  {
+   "id": "Y1-P0-S07",
+   "stream": "secondary",
+   "title": "Playtest Act 1 for fun and fix the worst pacing problems",
+   "why": "P2/P9 fun factor; playtest-driven fixes before the spine work starts",
+   "tags": [
+    "fun",
+    "level",
+    "story"
+   ],
+   "days": [
+    {
+     "focus": "Play Act 1 as a player and log what isn't fun",
+     "steps": [
+      "Play from New Game to the Ironhold arena without debug tools; time each section",
+      "Log moments of boredom, confusion, waiting and backtracking with timestamps",
+      "Note the village afternoon: is three conversations before the alarm the right number?",
+      "Write the notes with `/playtest-report`"
+     ],
+     "done": "Act 1 fun report with section timings"
+    },
+    {
+     "focus": "Rank the fun problems and pick the ones to fix now",
+     "steps": [
+      "Rank by impact \u00d7 cost; separate content-only fixes from ones needing code or combat approval",
+      "Pick up to 6 content-only fixes (dialogue length, NPC placement, trigger timing) for this phase",
+      "Turn the rest into GitHub issues tagged fun",
+      "Get the user's OK on the list"
+     ],
+     "done": "Approved fix list of \u2264 6 items"
+    },
+    {
+     "focus": "Apply the first half of the pacing fixes",
+     "steps": [
+      "Apply the first 3 approved fixes (e.g. trim a long staged beat in `ch1_oakhaven_village.gd`, move an NPC closer to the path)",
+      "Re-run chapter1_route and reachability tests",
+      "Play the changed sections again and note the timing difference",
+      "Screenshot any layout change"
+     ],
+     "done": "3 fixes in, tests green, timings noted"
+    },
+    {
+     "focus": "Apply the second half and re-time Act 1",
+     "steps": [
+      "Apply the remaining approved fixes in Chapter 2 (e.g. Ironhold walking distance between Command Hall and arena)",
+      "Re-run chapter2_route and the screenshot tour on touched scenes",
+      "Re-time the full Act 1 and compare with day 1",
+      "Update CHANGELOG"
+     ],
+     "done": "Act 1 time and fun notes compared before/after"
+    }
+   ],
+   "edge_cases": [
+    "Moving an NPC must keep it reachable (reachability test)",
+    "Shortening a beat must keep every flag the route tests read"
+   ],
+   "evidence": "production/qa/playtest-2026-10-act1-fun.md; before/after timings; route tests green"
+  },
+  {
+   "id": "Y1-P0-S08",
+   "stream": "secondary",
+   "title": "Build Elara's house and the shrine as real rooms",
+   "why": "ROADMAP \u00a75 'Build Elara's house and the shrine as rooms' (story progression: needs approval)",
+   "tags": [
+    "level",
+    "story",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Plan both rooms and their entry/exit",
+     "steps": [
+      "Read how `elara_house.dlg` 'invite' and 'start' run inside `ch1_oakhaven_village.gd:173\u2013177`, and the `open_shrine_gate` hook in `ch1_tutorial_knight.gd:1356`",
+      "Sketch each room: size in tiles, door, interactables (table, Elara's arm moment, shrine altar), camera bounds",
+      "Decide the transition (same-scene sub-room vs new scene) given TransitionService arrives in Y1-P1",
+      "Get user approval (story progression)"
+     ],
+     "done": "Approved room sketches and transition choice"
+    },
+    {
+     "focus": "Build Elara's house room",
+     "steps": [
+      "Create `scenes/chapter1/elara_house.tscn` with placeholder shapes (no production art), collision on walls and table",
+      "Move the stew conversation to run inside the room; each question still asked once",
+      "Return the player to the village door with the afternoon sequence intact",
+      "Add the room's interactables to reachability_test"
+     ],
+     "done": "Stew scene plays inside the room; route test green"
+    },
+    {
+     "focus": "Build the shrine room",
+     "steps": [
+      "Create `scenes/chapter1/shrine.tscn` reached from the shrine gate after Aldric",
+      "Move the post-Aldric shrine beats and Fragment One trigger into the room without changing flags",
+      "Make the room respect the kill/spare/purge outcome in its dressing (placeholder shapes)",
+      "Add to reachability_test and the screenshot tour"
+     ],
+     "done": "Shrine room reachable; Fragment One still fires once"
+    },
+    {
+     "focus": "Test both rooms and capture evidence",
+     "steps": [
+      "Extend chapter1_route_test with enter/exit assertions for both rooms",
+      "Save and load inside each room (or confirm saving is blocked) and check the return point",
+      "Screenshot both rooms in the live viewport",
+      "Commit `feat(ch1): Elara's house and the shrine are rooms` after user OK"
+     ],
+     "done": "Route tests green; screenshots retained"
+    }
+   ],
+   "edge_cases": [
+    "Entering the house before the stew invite",
+    "Leaving the shrine before Fragment One finishes",
+    "Gamepad focus after the room's dialogue"
+   ],
+   "evidence": "production/qa/evidence/2026-11-rooms/{elara_house,shrine}.png; chapter1_route_test log"
+  },
+  {
+   "id": "Y1-P0-S09",
+   "stream": "secondary",
+   "title": "Write side arc 04, Iron Owes (quests 19\u201324)",
+   "why": "ROADMAP \u00a75 'side arcs 04\u201306 not built'; PM 2612\u20132657; axis effect: faction alignment (P5)",
+   "tags": [
+    "story",
+    "quests",
+    "dialogue"
+   ],
+   "days": [
+    {
+     "focus": "Outline Iron Owes from the source",
+     "steps": [
+      "Read PM lines 2612\u20132657 and list quests 19 Red Marks, 20 Inherited Risk, 21 The Families Below, 22 A Public Ledger, 23 Brask's Order, 24 Debt Paid Forward",
+      "For each: giver, location in Ironhold, steps, flags set, which faction it pushes, timing type if any",
+      "Check the cast against STORY_BIBLE (Brask, Rook, Garro, Doss) and flag anything not yet canon",
+      "Save as `story/outlines/side_arc_04_iron_owes.md` using `ACT_TEMPLATE.md` fields"
+     ],
+     "done": "Outline with 6 quests, flags and faction effect"
+    },
+    {
+     "focus": "Write quests 19 Red Marks and 20 Inherited Risk as .dlg",
+     "steps": [
+      "Create `dialogue/side/iron_owes.dlg` with nodes for Q19 and Q20",
+      "Use the speaker voices from VOICE_GUIDE; contractions, real questions",
+      "Set flags `side04_q19_*`, `side04_q20_*` (names registered in the outline)",
+      "Run dialogue_test lint"
+     ],
+     "done": "Q19\u2013Q20 nodes pass lint"
+    },
+    {
+     "focus": "Write quests 21 The Families Below and 22 A Public Ledger",
+     "steps": [
+      "Add Q21 and Q22 nodes; Q22's choice is the faction push (record which option feeds Hearth/Archive/Continuity)",
+      "Keep every consequence visible later (quest rule: someone remembers the method)",
+      "Add `[if ...]` variants for whether Ch2 medicine was early/on time/late where the outline calls for it",
+      "Lint"
+     ],
+     "done": "Q21\u2013Q22 nodes pass lint with axis effects noted"
+    },
+    {
+     "focus": "Write quests 23 Brask's Order and 24 Debt Paid Forward",
+     "steps": [
+      "Add Q23 (Commander Brask) and Q24 (resolution) nodes",
+      "Write the failure state: what changes in Ironhold if the arc is abandoned (no silent loss)",
+      "Note rewards as RewardLedger ids (to be wired in Y1-P1) instead of item names",
+      "Lint"
+     ],
+     "done": "All six quests drafted"
+    },
+    {
+     "focus": "Review Iron Owes for voice and continuity",
+     "steps": [
+      "Read the whole arc aloud for rhythm; check the 30% short-line rule",
+      "Cross-check flags against STORY_BIBLE Chapter 2 flags; add new ones to a 'Side arc 04 flags' table",
+      "Show the arc to the user for approval",
+      "Commit `docs(story): side arc 04 Iron Owes draft`"
+     ],
+     "done": "User-approved arc draft and flag table"
+    }
+   ],
+   "edge_cases": [
+    "Player does Iron Owes after the Act 1 end: arc must close or carry into Act 2 cleanly",
+    "Seraphina absent (rejected) during Q23"
+   ],
+   "evidence": "story/outlines/side_arc_04_iron_owes.md; dialogue/side/iron_owes.dlg passing dialogue_test"
+  },
+  {
+   "id": "Y1-P0-S10",
+   "stream": "secondary",
+   "title": "Start the Chapter 3 rewrite into .dlg in the same voice",
+   "why": "ROADMAP \u00a75 'Then Chapter 2 onward, in the same voice'; Act 2 opener; PM 3140\u20133830",
+   "tags": [
+    "story",
+    "dialogue"
+   ],
+   "days": [
+    {
+     "focus": "Map the 21 source scenes to the existing Chapter 3 scenes",
+     "steps": [
+      "List PM scenes C3-S01 The Road That Moved \u2026 C3-S21 Kaito's Offer and match them to `scripts/chapter3/` (ironhold_departure, fractured_wastes, data_stream, archive_depths, kaelthas_betrayal, ch3_ending)",
+      "Read the extracted old lines in `dialogue/_extracted/chapter3/*.dlg` for anything worth keeping",
+      "Flag canon questions: Kaito is a backlog companion in STORY_BIBLE but appears in S02 and S21",
+      "Write `story/outlines/ch3_fractured_wastes.md` with scene list, flags from the PM consequence ledger (PM 3790) and file split"
+     ],
+     "done": "Ch3 outline with 21 scenes mapped to 6 scene scripts and the Kaito question for the user"
+    },
+    {
+     "focus": "Write C3-S01 The Road That Moved and C3-S02 Kaito's Test",
+     "steps": [
+      "Create `dialogue/ch3/wastes_arrival.dlg`; open with the act1_pace flag variants (early/on-time/late)",
+      "Write S02 per the user's Kaito decision (cameo vs placeholder speaker)",
+      "Party lines depend on Seraphina recruited/stayed/rejected",
+      "Lint"
+     ],
+     "done": "S01\u2013S02 nodes pass lint"
+    },
+    {
+     "focus": "Write C3-S03 Stranded Caravan and C3-S04 Lyra's Outpost",
+     "steps": [
+      "Add `dialogue/ch3/caravan.dlg` (caravan timing seed) and `dialogue/ch3/lyra_outpost.dlg`",
+      "Introduce Lyra in her voice sheet (notes, unstable memory, wants to choose what to keep)",
+      "Mark the caravan as a timing hook for the WorldClock, not a hard deadline yet",
+      "Lint"
+     ],
+     "done": "S03\u2013S04 drafted"
+    },
+    {
+     "focus": "Write C3-S05 Former Administrator and C3-S06 The Note With Her Name",
+     "steps": [
+      "Add nodes to `lyra_outpost.dlg` for S05 and `dialogue/ch3/lyra_note.dlg` for S06",
+      "Keep Lyra's choice framing open for S20",
+      "Rhythm pass on all Ch3 files written so far",
+      "Show S01\u2013S06 to the user"
+     ],
+     "done": "First six scenes user-reviewed"
+    }
+   ],
+   "edge_cases": [
+    "Arrival variants for all three act1_pace values",
+    "Party of one (Elara only) vs two companions"
+   ],
+   "evidence": "story/outlines/ch3_fractured_wastes.md; dialogue/ch3/*.dlg passing dialogue_test"
+  },
+  {
+   "id": "Y1-P0-S11",
+   "stream": "secondary",
+   "title": "Catalogue every Act 1 cutscene and what a timeline system must do",
+   "why": "ROADMAP \u00a711 \u00a74.7 'cutscene timelines'; cinematics groundwork",
+   "tags": [
+    "cinematics",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "List every staged cutscene in the prologue and Chapter 1",
+     "steps": [
+      "Walk `scripts/prologue/`, `scripts/chapter1/*.gd` and list each staged sequence (await chains, tweens, camera moves, `do` events)",
+      "For each: length, actors, camera moves, skippable, flags set on skip",
+      "Note the hold-to-skip half-skip report from 2026-10-06 and whether it still reproduces",
+      "Save rows into `design/cinematics/act1_cutscene_catalogue.md`"
+     ],
+     "done": "Catalogue covers every prologue/Ch1 cutscene"
+    },
+    {
+     "focus": "List the Chapter 2 cutscenes and derive the timeline needs",
+     "steps": [
+      "Add the Chapter 2 sequences (convoy, gate, Command Hall, bell, Wraith, Proxy, wall, Act 1 end)",
+      "Group recurring needs: camera track, actor move, dialogue line, wait-for-input, shake, flash, music cue, flag-on-skip",
+      "Note which rely on `cutscene_director`/`cinematic_vfx` (slated for deletion in Y2)",
+      "Write the requirement list that a Y1 cutscene-timeline ADR must satisfy"
+     ],
+     "done": "Requirements list with counts per need"
+    }
+   ],
+   "edge_cases": [
+    "Cutscenes that set flags mid-way: skip must set them all",
+    "Cutscenes during pause"
+   ],
+   "evidence": "design/cinematics/act1_cutscene_catalogue.md"
+  },
+  {
+   "id": "Y1-P0-S12",
+   "stream": "secondary",
+   "title": "Lay the groundwork for the art bible",
+   "why": "ROADMAP Months 7\u20139 Art bible v1 needs early decisions; Gate 1 PAE quality risk",
+   "tags": [
+    "art",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Collect the visual constraints the engine already imposes",
+     "steps": [
+      "Record viewport 1280\u00d7720, stretch mode 'viewport' (project.godot), and candidate pixel scales (e.g. 320\u00d7180 \u00d74, 640\u00d7360 \u00d72)",
+      "List the PAE export format facts from the PAE skill (sheet + JSON metadata) and the views (top-down 4-dir, side-scroll)",
+      "Review the archived art in `Desktop/Aethelgard sprite archive/` and DESIGN_PILLARS for tone words",
+      "Write the open questions for `/art-bible`"
+     ],
+     "done": "Constraint list and open questions written"
+    },
+    {
+     "focus": "Draft the art bible's identity and palette sections",
+     "steps": [
+      "Run `/art-bible` for the identity, pillars-to-visuals and palette sections only",
+      "Propose a master palette size and region accent colours for R1 Oakhaven and R2 Ironhold",
+      "Define the 'glitch' visual language rules (where corruption may break the palette)",
+      "Mark everything as draft for review"
+     ],
+     "done": "Draft art bible sections saved"
+    }
+   ],
+   "edge_cases": [
+    "Palette must keep text readable on dialogue boxes",
+    "Glitch effects vs photosensitivity"
+   ],
+   "evidence": "design/art/art-bible.md draft sections"
+  },
+  {
+   "id": "Y1-P0-S13",
+   "stream": "secondary",
+   "title": "Make the first PAE test sprites: Kaelen",
+   "why": "Gate 1 PAE quality risk; measure cost per asset early (ROADMAP \u00a73 re-baseline)",
+   "tags": [
+    "art",
+    "animation",
+    "assets"
+   ],
+   "days": [
+    {
+     "focus": "Kaelen side-scroll idle and run test",
+     "steps": [
+      "Use the PAE skill to author Kaelen side-scroll idle (4\u20136 frames) and run (6\u20138 frames) at the chosen pixel scale",
+      "Track the time spent per clip",
+      "Export the sheet + JSON to `assets/art_sources/pae_tests/kaelen/` (review-only, per AGENTS.md)",
+      "Note quality issues (silhouette, readability at 1\u00d7)"
+     ],
+     "done": "Two clips exported with time per clip logged"
+    },
+    {
+     "focus": "Kaelen attack and dash test",
+     "steps": [
+      "Author a 3-hit sword combo test (attack1\u20133) and a dash clip",
+      "Mark the active frames each attack needs (for MoveData in Y1-P2)",
+      "Export to the same review folder",
+      "Log time per clip"
+     ],
+     "done": "Combo and dash clips exported with active frames marked"
+    },
+    {
+     "focus": "Kaelen top-down 4-direction walk test and cost summary",
+     "steps": [
+      "Author the top-down south/east/north/west walk (4 frames each)",
+      "Make a contact sheet of all Kaelen test clips (labelled 'PAE test, not production')",
+      "Write the cost summary: minutes per frame, per clip, projected for ~40 clips",
+      "ComfyUI used: No (state it in the note, per AGENTS.md truth gate)"
+     ],
+     "done": "Contact sheet and cost summary saved"
+    }
+   ],
+   "edge_cases": [
+    "Sprite readability on the placeholder backgrounds",
+    "Frame sizes must not change between clips"
+   ],
+   "evidence": "assets/art_sources/pae_tests/kaelen/ contact sheet + docs/art_pipeline/pae_cost_log.md"
+  },
+  {
+   "id": "Y1-P0-S14",
+   "stream": "secondary",
+   "title": "List the animation clips the current moveset needs",
+   "why": "ROADMAP \u00a73 player animation ~40 clips + 4-direction top-down set; feeds MoveData in Y1-P2",
+   "tags": [
+    "animation",
+    "combat",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Derive the clip list from player_combat states",
+     "steps": [
+      "Read the state flags in `scripts/combat/player_combat.gd` (attack chain, dash, air dash, charge attack, parry, hurt, death, jump/fall)",
+      "Read `player_animation_controller.gd` for names already expected",
+      "Draft the side-scroll clip list with expected frame counts",
+      "Draft the top-down set (idle/walk \u00d74 directions, interact)"
+     ],
+     "done": "Draft clip list with names matching code"
+    },
+    {
+     "focus": "Prioritise the clip list for the Pillar Slice",
+     "steps": [
+      "Mark which clips the Gate 1 slice needs (Kaelen ~40 per \u00a75 Months 7\u20139) vs later",
+      "Add Elara and enemy clip needs for slime, guardian and boar (new fights)",
+      "Estimate effort using the Kaelen PAE cost log",
+      "Save as `design/art/animation_clip_list.md`"
+     ],
+     "done": "Prioritised clip list with effort estimate"
+    }
+   ],
+   "edge_cases": [
+    "Clips shared between top-down and side-scroll",
+    "Hurt vs knockback as separate clips"
+   ],
+   "evidence": "design/art/animation_clip_list.md"
+  },
+  {
+   "id": "Y1-P0-S15",
+   "stream": "secondary",
+   "title": "Inventory the audio Act 1 uses today",
+   "why": "P9 juice; audio direction groundwork; double hit sound evidence",
+   "tags": [
+    "audio",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "List every music track and SFX Act 1 plays and where it comes from",
+     "steps": [
+      "Grep `MusicManager` and `SFXManager` calls in prologue/ch1/ch2 scripts",
+      "List file, trigger, bus, and licence/source for each asset",
+      "Flag missing, placeholder or duplicate sounds (e.g. the double hit)",
+      "Save as `design/audio/act1_audio_inventory.md`"
+     ],
+     "done": "Inventory table with source/licence column filled or marked unknown"
+    }
+   ],
+   "edge_cases": [
+    "Sounds generated at runtime vs files",
+    "Assets with unknown licence must be flagged, not assumed"
+   ],
+   "evidence": "design/audio/act1_audio_inventory.md"
+  },
+  {
+   "id": "Y1-P0-S16",
+   "stream": "secondary",
+   "title": "Review Phase 0 and plan the spine",
+   "why": "ROADMAP \u00a714 monthly milestone review",
+   "tags": [
+    "docs",
+    "team"
+   ],
+   "days": [
+    {
+     "focus": "Run the milestone review and the retrospective",
+     "steps": [
+      "Run `/milestone-review` for Phase 0 against the exit criteria",
+      "Run `/retrospective`: what took longer, which decisions waited, energy level",
+      "Update the risk register (\u00a713) with anything new",
+      "Draft the Y1-P1 sprint goal for the user"
+     ],
+     "done": "Milestone review and retro saved; P1 goal drafted"
+    }
+   ],
+   "edge_cases": [
+    "Exit criterion not met: record the carry-over explicitly"
+   ],
+   "evidence": "production/milestones/y1-p0-review.md"
+  }
+ ]
+}

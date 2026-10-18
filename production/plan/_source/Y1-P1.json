@@ -1,0 +1,1830 @@
+{
+ "phase_id": "Y1-P1",
+ "phase_title": "Spine",
+ "goal": "Scene changes, saves, flags, rewards, stats and the world clock each have one owner with unit tests under gdUnit4, and the dialogue pipeline is ready for portraits, line IDs and translation.",
+ "exit_criteria": [
+  "gdUnit4 runs in CI and every new service (Transition, Save, FlagRegistry, StoryGraph, RewardLedger, WorldClock, Stats) has unit tests",
+  "No direct change_scene calls outside TransitionService",
+  "SaveService v2: atomic write, 3 rotating backups, migrations from 1.0.0–1.2.0 pass; clock/market/auction blocks round-trip",
+  "Boot validation clean: every flag read has a reachable writer; every reward id resolves; grant_once prevents duplicates",
+  "Ch1 bridge deadline runs on the WorldClock with early/on-time/late tests",
+  "Speaker registry, line-ID stamping and string-table export in use; pseudo-locale tour passes",
+  "InputService glyphs, hold/toggle and one-handed presets shipped with tests",
+  "Side arcs 04 and 05 completable in tests; arc 06 registered and blocked on Auction v1"
+ ],
+ "tasks": [
+  {
+   "id": "Y1-P1-T01",
+   "stream": "primary",
+   "title": "Adopt gdUnit4 as the unit-test framework",
+   "why": "ROADMAP §5 Months 3–4 'Adopt gdUnit4 (or GUT); every service gets unit tests'; CLAUDE.md CI command",
+   "tags": [
+    "tests",
+    "architecture",
+    "tools"
+   ],
+   "days": [
+    {
+     "focus": "Decide gdUnit4 vs GUT and record it",
+     "steps": [
+      "Check the current gdUnit4 and GUT releases for Godot 4.6 support (read their release notes; don't assume)",
+      "Compare: CLI runner for CI, headless support, mocking, test naming in `.claude/rules/test-standards.md` (gdUnit4 `[system]_[feature]_test.gd`)",
+      "Write `/architecture-decision` ADR 'Unit test framework' with the choice",
+      "Get the user's approval"
+     ],
+     "done": "Accepted ADR in docs/architecture/"
+    },
+    {
+     "focus": "Install the framework and port one suite",
+     "steps": [
+      "Add the addon under `addons/gdUnit4/` (pinned release, checksum noted) and enable it in project.godot",
+      "Port `tests/unit/core/context_stack_test.gd` (32 checks) to a `GdUnitTestSuite` alongside the old runner",
+      "Exclude `addons/gdUnit4` from release export presets like `scripts/debug/`",
+      "Run it headless with the CLAUDE.md command"
+     ],
+     "done": "Ported suite passes headless with identical check count"
+    },
+    {
+     "focus": "Put gdUnit4 in CI and write the service-test template",
+     "steps": [
+      "Add the gdUnit4 CI step to `.github/workflows/ci.yml` next to the existing runners",
+      "Write `tests/unit/_template/service_template_test.gd` (Arrange/Act/Assert, no file I/O, injected deps)",
+      "Make `run_all_tests.ps1` call the gdUnit4 CLI too",
+      "Commit `test: adopt gdUnit4`"
+     ],
+     "done": "CI shows gdUnit4 results; template committed"
+    }
+   ],
+   "edge_cases": [
+    "Addon must not ship in the release build (export log check in export_windows.ps1)",
+    "Old custom-runner suites keep running until ported"
+   ],
+   "evidence": "ADR file; CI run with gdUnit4 step; tests/unit/core/context_stack_test.gd under gdUnit4"
+  },
+  {
+   "id": "Y1-P1-T02",
+   "stream": "primary",
+   "title": "Build TransitionService",
+   "why": "ROADMAP §5 Months 3–4 TransitionService: go(path, TravelContext) consumed once, queue, re-entrancy guard, input lock (fixes R3 meta hand-offs)",
+   "tags": [
+    "architecture",
+    "code",
+    "systems"
+   ],
+   "days": [
+    {
+     "focus": "Design TransitionService and TravelContext",
+     "steps": [
+      "Inventory every scene change: `get_tree().change_scene_to_*`, `SceneTransitions` (scene_transition_manager.gd), `ScreenTransition`, and meta hand-offs (`set_meta`/`get_meta` used to pass spawn data)",
+      "Define `TravelContext` (target path, spawn id, facing, return point, reason) as a typed Resource",
+      "Define the API: `go(path, ctx)`, `current_context()` consumed once, `is_busy()`, signals `started/finished`",
+      "Write the ADR with `/architecture-decision`; get approval"
+     ],
+     "done": "Accepted ADR with the call-site inventory count"
+    },
+    {
+     "focus": "Implement the service core with queue and re-entrancy guard",
+     "steps": [
+      "Create `scripts/core/transition_service.gd` autoload; queue requests while busy; drop exact duplicates",
+      "Lock input through ContextStack for the duration; release on finish or failure",
+      "Fade via the existing ScreenTransition control",
+      "Unit tests: two `go()` calls in one frame → one transition then the queued one"
+     ],
+     "done": "Core passes queue/guard unit tests"
+    },
+    {
+     "focus": "Make TravelContext consumed exactly once and saves wait for it",
+     "steps": [
+      "`current_context()` returns the context once, then null; log a warning on second read",
+      "Saves requested during a transition queue until `finished` (keeps the C9/C10 behaviour)",
+      "Failed loads (missing scene) return to the previous scene with an error toast",
+      "Unit tests for consume-once and missing-scene fallback"
+     ],
+     "done": "Consume-once and failure tests pass"
+    },
+    {
+     "focus": "Migrate the Act 1 scene changes to TransitionService",
+     "steps": [
+      "Replace prologue, Ch1 and Ch2 scene changes with `TransitionService.go()` (story progression path unchanged: confirm with user)",
+      "Remove the matching meta hand-offs",
+      "Add a lint to load_all: no `change_scene_to` outside transition_service.gd for Act 1 scripts",
+      "Run chapter1_route and chapter2_route"
+     ],
+     "done": "Act 1 has zero direct scene changes; route tests green"
+    },
+    {
+     "focus": "Migrate the rest and test transitions under stress",
+     "steps": [
+      "Migrate Ch3–Ch10, regions and overworld scene changes",
+      "Integration test: transition during dialogue, during hitstop, and during a save",
+      "Measure transition time; P1 pillar target < 1 s for perspective switches (record the number)",
+      "Commit `feat(core): TransitionService`"
+     ],
+     "done": "All scene changes go through the service; stress tests pass"
+    }
+   ],
+   "edge_cases": [
+    "Pause pressed during a fade",
+    "Transition requested from inside a `finished` handler",
+    "Scene freed while its context is still unconsumed",
+    "Gamepad disconnect mid-transition"
+   ],
+   "evidence": "tests/unit/core/transition_service_test.gd; tests/integration/core/transition_stress_test.gd"
+  },
+  {
+   "id": "Y1-P1-T03",
+   "stream": "primary",
+   "title": "Build FlagRegistry, StoryGraph and RewardLedger with boot validation",
+   "why": "ROADMAP §5 Months 3–4 StoryGraph + FlagRegistry + RewardLedger (grant_once), boot validation that every read has a reachable writer (fixes R3, §4.1)",
+   "tags": [
+    "architecture",
+    "story",
+    "quests",
+    "save"
+   ],
+   "days": [
+    {
+     "focus": "Design the three services and the data format",
+     "steps": [
+      "Inventory flag use: `GameManager.story_flags` (~dictionary in game_manager.gd:289), `.dlg` `set`/`[if]`, `ChoiceConsequences`, `SideQuestManager`",
+      "Define FlagRegistry entries (id, type, owner, writers, readers, default), StoryGraph nodes (chapter beats, prerequisites) and RewardLedger (`grant_once(id, payload)`)",
+      "Choose the storage: `.tres` registry generated from a source table vs hand-written",
+      "Write the ADR; get approval (touches story progression and save data)"
+     ],
+     "done": "Accepted ADR with flag/reward inventory counts"
+    },
+    {
+     "focus": "Build FlagRegistry and register every Act 1 flag",
+     "steps": [
+      "Create `scripts/core/flag_registry.gd`; `get_flag/set_flag` reject unknown ids with a clear error",
+      "Generate entries for every flag in STORY_BIBLE §5 Ch1/Ch2 tables and every `set` in `dialogue/**/*.dlg`",
+      "Make `GameManager.set_story_flag` delegate to the registry (keep the API for callers)",
+      "Unit tests: unknown flag, wrong type, default values"
+     ],
+     "done": "All Act 1 flags registered; GameManager delegates"
+    },
+    {
+     "focus": "Scan dialogue and scripts for flag readers and writers",
+     "steps": [
+      "Write `tools/flag_scan.gd`: parse `.dlg` `[if]`/`set`, and grep `get_story_flag`/`set_story_flag` call sites",
+      "Fill readers/writers for each registry entry automatically",
+      "List flags read but never written, and written but never read",
+      "Review the list with the user; fix or mark intentional"
+     ],
+     "done": "Scan report with zero unexplained orphan reads"
+    },
+    {
+     "focus": "Build StoryGraph for Acts 1 and the Ch3 entry",
+     "steps": [
+      "Create `scripts/core/story_graph.gd` with beat nodes for prologue → Ch1 → Ch2 → Ch3 entry and their prerequisite flags",
+      "Expose `is_reachable(beat)` and `next_beats()` for the breadcrumb and the bot",
+      "Make `progression_breadcrumb.gd` read objectives from StoryGraph for Ch1",
+      "Unit tests on a small fixture graph"
+     ],
+     "done": "StoryGraph answers reachability for Act 1 beats"
+    },
+    {
+     "focus": "Build RewardLedger with grant_once",
+     "steps": [
+      "Create `scripts/core/reward_ledger.gd`: `grant_once(reward_id, payload)` records the id and returns false on repeat",
+      "Route quest rewards (`SideQuestManager.grant_rewards`), fragment pickups and achievement-linked rewards through it",
+      "Unit tests: double grant, grant after load, unknown item id",
+      "Keep the item validation from Y1-P0-T06"
+     ],
+     "done": "All Act 1 rewards go through grant_once"
+    },
+    {
+     "focus": "Add boot validation",
+     "steps": [
+      "On boot (debug builds and tests) check: every read flag has a writer reachable in StoryGraph; every reward id resolves",
+      "Fail load_all_test on any violation; print file:line for each",
+      "Make the check fast (< 200 ms) and skip it in release builds",
+      "Run it against the whole project and record the violations"
+     ],
+     "done": "Boot validation runs in tests and lists violations"
+    },
+    {
+     "focus": "Fix the violations the validation found",
+     "steps": [
+      "Fix or annotate each violation from day 6 (legacy Ch4–10 flags may be marked `legacy`)",
+      "Re-run until boot validation is clean",
+      "Update STORY_BIBLE flag tables from the registry (generated section)",
+      "Run all suites"
+     ],
+     "done": "Clean boot validation; all suites green"
+    },
+    {
+     "focus": "Integration tests for the three services",
+     "steps": [
+      "Integration test: play the Ch1 route and assert every flag written is registered and every reward granted once",
+      "Test save → load → re-trigger a reward: no duplicate",
+      "Test the bot still reaches the credits",
+      "Commit `feat(core): FlagRegistry, StoryGraph, RewardLedger`"
+     ],
+     "done": "Integration tests and the bot pass"
+    }
+   ],
+   "edge_cases": [
+    "Legacy saves with unknown flags: keep them in a `legacy` bucket, don't crash",
+    "Dialogue `[if]` on a flag set later in the same node",
+    "Reward granted while inventory is full: ledger must not mark it granted until delivered"
+   ],
+   "evidence": "tests/unit/core/{flag_registry,story_graph,reward_ledger}_test.gd; tests/integration/story/flags_rewards_route_test.gd"
+  },
+  {
+   "id": "Y1-P1-T04",
+   "stream": "primary",
+   "title": "Build WorldClock v1",
+   "why": "ROADMAP §5 Months 3–4 WorldClock v1 (§12.4): deterministic, saved, pausable, owned by ContextStack's time rules (P7f)",
+   "tags": [
+    "time",
+    "architecture",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Design WorldClock from the time-model doc",
+     "steps": [
+      "Read `design/gdd/time-model.md` (Y1-P0-S06): 24 real min/day, ~28-day month, 4 seasons",
+      "Define state: total minutes (int), derived day/hour/season; rate from data (`WorldClockConfig.tres`)",
+      "Define pause rules: stops when ContextStack is paused, during dialogue and cutscenes per the doc",
+      "ADR + approval"
+     ],
+     "done": "Accepted ADR"
+    },
+    {
+     "focus": "Implement the clock core",
+     "steps": [
+      "Create `scripts/core/world_clock.gd` autoload advancing on a fixed step from unscaled delta × rate",
+      "Signals: `minute_changed`, `hour_changed`, `day_changed`, `season_changed`",
+      "API: `now()`, `advance(minutes)` for rest/wait, `at(day, hour)` helpers",
+      "Unit tests with an injected time source (no real time)"
+     ],
+     "done": "Clock core passes deterministic tests"
+    },
+    {
+     "focus": "Tie the clock to ContextStack and Engine.time_scale",
+     "steps": [
+      "Read pause state from ContextStack only; ignore hitstop/slow-mo time scale (clock uses unscaled time)",
+      "Stop the clock during dialogue and cutscene contexts as decided",
+      "Test: 10 s of hitstop/slow-mo changes nothing; pause stops it",
+      "Add a debug overlay line (debug builds) showing day/time"
+     ],
+     "done": "Pause/time-scale tests pass"
+    },
+    {
+     "focus": "Add schedules: timed events and deadlines",
+     "steps": [
+      "`schedule(event_id, at_minute)` and `deadline(event_id, minutes_from_now)` with signals on fire",
+      "Events are data, saved as ids + times (no callables)",
+      "Wait/rest helper that advances to a target time and fires passed events in order",
+      "Unit tests: ordering, two events same minute, event in the past"
+     ],
+     "done": "Event scheduling tests pass"
+    },
+    {
+     "focus": "Seed the clock and expose it to dialogue",
+     "steps": [
+      "Add `.dlg` condition support `[if clock_before day1 18:00]` style (follow DIALOGUE_FORMAT.md syntax rules; update the doc)",
+      "Seed RNG and clock for tests (§12.4 testing rule)",
+      "Integration test: start Ch1, advance 2 in-game hours, check the day/hour",
+      "Commit `feat(core): WorldClock v1`"
+     ],
+     "done": "Dialogue can branch on clock; integration test passes"
+    }
+   ],
+   "edge_cases": [
+    "Clock crossing midnight during a cutscene",
+    "Advancing past several events at once (rest)",
+    "Very long sessions: minutes stored as int to avoid float drift"
+   ],
+   "evidence": "tests/unit/time/world_clock_test.gd; tests/integration/time/world_clock_dialogue_test.gd"
+  },
+  {
+   "id": "Y1-P1-T05",
+   "stream": "primary",
+   "title": "Build SaveService with versioned schema, serializers, atomic writes, backups and migrations",
+   "why": "ROADMAP §5 Months 3–4 SaveService (fixes R4, §4.1); saves include world clock, market and auction state (save-schema change: explicit approval)",
+   "tags": [
+    "save",
+    "architecture",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Design SaveService and the v2 schema",
+     "steps": [
+      "Read `GameManager.save_game` / `load_game` (game_manager.gd:1408–1600): SAVE_VERSION 1.2.0, compatible 1.0.0–1.2.0, .bak handling",
+      "Design schema v2: header (schema_version int, game version, timestamp, checksum) + per-system blocks: player, inventory, flags, rewards, quests, story_graph, world_clock, market, auction, settings_ref",
+      "Define the `Serializer` interface: `key()`, `save() -> Dictionary`, `load(d)`, `version()`",
+      "ADR + explicit user approval (save schema is protected)"
+     ],
+     "done": "Accepted ADR and approved v2 schema"
+    },
+    {
+     "focus": "Implement the service core and atomic write",
+     "steps": [
+      "Create `scripts/core/save_service.gd`; write to `slot_N.tmp`, flush, validate by re-reading, then rename over `slot_N.save`",
+      "Add a checksum over the payload and verify it on load",
+      "Keep the 'Damaged save — Restore' UI path working",
+      "Unit tests with an injected file system (no real user:// in unit tests)"
+     ],
+     "done": "Atomic write and checksum tests pass"
+    },
+    {
+     "focus": "Add validated rotating backups",
+     "steps": [
+      "Keep 3 rotating backups (`slot_N.bak1..3`); rotate only after the new save validates",
+      "Load falls back newest → oldest valid backup and reports which one it used",
+      "Never rotate a corrupt file into the backups (C11 rule)",
+      "Tests: corrupt main, corrupt bak1, all corrupt"
+     ],
+     "done": "Backup rotation tests pass"
+    },
+    {
+     "focus": "Write serializers for player, inventory, flags, rewards and quests",
+     "steps": [
+      "Implement serializers wrapping current GameManager/Inventory/FlagRegistry/RewardLedger/SideQuestManager state",
+      "Each serializer has its own round-trip unit test",
+      "Unknown keys in a block are kept (forward compatibility) in a `_extra` field",
+      "Register serializers in a fixed order"
+     ],
+     "done": "Five serializers round-trip in tests"
+    },
+    {
+     "focus": "Write serializers for world_clock, story_graph, market and auction",
+     "steps": [
+      "WorldClock serializer: total minutes + scheduled events",
+      "StoryGraph serializer: reached beats",
+      "Market and auction serializers with a reserved, versioned empty schema (`{v:1, prices:{}, lots:[]}`) so Y1-P3 Market/Auction v1 need no schema bump",
+      "Round-trip tests for each"
+     ],
+     "done": "Clock/graph/market/auction blocks round-trip"
+    },
+    {
+     "focus": "Write the migration chain from 1.0.0–1.2.0 saves to v2",
+     "steps": [
+      "Implement `migrate_1_2_0_to_2(d)` and chain 1.0.0 → 1.1.0 → 1.2.0 from the existing compatibility rules",
+      "Create fixtures: real saves from each old version in `tests/fixtures/saves/` (generate from the current build where missing, labelled)",
+      "Migration tests: each fixture loads into v2 with flags, inventory and position intact",
+      "Unknown future version → refuse with a clear message, never overwrite"
+     ],
+     "done": "Migration tests pass for every old version"
+    },
+    {
+     "focus": "Switch the game to SaveService",
+     "steps": [
+      "Point quick save, checkpoints, the save menu and auto-save at SaveService (story-checkpoint behaviour unchanged)",
+      "Keep `GameManager.save_game/load_game` as thin wrappers until callers move",
+      "Saves during transitions queue via TransitionService",
+      "Run chapter1/chapter2 route tests and the bot"
+     ],
+     "done": "All save paths use SaveService; route tests and bot pass"
+    },
+    {
+     "focus": "Fault-injection tests + Round-trip the whole game and close out",
+     "steps": [
+      "Simulate a crash between tmp write and rename; load must use the previous valid save",
+      "Simulate disk full and read-only user://; UI reports failure (no silent rejection, R4)",
+      "Truncated file, wrong checksum, valid JSON with missing blocks",
+      "Record results in the test log",
+      "Integration test: play Ch1 to the village meeting, save, quit, load, finish Ch1: identical flags and rewards",
+      "Same for a mid-Ch2 save with the medicine deadline running on the WorldClock",
+      "Add 'saves migrate' to CI as a required step",
+      "Commit `feat(core): SaveService v2 with migrations`"
+     ],
+     "done": "Round-trip integration tests in CI"
+    }
+   ],
+   "edge_cases": [
+    "Save while a reward is pending delivery",
+    "Two saves requested in the same frame",
+    "Very large inventories",
+    "Cloud-sync tools touching user:// mid-write (why atomic rename matters)"
+   ],
+   "evidence": "tests/unit/save/*_test.gd; tests/integration/save/save_roundtrip_test.gd; migration fixtures in tests/fixtures/saves/"
+  },
+  {
+   "id": "Y1-P1-T06",
+   "stream": "primary",
+   "title": "Build the stats model: final = base + level + training + Σ modifiers",
+   "why": "ROADMAP §5 Months 3–4 Stats model; §12.8 stats change damage/resources, never timing windows (P7d)",
+   "tags": [
+    "systems",
+    "combat",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Design the stat stack",
+     "steps": [
+      "Read the current stat fields in `player_combat.gd` and `GameManager` (attack, defense, max_hp, MP regen ~2/s, Soul) and DEF mitigation ×100/(100+DEF)",
+      "Define primary stats (proposal STR, AGI, VIT, INT, SPI, LCK) and derived stats with formulas",
+      "Define modifier sources (item, buff, choice, training) with add/mult order and caps",
+      "ADR + approval (combat numbers are protected)"
+     ],
+     "done": "Accepted stats ADR with formulas"
+    },
+    {
+     "focus": "Implement StatBlock and modifiers",
+     "steps": [
+      "Create `scripts/core/stats/stat_block.gd` and `stat_modifier.gd` (Resource) with source ids",
+      "`final(stat) = base + level + training + Σ add` then `× Π mult`, cached and invalidated on change",
+      "Unit tests: ordering, removal by source, caps",
+      "Ensure no timing-window field exists on StatBlock (§12.8 rule)"
+     ],
+     "done": "StatBlock unit tests pass"
+    },
+    {
+     "focus": "Add training growth and level points",
+     "steps": [
+      "Training: use counters per stat with a data-driven curve (from the secondary stats tables)",
+      "Level points: allocate/respec API with a cost hook",
+      "Unit tests: training saturation, respec refunds",
+      "Serializer for StatBlock registered in SaveService (schema v2 → v3 migration test)"
+     ],
+     "done": "Training/level tests and v2→v3 migration test pass"
+    },
+    {
+     "focus": "Route damage and resources through derived stats",
+     "steps": [
+      "Replace direct attack/defense reads in `player_combat.gd` and `enemy_base.gd` with derived stats (same numbers by default)",
+      "Replace NG+ and choice buffs with modifiers from their source (closes the stacking bug class)",
+      "Test: default character damage numbers match before/after within ±0",
+      "Run combat_fixes and route tests"
+     ],
+     "done": "Damage parity test passes"
+    },
+    {
+     "focus": "Show stats and test edge cases",
+     "steps": [
+      "Update `status_window.gd` to show base/level/training/modifiers breakdown",
+      "Edge tests: negative modifiers, 0 DEF, huge DEF, removing an equipped item mid-fight",
+      "Screenshot the status window",
+      "Commit `feat(stats): stat stack`"
+     ],
+     "done": "Status window screenshot; edge tests pass"
+    }
+   ],
+   "edge_cases": [
+    "Modifier from an item that gets destroyed",
+    "Respec while a buff is active",
+    "Old saves without StatBlock"
+   ],
+   "evidence": "tests/unit/stats/*_test.gd; production/qa/evidence/2027-01-stats/status_window.png"
+  },
+  {
+   "id": "Y1-P1-T07",
+   "stream": "primary",
+   "title": "Move the Chapter 1 bridge deadline onto the WorldClock",
+   "why": "ROADMAP §5 'Move the bridge deadline onto the WorldClock (fixing it is instant today)'; P7f (story progression: approval)",
+   "tags": [
+    "time",
+    "story",
+    "quests"
+   ],
+   "days": [
+    {
+     "focus": "Turn the bridge deadline into a clock deadline",
+     "steps": [
+      "Read the bridge logic in `ch1_oakhaven_village.gd` (`_bridge_done`, `_bridge_running`) and `north_field.dlg`; outcomes `ch1_bridge_saved/_evacuated/_fell`",
+      "Register a WorldClock deadline 'until dark, day 1' when Bran warns you; repair takes in-game time (amount from the time-model doc)",
+      "Show the deadline in the quest log with the in-world reason (signposting rule)",
+      "Get approval for the timing numbers"
+     ],
+     "done": "Deadline runs on the clock and shows in the quest log"
+    },
+    {
+     "focus": "Test early, on-time and late bridge outcomes",
+     "steps": [
+      "Integration test with a seeded clock: fix early, evacuate, and let it fall; assert flags and the Ch1 close lines",
+      "Apply difficulty leniency hook (×1.0 until DifficultyProfile exists in Y1-P2)",
+      "Make sure waiting/resting before the deadline warns first",
+      "Commit `feat(ch1): bridge deadline on the WorldClock`"
+     ],
+     "done": "Three timing outcomes covered by tests"
+    }
+   ],
+   "edge_cases": [
+    "Boar fight in progress when the deadline passes",
+    "Save and load with 5 in-game minutes left",
+    "Player never talks to Bran: deadline must not start silently"
+   ],
+   "evidence": "tests/integration/time/ch1_bridge_deadline_test.gd"
+  },
+  {
+   "id": "Y1-P1-T08",
+   "stream": "primary",
+   "title": "Add a speaker registry with portraits to the dialogue system",
+   "why": "ROADMAP §5 Dialogue still-to-do: speaker registry (portraits)",
+   "tags": [
+    "dialogue",
+    "ui",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Build the speaker registry from the secondary roster",
+     "steps": [
+      "Create `data/speakers.tres` (or the format the ADR picks) from the roster in `story/speaker_roster.md`: id, display name, voice-lint class (human/machine), portrait slot",
+      "Make `dialogue_manager.gd` resolve `.dlg` speaker ids through the registry; unknown speaker = validation error (replaces the lint's list)",
+      "Show a portrait placeholder (coloured frame + initial) when no art exists",
+      "Unit tests: unknown id, machine speaker exemption"
+     ],
+     "done": "All .dlg files validate against the registry"
+    },
+    {
+     "focus": "Portrait display and evidence",
+     "steps": [
+      "Add the portrait box to the dialogue UI without covering the choice list (screenshot-tour checks)",
+      "Support expression variants by suffix (`elara:worried`) falling back to neutral",
+      "Run the screenshot tour on the 30 dialogue shots",
+      "Commit `feat(dialogue): speaker registry and portraits`"
+     ],
+     "done": "Tour passes with portraits; shots retained"
+    }
+   ],
+   "edge_cases": [
+    "Lore entries (not speakers) must not use the registry",
+    "Speaker renamed in story: one change in the registry"
+   ],
+   "evidence": "tests/unit/dialogue/speaker_registry_test.gd; tour report"
+  },
+  {
+   "id": "Y1-P1-T09",
+   "stream": "primary",
+   "title": "Build the line-ID stamping tool",
+   "why": "ROADMAP §5 Dialogue still-to-do: ID-stamping tool (prerequisite for localization and VO)",
+   "tags": [
+    "dialogue",
+    "tools",
+    "localization"
+   ],
+   "days": [
+    {
+     "focus": "Write the stamping tool",
+     "steps": [
+      "Create `tools/stamp_line_ids.gd` that adds `[#id]` to every spoken line and choice in `dialogue/**/*.dlg` without one",
+      "ID scheme: `<file>_<node>_<n>` base-36 short hash, stable across edits that don't touch the line",
+      "Never change an existing id; report duplicates",
+      "Dry-run mode prints a diff"
+     ],
+     "done": "Dry run produces a clean diff on all files"
+    },
+    {
+     "focus": "Stamp the corpus and guard it in tests",
+     "steps": [
+      "Run the tool for real on prologue, ch1, ch2, ch3 and side folders",
+      "Add to `dialogue_test`: every line has an id, ids unique project-wide",
+      "Check route tests that search for exact lines still pass",
+      "Commit `chore(dialogue): stamp line ids`"
+     ],
+     "done": "All lines stamped; dialogue_test enforces it"
+    }
+   ],
+   "edge_cases": [
+    "Line moved between nodes keeps its id",
+    "Two writers adding lines in parallel (merge conflict on ids)"
+   ],
+   "evidence": "tests/unit/dialogue/dialogue_test.gd id checks"
+  },
+  {
+   "id": "Y1-P1-T10",
+   "stream": "primary",
+   "title": "Export dialogue to a localization string table",
+   "why": "ROADMAP §5 Dialogue still-to-do: localization string-table export; §3 EN + Simplified Chinese at 1.0",
+   "tags": [
+    "localization",
+    "dialogue",
+    "tools"
+   ],
+   "days": [
+    {
+     "focus": "Export and re-import the string table",
+     "steps": [
+      "Write `tools/export_strings.gd`: id, speaker, source text, context (file/node), max length → `localization/strings_en.csv` in a Godot-importable layout",
+      "Include UI strings that already go through InputService tokens, keeping `{action}` tokens intact",
+      "Make DialogueManager look up `tr(id)` with the source text as fallback",
+      "Test with a pseudo-locale (text wrapped in brackets, +30% length)"
+     ],
+     "done": "Pseudo-locale run shows translated lines"
+    },
+    {
+     "focus": "Pseudo-locale screenshot pass and CJK check",
+     "steps": [
+      "Run the screenshot tour in the pseudo-locale and check the overflow checks",
+      "Check a CJK test string renders (font fallback present or flagged as a Y1-P4 task)",
+      "Add the export to CI as a check that the CSV is current",
+      "Commit `feat(l10n): string table export`"
+     ],
+     "done": "Tour passes in pseudo-locale; CSV freshness check in CI"
+    }
+   ],
+   "edge_cases": [
+    "Choice text longer in another language",
+    "Tokens inside translated strings",
+    "Lines without ids fail the export"
+   ],
+   "evidence": "localization/strings_en.csv; production/qa/evidence/2027-01-l10n/pseudo_*.png"
+  },
+  {
+   "id": "Y1-P1-T11",
+   "stream": "primary",
+   "title": "Finish the InputService leftovers: glyphs, hold/toggle, one-handed and accessibility presets",
+   "why": "ROADMAP §5 InputService still-to-do (glyph icons, hold/toggle, one-handed and accessibility presets)",
+   "tags": [
+    "accessibility",
+    "ui",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Glyph icons instead of text labels",
+     "steps": [
+      "Add a glyph atlas lookup (keyboard, Xbox, PlayStation, Nintendo) to `input_service.gd` `bind_text` with text fallback",
+      "Render glyphs inline in dialogue/prompt RichTextLabels via `[img]`",
+      "Use the glyph set from secondary S03 (placeholder labelled if not final)",
+      "Unit tests: each device family resolves every action"
+     ],
+     "done": "Prompts show glyphs per device"
+    },
+    {
+     "focus": "Hold vs toggle options",
+     "steps": [
+      "Add per-action hold/toggle settings for charge attack, sprint/guard-type actions and hold-to-skip as listed in the accessibility spec",
+      "Save them in `user://input.cfg` with migration from the current file",
+      "Controls screen gets the options with gamepad focus working",
+      "Tests: toggle state cleared on context change (no stuck held action)"
+     ],
+     "done": "Hold/toggle saved and tested"
+    },
+    {
+     "focus": "One-handed presets",
+     "steps": [
+      "Add left-hand and right-hand keyboard presets and a one-handed pad preset from the spec",
+      "Presets obey the existing sharing modes (no two simultaneous actions on one button)",
+      "Tests: each preset validates against the mode rules",
+      "Screenshot the Controls screen with a preset applied"
+     ],
+     "done": "Presets validate and apply"
+    },
+    {
+     "focus": "Accessibility presets and options",
+     "steps": [
+      "Add the spec's options that live in input: repeat-press → hold alternatives, adjustable hold duration, input-timing assist placeholder (wired in Y1-P2)",
+      "Add reduce-flash option hook used by the screen flash (Y1-P0-T08 TODO)",
+      "Tests for each option's persistence",
+      "Run input_test (52 checks) and the hardcoded-key guard"
+     ],
+     "done": "All options persist; input_test green"
+    },
+    {
+     "focus": "Gamepad-only and keyboard-only pass",
+     "steps": [
+      "Play Ch1 start to Elara with the left-hand preset and with gamepad only",
+      "Fix focus or prompt bugs found",
+      "Retain screenshots of glyph prompts for 3 pad families",
+      "Commit `feat(input): glyphs, hold/toggle, presets`"
+     ],
+     "done": "Both passes done; screenshots retained"
+    }
+   ],
+   "edge_cases": [
+    "Glyph for an unbound action",
+    "Rebinding while a toggle is active",
+    "Pad family unknown (generic labels)"
+   ],
+   "evidence": "tests/unit/input/*_test.gd; production/qa/evidence/2027-01-input/{xbox,ps,switch}_prompts.png"
+  },
+  {
+   "id": "Y1-P1-T12",
+   "stream": "primary",
+   "title": "Wire side arc 04, Iron Owes, into Ironhold",
+   "why": "ROADMAP §5 side arcs not built; P5 side storylines feed an axis (faction)",
+   "tags": [
+    "quests",
+    "story",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Register Iron Owes quests, flags and rewards",
+     "steps": [
+      "Load the quest data authored in secondary S20 (quests 19–24) into SideQuestManager/StoryGraph",
+      "Register the arc's flags in FlagRegistry and rewards as RewardLedger ids",
+      "Hook quest givers in `ch2_ironhold_city.gd` / `ironhold_region.gd` to `dialogue/side/iron_owes.dlg` nodes",
+      "Boot validation must stay clean"
+     ],
+     "done": "Arc registered; boot validation clean"
+    },
+    {
+     "focus": "Wire quests 19–24 advancement and the faction effect",
+     "steps": [
+      "Add advance hooks for each step; Q22's choice writes the faction seed flag",
+      "Abandon/failure state changes Ironhold (per the outline), never deletes main plot",
+      "Make the arc respect Seraphina's state",
+      "Play the arc once"
+     ],
+     "done": "Arc completable in play"
+    },
+    {
+     "focus": "Test Iron Owes",
+     "steps": [
+      "Integration test `tests/integration/quests/side_arc_04_test.gd`: complete path and abandon path",
+      "Rewards granted once across save/load",
+      "Reachability test includes the givers",
+      "Commit `feat(quests): side arc 04 Iron Owes`"
+     ],
+     "done": "Arc test green"
+    }
+   ],
+   "edge_cases": [
+    "Arc started after Act 1 end",
+    "Brask unavailable",
+    "Arc rewards while inventory full"
+   ],
+   "evidence": "tests/integration/quests/side_arc_04_test.gd"
+  },
+  {
+   "id": "Y1-P1-T13",
+   "stream": "primary",
+   "title": "Wire side arc 05, The Flight List, and stub arc 06",
+   "why": "ROADMAP §5 side arcs; arc 05 seeds FIRST WAKE (post-1.0 secret route); arc 06 needs Auction v1 (Y1-P3)",
+   "tags": [
+    "quests",
+    "story",
+    "economy"
+   ],
+   "days": [
+    {
+     "focus": "Wire The Flight List quests 25–30",
+     "steps": [
+      "Register quests 25 Seat Numbers … 30 Last Announcement, their flags and rewards",
+      "Connect to existing seeds: `ch2_seraphina_186_told`, the Flight 707 manifest seed (STORY_BIBLE side arc 05)",
+      "The FIRST WAKE effect is a flag only (route is post-1.0)",
+      "Integration test `side_arc_05_test.gd`"
+     ],
+     "done": "Arc 05 completable in test"
+    },
+    {
+     "focus": "Stub Three Auctions and a Funeral until Auction v1",
+     "steps": [
+      "Register quests 31–36 in StoryGraph as blocked on `auction_v1_available`",
+      "Wire Q33 Funeral Price (shop price only, no auction) if the outline allows",
+      "Write a GitHub issue linking Q31/32/34–36 to Y1-P3 Auction v1",
+      "Boot validation passes with the blocked beats"
+     ],
+     "done": "Arc 06 registered and visibly blocked, Q33 playable or deferred with reason"
+    }
+   ],
+   "edge_cases": [
+    "Seraphina rejected: arc 05 still completable",
+    "Q33 price depends on market values that don't exist yet"
+   ],
+   "evidence": "tests/integration/quests/side_arc_05_test.gd; GitHub issue for arc 06"
+  },
+  {
+   "id": "Y1-P1-T14",
+   "stream": "primary",
+   "title": "Spine exit check",
+   "why": "ROADMAP §5 Months 3–4 done; R1/R3/R4/R5 fixes verified",
+   "tags": [
+    "tests",
+    "release"
+   ],
+   "days": [
+    {
+     "focus": "Verify the spine and record it",
+     "steps": [
+      "Run `/smoke-check`, the full suite and the bot from the exported debug build",
+      "Run `/regression-suite` to map tests to Act 1 critical paths",
+      "Run `/gate-check` against this phase's exit criteria",
+      "Tick the Months 3–4 boxes in ROADMAP §5 (with user OK)"
+     ],
+     "done": "Smoke, regression and gate reports saved"
+    }
+   ],
+   "edge_cases": [
+    "A service with no unit tests fails the check"
+   ],
+   "evidence": "production/qa/smoke-2027-01-31.md and gate-check report"
+  },
+  {
+   "id": "Y1-P1-S01",
+   "stream": "secondary",
+   "title": "Plan the spine sprint and open the tech-debt register",
+   "why": "ROADMAP §14 rhythm; R7 duplicated systems tracked",
+   "tags": [
+    "docs",
+    "team"
+   ],
+   "days": [
+    {
+     "focus": "Sprint plan for Dec–Jan and a debt register",
+     "steps": [
+      "Run `/sprint-plan` with the P1 tasks and the holiday weeks (plan lighter days if the user wants)",
+      "Run `/tech-debt` to seed the register with R7 items (cutscene_director, cinematic_vfx, TweenAnimator, 3 item DBs)",
+      "Update active.md",
+      "Carry over any Phase 0 items"
+     ],
+     "done": "Sprint plan and debt register saved"
+    }
+   ],
+   "edge_cases": [
+    "Carry-over larger than 5 days: re-plan with the user"
+   ],
+   "evidence": "production/sprints/sprint-2026-12-p1.md; docs/tech-debt register"
+  },
+  {
+   "id": "Y1-P1-S02",
+   "stream": "secondary",
+   "title": "Write the accessibility and input-options spec",
+   "why": "Feeds InputService leftovers (T11); Y7 accessibility pass starts from this",
+   "tags": [
+    "accessibility",
+    "ux",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "List the accessibility needs",
+     "steps": [
+      "Run `/ux-design` for project-wide accessibility: text size, contrast, colourblind-safe UI, reduce flash/shake, subtitles, hold/toggle, one-handed",
+      "Map each need to a system (InputService, UI theme, CombatFX)",
+      "Mark which ones the difficulty rules forbid (stats never change timing windows; accessibility assists are separate)",
+      "Draft `design/ux/accessibility.md`"
+     ],
+     "done": "Draft spec with system mapping"
+    },
+    {
+     "focus": "Define the presets and review the spec",
+     "steps": [
+      "Define the left-hand, right-hand and one-handed pad layouts action by action",
+      "Define which actions get hold/toggle options",
+      "Run `/ux-review` on the spec",
+      "Hand the preset tables to primary T11"
+     ],
+     "done": "Spec reviewed; preset tables ready"
+    }
+   ],
+   "edge_cases": [
+    "Presets must not collide with pause/menu bindings",
+    "Toggle for parry would break the skill test: exclude"
+   ],
+   "evidence": "design/ux/accessibility.md with /ux-review result"
+  },
+  {
+   "id": "Y1-P1-S03",
+   "stream": "secondary",
+   "title": "Make the input glyph set",
+   "why": "InputService glyph icons (T11); asset licence hygiene",
+   "tags": [
+    "ui",
+    "assets",
+    "art"
+   ],
+   "days": [
+    {
+     "focus": "Decide the source of the glyphs",
+     "steps": [
+      "List the glyphs needed: keyboard keys, mouse, Xbox, PlayStation, Nintendo face buttons, sticks, triggers",
+      "Option A: author in PAE; option B: an existing glyph pack (check its current licence terms before use)",
+      "Note trademark caution for platform button shapes (check current platform guidelines before release)",
+      "Get the user's choice"
+     ],
+     "done": "Glyph source decided"
+    },
+    {
+     "focus": "Produce and import the glyph atlas",
+     "steps": [
+      "Produce the atlas at the UI pixel scale; one PNG + JSON map of names",
+      "Place it under `assets/ui/glyphs/` only after the user approves the import (review copy under assets/art_sources first)",
+      "Hand the names map to primary T11",
+      "Record provenance (tool, licence) in docs/art_pipeline"
+     ],
+     "done": "Atlas and names map ready with provenance"
+    }
+   ],
+   "edge_cases": [
+    "Glyph readability at 1× scale",
+    "Missing glyph for a rare key (fallback text)"
+   ],
+   "evidence": "assets/ui/glyphs atlas + docs/art_pipeline/glyph_provenance.md"
+  },
+  {
+   "id": "Y1-P1-S04",
+   "stream": "secondary",
+   "title": "Write side arc 05, The Flight List (quests 25–30)",
+   "why": "PM 2658–2692; axis effect FIRST WAKE secret route (post-1.0 candidate per STORY_BIBLE)",
+   "tags": [
+    "story",
+    "quests",
+    "dialogue"
+   ],
+   "days": [
+    {
+     "focus": "Outline The Flight List",
+     "steps": [
+      "Read PM 2658–2692 and PM 11702 (secret quest 10 'The Number on the Wing', also Flight List)",
+      "List quests 25 Seat Numbers, 26 Passenger Echo, 27 One Hundred Eighty-Six, 28 The Missing Manifest, 29 Cabin Door, 30 Last Announcement with giver, steps, flags",
+      "Tie to existing flags: `ch2_seraphina_186_told`, `ch2_seraphina_truth/_cautious/_showoff`",
+      "Save `story/outlines/side_arc_05_flight_list.md`"
+     ],
+     "done": "Outline with 6 quests and flag ties"
+    },
+    {
+     "focus": "Write quests 25 Seat Numbers and 26 Passenger Echo",
+     "steps": [
+      "Create `dialogue/side/flight_list.dlg`; Seraphina's voice sheet (counts people) leads",
+      "Variants for Seraphina recruited vs stayed vs rejected",
+      "Flags `side05_q25_*`, `side05_q26_*`",
+      "Lint"
+     ],
+     "done": "Q25–26 pass lint"
+    },
+    {
+     "focus": "Write quests 27 One Hundred Eighty-Six and 28 The Missing Manifest",
+     "steps": [
+      "Q27 must agree with the wall scene and the '186' line already in Ch2",
+      "Q28 uses the manifest seed from the Broken Mile (passenger manifest)",
+      "Mira stays uncertain (STORY_BIBLE rule): no reveal",
+      "Lint"
+     ],
+     "done": "Q27–28 consistent with Ch1/Ch2 lines"
+    },
+    {
+     "focus": "Write quests 29 Cabin Door and 30 Last Announcement",
+     "steps": [
+      "Write the close; FIRST WAKE effect is a flag only",
+      "Write the abandon state (no silent loss)",
+      "Rewards as RewardLedger ids",
+      "Lint"
+     ],
+     "done": "Arc fully drafted"
+    },
+    {
+     "focus": "Review The Flight List",
+     "steps": [
+      "Read aloud; rhythm rule",
+      "Check Flight 707 facts against STORY_BIBLE §2 timeline",
+      "User approval",
+      "Commit `docs(story): side arc 05 draft`"
+     ],
+     "done": "Approved arc"
+    }
+   ],
+   "edge_cases": [
+    "Arc done before Seraphina tells the count",
+    "Player told Command Hall a show-off version"
+   ],
+   "evidence": "story/outlines/side_arc_05_flight_list.md; dialogue/side/flight_list.dlg"
+  },
+  {
+   "id": "Y1-P1-S05",
+   "stream": "secondary",
+   "title": "Write side arc 06, Three Auctions and a Funeral (quests 31–36)",
+   "why": "PM 2693–2730; axis effect Continuity or Hearth economics; needs Auction v1 to play fully",
+   "tags": [
+    "story",
+    "quests",
+    "economy"
+   ],
+   "days": [
+    {
+     "focus": "Outline Three Auctions and a Funeral",
+     "steps": [
+      "Read PM 2693–2730 and PM 11535 (funeral premise); list quests 31 Lot Seventeen, 32 Bidder With No Face, 33 Funeral Price, 34 The Second Hammer, 35 Limited Edition, 36 The Last Bid",
+      "Note the economy hooks each quest needs (auction lot, price spike, limited edition) for Y1-P3",
+      "Cast: Sol the auctioneer, Rook (fixer who hates profiting from scarcity)",
+      "Save `story/outlines/side_arc_06_three_auctions.md`"
+     ],
+     "done": "Outline with economy hooks listed"
+    },
+    {
+     "focus": "Write quests 31 Lot Seventeen and 32 Bidder With No Face",
+     "steps": [
+      "Create `dialogue/side/three_auctions.dlg` nodes for Q31–32",
+      "Auction outcomes written as variants keyed by flags the auction will set later",
+      "Rook's voice per VOICE_GUIDE",
+      "Lint"
+     ],
+     "done": "Q31–32 pass lint"
+    },
+    {
+     "focus": "Write quest 33 Funeral Price",
+     "steps": [
+      "The family and funeral cloth price spike; Rook's 'bought applause' line idea from PM 2710 in the game's own words",
+      "Choice pushes Continuity vs Hearth economics",
+      "Make it playable with shop prices only (for T13 stub)",
+      "Lint"
+     ],
+     "done": "Q33 playable without auctions"
+    },
+    {
+     "focus": "Write quests 34 The Second Hammer, 35 Limited Edition and 36 The Last Bid",
+     "steps": [
+      "Q35 references the limited-edition calendar (§12.6) by id only",
+      "Q36 close and abandon state",
+      "Rewards as ledger ids",
+      "Lint"
+     ],
+     "done": "Arc drafted"
+    },
+    {
+     "focus": "Review the arc and hand the economy hooks to the Y1-P3 plan",
+     "steps": [
+      "Read aloud; rhythm rule",
+      "List every auction/market dependency as an issue for Y1-P3",
+      "User approval",
+      "Commit `docs(story): side arc 06 draft`"
+     ],
+     "done": "Approved arc; dependency issues filed"
+    }
+   ],
+   "edge_cases": [
+    "Funeral for a Deleted citizen (Deleted axis barks)",
+    "Player has no money for Q33"
+   ],
+   "evidence": "story/outlines/side_arc_06_three_auctions.md; dialogue/side/three_auctions.dlg"
+  },
+  {
+   "id": "Y1-P1-S06",
+   "stream": "secondary",
+   "title": "Finish the Chapter 3 rewrite: scenes S07–S21",
+   "why": "Continues Y1-P0-S10; Chapter 3 in the same voice as Act 1 (Y2 legacy cleanup rebuilds Ch1–3 on the spine)",
+   "tags": [
+    "story",
+    "dialogue"
+   ],
+   "days": [
+    {
+     "focus": "Write C3-S07 Storm Preparation and C3-S08 Shelter Stories",
+     "steps": [
+      "Read the PM source for these scenes and the old extracted lines in `dialogue/_extracted/chapter3/`",
+      "Create or extend `dialogue/ch3/storm.dlg` in the voice-guide style",
+      "Shelter conversations unlock by party makeup; keep each to one beat",
+      "Run dialogue_test lint on the file"
+     ],
+     "done": "C3-S07 drafted and lint-clean in storm.dlg"
+    },
+    {
+     "focus": "Write C3-S09 The Data Stream Gate",
+     "steps": [
+      "Read the PM source for these scenes and the old extracted lines in `dialogue/_extracted/chapter3/`",
+      "Create or extend `dialogue/ch3/data_stream_gate.dlg` in the voice-guide style",
+      "Gate dialogue must match `ch3_data_stream.gd` ride start (C4 fix path)",
+      "Run dialogue_test lint on the file"
+     ],
+     "done": "C3-S09 drafted and lint-clean in data_stream_gate.dlg"
+    },
+    {
+     "focus": "Write C3-S10 Data Stream Ride",
+     "steps": [
+      "Read the PM source for these scenes and the old extracted lines in `dialogue/_extracted/chapter3/`",
+      "Create or extend `dialogue/ch3/data_stream.dlg` in the voice-guide style",
+      "Short barks timed to the ride; machine speaker lines exempt from rhythm rule",
+      "Run dialogue_test lint on the file"
+     ],
+     "done": "C3-S10 drafted and lint-clean in data_stream.dlg"
+    },
+    {
+     "focus": "Write C3-S11 Archive Threshold and C3-S12 Kaelthas",
+     "steps": [
+      "Read the PM source for these scenes and the old extracted lines in `dialogue/_extracted/chapter3/`",
+      "Create or extend `dialogue/ch3/archive.dlg` in the voice-guide style",
+      "Introduce Kaelthas Marr in voice (withheld a truth once and people died)",
+      "Run dialogue_test lint on the file"
+     ],
+     "done": "C3-S11 drafted and lint-clean in archive.dlg"
+    },
+    {
+     "focus": "Write C3-S13 Ordinary Memories and C3-S14 Fragment Three",
+     "steps": [
+      "Read the PM source for these scenes and the old extracted lines in `dialogue/_extracted/chapter3/`",
+      "Create or extend `dialogue/ch3/archive_memories.dlg` in the voice-guide style",
+      "Fragment Three flash; flag `source_key_fragment_3` unchanged",
+      "Run dialogue_test lint on the file"
+     ],
+     "done": "C3-S13 drafted and lint-clean in archive_memories.dlg"
+    },
+    {
+     "focus": "Write C3-S15 Memory Wisp Prime and C3-S16 The Comment",
+     "steps": [
+      "Read the PM source for these scenes and the old extracted lines in `dialogue/_extracted/chapter3/`",
+      "Create or extend `dialogue/ch3/archive_depths.dlg` in the voice-guide style",
+      "Boss barks plus 'The Comment' discovery; no screen-flash text cues",
+      "Run dialogue_test lint on the file"
+     ],
+     "done": "C3-S15 drafted and lint-clean in archive_depths.dlg"
+    },
+    {
+     "focus": "Write C3-S17 Betrayal and C3-S18 Kaelthas Decision",
+     "steps": [
+      "Read the PM source for these scenes and the old extracted lines in `dialogue/_extracted/chapter3/`",
+      "Create or extend `dialogue/ch3/kaelthas.dlg` in the voice-guide style",
+      "Betrayal outcome flags per PM ledger; companion rule: contradict expected stance",
+      "Run dialogue_test lint on the file"
+     ],
+     "done": "C3-S17 drafted and lint-clean in kaelthas.dlg"
+    },
+    {
+     "focus": "Write C3-S19 Fragment Four and C3-S20 Lyra's Choice",
+     "steps": [
+      "Read the PM source for these scenes and the old extracted lines in `dialogue/_extracted/chapter3/`",
+      "Create or extend `dialogue/ch3/ch3_close.dlg` in the voice-guide style",
+      "`ch3_fragment_4_collected` unchanged; Lyra chooses what to preserve",
+      "Run dialogue_test lint on the file"
+     ],
+     "done": "C3-S19 drafted and lint-clean in ch3_close.dlg"
+    },
+    {
+     "focus": "Write C3-S21 Kaito's Offer, the consequence ledger and the full-chapter review",
+     "steps": [
+      "Write S21 per the user's Kaito decision from Y1-P0-S10",
+      "Turn the PM Chapter 3 consequence ledger (PM 3790) into a flag table in STORY_BIBLE §5 'Chapter 3 flags'",
+      "Rhythm and voice pass over all `dialogue/ch3/*.dlg`; read the chapter aloud end to end",
+      "Write the wiring plan (which scene script calls which node) for the Y2 Chapter 3 rebuild; user approval"
+     ],
+     "done": "Chapter 3 fully drafted, ledger in the bible, wiring plan saved"
+    }
+   ],
+   "edge_cases": [
+    "Lyra absent if not recruited: who carries her lines",
+    "Kaelthas decision variants feed Act 2 scenes"
+   ],
+   "evidence": "dialogue/ch3/*.dlg passing dialogue_test; STORY_BIBLE Chapter 3 flag table"
+  },
+  {
+   "id": "Y1-P1-S07",
+   "stream": "secondary",
+   "title": "Rewrite the Oakhaven side quests as .dlg",
+   "why": "Follows the Y1-P0-T06 fixes; quest text in the rewrite voice (P5)",
+   "tags": [
+    "quests",
+    "dialogue",
+    "story"
+   ],
+   "days": [
+    {
+     "focus": "Rewrite oakhaven_lost_memories and oakhaven_corrupted_cellar",
+     "steps": [
+      "Read their current inline text and steps in `side_quest_manager.gd` and the village scripts",
+      "Create `dialogue/side/oakhaven_quests.dlg` with nodes per step for both quests",
+      "Use the fixed reward ids from Y1-P0-T06",
+      "Lint"
+     ],
+     "done": "Two quests in .dlg"
+    },
+    {
+     "focus": "Rewrite oakhaven_herbalist_favor and oakhaven_memory_herb_delivery",
+     "steps": [
+      "Add nodes for both; Mara and the herbalist in voice",
+      "The herb delivery gets a WorldClock window if the time doc calls for it (data only)",
+      "Lint",
+      "Note which NPCs need new repeat lines"
+     ],
+     "done": "Four Oakhaven quests in .dlg"
+    },
+    {
+     "focus": "Hand over and check in play",
+     "steps": [
+      "Write the hook list for primary (which line plays at which step)",
+      "Play each quest once with the new text in the editor",
+      "Fix length/overflow found in the tour",
+      "Commit"
+     ],
+     "done": "All four quests readable in play"
+    }
+   ],
+   "edge_cases": [
+    "Quest text that names an item not in Inventory",
+    "Repeat lines after completion"
+   ],
+   "evidence": "dialogue/side/oakhaven_quests.dlg; tour shots"
+  },
+  {
+   "id": "Y1-P1-S08",
+   "stream": "secondary",
+   "title": "Write the speaker roster for the registry",
+   "why": "Feeds primary T08 speaker registry",
+   "tags": [
+    "dialogue",
+    "npc",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "List every speaker in every .dlg and script",
+     "steps": [
+      "Collect speaker ids from `dialogue/**/*.dlg` and inline `DialogueManager.say` speakers",
+      "Normalise names (one id per person; 'Merchant Garro' → `garro`)",
+      "Mark machine speakers (SYSTEM, the Proxy) for the lint exemption",
+      "Draft `story/speaker_roster.md`"
+     ],
+     "done": "Roster lists every speaker once"
+    },
+    {
+     "focus": "Define portrait slots and tiers",
+     "steps": [
+      "Assign Tier A/B/C per STORY_BIBLE and ROADMAP §12.3",
+      "Define portrait slot names and expressions for Tier A (Kaelen, Elara, Seraphina, Lyra, Kaelthas, Mara, Mira as Voice)",
+      "Note which have no portrait (Tier C)",
+      "Hand to primary"
+     ],
+     "done": "Roster with tiers and portrait slots"
+    }
+   ],
+   "edge_cases": [
+    "Same name for two people",
+    "Mira must stay 'the Voice' in UI until NG+"
+   ],
+   "evidence": "story/speaker_roster.md"
+  },
+  {
+   "id": "Y1-P1-S09",
+   "stream": "secondary",
+   "title": "Write the base stat tables and training rates",
+   "why": "Feeds primary T06 stats model; §12.8",
+   "tags": [
+    "systems",
+    "difficulty",
+    "economy"
+   ],
+   "days": [
+    {
+     "focus": "Base stats per character",
+     "steps": [
+      "Propose STR/AGI/VIT/INT/SPI/LCK bases for Kaelen, Elara, Seraphina that reproduce today's attack/defense/max_hp exactly at level 1",
+      "Per-level growth table to level 20",
+      "Show derived damage and HP curves in a table",
+      "Save `design/balance/stats_tables.md`"
+     ],
+     "done": "Tables that keep current numbers at level 1"
+    },
+    {
+     "focus": "Training rates and a balance check",
+     "steps": [
+      "Define use counters and a saturating training curve per stat",
+      "Cap training so it can't exceed level growth by more than the doc's limit",
+      "Run `/balance-check` on the tables",
+      "Hand to primary as `.tres` data spec"
+     ],
+     "done": "Balance-check notes and data spec ready"
+    }
+   ],
+   "edge_cases": [
+    "Grinding training on a dummy enemy",
+    "LCK cap for gambling (small, capped per §12.8)"
+   ],
+   "evidence": "design/balance/stats_tables.md"
+  },
+  {
+   "id": "Y1-P1-S10",
+   "stream": "secondary",
+   "title": "Write the Act 1 calendar and the day/night look",
+   "why": "Feeds WorldClock v1 (T04) and the bridge deadline (T07); P7f",
+   "tags": [
+    "time",
+    "art",
+    "story"
+   ],
+   "days": [
+    {
+     "focus": "Put Act 1's timed events on the calendar",
+     "steps": [
+      "List every Act 1 event with a time meaning: arrival day 1, bridge until dark, medicine until the evening bell, the bell ringing thirteen times",
+      "Assign in-game times consistent with the time-model doc",
+      "Mark which are deadlines vs windows vs order effects",
+      "Save `design/gdd/act1_calendar.md`"
+     ],
+     "done": "Act 1 calendar table"
+    },
+    {
+     "focus": "Specify the day/night look",
+     "steps": [
+      "Define 4–6 time-of-day tints for placeholder scenes (CanvasModulate values)",
+      "Note readability limits for text and HUD at night",
+      "List which scenes are interior (no tint)",
+      "Hand the values to primary T04 as data"
+     ],
+     "done": "Tint table ready"
+    }
+   ],
+   "edge_cases": [
+    "Night tint vs colourblind readability",
+    "Cutscene that spans dusk"
+   ],
+   "evidence": "design/gdd/act1_calendar.md"
+  },
+  {
+   "id": "Y1-P1-S11",
+   "stream": "secondary",
+   "title": "Write the cutscene timeline requirements and ADR proposal",
+   "why": "From the Y1-P0-S11 catalogue; §4.7 cutscene timelines (Months 10–12)",
+   "tags": [
+    "cinematics",
+    "architecture",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Compare timeline approaches",
+     "steps": [
+      "Compare Godot AnimationPlayer method tracks, a custom `.cut` data format, and extending `.dlg` `do` events, against the catalogue needs",
+      "Check pause safety and skip-sets-all-flags for each",
+      "Estimate migration cost for the Act 1 cutscenes",
+      "Draft the comparison"
+     ],
+     "done": "Comparison table"
+    },
+    {
+     "focus": "Write the ADR proposal",
+     "steps": [
+      "Run `/architecture-decision` with the chosen approach (status Proposed)",
+      "Define the test: after skip, flags equal those after full play",
+      "Schedule implementation for Months 10–12 in the issue tracker",
+      "User review"
+     ],
+     "done": "Proposed ADR saved"
+    }
+   ],
+   "edge_cases": [
+    "Cutscene interrupted by a controller disconnect",
+    "Skipping during a fade"
+   ],
+   "evidence": "docs/architecture/adr-cutscene-timeline.md (Proposed)"
+  },
+  {
+   "id": "Y1-P1-S12",
+   "stream": "secondary",
+   "title": "Plan the audio bus layout",
+   "why": "ROADMAP Months 7–9 audio bus layout; P9 juice",
+   "tags": [
+    "audio",
+    "architecture"
+   ],
+   "days": [
+    {
+     "focus": "Design the buses",
+     "steps": [
+      "Propose buses: Master, Music, Music_Combat, SFX, SFX_UI, Ambience, Voice (future)",
+      "Define ducking (dialogue ducks music), hitstop low-pass idea, pause-menu filter",
+      "Map current `MusicManager`/`SFXManager` calls to buses using the Act 1 inventory",
+      "Draft `design/audio/bus_layout.md`"
+     ],
+     "done": "Bus layout doc"
+    },
+    {
+     "focus": "Prototype the layout and the mixer settings",
+     "steps": [
+      "Create a proposed `default_bus_layout.tres` on a branch (ask before committing)",
+      "Make the Options volume sliders map to Music/SFX/Ambience",
+      "Check the SFX slider reaches cached sounds (audit fix) per bus",
+      "Note adaptive-music layer needs for the 4 Gate 1 tracks"
+     ],
+     "done": "Bus layout prototype and slider mapping"
+    }
+   ],
+   "edge_cases": [
+    "Sounds played before buses load",
+    "Volume 0 vs mute"
+   ],
+   "evidence": "design/audio/bus_layout.md; default_bus_layout.tres proposal"
+  },
+  {
+   "id": "Y1-P1-S13",
+   "stream": "secondary",
+   "title": "Write the music direction brief",
+   "why": "ROADMAP §3 ~45 tracks; Gate 1 needs 4 adaptive tracks",
+   "tags": [
+    "music",
+    "audio"
+   ],
+   "days": [
+    {
+     "focus": "Define the sound of Act 1",
+     "steps": [
+      "Describe Oakhaven (belonging), Ironhold (institutions, fear), combat and boss moods with reference adjectives (no copyrighted track copying)",
+      "Define the adaptive layers for the 4 Gate 1 tracks (explore/tension/combat/boss)",
+      "Note loop length, BPM range and stem needs",
+      "Save `design/audio/music_direction.md`"
+     ],
+     "done": "Music brief saved"
+    }
+   ],
+   "edge_cases": [
+    "Boss 'rage' music state (fixed in the audit) must have a layer"
+   ],
+   "evidence": "design/audio/music_direction.md"
+  },
+  {
+   "id": "Y1-P1-S14",
+   "stream": "secondary",
+   "title": "Write art bible v1 sections",
+   "why": "ROADMAP Months 7–9 Art bible v1; continues Y1-P0-S12",
+   "tags": [
+    "art",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Characters: proportions and readability",
+     "steps": [
+      "Use the Kaelen PAE test to fix character height in pixels, outline rules and silhouette tests",
+      "Define the cast's shape language (Kaelen, Elara, Seraphina)",
+      "Write the section via `/art-bible`",
+      "Note PAE limits found"
+     ],
+     "done": "Character section drafted"
+    },
+    {
+     "focus": "Environments: tiles and props",
+     "steps": [
+      "Define the tile size (e.g. 16 or 32 px) against the chunk plan (§12.5 ~32×32 tiles)",
+      "Oakhaven and Ironhold material lists",
+      "Collision readability rule: what looks solid must be solid (ties to the 2026-10-06 collision work)",
+      "Write the section"
+     ],
+     "done": "Environment section drafted"
+    },
+    {
+     "focus": "UI and VFX",
+     "steps": [
+      "UI frame, font size minimums, dialogue box and portrait frame",
+      "VFX rules: glitch, hit sparks, flash limits (photosensitivity)",
+      "Write the section",
+      "List the asset types for `/asset-spec` later"
+     ],
+     "done": "UI/VFX sections drafted"
+    },
+    {
+     "focus": "Review and lock v1",
+     "steps": [
+      "Run a review against DESIGN_PILLARS",
+      "Resolve open questions with the user",
+      "Mark v1 locked with a change process",
+      "Commit"
+     ],
+     "done": "Art bible v1 approved"
+    }
+   ],
+   "edge_cases": [
+    "Pixel scale vs 1280×720 UI text",
+    "Palette for night tints"
+   ],
+   "evidence": "design/art/art-bible.md v1"
+  },
+  {
+   "id": "Y1-P1-S15",
+   "stream": "secondary",
+   "title": "Make PAE test sprites: Elara, the slime and an Oakhaven tile set",
+   "why": "Gate 1 cost-per-asset measurement; real fights from Y1-P0-T13 need sprites to judge feel",
+   "tags": [
+    "art",
+    "animation",
+    "assets"
+   ],
+   "days": [
+    {
+     "focus": "Elara idle, walk and cast",
+     "steps": [
+      "Author Elara side-scroll idle, walk and cast (the cart spell) in PAE at the locked scale",
+      "Export to `assets/art_sources/pae_tests/elara/`",
+      "Log time per clip",
+      "ComfyUI used: No"
+     ],
+     "done": "Three Elara clips exported"
+    },
+    {
+     "focus": "Slime idle, hop and polygon-break death",
+     "steps": [
+      "Author the slime clips including the 'breaks into polygons' death",
+      "Mark hit frames",
+      "Export and log time",
+      "Contact sheet"
+     ],
+     "done": "Slime clips exported"
+    },
+    {
+     "focus": "Oakhaven tile test: ground, path, fence, tree trunk",
+     "steps": [
+      "Author 12–16 tiles at the art-bible tile size",
+      "Seam-check in PAE",
+      "Export the tilesheet",
+      "Log time"
+     ],
+     "done": "Tile test passes seam check"
+    },
+    {
+     "focus": "Preview the test sprites in Godot (preview-only)",
+     "steps": [
+      "Build a preview scene under `assets/art_sources/pae_tests/preview/` (not production, per AGENTS.md)",
+      "Check pixel snapping and scale at 1280×720",
+      "Live viewport screenshot labelled 'PAE test preview'",
+      "No production import"
+     ],
+     "done": "Preview screenshot retained"
+    },
+    {
+     "focus": "Update the cost-per-asset log",
+     "steps": [
+      "Total minutes per frame across Kaelen, Elara, slime and tiles",
+      "Project the Gate 1 asset list cost",
+      "Flag quality risks for Gate 1",
+      "Share with the user"
+     ],
+     "done": "Cost log updated with projection"
+    }
+   ],
+   "edge_cases": [
+    "Different frame sizes across characters",
+    "Tile seams at non-integer zoom"
+   ],
+   "evidence": "docs/art_pipeline/pae_cost_log.md; production/qa/evidence/2027-01-pae/preview.png"
+  },
+  {
+   "id": "Y1-P1-S16",
+   "stream": "secondary",
+   "title": "Write Kaelen's frame-data sheet",
+   "why": "Feeds Y1-P2 MoveData/AttackSpec tied to animation frames (P2)",
+   "tags": [
+    "animation",
+    "combat",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Ground attacks",
+     "steps": [
+      "For attack1–3 and the charge attack list startup/active/recovery frames at 60 fps from current code constants",
+      "Mark cancel windows (jump-cancel, dash-cancel from the 2026-10-06 fixes)",
+      "Map frames to the PAE clip frames",
+      "Draft `design/combat/kaelen_frame_data.md`"
+     ],
+     "done": "Ground attack frame table"
+    },
+    {
+     "focus": "Movement and defence",
+     "steps": [
+      "Dash (0.18 s), air dash, parry, dodge with i-frame windows from the difficulty doc",
+      "Jump/fall/land",
+      "Note the 3-frame input latency target (P2)",
+      "Update the sheet"
+     ],
+     "done": "Movement/defence table"
+    },
+    {
+     "focus": "Review against difficulty and animation",
+     "steps": [
+      "Check parry/i-frame windows line up with Medium values (6 / 12 frames)",
+      "Check the clip list frame counts",
+      "Hand the sheet to the Y1-P2 plan",
+      "User review"
+     ],
+     "done": "Frame-data sheet approved"
+    }
+   ],
+   "edge_cases": [
+    "Frame data must not depend on stats (§12.8)",
+    "Hitstop frames excluded from windows"
+   ],
+   "evidence": "design/combat/kaelen_frame_data.md"
+  },
+  {
+   "id": "Y1-P1-S17",
+   "stream": "secondary",
+   "title": "Start the Simplified Chinese glossary",
+   "why": "§3 EN + Simplified Chinese at 1.0; terms must be fixed before the corpus grows",
+   "tags": [
+    "localization",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "List the terms that need fixed translations",
+     "steps": [
+      "Extract key terms: Root Access, Source Key, Data Vision, SOVEREIGN, God King, Null Court, Fracture, the region names, faction names",
+      "Add context notes (meaning, tone, don't-translate rules)",
+      "Mark names to keep in Latin vs translate",
+      "Save `localization/glossary.md`"
+     ],
+     "done": "Glossary with context notes"
+    },
+    {
+     "focus": "Plan translation review",
+     "steps": [
+      "Note that translations need a qualified translator (no machine-only translation for release)",
+      "Define the CSV columns for translator notes",
+      "Check the export from T10 contains context for each line",
+      "Run `/localize` for a hardcoded-string scan and log the findings"
+     ],
+     "done": "Translation plan and scan findings"
+    }
+   ],
+   "edge_cases": [
+    "Terms that are puns in English",
+    "Character limits in UI"
+   ],
+   "evidence": "localization/glossary.md; /localize scan report"
+  },
+  {
+   "id": "Y1-P1-S18",
+   "stream": "secondary",
+   "title": "Specify the save-slot UX",
+   "why": "SaveService v2 (T05) needs a clear player-facing flow: backups, restore, migration notices",
+   "tags": [
+    "ux",
+    "save"
+   ],
+   "days": [
+    {
+     "focus": "Design the save and load screens",
+     "steps": [
+      "Run `/ux-design` for the save/load flow: slot info (chapter, play time, in-game day), damaged save restore, backup choice",
+      "Messages for failed save, disk full, migrated save",
+      "Gamepad navigation order",
+      "Save `design/ux/save_load.md`"
+     ],
+     "done": "Save UX spec saved"
+    }
+   ],
+   "edge_cases": [
+    "Restore from the oldest backup confirmation",
+    "Save in progress when quitting"
+   ],
+   "evidence": "design/ux/save_load.md"
+  },
+  {
+   "id": "Y1-P1-S19",
+   "stream": "secondary",
+   "title": "Second Act 1 playtest and fun fixes",
+   "why": "Fun factor; checks the new real fights, rooms and the bridge clock",
+   "tags": [
+    "fun",
+    "combat",
+    "level"
+   ],
+   "days": [
+    {
+     "focus": "Play Act 1 with the new fights, rooms and clock",
+     "steps": [
+      "Play New Game to the arena on Medium-equivalent settings",
+      "Time each section and compare with the P0 fun report",
+      "Note feel of slime, guardian and boar fights",
+      "Write `/playtest-report`"
+     ],
+     "done": "Second playtest report"
+    },
+    {
+     "focus": "Ask one outside tester",
+     "steps": [
+      "Prepare a debug build with `tools/export_windows.ps1`",
+      "Write a 5-question survey (fun, confusion, fairness of deaths, bridge deadline noticed, would continue)",
+      "Watch or collect notes (with their consent)",
+      "Summarise"
+     ],
+     "done": "Tester notes summarised"
+    },
+    {
+     "focus": "Fix the top content-level issues",
+     "steps": [
+      "Pick ≤ 4 content fixes (line trims, signposting, NPC placement)",
+      "Apply and run route/reachability tests",
+      "File combat-feel issues for Y1-P2",
+      "Update CHANGELOG"
+     ],
+     "done": "Fixes in, tests green"
+    },
+    {
+     "focus": "Retest the fixed sections",
+     "steps": [
+      "Replay the fixed sections",
+      "Compare timings",
+      "Retain before/after screenshots where layout changed",
+      "Close the related issues"
+     ],
+     "done": "Before/after recorded"
+    }
+   ],
+   "edge_cases": [
+    "Bridge deadline missed without noticing (signposting failure)",
+    "Fights too long for a tutorial"
+   ],
+   "evidence": "production/qa/playtest-2027-01-act1.md"
+  },
+  {
+   "id": "Y1-P1-S20",
+   "stream": "secondary",
+   "title": "Author side-arc quest data in the StoryGraph format",
+   "why": "Primary T12/T13 load this data; quests as data, not code",
+   "tags": [
+    "quests",
+    "story"
+   ],
+   "days": [
+    {
+     "focus": "Arc 04 quest data",
+     "steps": [
+      "Write quest records for 19–24 in the format the StoryGraph ADR chose (steps, prerequisites, flags, reward ids, timing type)",
+      "Validate with boot validation in a branch",
+      "Fix id mismatches with the .dlg nodes",
+      "Hand to primary"
+     ],
+     "done": "Arc 04 data validates"
+    },
+    {
+     "focus": "Arc 05 and 06 quest data",
+     "steps": [
+      "Write records for 25–30 and 31–36 (31/32/34–36 blocked on `auction_v1_available`)",
+      "Validate",
+      "Note timing types (Q35 window on the limited-edition calendar)",
+      "Hand to primary"
+     ],
+     "done": "Arc 05/06 data validates"
+    }
+   ],
+   "edge_cases": [
+    "Prerequisite on a flag from Ch3 (not yet wired)"
+   ],
+   "evidence": "data files under the StoryGraph data folder; boot validation log"
+  },
+  {
+   "id": "Y1-P1-S21",
+   "stream": "secondary",
+   "title": "Bring the story bible up to date",
+   "why": "Canon record stays the source of truth (STORY_BIBLE retcon log)",
+   "tags": [
+    "story",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Update the bible for P0–P1 story changes",
+     "steps": [
+      "Add side arcs 04–06 flag tables and their axis effects",
+      "Add shatter scene change and bridge-clock change to the retcon log with dates",
+      "Record the Kaito decision",
+      "User review"
+     ],
+     "done": "Bible updated and reviewed"
+    }
+   ],
+   "edge_cases": [
+    "Conflicting flag names between bible and registry: registry wins, bible regenerated"
+   ],
+   "evidence": "story/STORY_BIBLE.md diff"
+  },
+  {
+   "id": "Y1-P1-S22",
+   "stream": "secondary",
+   "title": "Triage the issue tracker",
+   "why": "Keep the GitHub issues honest after two phases",
+   "tags": [
+    "tests",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Triage open issues",
+     "steps": [
+      "Run `/bug-triage` on all open issues",
+      "Close fixed ones with commit references",
+      "Move issues to the right phase milestones (Y1-P2 combat, Y1-P3 economy)",
+      "Note trends (which systems produce most bugs)"
+     ],
+     "done": "Triage report saved"
+    }
+   ],
+   "edge_cases": [
+    "Issues without a reproduction: ask or close as stale"
+   ],
+   "evidence": "production/qa/bug-triage-2027-01.md"
+  },
+  {
+   "id": "Y1-P1-S23",
+   "stream": "secondary",
+   "title": "Review the spine phase and plan combat foundation",
+   "why": "ROADMAP §14 monthly/quarterly review",
+   "tags": [
+    "docs",
+    "team"
+   ],
+   "days": [
+    {
+     "focus": "Milestone review, retro and next plan",
+     "steps": [
+      "Run `/milestone-review` for Y1-P1",
+      "Run `/retrospective` and record measured speed vs plan",
+      "Update the risk register",
+      "Draft the Y1-P2 sprint goal"
+     ],
+     "done": "Review, retro and next goal saved"
+    }
+   ],
+   "edge_cases": [
+    "Spine items unfinished: decide carry vs cut with the user"
+   ],
+   "evidence": "production/milestones/y1-p1-review.md"
+  }
+ ]
+}

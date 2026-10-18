@@ -96,7 +96,7 @@ not from optimism.
 
 | Content | Target | Notes |
 |---|---|---|
-| World | **8 connected regions** in one streamed open world | The blueprint's 15 kingdoms become 8 at launch; the rest are expansion candidates. |
+| World | **8 connected regions** in one streamed open world | The blueprint's 15 kingdoms become 8 at launch; the rest are expansion candidates. **Region map (decided 2026-10-18, from STORY_BIBLE §3):** Act 1: R1 Oakhaven Reach, R2 Ironhold Crown · Act 2: R3 Fractured Wastes, R4 Forgotten Sectors (the Null Court), R5 Mirror City · Act 3: R6 Cathedral Server, R7 Memory Ocean / Saved Assembly · Act 4: R8 Rootward Expanse (Human Patch Lab, Root of Heaven). |
 | Playtime | Main 35–45 h · completionist 100+ h | Open world, market and minigames carry the completionist hours. |
 | Acts | 4 + Story+ | Act 3 splits into 3 branches. |
 | Storylines | 24 + 3 secret | 3 axes × 3 outcomes, plus timing modifiers (§12.2, §12.4). |
@@ -122,7 +122,7 @@ not from optimism.
 | **Y1** | Oct 2026 – Sep 2027 | Stabilize, foundation, art pipeline, Pillar Slice; start open-world tech | **Gate 1 (Jun 2027)** |
 | **Y2** | Oct 2027 – Sep 2028 | Public demo, tools, open-world streaming, economy and time systems at scale, pre-production | **Gate 2 (Mar 2028)** · **Gate 3 (Sep 2028)** |
 | **Y3** | Oct 2028 – Sep 2029 | Production I: Act 1 (regions 1–2), team onboarding | M3 |
-| **Y4** | Oct 2029 – Sep 2030 | Production II: Act 2 (regions 3–5) → **Early Access (~Mar 2030)** | **Gate 4: EA health** |
+| **Y4** | Oct 2029 – Sep 2030 | Production II: Act 2 (regions 3–5) → **Early Access (~Mar 2030)** with Act 1 + R3; R4 and R5 follow as EA updates before Gate 4 | **Gate 4: EA health** |
 | **Y5** | Oct 2030 – Sep 2031 | Production III: Act 3 branches (regions 6–7), full market and auctions, all minigames | M5 |
 | **Y6** | Oct 2031 – Sep 2032 | Production IV: region 8, Act 4, endings, Story+, secrets → **Alpha** | **Gate 6: Content complete** |
 | **Y7** | Oct 2032 – Sep 2033 | Beta: balance (difficulty, economy, time paths), localization, accessibility, performance | **Gate 7: Release candidate** |
@@ -360,10 +360,10 @@ complete commercial product.
 
 | Year | Content | Systems deepened | Milestone |
 |---|---|---|---|
-| **Y3** (Oct 2028 – Sep 2029) | **Act 1**, regions 1–2: 6 bosses, 35 side quests, 6 secret quests, 10 time-sensitive quests, 3 side storylines, 25 Tier B NPCs, 3 companions, ~120 items, 1 auction house, 2 minigames + 1 gambling game | NPC sim v2 (factions, reputation, crime/witness, daily events); full moveset; training-based stat growth | **M3:** Act 1 shippable on all 5 difficulties |
-| **Y4** (Oct 2029 – Sep 2030) | **Act 2**, regions 3–5: 9 bosses, 45 side quests, 10 secret quests, 12 time-sensitive quests, 4 side storylines, 25 Tier B NPCs, 3 companions, ~150 items, 2 auction houses, limited-edition calendar v1 | Companion synergies; market agents at scale; adaptive music at scale | **Early Access ~Mar 2030** (Acts 1–2). **🚦 Gate 4:** review and retention targets, crash-free ≥ 99.5%, saves migrate across every patch, no economy exploit open for more than 1 patch |
-| **Y5** (Oct 2030 – Sep 2031) | **Act 3: 3 branches**, regions 6–7: 6 bosses, 40 side quests, 8 secret quests, 10 time-sensitive quests, 3 side storylines, 20 Tier B NPCs, 2 companions, ~120 items, 4th auction house, remaining minigames and gambling | NPC sim v3: towns change per route **and per elapsed time**; route-specific market events | **M5:** all branches playable end to end |
-| **Y6** (Oct 2031 – Sep 2032) | Region 8 + **Act 4**; SOVEREIGN then **the God King** (true final boss), each with a Hell phase; **all 27 endings** (framed by who authorizes the change);  **Story+ for every storyline**; remaining secrets and 2 side storylines; ~60 items | Ending composer and Story+ world state complete; timing modifiers wired into every ending | **🚦 Gate 6: Alpha.** Content complete; bot reaches every storyline and timing branch; every quest completable |
+| **Y3** (Oct 2028 – Sep 2029) | **Act 1**, regions 1–2: 6 bosses, 40 side quests, 6 secret quests, 10 time-sensitive quests, 3 side storylines, 25 Tier B NPCs, 3 companions, ~120 items, 1 auction house, 2 minigames + 1 gambling game | NPC sim v2 (factions, reputation, crime/witness, daily events); full moveset; training-based stat growth | **M3:** Act 1 shippable on all 5 difficulties |
+| **Y4** (Oct 2029 – Sep 2030) | **Act 2**, regions 3–5: 9 bosses, 50 side quests, 10 secret quests, 12 time-sensitive quests, 4 side storylines, 25 Tier B NPCs, 3 companions, ~150 items, 2 auction houses, limited-edition calendar v1 | Companion synergies; market agents at scale; adaptive music at scale | **Early Access ~Mar 2030** with Act 1 + R3; R4 (EA-U1) and R5 (EA-U2) ship as EA content updates, so all of Acts 1–2 is out before **🚦 Gate 4:** review and retention targets, crash-free ≥ 99.5%, saves migrate across every patch, no economy exploit open for more than 1 patch |
+| **Y5** (Oct 2030 – Sep 2031) | **Act 3: 3 branches**, regions 6–7: 6 bosses, 45 side quests, 8 secret quests, 10 time-sensitive quests, 3 side storylines, 20 Tier B NPCs, 2 companions, ~120 items, 4th auction house, remaining minigames and gambling | NPC sim v3: towns change per route **and per elapsed time**; route-specific market events | **M5:** all branches playable end to end |
+| **Y6** (Oct 2031 – Sep 2032) | Region 8 + **Act 4**; SOVEREIGN then **the God King** (true final boss), each with a Hell phase; **all 27 endings** (framed by who authorizes the change);  **Story+ for every storyline**; 15 side quests, remaining secrets and 2 side storylines; ~60 items | Ending composer and Story+ world state complete; timing modifiers wired into every ending | **🚦 Gate 6: Alpha.** Content complete; bot reaches every storyline and timing branch; every quest completable |
 
 **Production rules (Years 3–6):**
 - **Vertical, not horizontal:** finish one region to shippable quality before starting the next.

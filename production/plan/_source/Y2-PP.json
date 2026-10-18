@@ -1,0 +1,4841 @@
+{
+ "phase_id": "Y2-PP",
+ "phase_title": "Pre-production",
+ "goal": "The world bible, route architecture (bot-verified for all 27 storylines and every timing branch), economy design (365-day sim within inflation bounds), combat and itemization bibles are locked; legacy systems and stale files are gone; every content pipeline has shipped one final-quality asset; the team and funding plan is decided; and Gate 3 is decided on 2028-09-30.",
+ "exit_criteria": [
+  "World bible: 8 regions on one map, 3 factions, history, 8-companion roster, SOVEREIGN and the Null Court thesis per act",
+  "Route bot reaches all 24 + 3 storylines and every timing branch on stub content before any new content is written (CI report)",
+  "365-in-game-day headless economy sim keeps the inflation index within the agreed bounds on every route profile",
+  "Combat bible and itemization bible approved (affix tables, crafting trees, sets, limited-edition calendar)",
+  "Chapters 1-3 run on the spine with no legacy calls; cutscene_director, cinematic_vfx, TweenAnimator, duplicate feel systems, 3 old item databases and the stale docs/ probes deleted; load_all and route tests green",
+  "~97 legacy phase reports collapsed into ADRs plus an archive index",
+  "One final-quality asset shipped through each pipeline (character, tileset/chunk, enemy, boss, icon, VFX, UI, music, SFX, dialogue+zh-CN, cinematic)",
+  "Roles, hiring steps, funding route, company entity and IP-assignment contracts decided with professional advice; /onboard docs per role",
+  "Gate 3 ADR recorded: greenlight, or the smaller-game plan (2-3 regions, ~6 storylines)"
+ ],
+ "tasks": [
+  {
+   "id": "Y2-PP-T01",
+   "stream": "primary",
+   "title": "Delete the orphaned legacy systems",
+   "why": "Roadmap §6 legacy cleanup and §11 R7 (one owner per concern); deletion map from Y2-Q2",
+   "tags": [
+    "cleanup",
+    "code",
+    "architecture",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Delete cutscene_director",
+     "steps": [
+      "Re-run the reference search from `docs/architecture/legacy_deletion_plan.md` for `scripts/cutscene/cutscene_director.gd`; confirm every remaining caller is migrated",
+      "Move remaining callers to the timeline cutscene system (or `cutscene_manager.gd` if it is the surviving owner)",
+      "Delete `scripts/cutscene/cutscene_director.gd` (and their `.uid` files); remove any autoload entry in `project.godot`",
+      "Check no `.tscn` still references the script path",
+      "Run `load_all`, `phase0_blockers`, `chapter1_route`, `chapter2_route` and the bot; commit as `refactor(cleanup): remove cutscene_director`"
+     ],
+     "done": "cutscene_director gone; all suites green"
+    },
+    {
+     "focus": "Delete cinematic_vfx",
+     "steps": [
+      "Re-run the reference search from `docs/architecture/legacy_deletion_plan.md` for `scripts/effects/cinematic_vfx.gd`; confirm every remaining caller is migrated",
+      "Move remaining callers to FeelService and the timeline system's VFX cues",
+      "Delete `scripts/effects/cinematic_vfx.gd` (and their `.uid` files); remove any autoload entry in `project.godot`",
+      "Check every cinematic in Ch1–2 still plays its VFX cues in the screenshot tour",
+      "Run `load_all`, `phase0_blockers`, `chapter1_route`, `chapter2_route` and the bot; commit as `refactor(cleanup): remove cinematic_vfx`"
+     ],
+     "done": "cinematic_vfx gone; all suites green"
+    },
+    {
+     "focus": "Delete TweenAnimator",
+     "steps": [
+      "Re-run the reference search from `docs/architecture/legacy_deletion_plan.md` for `scripts/effects/tween_animator.gd`; confirm every remaining caller is migrated",
+      "Move remaining callers to plain `create_tween()` calls owned by each UI or the timeline system",
+      "Delete `scripts/effects/tween_animator.gd` (and their `.uid` files); remove any autoload entry in `project.godot`",
+      "Check UI transitions in the main menu, pause screen and status window still animate",
+      "Run `load_all`, `phase0_blockers`, `chapter1_route`, `chapter2_route` and the bot; commit as `refactor(cleanup): remove TweenAnimator`"
+     ],
+     "done": "TweenAnimator gone; all suites green"
+    },
+    {
+     "focus": "Duplicate feel systems: inventory and migration plan",
+     "steps": [
+      "List every shake, flash and damage-number path that still exists: `combat_effects.gd apply_screen_shake`, `game_juice.gd`, `vfx_library.gd`, `cinematic_camera.gd shake/earthquake_shake/impact_shake`, `enemy_base.gd _screen_shake/_play_hit_flash`, `player_combat.gd _screen_shake/_spawn_damage_number/_flash_red`",
+      "List per-scene copies: `_flash`/`_shake` in `ch1_oakhaven_village.gd`, `_shake_camera` in `ch1_opening_crash_site_hook.gd`, `_simulate_shake` in `ch2_administrator_boss.gd`, `_simulate_screen_shake` in `ch2_chapter_end.gd`, `_screen_flash` in four `chapter3` scripts",
+      "Decide the FeelService API each maps to (shake tier, flash preset, pooled number)",
+      "Write the order: combat first, then chapters"
+     ],
+     "done": "Migration table for every feel duplicate"
+    },
+    {
+     "focus": "Duplicate feel systems: combat callers to FeelService",
+     "steps": [
+      "Move `player_combat.gd` and `enemy_base.gd` shake, flash and number calls to FeelService",
+      "Keep hitstop tiers and feedback identical (compare recorded clips before/after)",
+      "Run `tests/combat_fixes_test.gd` and the boss replay tests",
+      "Delete the now-unused private helpers"
+     ],
+     "done": "Combat uses only FeelService; replay tests green"
+    },
+    {
+     "focus": "Duplicate feel systems: chapter scripts to FeelService",
+     "steps": [
+      "Replace the per-scene `_flash`, `_shake`, `_screen_flash`, `_simulate_shake` helpers in chapters 1–3 with FeelService presets",
+      "Respect the accessibility shake slider and flash reduction automatically through FeelService",
+      "Run the screenshot tour and compare key frames",
+      "Delete the private helpers"
+     ],
+     "done": "No per-scene feel helpers left in chapters 1–3"
+    },
+    {
+     "focus": "Duplicate feel systems: delete the old modules",
+     "steps": [
+      "Delete `combat_effects.gd`, `game_juice.gd` and `vfx_library.gd` once no caller remains (or keep one as the FeelService implementation if that is how Y1 built it; record which)",
+      "Remove their autoloads from `project.godot`",
+      "Add a CI grep that fails on new `_screen_shake(` or `_screen_flash(` definitions outside FeelService",
+      "Run every suite and the bot"
+     ],
+     "done": "One feel system remains; CI guard active"
+    },
+    {
+     "focus": "Old item databases: compare with ItemDB",
+     "steps": [
+      "Diff `inventory_system.gd ITEMS`, `shop_system.gd SHOP_ITEMS/SHOP_CATALOGS` and `crafting_system.gd MATERIAL_ITEMS/RECIPES` against the Y1 ItemDB `.tres` set",
+      "List items that exist only in the old dictionaries and decide: migrate to ItemDB or drop",
+      "Check `asset_manager.gd ITEM_SPRITE_MAP` for icon mappings that must move with them",
+      "Plan save migration for any item ID that changes"
+     ],
+     "done": "Item diff table with a decision per item"
+    },
+    {
+     "focus": "Old item databases: migrate callers",
+     "steps": [
+      "Point inventory, shop and crafting code at ItemDB only",
+      "Add `SaveService` migration for renamed item IDs with a round-trip test",
+      "Run the 100-day economy sim and the anti-exploit tests",
+      "Run the demo route bot"
+     ],
+     "done": "No code reads the old dictionaries; sim and tests green"
+    },
+    {
+     "focus": "Old item databases: delete and guard",
+     "steps": [
+      "Delete the three dictionaries (and any now-empty helper code)",
+      "Add a test that every item ID referenced in `.dlg` files, quests and loot tables exists in ItemDB",
+      "Run `load_all` and all suites",
+      "Update `docs/architecture/legacy_deletion_plan.md` status"
+     ],
+     "done": "Three old item databases deleted; ID test green"
+    },
+    {
+     "focus": "Stale probes under docs/: classify + Stale probes under docs/: delete",
+     "steps": [
+      "List every `.gd` under `docs/` (75 in Oct 2026, mostly `docs/art_pipeline/*_preview*/` and `docs/gameplay_audit/phase_10n_*/tools/`) and the diagnostic `.json/.log` probe outputs",
+      "Check each one is not referenced by CI, `tests/` or any active tool",
+      "Mark the 1–2 probes worth keeping as real tests (move into `tests/` with names that follow the test standards)",
+      "Agree the list with the user",
+      "Delete the agreed probe scripts and their `.uid` files; keep the evidence images that accepted baselines cite",
+      "Re-run the Godot import to make sure nothing breaks without them",
+      "Check the export filter still excludes `docs/`",
+      "Commit with the list in the message body"
+     ],
+     "done": "No stale probe scripts under docs/"
+    }
+   ],
+   "edge_cases": [
+    "A `.tscn` that still references a deleted script",
+    "An autoload entry left in project.godot",
+    "Save files containing old item IDs",
+    "A probe referenced from an accepted-baseline report"
+   ],
+   "evidence": "docs/architecture/legacy_deletion_plan.md marked done; CI guards; load_all and route tests green"
+  },
+  {
+   "id": "Y2-PP-T02",
+   "stream": "primary",
+   "title": "Index the ~97 legacy phase reports for the ADR collapse",
+   "why": "Roadmap §5 (collapse the 97 phase reports into ADRs) and §13 key-person risk",
+   "tags": [
+    "tools",
+    "docs",
+    "cleanup"
+   ],
+   "days": [
+    {
+     "focus": "Build the report index",
+     "steps": [
+      "Write `tools/docs/index_reports.py` listing every `.md` under `AethelgardPrototype/docs/` (97 in Oct 2026) with title, date, phase ID and folder",
+      "Extract decision-like sentences ('decided', 'accepted', 'baseline', 'rejected') per report",
+      "Group by area: art pipeline per region, shared environment, gameplay audit 10n, visual review, archive",
+      "Output `docs/archive/REPORT_INDEX.md`"
+     ],
+     "done": "Index file lists every report with its group"
+    },
+    {
+     "focus": "Hand-off format for ADRs",
+     "steps": [
+      "Write the ADR template mapping (context, decision, status, superseded-by)",
+      "Mark which groups produce an ADR and which only need an archive entry",
+      "Check the art truth-gate rules in AGENTS.md are preserved in the ADRs (ComfyUI evidence claims)",
+      "Hand the index to the secondary stream"
+     ],
+     "done": "Index and template handed off"
+    }
+   ],
+   "edge_cases": [
+    "Reports with no date",
+    "A report cited by an accepted baseline"
+   ],
+   "evidence": "docs/archive/REPORT_INDEX.md"
+  },
+  {
+   "id": "Y2-PP-T03",
+   "stream": "primary",
+   "title": "Rebuild Chapter 1 on the spine",
+   "why": "Roadmap §6 legacy cleanup: Chapters 1–3 rebuilt on the spine",
+   "tags": [
+    "code",
+    "story",
+    "cleanup",
+    "save"
+   ],
+   "days": [
+    {
+     "focus": "Chapter 1 on the spine: audit legacy calls",
+     "steps": [
+      "List every legacy call in `scripts/chapter1/` and `scenes/chapter1/`: direct `GameManager` flag writes, `change_scene_to_file`, meta hand-offs, direct `paused`/`time_scale` writes, `create_timer` chains",
+      "Scenes in scope: crash site hook, glitch crater, Broken Mile, Oakhaven village, tutorial knight (Aldric), shatter transition",
+      "Map each call to its spine owner: FlagRegistry, TransitionService.go(path, TravelContext), SaveService, ContextStack, timeline cutscenes",
+      "Write the migration checklist in the task's issue"
+     ],
+     "done": "Chapter 1 migration checklist complete"
+    },
+    {
+     "focus": "Chapter 1 on the spine: flags and transitions",
+     "steps": [
+      "Replace direct flag writes in `scripts/chapter1/*.gd` with FlagRegistry calls; flags registered with writers",
+      "Replace scene changes with `TransitionService.go(path, TravelContext)`; remove meta hand-offs",
+      "Check every `.dlg` `do` hook in `dialogue/ch1/` maps to a registered handler",
+      "Run `chapter1_route` after each file"
+     ],
+     "done": "Chapter 1 has no direct flag writes or scene changes"
+    },
+    {
+     "focus": "Chapter 1 on the spine: timers, pause and cutscenes",
+     "steps": [
+      "Replace `create_timer` chains in `ch1_opening_crash_site_hook.gd` and `ch1_glitch_crater.gd` with timeline events or state machines",
+      "Route pause and time scale through ContextStack only",
+      "Check Aldric's boss scene uses BossDef/PhaseDef and CombatEncounter `resolve()`",
+      "Run the screenshot tour for Chapter 1"
+     ],
+     "done": "No timers or direct pause writes in chapter1"
+    },
+    {
+     "focus": "Chapter 1 on the spine: saves and rewards",
+     "steps": [
+      "Make every Chapter 1 reward go through RewardLedger `grant_once`",
+      "Add save checkpoints at the agreed beats through SaveService",
+      "Migrate any Chapter 1 save fields to the current schema",
+      "Round-trip test for a mid-Chapter-1 save"
+     ],
+     "done": "Chapter 1 saves round-trip"
+    },
+    {
+     "focus": "Chapter 1 on the spine: tests and edge cases",
+     "steps": [
+      "Run `chapter1_route` (or add `tests/integration/story/test_chapter1_route.gd` if missing) and the bot through Chapter 1",
+      "Edge case: save and load at every Chapter 1 checkpoint, including mid-cutscene and mid-combat",
+      "Edge case: StoryGraph boot validation shows a reachable writer for every Chapter 1 flag read",
+      "Edge case: all three Aldric outcomes (`ch1_knight_killed`/`_spared`/`ch1_root_purge`) survive a save/load",
+      "Run the R1/R2 lints on the chapter folder; zero violations"
+     ],
+     "done": "Chapter 1 route test, bot and lints green"
+    }
+   ],
+   "edge_cases": [
+    "Aldric purge route save/load",
+    "New Game after an NG+ save",
+    "Demo save carried into the rebuilt chapter"
+   ],
+   "evidence": "chapter1_route test and bot run; lint output for scripts/chapter1"
+  },
+  {
+   "id": "Y2-PP-T04",
+   "stream": "primary",
+   "title": "Rebuild Chapter 2 on the spine",
+   "why": "Roadmap §6 legacy cleanup",
+   "tags": [
+    "code",
+    "story",
+    "cleanup",
+    "save"
+   ],
+   "days": [
+    {
+     "focus": "Chapter 2 on the spine: audit legacy calls",
+     "steps": [
+      "List every legacy call in `scripts/chapter2/` and `scenes/chapter2/`: direct `GameManager` flag writes, `change_scene_to_file`, meta hand-offs, direct `paused`/`time_scale` writes, `create_timer` chains",
+      "Scenes in scope: Ironhold arrival, command hall, arena, Clock Tower, Underground, Administrator Proxy, Fragment Two, chapter end",
+      "Map each call to its spine owner: FlagRegistry, TransitionService.go(path, TravelContext), SaveService, ContextStack, timeline cutscenes",
+      "Write the migration checklist in the task's issue"
+     ],
+     "done": "Chapter 2 migration checklist complete"
+    },
+    {
+     "focus": "Chapter 2 on the spine: flags and transitions",
+     "steps": [
+      "Replace direct flag writes in `scripts/chapter2/*.gd` with FlagRegistry calls",
+      "Replace scene changes with TransitionService; Clock Tower floors and Underground doors use TravelContext",
+      "Check `ch2_city_stable` is computed in one place before Seraphina decides",
+      "Run `chapter2_route`"
+     ],
+     "done": "Chapter 2 has no direct flag writes or scene changes"
+    },
+    {
+     "focus": "Chapter 2 on the spine: bosses and timers",
+     "steps": [
+      "Move `ch2_administrator_boss.gd` and the Clockwork Automaton onto BossDef/PhaseDef if any legacy logic remains",
+      "Replace `_simulate_shake` and timer chains with FeelService and timeline events",
+      "Check the arena brackets use CombatEncounter `resolve()` once",
+      "Run the boss replay tests"
+     ],
+     "done": "Chapter 2 bosses fully on the combat foundation"
+    },
+    {
+     "focus": "Chapter 2 on the spine: saves, rewards and the Act 1 end",
+     "steps": [
+      "Rewards through RewardLedger; checkpoints through SaveService",
+      "Check `act1_report_*` and `act1_pace_*` are written once",
+      "Check the demo hook and the full-game road to the Wastes both follow `ch2_complete`",
+      "Round-trip test for a mid-Chapter-2 save"
+     ],
+     "done": "Act 1 end works in demo and full builds"
+    },
+    {
+     "focus": "Chapter 2 on the spine: tests and edge cases",
+     "steps": [
+      "Run `chapter2_route` (or add `tests/integration/story/test_chapter2_route.gd` if missing) and the bot through Chapter 2",
+      "Edge case: save and load at every Chapter 2 checkpoint, including mid-cutscene and mid-combat",
+      "Edge case: StoryGraph boot validation shows a reachable writer for every Chapter 2 flag read",
+      "Edge case: medicine convoy outcomes and the Wraith choice survive a save/load at the Proxy door",
+      "Run the R1/R2 lints on the chapter folder; zero violations"
+     ],
+     "done": "Chapter 2 route test, bot and lints green"
+    }
+   ],
+   "edge_cases": [
+    "Convoy late plus Wraith absorbed",
+    "Save at the Proxy door",
+    "Demo build vs full build at ch2_complete"
+   ],
+   "evidence": "chapter2_route test and bot run; lint output for scripts/chapter2"
+  },
+  {
+   "id": "Y2-PP-T05",
+   "stream": "primary",
+   "title": "Rebuild Chapter 3 on the spine",
+   "why": "Roadmap §6 legacy cleanup; Chapter 3 still runs its legacy dialogue and scripts",
+   "tags": [
+    "code",
+    "story",
+    "cleanup",
+    "dialogue"
+   ],
+   "days": [
+    {
+     "focus": "Chapter 3 on the spine: audit legacy calls",
+     "steps": [
+      "List every legacy call in `scripts/chapter3/` and `scenes/chapter3/`: direct `GameManager` flag writes, `change_scene_to_file`, meta hand-offs, direct `paused`/`time_scale` writes, `create_timer` chains",
+      "Scenes in scope: Ironhold departure, Fractured Wastes, Archive Depths, Data Stream, Kaelthas betrayal, Chapter 3 ending",
+      "Map each call to its spine owner: FlagRegistry, TransitionService.go(path, TravelContext), SaveService, ContextStack, timeline cutscenes",
+      "Write the migration checklist in the task's issue"
+     ],
+     "done": "Chapter 3 migration checklist complete"
+    },
+    {
+     "focus": "Chapter 3 on the spine: dialogue to .dlg",
+     "steps": [
+      "Connect the secondary stream's ported `dialogue/ch3/*.dlg` files in place of inline dialogue",
+      "Map choices and flags into FlagRegistry",
+      "Run the dialogue validator",
+      "Run the Chapter 3 scenes in order"
+     ],
+     "done": "Chapter 3 dialogue comes only from .dlg files"
+    },
+    {
+     "focus": "Chapter 3 on the spine: flags and transitions",
+     "steps": [
+      "Replace direct flag writes in `scripts/chapter3/*.gd`",
+      "Replace scene changes and meta hand-offs with TransitionService",
+      "Check the C4 fix (Server Room gate resumes Chapter 3) survives",
+      "Run the reachability test on Chapter 3 maps"
+     ],
+     "done": "Chapter 3 transitions on the spine"
+    },
+    {
+     "focus": "Chapter 3 on the spine: timers and feel",
+     "steps": [
+      "Replace `create_timer` chains in `ch3_kaelthas_betrayal.gd`, `ch3_archive_depths.gd`, `ch3_fractured_wastes.gd`",
+      "Replace `_screen_flash` helpers with FeelService (if not done in the deletion task)",
+      "Route pause/time scale through ContextStack",
+      "Run the screenshot tour for Chapter 3"
+     ],
+     "done": "No timers or private feel helpers in chapter3"
+    },
+    {
+     "focus": "Chapter 3 on the spine: combat encounters",
+     "steps": [
+      "Move Chapter 3 fights onto EnemyDef/CombatEncounter",
+      "Generate the arenas from terrain context (Wastes biome)",
+      "Run spawn tests and stat invariants",
+      "Record a clip per fight"
+     ],
+     "done": "Chapter 3 fights on the combat foundation"
+    },
+    {
+     "focus": "Chapter 3 on the spine: saves and the route test",
+     "steps": [
+      "Rewards through RewardLedger; checkpoints through SaveService",
+      "Write `tests/integration/story/test_chapter3_route.gd` (Chapter 3 had no route test)",
+      "Extend the bot from the Act 1 card through `ch3_ending`",
+      "Edge case: Kaelthas ally/betrayer outcomes both reach the Chapter 3 end"
+     ],
+     "done": "Chapter 3 route test green"
+    },
+    {
+     "focus": "Chapter 3 on the spine: tests and edge cases",
+     "steps": [
+      "Run `chapter3_route` (or add `tests/integration/story/test_chapter3_route.gd` if missing) and the bot through Chapter 3",
+      "Edge case: save and load at every Chapter 3 checkpoint, including mid-cutscene and mid-combat",
+      "Edge case: StoryGraph boot validation shows a reachable writer for every Chapter 3 flag read",
+      "Edge case: the Data Stream ride ends (the old `lerp()` bug) and the Server Room gate resumes Chapter 3",
+      "Run the R1/R2 lints on the chapter folder; zero violations"
+     ],
+     "done": "Chapter 3 route test, bot and lints green"
+    }
+   ],
+   "edge_cases": [
+    "Data Stream ride never ending (old bug)",
+    "Kaelthas ally vs betrayer",
+    "Chapter 3 save from before the rebuild"
+   ],
+   "evidence": "tests/integration/story/test_chapter3_route.gd; bot run to ch3_ending"
+  },
+  {
+   "id": "Y2-PP-T06",
+   "stream": "primary",
+   "title": "Organise the test suites for production",
+   "why": "Coding standards: tests under tests/unit and tests/integration; gdUnit4 runner in CI",
+   "tags": [
+    "tests",
+    "tools",
+    "cleanup"
+   ],
+   "days": [
+    {
+     "focus": "Move the legacy root tests",
+     "steps": [
+      "Move `tests/*_test.gd` (load_all, phase0_blockers, chapter1_route, chapter2_route, dialogue, context_stack, input, combat_fixes, reachability) into `tests/unit/<system>/` or `tests/integration/<system>/`",
+      "Keep `run_phase0_tests.ps1`, `run_all_tests.ps1` and CI paths working",
+      "Name files per `.claude/rules/test-standards.md`",
+      "Run the full suite"
+     ],
+     "done": "All tests run from the new layout"
+    },
+    {
+     "focus": "Regression map",
+     "steps": [
+      "Run `/regression-suite` to map tests to critical paths (New Game → Act 1 card → Chapter 3 end)",
+      "List fixed bugs without regression tests",
+      "Add the missing tests",
+      "Record coverage gaps"
+     ],
+     "done": "Regression map saved"
+    },
+    {
+     "focus": "Test evidence review",
+     "steps": [
+      "Run `/test-evidence-review` on Y2 work",
+      "Fix weak assertions",
+      "Document the test layout in `tests/README.md`",
+      "CI green"
+     ],
+     "done": "Review clean"
+    }
+   ],
+   "edge_cases": [
+    "CI paths still pointing at old locations"
+   ],
+   "evidence": "tests/README.md; CI run"
+  },
+  {
+   "id": "Y2-PP-T07",
+   "stream": "primary",
+   "title": "Generate the combat bible's frame-data tables from the data",
+   "why": "Roadmap §6 combat bible; §12.10 frame data in .tres",
+   "tags": [
+    "combat",
+    "tools",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Exporter design",
+     "steps": [
+      "List the MoveData/AttackSpec fields (startup, active, recovery, hitstop tier, cancel windows, damage, poise)",
+      "Design `tools/combat/export_frame_data.gd` producing Markdown tables per character and boss",
+      "Include difficulty-dependent values from DifficultyProfile (parry window, i-frames, telegraph multiplier)",
+      "Agree the format with the secondary stream"
+     ],
+     "done": "Exporter design agreed"
+    },
+    {
+     "focus": "Write the exporter",
+     "steps": [
+      "Implement the exporter as a headless script",
+      "Output `design/combat/frame_data/kaelen.md` and one file per boss",
+      "Flag invalid data (active frames outside the animation length)",
+      "Run on all current moves"
+     ],
+     "done": "Tables generated"
+    },
+    {
+     "focus": "Validation rules",
+     "steps": [
+      "Add checks: parry windows match §12.1 per difficulty; Hell parry = 2 frames",
+      "Check stats never modify timing windows (P7d rule) by scanning the modifier stack",
+      "Add the checks to CI",
+      "Fix any violations"
+     ],
+     "done": "CI frame-data checks green"
+    },
+    {
+     "focus": "Tests and integration",
+     "steps": [
+      "Unit test the exporter with a fixture move",
+      "Edge case: a move with no animation",
+      "Hand the tables to the combat bible",
+      "Document regeneration in the bible"
+     ],
+     "done": "Exporter tested; bible links the tables"
+    }
+   ],
+   "edge_cases": [
+    "A buff that changes a timing window",
+    "Active frames past the animation end"
+   ],
+   "evidence": "design/combat/frame_data/*.md; CI checks"
+  },
+  {
+   "id": "Y2-PP-T08",
+   "stream": "primary",
+   "title": "Itemization engine for production scale",
+   "why": "Roadmap §12.9: ~450 items, rarities, affixes, sets, crafting trees",
+   "tags": [
+    "items",
+    "systems",
+    "code",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Plan the itemization engine against the bible draft",
+     "steps": [
+      "Read the itemization bible draft (rarities, affix tables, 8 slots, sets, limited editions)",
+      "Plan ItemDB extensions: affix roller, set bonus resolver, crafting tree graph",
+      "Reserve ID ranges for ~450 items per region and category",
+      "Write the plan"
+     ],
+     "done": "Plan agreed"
+    },
+    {
+     "focus": "Affix roller",
+     "steps": [
+      "Implement affix tables as `.tres` with weights, tiers and slot rules",
+      "Seeded rolls for determinism",
+      "Unit tests for weight distribution and exclusions",
+      "Check affixes never change timing windows"
+     ],
+     "done": "Affix tests green"
+    },
+    {
+     "focus": "Set bonuses and uniques",
+     "steps": [
+      "Implement set bonus resolution through the modifier stack",
+      "Uniques with fixed affixes",
+      "Unit tests for 2/4-piece bonuses",
+      "Save round-trip of rolled items"
+     ],
+     "done": "Set tests green"
+    },
+    {
+     "focus": "Crafting tree graph and validator",
+     "steps": [
+      "Represent crafting trees as data (inputs, outputs, quality from the forge minigame and stats)",
+      "Validator: no cycles, every input obtainable, crafted value ≤ 90% of inputs unless upgraded by skill",
+      "Salvage as a sink",
+      "Unit tests"
+     ],
+     "done": "Validator catches a planted bad recipe"
+    },
+    {
+     "focus": "Item editor and economy hooks",
+     "steps": [
+      "Update the Y1 item and recipe editor for affixes and sets",
+      "Feed items into the economy sim's sources and sinks",
+      "Run the anti-exploit tests on generated items",
+      "Edge case: limited-edition items never story-critical"
+     ],
+     "done": "Editor handles affixes; sim runs with new items"
+    }
+   ],
+   "edge_cases": [
+    "Affix rolling a timing-window change",
+    "Crafting cycle",
+    "Rolled item from an old save"
+   ],
+   "evidence": "tests/unit/items/*; crafting validator in CI"
+  },
+  {
+   "id": "Y2-PP-T09",
+   "stream": "primary",
+   "title": "Commodity schema and the 120-commodity roster import",
+   "why": "Roadmap §6 economy design locked; §12.6 ~120 commodities",
+   "tags": [
+    "economy",
+    "systems",
+    "tools"
+   ],
+   "days": [
+    {
+     "focus": "Commodity schema",
+     "steps": [
+      "Define the commodity resource: ID, family, base price, seasonality curve per season, demand weights, region sources, perishability",
+      "Match the formula: price = base + seasonality(calendar) + demand(player + agents) + noise",
+      "Version the schema",
+      "Unit test price computation on a fixture"
+     ],
+     "done": "Schema and price test"
+    },
+    {
+     "focus": "Import the roster",
+     "steps": [
+      "Import the secondary stream's commodity tables (8 families) into `.tres`",
+      "Validate every commodity has a source and at least one sink",
+      "Report gaps",
+      "Commit"
+     ],
+     "done": "120 commodities imported with 0 gaps"
+    },
+    {
+     "focus": "Dashboard update",
+     "steps": [
+      "Update the Y1 economy dashboard to show all families",
+      "Add per-family inflation charts",
+      "Test with a 30-day run",
+      "Screenshot to `production/qa/evidence/y2pp/economy_dashboard.png`"
+     ],
+     "done": "Dashboard screenshot retained"
+    }
+   ],
+   "edge_cases": [
+    "Commodity without a sink",
+    "Seasonality curve with a negative price"
+   ],
+   "evidence": "Economy schema tests; production/qa/evidence/y2pp/economy_dashboard.png"
+  },
+  {
+   "id": "Y2-PP-T10",
+   "stream": "primary",
+   "title": "Market agents at scale",
+   "why": "Roadmap §12.6: simulated NPC traders (gatherers, merchants, collectors) on schedules",
+   "tags": [
+    "economy",
+    "npc",
+    "systems",
+    "performance"
+   ],
+   "days": [
+    {
+     "focus": "Agent model plan",
+     "steps": [
+      "Define agent types: gatherer, merchant, collector; budgets, preferences, schedules on the WorldClock",
+      "Define simulation LOD: off-screen regions tick coarsely",
+      "Set a performance budget per tick",
+      "Write the plan"
+     ],
+     "done": "Plan agreed"
+    },
+    {
+     "focus": "Gatherers and merchants",
+     "steps": [
+      "Implement gatherers producing commodities per region and season",
+      "Merchants buy, transport and sell between regions",
+      "Unit tests for conservation of goods",
+      "Run 30 days"
+     ],
+     "done": "Goods conserved over 30 days"
+    },
+    {
+     "focus": "Collectors and bidders",
+     "steps": [
+      "Collectors buy rare items and bid in auctions",
+      "Preferences by item tags",
+      "Unit tests",
+      "Run 30 days"
+     ],
+     "done": "Collectors active in the sim"
+    },
+    {
+     "focus": "Simulation LOD and performance",
+     "steps": [
+      "Coarse tick for distant regions; exact tick for the current one",
+      "Check results match within tolerance between LOD and full simulation",
+      "Measure the per-tick cost on minimum spec",
+      "Optimise the top cost"
+     ],
+     "done": "LOD within tolerance and under budget"
+    },
+    {
+     "focus": "Agent tests and edge cases",
+     "steps": [
+      "Edge case: a region with no merchants for a season",
+      "Edge case: player buys out all stock",
+      "Edge case: save and load mid-transport",
+      "Write `tests/integration/economy/test_agents.gd`"
+     ],
+     "done": "Agent tests green"
+    }
+   ],
+   "edge_cases": [
+    "Player buys out all stock",
+    "Save mid-transport",
+    "Region with no merchants"
+   ],
+   "evidence": "tests/integration/economy/test_agents.gd; perf numbers"
+  },
+  {
+   "id": "Y2-PP-T11",
+   "stream": "primary",
+   "title": "Auction rules v2 for four auction houses",
+   "why": "Roadmap §12.6 auction house (4 cities): listing caps, fees, sniping cap",
+   "tags": [
+    "economy",
+    "systems",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Plan auction v2 from the locked rules",
+     "steps": [
+      "Read the secondary stream's auction rules per house",
+      "List changes from Auction v1: per-house fees, per-week listing caps, house-specific lot calendars",
+      "Plan data layout per house",
+      "Plan migration of v1 auction save data"
+     ],
+     "done": "Plan agreed"
+    },
+    {
+     "focus": "Implement house rules",
+     "steps": [
+      "Per-house data: fee, caps, opening hours, bidder pools",
+      "Player listing limits enforced",
+      "Fee sink tracked in the ledger",
+      "Unit tests"
+     ],
+     "done": "House-rule tests green"
+    },
+    {
+     "focus": "Sniping cap and NPC behaviour",
+     "steps": [
+      "NPC counter-bid behaviour in the final window",
+      "Extension rule if a bid lands in the last minutes (if the rules include it)",
+      "Unit tests for sniping",
+      "Run the sim with a sniping bot"
+     ],
+     "done": "Sniping bot cannot win below the expected price"
+    },
+    {
+     "focus": "Auction tests and migration",
+     "steps": [
+      "Save migration from v1",
+      "Edge case: two houses' lots ending on the same tick",
+      "Edge case: player listing while at the weekly cap",
+      "Write `tests/integration/economy/test_auction_v2.gd`"
+     ],
+     "done": "Auction v2 tests green"
+    }
+   ],
+   "edge_cases": [
+    "Two lots ending on one tick",
+    "Listing at the cap",
+    "v1 auction save"
+   ],
+   "evidence": "tests/integration/economy/test_auction_v2.gd"
+  },
+  {
+   "id": "Y2-PP-T12",
+   "stream": "primary",
+   "title": "Limited-edition calendar engine",
+   "why": "Roadmap §12.6 limited editions on the calendar, signposted in advance",
+   "tags": [
+    "economy",
+    "time",
+    "systems"
+   ],
+   "days": [
+    {
+     "focus": "Calendar engine",
+     "steps": [
+      "Implement release events (place, time window, stock, auction-only flag) on the WorldClock",
+      "Read the calendar from the secondary stream's data",
+      "Signpost each release N days before (rule: missables are signposted)",
+      "Unit tests"
+     ],
+     "done": "Calendar fires releases in a test run"
+    },
+    {
+     "focus": "Missable signposting",
+     "steps": [
+      "Notice board and NPC barks announce upcoming releases",
+      "Quest-log calendar view",
+      "Check no limited edition is story-critical",
+      "Screenshot to `production/qa/evidence/y2pp/limited_edition_notice.png`"
+     ],
+     "done": "Notice screenshot retained"
+    },
+    {
+     "focus": "Tests and edge cases",
+     "steps": [
+      "Edge case: player sleeps through a release window",
+      "Edge case: NG+ replays the calendar",
+      "Run the sim with all releases",
+      "Write `tests/integration/economy/test_limited_calendar.gd`"
+     ],
+     "done": "Calendar tests green"
+    }
+   ],
+   "edge_cases": [
+    "Sleeping through a window",
+    "NG+ calendar replay"
+   ],
+   "evidence": "tests/integration/economy/test_limited_calendar.gd; production/qa/evidence/y2pp/limited_edition_notice.png"
+  },
+  {
+   "id": "Y2-PP-T13",
+   "stream": "primary",
+   "title": "Gambling house edges and expected-value tests",
+   "why": "Roadmap §12.7: visible house edge, daily table limits; Y7 exploit hunting needs EV tests now",
+   "tags": [
+    "economy",
+    "systems",
+    "tests",
+    "legal"
+   ],
+   "days": [
+    {
+     "focus": "House edge data",
+     "steps": [
+      "Put each gambling game's odds and house edge into data (values from the economy design)",
+      "Show the edge in-game where the design says so",
+      "Daily table limits per game",
+      "Respect `GamblingPolicy`"
+     ],
+     "done": "Edges in data"
+    },
+    {
+     "focus": "Expected-value tests",
+     "steps": [
+      "Monte Carlo test per game (seeded, 1M rounds headless) asserting EV within tolerance of the design",
+      "Test luck stat cap stays small",
+      "Test daily limits",
+      "Write `tests/unit/economy/test_gambling_ev.gd`"
+     ],
+     "done": "EV tests green"
+    },
+    {
+     "focus": "Gambling in the economy sim",
+     "steps": [
+      "Add a gambler agent profile to the sim",
+      "Check gambling is a net sink",
+      "Run with gambling off (policy) as well",
+      "Record results"
+     ],
+     "done": "Sim shows gambling as a net sink"
+    }
+   ],
+   "edge_cases": [
+    "Luck stat stacking past its cap",
+    "Gambling disabled by policy"
+   ],
+   "evidence": "tests/unit/economy/test_gambling_ev.gd"
+  },
+  {
+   "id": "Y2-PP-T14",
+   "stream": "primary",
+   "title": "Headless 365-in-game-day economy simulation in CI",
+   "why": "Roadmap §6: a headless 365-in-game-day simulation shows inflation within bounds",
+   "tags": [
+    "economy",
+    "tools",
+    "tests",
+    "performance"
+   ],
+   "days": [
+    {
+     "focus": "Plan the 365-day simulation",
+     "steps": [
+      "Extend the Y1 100-day harness to 365 days with all regions' commodities, 4 auction houses, the limited-edition calendar and gambling",
+      "Define the inflation index: a fixed basket of 20 commodities weighted by expected use",
+      "Define bounds with the user (for example the index stays within a band per season)",
+      "Define player profiles: trader, crafter, gambler, story-only, hoarder"
+     ],
+     "done": "Plan with bounds agreed"
+    },
+    {
+     "focus": "Sources and sinks ledger",
+     "steps": [
+      "Ledger every gold source (loot, quests, sales, minigames) and sink (shops, fees, repairs, salvage, gambling)",
+      "Per-day totals per profile",
+      "Unit test the ledger balance",
+      "Chart output"
+     ],
+     "done": "Ledger balances"
+    },
+    {
+     "focus": "Run the profiles",
+     "steps": [
+      "Run each player profile for 365 days, seeded",
+      "Chart gold supply, inflation index and top commodity prices",
+      "Find the first day any bound is broken",
+      "Record results"
+     ],
+     "done": "Five runs recorded"
+    },
+    {
+     "focus": "Exploit probes",
+     "steps": [
+      "Arbitrage probe (buy low in one region, sell high in another, within 40% rule)",
+      "Auction sniping probe",
+      "Gambling EV probe",
+      "Crafting value probe"
+     ],
+     "done": "Each probe reports its best gain per in-game day"
+    },
+    {
+     "focus": "Tune to bounds",
+     "steps": [
+      "Adjust sinks and sources in data to bring every run within bounds",
+      "Do not special-case code for one exploit",
+      "Re-run all profiles",
+      "Record the changes for the economy bible"
+     ],
+     "done": "All profiles within bounds"
+    },
+    {
+     "focus": "Performance of the long run",
+     "steps": [
+      "Measure the run time of 365 days headless",
+      "Optimise so all profiles fit the nightly CI time",
+      "Parallelise profiles if needed",
+      "Record timings"
+     ],
+     "done": "Nightly runtime within the CI limit"
+    },
+    {
+     "focus": "CI integration + Edge cases and sign-off",
+     "steps": [
+      "Add the 365-day job to nightly CI with pass/fail on the bounds",
+      "Publish charts as artifacts",
+      "Alert on any bound broken",
+      "Document in `docs/economy/sim_365.md`",
+      "Edge case: a profile that never sells anything",
+      "Edge case: maximum luck stat",
+      "Edge case: NG+ carry-over gold",
+      "Review results with the user and sign off the economy lock"
+     ],
+     "done": "Economy lock signed off"
+    }
+   ],
+   "edge_cases": [
+    "NG+ carry-over gold",
+    "Player who never sells",
+    "Maximum luck"
+   ],
+   "evidence": "Nightly 365-day CI job; docs/economy/sim_365.md"
+  },
+  {
+   "id": "Y2-PP-T15",
+   "stream": "primary",
+   "title": "Open-world layout technology for 8 regions",
+   "why": "P7a and §12.5: one continuous streamed world, ~32x32-tile chunks, authored seams",
+   "tags": [
+    "openworld",
+    "performance",
+    "code",
+    "level"
+   ],
+   "days": [
+    {
+     "focus": "World grid plan",
+     "steps": [
+      "Take the world bible's map and plan the chunk grid for all 8 regions",
+      "Plan seams between neighbouring regions",
+      "Plan waystations and fast travel nodes",
+      "Write `docs/world/chunk_grid.md`"
+     ],
+     "done": "Chunk grid planned"
+    },
+    {
+     "focus": "Placeholder world",
+     "steps": [
+      "Generate placeholder chunks for all 8 regions at their planned sizes",
+      "Stream across every seam",
+      "Measure hitches",
+      "Record results"
+     ],
+     "done": "Placeholder world streams end to end"
+    },
+    {
+     "focus": "Map, fog of war and fast travel at scale",
+     "steps": [
+      "Map UI covering all regions with fog of war",
+      "Fast travel between discovered waystations",
+      "Save and load map state",
+      "Tests"
+     ],
+     "done": "Map tests green"
+    },
+    {
+     "focus": "Traversal unlock gates",
+     "steps": [
+      "Ability-gated traversal (no invisible walls) as data",
+      "Reachability test per unlock stage",
+      "Check combat arena generation per biome",
+      "Record results"
+     ],
+     "done": "Unlock-stage reachability green"
+    }
+   ],
+   "edge_cases": [
+    "Seam between two branch-only regions",
+    "Fast travel during a deadline"
+   ],
+   "evidence": "docs/world/chunk_grid.md; streaming measurements"
+  },
+  {
+   "id": "Y2-PP-T16",
+   "stream": "primary",
+   "title": "NPC simulation v2 technical spike",
+   "why": "Y3 plan: NPC sim v2 (factions, reputation, crime/witness, daily events)",
+   "tags": [
+    "npc",
+    "systems",
+    "performance"
+   ],
+   "days": [
+    {
+     "focus": "Spike plan",
+     "steps": [
+      "List v2 features: faction reputation, crime and witnesses, daily events",
+      "Plan data structures and memory budgets for Tier A/B/C (10/70/~200)",
+      "Plan LOD for off-screen NPCs",
+      "Write the spike plan"
+     ],
+     "done": "Spike plan"
+    },
+    {
+     "focus": "Reputation and witness prototype",
+     "steps": [
+      "Prototype faction reputation changes from actions",
+      "Prototype a witness check for crime",
+      "Measure costs with 200 NPCs",
+      "Record results"
+     ],
+     "done": "Prototype numbers recorded"
+    },
+    {
+     "focus": "Spike conclusion",
+     "steps": [
+      "Write the v2 architecture proposal as an ADR",
+      "List risks",
+      "Estimate Y3 work",
+      "Delete the throwaway prototype or move it to `prototypes/`"
+     ],
+     "done": "ADR proposed"
+    }
+   ],
+   "edge_cases": [
+    "200 NPCs in one town during a festival"
+   ],
+   "evidence": "NPC sim v2 ADR"
+  },
+  {
+   "id": "Y2-PP-T17",
+   "stream": "primary",
+   "title": "Route architecture data model (axes, storylines, invalid combinations)",
+   "why": "Roadmap §6 route architecture locked; §12.2 storyline architecture",
+   "tags": [
+    "story",
+    "architecture",
+    "code",
+    "save"
+   ],
+   "days": [
+    {
+     "focus": "Design the route data model",
+     "steps": [
+      "Read the secondary stream's locked route document",
+      "Model axes as data: Axis 1 Authority (You/Shared/None), Axis 2 Faction (Hearth Compact/Archive Covenant/Continuity League), Axis 3 The deleted (Restore/Release/Choose)",
+      "Model storylines SL-01..SL-24 and secret SX-01..SX-03 with their axis values and hidden 4th-axis values",
+      "Write the ADR for the model"
+     ],
+     "done": "ADR approved"
+    },
+    {
+     "focus": "Implement axis state in StoryGraph",
+     "steps": [
+      "Add axis state with legal transitions (when each axis locks)",
+      "Every axis write is a registered FlagRegistry writer",
+      "Boot validation: every axis read has a reachable writer",
+      "Unit tests"
+     ],
+     "done": "Axis tests green"
+    },
+    {
+     "focus": "Storyline resolver",
+     "steps": [
+      "Implement `StorylineResolver.resolve(axis_state, secret_state) -> storyline_id`",
+      "Invalid combinations map to their documented replacement",
+      "Unit test all 27 input combinations",
+      "Record the table in tests"
+     ],
+     "done": "27-case resolver test green"
+    },
+    {
+     "focus": "Ending family mapping",
+     "steps": [
+      "Map storylines to the four ending families (Sole / Bound / No Authority / Consent)",
+      "Faction and Deleted as modifiers (boss phase, ally lines, slides, Story+ cases)",
+      "Unit tests",
+      "Expose to the coverage viewer"
+     ],
+     "done": "Family mapping tests green"
+    },
+    {
+     "focus": "Route model edge cases",
+     "steps": [
+      "Edge case: axis locked by a missed deadline",
+      "Edge case: NG+ starts with a new axis state",
+      "Edge case: secret 4th-axis value set without the secret quest chain (must not happen)",
+      "Save round-trip of axis state"
+     ],
+     "done": "Edge-case tests green"
+    }
+   ],
+   "edge_cases": [
+    "Missed deadline locking an axis",
+    "NG+ axis reset",
+    "Secret value without its quest chain"
+   ],
+   "evidence": "tests/unit/story/test_storyline_resolver.gd; route ADR"
+  },
+  {
+   "id": "Y2-PP-T18",
+   "stream": "primary",
+   "title": "Act 3 branch graph (A, B, C)",
+   "why": "Roadmap §12.2: Act 3 splits into three branches",
+   "tags": [
+    "story",
+    "code",
+    "architecture"
+   ],
+   "days": [
+    {
+     "focus": "Branch entry conditions",
+     "steps": [
+      "Encode the locked entry conditions for branches A, B and C from axis state at the end of Act 2",
+      "Every combination enters exactly one branch",
+      "Unit test all combinations",
+      "Expose in the coverage viewer"
+     ],
+     "done": "Branch entry tests green"
+    },
+    {
+     "focus": "Branch region mapping",
+     "steps": [
+      "Map branches onto R6 Cathedral Server and R7 Memory Ocean / Saved Assembly per the world bible",
+      "Model shared and branch-only chunks",
+      "Check streaming boundaries per branch",
+      "Unit test"
+     ],
+     "done": "Branch region mapping tested"
+    },
+    {
+     "focus": "Branch exits into Act 4",
+     "steps": [
+      "Encode how each branch feeds the Act 4 bottleneck and its variants",
+      "Check every branch reaches Act 4",
+      "Write `tests/integration/story/test_act3_branches.gd`",
+      "Edge case: branch-only companion absence"
+     ],
+     "done": "Branch tests green"
+    }
+   ],
+   "edge_cases": [
+    "A combination that fits two branches",
+    "Companion missing in a branch"
+   ],
+   "evidence": "tests/integration/story/test_act3_branches.gd"
+  },
+  {
+   "id": "Y2-PP-T19",
+   "stream": "primary",
+   "title": "Timing modifiers registry",
+   "why": "Roadmap §12.4: pace values and named timing flags change scenes and slides, not storylines",
+   "tags": [
+    "time",
+    "story",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Pace values per act",
+     "steps": [
+      "Implement pace (early/on-time/late) per act from the locked thresholds",
+      "Act 1 already writes `act1_pace_*`; generalise to Acts 2–4",
+      "Register writers",
+      "Unit tests"
+     ],
+     "done": "Pace tests green"
+    },
+    {
+     "focus": "Named timing flags",
+     "steps": [
+      "Register the catalogue of named timing flags from the route document",
+      "Each flag lists the scenes, NPC fates, market events and slides it changes",
+      "Boot validation: each timing flag has a writer and at least one reader",
+      "Unit tests"
+     ],
+     "done": "Catalogue registered"
+    },
+    {
+     "focus": "Timing rules and fairness checks",
+     "steps": [
+      "Check every main-story deadline has a signposted warning event",
+      "Check difficulty leniency applies",
+      "Check timing never changes the storyline ID",
+      "Write `tests/unit/time/test_timing_registry.gd`"
+     ],
+     "done": "Fairness checks green"
+    }
+   ],
+   "edge_cases": [
+    "Timing flag with no reader",
+    "Deadline with no warning"
+   ],
+   "evidence": "tests/unit/time/test_timing_registry.gd"
+  },
+  {
+   "id": "Y2-PP-T20",
+   "stream": "primary",
+   "title": "Side storylines as data (SS-01 to SS-12)",
+   "why": "Roadmap §12.2: each side storyline writes into one axis or a timing modifier",
+   "tags": [
+    "quests",
+    "story",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Side storyline schema",
+     "steps": [
+      "Define SS records: owner, region, quest IDs, the axis or timing modifier it writes, prerequisites",
+      "Import the 12 records from the route document",
+      "Register their output flags",
+      "Unit tests"
+     ],
+     "done": "12 records imported"
+    },
+    {
+     "focus": "Axis feed validation",
+     "steps": [
+      "Check each SS writes exactly one axis value or timing modifier as designed",
+      "Check SS arcs that the source tied to deferred secret routes (First Wake, Crownless) are remapped as the lock says",
+      "Boot validation",
+      "Coverage viewer shows SS → axis links"
+     ],
+     "done": "Feed validation green"
+    },
+    {
+     "focus": "Side storyline tests",
+     "steps": [
+      "Stub-play each SS to completion with the bot",
+      "Edge case: SS abandoned midway",
+      "Edge case: SS completed after its axis locked",
+      "Write `tests/integration/quests/test_side_storylines.gd`"
+     ],
+     "done": "Side storyline tests green"
+    }
+   ],
+   "edge_cases": [
+    "SS completed after its axis locked",
+    "Abandoned SS"
+   ],
+   "evidence": "tests/integration/quests/test_side_storylines.gd"
+  },
+  {
+   "id": "Y2-PP-T21",
+   "stream": "primary",
+   "title": "Ending composer table v2",
+   "why": "Roadmap §12.2: the composer assembles modular sequences (axis values + companions + regions + timing)",
+   "tags": [
+    "story",
+    "cinematics",
+    "code",
+    "architecture"
+   ],
+   "days": [
+    {
+     "focus": "Composer table design",
+     "steps": [
+      "Read the locked composer table from the route document",
+      "Design module types: family final scene, faction modifier, deleted modifier, companion slides, region slides, timing slides",
+      "Define ordering and conflict rules",
+      "ADR"
+     ],
+     "done": "Composer ADR approved"
+    },
+    {
+     "focus": "Module data and assembly",
+     "steps": [
+      "Modules as data with conditions",
+      "Assembler builds a sequence from the full state",
+      "Stub modules carry IDs only (no content)",
+      "Unit tests"
+     ],
+     "done": "Assembler tests green"
+    },
+    {
+     "focus": "God King phase selection",
+     "steps": [
+      "Select the God King phase by ending family (per the story bible table)",
+      "Faction modifier changes a boss phase",
+      "Stub boss phases as IDs",
+      "Unit tests"
+     ],
+     "done": "Phase selection tests green"
+    },
+    {
+     "focus": "Composer coverage",
+     "steps": [
+      "Enumerate every storyline × companion presence × timing profile and count unique sequences",
+      "Report modules never used",
+      "Report states with missing modules",
+      "Output to the coverage viewer"
+     ],
+     "done": "Coverage report shows 0 missing modules"
+    },
+    {
+     "focus": "Composer edge cases",
+     "steps": [
+      "Edge case: all companions absent",
+      "Edge case: Consent family with its health-bar-less God King",
+      "Edge case: late pace in every act",
+      "Write `tests/integration/story/test_ending_composer_v2.gd`"
+     ],
+     "done": "Composer tests green"
+    }
+   ],
+   "edge_cases": [
+    "All companions absent",
+    "Late pace everywhere",
+    "Consent family"
+   ],
+   "evidence": "tests/integration/story/test_ending_composer_v2.gd"
+  },
+  {
+   "id": "Y2-PP-T22",
+   "stream": "primary",
+   "title": "Story+ structure engine",
+   "why": "P8 Story+: a playable epilogue per storyline; ~8 civic cases gated by flags plus one arc per ending family",
+   "tags": [
+    "story",
+    "openworld",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Story+ state model",
+     "steps": [
+      "Define Story+ world state derived from storyline, timing and companions",
+      "Model the civic case pool (about 8 cases, flag-gated) and the 4 family arcs",
+      "Register gating flags",
+      "Unit tests"
+     ],
+     "done": "State model tests green"
+    },
+    {
+     "focus": "Story+ entry and world reopen",
+     "steps": [
+      "After the God King, transition into Story+ with the world reopened",
+      "Apply world-state changes (NPC fates, market events) as data",
+      "Stub content IDs only",
+      "Unit tests"
+     ],
+     "done": "Entry tested on stub content"
+    },
+    {
+     "focus": "Story+ coverage",
+     "steps": [
+      "Each storyline unlocks ≥ 1 civic case plus its family arc",
+      "Report cases never unlocked",
+      "Show what timing changed (§12.4 rule)",
+      "Write `tests/integration/story/test_story_plus.gd`"
+     ],
+     "done": "Story+ coverage test green"
+    }
+   ],
+   "edge_cases": [
+    "A storyline with no civic case",
+    "Story+ entered from NG+"
+   ],
+   "evidence": "tests/integration/story/test_story_plus.gd"
+  },
+  {
+   "id": "Y2-PP-T23",
+   "stream": "primary",
+   "title": "Stub content generator for route verification",
+   "why": "The bot must prove every storyline before any content is written (roadmap §6)",
+   "tags": [
+    "tools",
+    "story",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Generator design",
+     "steps": [
+      "Design `tools/story/stub_generator.gd`: creates placeholder scenes with only flag writes, choices and transitions from the route data",
+      "Stubs live under `tests/fixtures/route_stubs/` and never ship",
+      "Each stub logs its ID when entered",
+      "Agree the design"
+     ],
+     "done": "Design agreed"
+    },
+    {
+     "focus": "Generate act stubs",
+     "steps": [
+      "Generate Act 2–4 stubs, Act 3 branch stubs, side storyline stubs and Story+ stubs",
+      "Wire them to the real StoryGraph and TransitionService",
+      "Check the export filter excludes them",
+      "Run the generator in CI"
+     ],
+     "done": "Stub world generated"
+    },
+    {
+     "focus": "Stub validation",
+     "steps": [
+      "Boot validation over stubs: every read has a writer",
+      "Reachability of each stub scene from New Game",
+      "Edge case: regenerate after a route data change",
+      "Unit test the generator"
+     ],
+     "done": "Generator tests green"
+    }
+   ],
+   "edge_cases": [
+    "Stubs leaking into an export",
+    "Route data change without regeneration"
+   ],
+   "evidence": "tools/story/stub_generator.gd; generator tests"
+  },
+  {
+   "id": "Y2-PP-T24",
+   "stream": "primary",
+   "title": "Route bot: prove all 27 storylines and every timing branch reachable",
+   "why": "Roadmap §6 and §10 Gate 3: routes and timing bot-verified before any content is written",
+   "tags": [
+    "tests",
+    "story",
+    "time",
+    "tools"
+   ],
+   "days": [
+    {
+     "focus": "Route bot: plan the storyline proof",
+     "steps": [
+      "List the 27 axis combinations and the route lock's mapping to SL-01..SL-24 and SX-01..SX-03",
+      "Give each combination a bot choice script (which choices set which axis values, in which act)",
+      "Define the assertion: the composer's storyline ID and ending family equal the table",
+      "Plan 3 combinations per bot day"
+     ],
+     "done": "Bot plan covering all 27 combinations"
+    },
+    {
+     "focus": "Route bot: Authority=You, Faction=Hearth Compact (3 Deleted outcomes)",
+     "steps": [
+      "Script the bot's choices for You/Hearth Compact/Restore, You/Hearth Compact/Release, You/Hearth Compact/Choose on stub content",
+      "Assert the ending family is 'Sole' for these combinations (or the documented replacement where a combination is invalid)",
+      "Assert the composer sequence and Story+ cases match the table",
+      "Run each on the fast and slow timing profiles",
+      "Record pass/fail in `production/qa/route_proof.md`"
+     ],
+     "done": "All three You/Hearth Compact combinations verified"
+    },
+    {
+     "focus": "Route bot: Authority=You, Faction=Archive Covenant (3 Deleted outcomes)",
+     "steps": [
+      "Script the bot's choices for You/Archive Covenant/Restore, You/Archive Covenant/Release, You/Archive Covenant/Choose on stub content",
+      "Assert the ending family is 'Sole' for these combinations (or the documented replacement where a combination is invalid)",
+      "Assert the composer sequence and Story+ cases match the table",
+      "Run each on the fast and slow timing profiles",
+      "Record pass/fail in `production/qa/route_proof.md`"
+     ],
+     "done": "All three You/Archive Covenant combinations verified"
+    },
+    {
+     "focus": "Route bot: Authority=You, Faction=Continuity League (3 Deleted outcomes)",
+     "steps": [
+      "Script the bot's choices for You/Continuity League/Restore, You/Continuity League/Release, You/Continuity League/Choose on stub content",
+      "Assert the ending family is 'Sole' for these combinations (or the documented replacement where a combination is invalid)",
+      "Assert the composer sequence and Story+ cases match the table",
+      "Run each on the fast and slow timing profiles",
+      "Record pass/fail in `production/qa/route_proof.md`"
+     ],
+     "done": "All three You/Continuity League combinations verified"
+    },
+    {
+     "focus": "Route bot: Authority=Shared, Faction=Hearth Compact (3 Deleted outcomes)",
+     "steps": [
+      "Script the bot's choices for Shared/Hearth Compact/Restore, Shared/Hearth Compact/Release, Shared/Hearth Compact/Choose on stub content",
+      "Assert the ending family is 'Bound' for these combinations (or the documented replacement where a combination is invalid)",
+      "Assert the composer sequence and Story+ cases match the table",
+      "Run each on the fast and slow timing profiles",
+      "Record pass/fail in `production/qa/route_proof.md`"
+     ],
+     "done": "All three Shared/Hearth Compact combinations verified"
+    },
+    {
+     "focus": "Route bot: Authority=Shared, Faction=Archive Covenant (3 Deleted outcomes)",
+     "steps": [
+      "Script the bot's choices for Shared/Archive Covenant/Restore, Shared/Archive Covenant/Release, Shared/Archive Covenant/Choose on stub content",
+      "Assert the ending family is 'Bound' for these combinations (or the documented replacement where a combination is invalid)",
+      "Assert the composer sequence and Story+ cases match the table",
+      "Run each on the fast and slow timing profiles",
+      "Record pass/fail in `production/qa/route_proof.md`"
+     ],
+     "done": "All three Shared/Archive Covenant combinations verified"
+    },
+    {
+     "focus": "Route bot: Authority=Shared, Faction=Continuity League (3 Deleted outcomes)",
+     "steps": [
+      "Script the bot's choices for Shared/Continuity League/Restore, Shared/Continuity League/Release, Shared/Continuity League/Choose on stub content",
+      "Assert the ending family is 'Bound' for these combinations (or the documented replacement where a combination is invalid)",
+      "Assert the composer sequence and Story+ cases match the table",
+      "Run each on the fast and slow timing profiles",
+      "Record pass/fail in `production/qa/route_proof.md`"
+     ],
+     "done": "All three Shared/Continuity League combinations verified"
+    },
+    {
+     "focus": "Route bot: Authority=None, Faction=Hearth Compact (3 Deleted outcomes)",
+     "steps": [
+      "Script the bot's choices for None/Hearth Compact/Restore, None/Hearth Compact/Release, None/Hearth Compact/Choose on stub content",
+      "Assert the ending family is 'No Authority' for these combinations (or the documented replacement where a combination is invalid)",
+      "Assert the composer sequence and Story+ cases match the table",
+      "Run each on the fast and slow timing profiles",
+      "Record pass/fail in `production/qa/route_proof.md`"
+     ],
+     "done": "All three None/Hearth Compact combinations verified"
+    },
+    {
+     "focus": "Route bot: Authority=None, Faction=Archive Covenant (3 Deleted outcomes)",
+     "steps": [
+      "Script the bot's choices for None/Archive Covenant/Restore, None/Archive Covenant/Release, None/Archive Covenant/Choose on stub content",
+      "Assert the ending family is 'No Authority' for these combinations (or the documented replacement where a combination is invalid)",
+      "Assert the composer sequence and Story+ cases match the table",
+      "Run each on the fast and slow timing profiles",
+      "Record pass/fail in `production/qa/route_proof.md`"
+     ],
+     "done": "All three None/Archive Covenant combinations verified"
+    },
+    {
+     "focus": "Route bot: Authority=None, Faction=Continuity League (3 Deleted outcomes)",
+     "steps": [
+      "Script the bot's choices for None/Continuity League/Restore, None/Continuity League/Release, None/Continuity League/Choose on stub content",
+      "Assert the ending family is 'No Authority' for these combinations (or the documented replacement where a combination is invalid)",
+      "Assert the composer sequence and Story+ cases match the table",
+      "Run each on the fast and slow timing profiles",
+      "Record pass/fail in `production/qa/route_proof.md`"
+     ],
+     "done": "All three None/Continuity League combinations verified"
+    },
+    {
+     "focus": "Route bot: secret storylines SX-01..SX-03",
+     "steps": [
+      "Script the secret quest chains that set the hidden 4th-axis values",
+      "Assert the Witness Protocol (Consent) route and the other two secret storylines chosen in the route lock are reachable",
+      "Assert they are unreachable without their chains",
+      "Record results"
+     ],
+     "done": "Three secret storylines verified"
+    },
+    {
+     "focus": "Timing branches: Act 1",
+     "steps": [
+      "Run bridge (saved/evacuated/fell) × convoy (early/on-time/late) × Act 1 pace on the real Act 1 content",
+      "Assert scenes, NPC fates and slides change as the timing table says",
+      "Assert storyline IDs do not change with timing",
+      "Record results"
+     ],
+     "done": "Act 1 timing branches verified"
+    },
+    {
+     "focus": "Timing branches: Act 2",
+     "steps": [
+      "Run Act 2 pace values and named timing flags on stub content",
+      "Assert every deadline warning appears before its deadline",
+      "Assert difficulty leniency on Beginner and Hell",
+      "Record results"
+     ],
+     "done": "Act 2 timing branches verified"
+    },
+    {
+     "focus": "Timing branches: Act 3 per branch",
+     "steps": [
+      "Run Act 3 timing flags in branches A, B and C",
+      "Assert out-of-order profiles (order quests) give the documented results",
+      "Assert duration-type quests change outcomes as documented",
+      "Record results"
+     ],
+     "done": "Act 3 timing branches verified"
+    },
+    {
+     "focus": "Timing branches: Act 4 and Story+ + Route proof report and CI",
+     "steps": [
+      "Run Act 4 pace and timing slides",
+      "Assert Story+ shows what timing changed",
+      "Assert nothing story-critical is lost silently",
+      "Record results",
+      "Add the full route proof to nightly CI",
+      "Publish `production/qa/route_proof.md` with every storyline and timing branch",
+      "Edge case: change one route data entry and confirm the bot fails",
+      "Hand the report to the Gate 3 evidence pack"
+     ],
+     "done": "Nightly route proof green; report published"
+    }
+   ],
+   "edge_cases": [
+    "An invalid combination reachable by accident",
+    "Secret route reachable without its chain",
+    "Timing changing a storyline ID"
+   ],
+   "evidence": "production/qa/route_proof.md; nightly CI route job"
+  },
+  {
+   "id": "Y2-PP-T25",
+   "stream": "primary",
+   "title": "Coverage viewer and nightly coverage report",
+   "why": "Y1 storyline coverage viewer, extended for the locked routes",
+   "tags": [
+    "tools",
+    "story",
+    "ui"
+   ],
+   "days": [
+    {
+     "focus": "Viewer update",
+     "steps": [
+      "Show axes, storylines, branches, SS feeds, timing flags and composer modules",
+      "Colour by verified/unverified from the nightly report (plus text labels)",
+      "Click a storyline to see its bot script",
+      "Screenshot to `production/qa/evidence/y2pp/coverage_viewer.png`"
+     ],
+     "done": "Viewer screenshot retained"
+    },
+    {
+     "focus": "Nightly coverage summary",
+     "steps": [
+      "Generate a one-page coverage summary per night",
+      "Track trends over time",
+      "Alert on any regression",
+      "Document"
+     ],
+     "done": "Summary job running"
+    }
+   ],
+   "edge_cases": [
+    "Large graphs becoming unreadable"
+   ],
+   "evidence": "production/qa/evidence/y2pp/coverage_viewer.png"
+  },
+  {
+   "id": "Y2-PP-T26",
+   "stream": "primary",
+   "title": "Save schema for production content",
+   "why": "§13 save breakage risk; saves must hold storyline, timing, economy and Story+ state",
+   "tags": [
+    "save",
+    "code",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Schema plan",
+     "steps": [
+      "List new blocks: axis state, timing flags, SS progress, economy (agents, auctions, calendar), Story+",
+      "Plan migrations from the demo and current schema",
+      "Plan size budgets",
+      "ADR"
+     ],
+     "done": "Schema ADR approved"
+    },
+    {
+     "focus": "Implement the blocks and migrations",
+     "steps": [
+      "Add serializers per block",
+      "Add `migrate(vN→vN+1)` with round-trip tests in `tests/unit/save/`",
+      "Validate on load",
+      "Atomic write unchanged"
+     ],
+     "done": "Migration tests green"
+    },
+    {
+     "focus": "Save edge cases",
+     "steps": [
+      "Edge case: a save from every demo version",
+      "Edge case: a save with 365 days of economy history (size check)",
+      "Edge case: corrupted economy block falls back to `.bak`",
+      "Run the suite"
+     ],
+     "done": "Edge-case tests green"
+    }
+   ],
+   "edge_cases": [
+    "Very large economy history",
+    "Corrupted economy block"
+   ],
+   "evidence": "tests/unit/save/*; schema ADR"
+  },
+  {
+   "id": "Y2-PP-T27",
+   "stream": "primary",
+   "title": "Retire the Chapter 4–10 legacy scenes after the writing salvage",
+   "why": "Roadmap §6 legacy cleanup: salvage the best Chapter 4–10 writing, then stop carrying the old scenes",
+   "tags": [
+    "cleanup",
+    "story",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Chapters 4–10 legacy scenes: decide their fate",
+     "steps": [
+      "List `scripts/chapter4`..`chapter10` and `scenes/chapter4`..`chapter10` with their autoload and scene references",
+      "Options: keep reachable behind the debug menu, move to an archive branch, or delete after the writing is salvaged",
+      "The user decides (deletion of story content needs explicit approval)",
+      "Record the decision as an ADR"
+     ],
+     "done": "ADR records the decision"
+    },
+    {
+     "focus": "Chapters 4–10 legacy scenes: apply the decision",
+     "steps": [
+      "Apply the decision only after the secondary stream confirms the salvage of that chapter's writing is done",
+      "If archived or deleted, cut the Chapter 3 → 4 exit to a clean 'end of current content' screen",
+      "Run `load_all`, the route tests and the bot",
+      "Update CHANGELOG"
+     ],
+     "done": "Repo matches the ADR; suites green"
+    }
+   ],
+   "edge_cases": [
+    "Chapter 3 exit pointing at a removed scene",
+    "A legacy autoload used by a Chapter 4 scene only"
+   ],
+   "evidence": "Ch4–10 ADR; load_all and route tests green after the change"
+  },
+  {
+   "id": "Y2-PP-T28",
+   "stream": "primary",
+   "title": "Hell-phase boss template and difficulty data for production",
+   "why": "P6: every boss has a Hell-only phase; 24 bosses in production",
+   "tags": [
+    "difficulty",
+    "combat",
+    "tools"
+   ],
+   "days": [
+    {
+     "focus": "Boss template",
+     "steps": [
+      "Create a BossDef template with phases, Hell-only phase slot and replay test scaffold",
+      "Generate the replay test automatically per new boss",
+      "Document in the combat bible",
+      "Test on Aldric"
+     ],
+     "done": "Template works on Aldric"
+    },
+    {
+     "focus": "Difficulty data checks",
+     "steps": [
+      "CI check: every boss has a Hell-only phase",
+      "CI check: §12.1 values per difficulty",
+      "CI check: no essential item exclusive to Hell",
+      "Document"
+     ],
+     "done": "Difficulty CI checks green"
+    }
+   ],
+   "edge_cases": [
+    "Boss without a Hell phase"
+   ],
+   "evidence": "Boss template; CI difficulty checks"
+  },
+  {
+   "id": "Y2-PP-T29",
+   "stream": "primary",
+   "title": "Performance at production scale",
+   "why": "§12.5 budgets with the full world, agents and NPCs",
+   "tags": [
+    "performance",
+    "openworld",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Scale test design",
+     "steps": [
+      "Combine the placeholder world, 200 NPCs and the full market agent sim",
+      "Define scenarios: festival day, auction end, region seam, boss fight",
+      "Define budgets",
+      "Write the plan"
+     ],
+     "done": "Scenarios defined"
+    },
+    {
+     "focus": "Run the scale tests",
+     "steps": [
+      "Run each scenario on minimum spec",
+      "Profile with `/perf-profile`",
+      "Rank costs",
+      "Record"
+     ],
+     "done": "Ranked costs"
+    },
+    {
+     "focus": "Fix the top costs",
+     "steps": [
+      "Fix the top 2 costs",
+      "Re-run",
+      "Record",
+      "Commit"
+     ],
+     "done": "Top costs fixed"
+    },
+    {
+     "focus": "Budgets in CI",
+     "steps": [
+      "Add the scenarios to nightly CI with budgets",
+      "Document the numbers in `docs/perf/scale_baseline.md`",
+      "Flag risks for Gate 3",
+      "Review"
+     ],
+     "done": "Scale budgets in CI"
+    }
+   ],
+   "edge_cases": [
+    "Festival day plus auction end on the same tick"
+   ],
+   "evidence": "docs/perf/scale_baseline.md"
+  },
+  {
+   "id": "Y2-PP-T30",
+   "stream": "primary",
+   "title": "Production content tools (dialogue, quests and localization at scale)",
+   "why": "~400k words and 150 quests need tools before the writer joins",
+   "tags": [
+    "tools",
+    "dialogue",
+    "quests",
+    "localization"
+   ],
+   "days": [
+    {
+     "focus": "Speaker registry and portraits",
+     "steps": [
+      "Add the speaker registry (speaker ID, display name, portrait set, voice-blip)",
+      "Validator: every speaker in `.dlg` exists",
+      "Portrait slots for the PAE pipeline",
+      "Tests"
+     ],
+     "done": "Registry validator green"
+    },
+    {
+     "focus": "Line ID stamping tool",
+     "steps": [
+      "Write the tool that stamps missing `[#id]` IDs and never changes existing ones",
+      "Run on all `.dlg` files",
+      "Test idempotence",
+      "Document"
+     ],
+     "done": "All lines have IDs; tool idempotent"
+    },
+    {
+     "focus": "String table export for translators",
+     "steps": [
+      "Export per-file string tables with context (speaker, scene, max length)",
+      "Import translations back with checks",
+      "Tests",
+      "Document in `docs/localization/pipeline.md`"
+     ],
+     "done": "Round-trip export/import test green"
+    },
+    {
+     "focus": "Quest editor at scale",
+     "steps": [
+      "Add quest ID ranges per region, axis/timing tags, and validation to the Y1 quest editor",
+      "Bulk view for 150 quests",
+      "Tests",
+      "Screenshot to `production/qa/evidence/y2pp/quest_editor.png`"
+     ],
+     "done": "Quest editor screenshot retained"
+    },
+    {
+     "focus": "Tool documentation for the team",
+     "steps": [
+      "Write `docs/tools/README.md` for each tool",
+      "Record a short screen capture per tool",
+      "Check tools run from a fresh clone",
+      "Fix setup issues"
+     ],
+     "done": "Tools run on a fresh clone"
+    }
+   ],
+   "edge_cases": [
+    "Two writers editing one file",
+    "Translations longer than max length"
+   ],
+   "evidence": "docs/tools/README.md; tool tests"
+  },
+  {
+   "id": "Y2-PP-T31",
+   "stream": "primary",
+   "title": "Prove every pipeline end to end (engineering side)",
+   "why": "Roadmap §10 Gate 3: every pipeline has shipped one final-quality asset",
+   "tags": [
+    "tools",
+    "assets",
+    "audio",
+    "cinematics",
+    "localization"
+   ],
+   "days": [
+    {
+     "focus": "Pipeline list and checks",
+     "steps": [
+      "List pipelines: character (PAE → importer → CharacterVisual), tileset/chunk, enemy, boss, item icon, VFX, UI screen, music (adaptive stems), SFX, dialogue + zh-CN, cinematic",
+      "For each, list the automated checks (import lint, fallback, budget, provenance)",
+      "Plan one final-quality asset per pipeline with the secondary stream",
+      "Write `docs/pipelines/README.md`"
+     ],
+     "done": "Pipeline list with checks"
+    },
+    {
+     "focus": "Character and enemy pipelines",
+     "steps": [
+      "Run the final-quality Kaelen clips and the enemy through import, CharacterVisual and frame data checks",
+      "Fallback and rollback checks",
+      "Provenance entries",
+      "Screenshot in a live viewport to `production/qa/evidence/y2pp/pipeline_character.png`"
+     ],
+     "done": "Character and enemy pipeline proven"
+    },
+    {
+     "focus": "Tileset/chunk and boss pipelines",
+     "steps": [
+      "Import the final-quality chunk; collision, streaming and reachability checks",
+      "Import the boss with BossDef and the replay scaffold",
+      "Provenance entries",
+      "Live viewport screenshots"
+     ],
+     "done": "Chunk and boss pipelines proven"
+    },
+    {
+     "focus": "Icon, VFX and UI pipelines",
+     "steps": [
+      "Import the icon set into ItemDB",
+      "Import the VFX through FeelService presets",
+      "Import the UI screen with the Theme",
+      "Screenshots"
+     ],
+     "done": "Icon, VFX and UI pipelines proven"
+    },
+    {
+     "focus": "Audio and dialogue/localization pipelines",
+     "steps": [
+      "Import the adaptive music stems; check transitions",
+      "Import the SFX batch; check bus routing",
+      "Run the dialogue scene in EN and zh-CN",
+      "Screenshots and clips"
+     ],
+     "done": "Audio and dialogue pipelines proven"
+    },
+    {
+     "focus": "Pipeline report",
+     "steps": [
+      "Measure cost per asset for each final-quality asset",
+      "Record checks passed per pipeline",
+      "Hand to Gate 3 evidence",
+      "List pipeline weaknesses for Y3"
+     ],
+     "done": "Pipeline report in the Gate 3 folder"
+    }
+   ],
+   "edge_cases": [
+    "A headless screenshot counted as a live viewport (not allowed)",
+    "Rollback after a failed import"
+   ],
+   "evidence": "docs/pipelines/README.md; live viewport screenshots in production/qa/evidence/y2pp"
+  },
+  {
+   "id": "Y2-PP-T32",
+   "stream": "primary",
+   "title": "Act 1 cinematic upgrade, part 2: the cinematic pipeline proof",
+   "why": "Cinematics pipeline; the secondary stream's Aldric-introduction storyboard",
+   "tags": [
+    "cinematics",
+    "animation",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Timeline features for the upgrade",
+     "steps": [
+      "List timeline features the storyboard needs (camera paths, sprite cues, letterbox, music sync)",
+      "Add the missing ones",
+      "Unit test timeline event ordering",
+      "Document"
+     ],
+     "done": "Timeline features ready"
+    },
+    {
+     "focus": "Build the upgraded cinematic",
+     "steps": [
+      "Author the cinematic from the storyboard",
+      "Hook audio and dialogue",
+      "Skip and pause through ContextStack",
+      "Record a clip"
+     ],
+     "done": "Cinematic plays"
+    },
+    {
+     "focus": "Verify and measure",
+     "steps": [
+      "Run Chapter 1 route test",
+      "Live viewport screenshots of key frames",
+      "Measure authoring cost",
+      "Add to the pipeline report"
+     ],
+     "done": "Cinematic pipeline proven"
+    }
+   ],
+   "edge_cases": [
+    "Pausing during a camera move",
+    "Skipping before the first view finishes"
+   ],
+   "evidence": "production/qa/evidence/y2pp/act1_cinematic_*.png"
+  },
+  {
+   "id": "Y2-PP-T33",
+   "stream": "primary",
+   "title": "Team-ready development environment",
+   "why": "Team joins after Gate 3; §13 key-person risk",
+   "tags": [
+    "team",
+    "tools",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Fresh-clone setup",
+     "steps": [
+      "Write `tools/setup_dev.ps1` (Godot 4.6.3 check, export templates, git hooks, LFS check)",
+      "Test on a fresh user profile",
+      "Document in `CONTRIBUTING.md`",
+      "Fix problems"
+     ],
+     "done": "Fresh clone runs the game and tests"
+    },
+    {
+     "focus": "Branching, reviews and CI for a team",
+     "steps": [
+      "Branch protection and required checks (the user configures GitHub)",
+      "Code owners per folder",
+      "PR template with test evidence fields",
+      "Document"
+     ],
+     "done": "Review workflow documented"
+    },
+    {
+     "focus": "Asset handoff structure",
+     "steps": [
+      "Folders for art, audio and writing handoffs with naming rules",
+      "Import lint for handoff folders",
+      "Provenance entry required for every handoff",
+      "Document"
+     ],
+     "done": "Handoff structure documented"
+    },
+    {
+     "focus": "Engineering onboarding doc",
+     "steps": [
+      "Run `/onboard` for a QA/engineering contributor",
+      "Include architecture overview, services, tests, CI, ADR index",
+      "Review with the user",
+      "Save under `docs/onboarding/`"
+     ],
+     "done": "Engineering onboarding doc saved"
+    }
+   ],
+   "edge_cases": [
+    "Contributor without LFS",
+    "Windows path with spaces"
+   ],
+   "evidence": "CONTRIBUTING.md; docs/onboarding/"
+  },
+  {
+   "id": "Y2-PP-T34",
+   "stream": "primary",
+   "title": "Production ADRs and the control manifest",
+   "why": "Coding standards: ADRs per workflow mode; Gate 3 needs the architecture recorded",
+   "tags": [
+    "architecture",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "List production decisions",
+     "steps": [
+      "List decisions made in Y1–Y2 without ADRs (content data layout, region template, save migration policy, feel system, item DB)",
+      "Prioritise critical ones",
+      "Draft with `/architecture-decision`",
+      "Review"
+     ],
+     "done": "ADR list"
+    },
+    {
+     "focus": "Write the critical ADRs",
+     "steps": [
+      "Write the critical ADRs",
+      "Link superseded phase-report ADRs",
+      "Run `/architecture-review`",
+      "Fix gaps"
+     ],
+     "done": "Critical ADRs accepted"
+    },
+    {
+     "focus": "Control manifest",
+     "steps": [
+      "Run `/create-control-manifest` from accepted ADRs",
+      "Check it covers lints (no direct pause, no create_timer, no gameplay geometry in code)",
+      "Review",
+      "Save"
+     ],
+     "done": "Control manifest saved"
+    },
+    {
+     "focus": "Architecture overview",
+     "steps": [
+      "Write a one-page architecture map (services, owners, data)",
+      "Link from the onboarding doc",
+      "Check against the code",
+      "Review"
+     ],
+     "done": "Overview saved"
+    }
+   ],
+   "edge_cases": [
+    "ADR conflicting with a phase-report decision"
+   ],
+   "evidence": "docs/architecture/ ADRs; control manifest"
+  },
+  {
+   "id": "Y2-PP-T35",
+   "stream": "primary",
+   "title": "Monthly engineering reviews in pre-production",
+   "why": "Roadmap §14",
+   "tags": [
+    "docs",
+    "business"
+   ],
+   "days": [
+    {
+     "focus": "April–May engineering review",
+     "steps": [
+      "Run `/milestone-review` for April and May",
+      "Compare planned vs actual",
+      "Update risks (route complexity, economy, performance)",
+      "Re-order June–July"
+     ],
+     "done": "Review saved"
+    },
+    {
+     "focus": "June–July engineering review",
+     "steps": [
+      "Run `/milestone-review`",
+      "Check the route proof and economy lock dates",
+      "Update risks",
+      "Re-order August–September"
+     ],
+     "done": "Review saved"
+    },
+    {
+     "focus": "August engineering review",
+     "steps": [
+      "Run `/milestone-review`",
+      "Check Gate 3 evidence readiness",
+      "Update risks",
+      "Plan September"
+     ],
+     "done": "Review saved"
+    }
+   ],
+   "edge_cases": [
+    "Route proof slipping past August"
+   ],
+   "evidence": "production/milestones/2028-PP reviews"
+  },
+  {
+   "id": "Y2-PP-T36",
+   "stream": "primary",
+   "title": "Smaller-game fallback: technical plan",
+   "why": "Roadmap §6: if Gate 3 fails, ship a smaller game (2–3 regions, ~6 storylines, market and minigames)",
+   "tags": [
+    "architecture",
+    "business",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Technical scope of the smaller game",
+     "steps": [
+      "Map which systems stay as-is (all spine, combat, market, minigames)",
+      "Map route data for ~6 storylines and how the bot proves them",
+      "List cuts to tools and world size",
+      "Write the plan"
+     ],
+     "done": "Technical fallback plan written"
+    },
+    {
+     "focus": "Fallback schedule",
+     "steps": [
+      "Estimate the smaller game with measured cost per asset",
+      "Plan a release window",
+      "List decisions needed",
+      "Review with the user"
+     ],
+     "done": "Fallback schedule reviewed"
+    }
+   ],
+   "edge_cases": [
+    "Partial funding (between the two plans)"
+   ],
+   "evidence": "production/gates/gate3/fallback_technical.md"
+  },
+  {
+   "id": "Y2-PP-T37",
+   "stream": "primary",
+   "title": "Gate 3 technical evidence and gate day",
+   "why": "Roadmap §10 Gate 3 (2028-09-30): routes and timing bot-verified; every pipeline proven",
+   "tags": [
+    "docs",
+    "tests",
+    "business"
+   ],
+   "days": [
+    {
+     "focus": "Assemble technical evidence",
+     "steps": [
+      "Route proof report, timing proof, 365-day sim results, pipeline report, perf baseline, test map",
+      "Run `/gate-check` for Gate 3",
+      "Write the technical summary",
+      "Store in `production/gates/gate3/`"
+     ],
+     "done": "Technical evidence complete"
+    },
+    {
+     "focus": "Freeze and verify",
+     "steps": [
+      "Re-run all nightly jobs on the gate commit",
+      "Freeze the evidence",
+      "List open risks",
+      "Review with the user"
+     ],
+     "done": "Evidence frozen"
+    },
+    {
+     "focus": "Gate 3 decision day (technical side)",
+     "steps": [
+      "Present the technical evidence",
+      "Record the decision in the Gate 3 ADR with the business evidence",
+      "Tag the gate commit",
+      "Update CHANGELOG"
+     ],
+     "done": "Gate 3 ADR recorded"
+    }
+   ],
+   "edge_cases": [
+    "Funding criterion not met while technical ones pass"
+   ],
+   "evidence": "production/gates/gate3/; Gate 3 ADR"
+  },
+  {
+   "id": "Y2-PP-T38",
+   "stream": "secondary",
+   "title": "World bible: 8 regions as one map",
+   "why": "Roadmap §6 world bible; P7a open world",
+   "tags": [
+    "story",
+    "openworld",
+    "level",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "World bible: confirm the region map locked on 2026-10-18",
+     "steps": [
+      "Confirm the 8-region map decided on 2026-10-18 from STORY_BIBLE §3: R1 Oakhaven Reach, R2 Ironhold Crown, R3 Fractured Wastes, R4 Forgotten Sectors, R5 Mirror City, R6 Cathedral Server, R7 Memory Ocean / Saved Assembly, R8 Rootward Expanse (Human Patch Lab, Root of Heaven)",
+      "List the blueprint's cut kingdoms that remain expansion candidates (Expansion 1's cut kingdoms A and B are chosen at the Y8 expansion planning day); keep the rule 'never name the God King before the Human Patch Lab'",
+      "Write options for each (fold into a launch region as a district, or keep as expansion and move the beat); do not decide alone",
+      "The user decides; record the decision and the act-per-region table in `design/world/WORLD_BIBLE.md`"
+     ],
+     "done": "Region list and act mapping decided by the user"
+    },
+    {
+     "focus": "World bible region R1 Oakhaven Reach",
+     "steps": [
+      "Write R1 Oakhaven Reach: Act 1; function 'belonging, ordinary stakes'; pressure 'the Fracture is encroaching' (STORY_BIBLE §3)",
+      "Anchor canon: Mara Quill, Bran, Aldric; side arcs 01–03; mark everything else as structure only (IDs, no new plot)",
+      "Budget proposal: 18 side quests (R1-SQ-01..R1-SQ-18), 3 boss slots, 12 Tier B NPC slots, POIs, waystations, chunk count",
+      "Art state: existing accepted Oakhaven baseline and Gate 1 chunks; list what production must replace or keep",
+      "List neighbours and seam type, factions present, and any market, auction or minigame candidates"
+     ],
+     "done": "R1 section complete in the world bible"
+    },
+    {
+     "focus": "World bible region R2 Ironhold",
+     "steps": [
+      "Write R2 Ironhold: Act 1; function 'strength, institutions, trade'; pressure 'protection culture going rigid' (STORY_BIBLE §3)",
+      "Anchor canon: Seraphina, Rook, Brask; side arcs 04–06; mark everything else as structure only (IDs, no new plot)",
+      "Budget proposal: 17 side quests (R2-SQ-01..R2-SQ-17), 3 boss slots, 13 Tier B NPC slots, POIs, waystations, chunk count",
+      "Art state: existing accepted Ironhold baseline; migrated as region 2 in Y1-P4; list what production must replace or keep",
+      "List neighbours and seam type, factions present, and any market, auction or minigame candidates"
+     ],
+     "done": "R2 section complete in the world bible"
+    },
+    {
+     "focus": "World bible region R3 Fractured Wastes",
+     "steps": [
+      "Write R3 Fractured Wastes: Act 2; function 'memory, system archaeology'; pressure 'routes and histories disagree' (STORY_BIBLE §3)",
+      "Anchor canon: Lyra, Kaelthas; side arc 07; mark everything else as structure only (IDs, no new plot)",
+      "Budget proposal: 15 side quests (R3-SQ-01..R3-SQ-15), 3 boss slots, 8 Tier B NPC slots, POIs, waystations, chunk count",
+      "Art state: accepted Fractured Wastes baseline (procedural lineage; no real ComfyUI evidence); list what production must replace or keep",
+      "List neighbours and seam type, factions present, and any market, auction or minigame candidates"
+     ],
+     "done": "R3 section complete in the world bible"
+    },
+    {
+     "focus": "World bible region R4 Forgotten Sectors",
+     "steps": [
+      "Write R4 Forgotten Sectors: Act 2; function 'the deleted, the Null Court'; pressure 'who counts when the record says \"removed\"' (STORY_BIBLE §3)",
+      "Anchor canon: Mirror Kaelen beats from the legacy Chapter 5; mark everything else as structure only (IDs, no new plot)",
+      "Budget proposal: 15 side quests (R4-SQ-01..R4-SQ-15), 3 boss slots, 9 Tier B NPC slots, POIs, waystations, chunk count",
+      "Art state: T7 controlled procedural baseline (not real ComfyUI art); list what production must replace or keep",
+      "List neighbours and seam type, factions present, and any market, auction or minigame candidates"
+     ],
+     "done": "R4 section complete in the world bible"
+    },
+    {
+     "focus": "World bible region R5 Mirror City",
+     "steps": [
+      "Write R5 Mirror City: Act 2; function 'self-confrontation'; pressure 'intentions versus consequences' (STORY_BIBLE §3)",
+      "Anchor canon: the Obedience scenes the story bible proposes merging with Mirror City; mark everything else as structure only (IDs, no new plot)",
+      "Budget proposal: 15 side quests (R5-SQ-01..R5-SQ-15), 3 boss slots, 8 Tier B NPC slots, POIs, waystations, chunk count",
+      "Art state: late-hub revisit scene only; list what production must replace or keep",
+      "List neighbours and seam type, factions present, and any market, auction or minigame candidates"
+     ],
+     "done": "R5 section complete in the world bible"
+    },
+    {
+     "focus": "World bible region R6 Cathedral Server",
+     "steps": [
+      "Write R6 Cathedral Server: Act 3; function 'administrative gods'; pressure 'good intentions without consent' (STORY_BIBLE §3)",
+      "Anchor canon: Act 3 branch content; mark everything else as structure only (IDs, no new plot)",
+      "Budget proposal: 20 side quests (R6-SQ-01..R6-SQ-20), 3 boss slots, 10 Tier B NPC slots, POIs, waystations, chunk count",
+      "Art state: late-hub revisit scene only; list what production must replace or keep",
+      "List neighbours and seam type, factions present, and any market, auction or minigame candidates"
+     ],
+     "done": "R6 section complete in the world bible"
+    },
+    {
+     "focus": "World bible region R7 Memory Ocean / Saved Assembly",
+     "steps": [
+      "Write R7 Memory Ocean / Saved Assembly: Act 3; function 'factions, the revolt'; pressure 'what society survives' (STORY_BIBLE §3)",
+      "Anchor canon: Act 3 branch content; mark everything else as structure only (IDs, no new plot)",
+      "Budget proposal: 20 side quests (R7-SQ-01..R7-SQ-20), 3 boss slots, 10 Tier B NPC slots, POIs, waystations, chunk count",
+      "Art state: late-hub revisit scene only; list what production must replace or keep",
+      "List neighbours and seam type, factions present, and any market, auction or minigame candidates"
+     ],
+     "done": "R7 section complete in the world bible"
+    },
+    {
+     "focus": "World bible region R8 Rootward Expanse",
+     "steps": [
+      "Write R8 Rootward Expanse (Human Patch Lab, Root of Heaven): Act 4; function 'origin and authorization'; pressure 'power without a legitimate owner' (STORY_BIBLE §3)",
+      "Anchor canon: SOVEREIGN, then the God King; the Human Patch Lab beats; mark everything else as structure only (IDs, no new plot)",
+      "Budget proposal: 30 side quests (R8-SQ-01..R8-SQ-30), 3 boss slots, 0 Tier B NPC slots, POIs, waystations, chunk count",
+      "Art state: prep hub only; list what production must replace or keep",
+      "List neighbours and seam type, factions present, and any market, auction or minigame candidates"
+     ],
+     "done": "R8 section complete in the world bible"
+    },
+    {
+     "focus": "World bible: compose the 8 regions as one map",
+     "steps": [
+      "Lay out R1–R8 on one map with neighbours, seams and travel distance in chunks",
+      "Pick the 4 auction-house cities with the user (roadmap: 1 in Y3, +2 in Y4, the 4th in Y5)",
+      "Place festival towns for the limited-edition calendar",
+      "Draw the map image into `design/world/map_v1.png`"
+     ],
+     "done": "Map v1 drawn and auction cities chosen"
+    },
+    {
+     "focus": "World bible: seams, traversal unlocks and fast travel",
+     "steps": [
+      "List each seam's traversal requirement (ability gates, not invisible walls)",
+      "Place waystations per region and the fast-travel graph",
+      "Check Act 3 branch regions (R6, R7) have branch-only areas marked",
+      "Hand the map to the primary stream for the chunk grid"
+     ],
+     "done": "Seam table and fast-travel graph complete"
+    }
+   ],
+   "edge_cases": [
+    "A beat with no region after the reconciliation",
+    "Act 3 branch region reachable outside its branch",
+    "Seam that needs an ability the player gets later"
+   ],
+   "evidence": "design/world/WORLD_BIBLE.md regions section; design/world/map_v1.png"
+  },
+  {
+   "id": "Y2-PP-T39",
+   "stream": "secondary",
+   "title": "Devlog DL-13: building a world map",
+   "why": "Community cadence slows to monthly in pre-production",
+   "tags": [
+    "marketing",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Write and post devlog DL-13 (building a world map)",
+     "steps": [
+      "Outline DL-13: 'building a world map' without spoiling the route architecture",
+      "Show map v1 without spoilers",
+      "Post to Steam news, itch and Discord",
+      "Log followers and wishlists in `production/marketing/devlog_log.md`"
+     ],
+     "done": "DL-13 published"
+    }
+   ],
+   "edge_cases": [
+    "Revealing ending structure",
+    "Promising a release date"
+   ],
+   "evidence": "production/marketing/devlog_log.md entry"
+  },
+  {
+   "id": "Y2-PP-T40",
+   "stream": "secondary",
+   "title": "Port Chapter 3 dialogue into .dlg files",
+   "why": "Roadmap §6: Chapters 1–3 rebuilt on the spine (Chapter 3 still uses legacy inline dialogue)",
+   "tags": [
+    "dialogue",
+    "story",
+    "cleanup"
+   ],
+   "days": [
+    {
+     "focus": "Chapter 3 dialogue inventory",
+     "steps": [
+      "Read `dialogue/_extracted/chapter3/` and the six `scripts/chapter3/*.gd` scenes",
+      "List every scene, choice and flag",
+      "Check Seraphina, Lyra and Kaelthas lines against canon (STORY_BIBLE §4)",
+      "Plan the file split under `dialogue/ch3/`"
+     ],
+     "done": "Inventory and file plan"
+    },
+    {
+     "focus": "Port Ironhold departure and Fractured Wastes",
+     "steps": [
+      "Port `ironhold_departure` and `fractured_wastes` into `.dlg` with choices and flags",
+      "Minimal voice pass (full rewrite waits for Y4 production)",
+      "Run the validator and voice lint",
+      "Keep flag names stable"
+     ],
+     "done": "Two files validator-clean"
+    },
+    {
+     "focus": "Port Archive Depths and Data Stream",
+     "steps": [
+      "Port `archive_depths` and `data_stream`",
+      "Mark lines that conflict with the world bible for Y4",
+      "Validator and voice lint",
+      "Keep flags stable"
+     ],
+     "done": "Two files validator-clean"
+    },
+    {
+     "focus": "Port Kaelthas betrayal and the Chapter 3 ending",
+     "steps": [
+      "Port `kaelthas_betrayal` and `ch3_ending` with both ally and betrayer branches",
+      "Validator and voice lint",
+      "Check Kaelthas's canon (withheld a truth, people died)",
+      "Hand all files to the primary stream"
+     ],
+     "done": "All Chapter 3 files handed off"
+    },
+    {
+     "focus": "Chapter 3 consistency check",
+     "steps": [
+      "Read Chapter 3 end to end in the new files",
+      "Check flags match `scripts/chapter3` reads",
+      "List Y4 rewrite notes",
+      "Update the story bible's Chapter 3 flag table"
+     ],
+     "done": "Story bible updated"
+    }
+   ],
+   "edge_cases": [
+    "A flag renamed during the port",
+    "Lines contradicting the Seraphina retcon"
+   ],
+   "evidence": "dialogue/ch3/*.dlg; validator logs"
+  },
+  {
+   "id": "Y2-PP-T41",
+   "stream": "secondary",
+   "title": "World bible: factions and institutions",
+   "why": "Roadmap §6 world bible; STORY_BIBLE axis 2 factions",
+   "tags": [
+    "story",
+    "npc",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Hearth Compact",
+     "steps": [
+      "Write the Hearth Compact (local autonomy): what it wants, fears, where it is strong (by region)",
+      "How it reads the Null Court thesis",
+      "Which side arcs feed it (SS-01, SS-06)",
+      "Tier B NPC slots that represent it"
+     ],
+     "done": "Hearth Compact section"
+    },
+    {
+     "focus": "Archive Covenant",
+     "steps": [
+      "Write the Archive Covenant (memory, accountability) with the same headings",
+      "Which side arcs feed it (SS-07 philosophy)",
+      "Its relation to the deleted",
+      "NPC slots"
+     ],
+     "done": "Archive Covenant section"
+    },
+    {
+     "focus": "Continuity League",
+     "steps": [
+      "Write the Continuity League (stability, infrastructure)",
+      "Which side arcs feed it (SS-06 economics)",
+      "Its relation to SOVEREIGN's protection logic",
+      "NPC slots"
+     ],
+     "done": "Continuity League section"
+    },
+    {
+     "focus": "SOVEREIGN's institutions as culture",
+     "steps": [
+      "Write how system roles became culture (security routines as knights, rollback as resurrection, server clusters as cathedrals)",
+      "Map institutions per region",
+      "Check 'magic is a culturally evolved interface' is respected",
+      "Review with the user"
+     ],
+     "done": "Institutions section"
+    }
+   ],
+   "edge_cases": [
+    "A faction that is a mascot (companion rule forbids it)"
+   ],
+   "evidence": "design/world/WORLD_BIBLE.md factions section"
+  },
+  {
+   "id": "Y2-PP-T42",
+   "stream": "secondary",
+   "title": "World bible: history and timeline",
+   "why": "Roadmap §6 world bible",
+   "tags": [
+    "story",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "History from canon",
+     "steps": [
+      "Expand the STORY_BIBLE timeline using PM 499–613 only",
+      "Mark what stays uncertain in the base game (the outside world)",
+      "Place Flight 707 wake times (Seraphina ~8 years before Ch1)",
+      "List open history questions for the user"
+     ],
+     "done": "History section drafted"
+    },
+    {
+     "focus": "Region histories and contradictions",
+     "steps": [
+      "Per region: what its people believe happened (routes and histories disagree in the Wastes)",
+      "Mark intentional contradictions",
+      "Check nothing names the God King early",
+      "Review"
+     ],
+     "done": "History section approved"
+    }
+   ],
+   "edge_cases": [
+    "Invented history beyond PM canon"
+   ],
+   "evidence": "design/world/WORLD_BIBLE.md history section"
+  },
+  {
+   "id": "Y2-PP-T43",
+   "stream": "secondary",
+   "title": "World bible: the companion roster",
+   "why": "Roadmap §6 world bible; §3 companions 8",
+   "tags": [
+    "story",
+    "npc",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Companion roster: decide the 8 slots",
+     "steps": [
+      "List candidates: Elara, Seraphina, Lyra, Kaelthas (canon); Kaito, Seven (backlog); Nema, Rook (proposed)",
+      "Check against roadmap §7 counts (Y3 3, Y4 3, Y5 2)",
+      "Check the companion rules: no faction mascots; two scenes contradicting each one's expected stance",
+      "The user decides the 8 and their acts"
+     ],
+     "done": "Roster of 8 decided"
+    },
+    {
+     "focus": "Companion sheet: Elara Venn",
+     "steps": [
+      "Write the sheet for Elara Venn (canon, joins Ch1) from canon: her damaged casting channel and the cost of a cure",
+      "Join act and region, leave/loss conditions, Tier A memory facts (20+)",
+      "Two planned scenes where they contradict their expected stance (structure only)",
+      "Which axes and endings change their slides; Story+ presence"
+     ],
+     "done": "Elara Venn sheet complete"
+    },
+    {
+     "focus": "Companion sheet: Seraphina Vale",
+     "steps": [
+      "Write the sheet for Seraphina Vale (canon, joins or stays in Ch2) from canon: the passengers she couldn't save; fear of being too useful to stop",
+      "Join act and region, leave/loss conditions, Tier A memory facts (20+)",
+      "Two planned scenes where they contradict their expected stance (structure only)",
+      "Which axes and endings change their slides; Story+ presence"
+     ],
+     "done": "Seraphina Vale sheet complete"
+    },
+    {
+     "focus": "Companion sheet: Lyra Sen",
+     "steps": [
+      "Write the sheet for Lyra Sen (canon, Ch3) from canon: unstable memory; wants to choose what to preserve",
+      "Join act and region, leave/loss conditions, Tier A memory facts (20+)",
+      "Two planned scenes where they contradict their expected stance (structure only)",
+      "Which axes and endings change their slides; Story+ presence"
+     ],
+     "done": "Lyra Sen sheet complete"
+    },
+    {
+     "focus": "Companion sheet: Kaelthas Marr",
+     "steps": [
+      "Write the sheet for Kaelthas Marr (canon, Ch3 ally or betrayer) from canon: once withheld a truth and people died",
+      "Join act and region, leave/loss conditions, Tier A memory facts (20+)",
+      "Two planned scenes where they contradict their expected stance (structure only)",
+      "Which axes and endings change their slides; Story+ presence"
+     ],
+     "done": "Kaelthas Marr sheet complete"
+    },
+    {
+     "focus": "Companion sheet: Kaito Aram",
+     "steps": [
+      "Write the sheet for Kaito Aram (backlog) from canon: cartographer of places that stop existing",
+      "Join act and region, leave/loss conditions, Tier A memory facts (20+)",
+      "Two planned scenes where they contradict their expected stance (structure only)",
+      "Which axes and endings change their slides; Story+ presence"
+     ],
+     "done": "Kaito Aram sheet complete"
+    },
+    {
+     "focus": "Companion sheet: Unit 734 'Seven'",
+     "steps": [
+      "Write the sheet for Unit 734 'Seven' (backlog) from canon: maintenance unit with emergent personhood",
+      "Join act and region, leave/loss conditions, Tier A memory facts (20+)",
+      "Two planned scenes where they contradict their expected stance (structure only)",
+      "Which axes and endings change their slides; Story+ presence"
+     ],
+     "done": "Unit 734 'Seven' sheet complete"
+    },
+    {
+     "focus": "Companion sheet: Nema Orr",
+     "steps": [
+      "Write the sheet for Nema Orr (proposed) from canon: deleted citizen and Null Court witness with partial backups",
+      "Join act and region, leave/loss conditions, Tier A memory facts (20+)",
+      "Two planned scenes where they contradict their expected stance (structure only)",
+      "Which axes and endings change their slides; Story+ presence"
+     ],
+     "done": "Nema Orr sheet complete"
+    },
+    {
+     "focus": "Companion sheet: Rook Damar",
+     "steps": [
+      "Write the sheet for Rook Damar (proposed) from canon: auction courier who hates how good he got at profiting from scarcity",
+      "Join act and region, leave/loss conditions, Tier A memory facts (20+)",
+      "Two planned scenes where they contradict their expected stance (structure only)",
+      "Which axes and endings change their slides; Story+ presence"
+     ],
+     "done": "Rook Damar sheet complete"
+    }
+   ],
+   "edge_cases": [
+    "A companion absent in a branch they are needed in",
+    "Two companions with the same arc beat"
+   ],
+   "evidence": "design/world/WORLD_BIBLE.md companions section"
+  },
+  {
+   "id": "Y2-PP-T44",
+   "stream": "secondary",
+   "title": "World bible: SOVEREIGN and the God King",
+   "why": "Roadmap §6 world bible; STORY_BIBLE §2",
+   "tags": [
+    "story",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "SOVEREIGN behaviour by fragment count",
+     "steps": [
+      "Write SOVEREIGN's stance per Source Key fragment (allows collection, concerned after 3, contains after 5, asks after 7)",
+      "Its invariant: prevent irreversible loss; it won't kill Kaelen",
+      "Its voice: plain and evidence-based",
+      "Per region, how it shows up"
+     ],
+     "done": "SOVEREIGN section"
+    },
+    {
+     "focus": "SOVEREIGN as penultimate boss",
+     "steps": [
+      "Write the boss's role per ending family (structure only)",
+      "Hell-only phase slot",
+      "Its memory of Kaelen from before",
+      "Review"
+     ],
+     "done": "Boss role section"
+    },
+    {
+     "focus": "God King foreshadowing plan",
+     "steps": [
+      "List foreshadow beats per act without naming it before the Human Patch Lab beats",
+      "Note the proposed personal link to Kaelen's and Seraphina's history as an open question",
+      "Phase per ending family (per the story bible table)",
+      "Review with the user"
+     ],
+     "done": "Foreshadow plan approved"
+    }
+   ],
+   "edge_cases": [
+    "Naming the God King early"
+   ],
+   "evidence": "design/world/WORLD_BIBLE.md SOVEREIGN section"
+  },
+  {
+   "id": "Y2-PP-T45",
+   "stream": "secondary",
+   "title": "World bible: the Null Court thesis through every act",
+   "why": "P10 (never cut): who is allowed to authorize change",
+   "tags": [
+    "story",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Thesis map per act",
+     "steps": [
+      "For each act's question (STORY_BIBLE §5), write how it tests 'capability is not legitimacy'",
+      "Map the thesis to axis 1 and the four ending families",
+      "Mark where the Null Court beats live after the region reconciliation",
+      "List thesis moments per region"
+     ],
+     "done": "Thesis map"
+    },
+    {
+     "focus": "Thesis checks for content",
+     "steps": [
+      "Write a checklist writers use for every main quest (who authorizes this change?)",
+      "Check side arcs SS-01..SS-12 against it",
+      "Add the checklist to the writing template",
+      "Review"
+     ],
+     "done": "Checklist added"
+    }
+   ],
+   "edge_cases": [
+    "A scene where restoring someone without asking is treated as purely good"
+   ],
+   "evidence": "design/world/WORLD_BIBLE.md thesis section; writing template"
+  },
+  {
+   "id": "Y2-PP-T46",
+   "stream": "secondary",
+   "title": "Itemization bible",
+   "why": "Roadmap §6 itemization bible (affix tables, crafting trees, sets); §12.9",
+   "tags": [
+    "items",
+    "economy",
+    "docs",
+    "art"
+   ],
+   "days": [
+    {
+     "focus": "Rarities, slots and the ~450-item budget",
+     "steps": [
+      "Rarity tiers and drop rules",
+      "8 equipment slots",
+      "Split ~450: ~180 craftable, ~40 limited, ~60 sets/uniques, rest base and consumables",
+      "ID ranges per region"
+     ],
+     "done": "Budget table"
+    },
+    {
+     "focus": "Affix tables",
+     "steps": [
+      "Prefix and suffix families with tiers",
+      "Slot restrictions",
+      "Rule: affixes never change timing windows",
+      "Weights draft"
+     ],
+     "done": "Affix tables drafted"
+    },
+    {
+     "focus": "Crafting trees",
+     "steps": [
+      "Trees per material family, linked to commodity families F1–F8",
+      "Quality from the forge minigame and stats",
+      "Refine, upgrade and salvage",
+      "Value rule: crafted ≤ 90% of inputs unless upgraded by skill"
+     ],
+     "done": "Crafting trees drafted"
+    },
+    {
+     "focus": "Sets and uniques",
+     "steps": [
+      "Set themes per region and faction (structure, names later)",
+      "2/4-piece bonus rules",
+      "Unique item rules",
+      "Check no set is required for any difficulty"
+     ],
+     "done": "Sets drafted"
+    },
+    {
+     "focus": "Limited editions",
+     "steps": [
+      "~40 limited editions: festival weapons, numbered artifacts, season cosmetics",
+      "None story-critical; missables signposted",
+      "Link to the calendar",
+      "Auction-only ones"
+     ],
+     "done": "Limited editions drafted"
+    },
+    {
+     "focus": "Visual rules",
+     "steps": [
+      "Weapon sprite per class; armor via palette swaps and overlays (no paper-doll)",
+      "Icon style rules",
+      "PAE cost estimate per item class",
+      "Review with the art bible"
+     ],
+     "done": "Visual rules drafted"
+    },
+    {
+     "focus": "Itemization bible review",
+     "steps": [
+      "Run `/design-review` on the bible",
+      "Run `/balance-check` on the tables",
+      "Fix issues",
+      "Hand to the primary stream"
+     ],
+     "done": "Itemization bible approved"
+    }
+   ],
+   "edge_cases": [
+    "A set bonus that trivialises Hell",
+    "A limited item needed for a quest"
+   ],
+   "evidence": "design/items/ITEMIZATION_BIBLE.md"
+  },
+  {
+   "id": "Y2-PP-T47",
+   "stream": "secondary",
+   "title": "Economy design locked",
+   "why": "Roadmap §6 economy design locked: commodities, sources and sinks, auction rules, limited-edition calendar, house edges",
+   "tags": [
+    "economy",
+    "systems",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Commodities F1 Metals and ore and F2 Food and drink",
+     "steps": [
+      "List 15 commodities for F1 (Metals and ore, sourced in Ironhold) and 15 for F2 (Food and drink, sourced in Oakhaven) by ID (F1-01..F1-15, F2-01..F2-15)",
+      "Base price, seasonality per season, perishability, region sources",
+      "At least one sink per commodity (crafting, quests, NPC consumption)",
+      "Write into `design/economy/commodities.csv`"
+     ],
+     "done": "F1 and F2 rows complete"
+    },
+    {
+     "focus": "Commodities F3 Cloth, dye and leather and F4 Herbs, medicine and resin",
+     "steps": [
+      "List 15 commodities for F3 (Cloth, dye and leather, sourced in Oakhaven and Ironhold) and 15 for F4 (Herbs, medicine and resin, sourced in Oakhaven and the Wastes) by ID (F3-01..F3-15, F4-01..F4-15)",
+      "Base price, seasonality per season, perishability, region sources",
+      "At least one sink per commodity (crafting, quests, NPC consumption)",
+      "Write into `design/economy/commodities.csv`"
+     ],
+     "done": "F3 and F4 rows complete"
+    },
+    {
+     "focus": "Commodities F5 Glitch materials and data shards and F6 Relics and antiques",
+     "steps": [
+      "List 15 commodities for F5 (Glitch materials and data shards, sourced in the Wastes and Mirror City) and 15 for F6 (Relics and antiques, sourced in auction houses) by ID (F5-01..F5-15, F6-01..F6-15)",
+      "Base price, seasonality per season, perishability, region sources",
+      "At least one sink per commodity (crafting, quests, NPC consumption)",
+      "Write into `design/economy/commodities.csv`"
+     ],
+     "done": "F5 and F6 rows complete"
+    },
+    {
+     "focus": "Commodities F7 Tools, parts and clockwork and F8 Luxury and festival goods",
+     "steps": [
+      "List 15 commodities for F7 (Tools, parts and clockwork, sourced in Ironhold) and 15 for F8 (Luxury and festival goods, sourced in the calendar's festivals) by ID (F7-01..F7-15, F8-01..F8-15)",
+      "Base price, seasonality per season, perishability, region sources",
+      "At least one sink per commodity (crafting, quests, NPC consumption)",
+      "Write into `design/economy/commodities.csv`"
+     ],
+     "done": "F7 and F8 rows complete"
+    },
+    {
+     "focus": "Sources and sinks table",
+     "steps": [
+      "List every gold and item source per region and act",
+      "List every sink (shops, fees, repairs, salvage, gambling, auctions)",
+      "Target ratio of sinks to sources per act",
+      "Use Next Fest economy telemetry as a reality check"
+     ],
+     "done": "Sources and sinks table"
+    },
+    {
+     "focus": "Sources and sinks per player profile",
+     "steps": [
+      "Estimate flows for trader, crafter, gambler, story-only and hoarder profiles",
+      "Mark risky flows",
+      "Define the inflation index basket (20 commodities)",
+      "Agree bounds with the user"
+     ],
+     "done": "Profiles and bounds agreed"
+    },
+    {
+     "focus": "Auction rules for the 4 houses",
+     "steps": [
+      "Per house: fees, listing caps, opening hours, bidder pools and specialities",
+      "Sniping cap behaviour",
+      "Player listing limits (e.g. 3 active lots, per-week caps)",
+      "Use demo auction data"
+     ],
+     "done": "Auction rules written"
+    },
+    {
+     "focus": "Auction lot calendars",
+     "steps": [
+      "Lot calendar per house over an in-game year",
+      "Link to limited editions",
+      "Check variety",
+      "Write data for the primary stream"
+     ],
+     "done": "Lot calendars written"
+    },
+    {
+     "focus": "Limited-edition calendar",
+     "steps": [
+      "Place ~40 limited editions on the year calendar with places and stock",
+      "Signposting lead time",
+      "NG+ behaviour",
+      "Write data"
+     ],
+     "done": "Calendar written"
+    },
+    {
+     "focus": "Gambling house edges",
+     "steps": [
+      "House edge per game (3), daily limits, luck stat cap",
+      "Region policy from the Q2 rating memo",
+      "Expected value targets for the EV tests",
+      "Write data"
+     ],
+     "done": "Edges written"
+    },
+    {
+     "focus": "Economy design review and lock",
+     "steps": [
+      "Run `/balance-check` and `/design-review` on the economy design",
+      "Review the 365-day sim plan with the primary stream",
+      "Record the lock",
+      "Write `design/economy/ECONOMY_DESIGN.md`"
+     ],
+     "done": "Economy design locked"
+    }
+   ],
+   "edge_cases": [
+    "A commodity with no sink",
+    "Auction cap bypass through several houses",
+    "Calendar release during the final act only"
+   ],
+   "evidence": "design/economy/ECONOMY_DESIGN.md; commodities.csv"
+  },
+  {
+   "id": "Y2-PP-T48",
+   "stream": "secondary",
+   "title": "Route architecture locked",
+   "why": "Roadmap §6 and §12.2: 3 axes, Act 3 branches, timing modifiers, 12 side storylines, composer table, Story+",
+   "tags": [
+    "story",
+    "quests",
+    "time",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Route design: Axis 1 Authority (You / Shared / None)",
+     "steps": [
+      "Define where Axis 1 is written in Acts 1–3 and when it locks",
+      "Map to ending families Sole / Bound / No Authority",
+      "List the scenes that change per value (≥ 3 per storyline rule)",
+      "Write `design/story/ROUTES.md` Axis 1 section"
+     ],
+     "done": "Axis 1 section"
+    },
+    {
+     "focus": "Route design: Axis 2 Faction (Hearth / Archive / Continuity)",
+     "steps": [
+      "Define reputation thresholds and when the faction axis locks",
+      "Which side arcs feed it",
+      "Scenes that change per faction",
+      "Write the Axis 2 section"
+     ],
+     "done": "Axis 2 section"
+    },
+    {
+     "focus": "Route design: Axis 3 The deleted (Restore / Release / Choose)",
+     "steps": [
+      "Define where Axis 3 is written and when it locks",
+      "Link to the thesis ('being restored without being asked is a second deletion')",
+      "Scenes that change per value",
+      "Write the Axis 3 section"
+     ],
+     "done": "Axis 3 section"
+    },
+    {
+     "focus": "Route design: invalid combinations",
+     "steps": [
+      "List the 27 combinations and mark the 3 that are invalid with reasons",
+      "Assign SL-01..SL-24 to the valid ones",
+      "Document the replacement for each invalid combination",
+      "Review with the user"
+     ],
+     "done": "Storyline ID table"
+    },
+    {
+     "focus": "Route design: the three secret storylines",
+     "steps": [
+      "Witness Protocol (Consent) is canon; First Wake and Crownless are post-1.0 candidates per the story bible",
+      "Decide with the user what SX-01..SX-03 are at 1.0",
+      "Define the hidden 4th-axis values and the secret quest chains that set them (10 of the 30 secret quests change storylines)",
+      "Write the secret routes section"
+     ],
+     "done": "Secret storylines decided"
+    },
+    {
+     "focus": "Route design: Act 3 branch A",
+     "steps": [
+      "Define branch A's entry condition from the axes",
+      "Regions and branch-only areas",
+      "Companions present",
+      "Act 4 exit variant"
+     ],
+     "done": "Branch A defined"
+    },
+    {
+     "focus": "Route design: Act 3 branch B",
+     "steps": [
+      "Define branch B's entry condition",
+      "Regions and branch-only areas",
+      "Companions present",
+      "Act 4 exit variant"
+     ],
+     "done": "Branch B defined"
+    },
+    {
+     "focus": "Route design: Act 3 branch C",
+     "steps": [
+      "Define branch C's entry condition",
+      "Regions and branch-only areas",
+      "Companions present",
+      "Check every axis combination enters exactly one branch"
+     ],
+     "done": "Branch C defined"
+    },
+    {
+     "focus": "Route design: timing modifiers for Acts 1 and 2",
+     "steps": [
+      "Act 1: bridge and convoy outcomes, act1 pace (existing flags)",
+      "Act 2: pace thresholds and named timing flags (IDs, structure only)",
+      "What each changes: scenes, NPC fates, market events, slides",
+      "Signpost per deadline"
+     ],
+     "done": "Acts 1–2 timing catalogue"
+    },
+    {
+     "focus": "Route design: timing modifiers for Act 3",
+     "steps": [
+      "Per branch: window, deadline, order and duration quests (IDs from the 40 time-sensitive quests)",
+      "Named timing flags",
+      "Leniency per difficulty",
+      "Signposts"
+     ],
+     "done": "Act 3 timing catalogue"
+    },
+    {
+     "focus": "Route design: timing modifiers for Act 4 and Story+",
+     "steps": [
+      "Act 4 pace and slides",
+      "Story+ 'what your timing changed' view",
+      "Rule check: timing never changes the storyline ID",
+      "Review the full catalogue"
+     ],
+     "done": "Timing catalogue complete"
+    },
+    {
+     "focus": "Side storyline SS-01 'The Baker of Oakhaven'",
+     "steps": [
+      "Read PM side story arc 'The Baker of Oakhaven' (owner: Mara Quill; source axis effect: Hearth reputation)",
+      "Lock its feed: Axis 2 (Hearth Compact); region R1; number of quests and their IDs",
+      "Define its output flags and the act in which it must finish before its axis locks",
+      "Mark which of its quests are time-sensitive or secret"
+     ],
+     "done": "SS-01 one-pager locked"
+    },
+    {
+     "focus": "Side storyline SS-02 'Knight's Debt'",
+     "steps": [
+      "Read PM side story arc 'Knight's Debt' (owner: Aldric; source axis effect: Root authority)",
+      "Lock its feed: Axis 1 (Authority); region R1; number of quests and their IDs",
+      "Define its output flags and the act in which it must finish before its axis locks",
+      "Mark which of its quests are time-sensitive or secret",
+      "Resolve: Aldric can be killed, spared or purged in Chapter 1; the arc needs a variant or a successor owner per outcome"
+     ],
+     "done": "SS-02 one-pager locked"
+    },
+    {
+     "focus": "Side storyline SS-03 'Glitch-Witch's Price'",
+     "steps": [
+      "Read PM side story arc 'Glitch-Witch's Price' (owner: Elara; source axis effect: authority and consent)",
+      "Lock its feed: Axis 1, or a Consent (Witness Protocol) prerequisite; region R1–R2; number of quests and their IDs",
+      "Define its output flags and the act in which it must finish before its axis locks",
+      "Mark which of its quests are time-sensitive or secret",
+      "Resolve: must respect Elara's fear of Kaelen treating her arm as his problem to solve"
+     ],
+     "done": "SS-03 one-pager locked"
+    },
+    {
+     "focus": "Side storyline SS-04 'Iron Owes'",
+     "steps": [
+      "Read PM side story arc 'Iron Owes' (owner: Ironhold workers and Seraphina; source axis effect: faction alignment)",
+      "Lock its feed: Axis 2 (Faction); region R2; number of quests and their IDs",
+      "Define its output flags and the act in which it must finish before its axis locks",
+      "Mark which of its quests are time-sensitive or secret"
+     ],
+     "done": "SS-04 one-pager locked"
+    },
+    {
+     "focus": "Side storyline SS-05 'The Flight List'",
+     "steps": [
+      "Read PM side story arc 'The Flight List' (owner: Seraphina; source axis effect: secret route FIRST WAKE)",
+      "Lock its feed: remap needed: First Wake is a post-1.0 candidate; region R2; number of quests and their IDs",
+      "Define its output flags and the act in which it must finish before its axis locks",
+      "Mark which of its quests are time-sensitive or secret",
+      "Resolve: the Flight 707 manifest seed is already placed in Chapter 2"
+     ],
+     "done": "SS-05 one-pager locked"
+    },
+    {
+     "focus": "Side storyline SS-06 'Three Auctions and a Funeral'",
+     "steps": [
+      "Read PM side story arc 'Three Auctions and a Funeral' (owner: Rook; source axis effect: Continuity or Hearth economics)",
+      "Lock its feed: Axis 2 (Continuity League vs Hearth Compact); region R2; number of quests and their IDs",
+      "Define its output flags and the act in which it must finish before its axis locks",
+      "Mark which of its quests are time-sensitive or secret",
+      "Resolve: quests 31 and 33 already shipped in the demo; keep their flags"
+     ],
+     "done": "SS-06 one-pager locked"
+    },
+    {
+     "focus": "Side storyline SS-07 'Things Lyra Forgot'",
+     "steps": [
+      "Read PM side story arc 'Things Lyra Forgot' (owner: Lyra; source axis effect: Deleted outcome and Archive philosophy)",
+      "Lock its feed: Axis 3 (The deleted); region R3; number of quests and their IDs",
+      "Define its output flags and the act in which it must finish before its axis locks",
+      "Mark which of its quests are time-sensitive or secret"
+     ],
+     "done": "SS-07 one-pager locked"
+    },
+    {
+     "focus": "Side storyline SS-08 'Kaito's False Sky'",
+     "steps": [
+      "Read PM side story arc 'Kaito's False Sky' (owner: Kaito; source axis effect: secret CROWNLESS)",
+      "Lock its feed: remap needed: Crownless is a post-1.0 candidate; region TBD; number of quests and their IDs",
+      "Define its output flags and the act in which it must finish before its axis locks",
+      "Mark which of its quests are time-sensitive or secret",
+      "Resolve: depends on Kaito being in the companion roster; `ch2_tower_secret_mark` is his seed"
+     ],
+     "done": "SS-08 one-pager locked"
+    },
+    {
+     "focus": "Side storyline SS-09 'The Last Error'",
+     "steps": [
+      "Read PM side story arc 'The Last Error' (owner: a harmless Clock Mite; source axis effect: secret FIRST WAKE)",
+      "Lock its feed: remap needed: First Wake is a post-1.0 candidate; region TBD; number of quests and their IDs",
+      "Define its output flags and the act in which it must finish before its axis locks",
+      "Mark which of its quests are time-sensitive or secret"
+     ],
+     "done": "SS-09 one-pager locked"
+    },
+    {
+     "focus": "Side storyline SS-10 'The Names We Keep'",
+     "steps": [
+      "Read PM side story arc 'The Names We Keep' (owner: Null Court residents; source axis effect: Deleted outcome)",
+      "Lock its feed: Axis 3 (The deleted); region TBD; number of quests and their IDs",
+      "Define its output flags and the act in which it must finish before its axis locks",
+      "Mark which of its quests are time-sensitive or secret",
+      "Its source region, the Forgotten Sectors, is launch region R4 (decided 2026-10-18): anchor SS-10 there and confirm which axis it feeds"
+     ],
+     "done": "SS-10 one-pager locked"
+    },
+    {
+     "focus": "Side storyline SS-11 'The Clerk Who Stayed'",
+     "steps": [
+      "Read PM side story arc 'The Clerk Who Stayed' (owner: Ilyen; source axis effect: shared authority)",
+      "Lock its feed: Axis 1 (Shared); region TBD; number of quests and their IDs",
+      "Define its output flags and the act in which it must finish before its axis locks",
+      "Mark which of its quests are time-sensitive or secret"
+     ],
+     "done": "SS-11 one-pager locked"
+    },
+    {
+     "focus": "Side storyline SS-12 'A Person in Three Places'",
+     "steps": [
+      "Read PM side story arc 'A Person in Three Places' (owner: Nema; source axis effect: secret SEVEN WITNESSES (renamed Witness Protocol))",
+      "Lock its feed: Secret: Consent family (Witness Protocol); region TBD; number of quests and their IDs",
+      "Define its output flags and the act in which it must finish before its axis locks",
+      "Mark which of its quests are time-sensitive or secret",
+      "Resolve: Nema refuses to let strangers vote on which backup is real; the arc must not resolve that for her"
+     ],
+     "done": "SS-12 one-pager locked"
+    },
+    {
+     "focus": "Route design: ending composer table",
+     "steps": [
+      "List modules: family final scene, God King phase, faction modifier, deleted modifier, companion slides, region slides, timing slides",
+      "Conditions per module",
+      "Count authored modules (cost must stay additive)",
+      "Write the composer table"
+     ],
+     "done": "Composer table drafted"
+    },
+    {
+     "focus": "Route design: composer cost check",
+     "steps": [
+      "Estimate words and cinematic shots per module",
+      "Compare with the ~400k-word budget",
+      "Cut or merge modules where cost explodes",
+      "Review with the user"
+     ],
+     "done": "Composer cost within budget"
+    },
+    {
+     "focus": "Route design: Story+ structure + Route architecture lock review",
+     "steps": [
+      "Pool of ~8 civic cases from the story bible (Toma, Asha, Sera Fen, Hush-4, Vale, Meri, Kera, Taren; merge the duplicate 'release versus irreplaceable knowledge' cases)",
+      "Gating flags per case; each storyline unlocks at least one",
+      "One hand-written arc per ending family",
+      "Write the Story+ section",
+      "Run `/design-review` on `design/story/ROUTES.md`",
+      "Walk every storyline from New Game to Story+ on paper",
+      "Fix gaps; record the lock with the user",
+      "Hand to the primary stream for the data model and the bot"
+     ],
+     "done": "Route architecture locked"
+    }
+   ],
+   "edge_cases": [
+    "A storyline that changes fewer than 3 scenes",
+    "A side storyline feeding an axis after it locks",
+    "A secret route reachable by accident"
+   ],
+   "evidence": "design/story/ROUTES.md; lock recorded in CHANGELOG"
+  },
+  {
+   "id": "Y2-PP-T49",
+   "stream": "secondary",
+   "title": "Production review: April and May",
+   "why": "Roadmap §14 monthly review",
+   "tags": [
+    "docs",
+    "business"
+   ],
+   "days": [
+    {
+     "focus": "April–May production review",
+     "steps": [
+      "Run `/milestone-review` for April and May",
+      "Check world bible, itemization and economy lock dates",
+      "Update risks (burnout, scope)",
+      "Re-order June–July"
+     ],
+     "done": "Review saved"
+    }
+   ],
+   "edge_cases": [
+    "Burnout signals in the hours log"
+   ],
+   "evidence": "production/milestones/ review file"
+  },
+  {
+   "id": "Y2-PP-T50",
+   "stream": "secondary",
+   "title": "Devlog DL-14: how we test that every route works",
+   "why": "Community cadence slows to monthly in pre-production",
+   "tags": [
+    "marketing",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Write and post devlog DL-14 (how we test that every route works)",
+     "steps": [
+      "Outline DL-14: 'how we test that every route works' without spoiling the route architecture",
+      "Explain the route bot in plain words without revealing routes",
+      "Post to Steam news, itch and Discord",
+      "Log followers and wishlists in `production/marketing/devlog_log.md`"
+     ],
+     "done": "DL-14 published"
+    }
+   ],
+   "edge_cases": [
+    "Revealing ending structure",
+    "Promising a release date"
+   ],
+   "evidence": "production/marketing/devlog_log.md entry"
+  },
+  {
+   "id": "Y2-PP-T51",
+   "stream": "secondary",
+   "title": "Combat bible",
+   "why": "Roadmap §6 combat bible; P2, P6, §12.10",
+   "tags": [
+    "combat",
+    "difficulty",
+    "docs",
+    "animation"
+   ],
+   "days": [
+    {
+     "focus": "Combat verbs and the moveset",
+     "steps": [
+      "List Kaelen's verbs (attacks, aerial and pogo, parry, dodge, tools, Root Access slow-time)",
+      "Original moves only (Silksong feel, not its moves)",
+      "Link the generated frame-data tables",
+      "Write the moveset section"
+     ],
+     "done": "Moveset section"
+    },
+    {
+     "focus": "Feel rules",
+     "steps": [
+      "Hitstop tiers, cancel windows, input buffer (4 frames)",
+      "Feedback per hit: camera, particles, audio, rumble",
+      "Accessibility: shake and flash options",
+      "Write the feel section"
+     ],
+     "done": "Feel section"
+    },
+    {
+     "focus": "Glitch Arts open points",
+     "steps": [
+      "Resolve the open points: how arts unlock, how many equip, corruption cost (decide with the user)",
+      "Soul costs for the five approved arts",
+      "Boss rules (Freeze Frame 0.4 s on bosses)",
+      "Write the Glitch Arts section"
+     ],
+     "done": "Glitch Arts decided"
+    },
+    {
+     "focus": "Enemy archetypes for 50 types",
+     "steps": [
+      "Group 50 enemy types into archetypes per region",
+      "Telegraph rules and readability",
+      "Arena generation needs per biome",
+      "Write the enemies section"
+     ],
+     "done": "Enemies section"
+    },
+    {
+     "focus": "Boss rules for 24 bosses",
+     "steps": [
+      "Boss slots per region (from the world bible)",
+      "Hell-only phase rules; replay-verified fairness",
+      "Pattern literacy on Beginner",
+      "Write the bosses section"
+     ],
+     "done": "Bosses section"
+    },
+    {
+     "focus": "Difficulty and stats rules",
+     "steps": [
+      "The §12.1 table as the starting values; tuning rules",
+      "Stats change damage and resources, never timing windows",
+      "Respec rules",
+      "Write the difficulty section"
+     ],
+     "done": "Difficulty section"
+    },
+    {
+     "focus": "Combat bible review",
+     "steps": [
+      "Run `/design-review`",
+      "Check against the Q2 fairness data",
+      "Fix issues",
+      "Approve with the user"
+     ],
+     "done": "Combat bible approved"
+    }
+   ],
+   "edge_cases": [
+    "A Glitch Art that bypasses Hell windows",
+    "A stat that widens a parry window"
+   ],
+   "evidence": "design/combat/COMBAT_BIBLE.md"
+  },
+  {
+   "id": "Y2-PP-T52",
+   "stream": "secondary",
+   "title": "Art bible v2: palettes for 8 regions",
+   "why": "Asset quality; Gate 1 art bible extended for the whole world",
+   "tags": [
+    "art",
+    "docs",
+    "assets"
+   ],
+   "days": [
+    {
+     "focus": "Region palettes and moods",
+     "steps": [
+      "Write a palette and mood per region R1–R8 (keep Oakhaven and Ironhold baselines)",
+      "Lighting rules for day/night and seasons",
+      "Readability rules for combat arenas per biome",
+      "Run `/art-bible` to update the bible"
+     ],
+     "done": "Palettes drafted"
+    },
+    {
+     "focus": "Art bible review",
+     "steps": [
+      "Check palettes against accessibility contrast",
+      "Make one test board per region (validation-only, labelled procedural if procedural)",
+      "Review with the user",
+      "Record"
+     ],
+     "done": "Art bible v2 approved"
+    }
+   ],
+   "edge_cases": [
+    "A palette that hides telegraphs",
+    "A procedural board presented as final art"
+   ],
+   "evidence": "Art bible v2; labelled validation boards"
+  },
+  {
+   "id": "Y2-PP-T53",
+   "stream": "secondary",
+   "title": "Team plan: role definitions and hiring steps",
+   "why": "Roadmap §6 team and funding; A1 a small team joins after Gate 3",
+   "tags": [
+    "team",
+    "business",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Role definition: art lead / animator",
+     "steps": [
+      "Responsibilities: PAE pipeline, hero and boss animation, art direction support",
+      "Required skills and a portfolio test brief using the pipeline",
+      "Hours and engagement type to decide (employee or contractor; consult a professional)",
+      "Write `production/team/roles/art_lead.md`"
+     ],
+     "done": "Art lead role written"
+    },
+    {
+     "focus": "Role definition: composer and sound designer",
+     "steps": [
+      "Responsibilities: ~45 tracks, ~900 SFX, adaptive music",
+      "Test brief: one adaptive cue with stems",
+      "Engagement type to decide",
+      "Write the role"
+     ],
+     "done": "Audio role written"
+    },
+    {
+     "focus": "Role definition: writer",
+     "steps": [
+      "Responsibilities: dialogue in `.dlg`, VOICE_GUIDE, the thesis checklist",
+      "Test brief: one scene from a beat sheet",
+      "Engagement type to decide",
+      "Write the role"
+     ],
+     "done": "Writer role written"
+    },
+    {
+     "focus": "Role definition: QA",
+     "steps": [
+      "Responsibilities: test passes, bot triage, difficulty × storyline × timing matrix",
+      "Test brief: a bug report from a seeded build",
+      "Engagement type to decide",
+      "Write the role"
+     ],
+     "done": "QA role written"
+    },
+    {
+     "focus": "Hiring process",
+     "steps": [
+      "Steps: posting, portfolio review, paid test (decide), interview, reference check",
+      "Interview rubric per role",
+      "Where to post (research; the user chooses)",
+      "Write `production/team/hiring.md`"
+     ],
+     "done": "Hiring process written"
+    },
+    {
+     "focus": "Hiring timeline and budget inputs",
+     "steps": [
+      "Timeline so the team can start after Gate 3 (October 2028)",
+      "Cost ranges come from the user's research and professional advice (no invented rates)",
+      "Fit with the funding route",
+      "Review with the user"
+     ],
+     "done": "Timeline agreed"
+    },
+    {
+     "focus": "Later role: economy/systems designer",
+     "steps": [
+      "Write a light role sketch for a later economy/systems designer (roadmap §6)",
+      "When it is needed (Y4–Y5 market scale)",
+      "Dependencies",
+      "Record"
+     ],
+     "done": "Sketch recorded"
+    }
+   ],
+   "edge_cases": [
+    "A test brief that is unpaid spec work (decide policy)",
+    "Contract type with legal implications (consult a professional)"
+   ],
+   "evidence": "production/team/roles/*.md; production/team/hiring.md"
+  },
+  {
+   "id": "Y2-PP-T54",
+   "stream": "secondary",
+   "title": "Quest framework and quest ID allocation",
+   "why": "P5: ~150 side, 30 secret, 40 time-sensitive quests",
+   "tags": [
+    "quests",
+    "docs",
+    "time"
+   ],
+   "days": [
+    {
+     "focus": "Quest template",
+     "steps": [
+      "Template: ID, region, act, axis/timing tag, timing type (window/deadline/order/duration), signpost, rewards",
+      "Thesis checklist question",
+      "Definition of Done for a quest",
+      "Write `design/quests/QUEST_TEMPLATE.md`"
+     ],
+     "done": "Template written"
+    },
+    {
+     "focus": "Side quest ID allocation",
+     "steps": [
+      "Allocate R1-SQ..R8-SQ ranges from the world bible budgets (150 total)",
+      "Tag which feed side storylines",
+      "Tag fun categories (combat, exploration, social, market)",
+      "Write the register"
+     ],
+     "done": "150 IDs allocated"
+    },
+    {
+     "focus": "Secret and time-sensitive allocation",
+     "steps": [
+      "Allocate 30 secret quests (10 change storylines) with IDs",
+      "Allocate 40 time-sensitive quests overlapping side and secret ones",
+      "Timing type per quest",
+      "Write the register"
+     ],
+     "done": "Secret and timed IDs allocated"
+    },
+    {
+     "focus": "Quest register import",
+     "steps": [
+      "Import the register into the quest editor",
+      "Validate tags",
+      "Check per-region balance",
+      "Review"
+     ],
+     "done": "Register in the quest editor"
+    }
+   ],
+   "edge_cases": [
+    "A time-sensitive quest with no signpost",
+    "Too many deadlines in one act"
+   ],
+   "evidence": "design/quests/QUEST_TEMPLATE.md; quest register"
+  },
+  {
+   "id": "Y2-PP-T55",
+   "stream": "secondary",
+   "title": "NPC roster plan (Tier A, B and C)",
+   "why": "P4 living NPCs; §12.3 tiers",
+   "tags": [
+    "npc",
+    "story",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Tier A roster",
+     "steps": [
+      "List the 10 Tier A NPCs (companions, Mara, Mira, others decided with the user)",
+      "Memory facts (20+) and calendar-aware schedules",
+      "Story+ presence",
+      "Write the roster"
+     ],
+     "done": "Tier A roster"
+    },
+    {
+     "focus": "Tier B slots",
+     "steps": [
+      "Allocate 70 Tier B slots per region (from the world bible)",
+      "Mark merchants, auctioneers and gambling hosts",
+      "Mini-arc or quest per slot",
+      "Write the slots"
+     ],
+     "done": "Tier B slots"
+    },
+    {
+     "focus": "Tier C rules",
+     "steps": [
+      "Rules for ~200 Tier C NPCs (simple schedules, reputation, barks)",
+      "Crime and witness participation",
+      "Festival and market-day behaviour",
+      "Write the rules"
+     ],
+     "done": "Tier C rules"
+    }
+   ],
+   "edge_cases": [
+    "A merchant NPC with no market role"
+   ],
+   "evidence": "design/npc/NPC_ROSTER.md"
+  },
+  {
+   "id": "Y2-PP-T56",
+   "stream": "secondary",
+   "title": "Level design rules and the Act 1 production layout plan",
+   "why": "Open world and level design ahead of Y3 (R1–R2 production)",
+   "tags": [
+    "level",
+    "openworld",
+    "fun"
+   ],
+   "days": [
+    {
+     "focus": "Open-world density rules",
+     "steps": [
+      "POI density per chunk, discovery types (lore, caches, secrets), dynamic events",
+      "Rewards within the economy rules",
+      "Traversal unlock pacing",
+      "Write `design/level/OPEN_WORLD_RULES.md`"
+     ],
+     "done": "Density rules written"
+    },
+    {
+     "focus": "R1 Oakhaven production layout plan",
+     "steps": [
+      "Plan R1's chunk layout from the world bible within the accepted baseline",
+      "Place quest anchors for R1-SQ IDs",
+      "Mark discoveries and waystations",
+      "Blockout sketch"
+     ],
+     "done": "R1 layout plan"
+    },
+    {
+     "focus": "R2 Ironhold production layout plan",
+     "steps": [
+      "Plan R2's layout, the auction house and MG locations",
+      "Quest anchors for R2-SQ IDs",
+      "Discoveries and waystations",
+      "Blockout sketch"
+     ],
+     "done": "R2 layout plan"
+    },
+    {
+     "focus": "Fun review of the plans",
+     "steps": [
+      "Walk the plans as a player: where is the fun every 2 minutes?",
+      "Fix dead zones",
+      "Review with the user",
+      "Record"
+     ],
+     "done": "Plans approved"
+    }
+   ],
+   "edge_cases": [
+    "A dead zone longer than 2 minutes of walking"
+   ],
+   "evidence": "design/level/ plans"
+  },
+  {
+   "id": "Y2-PP-T57",
+   "stream": "secondary",
+   "title": "Minigame and gambling one-pagers for launch",
+   "why": "Roadmap §12.7: 3 gambling games and 5 minigames, each with a one-page design",
+   "tags": [
+    "systems",
+    "fun",
+    "economy",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "MG-3 one-pager",
+     "steps": [
+      "Pick MG-3 from the remaining §12.7 candidates (fishing, Root Access hacking puzzle, courier run, rhythm/festival) with the user",
+      "Rules, rewards within economy rules, difficulty options",
+      "Region and calendar placement",
+      "Write `design/minigames/mg3.md`"
+     ],
+     "done": "MG-3 one-pager"
+    },
+    {
+     "focus": "MG-4 one-pager",
+     "steps": [
+      "Pick MG-4",
+      "Rules, rewards, difficulty options",
+      "Placement",
+      "Write `design/minigames/mg4.md`"
+     ],
+     "done": "MG-4 one-pager"
+    },
+    {
+     "focus": "MG-5 one-pager",
+     "steps": [
+      "Pick MG-5 (note: minigames 5 → 3 is the second cut in the cut order)",
+      "Rules, rewards, difficulty options",
+      "Placement",
+      "Write `design/minigames/mg5.md`"
+     ],
+     "done": "MG-5 one-pager"
+    },
+    {
+     "focus": "Gambling game 2 one-pager",
+     "steps": [
+      "Pick gambling game 2 (e.g. a card game) with the Q2 rating memo in mind",
+      "Visible house edge, daily limits, in-game currency only",
+      "Placement",
+      "Write the one-pager"
+     ],
+     "done": "Gambling 2 one-pager"
+    },
+    {
+     "focus": "Gambling game 3 one-pager",
+     "steps": [
+      "Pick gambling game 3 (e.g. arena betting)",
+      "Visible edge, limits, never needed for progress",
+      "Placement",
+      "Write the one-pager"
+     ],
+     "done": "Gambling 3 one-pager"
+    }
+   ],
+   "edge_cases": [
+    "A minigame reward that becomes a gold farm",
+    "Gambling required for completion"
+   ],
+   "evidence": "design/minigames/*.md"
+  },
+  {
+   "id": "Y2-PP-T58",
+   "stream": "secondary",
+   "title": "Funding route decision and pitch materials",
+   "why": "A7: funding decided at Gate 3; Gate 3 needs funding for >= 24 months of the team plan",
+   "tags": [
+    "business",
+    "team"
+   ],
+   "days": [
+    {
+     "focus": "List the funding options",
+     "steps": [
+      "Options: continued self-funding, publisher, grants, crowdfunding, Early Access revenue later",
+      "For each: what it costs (IP, control, time), what it needs (pitch, demo, page metrics)",
+      "Research grant programs the user is eligible for (official sources only)",
+      "Write `production/business/funding_options.md`"
+     ],
+     "done": "Options listed"
+    },
+    {
+     "focus": "Team budget model inputs",
+     "steps": [
+      "Team plan × 24 months: roles from the role definitions",
+      "The user fills costs from quotes and professional advice (no invented numbers)",
+      "Include tools, legal, store fees, contingency",
+      "Save the model"
+     ],
+     "done": "Budget model filled by the user"
+    },
+    {
+     "focus": "Pitch deck",
+     "steps": [
+      "Draft a pitch deck: hook, pillars, demo metrics from Gate 2, plan to 1.0, team",
+      "Use only true numbers",
+      "Review with the user",
+      "Export"
+     ],
+     "done": "Pitch deck draft"
+    },
+    {
+     "focus": "Pitch practice and outreach list",
+     "steps": [
+      "Practise the pitch with the user",
+      "List publishers or funds that fit (research public submission rules)",
+      "Track submissions",
+      "Record"
+     ],
+     "done": "Outreach list"
+    },
+    {
+     "focus": "Funding decision",
+     "steps": [
+      "Compare responses and options",
+      "The user decides the route; consult a professional on terms before signing anything",
+      "Record the decision",
+      "Update the Gate 3 evidence"
+     ],
+     "done": "Funding route decided"
+    },
+    {
+     "focus": "Funding follow-through",
+     "steps": [
+      "List next steps for the chosen route",
+      "Dates and owners",
+      "Risk if it falls through (smaller-game fallback)",
+      "Record"
+     ],
+     "done": "Follow-through plan"
+    }
+   ],
+   "edge_cases": [
+    "A publisher contract with IP terms (consult a lawyer)",
+    "Funding below 24 months"
+   ],
+   "evidence": "production/business/funding_options.md; decision record"
+  },
+  {
+   "id": "Y2-PP-T59",
+   "stream": "secondary",
+   "title": "Production review: June and July",
+   "why": "Roadmap §14 monthly review",
+   "tags": [
+    "docs",
+    "business"
+   ],
+   "days": [
+    {
+     "focus": "June–July production review",
+     "steps": [
+      "Run `/milestone-review` for June and July",
+      "Check the route lock and the team plan",
+      "Update risks",
+      "Re-order August–September"
+     ],
+     "done": "Review saved"
+    }
+   ],
+   "edge_cases": [
+    "Burnout signals in the hours log"
+   ],
+   "evidence": "production/milestones/ review file"
+  },
+  {
+   "id": "Y2-PP-T60",
+   "stream": "secondary",
+   "title": "Salvage the best Chapter 4–10 writing into dialogue data",
+   "why": "Roadmap §6 legacy cleanup",
+   "tags": [
+    "dialogue",
+    "story",
+    "cleanup"
+   ],
+   "days": [
+    {
+     "focus": "Salvage Chapter 4 writing",
+     "steps": [
+      "Read `dialogue/_extracted/chapter4/` and `scripts/chapter4/` (Forgotten Sectors intro, the Null Court, Chapter 4 ending)",
+      "Grade each scene: keep, rewrite later, drop; judge against VOICE_GUIDE and the bible",
+      "Move the best lines into `dialogue/salvage/ch4.dlg` as data, tagged with their future region and storyline use (Null Court and SS-10 material)",
+      "Run the validator; record what was dropped and why"
+     ],
+     "done": "Chapter 4 salvage file saved"
+    },
+    {
+     "focus": "Salvage Chapter 5 writing",
+     "steps": [
+      "Read `dialogue/_extracted/chapter5/` and `scripts/chapter5/` (Mirror City intro, Mirror Plaza, reflection trial, Mirror Kaelen confrontation)",
+      "Grade each scene: keep, rewrite later, drop; judge against VOICE_GUIDE and the bible",
+      "Move the best lines into `dialogue/salvage/ch5.dlg` as data, tagged with their future region and storyline use (R4 self-confrontation scenes)",
+      "Run the validator; record what was dropped and why"
+     ],
+     "done": "Chapter 5 salvage file saved"
+    },
+    {
+     "focus": "Salvage Chapter 6 writing",
+     "steps": [
+      "Read `dialogue/_extracted/chapter6/` and `scripts/chapter6/` (Chapter 6 scenes)",
+      "Grade each scene: keep, rewrite later, drop; judge against VOICE_GUIDE and the bible",
+      "Move the best lines into `dialogue/salvage/ch6.dlg` as data, tagged with their future region and storyline use (Cathedral Server material)",
+      "Run the validator; record what was dropped and why"
+     ],
+     "done": "Chapter 6 salvage file saved"
+    },
+    {
+     "focus": "Salvage Chapter 7 writing",
+     "steps": [
+      "Read `dialogue/_extracted/chapter7/` and `scripts/chapter7/` (Chapter 7 scenes)",
+      "Grade each scene: keep, rewrite later, drop; judge against VOICE_GUIDE and the bible",
+      "Move the best lines into `dialogue/salvage/ch7.dlg` as data, tagged with their future region and storyline use (Act 3 faction material)",
+      "Run the validator; record what was dropped and why"
+     ],
+     "done": "Chapter 7 salvage file saved"
+    },
+    {
+     "focus": "Salvage Chapter 8 writing",
+     "steps": [
+      "Read `dialogue/_extracted/chapter8/` and `scripts/chapter8/` (Chapter 8 scenes)",
+      "Grade each scene: keep, rewrite later, drop; judge against VOICE_GUIDE and the bible",
+      "Move the best lines into `dialogue/salvage/ch8.dlg` as data, tagged with their future region and storyline use (the Oakhaven warning payoff (`ch1_oakhaven_warned_*` is read in Chapter 8))",
+      "Run the validator; record what was dropped and why"
+     ],
+     "done": "Chapter 8 salvage file saved"
+    },
+    {
+     "focus": "Salvage Chapter 9 writing",
+     "steps": [
+      "Read `dialogue/_extracted/chapter9/` and `scripts/chapter9/` (Chapter 9 scenes)",
+      "Grade each scene: keep, rewrite later, drop; judge against VOICE_GUIDE and the bible",
+      "Move the best lines into `dialogue/salvage/ch9.dlg` as data, tagged with their future region and storyline use (Human Patch Lab material)",
+      "Run the validator; record what was dropped and why"
+     ],
+     "done": "Chapter 9 salvage file saved"
+    },
+    {
+     "focus": "Salvage Chapter 10 writing",
+     "steps": [
+      "Read `dialogue/_extracted/chapter10/` and `scripts/chapter10/` (Root intro, kernel descent, SOVEREIGN confrontation, witness chamber, ending)",
+      "Grade each scene: keep, rewrite later, drop; judge against VOICE_GUIDE and the bible",
+      "Move the best lines into `dialogue/salvage/ch10.dlg` as data, tagged with their future region and storyline use (SOVEREIGN and Witness Protocol material)",
+      "Run the validator; record what was dropped and why"
+     ],
+     "done": "Chapter 10 salvage file saved"
+    },
+    {
+     "focus": "Salvage: cross-chapter index",
+     "steps": [
+      "Index all salvage files by character, region and theme",
+      "Mark lines that conflict with the locked routes",
+      "Link from the world bible",
+      "Tell the primary stream which chapters are safe to retire"
+     ],
+     "done": "Salvage index saved; retire list handed over"
+    },
+    {
+     "focus": "Salvage: voice and thesis check",
+     "steps": [
+      "Run the voice lint on all salvage files",
+      "Check every kept scene against the thesis checklist",
+      "Note Y4–Y6 rewrite needs",
+      "Review with the user"
+     ],
+     "done": "Salvage reviewed"
+    }
+   ],
+   "edge_cases": [
+    "A salvaged line that contradicts the locked routes",
+    "Losing a flag-setting line during salvage"
+   ],
+   "evidence": "dialogue/salvage/ch4..ch10.dlg; salvage index"
+  },
+  {
+   "id": "Y2-PP-T61",
+   "stream": "secondary",
+   "title": "Collapse the ~97 phase reports into ADRs",
+   "why": "Roadmap §5 and §11: one owner per concern, docs cleaned in the Y2 cleanup",
+   "tags": [
+    "docs",
+    "cleanup",
+    "architecture"
+   ],
+   "days": [
+    {
+     "focus": "Phase reports to ADRs: Oakhaven art phases P7–P12",
+     "steps": [
+      "Read the reports in `docs/art_pipeline/oakhaven_p7_preview` .. `oakhaven_p12_acceptance` using `docs/archive/REPORT_INDEX.md`",
+      "Write one ADR per real decision (Oakhaven accepted baseline and its real ComfyUI lineage), with status and superseded-by",
+      "Keep the art truth-gate facts exact (ComfyUI used: Yes / No / Unproven)",
+      "Mark each report as collapsed in the index"
+     ],
+     "done": "Oakhaven art phases P7–P12 collapsed into ADRs"
+    },
+    {
+     "focus": "Phase reports to ADRs: Ironhold Q1–Q3 and Fractured Wastes R1–R3",
+     "steps": [
+      "Read the reports in `docs/art_pipeline/ironhold_q*` and `fractured_wastes_r*` using `docs/archive/REPORT_INDEX.md`",
+      "Write one ADR per real decision (the two accepted baselines and their procedural lineage), with status and superseded-by",
+      "Keep the art truth-gate facts exact (ComfyUI used: Yes / No / Unproven)",
+      "Mark each report as collapsed in the index"
+     ],
+     "done": "Ironhold Q1–Q3 and Fractured Wastes R1–R3 collapsed into ADRs"
+    },
+    {
+     "focus": "Phase reports to ADRs: Mirror City T5–T7 and late hubs T1–T3",
+     "steps": [
+      "Read the reports in `docs/art_pipeline/mirror_city_t*` and `late_hubs_t*` using `docs/archive/REPORT_INDEX.md`",
+      "Write one ADR per real decision (T7 is a controlled procedural baseline, not real ComfyUI art), with status and superseded-by",
+      "Keep the art truth-gate facts exact (ComfyUI used: Yes / No / Unproven)",
+      "Mark each report as collapsed in the index"
+     ],
+     "done": "Mirror City T5–T7 and late hubs T1–T3 collapsed into ADRs"
+    },
+    {
+     "focus": "Phase reports to ADRs: shared environment S1–S4 and production import review",
+     "steps": [
+      "Read the reports in `docs/art_pipeline/shared_environment_s*` and `production_import_review` using `docs/archive/REPORT_INDEX.md`",
+      "Write one ADR per real decision (V3 props/decals locked as the active baseline), with status and superseded-by",
+      "Keep the art truth-gate facts exact (ComfyUI used: Yes / No / Unproven)",
+      "Mark each report as collapsed in the index"
+     ],
+     "done": "shared environment S1–S4 and production import review collapsed into ADRs"
+    },
+    {
+     "focus": "Phase reports to ADRs: gameplay audit 10n phases",
+     "steps": [
+      "Read the reports in `docs/gameplay_audit/phase_10n_*` using `docs/archive/REPORT_INDEX.md`",
+      "Write one ADR per real decision (first-minute and opening-hook decisions), with status and superseded-by",
+      "Keep the art truth-gate facts exact (ComfyUI used: Yes / No / Unproven)",
+      "Mark each report as collapsed in the index"
+     ],
+     "done": "gameplay audit 10n phases collapsed into ADRs"
+    },
+    {
+     "focus": "Phase reports to ADRs: visual review and archive",
+     "steps": [
+      "Read the reports in `docs/visual_review` and `docs/archive` using `docs/archive/REPORT_INDEX.md`",
+      "Write one ADR per real decision (superseded decisions), with status and superseded-by",
+      "Keep the art truth-gate facts exact (ComfyUI used: Yes / No / Unproven)",
+      "Mark each report as collapsed in the index"
+     ],
+     "done": "visual review and archive collapsed into ADRs"
+    },
+    {
+     "focus": "Phase reports: archive and sign-off",
+     "steps": [
+      "Move collapsed reports to `docs/archive/phase_reports/` (or delete with the user's approval; keep evidence images that baselines cite)",
+      "Check no link in README, CHANGELOG or AGENTS.md breaks",
+      "Update the ADR index",
+      "Review with the user"
+     ],
+     "done": "All ~97 reports collapsed or archived"
+    }
+   ],
+   "edge_cases": [
+    "A report cited by AGENTS.md",
+    "Evidence images referenced by accepted baselines"
+   ],
+   "evidence": "docs/architecture/ ADRs; docs/archive/REPORT_INDEX.md all marked"
+  },
+  {
+   "id": "Y2-PP-T62",
+   "stream": "secondary",
+   "title": "Company entity and contracts with IP assignment",
+   "why": "Roadmap §6: company entity, contracts with IP assignment (business steps; not legal advice)",
+   "tags": [
+    "business",
+    "legal",
+    "team"
+   ],
+   "days": [
+    {
+     "focus": "Entity decision inputs",
+     "steps": [
+      "List the questions for an accountant/lawyer: entity type, tax, liability, where to register",
+      "Book the consultation (the user)",
+      "Collect the advice",
+      "Record"
+     ],
+     "done": "Advice collected"
+    },
+    {
+     "focus": "Decide the entity",
+     "steps": [
+      "The user decides with the professional's advice",
+      "List the registration steps the user must do",
+      "Plan bank and store account changes (the user does them; Claude never handles credentials or financial data)",
+      "Record the decision"
+     ],
+     "done": "Entity decided"
+    },
+    {
+     "focus": "Contracts with IP assignment",
+     "steps": [
+      "List what contracts must cover: IP assignment, confidentiality, credits, payment terms, termination",
+      "Get templates from a lawyer (not written by Claude as legal documents)",
+      "Check contractor agreements cover PAE, AI-assisted work and provenance records",
+      "Record"
+     ],
+     "done": "Contract requirements and lawyer templates obtained"
+    },
+    {
+     "focus": "Transfer the IP to the entity",
+     "steps": [
+      "List assets to transfer (code, art, music, story, trademarks if filed)",
+      "The lawyer advises the process",
+      "Update the provenance manifest's owner field",
+      "Record"
+     ],
+     "done": "IP transfer steps recorded"
+    }
+   ],
+   "edge_cases": [
+    "Contributor work before contracts exist",
+    "AI-assisted assets in IP assignment"
+   ],
+   "evidence": "production/business/entity_decision.md"
+  },
+  {
+   "id": "Y2-PP-T63",
+   "stream": "secondary",
+   "title": "Art pipeline proof: final-quality assets",
+   "why": "Roadmap §10 Gate 3: every pipeline has shipped one final-quality asset",
+   "tags": [
+    "art",
+    "animation",
+    "assets",
+    "vfx",
+    "ui"
+   ],
+   "days": [
+    {
+     "focus": "Final-quality Kaelen run cycle and attack",
+     "steps": [
+      "Make the final-quality run cycle and one attack in PAE (side-scroll)",
+      "Check against the art bible v2 and frame data",
+      "Import; live viewport screenshot to `production/qa/evidence/y2pp/final_kaelen_side.png`",
+      "Log hours for cost per asset"
+     ],
+     "done": "Kaelen side-scroll clips final"
+    },
+    {
+     "focus": "Final-quality Kaelen 4-direction top-down set",
+     "steps": [
+      "Make the final top-down walk in 4 directions",
+      "Check readability at game zoom",
+      "Import; live viewport screenshot",
+      "Log hours"
+     ],
+     "done": "Top-down set final"
+    },
+    {
+     "focus": "Final-quality tileset chunk (R1)",
+     "steps": [
+      "Make one final 32x32-tile chunk for R1 within the accepted baseline style",
+      "Collision and decoration layers",
+      "Import; reachability test; live screenshot",
+      "Log hours"
+     ],
+     "done": "Chunk final"
+    },
+    {
+     "focus": "Final-quality tileset chunk polish and seam",
+     "steps": [
+      "Make the seam tiles to a neighbouring chunk",
+      "Check streaming boundary visuals",
+      "Live screenshot of the seam",
+      "Log hours"
+     ],
+     "done": "Seam final"
+    },
+    {
+     "focus": "Final-quality enemy",
+     "steps": [
+      "Make one enemy's full clip set",
+      "Telegraph readability on Hell timing",
+      "Import; live screenshot",
+      "Log hours"
+     ],
+     "done": "Enemy final"
+    },
+    {
+     "focus": "Final-quality boss key clips",
+     "steps": [
+      "Make one boss's idle, two telegraphs and a hit reaction",
+      "Check silhouettes",
+      "Import; live screenshot",
+      "Log hours"
+     ],
+     "done": "Boss clips final"
+    },
+    {
+     "focus": "Final-quality item icon set",
+     "steps": [
+      "Make 10 icons at final quality",
+      "Check consistency and legibility",
+      "Import into ItemDB",
+      "Log hours"
+     ],
+     "done": "Icons final"
+    },
+    {
+     "focus": "Final-quality VFX",
+     "steps": [
+      "Make one hit VFX and one Root Access VFX",
+      "Respect flash reduction",
+      "Import via FeelService presets",
+      "Log hours"
+     ],
+     "done": "VFX final"
+    },
+    {
+     "focus": "Final-quality UI screen",
+     "steps": [
+      "Make the final quest log screen with deadline UI",
+      "Check `/ux-review`",
+      "Import; live screenshot",
+      "Log hours"
+     ],
+     "done": "UI screen final"
+    }
+   ],
+   "edge_cases": [
+    "A headless screenshot used as evidence (must be a live viewport)",
+    "Replacing an accepted baseline without reason"
+   ],
+   "evidence": "production/qa/evidence/y2pp/final_*.png with live viewport screenshots; cost log"
+  },
+  {
+   "id": "Y2-PP-T64",
+   "stream": "secondary",
+   "title": "Audio pipeline proof: one final-quality track and SFX batch",
+   "why": "Gate 3: every pipeline proven",
+   "tags": [
+    "audio",
+    "music"
+   ],
+   "days": [
+    {
+     "focus": "Final-quality adaptive track plan",
+     "steps": [
+      "Pick the track (R1 exploration) and its layers",
+      "Write the adaptive rules (combat, night, deadline urgency)",
+      "Decide source and license",
+      "Plan stems"
+     ],
+     "done": "Track plan"
+    },
+    {
+     "focus": "Make the track",
+     "steps": [
+      "Compose or produce the track and stems",
+      "Loop points and transitions",
+      "Provenance entry",
+      "Log hours"
+     ],
+     "done": "Track made"
+    },
+    {
+     "focus": "Final-quality SFX batch",
+     "steps": [
+      "Make 20 final SFX for one system (combat or market)",
+      "Loudness to the mix target",
+      "Provenance entries",
+      "Log hours"
+     ],
+     "done": "SFX batch made"
+    },
+    {
+     "focus": "Audio integration review",
+     "steps": [
+      "Listen in game with the primary stream's import",
+      "Fix mix issues",
+      "Record a clip",
+      "Add to the pipeline report"
+     ],
+     "done": "Audio pipeline proven"
+    }
+   ],
+   "edge_cases": [
+    "Loop click at the seam",
+    "License not covering trailers"
+   ],
+   "evidence": "Audio clip and provenance entries"
+  },
+  {
+   "id": "Y2-PP-T65",
+   "stream": "secondary",
+   "title": "Dialogue and localization pipeline proof",
+   "why": "Gate 3: every pipeline proven; EN + Simplified Chinese at 1.0",
+   "tags": [
+    "dialogue",
+    "localization"
+   ],
+   "days": [
+    {
+     "focus": "Final-quality scene",
+     "steps": [
+      "Rewrite one Act 1 scene to final quality with the thesis checklist",
+      "Speaker registry, line IDs, portraits",
+      "Validator and voice lint",
+      "Log words per hour"
+     ],
+     "done": "Scene final"
+    },
+    {
+     "focus": "zh-CN for the scene",
+     "steps": [
+      "Export the string table; get a translation (translator or a clearly marked test)",
+      "Import and run the scene in zh-CN",
+      "Screenshot to `production/qa/evidence/y2pp/final_scene_zh_cn.png`",
+      "Log cost"
+     ],
+     "done": "zh-CN scene runs"
+    }
+   ],
+   "edge_cases": [
+    "Line breaking in Chinese",
+    "Speaker names untranslated"
+   ],
+   "evidence": "production/qa/evidence/y2pp/final_scene_zh_cn.png"
+  },
+  {
+   "id": "Y2-PP-T66",
+   "stream": "secondary",
+   "title": "Act 1 cinematic upgrade storyboard (Aldric's introduction)",
+   "why": "Cinematics pipeline proof; Act 1 cinematic upgrade",
+   "tags": [
+    "cinematics",
+    "story",
+    "animation"
+   ],
+   "days": [
+    {
+     "focus": "Aldric introduction shot list",
+     "steps": [
+      "Read `dialogue/ch1/aldric.dlg` and list the beats",
+      "Shot list with framing and camera moves",
+      "Clips needed",
+      "Keep under 60 seconds"
+     ],
+     "done": "Shot list"
+    },
+    {
+     "focus": "Storyboard",
+     "steps": [
+      "Boards with timings",
+      "Music and SFX cues",
+      "Save to `design/cinematics/act1_aldric/`",
+      "Review"
+     ],
+     "done": "Boards approved"
+    },
+    {
+     "focus": "Final animation clips for the cinematic",
+     "steps": [
+      "Make the missing clips at final quality",
+      "Import",
+      "Hand to the primary stream",
+      "Log hours"
+     ],
+     "done": "Clips handed off"
+    }
+   ],
+   "edge_cases": [
+    "A clip that changes Aldric's combat frame data"
+   ],
+   "evidence": "design/cinematics/act1_aldric/"
+  },
+  {
+   "id": "Y2-PP-T67",
+   "stream": "secondary",
+   "title": "Devlog DL-15: one asset, every pipeline",
+   "why": "Community cadence slows to monthly in pre-production",
+   "tags": [
+    "marketing",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Write and post devlog DL-15 (one asset, every pipeline)",
+     "steps": [
+      "Outline DL-15: 'one asset, every pipeline' without spoiling the route architecture",
+      "Show one final-quality asset per pipeline",
+      "Post to Steam news, itch and Discord",
+      "Log followers and wishlists in `production/marketing/devlog_log.md`"
+     ],
+     "done": "DL-15 published"
+    }
+   ],
+   "edge_cases": [
+    "Revealing ending structure",
+    "Promising a release date"
+   ],
+   "evidence": "production/marketing/devlog_log.md entry"
+  },
+  {
+   "id": "Y2-PP-T68",
+   "stream": "secondary",
+   "title": "Localization glossary and style guide",
+   "why": "Languages at 1.0: EN + Simplified Chinese",
+   "tags": [
+    "localization",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Glossary",
+     "steps": [
+      "List canon terms (Root Access, Source Key, SOVEREIGN, Null Court, factions, regions)",
+      "Notes for translators on meaning and tone",
+      "Decide which names are translated and which kept",
+      "Write `docs/localization/glossary.md`"
+     ],
+     "done": "Glossary drafted"
+    },
+    {
+     "focus": "Style guide",
+     "steps": [
+      "Voice notes per character for translators",
+      "Formatting rules (glyph tokens, line length)",
+      "Review",
+      "Save"
+     ],
+     "done": "Style guide saved"
+    }
+   ],
+   "edge_cases": [
+    "A term with two meanings"
+   ],
+   "evidence": "docs/localization/glossary.md"
+  },
+  {
+   "id": "Y2-PP-T69",
+   "stream": "secondary",
+   "title": "Accessibility plan for production",
+   "why": "Accessibility baseline to a production standard",
+   "tags": [
+    "accessibility",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Write the production accessibility plan",
+     "steps": [
+      "Run `/ux-design` for project-wide accessibility",
+      "List required options per system (combat assists, deadline leniency, subtitles, colour, remap)",
+      "Map to Y3–Y7 work",
+      "Save"
+     ],
+     "done": "Plan saved"
+    }
+   ],
+   "edge_cases": [
+    "An assist that breaks Hell fairness"
+   ],
+   "evidence": "design/ux/accessibility_plan.md"
+  },
+  {
+   "id": "Y2-PP-T70",
+   "stream": "secondary",
+   "title": "UI/UX production style guide",
+   "why": "UI/UX for HUD, quest log timing and the market",
+   "tags": [
+    "ui",
+    "ux",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "HUD and quest log spec",
+     "steps": [
+      "Run `/ux-design` for the HUD and quest log with timing",
+      "Deadline display rules",
+      "Pad-first navigation",
+      "Save the spec"
+     ],
+     "done": "HUD spec"
+    },
+    {
+     "focus": "Market and auction UI spec",
+     "steps": [
+      "Spec market, auction and crafting screens",
+      "Price history display",
+      "Accessibility",
+      "Save"
+     ],
+     "done": "Market UI spec"
+    },
+    {
+     "focus": "UX review",
+     "steps": [
+      "Run `/ux-review` on both specs",
+      "Fix issues",
+      "Approve",
+      "Hand off"
+     ],
+     "done": "Specs approved"
+    }
+   ],
+   "edge_cases": [
+    "Too much information on one screen"
+   ],
+   "evidence": "design/ux/ specs"
+  },
+  {
+   "id": "Y2-PP-T71",
+   "stream": "secondary",
+   "title": "Production review: August",
+   "why": "Roadmap §14 monthly review",
+   "tags": [
+    "docs",
+    "business"
+   ],
+   "days": [
+    {
+     "focus": "August production review",
+     "steps": [
+      "Run `/milestone-review` for August",
+      "Check pipeline proofs and the funding decision",
+      "Update risks",
+      "Plan September and the Gate 3 week"
+     ],
+     "done": "Review saved"
+    }
+   ],
+   "edge_cases": [
+    "Burnout signals in the hours log"
+   ],
+   "evidence": "production/milestones/ review file"
+  },
+  {
+   "id": "Y2-PP-T72",
+   "stream": "secondary",
+   "title": "Onboarding documents for each role",
+   "why": "Roadmap §6 onboarding docs (/onboard); §13 key-person risk",
+   "tags": [
+    "team",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Art lead onboarding",
+     "steps": [
+      "Run `/onboard` for the art lead/animator",
+      "Include the PAE pipeline, art bible v2, provenance rules and the AGENTS.md art truth gate",
+      "Review",
+      "Save under `docs/onboarding/`"
+     ],
+     "done": "Art onboarding saved"
+    },
+    {
+     "focus": "Audio onboarding",
+     "steps": [
+      "Run `/onboard` for the composer and sound designer",
+      "Include the bus layout, adaptive rules and mix target",
+      "Review",
+      "Save"
+     ],
+     "done": "Audio onboarding saved"
+    },
+    {
+     "focus": "Writer onboarding",
+     "steps": [
+      "Run `/onboard` for the writer",
+      "Include the story bible, VOICE_GUIDE, `.dlg` format, routes and thesis checklist",
+      "Review",
+      "Save"
+     ],
+     "done": "Writer onboarding saved"
+    },
+    {
+     "focus": "QA onboarding",
+     "steps": [
+      "Run `/onboard` for QA",
+      "Include the bot, test layout, bug template and the QA matrix",
+      "Review",
+      "Save"
+     ],
+     "done": "QA onboarding saved"
+    }
+   ],
+   "edge_cases": [
+    "Docs out of date by the start date"
+   ],
+   "evidence": "docs/onboarding/*.md"
+  },
+  {
+   "id": "Y2-PP-T73",
+   "stream": "secondary",
+   "title": "Production planning for Year 3",
+   "why": "Gate 3 re-baseline; Y3 = Act 1 (R1–R2)",
+   "tags": [
+    "docs",
+    "business",
+    "team"
+   ],
+   "days": [
+    {
+     "focus": "Re-baseline §3 from measured cost",
+     "steps": [
+      "Use the cost-per-asset numbers and the pipeline report",
+      "Propose the §3 re-baseline (cut order if needed)",
+      "Review with the user",
+      "Record"
+     ],
+     "done": "Re-baseline proposal"
+    },
+    {
+     "focus": "Year 3 epics",
+     "steps": [
+      "Run `/create-epics` from the bibles and architecture",
+      "One epic per module",
+      "Review",
+      "Save"
+     ],
+     "done": "Epics saved"
+    },
+    {
+     "focus": "First Y3 stories",
+     "steps": [
+      "Run `/create-stories` for the first epic",
+      "Check readiness with `/story-readiness`",
+      "Plan sprint 1",
+      "Save"
+     ],
+     "done": "First stories ready"
+    },
+    {
+     "focus": "Team-stream plan for October",
+     "steps": [
+      "Plan art, audio, writing and QA work for the first team month",
+      "Review flows",
+      "Save",
+      "Review with the user"
+     ],
+     "done": "October team plan saved"
+    }
+   ],
+   "edge_cases": [
+    "Team starting late"
+   ],
+   "evidence": "production/y3/ plans"
+  },
+  {
+   "id": "Y2-PP-T74",
+   "stream": "secondary",
+   "title": "Smaller-game fallback plan",
+   "why": "Roadmap §6: if Gate 3 fails, ship a smaller game (2–3 regions, ~6 storylines, market and minigames)",
+   "tags": [
+    "business",
+    "story",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Smaller-game scope",
+     "steps": [
+      "Pick 2–3 regions (R1–R3) and ~6 storylines from the locked route table",
+      "Keep never-cut pillars (P1, P2, P6, P7f, P8, P10)",
+      "List which side storylines, companions and minigames stay",
+      "Write the scope"
+     ],
+     "done": "Scope written"
+    },
+    {
+     "focus": "Smaller-game schedule and budget inputs",
+     "steps": [
+      "Estimate with measured cost per asset",
+      "Team needed",
+      "Release plan",
+      "Write"
+     ],
+     "done": "Schedule written"
+    },
+    {
+     "focus": "Smaller-game review",
+     "steps": [
+      "Review with the user",
+      "Record as a Gate 3 input",
+      "List triggers that would choose it",
+      "Save"
+     ],
+     "done": "Fallback approved as an option"
+    }
+   ],
+   "edge_cases": [
+    "Cutting a never-cut pillar"
+   ],
+   "evidence": "production/gates/gate3/smaller_game.md"
+  },
+  {
+   "id": "Y2-PP-T75",
+   "stream": "secondary",
+   "title": "Gate 3 evidence (business, team and content)",
+   "why": "Roadmap §10 Gate 3: funding >= 24 months, routes verified, every pipeline proven",
+   "tags": [
+    "business",
+    "docs",
+    "team"
+   ],
+   "days": [
+    {
+     "focus": "Business and team evidence",
+     "steps": [
+      "Funding decision and coverage in months",
+      "Team plan and hiring status",
+      "Entity and contract status",
+      "Write the business section"
+     ],
+     "done": "Business section"
+    },
+    {
+     "focus": "Content evidence",
+     "steps": [
+      "World bible, routes, economy, combat and itemization bibles",
+      "Pipeline report and cost per asset",
+      "Run `/gate-check`",
+      "Write the content section"
+     ],
+     "done": "Content section"
+    }
+   ],
+   "edge_cases": [
+    "Funding not finalized by gate day"
+   ],
+   "evidence": "production/gates/gate3/summary.md"
+  },
+  {
+   "id": "Y2-PP-T76",
+   "stream": "secondary",
+   "title": "Gate 3 decision day",
+   "why": "Roadmap §10 Gate 3 on 2028-09-30",
+   "tags": [
+    "business",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Gate 3 decision with the user",
+     "steps": [
+      "Walk through each criterion with the evidence",
+      "Decide: greenlight, or the smaller game",
+      "Record the Gate 3 ADR and update ROADMAP status (with approval)",
+      "Plan the community announcement"
+     ],
+     "done": "Gate 3 ADR recorded"
+    }
+   ],
+   "edge_cases": [
+    "Split decision (technical pass, funding fail)"
+   ],
+   "evidence": "Gate 3 ADR"
+  },
+  {
+   "id": "Y2-PP-T77",
+   "stream": "secondary",
+   "title": "Devlog DL-16: Gate 3 and what comes next",
+   "why": "Community cadence slows to monthly in pre-production",
+   "tags": [
+    "marketing",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Write and post devlog DL-16 (Gate 3 and what comes next)",
+     "steps": [
+      "Outline DL-16: 'Gate 3 and what comes next' without spoiling the route architecture",
+      "Explain the decision in a safe, honest form after the gate",
+      "Post to Steam news, itch and Discord",
+      "Log followers and wishlists in `production/marketing/devlog_log.md`"
+     ],
+     "done": "DL-16 published"
+    }
+   ],
+   "edge_cases": [
+    "Revealing ending structure",
+    "Promising a release date"
+   ],
+   "evidence": "production/marketing/devlog_log.md entry"
+  }
+ ]
+}

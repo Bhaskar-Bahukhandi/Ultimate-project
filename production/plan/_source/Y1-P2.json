@@ -1,0 +1,2015 @@
+{
+ "phase_id": "Y1-P2",
+ "phase_title": "Combat foundation",
+ "goal": "Kaelen and every Chapter 1 fight run on a fixed-tick, data-driven combat stack (states, MoveData, hitboxes, encounters, bosses with poise, 5 difficulty profiles, FeelService, generated arenas) proven by input-replay tests, and the old player_combat.gd and duplicate feel systems are gone.",
+ "exit_criteria": [
+  "Player combat runs on player_controller.tscn with 11 states and zero await/create_timer in scripts/combat/core and scripts/combat/states (lint passes in CI)",
+  "Kaelen's 9 moves exist as validated MoveData/AttackSpec .tres; old timing consts have no readers",
+  "Slime, guardian (fight and filter), boar and Aldric are real CombatEncounter fights; chapter1_route_test covers each",
+  "5 DifficultyProfile .tres match the §12.1 table (test); Hell parry boundary replays pass and a human Hell session verdict is recorded",
+  "At least 14 input-replay tests run in CI, each verified to fail without its fix",
+  "One shake system, one damage-number pool, one hitstop path: deleted functions have no callers",
+  "Arena builder is deterministic for 100 seeds and every generated arena passes reachability",
+  "Every CODE_REVIEW §4.4/§4.5 item is fixed with a test, superseded, or has an issue"
+ ],
+ "tasks": [
+  {
+   "id": "Y1-P2-T01",
+   "stream": "primary",
+   "title": "Write the combat-foundation ADR and name the physics layers",
+   "why": "ROADMAP §5 Months 5-6 and §11 R2: one decision record before player_combat.gd is split",
+   "tags": [
+    "architecture",
+    "combat",
+    "docs",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Combat ADR, physics layer names and the no-timer lint",
+     "steps": [
+      "Run /architecture-decision: 'Combat runs on a 60 Hz fixed tick; states count frames, never seconds; no await/create_timer in gameplay code; hitstop freezes the combat tick instead of writing Engine.time_scale' -> docs/architecture/adr-combat-fixed-tick.md",
+      "Inventory every await / create_timer in scripts/combat/player_combat.gd (about 30) and enemy_base.gd into a table in the ADR: line, purpose, which future state owns it",
+      "Name 2D physics layers in project.godot [layer_names]: 1 world, 2 player_body, 3 enemy_body, 4 player_hitbox, 5 enemy_hitbox, 6 player_hurtbox, 7 enemy_hurtbox, 8 hazard, 9 interactable, 10 projectile, 11 arena_bounds, 12 kill_plane",
+      "Add tools/lint_no_timers.ps1: fail on create_timer( or 'await get_tree()' under scripts/combat/core and scripts/combat/states; wire it into .github CI next to git diff --check",
+      "Set physics/common/physics_ticks_per_second=60 explicitly and max_physics_steps_per_frame=8; note the choice in the ADR"
+     ],
+     "done": "ADR merged-ready, layer names visible in the editor's Layers dialog, lint passes on an empty core folder and fails on a seeded test file"
+    }
+   ],
+   "edge_cases": [
+    "A legacy script outside the linted folders still uses create_timer: the lint must not flag it until that file is migrated",
+    "Renaming layers must not change existing collision bits (names only, numbers unchanged for current scenes)"
+   ],
+   "evidence": "docs/architecture/adr-combat-fixed-tick.md; tools/lint_no_timers.ps1 output in the CI log"
+  },
+  {
+   "id": "Y1-P2-T02",
+   "stream": "primary",
+   "title": "Build the fixed-tick combat clock and node state machine",
+   "why": "§11 R2 (fire-and-forget coroutines) and review Phase 2: states tick in _physics_process with no await",
+   "tags": [
+    "code",
+    "architecture",
+    "combat",
+    "systems",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "CombatTick: the frame counter every combat system reads",
+     "steps": [
+      "Create scripts/combat/core/combat_tick.gd (class_name CombatTick): monotonically increasing frame:int, advanced once per _physics_process, frozen while hitstop_frames > 0",
+      "Expose request_hitstop(frames:int, tier:StringName) where the longest request wins (keeps the 2026-10-06 'no stacking' decision from tests/combat_fixes_test.gd)",
+      "Make CombatTick respect ContextStack pause: no advance while get_tree().paused; no direct time_scale writes",
+      "Unit tests tests/unit/combat/test_combat_tick.gd: advance, hitstop freeze, longest-wins, pause freeze"
+     ],
+     "done": "4 gdUnit4 tests green; CombatTick has no await in its source"
+    },
+    {
+     "focus": "StateMachine and State base classes",
+     "steps": [
+      "Create scripts/combat/core/state_machine.gd: children are State nodes; transition_to(name, msg:Dictionary) runs exit() then enter(msg) in the same tick",
+      "Create scripts/combat/core/state.gd: enter(msg), exit(), tick(frame:int) -> StringName (next state or &''), frames_in_state counter",
+      "Forbid transitions during exit() (re-entrancy guard) and log a one-line warning with both state names",
+      "Add a debug overlay label (DebugTestMode only) that prints current state and frames_in_state above the actor"
+     ],
+     "done": "A dummy two-state test actor flips states on exact frames in tests/unit/combat/test_state_machine.gd"
+    },
+    {
+     "focus": "Player controller shell and pause/hitstop safety",
+     "steps": [
+      "Create scenes/player/player_controller.tscn: CharacterBody2D + StateMachine + empty states Idle, Run, Air, Dash, Attack, Parry, Block, Heal, Cast, Hurt, Dead",
+      "PlayerController._physics_process: sample input -> CombatTick.advance -> state.tick -> move_and_slide, in that fixed order",
+      "Pause-safety test: open the pause context mid-Dash for 120 frames, resume, dash ends on the same frame count it would have without pause",
+      "Hitstop test: a 6-frame hitstop delays Attack recovery by exactly 6 ticks"
+     ],
+     "done": "player_controller.tscn instantiates headless; pause and hitstop tests pass"
+    }
+   ],
+   "edge_cases": [
+    "Pause pressed on the same tick as a state transition",
+    "Hitstop requested while already in hitstop with a shorter value",
+    "Scene change during hitstop must clear the freeze (ContextStack clears time requests on scene change; CombatTick must too)"
+   ],
+   "evidence": "tests/unit/combat/test_combat_tick.gd and test_state_machine.gd green in the gdUnit4 run log"
+  },
+  {
+   "id": "Y1-P2-T03",
+   "stream": "primary",
+   "title": "Add input buffers on the fixed tick and the input recorder",
+   "why": "§5 Months 5-6 'input buffers (jump, attack, parry, dash) on the fixed tick'; §12.1 Hell needs a 4-frame buffer",
+   "tags": [
+    "code",
+    "combat",
+    "systems",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "InputBuffer per action, sampled once per tick",
+     "steps": [
+      "Create scripts/combat/core/input_buffer.gd: per-action press frame, consume(action) returns true once if pressed within buffer_frames",
+      "Move buffer lengths out of player_combat.gd consts (JUMP_BUFFER_FRAMES 8, ATTACK_BUFFER_FRAMES 12, DASH_BUFFER_FRAMES 6, SPELL_BUFFER_FRAMES 6) into data/combat/combat_tuning.tres; add parry_buffer_frames=4",
+      "Sample through InputService action names only (no raw keys) at the start of PlayerController._physics_process",
+      "Tests: press at frame 10, consume at 13 succeeds; consume at 13+buffer fails; second consume of the same press fails"
+     ],
+     "done": "tests/unit/combat/test_input_buffer.gd green; no Input.is_key_pressed anywhere in scripts/combat/core"
+    },
+    {
+     "focus": "InputRecorder / InputPlayer for deterministic replays",
+     "steps": [
+      "Create scripts/combat/core/input_recorder.gd: writes {tick, pressed_bits, released_bits, axis_x, axis_y} per tick to user://replays/<name>.replay.json",
+      "Create input_player.gd that feeds the same frames into InputBuffer instead of InputService, with a seeded RandomNumberGenerator for any combat RNG",
+      "Add a DebugTestMode hotkey (F9 start/stop recording) and a headless runner flag --replay=<file> for tests/run_phase0_tests.ps1",
+      "Round-trip test: record 300 synthetic ticks, replay, compare the player position hash at tick 300"
+     ],
+     "done": "A replay reproduces the exact final position hash twice in a row"
+    }
+   ],
+   "edge_cases": [
+    "Two actions pressed on the same tick (jump+attack) must both buffer",
+    "Gamepad and keyboard pressed on the same tick count once",
+    "Replay file from an older format version must be rejected with a clear message, not crash"
+   ],
+   "evidence": "tests/unit/combat/test_input_buffer.gd; tests/integration/combat/test_replay_roundtrip.gd"
+  },
+  {
+   "id": "Y1-P2-T04",
+   "stream": "primary",
+   "title": "Port locomotion, air and dash into states",
+   "why": "Review Phase 2 state list (Locomotion, Air, Dash) and §4.4 dash i-frame bug",
+   "tags": [
+    "code",
+    "combat",
+    "tests",
+    "fun"
+   ],
+   "days": [
+    {
+     "focus": "Idle/Run states and the movement tuning resource",
+     "steps": [
+      "Create data/combat/player_movement.tres (PlayerMovementTuning) holding SPEED 330, SPRINT_SPEED 510, GROUND_ACCEL 0.30, GROUND_DECEL 0.22, AIR_ACCEL 0.18, AIR_DECEL 0.10",
+      "scripts/combat/states/player_idle.gd and player_run.gd: acceleration per tick, facing flip, sprint modifier",
+      "Fix §4.4 speed_multiplier compounding: apply the zone multiplier to target speed once, never velocity.x *= mult per frame",
+      "Test: 0.4x zone settles at exactly 0.4x of SPEED within 30 ticks; 2.0x zone never exceeds 2x SPEED"
+     ],
+     "done": "Speed-zone tests pass; Kaelen walks and runs in combat_arena.tscn using the new controller"
+    },
+    {
+     "focus": "Air state: jump, coyote, variable jump, apex, fast fall, wall slide",
+     "steps": [
+      "scripts/combat/states/player_air.gd: COYOTE_FRAMES 9, JUMP_VELOCITY -560, JUMP_VELOCITY_MIN -280, APEX_GRAVITY_MULT 0.55, FAST_FALL_MULT 1.6, MAX_FALL_SPEED 950 read from the tuning resource",
+      "Double jump (MAX_AIR_JUMPS 1) and wall slide (55 px/s) / wall jump (380,-500) with a 6-frame input lock instead of WALL_JUMP_LOCK_TIME 0.10 s",
+      "Consume the jump buffer on landing so a press 4 frames before touchdown jumps on the landing tick",
+      "Replay tests: coyote jump at frame 8 after leaving a ledge succeeds, at frame 10 fails"
+     ],
+     "done": "Coyote and buffered-jump replays pass headless"
+    },
+    {
+     "focus": "Dash state with frame-exact i-frames",
+     "steps": [
+      "scripts/combat/states/player_dash.gd: duration 11 frames (0.18 s), cooldown 20 frames (0.34 s), i-frames strictly inside the dash (never longer than duration) -- fixes the 0.41 s permanent-invulnerability bug",
+      "Perfect dodge: an enemy hit absorbed during i-frames grants Soul +15 once per dash (DESIGN_PILLARS Soul rule)",
+      "Air dash allowed once per airtime; dash cancels into attack via the buffer (keeps DASH_CANCEL_INTO_ATTACK)",
+      "Replay test: chained timed dashes for 600 frames leave at least 9 vulnerable frames per cycle"
+     ],
+     "done": "Permanent-i-frame regression test fails on old code, passes on the new state"
+    }
+   ],
+   "edge_cases": [
+    "Wall jump pressed on the same tick the player touches ground",
+    "Dash started on the last coyote frame",
+    "Dash into a wall: i-frames still end on schedule",
+    "Landing on a moving platform while fast-falling"
+   ],
+   "evidence": "tests/integration/combat/test_locomotion_replays.gd; production/qa/evidence/y1p2/locomotion_states_debug_overlay.png"
+  },
+  {
+   "id": "Y1-P2-T05",
+   "stream": "primary",
+   "title": "Create MoveData and AttackSpec resources tied to animation frames",
+   "why": "§12.10 frame data in .tres; review Phase 2 'MoveData / AttackSpec .tres'",
+   "tags": [
+    "code",
+    "combat",
+    "animation",
+    "systems"
+   ],
+   "days": [
+    {
+     "focus": "Resource classes and the frame-timeline validator",
+     "steps": [
+      "scripts/combat/data/move_data.gd (MoveData): clip name, startup/active/recovery frame counts, cancel windows [{into, from_frame, to_frame}], root motion px per frame",
+      "scripts/combat/data/attack_spec.gd (AttackSpec): damage_mult, soul_gain, hitstop_tier, knockback Vector2, poise_damage, hitbox rects per active frame",
+      "Validator tools/validate_moves.gd: startup+active+recovery equals clip frame count (from ClipTiming), cancel windows inside the move, every hitbox frame inside the active range",
+      "ClipTiming placeholder resource per clip until the PAE importer lands in Y1-P3 (frames and per-frame duration in ms)"
+     ],
+     "done": "Validator flags a deliberately broken .tres with the exact field name"
+    },
+    {
+     "focus": "Author Kaelen's move set as data",
+     "steps": [
+      "Convert COMBO1/2/3 consts to frames at 60 Hz: 4/5/10, 5/5/11, 7/6/16 -> data/combat/moves/kaelen/attack_1.tres .. attack_3.tres",
+      "Charged attack (startup 10, active 7, recovery 20, hold 72 frames, mult 3.5), up_slash (5/5/10), down_pogo (active 4, bounce -500), air_attack (mult 1.15)",
+      "Parry move: window comes from DifficultyProfile (not the move); riposte window 24 frames (PARRY_COUNTERATTACK_WINDOW 0.4 s)",
+      "Run the validator over all 9 Kaelen moves; commit-ready list of any rounding differences vs the old seconds values in the ADR appendix"
+     ],
+     "done": "9 .tres moves validate clean; old COMBO*_STARTUP consts have no remaining readers in the new states"
+    }
+   ],
+   "edge_cases": [
+    "A clip with variable per-frame duration (durationMs differs per frame) must still map active frames correctly",
+    "Cancel window that starts on frame 0",
+    "Move whose hitbox list is empty (feints) must validate"
+   ],
+   "evidence": "tools/validate_moves.gd report in the run log; data/combat/moves/kaelen/*.tres"
+  },
+  {
+   "id": "Y1-P2-T06",
+   "stream": "primary",
+   "title": "Build Hitbox/Hurtbox components on named layers",
+   "why": "Review Phase 2 Hitbox/Hurtbox; §4.4 origin-point melee misses",
+   "tags": [
+    "code",
+    "combat",
+    "systems",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Hitbox2D, Hurtbox2D and the per-activation hit registry",
+     "steps": [
+      "scripts/combat/core/hitbox_2d.gd: Area2D on layer player_hitbox or enemy_hitbox, active only on AttackSpec frames, carries owner + AttackSpec",
+      "scripts/combat/core/hurtbox_2d.gd: Area2D on player_hurtbox/enemy_hurtbox, emits hit_received(HitInfo); invulnerable flag driven by states",
+      "HitRegistry: one hit per target per activation id; reset when the next activation starts",
+      "Line-of-sight check with a PhysicsRayQueryParameters2D against the world layer only"
+     ],
+     "done": "Unit test: one swing overlapping two hurtboxes of the same enemy deals damage once"
+    },
+    {
+     "focus": "Replace the old melee queries and keep the 2026-10-06 generosity rule",
+     "steps": [
+      "Delete _get_enemies_in_melee_hitbox / _enemy_matches_melee_hitbox use from the new Attack states; hits are shape-vs-shape overlaps",
+      "Hurtboxes size to the body, not the detection or attack-range areas (keeps 'only bodies count')",
+      "Keep MELEE_BEHIND_TOLERANCE 16 px as a hurtbox margin rule documented in combat_tuning.tres",
+      "Debug draw: hitboxes yellow, hurtboxes blue, toggled by DebugTestMode; capture a screenshot of a combo frame"
+     ],
+     "done": "Pogo on a 96 px tall enemy registers (old origin bug); screenshot production/qa/evidence/y1p2/hitbox_debug_draw.png saved"
+    }
+   ],
+   "edge_cases": [
+    "Enemy standing on top of the player (centre up to 16 px behind)",
+    "Projectile hitbox vs a parrying hurtbox on the same tick",
+    "Two enemies sharing one hurtbox parent",
+    "Hitbox activation during hitstop must not tick its active frames"
+   ],
+   "evidence": "tests/unit/combat/test_hitbox_registry.gd; production/qa/evidence/y1p2/hitbox_debug_draw.png"
+  },
+  {
+   "id": "Y1-P2-T07",
+   "stream": "primary",
+   "title": "Implement attack states: combo, charged, up-slash, pogo, air attack",
+   "why": "§12.10 cancel windows and aerial/pogo game; P2 latency <= 3 frames",
+   "tags": [
+    "code",
+    "combat",
+    "fun",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Ground combo chain and charged attack",
+     "steps": [
+      "scripts/combat/states/player_attack.gd plays MoveData frames; chain to next combo step only inside the cancel window; COMBO_WINDOW 0.46 s becomes 28 frames",
+      "Jump-cancel and dash-cancel during recovery (ATTACK_CANCEL_INTO_JUMP/DASH) as cancel windows in data, not flags in code",
+      "player_charge.gd: hold for 72 frames, release before = normal attack; release during dash cancels the charge cleanly (2026-10-06 stuck-charge bug)",
+      "Measure press-to-first-active-frame: must equal startup frames + at most 1 tick of input latency"
+     ],
+     "done": "Replay: 3-hit combo lands on frames 4, 37, 70 exactly; charge+dash leaves no stuck flash"
+    },
+    {
+     "focus": "Up-slash, down-pogo and air attacks",
+     "steps": [
+      "player_upslash.gd and player_pogo.gd (bounce -500 px/s, damage mult 1.8, refresh air dash on pogo hit)",
+      "Air attacks capped at MAX_AIR_ATTACKS 3 per airtime, reset on landing or pogo",
+      "Pogo against hazards (spikes layer) bounces without damage; against bosses applies poise damage not hitstun",
+      "Replay tests: pogo chain on 3 slimes in a row; air-attack cap holds after 3"
+     ],
+     "done": "Pogo and air-attack replays green; a 30 s feel capture recorded for the playtest"
+    }
+   ],
+   "edge_cases": [
+    "Attack pressed on the exact landing tick",
+    "Combo input buffered across a hitstop",
+    "Pogo onto an enemy that dies on that hit",
+    "Up-slash under a low ceiling"
+   ],
+   "evidence": "tests/integration/combat/test_attack_replays.gd; production/qa/evidence/y1p2/combo_frames_overlay.png"
+  },
+  {
+   "id": "Y1-P2-T08",
+   "stream": "primary",
+   "title": "Implement parry, block, heal, cast, Glitch Arts, hurt and dead states",
+   "why": "DESIGN_PILLARS Soul/MP rules and Glitch Arts approved set; §12.1 parry windows",
+   "tags": [
+    "code",
+    "combat",
+    "systems",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Parry and block on frame windows",
+     "steps": [
+      "player_parry.gd: window frames read from the active DifficultyProfile (12/9/6/4/2); cooldown 14 frames (PARRY_COOLDOWN 0.24 s)",
+      "Successful parry: Soul +25, PARRY_FREEZE 7-frame hitstop tier 'parry', open the 24-frame riposte window",
+      "player_block.gd: 70% reduction (BLOCK_DAMAGE_REDUCTION) with chip damage, guard-break on unblockable AttackSpec flag",
+      "Tests: parry on frame 1 and on the last window frame succeed; one frame later fails, for all 5 profiles"
+     ],
+     "done": "Parry boundary tests pass for Beginner..Hell"
+    },
+    {
+     "focus": "Heal and Cast (MP) and the first two Glitch Arts (Soul)",
+     "steps": [
+      "player_heal.gd: 57-frame channel (HEAL_CHANNEL_TIME 0.95 s), costs 20 MP, interrupted by Hurt with MP refunded; healing charges per DifficultyProfile",
+      "player_cast.gd: forward / up / down spells at 15 MP from data/combat/moves/kaelen/cast_*.tres",
+      "Glitch Arts as MoveData + SoulCost: noclip_step (i-frames through enemies, not stacking with dash i-frames) and source_peek (5 s timing-window highlight)",
+      "Remove the paused-menu potion path for combat (§4.3): healing only through Heal state or a consumable state"
+     ],
+     "done": "Heal interrupt refunds MP in test; Noclip Step and Source Peek usable in the arena"
+    },
+    {
+     "focus": "Hurt and Dead states and the combat HUD split",
+     "steps": [
+      "player_hurt.gd: knockback from HitInfo, hurt i-frames 30 frames, DEF mitigation x100/(100+DEF) unchanged",
+      "player_dead.gd hands the result to CombatEncounter instead of changing scene itself; move DEATH_TIPS dictionary to data/combat/death_tips.tres",
+      "Split _build_combat_hud/_update_hud from player_combat.gd into scripts/ui/combat_hud.gd listening to signals",
+      "Tests: death during hitstop, death during heal channel, simultaneous lethal hit and parry (parry wins if on its window frame)"
+     ],
+     "done": "Hurt/Dead tests green; combat HUD renders from the new signals"
+    }
+   ],
+   "edge_cases": [
+    "Parry and enemy hit on the same tick",
+    "Heal channel completing on the same tick as a lethal hit",
+    "Soul at exactly the art's cost",
+    "MP regen (2/s) must not tick while paused or during hitstop"
+   ],
+   "evidence": "tests/unit/combat/test_parry_windows.gd; tests/integration/combat/test_heal_cast.gd"
+  },
+  {
+   "id": "Y1-P2-T09",
+   "stream": "primary",
+   "title": "Retire player_combat.gd behind the new controller",
+   "why": "§11 R7 duplicated systems; brief: delete what is superseded",
+   "tags": [
+    "code",
+    "cleanup",
+    "combat",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Swap scenes onto player_controller.tscn",
+     "steps": [
+      "Replace the Player node in scenes/combat/combat_arena.tscn and scenes/chapter1/tutorial_knight_boss.tscn with player_controller.tscn",
+      "Keep public signals (health_changed, soul_changed, died) and on_enemy_killed() so GameManager and UI callers compile unchanged",
+      "Run tests/run_phase0_tests.ps1 (load_all, combat_fixes, chapter1_route, chapter2_route) and list every failure",
+      "Port each combat_fixes_test check to the new controller or mark it superseded with a replay test reference"
+     ],
+     "done": "load_all and combat_fixes pass with the new controller in both scenes"
+    },
+    {
+     "focus": "Delete the old monolith",
+     "steps": [
+      "Delete scripts/combat/player_combat.gd (2,763 lines) or reduce it to a <50-line shim if any non-combat caller remains; grep for 'player_combat' and fix each reference",
+      "Delete scripts/player_animation_controller.gd callers that only existed for the old combat path (keep the file until CharacterVisual lands in Y1-P3)",
+      "Re-run lint_no_timers.ps1 over scripts/combat/states and scripts/combat/core",
+      "Update CHANGELOG.md draft entry and the ADR status to Accepted"
+     ],
+     "done": "grep -r player_combat.gd returns only the shim or nothing; full suite green"
+    }
+   ],
+   "edge_cases": [
+    "A chapter script that calls a private player_combat method by name (has_method checks)",
+    "Saved games referencing the old player node path"
+   ],
+   "evidence": "Full gdUnit4 + phase0 run log; git diff --stat showing player_combat.gd removed"
+  },
+  {
+   "id": "Y1-P2-T10",
+   "stream": "primary",
+   "title": "Create EnemyDef and the enemy state machine with a legacy adapter",
+   "why": "§4.5 enemies spawn hacked, absolute stats, subclasses skipping super; review Phase 2 EnemyDef",
+   "tags": [
+    "code",
+    "combat",
+    "ai",
+    "systems"
+   ],
+   "days": [
+    {
+     "focus": "EnemyDef resource and stat scaling as multipliers",
+     "steps": [
+      "scripts/combat/data/enemy_def.gd: id, max_hp, contact_damage, poise, move list (AttackSpec), detection px, loot table id, hack capabilities, sprite id",
+      "Stats computed once: base x zone x NG+ x DifficultyProfile.enemy_damage; never written through hack setters before _ready (fixes 'every enemy spawns hacked')",
+      "Author data/combat/enemies/fracture_slime.tres, oakhaven_guardian.tres, corrupted_boar.tres with values from the secondary-stream specs",
+      "Test: spawn each def, is_hacked == false, stats equal the expected product for Hard"
+     ],
+     "done": "3 EnemyDefs load and spawn clean; spawn-state test passes"
+    },
+    {
+     "focus": "EnemyController states on the CombatTick",
+     "steps": [
+      "scripts/combat/enemies/enemy_controller.gd with states Idle, Patrol, Chase, Telegraph, Attack, Recover, Stunned, Dead (same set as EnemyBase.State)",
+      "Telegraph length = AttackSpec telegraph frames x DifficultyProfile.boss_telegraph (enemies use 1.0)",
+      "Freeze all enemy ticks while a dialogue context is on ContextStack (§4.4 'AMBUSH' free hits)",
+      "is_hostile=false checked in the base tick, not overridable by subclasses"
+     ],
+     "done": "Enemy freezes during a test dialogue; telegraph frames match the def"
+    },
+    {
+     "focus": "Legacy adapter so Chapters 2-10 keep working",
+     "steps": [
+      "Keep EnemyBase for the 15 un-migrated subclasses but route their damage through Hurtbox2D and their rewards through CombatEncounter",
+      "Fix enemy_base.gd:717 AssetManager.get_asset() call (ranged enemies never fire) by using the projectile scene directly",
+      "Spawn test over every scripts/combat/enemies/*.gd: spawns, takes a hit, dies, rewards once",
+      "Write docs/architecture/enemy-migration-list.md: each legacy enemy, its chapter, target year for migration"
+     ],
+     "done": "15-enemy spawn test green; migration list committed"
+    }
+   ],
+   "edge_cases": [
+    "Enemy def with zero patrol points",
+    "NG+ cycle 3 scaling on Hell (damage x2.0 stack)",
+    "Enemy killed during its own telegraph"
+   ],
+   "evidence": "tests/integration/combat/test_enemy_spawn_all.gd; docs/architecture/enemy-migration-list.md"
+  },
+  {
+   "id": "Y1-P2-T11",
+   "stream": "primary",
+   "title": "Create BossDef, PhaseDef and BossController with poise",
+   "why": "§4.5 boss hitstun stun-lock, phase stat resets, double end_boss_fight; §12.1 Hell-only phase",
+   "tags": [
+    "code",
+    "combat",
+    "ai",
+    "difficulty"
+   ],
+   "days": [
+    {
+     "focus": "BossDef and PhaseDef resources",
+     "steps": [
+      "scripts/combat/data/boss_def.gd: extends EnemyDef with phases:Array[PhaseDef], poise_max, poise_regen per frame, music cue ids",
+      "phase_def.gd: hp threshold, pattern list (ordered AttackSpec ids with weights), stat multipliers applied on scaled stats, difficulty mask (Medium+ variants, Hell-only)",
+      "Validator: thresholds descending, every pattern id exists, Hell-only phase present for each boss",
+      "Unit test: Clockwork-style phase change keeps contact damage scaled (the 134 -> 50 bug cannot recur)"
+     ],
+     "done": "Phase-multiplier test passes on a fixture boss"
+    },
+    {
+     "focus": "BossController: patterns, poise and cancellation",
+     "steps": [
+      "scripts/combat/enemies/boss_controller.gd runs patterns as states (no coroutines); a phase change, parry stagger or retry cancels the in-flight pattern on that tick",
+      "Poise: hits reduce poise by AttackSpec.poise_damage; at 0 the boss staggers for N frames then poise refills; no generic hitstun on bosses",
+      "Exactly one end_boss_fight emission guarded by CombatEncounter.resolve()",
+      "Test: pogo every 12 frames for 600 frames never freezes boss timers"
+     ],
+     "done": "Pogo stun-lock regression passes; end_boss_fight count == 1 in every test"
+    },
+    {
+     "focus": "Boss retries and the Hell-only phase hook",
+     "steps": [
+      "Retry resets the boss from BossDef, not from the mutated instance; arena retry-HP easing after 3 attempts kept as a DifficultyProfile flag",
+      "Hell-only phase activates only when DifficultyProfile.id == hell; Medium/Hard variants via the pattern difficulty mask",
+      "Boss HP bar shows poise as a second thin bar (single bar instance; fixes duplicate-bar bug)",
+      "Tests: retry x3 stats identical to first attempt; Hell phase absent on Hard"
+     ],
+     "done": "Retry invariance and difficulty-mask tests green"
+    }
+   ],
+   "edge_cases": [
+    "Phase threshold crossed by a single big hit skipping a phase",
+    "Boss dies during a phase transition",
+    "Retry pressed during the boss death animation"
+   ],
+   "evidence": "tests/unit/combat/test_boss_phases.gd; tests/integration/combat/test_boss_retry_invariants.gd"
+  },
+  {
+   "id": "Y1-P2-T12",
+   "stream": "primary",
+   "title": "Implement DifficultyProfile x5 from the §12.1 table",
+   "why": "P6 five difficulty modes; §12.1 starting values",
+   "tags": [
+    "code",
+    "difficulty",
+    "systems",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Profile resource and the five .tres files",
+     "steps": [
+      "scripts/combat/data/difficulty_profile.gd with fields: parry_window_frames, dodge_iframes, boss_telegraph_mult, enemy_damage_mult, boss_pattern_mask, healing_charges, dda_mode, deadline_leniency, loot_tier",
+      "data/difficulty/beginner.tres (12,18,1.5,0.6,base,5,gentle,1.5) easy (9,15,1.25,0.8,base,4,on,1.25) medium (6,12,1.0,1.0,+variants,3,off,1.0) hard (4,10,0.85,1.3,+variants,2,off,1.0) hell (2,8,0.7,2.0,+hell_phase,1,off,0.85)",
+      "DifficultyService (autoload) holds the active profile; dodge i-frames read from it, never from Stats (P7d rule: stats never change windows)",
+      "Test asserting every value against the §12.1 table so tuning changes are deliberate"
+     ],
+     "done": "5 profiles load; table test green"
+    },
+    {
+     "focus": "Lower-only rule, DDA hookup and save field",
+     "steps": [
+      "set_profile(id) refuses raising difficulty mid-run; lowering allowed and recorded in a run flag for Story+ stats",
+      "Replace enemy_base _on_difficulty_adjusted / get_enemy_damage_multiplier with DifficultyService reads; DDA only on Beginner (gentle) and Easy (on)",
+      "Add difficulty_id to the SaveService player block with a migration default 'medium'",
+      "Expose deadline_leniency for WorldClock quest deadlines (consumed in Y1-P3)"
+     ],
+     "done": "Raise attempt rejected in test; save round-trip keeps difficulty"
+    }
+   ],
+   "edge_cases": [
+    "Loading an old save without difficulty_id",
+    "Lowering difficulty during a boss fight (applies on next attempt)",
+    "Stats item that claims '+parry window' must be rejected by the validator"
+   ],
+   "evidence": "tests/unit/difficulty/test_profiles_table.gd; tests/unit/save/test_difficulty_migration.gd"
+  },
+  {
+   "id": "Y1-P2-T13",
+   "stream": "primary",
+   "title": "Build CombatEncounter with one idempotent resolve()",
+   "why": "§4.4 Perfect Delete payout x3, abort_arena never called; review Phase 2 CombatEncounter",
+   "tags": [
+    "code",
+    "combat",
+    "systems",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Encounter states, bounds and kill plane",
+     "steps": [
+      "scripts/combat/core/combat_encounter.gd: Intro -> Fighting -> Resolved{Victory|Defeat|Fled}; resolve(result) no-ops after the first call",
+      "Rewards through RewardLedger.grant_once(encounter_id) so double gold (drop_manager + enemy_base) cannot recur",
+      "Arena bounds (layer arena_bounds) and a kill plane 200 px below the floor that respawns the player with 10% max HP damage",
+      "Perfect Delete and Root Access only accepted in Fighting; spam-press test pays out once"
+     ],
+     "done": "Spam Perfect Delete test pays once; kill plane test passes"
+    },
+    {
+     "focus": "Hook arenas and the arena manager to encounters",
+     "steps": [
+      "combat_arena.gd: replace _victory/_on_player_died_in_boss/_return_from_boss with encounter signals; return through TransitionService with the original TravelContext",
+      "arena_manager.gd: abort_arena() called on Fled and on scene exit so the win-streak multiplier resets",
+      "Encounter records the loss on arena death (2026-10-06 audit item) and clears boss context on return",
+      "Integration test: start encounter, win, return, world position equals the start position within 1 px"
+     ],
+     "done": "Return-to-same-position test green; win streak resets on flee"
+    }
+   ],
+   "edge_cases": [
+    "Player and last enemy die on the same tick (defeat wins, documented)",
+    "Flee pressed during Intro",
+    "Scene change requested by Root Access while paused (§4.4)"
+   ],
+   "evidence": "tests/integration/combat/test_combat_encounter.gd"
+  },
+  {
+   "id": "Y1-P2-T14",
+   "stream": "primary",
+   "title": "Rebuild Root Access from per-enemy capability definitions",
+   "why": "§4.4 instant boss kill via current_health; review Phase 2 Root Access as slowed time",
+   "tags": [
+    "code",
+    "combat",
+    "systems",
+    "difficulty"
+   ],
+   "days": [
+    {
+     "focus": "HackCapability data and safe ranges",
+     "steps": [
+      "scripts/combat/data/hack_capability.gd: property, min, max, step, corruption_cost, boss_allowed, label key",
+      "Each EnemyDef lists its capabilities; no capability may target current_health or max_hp; bosses limited to 2 capabilities",
+      "Remove get_hackable_properties/apply_hack reflection from enemy_base.gd for migrated enemies; legacy enemies get a whitelist",
+      "is_hostile=false pays 0 kill rewards (reward only for defeating, §4.4)"
+     ],
+     "done": "Capability validator rejects an HP capability; legacy whitelist test passes"
+    },
+    {
+     "focus": "Root Access as a slowed-time combat state",
+     "steps": [
+      "Open Root Access as a ContextStack 'slow-mo' time request (0.2x) owned by the encounter instead of tree pause",
+      "Rewrite scripts/ui/root_access_panel.gd to list capabilities from data with min/max sliders and corruption preview",
+      "Root Access during Resolved, death or victory windows refused (§4.4 frozen next scene)",
+      "Guardian 'TARGET FILTER' capability added for Chapter 1 (used by ch1_path_to_oakhaven.gd filter path)"
+     ],
+     "done": "Panel shows Ch1 slime capabilities; screenshot production/qa/evidence/y1p2/root_access_capabilities.png"
+    }
+   ],
+   "edge_cases": [
+    "Opening Root Access on the tick the last enemy dies",
+    "Corruption cost that would exceed 100%",
+    "Gamepad focus inside the panel after a slider change"
+   ],
+   "evidence": "tests/unit/combat/test_hack_capabilities.gd; production/qa/evidence/y1p2/root_access_capabilities.png"
+  },
+  {
+   "id": "Y1-P2-T15",
+   "stream": "primary",
+   "title": "Build FeelService and delete the duplicate shake, number and flash systems",
+   "why": "§4.7 shake no-op, tint stuck, flashes 0x0; review Phase 2 FeelService; P9 juice",
+   "tags": [
+    "code",
+    "vfx",
+    "cleanup",
+    "fun",
+    "performance"
+   ],
+   "days": [
+    {
+     "focus": "One trauma-based shake component and hitstop tiers",
+     "steps": [
+      "scripts/feel/feel_service.gd (autoload FeelService): hit(event:StringName, pos, dir) looks up data/feel/feel_events.tres for shake trauma, hitstop tier, rumble, particles, sfx id",
+      "scripts/feel/camera_shake.gd attached to every Camera2D (combat, cinematic, overworld); fixes cinematic_camera.gd:146 decay overshoot",
+      "Hitstop tiers light 3, medium 5, heavy 8, kill 10, parry 7 frames as starting values in feel_events.tres via CombatTick.request_hitstop",
+      "Controller rumble via Input.start_joy_vibration with an accessibility multiplier (0 disables)"
+     ],
+     "done": "Combat hits shake the camera in the arena (was a no-op); hitstop tiers measured in a replay"
+    },
+    {
+     "focus": "Pooled damage numbers, particles and flashes",
+     "steps": [
+      "scripts/feel/damage_number_pool.gd: 32 pooled Label nodes, crit/heal colours, one number per hit",
+      "Particle presets (hit_spark, dust, parry_flash, death_burst) as GPUParticles2D scenes pooled through ObjectPool",
+      "Hit flash via a canvas shader uniform on the sprite (flash_amount) instead of modulate tweens -- removes tween_animator.gd:505 stuck tint",
+      "Stress test: 200 hits in 10 s keep pool size <= 32 and no orphan nodes"
+     ],
+     "done": "Orphan-node check zero after the stress test"
+    },
+    {
+     "focus": "Delete the duplicates",
+     "steps": [
+      "Delete shake/hitstop/number code from scripts/combat_effects.gd (apply_hitstop, apply_screen_shake, spawn_damage_number) and point callers at FeelService",
+      "Delete GameJuice failsafe and add_trauma path in scripts/effects/game_juice.gd; delete _screen_shake/_spawn_damage_number wrappers in enemy_base.gd",
+      "Mark tween_animator.gd and cinematic_vfx.gd as deprecated with a header comment and list remaining callers in docs/architecture/feel-migration.md",
+      "Run /perf-profile on the arena with 8 enemies: FeelService under 0.5 ms per frame"
+     ],
+     "done": "grep shows no remaining callers of the deleted functions; perf note recorded"
+    }
+   ],
+   "edge_cases": [
+    "Hitstop and pause requested on the same frame",
+    "Shake on a camera that is freed mid-shake",
+    "Screen-shake accessibility slider at 0 must also stop rumble"
+   ],
+   "evidence": "tests/integration/feel/test_feel_service.gd; production/qa/evidence/y1p2/feel_hit_sequence.png; perf note in production/qa/perf/y1p2_feel.md"
+  },
+  {
+   "id": "Y1-P2-T16",
+   "stream": "primary",
+   "title": "Implement arena generation v1 from terrain context",
+   "why": "P1 'combat arenas generated from the terrain where the fight starts'; §5 Months 5-6 arena generation",
+   "tags": [
+    "code",
+    "combat",
+    "level",
+    "openworld",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "TerrainContext sampling and the chunk contract",
+     "steps": [
+      "scripts/combat/arena/terrain_context.gd: biome (forest/bridge/cave), ground shape (flat/slope/gap), hazards, ceiling height -- sampled from the world tile under the encounter start",
+      "Arena chunk contract: each scenes/combat/arena_chunks/<biome>_<role>.tscn has Marker2D entry_left/entry_right, ground TileMapLayer, spawn markers, optional hazard nodes",
+      "Write the contract as docs/architecture/arena-chunk-contract.md for the secondary stream's level work",
+      "Test fixture contexts for the three Chapter 1 fight sites (Elara meeting path, guardian road, north field)"
+     ],
+     "done": "Contract doc and 3 fixture contexts committed"
+    },
+    {
+     "focus": "ArenaBuilder: deterministic assembly",
+     "steps": [
+      "scripts/combat/arena/arena_builder.gd: build(context, seed) picks left-edge, 1-3 middle, right-edge chunks for the biome with a seeded RNG",
+      "Stitch chunks by entry markers, add arena_bounds walls and the kill plane, place enemy spawns from EnemyDef size class",
+      "Same seed + context gives the same arena (hash of chunk ids and offsets)",
+      "Fallback: unknown biome uses the forest set and logs once"
+     ],
+     "done": "Determinism test green for 100 seeds"
+    },
+    {
+     "focus": "Hook encounters to generated arenas and validate reachability",
+     "steps": [
+      "CombatEncounter.start(context) builds the arena instead of loading a fixed combat_arena.tscn layout",
+      "Reuse tests/reachability_test.gd flood fill on each generated arena: player spawn reaches every enemy spawn",
+      "Screenshot forest, bridge and cave arenas for review",
+      "Record arena generation time; budget under 30 ms"
+     ],
+     "done": "3 screenshots in production/qa/evidence/y1p2/arena_forest.png, arena_bridge.png, arena_cave.png; reachability passes"
+    }
+   ],
+   "edge_cases": [
+    "Context at a biome boundary (half forest, half bridge)",
+    "Gap terrain where the generated floor would be unreachable",
+    "Seed collision producing a single-chunk arena"
+   ],
+   "evidence": "tests/integration/combat/test_arena_builder.gd; production/qa/evidence/y1p2/arena_*.png"
+  },
+  {
+   "id": "Y1-P2-T17",
+   "stream": "primary",
+   "title": "Make the Chapter 1 slime a real fight",
+   "why": "CHANGELOG 'still to do: make the boar, the guardian and the opening slime real side-scroll fights'",
+   "tags": [
+    "code",
+    "combat",
+    "story",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Elara meeting slime on CombatEncounter",
+     "steps": [
+      "Replace the ColorRect _slime and _stage_slime_fight tween hop in scripts/chapter1/ch1_elara_meeting.gd with CombatEncounter.start(context: forest, enemies:[fracture_slime])",
+      "Teach attack + jump through {action} prompts from the secondary-stream tutorial text; Elara barks on first hit and on victory",
+      "DialogueManager.run(DLG, 'after_slime') only after resolve(Victory); defeat retries from the encounter Intro without replaying dialogue",
+      "Extend tests/chapter1_route_test.gd: the slime encounter resolves through the encounter, not a skip flag"
+     ],
+     "done": "chapter1_route passes with a real slime fight; screenshot of the fight saved"
+    }
+   ],
+   "edge_cases": [
+    "Player dies to the slime (must not soft-lock the tutorial)",
+    "Pause during the slime Intro"
+   ],
+   "evidence": "tests/chapter1_route_test.gd; production/qa/evidence/y1p2/ch1_slime_fight.png"
+  },
+  {
+   "id": "Y1-P2-T18",
+   "stream": "primary",
+   "title": "Make the Chapter 1 guardian a real fight with the Root Access filter path",
+   "why": "Ch1 story: guardian resolved by fight or by editing its TARGET FILTER",
+   "tags": [
+    "code",
+    "combat",
+    "story",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Guardian fight on the new system",
+     "steps": [
+      "Replace _add_prop('Guardian', ...) ColorRect and _stage_guardian_fight in scripts/chapter1/ch1_path_to_oakhaven.gd with an encounter using oakhaven_guardian.tres",
+      "Guardian moves from the secondary-stream spec: telegraphed charge, guard stance, poise 0 stagger",
+      "Road arena context: biome forest, shape flat with a ledge",
+      "Fight path sets guardian_resolved and the existing fight flag through FlagRegistry"
+     ],
+     "done": "Fight path completes headless via a recorded replay"
+    },
+    {
+     "focus": "Filter path through Root Access and route tests",
+     "steps": [
+      "'guardian_directive' opens Root Access with the TARGET FILTER capability; choosing the safe filter value resolves the encounter as Victory(non-lethal) with no kill reward",
+      "Make sure ch1_data_vision_unlocked / root_access_unlocked are written on both paths (§4.6 Data Vision locked forever bug)",
+      "Add both paths to tests/chapter1_route_test.gd",
+      "Screenshot both outcomes"
+     ],
+     "done": "Both paths green; production/qa/evidence/y1p2/ch1_guardian_fight.png and ch1_guardian_filter.png saved"
+    }
+   ],
+   "edge_cases": [
+    "Player opens Root Access, cancels, then fights",
+    "Player sets an unsafe filter value",
+    "Guardian staggered while the panel opens"
+   ],
+   "evidence": "tests/chapter1_route_test.gd (guardian_fight, guardian_filter cases)"
+  },
+  {
+   "id": "Y1-P2-T19",
+   "stream": "primary",
+   "title": "Make the Chapter 1 boar a real fight in the north field",
+   "why": "Ch1 north_field.dlg beats: boar charge, pogo, stunned; flags ch1_boar_fought/_calmed",
+   "tags": [
+    "code",
+    "combat",
+    "story",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Boar encounter replacing the scripted beats",
+     "steps": [
+      "In scripts/chapter1/ch1_oakhaven_village.gd route 'start_boar_fight' to an encounter with corrupted_boar.tres (bridge or forest context from the trigger position)",
+      "Boar moves: charge (long telegraph, wall stun), pogo-able back, stunned state on wall hit -- replaces the 'boar_charge'/'boar_pogo'/'boar_stunned' dialogue-event stubs",
+      "The bridge deadline keeps running on the WorldClock while the fight runs (it is a real-time cost)",
+      "Victory sets ch1_boar_fought; the calm option (dialogue) sets ch1_boar_calmed without a fight"
+     ],
+     "done": "Boar fight playable from the village trigger"
+    },
+    {
+     "focus": "Boar tests, nest rebuild branch and replay",
+     "steps": [
+      "Record a replay of the boar fight on Medium and on Hell; both must be winnable without damage by the replay",
+      "Test ch1_boar_nest_rebuilt branch still reachable after the fight (Mara line)",
+      "reachability_test on the village after the fight returns the player to the trigger spot",
+      "Screenshot charge telegraph and stun"
+     ],
+     "done": "Medium and Hell replays pass; production/qa/evidence/y1p2/ch1_boar_charge.png saved"
+    }
+   ],
+   "edge_cases": [
+    "Boar charge into the arena wall on the same tick as a player parry",
+    "Fight started after the bridge deadline already passed",
+    "Player flees the boar"
+   ],
+   "evidence": "tests/integration/combat/replays/boar_medium.replay.json, boar_hell.replay.json; chapter1_route_test"
+  },
+  {
+   "id": "Y1-P2-T20",
+   "stream": "primary",
+   "title": "Move Aldric (Tutorial Knight) onto BossController",
+   "why": "Ch1 boss; §4.5 double end_boss_fight for the Knight; every boss has a Hell-only phase",
+   "tags": [
+    "code",
+    "combat",
+    "ai",
+    "difficulty"
+   ],
+   "days": [
+    {
+     "focus": "Aldric BossDef and phases",
+     "steps": [
+      "data/combat/bosses/aldric.tres: 2 phases + Hell-only phase from the secondary-stream spec; port patterns from scripts/combat/enemies/tutorial_knight_boss_enemy.gd (1,343 lines)",
+      "Replace _on_attack_connected shake calls with FeelService events",
+      "scripts/chapter1/ch1_tutorial_knight.gd uses CombatEncounter; kill / spare / purge choice after resolve(Victory)",
+      "Delete migrated code paths; keep the file only if Chapter 9 or 10 reference it (grep first)"
+     ],
+     "done": "Aldric fight runs on BossController in tutorial_knight_boss.tscn"
+    },
+    {
+     "focus": "Aldric invariants and the kill/spare/purge flags",
+     "steps": [
+      "Tests: end_boss_fight emitted once, retry x3 invariant, Hell-only phase present only on Hell",
+      "ch1_knight_killed / ch1_knight_spared / ch1_root_purge written once each via FlagRegistry",
+      "Record an Aldric replay on Hard",
+      "Screenshot phase 2 transition"
+     ],
+     "done": "Aldric tests green; production/qa/evidence/y1p2/aldric_phase2.png"
+    }
+   ],
+   "edge_cases": [
+    "Spare chosen after a retry",
+    "Player dies on the boss's death frame",
+    "Hell phase entered then difficulty lowered and retried"
+   ],
+   "evidence": "tests/integration/combat/test_aldric_boss.gd; replays/aldric_hard.replay.json"
+  },
+  {
+   "id": "Y1-P2-T21",
+   "stream": "primary",
+   "title": "Write the input-replay regression suite",
+   "why": "§11 '§4.4 player combat: input-replay tests'; R8 tests forever",
+   "tags": [
+    "tests",
+    "combat",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Replay runner and the first six regressions",
+     "steps": [
+      "tests/integration/combat/test_replays.gd loads every tests/integration/combat/replays/*.replay.json and asserts a stored expectation block (final hash, flags, HP)",
+      "Regressions: permanent dash i-frames, speed multiplier compounding, origin-point melee miss, jump-cancel, dash->attack buffer, charge stuck after dash",
+      "Make each replay fail on a revert of its fix (verify by stashing the fix once)",
+      "Add the runner to tests/run_phase0_tests.ps1 and CI"
+     ],
+     "done": "6 replays green in CI; each one verified to fail without its fix"
+    },
+    {
+     "focus": "Boss and difficulty replays",
+     "steps": [
+      "Add pogo stun-lock, Perfect Delete spam, boss phase stat scaling, retry invariance, parry boundary x5 profiles",
+      "Store replays recorded with both keyboard and gamepad for the parry cases",
+      "Document how to record a new replay in tests/README section 'Combat replays'",
+      "Run /test-evidence-review on the combat tests"
+     ],
+     "done": "At least 14 replays in CI; test-evidence-review result ADEQUATE or gaps listed"
+    }
+   ],
+   "edge_cases": [
+    "Replay recorded at a different physics tick rate must be refused",
+    "Replay that depends on the RNG uses the stored seed"
+   ],
+   "evidence": "tests/integration/combat/test_replays.gd in the CI log"
+  },
+  {
+   "id": "Y1-P2-T22",
+   "stream": "primary",
+   "title": "Validate the Hell 2-frame parry",
+   "why": "§12.1 'Hell's 2-frame windows need a fixed tick, a 4-frame input buffer, latency calibration and replay-verified fairness'",
+   "tags": [
+    "combat",
+    "difficulty",
+    "tests",
+    "accessibility",
+    "performance"
+   ],
+   "days": [
+    {
+     "focus": "Latency calibration and measurement",
+     "steps": [
+      "Add an options entry 'Input latency offset' (0-4 frames) stored in user://settings.cfg; applies a frame offset to parry window checks only",
+      "Calibration screen: a metronome flash every 60 frames, player presses on the flash, median offset suggested",
+      "Measure input-to-action latency with the debug frame counter: press frame vs first parry frame across keyboard and gamepad, windowed and fullscreen, vsync on/off",
+      "Target <= 3 frames (P2); record the table in production/qa/perf/y1p2_latency.md"
+     ],
+     "done": "Latency table filled for 8 configurations; calibration screen works with a pad"
+    },
+    {
+     "focus": "Replay-verified fairness on Hell",
+     "steps": [
+      "Replays: Aldric's fastest attack parried on window frame 1 and 2 succeed, frame 0 and 3 fail on Hell",
+      "Check the 4-frame parry buffer cannot widen the window (buffered press still checks the press frame)",
+      "Human session: 50 parry attempts on Hell against the slime and Aldric, record hit rate; compare with Hard (4 frames)",
+      "Write the verdict and any tuning proposal into design/gdd/difficulty.md 'Hell parry validation'"
+     ],
+     "done": "Hell boundary replays green; session numbers recorded with an honest verdict"
+    }
+   ],
+   "edge_cases": [
+    "Frame drop during the parry window (window counted in ticks, not rendered frames)",
+    "Calibration offset that pushes the window past the attack's active frame"
+   ],
+   "evidence": "tests/integration/combat/replays/hell_parry_*.replay.json; production/qa/perf/y1p2_latency.md; production/qa/evidence/y1p2/latency_calibration.png"
+  },
+  {
+   "id": "Y1-P2-T23",
+   "stream": "primary",
+   "title": "Close the combat phase: review sweep, deletions, perf and milestone",
+   "why": "§11 §4.4/§4.5 fixed in Months 5-6; R7 one owner per concern",
+   "tags": [
+    "cleanup",
+    "tests",
+    "performance",
+    "release"
+   ],
+   "days": [
+    {
+     "focus": "Review §4.4/§4.5 sweep and dead-code deletion",
+     "steps": [
+      "Walk every bullet of CODE_REVIEW_2026-10-04.md §4.4 and §4.5; mark each fixed (test name), superseded, or deferred (issue number)",
+      "Delete the now-unused combat_effects.gd remnants and random-encounter danger overlay duplicates if no callers remain",
+      "Run /tech-debt to register anything left in legacy EnemyBase subclasses",
+      "Run /code-review on scripts/combat/core and scripts/combat/states"
+     ],
+     "done": "Sweep table in docs/reviews/y1p2_review_sweep.md; tech-debt register updated"
+    },
+    {
+     "focus": "Performance, smoke check, export tour and phase review",
+     "steps": [
+      "/perf-profile: arena with Aldric + 6 slimes, 60 fps target, record frame time and FeelService cost",
+      "/smoke-check and tools/export_windows.ps1 -Tour; save the tour screenshots of the 4 Ch1 fights",
+      "/milestone-review for Y1-P2 against the exit criteria; list carry-overs into Y1-P3",
+      "Update CHANGELOG.md draft and ask the user before committing (Conventional Commits, Story: Y1-P2)"
+     ],
+     "done": "Milestone review written; export tour screenshots in production/qa/evidence/y1p2/export_tour/"
+    }
+   ],
+   "edge_cases": [
+    "Export build behaves differently from the editor for pooled particles",
+    "A deferred item that blocks Gate 1 must be escalated now"
+   ],
+   "evidence": "docs/reviews/y1p2_review_sweep.md; production/milestones/y1p2_review.md; production/qa/evidence/y1p2/export_tour/"
+  },
+  {
+   "id": "Y1-P2-T24",
+   "stream": "secondary",
+   "title": "Plan the combat phase and set up the tracker",
+   "why": "§14 operating rhythm; Y1-P2 kickoff",
+   "tags": [
+    "team",
+    "docs",
+    "combat"
+   ],
+   "days": [
+    {
+     "focus": "Y1-P2 kickoff and February sprint",
+     "steps": [
+      "Re-read ROADMAP §5 Months 5-6, §12.1 and §12.10; list the 13 required deliverables in production/sprints/2027-02.md",
+      "Run /sprint-plan for February with primary T01-T09 and this stream's design tasks",
+      "Update the risk register: Hell fairness, PAE frame timing unknown until Y1-P3, Ch2+ legacy enemies",
+      "Write the phase's evidence checklist (which screenshots, which replays) into the sprint file"
+     ],
+     "done": "production/sprints/2027-02.md exists with capacity and risks"
+    }
+   ],
+   "edge_cases": [
+    "A Y1-P1 carry-over (SaveService or WorldClock not done) must be scheduled first"
+   ],
+   "evidence": "production/sprints/2027-02.md"
+  },
+  {
+   "id": "Y1-P2-T25",
+   "stream": "secondary",
+   "title": "Write the player combat GDD",
+   "why": "Coding standards: each mechanic has a GDD; P2 frame data",
+   "tags": [
+    "docs",
+    "combat",
+    "fun"
+   ],
+   "days": [
+    {
+     "focus": "Overview, player fantasy and the move list",
+     "steps": [
+      "Run /design-system for 'player combat' -> design/gdd/combat-player.md",
+      "Overview and Player Fantasy sections (P2: stylish, tough, readable; original moves)",
+      "Detailed Rules: every move with input, state, frames, cancels (combo x3, charged, up-slash, pogo, air attack, dash, parry, block, heal, cast, Glitch Arts)",
+      "Mark which rules are already implemented in the old code and which change"
+     ],
+     "done": "Sections 1-3 drafted"
+    },
+    {
+     "focus": "Formulas, resources and Glitch Arts open points",
+     "steps": [
+      "Formulas: damage = base x move mult x combo mult x (100/(100+DEF)); Soul gains +25/+15/+10; MP 15/20, regen 2/s",
+      "Decide the Glitch Arts open points with the user: unlock route, equip count (proposal 2), corruption on use (proposal: none)",
+      "Edge Cases section: simultaneous hits, parry vs unblockable, death during heal",
+      "Dependencies: DifficultyProfile, Stats model, FeelService, InputService"
+     ],
+     "done": "Sections 4-6 drafted; Glitch Arts decisions recorded in DESIGN_PILLARS.md decision log"
+    },
+    {
+     "focus": "Tuning knobs, acceptance criteria and review",
+     "steps": [
+      "Tuning Knobs: every frame count and multiplier with a safe range",
+      "Acceptance Criteria as testable lines the replay suite can check (e.g. 'combo step 2 active on frame 37 after the first press')",
+      "Run /design-review on design/gdd/combat-player.md and fix the findings",
+      "Send the frame table to the primary stream as data/combat/moves input"
+     ],
+     "done": "GDD passes /design-review"
+    }
+   ],
+   "edge_cases": [
+    "A designed cancel that would allow infinite air time",
+    "Glitch Art interacting with dash i-frames"
+   ],
+   "evidence": "design/gdd/combat-player.md with the /design-review verdict"
+  },
+  {
+   "id": "Y1-P2-T26",
+   "stream": "secondary",
+   "title": "Write the difficulty GDD",
+   "why": "P6; §12.1 table and rules",
+   "tags": [
+    "docs",
+    "difficulty",
+    "fun"
+   ],
+   "days": [
+    {
+     "focus": "Difficulty rules and the profile table",
+     "steps": [
+      "Run /design-system for 'difficulty' -> design/gdd/difficulty.md with the §12.1 table verbatim as starting values",
+      "Rules: lower-only mid-run, DDA definitions (gentle/on/off: what changes, how fast, never windows)",
+      "Pattern literacy rule: lower modes forgive execution, not attention -- list how each Ch1 enemy telegraphs on Beginner",
+      "Loot differences per tier as placeholders until ItemDB exists"
+     ],
+     "done": "Draft covers all 9 table rows with rationale"
+    },
+    {
+     "focus": "Balance check and selection screen copy",
+     "steps": [
+      "Run /balance-check on the difficulty table and record outliers",
+      "Write the difficulty selection copy (one honest line per mode, no shaming) for the new-game screen",
+      "Define Hell cosmetic/title rewards as IDs only (HELL-COS-01..03)",
+      "/design-review and fix"
+     ],
+     "done": "difficulty.md reviewed; selection copy ready for the UI"
+    }
+   ],
+   "edge_cases": [
+    "Player on Beginner who never learns parry still finishes Aldric",
+    "Leniency x0.85 on Hell making a Ch1 deadline impossible"
+   ],
+   "evidence": "design/gdd/difficulty.md"
+  },
+  {
+   "id": "Y1-P2-T27",
+   "stream": "secondary",
+   "title": "Specify the Chapter 1 enemies and Aldric",
+   "why": "§4.5 fixes need data; brief: make the boar, guardian and slime real fights",
+   "tags": [
+    "combat",
+    "docs",
+    "ai",
+    "fun"
+   ],
+   "days": [
+    {
+     "focus": "Fracture slime spec",
+     "steps": [
+      "design/gdd/enemies/fracture_slime.md: role (teach attack and jump), HP, contact damage, hop pattern, telegraph frames, poise",
+      "Two attacks max; telegraph >= 24 frames on Medium",
+      "Root Access capabilities: hop_height and move_speed with safe ranges",
+      "Animation needs list for PAE: idle, hop, land, hurt, death"
+     ],
+     "done": "Slime spec ready for EnemyDef"
+    },
+    {
+     "focus": "Oakhaven guardian spec",
+     "steps": [
+      "design/gdd/enemies/oakhaven_guardian.md: role (teach Root Access as an alternative to violence), DEFEND NEST directive, TARGET FILTER capability values",
+      "Attacks: charge with a long telegraph, guard stance blocking front hits, poise break after N hits",
+      "Non-lethal resolution rules and what the player learns",
+      "Animation needs list"
+     ],
+     "done": "Guardian spec ready"
+    },
+    {
+     "focus": "Corrupted boar spec",
+     "steps": [
+      "design/gdd/enemies/corrupted_boar.md: role (teach pogo and parry), charge -> wall stun loop, back is pogo-able",
+      "Calm path conditions (dialogue) vs fight path; flags ch1_boar_fought / _calmed / _nest_rebuilt unchanged",
+      "Telegraph and damage per difficulty from the table",
+      "Animation needs list"
+     ],
+     "done": "Boar spec ready"
+    },
+    {
+     "focus": "Aldric boss spec with Hell-only phase",
+     "steps": [
+      "design/gdd/bosses/aldric.md: phase 1 (sword patterns), phase 2 (protection directive misfires), Hell-only phase concept within canon (Tutorial Knight, mis-targeted protection directive)",
+      "Every attack: telegraph frames, active frames, parryable yes/no, poise damage taken",
+      "Medium/Hard variants (+variants) listed as pattern IDs",
+      "Kill / spare / purge aftermath hooks reference existing flags only"
+     ],
+     "done": "Aldric spec reviewed against STORY_BIBLE.md"
+    }
+   ],
+   "edge_cases": [
+    "An attack that is unparryable and unavoidable on Hell (must not exist)",
+    "Telegraph shorter than the parry window on Beginner"
+   ],
+   "evidence": "design/gdd/enemies/*.md and design/gdd/bosses/aldric.md"
+  },
+  {
+   "id": "Y1-P2-T28",
+   "stream": "secondary",
+   "title": "Design the Root Access capability table",
+   "why": "§4.4 instant-kill exploit; review Phase 2 'safe ranges'",
+   "tags": [
+    "combat",
+    "systems",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Capabilities for the Chapter 1-2 roster",
+     "steps": [
+      "design/gdd/root-access.md: capability list per enemy for slime, guardian, boar, Aldric and the Ch2 enemies (clockwork soldier, gear sentry, Administrator Proxy)",
+      "Safe min/max, step and corruption cost per capability; bosses at most 2",
+      "Forbidden list: current_health, max_hp, is_hostile on bosses",
+      "Corruption budget per chapter"
+     ],
+     "done": "Capability table complete for 10 enemies"
+    },
+    {
+     "focus": "Root Access UX and teaching",
+     "steps": [
+      "Panel UX sketch: capability list, slider, corruption preview, gamepad flow",
+      "Tutorial lines for the guardian TARGET FILTER moment, using {action} tokens",
+      "Slow-time feel target (0.2x) and audio filter idea for the audio pass",
+      "/design-review"
+     ],
+     "done": "root-access.md reviewed"
+    }
+   ],
+   "edge_cases": [
+    "Capability that soft-locks a fight (e.g. move_speed 0 on a required-kill enemy)"
+   ],
+   "evidence": "design/gdd/root-access.md"
+  },
+  {
+   "id": "Y1-P2-T29",
+   "stream": "secondary",
+   "title": "Study reference combat feel and write feel targets",
+   "why": "P2 'inspired by Silksong's feel, original moveset'; P9 juice",
+   "tags": [
+    "fun",
+    "combat",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Critical play session: movement and attacks",
+     "steps": [
+      "Play 60 min of a reference action-platformer you own; note your own observations of jump arc, attack recovery feel and hit feedback (no copying moves or visuals)",
+      "Record a 30 s capture of our current combat for a side-by-side",
+      "Write design/references/combat_feel_notes.md: 10 observations, each turned into a target for our game",
+      "Mark which targets need a tuning value and which need art or audio"
+     ],
+     "done": "Notes file with 10 targets"
+    },
+    {
+     "focus": "Critical play session: bosses and telegraphs",
+     "steps": [
+      "Play one reference boss fight; note telegraph readability, punish windows and how the fight teaches",
+      "Map each observation to Aldric's spec and adjust telegraph lengths if needed",
+      "Write 'feel acceptance tests' (e.g. 'a jab feels lighter than a kill') for the Y1-P2 playtests",
+      "Share the list with the primary stream for FeelService tuning"
+     ],
+     "done": "Feel acceptance list in combat_feel_notes.md"
+    }
+   ],
+   "edge_cases": [
+    "Observation that would copy a signature move: rewrite as an original idea or drop"
+   ],
+   "evidence": "design/references/combat_feel_notes.md"
+  },
+  {
+   "id": "Y1-P2-T30",
+   "stream": "secondary",
+   "title": "Author the arena prefab chunks (forest, bridge, cave)",
+   "why": "P1 arenas from terrain context; arena-chunk-contract.md",
+   "tags": [
+    "level",
+    "combat",
+    "openworld"
+   ],
+   "days": [
+    {
+     "focus": "Forest chunk set",
+     "steps": [
+      "Create scenes/combat/arena_chunks/forest_left.tscn, forest_mid_a.tscn, forest_mid_b.tscn, forest_right.tscn per the contract",
+      "Ground TileMapLayer with placeholder tiles (clearly labelled placeholder), entry markers, 2-3 spawn markers per mid chunk",
+      "One raised ledge for pogo practice in mid_b",
+      "Playtest each chunk alone with the new controller"
+     ],
+     "done": "4 forest chunks load in the ArenaBuilder test"
+    },
+    {
+     "focus": "Bridge chunk set",
+     "steps": [
+      "bridge_left.tscn, bridge_mid_a.tscn (gap with planks), bridge_mid_b.tscn, bridge_right.tscn",
+      "Kill-plane-friendly gap no wider than a dash + jump; document the max gap px in the contract",
+      "Hazard node: breaking plank (placeholder) for later",
+      "Reachability check via the builder test"
+     ],
+     "done": "Bridge set passes reachability"
+    },
+    {
+     "focus": "Cave chunk set",
+     "steps": [
+      "cave_left.tscn, cave_mid_a.tscn (low ceiling), cave_mid_b.tscn (stalactite hazard marker), cave_right.tscn",
+      "Ceiling height >= up-slash reach + 16 px",
+      "Spawn markers for flying enemies",
+      "Run the builder for 20 seeds and screenshot the 3 most different"
+     ],
+     "done": "Cave set passes; 3 screenshots"
+    },
+    {
+     "focus": "Chunk rules review and Chapter 1 site mapping",
+     "steps": [
+      "Write docs/level/arena_chunk_rules.md: widths, gap limits, ceiling, hazard density, spawn spacing",
+      "Map the 4 Ch1 fight sites to biome/shape (Elara path forest flat, guardian road forest ledge, north field bridge, Aldric fixed arena)",
+      "Note which chunks need PAE tiles in Y1-P3",
+      "Fix any chunk that failed reachability"
+     ],
+     "done": "Rules doc committed; site map shared with primary T16"
+    },
+    {
+     "focus": "Arena variety and fun pass",
+     "steps": [
+      "Play 10 generated arenas per biome; rate each 1-5 for fun and readability",
+      "Remove or fix any chunk rated <= 2",
+      "Add 1 extra mid chunk to the weakest biome",
+      "Record the ratings in docs/level/arena_variety_log.md"
+     ],
+     "done": "Every biome averages >= 3.5 in the log"
+    }
+   ],
+   "edge_cases": [
+    "Generated arena where a spawn sits inside a ledge",
+    "Bridge arena on Hell where the gap and an enemy charge combine unfairly"
+   ],
+   "evidence": "scenes/combat/arena_chunks/*.tscn; docs/level/arena_chunk_rules.md; production/qa/evidence/y1p2/arena_variety_*.png"
+  },
+  {
+   "id": "Y1-P2-T31",
+   "stream": "secondary",
+   "title": "Produce PAE combat pilot clips for frame-data testing",
+   "why": "§6 importer needs real fixtures; A3 PAE quality unknown until Gate 1; cost-per-asset baseline",
+   "tags": [
+    "art",
+    "animation",
+    "assets"
+   ],
+   "days": [
+    {
+     "focus": "Kaelen pilot: idle and run",
+     "steps": [
+      "In PAE, draw Kaelen at the provisional height from the art-bible prep (placeholder palette), clips idle (4 frames) and run (6-8 frames), side view",
+      "Export pae-sheet v1 PNG + JSON to assets/art_sources/pae/pilot/kaelen_pilot.* (review-only, not production, per AGENTS.md)",
+      "Log hours per clip in production/cost/asset_hours.csv (asset, clip, frames, minutes)",
+      "Note any PAE export field that differs from the review §6 description"
+     ],
+     "done": "Pilot idle/run exported with a time log"
+    },
+    {
+     "focus": "Kaelen pilot: 3-hit combo",
+     "steps": [
+      "Draw attack_1, attack_2, attack_3 with per-frame durationMs matching the MoveData frames (4/5/10, 5/5/11, 7/6/16 at 60 Hz)",
+      "Mark the active frames in a draft kaelen_pilot.rig.json (hitbox rects by hand)",
+      "Export and log time",
+      "Hand to primary as importer fixtures for Y1-P3"
+     ],
+     "done": "Combo pilot exported with a draft rig sidecar"
+    },
+    {
+     "focus": "Kaelen pilot: dash and parry",
+     "steps": [
+      "Draw dash (11 frames total time) and parry (startup + window + recovery)",
+      "Check readability at 1x and 2x integer scale",
+      "Export and log time",
+      "Write first impressions on PAE limits in assets/art_sources/pae/pilot/NOTES.md"
+     ],
+     "done": "Dash/parry pilot exported"
+    },
+    {
+     "focus": "Slime pilot and the pilot review",
+     "steps": [
+      "Draw fracture slime idle, hop, hurt, death",
+      "Contact sheet of all pilot clips at 2x; compare against the art-bible prep references",
+      "Compute minutes per frame from asset_hours.csv as the first cost-per-asset data point",
+      "Decide what changes before production sprites in Y1-P3"
+     ],
+     "done": "Pilot review note with minutes-per-frame"
+    }
+   ],
+   "edge_cases": [
+    "PAE export with frames of unequal size in one row",
+    "A clip whose durations do not sum to a whole number of 60 Hz frames"
+   ],
+   "evidence": "assets/art_sources/pae/pilot/*; production/cost/asset_hours.csv; ComfyUI used: No (PAE hand-authored)"
+  },
+  {
+   "id": "Y1-P2-T32",
+   "stream": "secondary",
+   "title": "Write the combat SFX and feel event spec",
+   "why": "P9 every hit gives visual, audio and haptic feedback; §4.7 audio problems",
+   "tags": [
+    "audio",
+    "vfx",
+    "docs",
+    "combat"
+   ],
+   "days": [
+    {
+     "focus": "Combat audio event list",
+     "steps": [
+      "design/audio/combat_sfx_spec.md: ~30 events (swing x3, charged release, pogo, parry, perfect dodge, block, hurt, heal start/end, cast x3, slime hop/land/death, boar charge/wall hit, Aldric telegraphs x4, poise break, encounter start/victory/defeat)",
+      "Per event: category bus (SFX/UI), priority, max voices, pitch variation range (pre-rendered variants, not runtime synthesis)",
+      "Map events to FeelService ids in data/feel/feel_events.tres",
+      "List which ones need final sounds in Y1-P3's ~70 SFX"
+     ],
+     "done": "30-event spec with bus and voice limits"
+    },
+    {
+     "focus": "Feel tuning matrix and sourcing plan",
+     "steps": [
+      "Shake trauma, hitstop tier, rumble strength and particle preset per event as starting values",
+      "Sourcing plan: record, synthesize offline, or licensed library -- with a provenance column for the Y2 license audit",
+      "Placeholder SFX list for Y1-P2 playtests (clearly marked placeholder)",
+      "Review with a 5-minute play session"
+     ],
+     "done": "Matrix filled; provenance column present"
+    },
+    {
+     "focus": "Placeholder combat SFX set for the playtests",
+     "steps": [
+      "Render 12 placeholder WAVs offline (swing x3, hit, parry, dash, hurt, heal, slime hop, boar charge, Aldric telegraph, victory) into assets/audio/placeholder/combat/",
+      "Name every file placeholder_*.wav and list them in assets/ASSET_SOURCES.md with tool and provenance",
+      "Hook them to feel_events.tres ids so FeelService plays files, not runtime synthesis",
+      "Listen pass at 3 volumes; note clipping"
+     ],
+     "done": "12 placeholder files play from FeelService in the arena"
+    }
+   ],
+   "edge_cases": [
+    "Two loud events on one tick (voice-stealing priority)",
+    "Rumble on a pad without vibration support"
+   ],
+   "evidence": "design/audio/combat_sfx_spec.md"
+  },
+  {
+   "id": "Y1-P2-T33",
+   "stream": "secondary",
+   "title": "Storyboard Aldric's boss intro and outro",
+   "why": "Cinematics stream; review §4.7 cutscene issues; camera language starts here",
+   "tags": [
+    "cinematics",
+    "story",
+    "combat"
+   ],
+   "days": [
+    {
+     "focus": "Intro storyboard and shot list",
+     "steps": [
+      "Read dialogue/ch1/aldric.dlg; list the beats that happen before the fight",
+      "Storyboard 6-10 panels in design/cinematics/aldric_intro.md: shot type, framing, duration in frames, integer zoom level",
+      "Mark which beats can be skipped and where the skip lands",
+      "Note what the old cutscene coroutine does today so the Y1-P4 timeline port matches"
+     ],
+     "done": "Intro board with timings"
+    },
+    {
+     "focus": "Outro storyboards for kill / spare / purge",
+     "steps": [
+      "One short board per outcome (3-5 panels each) in design/cinematics/aldric_outro.md",
+      "Music and SFX cues per panel",
+      "Camera rules draft: no zoom in the middle of a line, integer zooms only, shake only on impacts",
+      "Send open questions to the narrative log"
+     ],
+     "done": "3 outro boards done"
+    }
+   ],
+   "edge_cases": [
+    "Skip pressed on the last frame of the intro",
+    "Outro for an outcome the player reached via retry"
+   ],
+   "evidence": "design/cinematics/aldric_intro.md, aldric_outro.md"
+  },
+  {
+   "id": "Y1-P2-T34",
+   "stream": "secondary",
+   "title": "Design combat onboarding for Chapter 1",
+   "why": "Brief: real fights in Ch1; P6 pattern literacy",
+   "tags": [
+    "ux",
+    "combat",
+    "dialogue",
+    "accessibility"
+   ],
+   "days": [
+    {
+     "focus": "Teaching map across the four fights",
+     "steps": [
+      "Table: slime teaches attack/jump, guardian teaches Root Access and guard, boar teaches pogo/parry, Aldric tests all",
+      "One prompt per new verb, shown once, re-shown only after 3 failures",
+      "Prompts use {action} tokens so InputService renders the right key or button",
+      "Write into design/ux/combat_onboarding.md"
+     ],
+     "done": "Teaching map complete"
+    },
+    {
+     "focus": "Prompt text and failure help",
+     "steps": [
+      "Write each prompt line (<= 60 characters) in VOICE_GUIDE style",
+      "Failure help after 3 deaths: point at the telegraph, offer to lower difficulty (never auto-lower)",
+      "Add the lines to dialogue/ch1/*.dlg as a tutorial node set with [#id] line IDs",
+      "Run the voice lint"
+     ],
+     "done": "Lines in .dlg; voice lint clean"
+    },
+    {
+     "focus": "Onboarding playtest with a fresh player",
+     "steps": [
+      "One person who has not played the build plays the 4 fights on Medium with no help",
+      "Record where they got stuck and which prompt they missed",
+      "/playtest-report into production/playtests/2027-03_onboarding.md",
+      "Fix the top 3 issues in the prompt text"
+     ],
+     "done": "Report written; top 3 text fixes done"
+    }
+   ],
+   "edge_cases": [
+    "Prompt shown while the pad is disconnected",
+    "Player who rebinds attack mid-tutorial"
+   ],
+   "evidence": "design/ux/combat_onboarding.md; production/playtests/2027-03_onboarding.md"
+  },
+  {
+   "id": "Y1-P2-T35",
+   "stream": "secondary",
+   "title": "Write Elara's combat barks for Chapter 1",
+   "why": "P9 visibly reactive characters; Tier A companion banter (§12.3)",
+   "tags": [
+    "dialogue",
+    "story",
+    "combat"
+   ],
+   "days": [
+    {
+     "focus": "Bark set for slime and guardian",
+     "steps": [
+      "dialogue/ch1/barks_combat.dlg: Elara lines for first hit, player hurt, low HP, victory -- 3 variants each, in her voice sheet",
+      "Guardian-specific lines for Root Access opening and the filter choice",
+      "Respect canon: her damaged casting channel costs her (no free magic)",
+      "Voice lint"
+     ],
+     "done": "Slime/guardian barks written; lint clean"
+    },
+    {
+     "focus": "Bark set for boar and Aldric, plus cooldown rules",
+     "steps": [
+      "Boar and Aldric lines (Aldric is Oakhaven's protector: lines must carry that weight)",
+      "Bark rules: min 6 s between barks, never over a dialogue line, priority for low-HP",
+      "Line IDs stamped; list them for the localization table",
+      "Read-aloud pass"
+     ],
+     "done": "All Ch1 barks done with IDs"
+    }
+   ],
+   "edge_cases": [
+    "Bark trigger during the boss intro cutscene",
+    "Elara not present (refused-help route)"
+   ],
+   "evidence": "dialogue/ch1/barks_combat.dlg; voice lint log"
+  },
+  {
+   "id": "Y1-P2-T36",
+   "stream": "secondary",
+   "title": "Record the input-replay fixtures",
+   "why": "§11 input-replay tests; Hell parry validation",
+   "tags": [
+    "tests",
+    "combat"
+   ],
+   "days": [
+    {
+     "focus": "Movement and attack replays",
+     "steps": [
+      "With DebugTestMode F9, record coyote jump, buffered jump, timed-dash chain, speed zones, 3-hit combo, charge+dash on keyboard",
+      "Re-record the combo and dash-chain on gamepad",
+      "Write the expected result block for each replay (final hash, HP, flags)",
+      "Save to tests/integration/combat/replays/ with descriptive names"
+     ],
+     "done": "10 movement/attack replays saved"
+    },
+    {
+     "focus": "Fight and parry replays",
+     "steps": [
+      "Record slime, guardian fight, guardian filter, boar Medium/Hell, Aldric Hard",
+      "Record Hell parry boundary attempts on frames 0, 1, 2, 3 of the window against Aldric's fastest attack",
+      "Verify each replays deterministically twice",
+      "Hand the list to primary T21/T22"
+     ],
+     "done": "Fight and parry replays saved and verified"
+    }
+   ],
+   "edge_cases": [
+    "Replay recorded with the latency offset set (must store the offset)"
+   ],
+   "evidence": "tests/integration/combat/replays/*.replay.json"
+  },
+  {
+   "id": "Y1-P2-T37",
+   "stream": "secondary",
+   "title": "Run fortnightly combat playtests",
+   "why": "§14 weekly playtest note; Gate 1 fairness criterion starts here",
+   "tags": [
+    "fun",
+    "combat",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Playtest 1: movement only",
+     "steps": [
+      "Play 30 min of the new locomotion states in the forest arena",
+      "Rate jump, dash, wall jump feel 1-5 against combat_feel_notes.md targets",
+      "/playtest-report -> production/playtests/2027-02_movement.md",
+      "File the top 5 issues for primary"
+     ],
+     "done": "Movement report filed"
+    },
+    {
+     "focus": "Playtest 2: attacks, parry and FeelService",
+     "steps": [
+      "Play the slime and boar fights on Medium and Hard",
+      "Check feel acceptance tests (jab vs kill weight, parry flash, rumble)",
+      "/playtest-report -> production/playtests/2027-03_attacks.md",
+      "Tuning proposals for feel_events.tres"
+     ],
+     "done": "Attacks report filed"
+    },
+    {
+     "focus": "Playtest 3: Aldric on every difficulty",
+     "steps": [
+      "Fight Aldric on Beginner, Medium, Hard and Hell (Hell attempts capped at 45 min)",
+      "Record deaths and whether each felt fair (yes/no + reason)",
+      "/playtest-report -> production/playtests/2027-03_aldric.md",
+      "Pattern or telegraph changes into aldric.md"
+     ],
+     "done": "Aldric fairness table filled"
+    },
+    {
+     "focus": "Playtest 4: Chapter 1 end to end",
+     "steps": [
+      "Play New Game through Aldric with all four real fights",
+      "Note any soft-lock, return-position error or dialogue/encounter overlap",
+      "/playtest-report -> production/playtests/2027-03_ch1_full.md",
+      "/bug-triage for anything found"
+     ],
+     "done": "Full Ch1 report filed; bugs triaged"
+    }
+   ],
+   "edge_cases": [
+    "Tester fatigue on Hell inflating 'unfair' votes: note session length"
+   ],
+   "evidence": "production/playtests/2027-0*_*.md"
+  },
+  {
+   "id": "Y1-P2-T38",
+   "stream": "secondary",
+   "title": "Validate the Hell parry with human sessions",
+   "why": "§12.1 Hell 2-frame parry; risk 'Hell feels unfair'",
+   "tags": [
+    "difficulty",
+    "combat",
+    "fun"
+   ],
+   "days": [
+    {
+     "focus": "Calibration UX and copy",
+     "steps": [
+      "Write the latency calibration screen copy and help text",
+      "Test calibration on keyboard, Xbox-layout and PlayStation-layout pads (whatever hardware is available; note what was not tested)",
+      "Record suggested offsets per device",
+      "Screenshot the screen"
+     ],
+     "done": "Calibration copy final; offsets noted"
+    },
+    {
+     "focus": "Hell parry session and verdict",
+     "steps": [
+      "50 Hell parry attempts against Aldric's fastest attack after calibration; record success rate",
+      "Same count on Hard for comparison",
+      "Ask: did misses feel like your fault? Record honestly",
+      "Write the verdict into design/gdd/difficulty.md; propose a change only if success < 30% after practice"
+     ],
+     "done": "Verdict paragraph written with numbers"
+    }
+   ],
+   "edge_cases": [
+    "Only one controller type available: record as a test gap"
+   ],
+   "evidence": "design/gdd/difficulty.md 'Hell parry validation'; production/qa/evidence/y1p2/hell_parry_session.png"
+  },
+  {
+   "id": "Y1-P2-T39",
+   "stream": "secondary",
+   "title": "Prepare the art bible inputs",
+   "why": "§5 Months 7-9 art bible v1; risk 'PAE can't reach the bar'",
+   "tags": [
+    "art",
+    "docs",
+    "assets"
+   ],
+   "days": [
+    {
+     "focus": "Reference board and resolution options",
+     "steps": [
+      "Collect references you have rights to view into assets/art_sources/reference/ (links and notes, not copied art in the build)",
+      "Options for character height: 32, 48, 64 px at 640x360 base with integer scaling to 1280x720/1920x1080 -- pros and cons for animation hours",
+      "Mock a Kaelen silhouette at each height in PAE",
+      "Note the pilot's minutes-per-frame for each option"
+     ],
+     "done": "3 height mocks and a recommendation"
+    },
+    {
+     "focus": "Palette and readability tests",
+     "steps": [
+      "Draft a master palette (target 32-48 colours) with ramps for skin, cloth, metal, foliage, glitch accents",
+      "Readability test: Kaelen vs forest, bridge and cave placeholder backgrounds",
+      "Colour-blind check of hurt/parry/telegraph colours with a simulator",
+      "Write assets/art_sources/reference/palette_v0.md"
+     ],
+     "done": "Palette v0 with readability notes"
+    },
+    {
+     "focus": "Style rules draft for /art-bible",
+     "steps": [
+      "Outline rules, light direction, dithering policy, glitch-effect language (how 'corruption' looks)",
+      "Tile grid size proposal (16 px) and how it matches 32x32-tile chunks",
+      "UI pixel style direction",
+      "List open questions for the /art-bible session in Y1-P3"
+     ],
+     "done": "Inputs folder ready for /art-bible"
+    }
+   ],
+   "edge_cases": [
+    "Palette fails colour-blind check for telegraph red vs foliage green"
+   ],
+   "evidence": "assets/art_sources/reference/*; palette_v0.md"
+  },
+  {
+   "id": "Y1-P2-T40",
+   "stream": "secondary",
+   "title": "Run sprint reviews and the phase milestone",
+   "why": "§14 monthly milestone review and retrospective",
+   "tags": [
+    "team",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Mid-February status",
+     "steps": [
+      "/sprint-status for February",
+      "Compare primary progress against T01-T09; move slipped items",
+      "Update the risk register (Hell fairness, legacy enemies)",
+      "Log energy and hours honestly (burnout risk §13)"
+     ],
+     "done": "Status note in production/sprints/2027-02.md"
+    },
+    {
+     "focus": "March sprint plan",
+     "steps": [
+      "/sprint-plan for March: encounters, Root Access, FeelService, arenas, Ch1 fights, replays",
+      "Book the 4 playtests and the Hell session",
+      "List carry-overs from February",
+      "Confirm evidence paths"
+     ],
+     "done": "production/sprints/2027-03.md"
+    },
+    {
+     "focus": "Mid-March status",
+     "steps": [
+      "/sprint-status for March",
+      "Check that every Ch1 fight has a replay and a screenshot",
+      "Escalate anything blocking Gate 1",
+      "Update the tracker"
+     ],
+     "done": "Status note added"
+    },
+    {
+     "focus": "Phase retrospective",
+     "steps": [
+      "/retrospective for Y1-P2",
+      "What slowed the combat rewrite? What to change for the art pipeline?",
+      "Record measured days per task vs plan",
+      "Feed the numbers into the Y1-P3 sprint plan"
+     ],
+     "done": "production/retros/y1p2.md"
+    }
+   ],
+   "edge_cases": [
+    "A task that ran > 150% of estimate: write why"
+   ],
+   "evidence": "production/sprints/2027-0*.md; production/retros/y1p2.md"
+  },
+  {
+   "id": "Y1-P2-T41",
+   "stream": "secondary",
+   "title": "Review the combat design docs and balance",
+   "why": "Design standards: /design-review before programmers rely on a GDD",
+   "tags": [
+    "docs",
+    "difficulty",
+    "combat"
+   ],
+   "days": [
+    {
+     "focus": "Cross-review of combat GDDs",
+     "steps": [
+      "/design-review on root-access.md and the four enemy specs",
+      "Check numbers match data/combat/*.tres in the repo",
+      "Fix contradictions between combat-player.md and difficulty.md",
+      "Record decisions in the GDD changelogs"
+     ],
+     "done": "All combat GDDs reviewed"
+    },
+    {
+     "focus": "Balance pass on Chapter 1 fights",
+     "steps": [
+      "/balance-check on enemy HP, damage and player damage per difficulty",
+      "Time-to-kill targets: slime 10-20 s, boar 30-60 s, Aldric 2-4 min on Medium",
+      "Adjust values in the specs; hand changes to primary",
+      "Note what playtests must confirm"
+     ],
+     "done": "Balance notes with TTK table"
+    }
+   ],
+   "edge_cases": [
+    "Hell TTK for Aldric > 10 min means attrition, not skill: flag"
+   ],
+   "evidence": "design/gdd/* review logs; design/balance/ch1_ttk.md"
+  },
+  {
+   "id": "Y1-P2-T42",
+   "stream": "secondary",
+   "title": "Write one-page designs for the five Glitch Arts",
+   "why": "DESIGN_PILLARS Glitch Arts approved set; built with the combat foundation",
+   "tags": [
+    "combat",
+    "docs",
+    "fun"
+   ],
+   "days": [
+    {
+     "focus": "Noclip Step, Freeze Frame, Clone Process",
+     "steps": [
+      "design/gdd/glitch-arts.md: per art -- input, Soul cost (Low/Medium mapped to numbers), frames, interaction with i-frames and bosses",
+      "Freeze Frame: 1.5 s on enemies, 0.4 s on bosses, telegraphed recovery",
+      "Clone Process: 3 s aggro decoy; what bosses do with it",
+      "Animation needs per art for PAE"
+     ],
+     "done": "3 arts specified"
+    },
+    {
+     "focus": "Overwrite, Source Peek and unlock plan",
+     "steps": [
+      "Overwrite: projectile ownership flip, timing window, Hell behaviour",
+      "Source Peek: 5 s weak-point view; accessibility value",
+      "Unlock order through Chapters 1-2 (decided with the user)",
+      "/design-review"
+     ],
+     "done": "glitch-arts.md reviewed"
+    }
+   ],
+   "edge_cases": [
+    "Freeze Frame on a boss mid-phase-transition",
+    "Overwrite on a beam (non-projectile)"
+   ],
+   "evidence": "design/gdd/glitch-arts.md"
+  },
+  {
+   "id": "Y1-P2-T43",
+   "stream": "secondary",
+   "title": "Specify the combat HUD",
+   "why": "§4.4 HP bar lerp bug; UX before UI code",
+   "tags": [
+    "ui",
+    "ux",
+    "combat"
+   ],
+   "days": [
+    {
+     "focus": "Combat HUD UX spec",
+     "steps": [
+      "/ux-design for the combat HUD: HP, MP, Soul, healing charges, boss bar with poise, combo counter",
+      "Rules: one bar per value, starts at the real value, no lerp from 0",
+      "Gamepad-only and keyboard layouts",
+      "Readability at 1280x720"
+     ],
+     "done": "design/ux/combat_hud.md drafted"
+    },
+    {
+     "focus": "Review and handoff",
+     "steps": [
+      "/ux-review on combat_hud.md",
+      "Mock it in Godot with placeholder theme",
+      "Screenshot for evidence",
+      "List items waiting for the Y1-P3 UI Theme and font"
+     ],
+     "done": "Review verdict recorded; production/qa/evidence/y1p2/combat_hud_mock.png"
+    }
+   ],
+   "edge_cases": [
+    "Boss with no poise bar (non-boss elite)",
+    "HP over 999"
+   ],
+   "evidence": "design/ux/combat_hud.md; production/qa/evidence/y1p2/combat_hud_mock.png"
+  },
+  {
+   "id": "Y1-P2-T44",
+   "stream": "secondary",
+   "title": "Write the combat accessibility spec",
+   "why": "Gate 7 accessibility; baseline later in Y1-P4",
+   "tags": [
+    "accessibility",
+    "combat",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Combat accessibility options",
+     "steps": [
+      "design/ux/combat_accessibility.md: screen-shake slider, flash reduction, rumble strength, hold vs toggle for block and charge",
+      "Source Peek as an accessibility aid on every difficulty",
+      "Latency offset (from the Hell validation)",
+      "Which options are in Y1-P2 code vs the Y1-P4 baseline"
+     ],
+     "done": "Spec covers 7 options"
+    }
+   ],
+   "edge_cases": [
+    "Flash reduction must still show the parry success clearly"
+   ],
+   "evidence": "design/ux/combat_accessibility.md"
+  },
+  {
+   "id": "Y1-P2-T45",
+   "stream": "secondary",
+   "title": "Map review findings to issues for this phase",
+   "why": "§5 'turn every review finding into a GitHub Issue tagged with its phase'",
+   "tags": [
+    "docs",
+    "team"
+   ],
+   "days": [
+    {
+     "focus": "§4.4/§4.5 issues",
+     "steps": [
+      "List every §4.4 and §4.5 bullet with file:line and its new owner (state, encounter, BossController)",
+      "Ask the user before creating any GitHub issue; if declined, keep docs/reviews/issue_backlog.md",
+      "Label phase:Y1-P2",
+      "Link each to its planned replay test"
+     ],
+     "done": "Every §4.4/4.5 item has an issue or backlog line"
+    }
+   ],
+   "edge_cases": [
+    "Item already fixed in Phase 0: close with the test name"
+   ],
+   "evidence": "GitHub issues labelled phase:Y1-P2 or docs/reviews/issue_backlog.md"
+  },
+  {
+   "id": "Y1-P2-T46",
+   "stream": "secondary",
+   "title": "Start the cost-per-asset log",
+   "why": "Gate 1 criterion 'cost per asset measured'; §3 re-baseline",
+   "tags": [
+    "art",
+    "business",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Cost log template and first data",
+     "steps": [
+      "production/cost/asset_hours.csv columns: date, asset id, type, frames/tiles, minutes, rework minutes, tool",
+      "production/cost/README.md: how to log, what counts as rework",
+      "Back-fill the PAE pilot entries",
+      "First estimate: minutes per animation frame and per tile"
+     ],
+     "done": "Log has the pilot data and a first per-frame estimate"
+    }
+   ],
+   "edge_cases": [
+    "Time spent learning PAE: log separately as 'learning'"
+   ],
+   "evidence": "production/cost/asset_hours.csv"
+  },
+  {
+   "id": "Y1-P2-T47",
+   "stream": "secondary",
+   "title": "Direct the combat music layers",
+   "why": "§5 Months 7-9 '4 adaptive tracks'; §4.7 dynamic music overriding chosen tracks",
+   "tags": [
+    "music",
+    "audio",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Adaptive combat music direction",
+     "steps": [
+      "design/audio/music_direction.md: 4 slice tracks (Oakhaven day, Oakhaven night, field combat, Aldric boss) with layers (base, percussion, tension)",
+      "Rules: explicit track choice beats dynamic music; music clock ignores hitstop",
+      "Tempo and key notes for the composer (yourself for now)",
+      "Stems naming convention for the Y1-P3 import"
+     ],
+     "done": "Music direction doc with 4 track briefs"
+    }
+   ],
+   "edge_cases": [
+    "Boss music change during a phase transition with hitstop"
+   ],
+   "evidence": "design/audio/music_direction.md"
+  },
+  {
+   "id": "Y1-P2-T48",
+   "stream": "secondary",
+   "title": "Audit the asset folders before the PAE pipeline",
+   "why": "Clean project folder; AGENTS.md art-pipeline rules; review §6 'delete .png.import files'",
+   "tags": [
+    "assets",
+    "cleanup",
+    "art"
+   ],
+   "days": [
+    {
+     "focus": "Asset inventory and keep/archive proposal",
+     "steps": [
+      "/asset-audit over AethelgardPrototype/assets (generated, generated_v2, generated_v3, production_art, sprites, tilesets)",
+      "List the 72 missing asset paths reported by AssetManager and which ones PAE will replace",
+      "Proposal table: keep, archive to assets/art_sources, or delete -- respecting accepted baselines (Oakhaven, Ironhold, Fractured Wastes) and the V3 props lock",
+      "Ask the user before moving anything"
+     ],
+     "done": "docs/art_pipeline/asset_inventory_2027-03.md with a proposal awaiting approval"
+    }
+   ],
+   "edge_cases": [
+    "Accepted baseline assets must not be listed for deletion"
+   ],
+   "evidence": "docs/art_pipeline/asset_inventory_2027-03.md"
+  }
+ ]
+}

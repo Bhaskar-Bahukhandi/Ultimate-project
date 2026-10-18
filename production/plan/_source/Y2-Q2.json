@@ -1,0 +1,2635 @@
+{
+ "phase_id": "Y2-Q2",
+ "phase_title": "Market signal",
+ "goal": "The demo has been iterated twice from telemetry and playtest data, has run in Steam Next Fest, the legal groundwork (license audit, AI disclosure, title trademark search, gambling rating impact) is documented, and Gate 2 has been decided on 2028-03-31 with an ADR.",
+ "exit_criteria": [
+  "Demo completion rate measured from opted-in telemetry (Gate 2 target: >= 40%)",
+  "Wishlist and follower targets set by the user from comparable indie RPGs before Next Fest, then measured against",
+  ">= 70% of surveyed testers state the hook correctly in one sentence (threshold set by the user)",
+  "Measured cost per asset compared with roadmap §3 (Gate 2: within +/-30%)",
+  "Asset license audit complete: every shipped asset has a provenance entry; Steam AI-content disclosure re-checked against current rules",
+  "Title trademark search and simulated-gambling rating memo written, with 'consult a professional' items listed",
+  "Gate 2 ADR recorded: pass, or the chosen fallback (rework the hook for a quarter, or a smaller first commercial release)"
+ ],
+ "tasks": [
+  {
+   "id": "Y2-Q2-T01",
+   "stream": "primary",
+   "title": "Build the telemetry analysis toolkit (funnel, deaths, timing, economy)",
+   "why": "Roadmap §6 Y2-Q2: iterate on the demo from data; Gate 2 completion rate",
+   "tags": [
+    "tools",
+    "code",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Plan the analysis toolkit",
+     "steps": [
+      "List the questions Gate 2 needs answered: completion rate, drop-off points, deaths per boss and difficulty, deadline outcomes, minigame and auction use",
+      "Define the input: telemetry JSON lines from `docs/telemetry/demo_events.md`",
+      "Choose plain Python in `tools/telemetry/` with tests (no external services)",
+      "Define how sessions are deduplicated by install ID"
+     ],
+     "done": "Toolkit plan with each question mapped to an event"
+    },
+    {
+     "focus": "Ingest and clean the event files",
+     "steps": [
+      "Write `tools/telemetry/ingest.py`: validate each event against the schema, drop malformed lines, report counts",
+      "Group by install ID and session; handle clock skew by using event order",
+      "Separate tester cohorts from public players by build channel",
+      "Unit tests with fixture files in `tools/telemetry/tests/`"
+     ],
+     "done": "Ingest runs on the itch data with a clean-up report"
+    },
+    {
+     "focus": "Funnel report",
+     "steps": [
+      "Write `tools/telemetry/funnel.py`: share of sessions reaching each checkpoint from prologue to `demo_end`",
+      "Completion rate = installs with `demo_end` / installs with `session_start` past the first menu (definition written down)",
+      "Output a Markdown table and a chart",
+      "Test against a synthetic fixture with known answers"
+     ],
+     "done": "Funnel numbers match the fixture exactly"
+    },
+    {
+     "focus": "Deaths and fairness report",
+     "steps": [
+      "Deaths per boss, per AttackSpec ID and per difficulty",
+      "Attempts before first win per boss",
+      "Flag attacks causing over X% of deaths (threshold agreed with the user)",
+      "Join with survey fairness answers where tester IDs exist"
+     ],
+     "done": "Death report produced for the itch data"
+    },
+    {
+     "focus": "Timing, minigame and auction reports",
+     "steps": [
+      "Deadline outcome shares for the bridge and the convoy, per difficulty",
+      "MG-1, MG-2 and gambling play counts and median session length",
+      "Auction bids per player and final prices",
+      "Time spent per region"
+     ],
+     "done": "All three reports produced"
+    },
+    {
+     "focus": "One command, tests and documentation",
+     "steps": [
+      "Add `tools/telemetry/run_all.ps1` producing `production/analytics/<date>/report.md`",
+      "Edge case: empty data, a single session, a session with no `demo_end`",
+      "Document the definitions in the report header so Gate 2 numbers are reproducible",
+      "Commit with tests"
+     ],
+     "done": "Report generated from one command; edge-case tests green"
+    }
+   ],
+   "edge_cases": [
+    "Duplicate install IDs",
+    "Sessions from debug builds mixed in",
+    "Clock changes on the player's PC"
+   ],
+   "evidence": "tools/telemetry/tests; production/analytics/<date>/report.md"
+  },
+  {
+   "id": "Y2-Q2-T02",
+   "stream": "primary",
+   "title": "Funnel analysis round 1 on itch and cohort data",
+   "why": "Roadmap §6: iterate from data",
+   "tags": [
+    "fun",
+    "ux",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Run the reports on all data so far",
+     "steps": [
+      "Run `tools/telemetry/run_all.ps1` on itch public data and cohorts A and B",
+      "Compute the completion rate with its definition",
+      "List the 5 largest drop-off points",
+      "Cross-check with playtest reports"
+     ],
+     "done": "Round-1 report generated"
+    },
+    {
+     "focus": "Find causes for the drop-offs",
+     "steps": [
+      "Watch replays or playtest recordings for each drop-off",
+      "Classify each: clarity, difficulty spike, bug, pacing, performance",
+      "Estimate the fix size",
+      "Write the causes into the round-1 report"
+     ],
+     "done": "Causes classified"
+    },
+    {
+     "focus": "Write round-1 findings",
+     "steps": [
+      "Write `production/analytics/round1_findings.md` with numbers, causes and recommended changes",
+      "Mark which changes are safe before the Next Fest build review",
+      "Review with the user",
+      "Feed the agreed list into iteration 1"
+     ],
+     "done": "Findings approved"
+    }
+   ],
+   "edge_cases": [
+    "Too few opted-in sessions to be meaningful (say so, do not over-read)"
+   ],
+   "evidence": "production/analytics/round1_findings.md"
+  },
+  {
+   "id": "Y2-Q2-T03",
+   "stream": "primary",
+   "title": "Demo iteration 1 (before the Next Fest build review)",
+   "why": "Gate 2 completion >= 40%; the Next Fest build is the most-played version",
+   "tags": [
+    "fun",
+    "ux",
+    "code",
+    "difficulty"
+   ],
+   "days": [
+    {
+     "focus": "Iteration 1: choose the fixes from the funnel report",
+     "steps": [
+      "Read the Iteration 1 funnel report and rank drop-off points by players lost",
+      "For each of the top items write a hypothesis, the change, and the metric that should move",
+      "Agree the list with the user; design changes that touch combat, story progression or saves need explicit approval",
+      "Tag each item with the build version it will ship in"
+     ],
+     "done": "Iteration 1 change list agreed with a target metric per item"
+    },
+    {
+     "focus": "Iteration 1 item 1: the first ten minutes after the crash site",
+     "steps": [
+      "Reproduce the problem at 'the first ten minutes after the crash site' with the telemetry seed or a playtest save",
+      "Change: tighten the path to Elara and make the first goal explicit in the quest log",
+      "Add or update a test that locks the new behaviour",
+      "Instrument the metric: share of sessions reaching Elara",
+      "Run the bot route through the area on Beginner and Hell"
+     ],
+     "done": "the first ten minutes after the crash site change merged with its metric instrumented"
+    },
+    {
+     "focus": "Iteration 1 item 2: the Aldric fight",
+     "steps": [
+      "Reproduce the problem at 'the Aldric fight' with the telemetry seed or a playtest save",
+      "Change: adjust Beginner/Easy telegraph multipliers within §12.1 ranges if deaths cluster on one attack; never touch Hell windows",
+      "Add or update a test that locks the new behaviour",
+      "Instrument the metric: attempts before first win on Beginner/Easy",
+      "Run the bot route through the area on Beginner and Hell"
+     ],
+     "done": "the Aldric fight change merged with its metric instrumented"
+    },
+    {
+     "focus": "Iteration 1 item 3: the road from Oakhaven to Ironhold",
+     "steps": [
+      "Reproduce the problem at 'the road from Oakhaven to Ironhold' with the telemetry seed or a playtest save",
+      "Change: add a waystation sign and a clear quest marker at the seam",
+      "Add or update a test that locks the new behaviour",
+      "Instrument the metric: share reaching the Ironhold gate",
+      "Run the bot route through the area on Beginner and Hell"
+     ],
+     "done": "the road from Oakhaven to Ironhold change merged with its metric instrumented"
+    },
+    {
+     "focus": "Iteration 1 item 4: the Clock Tower climb",
+     "steps": [
+      "Reproduce the problem at 'the Clock Tower climb' with the telemetry seed or a playtest save",
+      "Change: fix the most common stall point (signage or a checkpoint)",
+      "Add or update a test that locks the new behaviour",
+      "Instrument the metric: time spent in the Clock Tower",
+      "Run the bot route through the area on Beginner and Hell"
+     ],
+     "done": "the Clock Tower climb change merged with its metric instrumented"
+    },
+    {
+     "focus": "Iteration 1 item 5: the auction and MG-2 discovery",
+     "steps": [
+      "Reproduce the problem at 'the auction and MG-2 discovery' with the telemetry seed or a playtest save",
+      "Change: add a reason to visit in the main path (a quest-log hint from Rook)",
+      "Add or update a test that locks the new behaviour",
+      "Instrument the metric: share of players who place a bid or play MG-2",
+      "Run the bot route through the area on Beginner and Hell"
+     ],
+     "done": "the auction and MG-2 discovery change merged with its metric instrumented"
+    },
+    {
+     "focus": "Iteration 1 item 6: the convoy deadline warning",
+     "steps": [
+      "Reproduce the problem at 'the convoy deadline warning' with the telemetry seed or a playtest save",
+      "Change: make the tower-gate warning harder to miss",
+      "Add or update a test that locks the new behaviour",
+      "Instrument the metric: share of `_late` outcomes that saw the warning",
+      "Run the bot route through the area on Beginner and Hell"
+     ],
+     "done": "the convoy deadline warning change merged with its metric instrumented"
+    },
+    {
+     "focus": "Iteration 1: ship the iteration build and verify",
+     "steps": [
+      "Export with `export_windows.ps1 -Demo`, run the tour and the nightly bot",
+      "Check saves from the previous demo version load",
+      "Push to itch and the Steam demo private branch; the user makes it public",
+      "Write patch notes with `/patch-notes`"
+     ],
+     "done": "Iteration 1 build live; old saves load"
+    }
+   ],
+   "edge_cases": [
+    "A fix that changes a flag name (needs a save migration)",
+    "Lower-difficulty tuning leaking into Hell",
+    "Old demo saves after the change"
+   ],
+   "evidence": "Iteration-1 build tag; tests per change; funnel metric per item"
+  },
+  {
+   "id": "Y2-Q2-T04",
+   "stream": "primary",
+   "title": "Next Fest demo build and build-review submission",
+   "why": "Steam Next Fest rules: demo build review >= 3 weeks before the fest (>= 5 weeks for the press preview); public base-game page",
+   "tags": [
+    "release",
+    "tools",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Confirm the dates and freeze the Next Fest build",
+     "steps": [
+      "Re-read `docs/release/next_fest_2028.md` and the Steamworks Next Fest page; confirm the February 2028 dates and both review deadlines",
+      "If the 5-week press-preview deadline has already passed, decide with the user to aim for the 3-week deadline",
+      "Freeze content: only fixes after this day",
+      "Tag `demo-v0.2.0-rc1`"
+     ],
+     "done": "Build frozen and dates confirmed"
+    },
+    {
+     "focus": "Release-candidate verification",
+     "steps": [
+      "Run `/release-checklist`, the nightly bot matrix, the tour and the perf check on the RC",
+      "Install from the private Steam branch on a clean profile",
+      "Check every store-page claim exists in the build",
+      "Fix only blockers"
+     ],
+     "done": "RC verified"
+    },
+    {
+     "focus": "Submit the demo for build review",
+     "steps": [
+      "Push the RC with `tools/push_steam_demo.ps1`",
+      "The user submits the demo for review in Steamworks",
+      "Record the submission date against the deadline",
+      "Prepare to answer review feedback within a day"
+     ],
+     "done": "Submission recorded before the deadline"
+    },
+    {
+     "focus": "Build review follow-up and fest-day readiness",
+     "steps": [
+      "Answer review notes or fix issues raised",
+      "Plan the release time (Steam recommends releasing the demo at least 30 minutes before the event starts; re-check)",
+      "Prepare a hotfix branch and the hotfix checklist",
+      "Write the on-call plan for fest week (hours, what counts as a hotfix)"
+     ],
+     "done": "Review passed or issues fixed; fest on-call plan written"
+    }
+   ],
+   "edge_cases": [
+    "Review rejection close to the deadline",
+    "Late-found crash after the freeze"
+   ],
+   "evidence": "docs/release/next_fest_2028.md with submission date; build review result"
+  },
+  {
+   "id": "Y2-Q2-T05",
+   "stream": "primary",
+   "title": "Measure cost per asset from the project's own records",
+   "why": "Gate 2: measured cost per asset supports §3 within +/-30%",
+   "tags": [
+    "tools",
+    "business",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Define asset categories and the data sources",
+     "steps": [
+      "Categories: character clip, tileset chunk, item icon, enemy, boss, SFX, music minute, dialogue word, quest",
+      "Sources: the daily logs, git history per asset path, the Gate 1 measurement",
+      "Define 'cost' as focused hours including iteration and import",
+      "Write the method in `docs/production/cost_per_asset.md`"
+     ],
+     "done": "Method written"
+    },
+    {
+     "focus": "Build the measurement script",
+     "steps": [
+      "Write `tools/production/cost_per_asset.py` that maps commits and log entries to asset categories",
+      "Output hours per unit per category with sample sizes",
+      "Flag categories with fewer than 5 samples as low confidence",
+      "Unit test with a fixture log"
+     ],
+     "done": "Script outputs a category table"
+    },
+    {
+     "focus": "Compare against §3 and project the scope",
+     "steps": [
+      "Multiply unit costs by §3 counts (e.g. ~40 clips, ~450 items, ~900 SFX, ~400k words)",
+      "Compare with the plan's capacity per year and the team plan",
+      "Mark each category inside or outside +/-30%",
+      "Hand the table to the Gate 2 evidence pack"
+     ],
+     "done": "Projection table in the Gate 2 evidence folder"
+    }
+   ],
+   "edge_cases": [
+    "Assets made before logging started",
+    "Rework counted twice"
+   ],
+   "evidence": "docs/production/cost_per_asset.md; projection table"
+  },
+  {
+   "id": "Y2-Q2-T06",
+   "stream": "primary",
+   "title": "Build the asset provenance scanner for the license audit",
+   "why": "Roadmap §6 legal groundwork (asset license audit) and §13 legal risk: provenance records",
+   "tags": [
+    "tools",
+    "legal",
+    "assets"
+   ],
+   "days": [
+    {
+     "focus": "Define the provenance manifest",
+     "steps": [
+      "Fields per file: path, source (made in-house / PAE / AI-assisted / licensed / Godot built-in), license, author, tool, date, AI flag, notes",
+      "Decide format: `assets/PROVENANCE.csv` plus per-folder overrides",
+      "List what counts as shipped: everything not excluded by the export filter",
+      "Agree with the user"
+     ],
+     "done": "Manifest format agreed"
+    },
+    {
+     "focus": "Write the scanner",
+     "steps": [
+      "Write `tools/legal/provenance_scan.py`: list every shipped file from the export preset and match it to the manifest",
+      "Report missing entries, unknown licenses and AI-flagged files",
+      "Also scan fonts, shaders, addons and the Godot engine license notice",
+      "Unit tests with a fixture tree"
+     ],
+     "done": "Scanner runs and reports gaps"
+    },
+    {
+     "focus": "Seed the manifest from known sources",
+     "steps": [
+      "Pre-fill entries for PAE assets from the importer's metadata",
+      "Pre-fill audio entries from the license records kept in Q1",
+      "Pre-fill third-party code (gdUnit4 and any addon) with their license files",
+      "Run the scanner and count gaps"
+     ],
+     "done": "Gap count recorded for the secondary stream's audit"
+    },
+    {
+     "focus": "CI check and edge cases",
+     "steps": [
+      "Add the scanner to CI: fail on any shipped file without an entry",
+      "Edge case: generated files (`.import`, `.uid`) handled by rule",
+      "Edge case: assets under `assets/art_sources/` must never be shipped",
+      "Document the process in `docs/legal/provenance.md`"
+     ],
+     "done": "CI provenance check green on the demo preset"
+    }
+   ],
+   "edge_cases": [
+    "Generated import files",
+    "An asset whose source is unknown"
+   ],
+   "evidence": "tools/legal/provenance_scan.py; CI job; docs/legal/provenance.md"
+  },
+  {
+   "id": "Y2-Q2-T07",
+   "stream": "primary",
+   "title": "Region configuration for simulated gambling",
+   "why": "Roadmap §12.7 and §13: gambling raises ratings and some countries restrict it; mitigation 'region config'",
+   "tags": [
+    "code",
+    "legal",
+    "systems"
+   ],
+   "days": [
+    {
+     "focus": "Design the gambling content switch",
+     "steps": [
+      "List every gambling surface: the Gate 1 gambling game, arena betting if present, any dice in dialogue",
+      "Design `GamblingPolicy` (data resource) with modes: on, hidden (tables closed with an in-world reason), off",
+      "Decide what sets it: a build feature tag per regional build, not runtime IP detection",
+      "Check that the story never needs gambling (PM rule: 'The story never forces gambling or auctions')"
+     ],
+     "done": "Design approved"
+    },
+    {
+     "focus": "Implement the switch",
+     "steps": [
+      "Implement `GamblingPolicy` and read it in every gambling surface",
+      "Closed tables show an in-world sign; no broken interactions",
+      "Achievements or completion tracker items tied to gambling are excluded when off",
+      "Unit tests per mode"
+     ],
+     "done": "All three modes work in a debug run"
+    },
+    {
+     "focus": "Tests and bot runs per mode",
+     "steps": [
+      "Run the bot through the demo with gambling off",
+      "Check the economy sim with gambling off (sinks still balance)",
+      "Edge case: a save from a build with gambling on loaded in a build with it off",
+      "Write `tests/integration/legal/test_gambling_policy.gd`"
+     ],
+     "done": "Bot and sim pass with gambling off"
+    }
+   ],
+   "edge_cases": [
+    "Save carrying gambling winnings into an off build",
+    "Completion tracker demanding a gambling win"
+   ],
+   "evidence": "tests/integration/legal/test_gambling_policy.gd"
+  },
+  {
+   "id": "Y2-Q2-T08",
+   "stream": "primary",
+   "title": "Difficulty and fairness tuning from death data",
+   "why": "P6 and Gate 1 fairness (>= 70% of Hard/Hell testers say deaths are fair)",
+   "tags": [
+    "difficulty",
+    "combat",
+    "fun"
+   ],
+   "days": [
+    {
+     "focus": "Read the death data per difficulty",
+     "steps": [
+      "Run the deaths report; list attacks with outlier death shares per difficulty",
+      "Compare with survey fairness answers",
+      "Separate 'unfair' (unreadable, unavoidable) from 'hard' (readable, needs practice)",
+      "List candidate changes within the §12.1 tables"
+     ],
+     "done": "Candidate list with evidence"
+    },
+    {
+     "focus": "Fix unreadable attacks",
+     "steps": [
+      "For each 'unfair' attack: fix the telegraph frames or SFX cue, not the window",
+      "Re-run the replay tests (perfect run wins, one frame off loses on Hell)",
+      "Update MoveData only through the tuning panel",
+      "Record before/after clips"
+     ],
+     "done": "Replay tests green after changes"
+    },
+    {
+     "focus": "Tune lower difficulties",
+     "steps": [
+      "Adjust Beginner and Easy damage or healing charges within the §12.1 bands if completion data supports it",
+      "Check DDA behaviour on Beginner/Easy",
+      "Run the bot on all 5 difficulties",
+      "Run `/balance-check`"
+     ],
+     "done": "Bot green on all 5; balance-check clean"
+    },
+    {
+     "focus": "Fairness verification and notes",
+     "steps": [
+      "Ask Discord testers on Hard/Hell to replay the changed bosses",
+      "Collect a short fairness survey",
+      "Record the change log in `docs/combat/tuning_log.md`",
+      "Feed open issues into the combat bible (Y2-PP)"
+     ],
+     "done": "Fairness survey results recorded"
+    }
+   ],
+   "edge_cases": [
+    "Changing a Hell window (forbidden)",
+    "DDA masking a real spike"
+   ],
+   "evidence": "docs/combat/tuning_log.md; boss replay tests"
+  },
+  {
+   "id": "Y2-Q2-T09",
+   "stream": "primary",
+   "title": "Next Fest live operations (fest week)",
+   "why": "Steam Next Fest runs about 7 days; stability and fast fixes protect the signal",
+   "tags": [
+    "release",
+    "code",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Fest day 1: launch watch",
+     "steps": [
+      "Confirm the demo is live at least 30 minutes before the start",
+      "Watch crash reports and Steam discussions every few hours",
+      "Log every crash with version and stack",
+      "Post a short 'we are here' note with the community stream"
+     ],
+     "done": "Day-1 crash log written"
+    },
+    {
+     "focus": "Fest day 2: first hotfix decision",
+     "steps": [
+      "Rank crashes and blockers by players affected",
+      "Write failing tests for the top issues",
+      "Fix only safe issues; everything else waits",
+      "Decide with the user whether to ship a hotfix"
+     ],
+     "done": "Hotfix decision recorded"
+    },
+    {
+     "focus": "Fest day 3: hotfix build if needed",
+     "steps": [
+      "Export, run the bot and tour, push to Steam",
+      "Check old demo saves load",
+      "Post patch notes",
+      "Watch for new crashes after the patch"
+     ],
+     "done": "Hotfix live or skipped with a reason"
+    },
+    {
+     "focus": "Fest day 4: telemetry mid-point check",
+     "steps": [
+      "Run the funnel on fest data so far",
+      "Compare completion with the itch baseline",
+      "Spot any new drop-off caused by a fix",
+      "Share safe numbers with the community stream"
+     ],
+     "done": "Mid-fest funnel recorded"
+    },
+    {
+     "focus": "Fest day 5: performance and hardware reports",
+     "steps": [
+      "Group reports by GPU, OS and Steam Deck",
+      "Reproduce the most common hardware issue",
+      "Plan a fix for post-fest",
+      "Answer reports with workarounds"
+     ],
+     "done": "Hardware issue list"
+    },
+    {
+     "focus": "Fest day 6: second hotfix window + Fest day 7: close-out",
+     "steps": [
+      "Ship a second hotfix only for crashes or softlocks",
+      "Re-run the full checks",
+      "Update the known-issues list",
+      "Log decisions",
+      "Snapshot telemetry, wishlists and follower counts at the end",
+      "Archive crash logs and the fest build",
+      "List everything deferred to iteration 2",
+      "Thank players in a closing post with the community stream"
+     ],
+     "done": "Fest snapshot archived"
+    }
+   ],
+   "edge_cases": [
+    "A crash on a common GPU",
+    "A hotfix that breaks old saves",
+    "Steam outage during the fest"
+   ],
+   "evidence": "Fest crash log; snapshot in production/analytics/next_fest/"
+  },
+  {
+   "id": "Y2-Q2-T10",
+   "stream": "primary",
+   "title": "Post-fest analysis (round 2)",
+   "why": "Gate 2 evidence comes mostly from Next Fest data",
+   "tags": [
+    "fun",
+    "docs",
+    "tools"
+   ],
+   "days": [
+    {
+     "focus": "Run the full report on fest data",
+     "steps": [
+      "Run `run_all.ps1` on fest data separated from itch data",
+      "Compute completion rate, quit points, deaths, timing outcomes, minigame and auction use",
+      "Compare with round 1",
+      "Check sample size and say what it supports"
+     ],
+     "done": "Round-2 report generated"
+    },
+    {
+     "focus": "Segment the data",
+     "steps": [
+      "Segment by difficulty, input device and Steam Deck",
+      "Segment by players who saw the trailer vs not if the data allows (otherwise say so)",
+      "Find segments that drop much earlier than average",
+      "Write findings"
+     ],
+     "done": "Segments analysed"
+    },
+    {
+     "focus": "Combine with qualitative data",
+     "steps": [
+      "Read Steam discussions, Discord and survey answers from the fest",
+      "Tag themes and count them",
+      "Match themes to drop-offs",
+      "List hook sentences players wrote"
+     ],
+     "done": "Theme table done"
+    },
+    {
+     "focus": "Write round-2 findings",
+     "steps": [
+      "Write `production/analytics/round2_findings.md`",
+      "Recommend the iteration-2 list",
+      "Mark the Gate 2 numbers clearly with their definitions",
+      "Review with the user"
+     ],
+     "done": "Round-2 findings approved"
+    }
+   ],
+   "edge_cases": [
+    "Players who replay the demo several times inflate counts"
+   ],
+   "evidence": "production/analytics/round2_findings.md"
+  },
+  {
+   "id": "Y2-Q2-T11",
+   "stream": "primary",
+   "title": "Economy telemetry versus the simulation",
+   "why": "P7b; §13 economy exploit risk; the Y2-PP economy design needs real player behaviour",
+   "tags": [
+    "economy",
+    "tools"
+   ],
+   "days": [
+    {
+     "focus": "Compare real gold flows with the sim",
+     "steps": [
+      "Compute gold sources and sinks per player-hour from telemetry",
+      "Compare with the 100-day sim's per-hour flows",
+      "List the biggest differences",
+      "Check for any exploit patterns (repeated buy/sell, MG-2 farming)"
+     ],
+     "done": "Comparison table"
+    },
+    {
+     "focus": "Auction behaviour analysis",
+     "steps": [
+      "Bids per lot, sniping attempts, final price vs reserve",
+      "Check NPC bidders behaved as designed",
+      "List tuning ideas for the auction rules",
+      "Feed them to the economy design (Y2-PP)"
+     ],
+     "done": "Auction analysis written"
+    },
+    {
+     "focus": "Fix any live exploit and add a sim probe",
+     "steps": [
+      "If an exploit appeared, write a failing test and fix it in data",
+      "Add an exploit probe to the sim for the pattern found",
+      "Re-run the 100-day sim",
+      "Record in `docs/economy/telemetry_vs_sim.md`"
+     ],
+     "done": "Probe added; doc written"
+    }
+   ],
+   "edge_cases": [
+    "Too little auction data to conclude"
+   ],
+   "evidence": "docs/economy/telemetry_vs_sim.md"
+  },
+  {
+   "id": "Y2-Q2-T12",
+   "stream": "primary",
+   "title": "Demo iteration 2 (post-fest)",
+   "why": "Gate 2; the iterated demo stays up as the public face during pre-production",
+   "tags": [
+    "fun",
+    "ux",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Iteration 2: choose the fixes from the funnel report",
+     "steps": [
+      "Read the Iteration 2 funnel report and rank drop-off points by players lost",
+      "For each of the top items write a hypothesis, the change, and the metric that should move",
+      "Agree the list with the user; design changes that touch combat, story progression or saves need explicit approval",
+      "Tag each item with the build version it will ship in"
+     ],
+     "done": "Iteration 2 change list agreed with a target metric per item"
+    },
+    {
+     "focus": "Iteration 2 item 1: the largest post-fest drop-off point",
+     "steps": [
+      "Reproduce the problem at 'the largest post-fest drop-off point' with the telemetry seed or a playtest save",
+      "Change: apply the fix chosen in round-2 findings",
+      "Add or update a test that locks the new behaviour",
+      "Instrument the metric: share of players passing that point",
+      "Run the bot route through the area on Beginner and Hell"
+     ],
+     "done": "the largest post-fest drop-off point change merged with its metric instrumented"
+    },
+    {
+     "focus": "Iteration 2 item 2: the most common hardware issue from the fest",
+     "steps": [
+      "Reproduce the problem at 'the most common hardware issue from the fest' with the telemetry seed or a playtest save",
+      "Change: fix or add a settings fallback",
+      "Add or update a test that locks the new behaviour",
+      "Instrument the metric: crash-free sessions on that hardware",
+      "Run the bot route through the area on Beginner and Hell"
+     ],
+     "done": "the most common hardware issue from the fest change merged with its metric instrumented"
+    },
+    {
+     "focus": "Iteration 2 item 3: the weakest-rated fun section",
+     "steps": [
+      "Reproduce the problem at 'the weakest-rated fun section' with the telemetry seed or a playtest save",
+      "Change: apply the agreed pacing change",
+      "Add or update a test that locks the new behaviour",
+      "Instrument the metric: time spent and quit rate in that section",
+      "Run the bot route through the area on Beginner and Hell"
+     ],
+     "done": "the weakest-rated fun section change merged with its metric instrumented"
+    },
+    {
+     "focus": "Iteration 2 item 4: the hook delivery in the first 15 minutes",
+     "steps": [
+      "Reproduce the problem at 'the hook delivery in the first 15 minutes' with the telemetry seed or a playtest save",
+      "Change: surface Root Access and the timing hook earlier if testers missed it",
+      "Add or update a test that locks the new behaviour",
+      "Instrument the metric: hook-sentence accuracy in the next survey",
+      "Run the bot route through the area on Beginner and Hell"
+     ],
+     "done": "the hook delivery in the first 15 minutes change merged with its metric instrumented"
+    },
+    {
+     "focus": "Iteration 2: ship the iteration build and verify",
+     "steps": [
+      "Export with `export_windows.ps1 -Demo`, run the tour and the nightly bot",
+      "Check saves from the previous demo version load",
+      "Push to itch and the Steam demo private branch; the user makes it public",
+      "Write patch notes with `/patch-notes`"
+     ],
+     "done": "Iteration 2 build live; old saves load"
+    }
+   ],
+   "edge_cases": [
+    "A hardware fallback that changes visuals for everyone",
+    "Earlier hook beat skipping a tutorial prompt"
+   ],
+   "evidence": "Iteration-2 build tag; tests per change; round-4 survey metrics"
+  },
+  {
+   "id": "Y2-Q2-T13",
+   "stream": "primary",
+   "title": "Save migration from demo to full game, plus spine hardening",
+   "why": "§13 save breakage risk; demo players' saves should carry into the full game if the user decides so",
+   "tags": [
+    "save",
+    "code",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Decide demo-save carry-over",
+     "steps": [
+      "Options: carry Act 1 progress into the full game, carry only a cosmetic, or no carry-over",
+      "Check what Steam does with demo and full-game save folders (check current docs)",
+      "Write the trade-offs; the user decides",
+      "Record the decision as an ADR"
+     ],
+     "done": "ADR written"
+    },
+    {
+     "focus": "Implement the migration path",
+     "steps": [
+      "Add `SaveService.migrate(demo → full)` for the chosen option",
+      "Version-stamp demo saves",
+      "Refuse unknown versions with a clear message",
+      "Round-trip test in `tests/unit/save/test_demo_migration.gd`"
+     ],
+     "done": "Migration test green"
+    },
+    {
+     "focus": "Spine hardening from the quarter's bugs",
+     "steps": [
+      "List every bug in Q1–Q2 that came from a spine service (Transition, Save, StoryGraph, Flags, Clock)",
+      "Add a regression test for each",
+      "Fix any remaining root cause",
+      "Run `/regression-suite`"
+     ],
+     "done": "Regression tests added"
+    },
+    {
+     "focus": "Demo save migration edge cases",
+     "steps": [
+      "Edge case: demo save made mid-auction",
+      "Edge case: demo save made during the free roam after the hook",
+      "Edge case: corrupted demo save shows 'Damaged save — Restore'",
+      "Run the full suite"
+     ],
+     "done": "Edge-case tests green"
+    }
+   ],
+   "edge_cases": [
+    "Demo save mid-auction",
+    "Corrupted demo save",
+    "Save from demo 0.1.0"
+   ],
+   "evidence": "tests/unit/save/test_demo_migration.gd; ADR"
+  },
+  {
+   "id": "Y2-Q2-T14",
+   "stream": "primary",
+   "title": "Performance checks in CI with the fest hardware data",
+   "why": "§12.5 budgets; pre-production needs a perf baseline before content scales",
+   "tags": [
+    "performance",
+    "tools",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Update the minimum spec from real data",
+     "steps": [
+      "Read the hardware spread from fest telemetry (if collected) and Steam's public hardware survey",
+      "Propose a minimum spec with the user",
+      "Record it in `docs/perf/min_spec.md`",
+      "Update the store page system requirements (secondary stream)"
+     ],
+     "done": "Min spec recorded"
+    },
+    {
+     "focus": "Perf budgets in CI",
+     "steps": [
+      "Add per-scene frame-time budgets to the nightly bot",
+      "Add a streaming hitch budget (< 2 ms) at the region seam",
+      "Fail the job on budget breach; report the scene",
+      "Document the budgets"
+     ],
+     "done": "CI perf job active"
+    },
+    {
+     "focus": "Fix the top post-fest perf issue",
+     "steps": [
+      "Reproduce the top perf complaint",
+      "Profile and fix",
+      "Re-run the perf job",
+      "Note the result in the baseline doc"
+     ],
+     "done": "Fix merged; baseline updated"
+    }
+   ],
+   "edge_cases": [
+    "CI runners slower than minimum spec (calibrate thresholds)"
+   ],
+   "evidence": "docs/perf/min_spec.md; CI perf job"
+  },
+  {
+   "id": "Y2-Q2-T15",
+   "stream": "primary",
+   "title": "Map the orphaned systems before the Y2-PP deletion pass",
+   "why": "R7 duplicated systems; roadmap §6 legacy cleanup; deletions need a safe map first",
+   "tags": [
+    "cleanup",
+    "architecture",
+    "code"
+   ],
+   "days": [
+    {
+     "focus": "Find every user of each orphan candidate",
+     "steps": [
+      "Grep references to `scripts/cutscene/cutscene_director.gd`, `scripts/effects/cinematic_vfx.gd`, `scripts/effects/tween_animator.gd`",
+      "Grep the duplicate feel helpers: `combat_effects.gd apply_screen_shake`, `game_juice.gd`, `vfx_library.gd`, per-scene `_screen_flash`/`_shake` in chapter scripts, `enemy_base._screen_shake`, `player_combat._spawn_damage_number`",
+      "Grep the old item data: `inventory_system.gd ITEMS`, `shop_system.gd SHOP_ITEMS`, `crafting_system.gd MATERIAL_ITEMS`",
+      "Check which of these still exist in the repo at this date and which Y1 already removed"
+     ],
+     "done": "Reference table per candidate"
+    },
+    {
+     "focus": "Classify each reference",
+     "steps": [
+      "Mark each reference as: on the demo path, on chapters 3–10 only, or dead",
+      "Find the replacement owner for each (FeelService, ItemDB, timeline cutscenes)",
+      "Estimate deletion size per candidate",
+      "List stale probe files under `docs/` (count the .gd probes; there were 75 in Oct 2026)"
+     ],
+     "done": "Classification done"
+    },
+    {
+     "focus": "Write the deletion plan",
+     "steps": [
+      "Order deletions so each one leaves load_all and the route tests green",
+      "Write `docs/architecture/legacy_deletion_plan.md`",
+      "Add a CI check that fails on new references to deleted files",
+      "Review with the user"
+     ],
+     "done": "Deletion plan approved for Y2-PP"
+    }
+   ],
+   "edge_cases": [
+    "A reference inside a `.tscn` rather than a script",
+    "Autoload references in project.godot"
+   ],
+   "evidence": "docs/architecture/legacy_deletion_plan.md"
+  },
+  {
+   "id": "Y2-Q2-T16",
+   "stream": "primary",
+   "title": "Decide on a Simplified Chinese demo and prove the zh-CN pipeline",
+   "why": "Languages at 1.0: EN + Simplified Chinese; the localization pipeline must be proven before production",
+   "tags": [
+    "localization",
+    "tools",
+    "business"
+   ],
+   "days": [
+    {
+     "focus": "Decide whether the demo gets zh-CN",
+     "steps": [
+      "Read Next Fest wishlist share by language if Steam shows it (check what reports exist)",
+      "Estimate the demo word count and translation cost (get real quotes; no invented prices)",
+      "List the risks: quality, glossary not locked, rating text",
+      "The user decides; record it"
+     ],
+     "done": "Decision recorded"
+    },
+    {
+     "focus": "Prove the pipeline on one scene",
+     "steps": [
+      "Export the string table for one scene (`dialogue/ch1/elara_meeting.dlg`)",
+      "Insert a zh-CN translation (from a translator or a clearly marked test translation)",
+      "Run the scene in zh-CN; check font, line breaks and inline glyph tokens",
+      "Screenshot to `production/qa/evidence/y2q2/zh_cn_elara_meeting.png`"
+     ],
+     "done": "zh-CN scene renders correctly"
+    },
+    {
+     "focus": "Localization tests",
+     "steps": [
+      "Add a test that every string ID in the table exists in the .dlg files",
+      "Add a test for missing translations falling back to EN",
+      "Run `/localize` to find any hard-coded strings left",
+      "Document the pipeline in `docs/localization/pipeline.md`"
+     ],
+     "done": "Localization tests green"
+    }
+   ],
+   "edge_cases": [
+    "Line breaking without spaces",
+    "A missing glyph in the CJK font"
+   ],
+   "evidence": "production/qa/evidence/y2q2/zh_cn_elara_meeting.png; docs/localization/pipeline.md"
+  },
+  {
+   "id": "Y2-Q2-T17",
+   "stream": "primary",
+   "title": "Accessibility improvements from player feedback",
+   "why": "Accessibility baseline; demo players reported needs",
+   "tags": [
+    "accessibility",
+    "ux",
+    "ui"
+   ],
+   "days": [
+    {
+     "focus": "Collect accessibility feedback",
+     "steps": [
+      "Gather accessibility mentions from surveys, Discord and Steam",
+      "Rank by how many players they affect",
+      "Pick the top 3",
+      "Agree with the user"
+     ],
+     "done": "Top-3 list"
+    },
+    {
+     "focus": "Implement the top 3",
+     "steps": [
+      "Implement each item; one commit each",
+      "Add options text explaining each",
+      "Test with keyboard and pad",
+      "Screenshot each to `production/qa/evidence/y2q2/a11y_<item>.png`"
+     ],
+     "done": "Three items implemented"
+    },
+    {
+     "focus": "Verify and document",
+     "steps": [
+      "Run `/ux-review` on the changed screens",
+      "Update the accessibility statement on the store page",
+      "Add tests for option persistence",
+      "Log in CHANGELOG"
+     ],
+     "done": "Review clean; statement updated"
+    }
+   ],
+   "edge_cases": [
+    "Option persistence after a demo update"
+   ],
+   "evidence": "production/qa/evidence/y2q2/a11y_*.png"
+  },
+  {
+   "id": "Y2-Q2-T18",
+   "stream": "primary",
+   "title": "Monthly reviews and the pre-production re-plan",
+   "why": "Roadmap §14",
+   "tags": [
+    "docs",
+    "business"
+   ],
+   "days": [
+    {
+     "focus": "January and February reviews",
+     "steps": [
+      "Run `/milestone-review` for January and February",
+      "Compare planned and actual days",
+      "Update the risk register",
+      "Adjust March tasks"
+     ],
+     "done": "Reviews saved"
+    },
+    {
+     "focus": "Pre-production re-plan",
+     "steps": [
+      "Check that Y2-PP's first tasks have their inputs (route data, economy data, deletion plan)",
+      "Re-estimate Y2-PP from measured speed",
+      "Run `/sprint-plan` for April",
+      "Record changes"
+     ],
+     "done": "April sprint plan saved"
+    }
+   ],
+   "edge_cases": [
+    "Gate 2 outcome changing the April plan"
+   ],
+   "evidence": "production/milestones/2028-01_02_review.md"
+  },
+  {
+   "id": "Y2-Q2-T19",
+   "stream": "primary",
+   "title": "Gate 2 measurement scripts and evidence pack",
+   "why": "Roadmap §10 Gate 2: completion >= 40%, wishlist targets, hook understood, cost per asset within +/-30%",
+   "tags": [
+    "tools",
+    "docs",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Script every Gate 2 number",
+     "steps": [
+      "Completion rate from telemetry with its definition",
+      "Wishlist and follower counts vs the user's targets from the dashboard",
+      "Hook sentence accuracy from surveys (rubric agreed in Q2 secondary task)",
+      "Cost per asset vs §3"
+     ],
+     "done": "One script outputs all four numbers"
+    },
+    {
+     "focus": "Assemble the evidence pack",
+     "steps": [
+      "Collect reports, surveys, screenshots and the dashboard into `production/gates/gate2/`",
+      "Write a one-page summary with each criterion, value and pass/fail",
+      "Mark uncertainty (sample size, opt-in bias)",
+      "Run `/gate-check`"
+     ],
+     "done": "Evidence pack complete"
+    },
+    {
+     "focus": "Re-run and freeze the numbers",
+     "steps": [
+      "Re-run the scripts on the final data cut-off",
+      "Freeze the inputs (copy the data files used)",
+      "Check numbers are reproducible from the copy",
+      "Hand to Gate 2 day"
+     ],
+     "done": "Numbers frozen and reproducible"
+    }
+   ],
+   "edge_cases": [
+    "Opt-in bias in completion rate (state it)",
+    "Survey sample too small"
+   ],
+   "evidence": "production/gates/gate2/ evidence pack and /gate-check output"
+  },
+  {
+   "id": "Y2-Q2-T20",
+   "stream": "primary",
+   "title": "Gate 2 day and the failure fallback",
+   "why": "Roadmap §6 and §10 Gate 2 (2028-03-31); every gate ends with an ADR",
+   "tags": [
+    "business",
+    "docs",
+    "release"
+   ],
+   "days": [
+    {
+     "focus": "Prepare both fallback plans in outline",
+     "steps": [
+      "Fallback A: rework the hook for one quarter (what changes, what is measured again, when)",
+      "Fallback B: a smaller first commercial release (2–3 regions, ~6 storylines, market and minigames)",
+      "List what each does to Y2-PP and the dates",
+      "Review with the user before the gate"
+     ],
+     "done": "Both fallback outlines written"
+    },
+    {
+     "focus": "Gate 2 decision meeting",
+     "steps": [
+      "Walk through each criterion with the evidence pack",
+      "Decide: pass, fallback A or fallback B",
+      "Write the Gate 2 ADR with the numbers and reasons",
+      "Update ROADMAP §10 status (with the user's approval)"
+     ],
+     "done": "Gate 2 ADR recorded"
+    },
+    {
+     "focus": "Apply the decision",
+     "steps": [
+      "If pass: confirm the Y2-PP plan as written",
+      "If a fallback: re-plan Y2-PP with the user and update the task list",
+      "Announce the outcome to the community in a safe form",
+      "Update CHANGELOG"
+     ],
+     "done": "Plan updated for April"
+    }
+   ],
+   "edge_cases": [
+    "A split result (some criteria pass)",
+    "Data still arriving on gate day"
+   ],
+   "evidence": "Gate 2 ADR in docs/architecture/; CHANGELOG entry"
+  },
+  {
+   "id": "Y2-Q2-T21",
+   "stream": "secondary",
+   "title": "Set the Gate 2 wishlist and follower targets from comparable indie RPGs",
+   "why": "Roadmap §6 Gate 2: 'wishlist and follower targets, set by you from comparable indie RPGs'",
+   "tags": [
+    "business",
+    "marketing",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Collect comparable data from public sources",
+     "steps": [
+      "Pick 8–12 comparable indie RPGs (2D, solo or tiny team, demo before launch)",
+      "Collect only public numbers (developer postmortems, talks, published Steam data); record each source link",
+      "Note where numbers are estimates and how they were estimated",
+      "Do not invent figures; leave a cell empty when no source exists"
+     ],
+     "done": "Comparables table with a source per number"
+    },
+    {
+     "focus": "Set the targets with the user",
+     "steps": [
+      "Propose a low/target/high range for wishlists and followers by 2028-03-31",
+      "The user picks the targets; record them in `production/gates/gate2/targets.md` dated today",
+      "Define how each is measured (Steamworks report, Discord count, devlog followers)",
+      "Add the targets to the weekly dashboard"
+     ],
+     "done": "Targets recorded before Next Fest"
+    }
+   ],
+   "edge_cases": [
+    "No reliable public data for a comparable (exclude it)"
+   ],
+   "evidence": "production/gates/gate2/targets.md"
+  },
+  {
+   "id": "Y2-Q2-T22",
+   "stream": "secondary",
+   "title": "Define and test the one-sentence hook",
+   "why": "Gate 2: testers can explain the hook in one sentence",
+   "tags": [
+    "marketing",
+    "story",
+    "fun"
+   ],
+   "days": [
+    {
+     "focus": "Write the hook and the scoring rubric",
+     "steps": [
+      "Write the intended hook in one sentence (dual perspective + Root Access + timing changes the story)",
+      "Write a rubric: which elements a tester's sentence must contain to count as 'understood'",
+      "Agree the pass threshold with the user (for example >= 70% of surveyed testers)",
+      "Add the rubric to the survey kit"
+     ],
+     "done": "Hook and rubric agreed"
+    },
+    {
+     "focus": "Score existing sentences",
+     "steps": [
+      "Score all cohort A, B and itch survey sentences with the rubric",
+      "Find which element is most often missing",
+      "Suggest where the demo or trailer should show it earlier",
+      "Record results in the Gate 2 folder"
+     ],
+     "done": "Baseline hook score recorded"
+    }
+   ],
+   "edge_cases": [
+    "Rubric scored differently by two readers (score twice and compare)"
+   ],
+   "evidence": "production/gates/gate2/hook_scores.md"
+  },
+  {
+   "id": "Y2-Q2-T23",
+   "stream": "secondary",
+   "title": "Playtest round 3 (post-itch, structured)",
+   "why": "Structured playtest program; checks iteration 1 before Next Fest",
+   "tags": [
+    "tests",
+    "fun",
+    "ux"
+   ],
+   "days": [
+    {
+     "focus": "Run round 3",
+     "steps": [
+      "Recruit 10–15 testers who have not played before",
+      "Use the iteration-1 build",
+      "Observe 3 sessions with the observation sheet",
+      "Collect surveys with the hook question and the rubric"
+     ],
+     "done": "Round-3 surveys collected"
+    },
+    {
+     "focus": "Analyse round 3",
+     "steps": [
+      "Compare completion and drop-offs with rounds A and B",
+      "Score hook sentences",
+      "List remaining clarity issues",
+      "Run `/playtest-report`"
+     ],
+     "done": "Round-3 report written"
+    },
+    {
+     "focus": "Act on round 3",
+     "steps": [
+      "Assign fixes that fit before the build freeze",
+      "Defer the rest to iteration 2",
+      "Thank testers",
+      "Update the program doc"
+     ],
+     "done": "Fix list assigned"
+    }
+   ],
+   "edge_cases": [
+    "Testers recruited from the existing Discord (bias; note it)"
+   ],
+   "evidence": "production/playtests/round3_report.md"
+  },
+  {
+   "id": "Y2-Q2-T24",
+   "stream": "secondary",
+   "title": "Content iteration 1: dialogue, signposting and quest-log text",
+   "why": "Iterate from data; clarity problems found in round 1 and round 3",
+   "tags": [
+    "dialogue",
+    "quests",
+    "level",
+    "ux"
+   ],
+   "days": [
+    {
+     "focus": "Quest-log text and goals",
+     "steps": [
+      "Rewrite quest-log entries that testers misread",
+      "Make every deadline entry state the in-world reason and time left",
+      "Run the validator and voice lint",
+      "Keep line IDs stable"
+     ],
+     "done": "Quest-log rewrites merged"
+    },
+    {
+     "focus": "Signposting in Oakhaven and the road",
+     "steps": [
+      "Fix the signs and NPC hints at the top drop-off points",
+      "Add one Bran line pointing to the north field if players miss it",
+      "Run the reachability test",
+      "Screenshot changes to `production/qa/evidence/y2q2/signpost_oakhaven.png`"
+     ],
+     "done": "Signs placed; screenshot retained"
+    },
+    {
+     "focus": "Signposting in Ironhold",
+     "steps": [
+      "Make the auction house and MG-2 easier to find (Rook's hint)",
+      "Clarify the Clock Tower entrance",
+      "Run the reachability test",
+      "Screenshot to `production/qa/evidence/y2q2/signpost_ironhold.png`"
+     ],
+     "done": "Signs placed; screenshot retained"
+    },
+    {
+     "focus": "Dialogue trims",
+     "steps": [
+      "Cut lines that testers skipped most (where telemetry shows fast skipping)",
+      "Keep every story-critical line",
+      "Re-export the string table",
+      "Note the word count change"
+     ],
+     "done": "Trimmed scenes merged"
+    }
+   ],
+   "edge_cases": [
+    "Changing a line ID",
+    "Removing a line that sets a flag"
+   ],
+   "evidence": "production/qa/evidence/y2q2/signpost_*.png; validator log"
+  },
+  {
+   "id": "Y2-Q2-T25",
+   "stream": "secondary",
+   "title": "Steam page iteration and trailer v2 for Next Fest",
+   "why": "Next Fest traffic lands on the page; the trailer is the first impression",
+   "tags": [
+    "marketing",
+    "cinematics",
+    "art"
+   ],
+   "days": [
+    {
+     "focus": "Page update from feedback",
+     "steps": [
+      "Rewrite the short description using the best hook wording from testers",
+      "Replace the weakest screenshot with an iteration-1 shot",
+      "Update system requirements from `docs/perf/min_spec.md`",
+      "Check all claims against the build"
+     ],
+     "done": "Page text updated"
+    },
+    {
+     "focus": "Trailer v2 plan",
+     "steps": [
+      "List what testers missed in trailer v1 (from hook scores)",
+      "Plan a 30–45 s cut-down for the fest with the hook in the first 5 s",
+      "List new shots needed",
+      "Capture them with the capture tool"
+     ],
+     "done": "New shots captured"
+    },
+    {
+     "focus": "Trailer v2 edit",
+     "steps": [
+      "Edit the cut-down",
+      "Add readable captions for silent autoplay",
+      "Check on a phone",
+      "Export"
+     ],
+     "done": "Trailer v2 exported"
+    },
+    {
+     "focus": "Event assets",
+     "steps": [
+      "Check current Next Fest requirements for any event-specific art or text",
+      "Prepare a short demo description for the event listing",
+      "Prepare a pinned discussion post with known issues and bug-report steps",
+      "Upload trailer v2 (the user publishes)"
+     ],
+     "done": "Event assets ready"
+    },
+    {
+     "focus": "Final page check before the fest",
+     "steps": [
+      "Review the page on desktop and mobile",
+      "Check the demo button and Discord link",
+      "Check the release-date text is honest",
+      "Screenshot the page to `production/qa/evidence/y2q2/steam_page_prefest.png`"
+     ],
+     "done": "Page screenshot retained"
+    }
+   ],
+   "edge_cases": [
+    "Autoplay without sound hiding the hook"
+   ],
+   "evidence": "production/qa/evidence/y2q2/steam_page_prefest.png; trailer v2 master"
+  },
+  {
+   "id": "Y2-Q2-T26",
+   "stream": "secondary",
+   "title": "Devlog DL-07: what the first players taught us",
+   "why": "Roadmap §6 devlog cadence; keeps followers warm through Next Fest and Gate 2",
+   "tags": [
+    "marketing",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Write and post devlog DL-07 (what the first players taught us)",
+     "steps": [
+      "Outline DL-07: 'what the first players taught us', three points and one honest lesson",
+      "Show one funnel chart with only numbers the user cleared",
+      "Post to Steam news, itch devlog and Discord #devlog",
+      "Log followers and wishlists before and after in `production/marketing/devlog_log.md`"
+     ],
+     "done": "DL-07 published and logged"
+    }
+   ],
+   "edge_cases": [
+    "Sharing numbers the user has not cleared",
+    "Promising dates"
+   ],
+   "evidence": "production/marketing/devlog_log.md entry"
+  },
+  {
+   "id": "Y2-Q2-T27",
+   "stream": "secondary",
+   "title": "Asset license audit",
+   "why": "Roadmap §6 legal groundwork; §13 legal risk (licenses, provenance records)",
+   "tags": [
+    "legal",
+    "assets",
+    "audio",
+    "art"
+   ],
+   "days": [
+    {
+     "focus": "Audit art assets",
+     "steps": [
+      "Run `tools/legal/provenance_scan.py` and take the art gap list",
+      "For each gap find the source: PAE project file, in-house drawing, or third-party",
+      "Fill the manifest; mark unknowns",
+      "Plan replacement for any asset with no clear source"
+     ],
+     "done": "Art entries complete or flagged"
+    },
+    {
+     "focus": "Audit audio assets",
+     "steps": [
+      "Check every SFX and music file against its license record",
+      "Read each third-party license's terms for commercial games and trailers",
+      "Fill the manifest",
+      "Plan replacements for unclear licenses"
+     ],
+     "done": "Audio entries complete or flagged"
+    },
+    {
+     "focus": "Audit fonts, code and engine notices",
+     "steps": [
+      "Check font licenses (embedding in games, CJK font for zh-CN)",
+      "Check addon and tool licenses (gdUnit4 and any other)",
+      "Check the Godot MIT license notice and third-party notices required in credits",
+      "Draft the credits licenses section"
+     ],
+     "done": "Fonts and code entries complete"
+    },
+    {
+     "focus": "Replace or clear flagged assets",
+     "steps": [
+      "Replace each flagged asset or get written permission",
+      "Re-run the scanner until no shipped file lacks an entry",
+      "Record decisions in `docs/legal/license_audit_2028Q1.md`",
+      "List items that need a professional's opinion"
+     ],
+     "done": "Scanner shows 0 gaps"
+    },
+    {
+     "focus": "Audit sign-off",
+     "steps": [
+      "Review the audit with the user",
+      "Decide what to take to a lawyer (if anything)",
+      "Add the audit to the Gate 2 and Gate 3 evidence",
+      "Schedule the next audit (Y7 per roadmap)"
+     ],
+     "done": "Audit signed off by the user"
+    }
+   ],
+   "edge_cases": [
+    "A font whose license forbids embedding",
+    "Music cleared for the game but not for trailers"
+   ],
+   "evidence": "docs/legal/license_audit_2028Q1.md; scanner output with 0 gaps"
+  },
+  {
+   "id": "Y2-Q2-T28",
+   "stream": "secondary",
+   "title": "Steam AI-content disclosure for PAE and AI-assisted assets",
+   "why": "Roadmap §6 legal groundwork: Steam AI-content disclosure (check current rules)",
+   "tags": [
+    "legal",
+    "art",
+    "ai",
+    "release"
+   ],
+   "days": [
+    {
+     "focus": "Check the current Steam rules",
+     "steps": [
+      "Read the current Steamworks content survey AI section (as of Oct 2026 it separates pre-generated and live-generated AI content; re-check for changes)",
+      "List what counts as AI-generated content that ships (art, sound, narrative, localization)",
+      "Note that some survey answers cannot be edited after approval without contacting Steam Support (as of Oct 2026; re-check)",
+      "Write findings in `docs/legal/steam_ai_disclosure.md`"
+     ],
+     "done": "Current rules summarised with the check date"
+    },
+    {
+     "focus": "Inventory AI involvement per asset",
+     "steps": [
+      "Use the provenance manifest's AI flag: PAE-authored sprites, AI-assisted writing, AI-assisted code, any AI audio",
+      "Separate shipped content from development-only tools",
+      "Note the guardrails if anything is generated live (expected: nothing)",
+      "Check the AGENTS.md art truth gate records (ComfyUI evidence or not) for every claim"
+     ],
+     "done": "AI inventory complete"
+    },
+    {
+     "focus": "Write and update the disclosure",
+     "steps": [
+      "Draft the disclosure text: accurate, plain, no overclaiming",
+      "Compare with the answers drafted in Q1; correct anything wrong",
+      "The user updates the survey in Steamworks",
+      "Add the same note to the itch page"
+     ],
+     "done": "Disclosure updated on Steam and itch"
+    }
+   ],
+   "edge_cases": [
+    "An asset whose AI involvement is unproven (disclose conservatively)",
+    "A change in Steam's rules after submission"
+   ],
+   "evidence": "docs/legal/steam_ai_disclosure.md"
+  },
+  {
+   "id": "Y2-Q2-T29",
+   "stream": "secondary",
+   "title": "Next Fest marketing preparation",
+   "why": "Steam Next Fest is the main Gate 2 signal",
+   "tags": [
+    "marketing",
+    "release"
+   ],
+   "days": [
+    {
+     "focus": "Fest plan",
+     "steps": [
+      "Write the fest plan: dates (from `docs/release/next_fest_2028.md`), goals, daily tasks",
+      "Check current rules for livestreaming on the store page during the fest",
+      "Plan Discord events (Q&A, dev stream)",
+      "Agree the plan with the user"
+     ],
+     "done": "Fest plan approved"
+    },
+    {
+     "focus": "Press preview and creator outreach",
+     "steps": [
+      "If the demo is in the press preview, send the press kit to the creator list",
+      "Write personal, short messages; no mass spam",
+      "Track replies in `production/marketing/creators.md`",
+      "Prepare demo keys only if needed (the demo is free)"
+     ],
+     "done": "Outreach sent and tracked"
+    },
+    {
+     "focus": "Stream preparation",
+     "steps": [
+      "Plan a 30–60 minute dev stream: play the demo, talk about Root Access and timing",
+      "Test the streaming setup and audio",
+      "Write a run sheet",
+      "Prepare answers for common questions"
+     ],
+     "done": "Stream run sheet ready"
+    },
+    {
+     "focus": "Discussion and FAQ",
+     "steps": [
+      "Write the FAQ (platforms, release timing, gambling is in-game currency only, single-player market)",
+      "Pin the bug-report post",
+      "Set moderation for the fest",
+      "Prepare the community playbook for fest week"
+     ],
+     "done": "FAQ and pinned posts ready"
+    },
+    {
+     "focus": "Social posts",
+     "steps": [
+      "Prepare one post per fest day with a GIF",
+      "Schedule them",
+      "Check every GIF shows current build content",
+      "Prepare a thank-you post for the end"
+     ],
+     "done": "Posts scheduled"
+    },
+    {
+     "focus": "Dry run",
+     "steps": [
+      "Walk through fest day 1 hour by hour with the user",
+      "Check links, demo availability and the stream page",
+      "Fix anything missing",
+      "Rest day planned before the fest (burnout risk)"
+     ],
+     "done": "Dry run done"
+    }
+   ],
+   "edge_cases": [
+    "Stream technical failure",
+    "Negative thread on day 1"
+   ],
+   "evidence": "Fest plan; creators.md replies; FAQ"
+  },
+  {
+   "id": "Y2-Q2-T30",
+   "stream": "secondary",
+   "title": "Devlog DL-08: Next Fest is coming",
+   "why": "Roadmap §6 devlog cadence; keeps followers warm through Next Fest and Gate 2",
+   "tags": [
+    "marketing",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Write and post devlog DL-08 (Next Fest is coming)",
+     "steps": [
+      "Outline DL-08: 'Next Fest is coming', three points and one honest lesson",
+      "Announce the fest dates and the stream time",
+      "Post to Steam news, itch devlog and Discord #devlog",
+      "Log followers and wishlists before and after in `production/marketing/devlog_log.md`"
+     ],
+     "done": "DL-08 published and logged"
+    }
+   ],
+   "edge_cases": [
+    "Sharing numbers the user has not cleared",
+    "Promising dates"
+   ],
+   "evidence": "production/marketing/devlog_log.md entry"
+  },
+  {
+   "id": "Y2-Q2-T31",
+   "stream": "secondary",
+   "title": "Creator follow-up during the press preview",
+   "why": "Coverage multiplies wishlists during Next Fest",
+   "tags": [
+    "marketing"
+   ],
+   "days": [
+    {
+     "focus": "Follow up with creators",
+     "steps": [
+      "Reply to creators who answered; send build notes",
+      "Do not chase creators who did not answer more than once",
+      "Track coverage links",
+      "Share coverage in Discord"
+     ],
+     "done": "Coverage tracked"
+    },
+    {
+     "focus": "Coverage review",
+     "steps": [
+      "Read every piece of coverage for what confused people",
+      "Note the hook wording creators used",
+      "Feed findings into the hook rubric",
+      "Thank creators"
+     ],
+     "done": "Coverage notes saved"
+    }
+   ],
+   "edge_cases": [
+    "Coverage that misdescribes the game"
+   ],
+   "evidence": "production/marketing/creators.md coverage section"
+  },
+  {
+   "id": "Y2-Q2-T32",
+   "stream": "secondary",
+   "title": "Next Fest community operations (fest week)",
+   "why": "Next Fest is the Gate 2 market signal; players need answers fast",
+   "tags": [
+    "marketing",
+    "release"
+   ],
+   "days": [
+    {
+     "focus": "Fest community launch day",
+     "steps": [
+      "Post the launch note; run the first Discord Q&A",
+      "Moderate Discord and Steam discussions using the playbook",
+      "Log praise, confusion and bug themes in `production/marketing/next_fest_log.md`",
+      "Record the wishlist count at the end of the day"
+     ],
+     "done": "First-day community log"
+    },
+    {
+     "focus": "Fest community day 2",
+     "steps": [
+      "Answer every Steam discussion thread; collect hook sentences from comments",
+      "Moderate Discord and Steam discussions using the playbook",
+      "Log praise, confusion and bug themes in `production/marketing/next_fest_log.md`",
+      "Record the wishlist count at the end of the day"
+     ],
+     "done": "Discussion threads answered"
+    },
+    {
+     "focus": "Fest community day 3",
+     "steps": [
+      "Run the dev stream from the run sheet; log questions",
+      "Moderate Discord and Steam discussions using the playbook",
+      "Log praise, confusion and bug themes in `production/marketing/next_fest_log.md`",
+      "Record the wishlist count at the end of the day"
+     ],
+     "done": "Stream done and questions logged"
+    },
+    {
+     "focus": "Fest community day 4",
+     "steps": [
+      "Post mid-fest thanks with one cleared number; check sentiment",
+      "Moderate Discord and Steam discussions using the playbook",
+      "Log praise, confusion and bug themes in `production/marketing/next_fest_log.md`",
+      "Record the wishlist count at the end of the day"
+     ],
+     "done": "Sentiment note written"
+    },
+    {
+     "focus": "Fest community day 5",
+     "steps": [
+      "Collect bug reports into the triage sheet for the primary stream",
+      "Moderate Discord and Steam discussions using the playbook",
+      "Log praise, confusion and bug themes in `production/marketing/next_fest_log.md`",
+      "Record the wishlist count at the end of the day"
+     ],
+     "done": "Bug sheet updated"
+    },
+    {
+     "focus": "Fest community day 6 + Fest community closing day",
+     "steps": [
+      "Run a second, shorter stream or Q&A; push wishlists at the demo end",
+      "Moderate Discord and Steam discussions using the playbook",
+      "Log praise, confusion and bug themes in `production/marketing/next_fest_log.md`",
+      "Record the wishlist count at the end of the day",
+      "Post the closing thank-you; snapshot followers and wishlists",
+      "Moderate Discord and Steam discussions using the playbook",
+      "Log praise, confusion and bug themes in `production/marketing/next_fest_log.md`",
+      "Record the wishlist count at the end of the day"
+     ],
+     "done": "Closing snapshot saved"
+    }
+   ],
+   "edge_cases": [
+    "Toxic thread",
+    "A creator reporting a crash live"
+   ],
+   "evidence": "production/marketing/next_fest_log.md"
+  },
+  {
+   "id": "Y2-Q2-T33",
+   "stream": "secondary",
+   "title": "Post-fest Steam page and community update",
+   "why": "Keep the page current for the traffic that continues after the fest",
+   "tags": [
+    "marketing"
+   ],
+   "days": [
+    {
+     "focus": "Update the page after the fest",
+     "steps": [
+      "Add one quote from players or coverage (with permission where needed)",
+      "Update known issues and the demo version",
+      "Refresh screenshots if iteration 2 changed visuals",
+      "Check the page on mobile"
+     ],
+     "done": "Page updated"
+    },
+    {
+     "focus": "Community follow-up",
+     "steps": [
+      "Post 'what we learned from Next Fest' in Discord",
+      "Invite active players to playtest round 4",
+      "Update the FAQ",
+      "Thank moderators"
+     ],
+     "done": "Follow-up posted"
+    }
+   ],
+   "edge_cases": [
+    "Quoting someone without permission"
+   ],
+   "evidence": "Store page revision; Discord post"
+  },
+  {
+   "id": "Y2-Q2-T34",
+   "stream": "secondary",
+   "title": "Wishlist conversion and funnel analysis (marketing side)",
+   "why": "Gate 2 wishlist targets",
+   "tags": [
+    "marketing",
+    "business",
+    "tools"
+   ],
+   "days": [
+    {
+     "focus": "Analyse wishlist sources",
+     "steps": [
+      "Read Steamworks traffic and wishlist reports for the fest period",
+      "Attribute spikes to events (trailer, creator video, devlog, fest day)",
+      "Compare to the targets",
+      "Update the dashboard"
+     ],
+     "done": "Attribution table"
+    },
+    {
+     "focus": "Write marketing findings",
+     "steps": [
+      "List what worked and what did not",
+      "Recommend the marketing plan for pre-production months",
+      "Mark the Gate 2 wishlist numbers with dates",
+      "Review with the user"
+     ],
+     "done": "Marketing findings approved"
+    }
+   ],
+   "edge_cases": [
+    "Wishlists inflated by bots (check Steam's notes)"
+   ],
+   "evidence": "production/marketing/post_fest_findings.md"
+  },
+  {
+   "id": "Y2-Q2-T35",
+   "stream": "secondary",
+   "title": "Devlog DL-09: Next Fest by the numbers",
+   "why": "Roadmap §6 devlog cadence; keeps followers warm through Next Fest and Gate 2",
+   "tags": [
+    "marketing",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Write and post devlog DL-09 (Next Fest by the numbers)",
+     "steps": [
+      "Outline DL-09: 'Next Fest by the numbers', three points and one honest lesson",
+      "Share only numbers the user approves",
+      "Post to Steam news, itch devlog and Discord #devlog",
+      "Log followers and wishlists before and after in `production/marketing/devlog_log.md`"
+     ],
+     "done": "DL-09 published and logged"
+    }
+   ],
+   "edge_cases": [
+    "Sharing numbers the user has not cleared",
+    "Promising dates"
+   ],
+   "evidence": "production/marketing/devlog_log.md entry"
+  },
+  {
+   "id": "Y2-Q2-T36",
+   "stream": "secondary",
+   "title": "Playtest round 4 (post-fest, iteration 2 build)",
+   "why": "Structured playtest program; final Gate 2 survey data",
+   "tags": [
+    "tests",
+    "fun"
+   ],
+   "days": [
+    {
+     "focus": "Run round 4",
+     "steps": [
+      "Recruit from fest players who joined Discord plus new testers",
+      "Use the iteration-2 build",
+      "Run surveys with the hook rubric and fairness questions",
+      "Observe 2 sessions"
+     ],
+     "done": "Round-4 surveys collected"
+    },
+    {
+     "focus": "Analyse round 4",
+     "steps": [
+      "Compare with rounds A, B and 3",
+      "Score hook sentences",
+      "Score fairness on Hard and Hell",
+      "Run `/playtest-report`"
+     ],
+     "done": "Round-4 report written"
+    },
+    {
+     "focus": "Feed Gate 2 and pre-production",
+     "steps": [
+      "Copy final numbers into the Gate 2 folder",
+      "List lessons for production design (what players loved and ignored)",
+      "Thank testers",
+      "Close the Y2 playtest program report"
+     ],
+     "done": "Program report closed"
+    }
+   ],
+   "edge_cases": [
+    "Testers from the fest skewing toward fans"
+   ],
+   "evidence": "production/playtests/round4_report.md"
+  },
+  {
+   "id": "Y2-Q2-T37",
+   "stream": "secondary",
+   "title": "Content iteration 2: dialogue and world from fest feedback",
+   "why": "Iterate from data before the demo becomes the long-running public version",
+   "tags": [
+    "dialogue",
+    "level",
+    "fun"
+   ],
+   "days": [
+    {
+     "focus": "Fix the top fest confusion points in text",
+     "steps": [
+      "Rewrite the 5 most confusing lines or hints",
+      "Run the validator and lint",
+      "Keep IDs stable",
+      "Hand to the primary stream for the iteration-2 build"
+     ],
+     "done": "Rewrites merged"
+    },
+    {
+     "focus": "World polish from feedback",
+     "steps": [
+      "Fix the top 3 world complaints (dead ends, empty areas, unclear exits)",
+      "Run the reachability test",
+      "Screenshot changes to `production/qa/evidence/y2q2/world_polish_<area>.png`",
+      "Re-run the bot"
+     ],
+     "done": "World fixes merged"
+    },
+    {
+     "focus": "Fun polish from feedback",
+     "steps": [
+      "Add one small discovery or reaction in the weakest-rated area",
+      "Check the economy rules for any new reward",
+      "Play it twice",
+      "Log the change"
+     ],
+     "done": "Polish merged"
+    }
+   ],
+   "edge_cases": [
+    "A new reward breaking the sim bounds"
+   ],
+   "evidence": "production/qa/evidence/y2q2/world_polish_*.png"
+  },
+  {
+   "id": "Y2-Q2-T38",
+   "stream": "secondary",
+   "title": "Trademark search for the title",
+   "why": "Roadmap §6 legal groundwork; §13 legal risk",
+   "tags": [
+    "legal",
+    "business"
+   ],
+   "days": [
+    {
+     "focus": "Search official databases",
+     "steps": [
+      "Search the title words ('Aethelgard', 'Glitch Sovereign', and the full title) in official public trademark databases for the main markets (for example USPTO, EUIPO/TMview, WIPO Global Brand Database, and India's IP office search)",
+      "Record exact queries, dates, classes searched (games are usually software/entertainment classes; check) and results",
+      "Do not draw legal conclusions; record facts",
+      "Save to `docs/legal/trademark_search.md`"
+     ],
+     "done": "Search log saved"
+    },
+    {
+     "focus": "Search the market for name collisions",
+     "steps": [
+      "Search Steam, itch.io, console stores and app stores for games with the same or similar names",
+      "Search for books, films or companies with the name in entertainment",
+      "Check domain and social handle availability",
+      "Record findings"
+     ],
+     "done": "Collision list recorded"
+    },
+    {
+     "focus": "Decide next steps",
+     "steps": [
+      "Summarise risks plainly for the user",
+      "Decide: keep the title, change it, or ask a trademark professional",
+      "If filing is considered, consult a professional before spending money",
+      "Record the decision"
+     ],
+     "done": "Decision recorded"
+    }
+   ],
+   "edge_cases": [
+    "A similar mark in a different class (needs a professional's view)"
+   ],
+   "evidence": "docs/legal/trademark_search.md"
+  },
+  {
+   "id": "Y2-Q2-T39",
+   "stream": "secondary",
+   "title": "Simulated gambling: rating impact memo",
+   "why": "Roadmap §6 and §12.7: simulated gambling raises ratings in most systems and some countries restrict it; verify before Beta",
+   "tags": [
+    "legal",
+    "systems",
+    "business"
+   ],
+   "days": [
+    {
+     "focus": "List the game's gambling features precisely",
+     "steps": [
+      "List each planned gambling game (3 at launch) and the Gate 1 one already built: currency, odds shown, limits",
+      "Confirm: in-game currency only, no real money, no paid random items (A6)",
+      "Note which can be won or bought with real money (should be none)",
+      "Write the feature list in `docs/legal/gambling_rating_memo.md`"
+     ],
+     "done": "Feature list written"
+    },
+    {
+     "focus": "Check current rating criteria",
+     "steps": [
+      "Check current criteria for simulated gambling in ESRB, PEGI, USK, the Australian Classification Board, Korea's GRAC and China's approval process (each has its own rules; verify on official sites)",
+      "Check the Steam content survey questions on gambling",
+      "Record what each system says, with links and the check date",
+      "Mark anything unclear for a professional"
+     ],
+     "done": "Criteria table with links"
+    },
+    {
+     "focus": "Estimate the impact",
+     "steps": [
+      "For each system note the likely minimum rating given the features (as stated by the official criteria, not guessed)",
+      "Note regions where the content may need the `GamblingPolicy` switch",
+      "List design options: keep, reskin as a non-gambling minigame, or region-disable",
+      "Estimate the cost of each option"
+     ],
+     "done": "Impact table written"
+    },
+    {
+     "focus": "Decide and plan",
+     "steps": [
+      "Review options with the user",
+      "Record the decision and what must be re-checked before Beta (Y7)",
+      "Update the risk register",
+      "Hand design changes (if any) to Y2-PP minigame designs"
+     ],
+     "done": "Decision recorded"
+    }
+   ],
+   "edge_cases": [
+    "A region where any gambling theme blocks release"
+   ],
+   "evidence": "docs/legal/gambling_rating_memo.md"
+  },
+  {
+   "id": "Y2-Q2-T40",
+   "stream": "secondary",
+   "title": "Devlog DL-10: what we checked before going further (licenses and names)",
+   "why": "Roadmap §6 devlog cadence; keeps followers warm through Next Fest and Gate 2",
+   "tags": [
+    "marketing",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Write and post devlog DL-10 (what we checked before going further (licenses and names))",
+     "steps": [
+      "Outline DL-10: 'what we checked before going further (licenses and names)', three points and one honest lesson",
+      "Explain the provenance manifest in plain words",
+      "Post to Steam news, itch devlog and Discord #devlog",
+      "Log followers and wishlists before and after in `production/marketing/devlog_log.md`"
+     ],
+     "done": "DL-10 published and logged"
+    }
+   ],
+   "edge_cases": [
+    "Sharing numbers the user has not cleared",
+    "Promising dates"
+   ],
+   "evidence": "production/marketing/devlog_log.md entry"
+  },
+  {
+   "id": "Y2-Q2-T41",
+   "stream": "secondary",
+   "title": "Review measured cost per asset against the content budget",
+   "why": "Gate 2: cost per asset within +/-30% of §3",
+   "tags": [
+    "business",
+    "docs",
+    "art"
+   ],
+   "days": [
+    {
+     "focus": "Check the measured numbers",
+     "steps": [
+      "Read the primary stream's cost-per-asset table",
+      "Spot-check 5 assets per category against the daily logs",
+      "Note categories with weak data",
+      "Correct mistakes"
+     ],
+     "done": "Checked table"
+    },
+    {
+     "focus": "Compare with §3",
+     "steps": [
+      "Compute total cost for §3 counts per category",
+      "Compare with the team plan after Gate 3",
+      "Mark categories outside +/-30%",
+      "List what would bring each inside (process, tools, cut order)"
+     ],
+     "done": "Comparison done"
+    },
+    {
+     "focus": "Recommend re-baselines",
+     "steps": [
+      "Recommend changes to §3 for Gate 3 re-baseline",
+      "Use the roadmap cut order, never the never-cut pillars",
+      "Review with the user",
+      "Store in the Gate 2 folder"
+     ],
+     "done": "Recommendation approved"
+    }
+   ],
+   "edge_cases": [
+    "A category with fewer than 5 samples"
+   ],
+   "evidence": "production/gates/gate2/cost_per_asset_review.md"
+  },
+  {
+   "id": "Y2-Q2-T42",
+   "stream": "secondary",
+   "title": "Audio iteration from feedback",
+   "why": "P9 juice; players commented on music and SFX",
+   "tags": [
+    "audio",
+    "music"
+   ],
+   "days": [
+    {
+     "focus": "Collect audio feedback",
+     "steps": [
+      "Gather audio comments from surveys and fest discussions",
+      "Find the most-repeated music loop complaint",
+      "Find missing or weak SFX",
+      "Rank"
+     ],
+     "done": "Audio issue list"
+    },
+    {
+     "focus": "Fix SFX issues",
+     "steps": [
+      "Replace or remix the top 5 SFX",
+      "Update provenance entries",
+      "Test in game",
+      "Mix check"
+     ],
+     "done": "SFX fixes merged"
+    },
+    {
+     "focus": "Fix music issues",
+     "steps": [
+      "Extend or vary the most-repeated loop",
+      "Check adaptive transitions",
+      "Update provenance",
+      "Record a before/after clip"
+     ],
+     "done": "Music fix merged"
+    }
+   ],
+   "edge_cases": [
+    "New audio without a license record"
+   ],
+   "evidence": "Provenance entries; before/after clips"
+  },
+  {
+   "id": "Y2-Q2-T43",
+   "stream": "secondary",
+   "title": "Art iteration from feedback",
+   "why": "Asset quality; players' first impressions",
+   "tags": [
+    "art",
+    "assets"
+   ],
+   "days": [
+    {
+     "focus": "Collect art feedback",
+     "steps": [
+      "Gather art comments (readability, UI, sprites)",
+      "Find the top 3 complaints",
+      "Check them against the art bible",
+      "Plan fixes as PAE units"
+     ],
+     "done": "Art fix list"
+    },
+    {
+     "focus": "Fix the top art issues",
+     "steps": [
+      "Make the fixes in PAE",
+      "Import with fallback checks",
+      "Screenshot to `production/qa/evidence/y2q2/art_fix_<n>.png`",
+      "Measure cost per unit"
+     ],
+     "done": "Fixes imported"
+    },
+    {
+     "focus": "Capsule and key art check",
+     "steps": [
+      "Check capsule click-through in Steamworks if the report exists",
+      "Decide with the user whether to refresh the capsule",
+      "If yes, make the new capsule",
+      "Keep the old one archived"
+     ],
+     "done": "Capsule decision recorded"
+    }
+   ],
+   "edge_cases": [
+    "Replacing an accepted baseline (not allowed without a specific reason)"
+   ],
+   "evidence": "production/qa/evidence/y2q2/art_fix_*.png"
+  },
+  {
+   "id": "Y2-Q2-T44",
+   "stream": "secondary",
+   "title": "Animation readability polish from feedback",
+   "why": "P2: fairness depends on readable telegraphs",
+   "tags": [
+    "animation",
+    "combat",
+    "art"
+   ],
+   "days": [
+    {
+     "focus": "Find unreadable animations",
+     "steps": [
+      "Use the death report and fairness comments to list unreadable attacks",
+      "Watch each one frame by frame",
+      "Plan a pose or smear fix",
+      "Agree with the primary stream"
+     ],
+     "done": "Animation fix list"
+    },
+    {
+     "focus": "Fix boss telegraph animations",
+     "steps": [
+      "Fix the listed boss telegraphs in PAE",
+      "Import; frame data unchanged",
+      "Ask for replay tests",
+      "Record clips"
+     ],
+     "done": "Boss fixes in"
+    },
+    {
+     "focus": "Fix enemy and player readability",
+     "steps": [
+      "Fix enemy wind-ups and Kaelen's parry flash",
+      "Import",
+      "Test on Hell timing",
+      "Record clips"
+     ],
+     "done": "Fixes in; Hell timing readable"
+    }
+   ],
+   "edge_cases": [
+    "Fixes that shift active frames"
+   ],
+   "evidence": "Before/after clips; replay tests"
+  },
+  {
+   "id": "Y2-Q2-T45",
+   "stream": "secondary",
+   "title": "Weekly community triage",
+   "why": "Community and bug flow after the fest",
+   "tags": [
+    "marketing",
+    "tests"
+   ],
+   "days": [
+    {
+     "focus": "Triage week 1 after the fest",
+     "steps": [
+      "Read new Discord and Steam reports",
+      "Run `/bug-triage` with the primary stream",
+      "Reply to reporters",
+      "Update the known-issues post"
+     ],
+     "done": "Week-1 triage done"
+    },
+    {
+     "focus": "Triage week 2 after the fest",
+     "steps": [
+      "Read new reports",
+      "Close fixed issues with thanks",
+      "Find any trend",
+      "Update the known-issues post"
+     ],
+     "done": "Week-2 triage done"
+    },
+    {
+     "focus": "Triage week 3 after the fest",
+     "steps": [
+      "Read new reports",
+      "Close or defer to Y2-PP",
+      "Write a short community health note",
+      "Plan a quieter cadence for pre-production"
+     ],
+     "done": "Week-3 triage done; cadence planned"
+    }
+   ],
+   "edge_cases": [
+    "Duplicate reports across channels"
+   ],
+   "evidence": "Triage list; known-issues post"
+  },
+  {
+   "id": "Y2-Q2-T46",
+   "stream": "secondary",
+   "title": "Devlog DL-11: how the game decides who you are (timing and choices)",
+   "why": "Roadmap §6 devlog cadence; keeps followers warm through Next Fest and Gate 2",
+   "tags": [
+    "marketing",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Write and post devlog DL-11 (how the game decides who you are (timing and choices))",
+     "steps": [
+      "Outline DL-11: 'how the game decides who you are (timing and choices)', three points and one honest lesson",
+      "Show the Act 1 deadline outcomes without spoilers",
+      "Post to Steam news, itch devlog and Discord #devlog",
+      "Log followers and wishlists before and after in `production/marketing/devlog_log.md`"
+     ],
+     "done": "DL-11 published and logged"
+    }
+   ],
+   "edge_cases": [
+    "Sharing numbers the user has not cleared",
+    "Promising dates"
+   ],
+   "evidence": "production/marketing/devlog_log.md entry"
+  },
+  {
+   "id": "Y2-Q2-T47",
+   "stream": "secondary",
+   "title": "Business: runway check and pre-Gate-3 business questions",
+   "why": "A7 self-funded until Gate 2; Gate 3 needs funding >= 24 months of the team plan",
+   "tags": [
+    "business"
+   ],
+   "days": [
+    {
+     "focus": "Runway and cost review",
+     "steps": [
+      "List personal runway and project costs to date (the user fills numbers; Claude does not handle bank data)",
+      "List expected Y2-PP costs (software, Steam fees, legal advice)",
+      "Note decisions needed before Gate 3 (funding route, entity)",
+      "Say 'decide' and 'consult a professional' for each money or legal item"
+     ],
+     "done": "Runway sheet updated by the user"
+    },
+    {
+     "focus": "Business questions list for pre-production",
+     "steps": [
+      "List questions for an accountant and a lawyer (entity, contracts, IP assignment, taxes on revenue)",
+      "Find local professional options (the user chooses)",
+      "Schedule consultations for Y2-PP",
+      "Record in `production/business/questions.md`"
+     ],
+     "done": "Questions list saved"
+    }
+   ],
+   "edge_cases": [
+    "Treating this list as legal or financial advice (it is not)"
+   ],
+   "evidence": "production/business/questions.md"
+  },
+  {
+   "id": "Y2-Q2-T48",
+   "stream": "secondary",
+   "title": "Pre-production preparation: world bible skeleton and reading list",
+   "why": "Y2-PP starts with the world bible; prepare the skeleton and sources",
+   "tags": [
+    "story",
+    "docs",
+    "openworld"
+   ],
+   "days": [
+    {
+     "focus": "World bible skeleton",
+     "steps": [
+      "Create the outline: regions, map, factions, history, companions, SOVEREIGN, the God King, the Null Court thesis",
+      "List the canon sources per section (STORY_BIBLE, DESIGN_PILLARS, PM line ranges)",
+      "List open conflicts to settle (for example the story bible's region list vs the 8-region launch list)",
+      "Save to `design/world/WORLD_BIBLE.md` (outline only)"
+     ],
+     "done": "Skeleton saved"
+    },
+    {
+     "focus": "Gather PM references per region",
+     "steps": [
+      "Index PM line ranges per region and chapter",
+      "Index side story arcs 01–12 with their owners and axis effects",
+      "Index Story+ cases",
+      "Save the index"
+     ],
+     "done": "Index saved"
+    },
+    {
+     "focus": "Reading and reference list",
+     "steps": [
+      "List reference games to play critically for open-world 2D, markets and branching (2–3 each)",
+      "List design reading on branching narrative and economies",
+      "Schedule reference play in non-work time (roadmap §1.1)",
+      "Record the list"
+     ],
+     "done": "List saved"
+    }
+   ],
+   "edge_cases": [
+    "Inventing canon in the skeleton (structure only)"
+   ],
+   "evidence": "design/world/WORLD_BIBLE.md outline"
+  },
+  {
+   "id": "Y2-Q2-T49",
+   "stream": "secondary",
+   "title": "Production reviews for Q2",
+   "why": "Roadmap §14",
+   "tags": [
+    "docs",
+    "business"
+   ],
+   "days": [
+    {
+     "focus": "January review",
+     "steps": [
+      "Run `/sprint-status` and `/milestone-review` for January",
+      "Check the Next Fest timeline",
+      "Update the risk register",
+      "Re-order February"
+     ],
+     "done": "January review saved"
+    },
+    {
+     "focus": "February review",
+     "steps": [
+      "Review fest results against the plan",
+      "Check energy and rest (burnout row)",
+      "Update risks",
+      "Re-order March"
+     ],
+     "done": "February review saved"
+    },
+    {
+     "focus": "March review and the Q2 retrospective",
+     "steps": [
+      "Run `/retrospective` for Q2",
+      "Compare planned vs actual days",
+      "Feed findings into the Y2-PP plan",
+      "Save"
+     ],
+     "done": "Q2 retrospective saved"
+    }
+   ],
+   "edge_cases": [
+    "Fest overtime (plan a rest day after)"
+   ],
+   "evidence": "production/milestones/2028-Q2 reviews"
+  },
+  {
+   "id": "Y2-Q2-T50",
+   "stream": "secondary",
+   "title": "Gate 2: market and community evidence",
+   "why": "Roadmap §10 Gate 2",
+   "tags": [
+    "business",
+    "marketing",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Market evidence",
+     "steps": [
+      "Final wishlist and follower numbers vs targets",
+      "Coverage list",
+      "Hook score from all rounds",
+      "Write the market section of the Gate 2 summary"
+     ],
+     "done": "Market section written"
+    },
+    {
+     "focus": "Player evidence",
+     "steps": [
+      "Playtest summary across rounds A, B, 3 and 4",
+      "Fairness and fun scores",
+      "What players loved and ignored",
+      "Write the player section"
+     ],
+     "done": "Player section written"
+    },
+    {
+     "focus": "Risks and recommendations",
+     "steps": [
+      "Update the risk register with Gate 2 facts",
+      "Recommend pass or a fallback with reasons",
+      "Run `/gate-check`",
+      "Review with the user"
+     ],
+     "done": "Recommendation ready for gate day"
+    }
+   ],
+   "edge_cases": [
+    "Evidence that conflicts between sources"
+   ],
+   "evidence": "production/gates/gate2/summary.md"
+  },
+  {
+   "id": "Y2-Q2-T51",
+   "stream": "secondary",
+   "title": "Gate 2 fallback content plans",
+   "why": "Roadmap §6: if Gate 2 fails, rework the hook for a quarter or plan a smaller first commercial release",
+   "tags": [
+    "business",
+    "story",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Fallback A content plan: hook rework quarter",
+     "steps": [
+      "List hook changes to test (opening, first Root Access use, timing reveal)",
+      "Plan a test cycle (build, playtest, measure) inside one quarter",
+      "List what pre-production work pauses",
+      "Write the plan"
+     ],
+     "done": "Fallback A content plan written"
+    },
+    {
+     "focus": "Fallback B content plan: smaller first commercial release",
+     "steps": [
+      "Draft the scope: 2–3 regions (R1–R3), ~6 storylines, market and minigames, Story+",
+      "Map which axes and endings survive",
+      "Estimate with measured cost per asset",
+      "Write the plan"
+     ],
+     "done": "Fallback B content plan written"
+    }
+   ],
+   "edge_cases": [
+    "A fallback that cuts a never-cut pillar (not allowed)"
+   ],
+   "evidence": "production/gates/gate2/fallbacks.md"
+  },
+  {
+   "id": "Y2-Q2-T52",
+   "stream": "secondary",
+   "title": "Gate 2 decision day and applying the decision (secondary side)",
+   "why": "Roadmap §10 Gate 2 on 2028-03-31",
+   "tags": [
+    "business",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Gate 2 decision with the user",
+     "steps": [
+      "Present the market and player evidence with the primary stream's numbers",
+      "Record the user's decision in the Gate 2 ADR",
+      "List the content and marketing changes the decision implies",
+      "Plan the community announcement"
+     ],
+     "done": "Decision recorded in the ADR"
+    },
+    {
+     "focus": "Choose and apply",
+     "steps": [
+      "Apply the gate decision to the Y2-PP secondary task list",
+      "If pass, archive both fallbacks as Gate 3 inputs",
+      "Update CHANGELOG",
+      "Run `/sprint-plan` for April"
+     ],
+     "done": "April plan matches the gate decision"
+    }
+   ],
+   "edge_cases": [
+    "Decision deferred for missing data (set a date)"
+   ],
+   "evidence": "Gate 2 ADR; April sprint plan"
+  },
+  {
+   "id": "Y2-Q2-T53",
+   "stream": "secondary",
+   "title": "Devlog DL-12: Gate 2: what happens next",
+   "why": "Roadmap §6 devlog cadence; keeps followers warm through Next Fest and Gate 2",
+   "tags": [
+    "marketing",
+    "docs"
+   ],
+   "days": [
+    {
+     "focus": "Write and post devlog DL-12 (Gate 2: what happens next)",
+     "steps": [
+      "Outline DL-12: 'Gate 2: what happens next', three points and one honest lesson",
+      "Explain the decision in a safe, honest form after the gate",
+      "Post to Steam news, itch devlog and Discord #devlog",
+      "Log followers and wishlists before and after in `production/marketing/devlog_log.md`"
+     ],
+     "done": "DL-12 published and logged"
+    }
+   ],
+   "edge_cases": [
+    "Sharing numbers the user has not cleared",
+    "Promising dates"
+   ],
+   "evidence": "production/marketing/devlog_log.md entry"
+  }
+ ]
+}
