@@ -15,6 +15,7 @@
 *.xml text eol=lf
 *.sh text eol=lf
 *.yml text eol=lf
+.githooks/* text eol=lf
 
 *.png binary
 *.jpg binary

@@ -71,6 +71,20 @@ CI (`.github/workflows/ci.yml`, at the repository root) runs the same checks on 
 pull request: boot without script errors, load every script and scene, the dialogue,
 ContextStack, input and Chapter 1–2 route tests, the Phase 0 suite, and `git diff --check`.
 
+## Commit messages
+
+Commits use [Conventional Commits](https://www.conventionalcommits.org/) and name their task:
+`type(scope): what changed`, where type is `feat`, `fix`, `chore`, `docs`, `test` or `refactor`,
+plus a body line `Task: Y1-P0-S03` (or `Story: EPIC-001-S02`). `.githooks/commit-msg` (at the
+repository root) checks this. Turn it on once per clone, from the repository root:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+CI runs the same hook on every new commit; commits up to `d33ce66` predate the rule and are
+skipped. Test the hook itself with `bash .githooks/test_commit_msg.sh`.
+
 ## Layout
 
 | Path | Contents |

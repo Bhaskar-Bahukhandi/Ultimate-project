@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# Conventional Commits check (Y1-P0-S03). Git runs it with the message file;
+# CI runs the same file on every new commit (.github/workflows/ci.yml).
+# Enable locally once per clone:  git config core.hooksPath .githooks
+#
+# A message passes when:
+#   - the subject is `type(scope)!: text`, type one of feat|fix|chore|docs|test|refactor,
+#     the scope and `!` optional, a scope lowercase (letters, digits, . _ / -);
+#   - and a line in the body reads `Task: <id>` or `Story: <id>` (coding-standards.md).
+# Merge, revert and fixup!/squash!/amend! subjects pass as they are: git writes them.
+# Comment lines (#) are ignored, as git strips them; CRLF endings are fine.
+
+msg_file="$1"
+if [ -z "$msg_file" ] || [ ! -f "$msg_file" ]; then
+	echo "commit-msg: no message file given" >&2
+	exit 2
+fi
+
+# Drop CR and comment lines, the way git's default cleanup does.
+msg=$(tr -d '\r' < "$msg_file" | grep -v '^#')
+subject=$(printf '%s\n' "$msg" | sed -n '/[^[:space:]]/{p;q;}')
+
+case "$subject" in
+	"Merge "* | "Revert \""* | "fixup! "* | "squash! "* | "amend! "*) exit 0 ;;
+esac
+
+types='feat|fix|chore|docs|test|refactor'
+if ! printf '%s\n' "$subject" | grep -Eq "^($types)(\([a-z0-9._/-]+\))?!?: [^[:space:]]"; then
+	cat >&2 <<EOF
+commit-msg: the subject must be Conventional Commits:
+    type(scope): what changed        type = feat|fix|chore|docs|test|refactor
+got:
+    $subject
+EOF
+	exit 1
+fi
+
+if ! printf '%s\n' "$msg" | grep -Eq '^(Task|Story): +[A-Za-z0-9][A-Za-z0-9._-]*'; then
+	cat >&2 <<EOF
+commit-msg: add a body line naming the task or story, for example:
+    Task: Y1-P0-S03
+    Story: EPIC-001-S02
+EOF
+	exit 1
+fi
+exit 0

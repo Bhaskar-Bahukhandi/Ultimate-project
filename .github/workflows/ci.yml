@@ -30,6 +30,32 @@ jobs:
             git diff --check "$base" HEAD
           fi
 
+      - name: Commit messages (Conventional Commits + Task/Story line)
+        run: |
+          bash .githooks/test_commit_msg.sh
+          # The last commit before the rule (2026-10-18); it and its ancestors aren't checked.
+          cutoff=d33ce6679ee8f9478a7c72710e538db4ed4f2423
+          before="${{ github.event.before }}"
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            range="origin/${{ github.base_ref }}..HEAD"
+          elif [ -n "$before" ] && [ "$before" != "0000000000000000000000000000000000000000" ] \
+              && git cat-file -e "$before^{commit}" 2>/dev/null; then
+            range="$before..HEAD"
+          else
+            range="HEAD"   # new branch or force-push: everything after the cutoff
+          fi
+          not=""
+          if git cat-file -e "$cutoff^{commit}" 2>/dev/null; then not="^$cutoff"; fi
+          bad=0
+          for c in $(git rev-list $range $not); do
+            git log -1 --format=%B "$c" > "$RUNNER_TEMP/msg"
+            if ! bash .githooks/commit-msg "$RUNNER_TEMP/msg"; then
+              echo "::error::Commit message: $(git log -1 --format='%h %s' "$c")"
+              bad=1
+            fi
+          done
+          exit $bad
+
       - name: Cache Godot
         id: godot-cache
         uses: actions/cache@v4
