@@ -41,7 +41,7 @@ Sundays: Block A is the weekly integration playthrough, not task work.
 | Y1-P0-T01 | Clean the junk out of the repo root | you + Claude (devops-engineer) | 1 | — | **Done 2026-10-18**, commit `1484435`; evidence `production/qa/evidence/2026-10-repo-hygiene/root-cleanup.md` |
 | Y1-P0-S01 | Plan the Phase 0 sprint | you + Claude (producer) | 1 | — | This file, `production/sprint-status.yaml`, `production/session-state/active.md` |
 | Y1-P0-T02 | Move the tests into tests/unit and tests/integration | you + Claude (devops-engineer, qa-lead) | 3 | — | 9/9 suites pass locally (log `production/qa/evidence/2026-10-test-layout/run_all.log`); CI green; layout guard committed |
-| Y1-P0-S02 | Write the replacement Ch1 text: shatter scene, breadcrumbs, item and quest strings | you + Claude (writer) | 2 | — | `dialogue/ch1/shatter.dlg`; dialogue_test lint passes; **user-approved** string list |
+| Y1-P0-S02 | Write the replacement Ch1 text: shatter scene, breadcrumbs, item and quest strings | you + Claude (writer) | 2 | T03 (null_potion text and reward strings only) | `dialogue/ch1/shatter.dlg`; dialogue_test lint passes; **user-approved** string list |
 | Y1-P0-S03 | Evidence folder, session checkpoint, Conventional Commits hook | you + Claude (devops-engineer) | 2 | — | `.githooks/commit-msg` rejects `stuff`, accepts `chore: add commit-msg hook`; `production/qa/evidence/README.md`; CI check green |
 | Y1-P0-T03 | Decision memo for the 7 open audit decisions (the day plan's title says "3–5"; the record covers all 7) | **you decide** + Claude (producer) | 1 | — | Decision record with 7 dated decisions (or explicit "defer to phase X") |
 | Y1-P0-S04 | Repo hygiene calls: OneDrive, LFS, sprite archive, context.txt | **you decide** + Claude (devops-engineer) | 3 | T02 (clean, green suite to compare) | Decision record; `git lfs track` output; fresh clone passes load_all. Move done at the **start of a day on a clean, committed tree**; updating the OneDrive path in `AGENTS.md` and checking Claude Code starts in the new folder are listed steps (user approval) |
@@ -98,6 +98,9 @@ disagree, this sprint plan wins until the plan is re-generated:
 - **Day 0035 (Sun 22 Nov):** the weekly integration becomes a **human pass through Chapters 4–10** (any difficulty).
 - **Former S13/S14 slots (late-November Block B):** softlock-fix reserve.
 - **Day 0043:** gate-check and S16 only; softlock fixes belong in the reserve, not here.
+- **S02 waits on T03 (found 2026-10-18):** the shatter text (done, `35b67e0`) and the 10 breadcrumb lines
+  (approved) are written; the null_potion description and quest reward strings depend on T03's decisions
+  (null_potion effect, reward mapping), so S02 closes on or after Day 0005, not Day 0003.
 
 ## User-decision days (must not be skipped)
 | Day | Date | Task | Decision |
