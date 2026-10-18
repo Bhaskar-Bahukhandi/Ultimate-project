@@ -4,7 +4,7 @@
 Godot 4.6 2D RPG project.
 
 Project path:
-C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype
+C:\dev\Aethelgard\AethelgardPrototype
 
 Godot executable folder:
 C:\Godot
