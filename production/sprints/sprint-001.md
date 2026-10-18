@@ -10,7 +10,7 @@
 > **PR-SPRINT (producer, 2026-10-18): CONCERNS** — user chose **[B] Adjust scope**: T14 and T13 split,
 > T14a moved before T13, a named softlock-fix reserve, a human Ch4–10 pass on Day 0035, T15/S16
 > dependency fixed, exported build added to T15. Capacity confirmed by the user as real (no coursework cut).
-> **QA plan:** run `/qa-plan sprint` before implementation begins (before T02 on Day 0002).
+> **QA Plan:** `production/qa/qa-plan-sprint-001-2026-10-18.md` (written 2026-10-18, before implementation).
 
 ## Sprint Goal
 A human and the bot can play New Game to the credits with no softlock, the repo is clean and
