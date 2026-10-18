@@ -1,10 +1,41 @@
-# C1 end: the Shatter. Kaelen and Elara on the Ironhold side, looking back.
-# Replaces the inline Aldric reflection in ch1_shatter_transition.gd
-# (play_post_shatter_dialogue). Elara is always with Kaelen here and uses his name.
-# Purge also sets ch1_knight_spared (aldric.dlg), so it is checked first.
-# A save with no Aldric flag (made before the rewrite) gets after_none.
+# C1 end: the Shatter. The last scene of Chapter 1.
+# Kaelen and Elara come through onto the Ironhold side, see the city, look back
+# at Oakhaven (Aldric first, then the village meeting), and turn toward Ironhold.
+# Replaces play_post_shatter_dialogue() in scripts/chapter1/ch1_shatter_transition.gd.
+# Entry node: start.
+# Elara is always with Kaelen here (elara_meeting.dlg keeps her in every branch),
+# so there is no solo branch. She uses his name.
+# It's night: Tobb is asleep (fragment_one.dlg) and after_kill says "It's not morning".
+#
+# Scene events (the scene implements these):
+#   do pan_ironhold   camera pans over the city; hide the dialogue box. NEW.
+#   do look_back      Kaelen turns toward Oakhaven. Once per path, in the Aldric node.
+#   do pause 2.0      built in.
+#
+# Flag order (reads flags only; sets none):
+#   1. Aldric, router "aldric": ch1_root_purge, then ch1_knight_killed, then
+#      ch1_knight_spared, else after_none.
+#      Purge also sets ch1_knight_spared (aldric.dlg), so it is checked first.
+#      A kill also reads ch1_aldric_kill_owned / _justified / _unsure.
+#      A save with no Aldric flag (made before the rewrite) gets after_none.
+#   2. Village meeting, router "village": ch1_oakhaven_warned_villagers, then
+#      ch1_oakhaven_warned_leaders, then ch1_oakhaven_left_quietly, else
+#      village_none. fragment_one.dlg sets exactly one, so the order only matters
+#      for old or broken saves.
 
 ~ start
+Kaelen (Internal): Everything's heavier. My boots, my arms, the sword. Like the ground just remembered I'm standing on it.
+Kaelen: Okay. Either the world just came apart and put itself back together, or I hit my head harder than I—
+Elara: You didn't hit your head. I'd have heard it.
+Elara: First time I came this way, I lost an hour in a ditch being sick. You're doing better than I did.
+Kaelen (Internal): The air tastes like soot and hot copper, and there's steam hissing somewhere close that never stops for breath.
+do pan_ironhold
+Kaelen: That's Ironhold, isn't it? What are we walking into?
+Elara: Work, mostly. Forges, caravan yards, a bell for every shift. They'll want to know who you are at the gate.
+Kaelen: Then I hope they're patient. I'm still working that out myself.
+=> aldric
+
+~ aldric
 [if ch1_root_purge] => after_purge
 [if ch1_knight_killed] => after_kill
 [if ch1_knight_spared] => after_spare
@@ -20,7 +51,7 @@ Elara: He meant it. Aldric never said anything he didn't mean, not even to be ki
 [if ch1_aldric_kill_justified] Kaelen: He was a threat. That's true, and it isn't enough, is it?
 [if ch1_aldric_kill_unsure] Kaelen: You said it'd still be there in the morning. It's not morning, and it's still there.
 Elara: Then carry it. Just don't carry it alone.
-=> END
+=> village
 
 ~ after_spare
 do look_back
@@ -30,7 +61,7 @@ Kaelen: I know. I just wanted to be the last one who looked.
 Elara: Oakhaven's stubborn. It'll keep an eye on him whether he likes it or not.
 Kaelen: Okay. If he's still in there, the directive slips eventually. If he isn't—
 Elara: Don't finish that. Not out loud.
-=> END
+=> village
 
 ~ after_purge
 do look_back
@@ -40,10 +71,57 @@ Kaelen: I'm sorry. I couldn't tell you what it would cost, and I did it anyway.
 Elara: You told me you didn't know. Before you did it. That's the part I'll hold on to.
 Kaelen: And the rest of it?
 Elara: Ask me in a week. Ask him, if he's the one who answers.
-=> END
+=> village
 
 ~ after_none
 do look_back
 Kaelen (Internal): Oakhaven's behind the smoke now. Everything I did there already feels like it happened to someone else.
 Elara: It didn't. It happened to you, and to us. Keep walking.
+=> village
+
+# The village meeting (fragment_one.dlg, C1-S11). Each branch is short on purpose.
+~ village
+do pause 2.0
+[if ch1_oakhaven_warned_villagers] => village_warned
+[if ch1_oakhaven_warned_leaders] => village_leaders
+[if ch1_oakhaven_left_quietly] => village_quiet
+=> village_none
+
+~ village_warned
+Kaelen: I told Mara I'd find out about the wells. I said give me a day.
+Elara: She'll have the whole village boiling water until you come back and tell her to stop.
+Kaelen: Then I'd better come back with an answer.
+=> under
+
+~ village_leaders
+Kaelen: Bran and Mara know. Tobb too, once Bran's woken him and put it in writing for him.
+Kaelen: Three people out of a whole village. Was that enough, do you think?
+Elara: Ask me after the council's met. Bran will have written down who said what.
+=> under
+
+# Elara answers him sideways. She doesn't use his name here, and that's on purpose.
+~ village_quiet
+Kaelen: You think I should have told them.
+Elara: Tull and Wenna will be arguing about the water again by morning. Nobody's told them it was never the sluice.
+=> under
+
+~ village_none
+Kaelen (Internal): Nobody back there knows what's under their village. I'm not sure I do either.
+=> under
+
+# What Kaelen knows by the end of Chapter 1: the shrine words, and one memory of
+# arguing for seven signatures (fragment_one.dlg). Nothing more. No Human Patch yet.
+~ under
+Kaelen: Down in the shrine, those words on the wall. I knew them before I read them.
+Elara: I remember. You went white.
+Kaelen: Someone made it so nothing down there changes without seven signatures. I remember arguing for it.
+Kaelen: If some of what's under Oakhaven is mine, I need to know which parts before I touch anything else.
+Elara: Mara's bread is still Mara's bread, whoever laid the stones under her oven.
+Elara: And if you start feeling guilty about it, don't you dare go fixing my arm to make up for it.
+=> onward
+
+~ onward
+Kaelen: I probably wasn't going to.
+Elara: Come on, Kaelen. It's further than it looks, and I'd like walls round us by morning.
+Kaelen: Okay. Walls first. Then the list of names.
 => END
