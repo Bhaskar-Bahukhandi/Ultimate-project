@@ -1,0 +1,49 @@
+# C1 end: the Shatter. Kaelen and Elara on the Ironhold side, looking back.
+# Replaces the inline Aldric reflection in ch1_shatter_transition.gd
+# (play_post_shatter_dialogue). Elara is always with Kaelen here and uses his name.
+# Purge also sets ch1_knight_spared (aldric.dlg), so it is checked first.
+# A save with no Aldric flag (made before the rewrite) gets after_none.
+
+~ start
+[if ch1_root_purge] => after_purge
+[if ch1_knight_killed] => after_kill
+[if ch1_knight_spared] => after_spare
+=> after_none
+
+~ after_kill
+do look_back
+Kaelen (Internal): Somewhere behind that smoke is the gate he died guarding. It already looks smaller than it should.
+Elara: You're doing it again. Staring.
+Kaelen: He said "good". Right before. I keep trying to work out what he meant by it.
+Elara: He meant it. Aldric never said anything he didn't mean, not even to be kind.
+[if ch1_aldric_kill_owned] Kaelen: You told me not to dress it up. I'm not going to start now.
+[if ch1_aldric_kill_justified] Kaelen: He was a threat. That's true, and it isn't enough, is it?
+[if ch1_aldric_kill_unsure] Kaelen: You said it'd still be there in the morning. It's not morning, and it's still there.
+Elara: Then carry it. Just don't carry it alone.
+=> END
+
+~ after_spare
+do look_back
+Kaelen (Internal): He's back there in his own village, still arguing with an order nobody else can hear.
+Elara: He'll come back or he won't. Standing here won't decide it.
+Kaelen: I know. I just wanted to be the last one who looked.
+Elara: Oakhaven's stubborn. It'll keep an eye on him whether he likes it or not.
+Kaelen: Okay. If he's still in there, the directive slips eventually. If he isn't—
+Elara: Don't finish that. Not out loud.
+=> END
+
+~ after_purge
+do look_back
+Kaelen (Internal): He knew her name. He knew she was lying. That's two things the purge didn't take, and I don't know what it did.
+Elara: He remembered me. I keep waiting to find out what he didn't.
+Kaelen: I'm sorry. I couldn't tell you what it would cost, and I did it anyway.
+Elara: You told me you didn't know. Before you did it. That's the part I'll hold on to.
+Kaelen: And the rest of it?
+Elara: Ask me in a week. Ask him, if he's the one who answers.
+=> END
+
+~ after_none
+do look_back
+Kaelen (Internal): Oakhaven's behind the smoke now. Everything I did there already feels like it happened to someone else.
+Elara: It didn't. It happened to you, and to us. Keep walking.
+=> END
