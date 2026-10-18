@@ -86,20 +86,34 @@ func start_shatter_sequence() -> void:
 	await play_chapter_end_card()
 	if not is_inside_tree(): return
 
+## Every spoken line of this scene is in dialogue/ch1/shatter.dlg (nodes bridge, shift,
+## reconstruct, start). The scene stages the camera, the characters and the colour drain,
+## and answers the file's `do` events in _on_dlg_event().
+const SHATTER_DLG := "res://dialogue/ch1/shatter.dlg"
+
+## `do desaturate`: the colour the world drains to, and how long the drain takes.
+const DESATURATE_COLOR := Color(0.6, 0.6, 0.7, 1.0)
+const DESATURATE_SECONDS := 3.0
+
+## `do look_back`: how far the camera swings toward Oakhaven (the left) and how long
+## each leg takes (out, then back).
+const LOOK_BACK_OFFSET := Vector2(-80.0, 0.0)
+const LOOK_BACK_SECONDS := 0.5
+
+## The running colour drain (`do desaturate`). play_environmental_shift() waits for it.
+var _desat_tween: Tween = null
+
 func play_bridge_approach() -> void:
-	## Kaelen steps onto the bridge leading out of Oakhaven — expanded
-	var has_elara = GameManager.story_flags.get("ch1_elara_trusted", false) or GameManager.story_flags.get("ch1_elara_cautious", false)
-	
-	var beats = [
+	## Kaelen and Elara step onto the bridge leading out of Oakhaven. Elara is always with
+	## him (elara_meeting.dlg keeps her in every branch), so there is no solo variant.
+	## Order: enter beats, then shatter.dlg `bridge`, then the walk to mid-bridge.
+	await _play_beats("Bridge Approach", [
 		{
 			"type": "camera_move",
 			"target": Vector2(640, 360),
 			"duration": 0.5
 		},
-	]
-	
-	if has_elara:
-		beats.append({
+		{
 			"type": "parallel",
 			"beats": [
 				{
@@ -117,65 +131,15 @@ func play_bridge_approach() -> void:
 					"duration": 2.5
 				}
 			]
-		})
-	else:
-		beats.append({
-			"type": "character_enter",
-			"character": "Kaelen",
-			"position": Vector2(350, 430),
-			"from": "left",
-			"duration": 2.0
-		})
-	
-	# Kaelen walking dialogue
-	beats.append({
-		"type": "dialogue",
-		"speaker": "Kaelen",
-		"text": "This bridge... the materials change halfway. Oak planks on this side, industrial steel on the other. Like two completely different worlds welded together.",
-		"auto_advance": false
-	})
-	
-	if has_elara:
-		beats.append({
-			"type": "dialogue",
-			"speaker": "Elara",
-			"text": "The regions are stitched together at the bridges. Each one was built by a different hand — different rules, different physics, different laws of nature.",
-			"auto_advance": false
-		})
-		beats.append({
-			"type": "dialogue",
-			"speaker": "Kaelen (Internal)",
-			"text": "Different laws of nature. She's saying the way things WORK literally changes when you cross into a new region. That's either brilliant... or terrifying.",
-			"auto_advance": false
-		})
-		beats.append({
-			"type": "dialogue",
-			"speaker": "Elara",
-			"text": "When we cross... brace yourself. The Shatter isn't just visual. You'll feel it in your bones. The whole world literally tears itself apart and rebuilds around you — from a different angle.",
-			"auto_advance": false
-		})
-		beats.append({
-			"type": "dialogue",
-			"speaker": "Kaelen",
-			"text": "Top-down to side-scrolling. The way I see the world is about to completely change. *deep breath* Let's do it.",
-			"auto_advance": false
-		})
-	else:
-		beats.append({
-			"type": "dialogue",
-			"speaker": "Kaelen (Internal)",
-			"text": "The planks change material halfway across. Oak gives way to steel. The air shifts — warmer, heavier, carrying the smell of smoke and metal. Two worlds welded at a seam, and I'm about to step across.",
-			"auto_advance": false
-		})
-		beats.append({
-			"type": "dialogue",
-			"speaker": "Kaelen",
-			"text": "Elara warned me about this before we parted. The Shatter — when the world tears itself apart and rebuilds from a different angle. Top-down to side-scrolling. *deep breath* ...Here goes nothing.",
-			"auto_advance": false
-		})
-	
-	if has_elara:
-		beats.append({
+		},
+	])
+	if not is_inside_tree() or not cinematic_active: return
+
+	await DialogueManager.run(SHATTER_DLG, "bridge", _on_dlg_event)
+	if not is_inside_tree() or not cinematic_active: return
+
+	await _play_beats("Bridge Approach (walk)", [
+		{
 			"type": "parallel",
 			"beats": [
 				{
@@ -191,81 +155,72 @@ func play_bridge_approach() -> void:
 					"duration": 3.0
 				}
 			]
-		})
-	else:
-		beats.append({
-			"type": "character_move",
-			"character": "Kaelen",
-			"target": Vector2(640, 430),
-			"duration": 3.0
-		})
-	
-	var cutscene = {
-		"name": "Bridge Approach",
-		"beats": beats
-	}
-	
-	cutscene_mgr.play_cutscene(cutscene)
-	await cutscene_mgr.cutscene_finished
+		},
+	])
 	if not is_inside_tree(): return
+
+func _play_beats(cutscene_name: String, beats: Array) -> void:
+	## Plays one cutscene and waits for it to finish. It also returns after a hold-to-skip:
+	## _on_skip_cutscene() sets cinematic_active = false and then calls stop_cutscene(),
+	## which emits cutscene_finished (synchronously) for a cutscene that was playing.
+	## So the callers' `not cinematic_active` guards are what stop the sequence after a
+	## skip; they must stay.
+	cutscene_mgr.play_cutscene({"name": cutscene_name, "beats": beats})
+	await cutscene_mgr.cutscene_finished
 
 func play_environmental_shift() -> void:
-	## Visual and audio shift — expanded atmosphere
+	## Visual and audio shift. The lines are shatter.dlg `shift`; the colour drain starts
+	## on its `do desaturate`, and this waits for it to finish before returning.
 	print("[CH1-SHATTER] Environmental shift begins")
 	
-	# Kaelen notices the change starting
-	await DialogueManager.say("Kaelen", "The colors are draining. Look — the greens are fading to grey, like someone's sucking the life out of the landscape.")
-	if not is_inside_tree(): return
+	_desat_tween = null
+	await DialogueManager.run(SHATTER_DLG, "shift", _on_dlg_event)
+	if not is_inside_tree() or not cinematic_active: return
 	
-	# Desaturation effect — gradually grey out the world
-	var desat_tween = create_tween()
-	desat_tween.tween_property(self, "modulate", Color(0.6, 0.6, 0.7, 1.0), 3.0)
-	
-	# Audio shift
-	await DialogueManager.say("System", "[AUDIO_SHIFT: Pastoral melody decelerating... Pitch -50%]\n[VISUAL_SHIFT: Color palette desaturating... Skybox transitioning to industrial smog]", Color(0.5, 0.5, 0.5), true)
-	if not is_inside_tree(): return
-	
-	# Companion reacts to the shift
-	var has_elara_shift = GameManager.story_flags.get("ch1_elara_trusted", false) or GameManager.story_flags.get("ch1_elara_cautious", false)
-	if has_elara_shift:
-		await DialogueManager.say("Elara", "It's starting. The boundary between regions is dissolving. Can you feel it? The air itself is changing — heavier, hotter, like walking toward a furnace.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "It's starting. Something in the air is changing — heavier, hotter, like walking toward a furnace. The boundary between regions is dissolving.")
-		if not is_inside_tree(): return
-
-	# Feel the world changing
-	camera.shake(4.0, 0.5)
-	await get_tree().create_timer(1.5, false).timeout
-	if not is_inside_tree(): return
-
-	# Kaelen notices physical sensations
-	await DialogueManager.say("Kaelen", "My movement feels... different. Heavier. Like the ground is pulling harder. Every step takes more effort.")
-	if not is_inside_tree(): return
-
-	if has_elara_shift:
-		await DialogueManager.say("Elara", "That's the shift. The rules of this place are changing — how you move, how you jump, how far you fall. You'll need to relearn your own body on the other side.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "The rules are changing — how I move, how I jump, how far I fall. I'll need to relearn my own body on the other side. No one to warn me what's coming.")
-		if not is_inside_tree(): return
-	
-	# System warning
-	await DialogueManager.say("System", "[WARNING: REGIONAL BOUNDARY BREAKING]\n[VIEW SHIFTING: Bird's Eye → Side View]\n[GRAVITY: Increasing]\n[BRACE FOR THE SHATTER]", Color(1.0, 0.3, 0.0), true)
-	if not is_inside_tree(): return
-	
-	await desat_tween.finished
-	if not is_inside_tree(): return
+	# The drain started during the run; it may already be over (a finished tween is
+	# invalid, and waiting on one would never return).
+	if _desat_tween != null and _desat_tween.is_valid():
+		await _desat_tween.finished
+		if not is_inside_tree() or not cinematic_active: return
 	DialogueManager.hide_dialogue()
+
+func _on_dlg_event(event: String) -> void:
+	## Handles the `do` events of shatter.dlg. Awaited by DialogueManager.run(), so an
+	## event that waits holds the dialogue until it is done. An unknown event warns and
+	## returns at once: the dialogue must never hang on a name this scene doesn't know.
+	match event:
+		"desaturate":
+			# Starts the drain and returns: the next line plays while the colour goes.
+			_desat_tween = create_tween()
+			_desat_tween.tween_property(self, "modulate", DESATURATE_COLOR, DESATURATE_SECONDS)
+		"shake":
+			# Feel the world changing
+			camera.shake(4.0, 0.5)
+			await get_tree().create_timer(1.5, false).timeout
+		"pan_ironhold":
+			# Absorb the new world — slow camera pan
+			DialogueManager.hide_dialogue()
+			camera.move_to(Vector2(640, 320), 2.0)
+			await get_tree().create_timer(2.5, false).timeout
+		"look_back":
+			# Kaelen turns toward Oakhaven: the camera swings left, then returns.
+			var home := camera.global_position
+			await camera.move_to(home + LOOK_BACK_OFFSET, LOOK_BACK_SECONDS, Tween.TRANS_SINE)
+			if not is_inside_tree(): return
+			await camera.move_to(home, LOOK_BACK_SECONDS, Tween.TRANS_SINE)
+		_:
+			push_warning("[CH1-SHATTER] unhandled dialogue event: %s" % event)
 
 func play_the_shatter() -> void:
 	## THE SHATTER — screen freezes, maps to 3D glass plane, shatters
+	## (Every await is followed by the skip guard: a hold-to-skip during the effects must
+	## not let the `reconstruct` node start afterwards.)
 	print("[CH1-SHATTER] Executing THE SHATTER")
 	
 	# Step 1: FREEZE — screen holds
 	# (In a real implementation, we'd capture the viewport texture)
 	await get_tree().create_timer(1.0, false).timeout
-	if not is_inside_tree(): return
+	if not is_inside_tree() or not cinematic_active: return
 	
 	# Step 2: Glass cracking sound + visual
 	# Initial crack lines appear
@@ -275,7 +230,7 @@ func play_the_shatter() -> void:
 		var crack_tween = create_tween()
 		crack_tween.tween_property(shatter_effect, "modulate:a", 1.0, 0.3)
 		await crack_tween.finished
-		if not is_inside_tree(): return
+		if not is_inside_tree() or not cinematic_active: return
 	
 	# Step 3: SHATTER! — massive impact
 	camera.earthquake_shake(1.5)
@@ -290,11 +245,11 @@ func play_the_shatter() -> void:
 			glitch_overlay.visible = true
 			glitch_overlay.color = Color(randf_range(0.3, 1.0), randf_range(0.3, 1.0), randf_range(0.3, 1.0), 0.7)
 		await get_tree().create_timer(0.06, false).timeout
-		if not is_inside_tree(): return
+		if not is_inside_tree() or not cinematic_active: return
 		if glitch_overlay:
 			glitch_overlay.visible = false
 		await get_tree().create_timer(0.04, false).timeout
-		if not is_inside_tree(): return
+		if not is_inside_tree() or not cinematic_active: return
 	
 	flash_overlay.modulate.a = 0.0
 	
@@ -302,19 +257,18 @@ func play_the_shatter() -> void:
 	flash_overlay.color = Color.BLACK
 	flash_overlay.modulate.a = 1.0
 	await get_tree().create_timer(1.0, false).timeout
-	if not is_inside_tree(): return
+	if not is_inside_tree() or not cinematic_active: return
 	
-	# Step 5: Reveal — new perspective (side-scrolling world peek)
-	# Show a message about the rendering engine switch
-	await DialogueManager.say("System", "[WORLD RECONSTRUCTION COMPLETE]\n[VIEW: Top-Down → Side-Scrolling]\n[REGION: Oakhaven → Ironhold]\n[Welcome to Ironhold.]", Color(1, 0.5, 0), true)
-	if not is_inside_tree(): return
+	# Step 5: Reveal — the world's one line while the screen is still black
+	await DialogueManager.run(SHATTER_DLG, "reconstruct", _on_dlg_event)
+	if not is_inside_tree() or not cinematic_active: return
 	DialogueManager.hide_dialogue()
 	
 	# Fade from black
 	var reveal_tween = create_tween()
 	reveal_tween.tween_property(flash_overlay, "modulate:a", 0.0, 2.0)
 	await reveal_tween.finished
-	if not is_inside_tree(): return
+	if not is_inside_tree() or not cinematic_active: return
 	
 	# Reset modulate
 	self.modulate = Color(0.5, 0.45, 0.35, 1.0)  # Ironhold's brass/rust palette
@@ -323,103 +277,16 @@ func play_the_shatter() -> void:
 		shatter_effect.visible = false
 	
 	await get_tree().create_timer(1.0, false).timeout
-	if not is_inside_tree(): return
+	if not is_inside_tree() or not cinematic_active: return
 	
 	GameManager.set_story_flag("ch1_shatter_witnessed", true)
 
 func play_post_shatter_dialogue() -> void:
-	## Kaelen's reaction to the genre shift — expanded reflection with choice callbacks
-	
-	var has_elara = GameManager.story_flags.get("ch1_elara_trusted", false) or GameManager.story_flags.get("ch1_elara_cautious", false)
-	var knight_killed = GameManager.story_flags.get("ch1_knight_killed", false)
-	var knight_spared = GameManager.story_flags.get("ch1_knight_spared", false)
-	var warned_village = GameManager.story_flags.get("ch1_oakhaven_warned_villagers", false)
-	
-	await DialogueManager.say("Kaelen", "*gasping* ...What just happened? The entire world just BROKE and rebuilt itself around me.")
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen", "*stumbling* ...Everything SHIFTED. I'm seeing the world from the SIDE now — and gravity, actual GRAVITY, pulling me DOWN. Before, it was like floating. Now every step has weight.")
-	if not is_inside_tree(): return
-	
-	if has_elara:
-		await DialogueManager.say("Elara", "Welcome to the other side of The Shatter. It never gets easier. The first time I crossed, I couldn't move for an hour — my body had to relearn how to walk.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "No one here to tell me if this is normal. No one to explain what just happened. Every cell in my body is screaming that the rules just changed — gravity, movement, perspective. I need to adapt. Fast.", Color(0.5, 0.9, 1.0))
-		if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen (Internal)", "The air smells like soot and hot copper. The skybox went from pastoral blue to industrial grey in one hard cut. Chimney stacks. Gears. Steam vents.", Color(0.5, 0.9, 1.0))
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen (Internal)", "Oakhaven was the tutorial. The safe zone. The place where the game holds your hand and teaches you the basics while pretending it's a charming village.", Color(0.5, 0.9, 1.0))
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen (Internal)", "This... this is Ironhold. The Steam Realm. And judging by how thick that smog is, the corruption here runs a LOT deeper.", Color(0.5, 0.9, 1.0))
-	if not is_inside_tree(): return
-	
-	# Absorb the new world — slow camera pan
-	DialogueManager.hide_dialogue()
-	camera.move_to(Vector2(640, 320), 2.0)
-	await get_tree().create_timer(2.5, false).timeout
-	if not is_inside_tree(): return
-	
-	if has_elara:
-		await DialogueManager.say("Kaelen", "Elara, what are we walking into?")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Elara", "Ironhold. Industrial-era region. The NPCs here are factory workers, gearwrights, and steam-powered automatons. The boss is... complicated.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Elara", "But we'll deal with that when we get there. For now, just... take a moment. Getting through Chapter 1 is no small thing.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "Ironhold. That's what the system called this region during the reconstruction. Industrial-era. Chimneys, steam, gears. The enemies here won't be slimes and boars. They'll be machines. And the boss...", Color(0.5, 0.9, 1.0))
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen", "One chapter down. I barely survived it. And something tells me the difficulty curve is about to get a lot steeper.")
-		if not is_inside_tree(): return
-	
-	# Knight reflection — branches based on kill/spare choice
-	if knight_spared:
-		await DialogueManager.say("Kaelen", "*looking back at the bridge* Aldric — the knight — he said 'thank you.' Four hundred and twelve iterations of the same fight, and I was the first person who thought to free him instead of just winning.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen (Internal)", "I left him standing at that bridge. Alive. Free. Fighting the corruption inside him with every breath. I hope that freedom holds. I hope it was worth the risk.", Color(0.5, 0.9, 1.0))
-		if not is_inside_tree(): return
-	elif knight_killed:
-		await DialogueManager.say("Kaelen", "*looking back at the bridge, fists clenched* Aldric. His name was Aldric. I ended four hundred and twelve cycles of suffering in a single strike. He asked me to. He THANKED me.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen (Internal)", "But the system called it 'entity deletion.' Not liberation. Deletion. There's a difference between freeing someone and erasing them, and I'm not sure which one I did.", Color(0.5, 0.9, 1.0))
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen (Internal)", "The corruption it left in me — 5% extra, crawling through my data like an echo of his pain. Every choice in this world costs something. Every act of mercy is also an act of violence.", Color(0.5, 0.9, 1.0))
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen", "*looking back at the bridge* The Tutorial Knight said 'thank you.' Four hundred and twelve iterations of the same fight, and I was the first person who thought to end the loop instead of winning it.")
-		if not is_inside_tree(): return
-	
-	# Weight of the Tutorial Knight's gratitude
-	await get_tree().create_timer(2.0, false).timeout
-	if not is_inside_tree(): return
-	
-	# Village reflection — branches based on warn/leave choice
-	if warned_village:
-		await DialogueManager.say("Kaelen (Internal)", "The farmer at his well. The guard trapped at his post. The child who wanted to learn how to CHOOSE. I warned them. It might not change anything — they might not be able to change. But at least they know someone saw them. Someone cared enough to speak.", Color(0.5, 0.9, 1.0))
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen (Internal)", "The farmer at his well. The guard trapped at his post. The child who wanted to learn how to CHOOSE. I left them without saying goodbye. Without warning them. The smart move. The safe move. The move that tastes like ash.", Color(0.5, 0.9, 1.0))
-		if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen (Internal)", "AetherCorp did things like this. Traps disguised as games — keep people running in circles, keep them hooked, keep them spending. I quit because I couldn't stomach it anymore. And now I'm standing inside one, seeing what it does to the people caught in it.", Color(0.5, 0.9, 1.0))
-	if not is_inside_tree(): return
-	
-	await DialogueManager.say("Kaelen (Internal)", "But I didn't just watch it happen. I BUILT parts of this. My code, my architecture, my optimizations — they're in the foundation. If this world is a prison, I helped lay the bricks.", Color(0.5, 0.9, 1.0))
-	if not is_inside_tree(): return
-	
-	if has_elara:
-		await DialogueManager.say("Elara", "*gently* You're asking questions nobody else asks. Not just 'how do I get stronger' but 'what am I breaking along the way.' That matters, Kaelen. More than you know.")
-		if not is_inside_tree(): return
-		await DialogueManager.say("Kaelen", "*quietly* ...Seven Source Key Fragments, guarded by the seven Lower Gods. And a System Administrator who probably already knows we're coming. Let's move.")
-		if not is_inside_tree(): return
-	else:
-		await DialogueManager.say("Kaelen", "*quietly, to himself* Seven Source Key Fragments. Seven Lower Gods. One System Administrator. And me — alone, with a dead man's blade and a corruption meter that keeps climbing. ...Let's move.")
-		if not is_inside_tree(): return
-	
+	## Kaelen and Elara on the Ironhold side, then the look back at Oakhaven. Everything
+	## from here to the end of the scene is one run of shatter.dlg's `start` node, which
+	## routes on the Aldric and village flags itself. This scene reads no flags here.
+	await DialogueManager.run(SHATTER_DLG, "start", _on_dlg_event)
+	if not is_inside_tree() or not cinematic_active: return
 	DialogueManager.hide_dialogue()
 
 func play_chapter_end_card() -> void:

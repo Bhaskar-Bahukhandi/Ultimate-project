@@ -3,6 +3,16 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-18 — Chapter 1 shatter scene from dialogue (Y1-P0-T04)
+
+- **fix(story):** the Chapter 1 shatter scene now plays entirely from `dialogue/ch1/shatter.dlg`
+  (nodes `bridge`, `shift`, `reconstruct`, `start`, then one `after_*` node per Aldric outcome
+  and the village and `under` nodes). The Purge route no longer shows the Spare text, and the
+  "412 iterations" line, the mechanics-narration lines and the stale-fact lines are gone.
+- The screenshot tour has three new stops, `ch1_shatter_kill`, `ch1_shatter_spare` and
+  `ch1_shatter_purge`: each runs the real scene with that route's flags and captures the
+  route's first Aldric line.
+
 ## 2026-10-18 — Test layout (Y1-P0-T02)
 
 - **Suites moved to `tests/integration/<system>/`:** `project/load_all`, `dialogue/dialogue`,

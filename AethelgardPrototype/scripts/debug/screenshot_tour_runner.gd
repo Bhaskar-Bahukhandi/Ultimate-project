@@ -36,6 +36,25 @@ const SCENES := [
 	["ch2_fragment_two", "res://scenes/chapter2/seraphina_choice.tscn", 4.0],
 	["ch2_act1_end", "res://scenes/chapter2/ch2_ending.tscn", 4.0],
 ]
+## The Chapter 1 shatter scene once per Aldric outcome. Each stop sets the story flags
+## aldric.dlg leaves for that route (plus a village flag and the Elara flag the scene
+## expects), loads the REAL scene and lets it run: the runner only taps "advance" on each
+## line (the same flags DialogueManager._input sets) until the first line of the route's
+## shatter.dlg node is on screen, then captures. [id, dlg node, flags]
+const SHATTER_SCENE := "res://scenes/chapter1/shatter_transition.tscn"
+const SHATTER_DLG := "res://dialogue/ch1/shatter.dlg"
+const SHATTER_TIMEOUT := 120.0   # real seconds; the intro (bridge, shift, shatter) is ~25 s
+const SHATTER_ROUTES := [
+	["ch1_shatter_kill", "after_kill", {
+		"ch1_knight_killed": true, "ch1_aldric_kill_owned": true,
+		"ch1_oakhaven_warned_villagers": true, "ch1_elara_trusted": true}],
+	["ch1_shatter_spare", "after_spare", {
+		"ch1_knight_spared": true,
+		"ch1_oakhaven_warned_villagers": true, "ch1_elara_trusted": true}],
+	["ch1_shatter_purge", "after_purge", {
+		"ch1_root_purge": true, "ch1_knight_spared": true,
+		"ch1_oakhaven_warned_villagers": true, "ch1_elara_trusted": true}],
+]
 const DLG_DIRS := ["res://dialogue/prologue", "res://dialogue/ch1", "res://dialogue/ch2"]
 const BACKDROP := "res://scenes/regions/oakhaven_region.tscn"
 const THUMB := Vector2i(320, 180)
@@ -76,6 +95,9 @@ func run() -> int:
 	for s in SCENES:
 		if _wanted(s[0]):
 			await _scene_shot(s[0], s[1], s[2])
+	for r in SHATTER_ROUTES:
+		if _wanted(r[0]):
+			await _shatter_route_shot(r[0], r[1], r[2])
 	if _wanted("ui"):
 		await _ui_shots()
 	if _wanted("dlg"):
@@ -139,6 +161,52 @@ func _scene_shot(id: String, path: String, settle: float) -> void:
 	if now != path:
 		notes.append("scene moved on to %s" % now.get_file())
 	await _capture(id, "scene", path, notes)
+
+
+## Plays the real shatter scene with `flags` set and captures the first line of `dlg_node`
+## (after_kill / after_spare / after_purge) while it waits for the player. Nothing is
+## faked: if that line never shows (timeout, scene moved on) the shot is flagged as a
+## PROBLEM and shows whatever was on screen.
+func _shatter_route_shot(id: String, dlg_node: String, flags: Dictionary) -> void:
+	var dm := _dm()
+	var script = load("res://scripts/dialogue/dialogue_script.gd").load_file(SHATTER_DLG, false)
+	var target := ""
+	for step in script.nodes.get(dlg_node, []):
+		if step["type"] == "line":
+			target = step["text"]
+			break
+	_gm().reset_game()
+	for f in flags:
+		_gm().set_story_flag(f, flags[f])
+	await _load_scene(SHATTER_SCENE, 0.0)
+	dm.dialogue_history.clear()
+	var notes: Array[String] = ["real scene run; first line of shatter.dlg `%s`" % dlg_node]
+	var started := Time.get_ticks_msec()
+	var reached := false
+	while target != "" and (Time.get_ticks_msec() - started) < int(SHATTER_TIMEOUT * 1000.0):
+		var scene_now: String = tree.current_scene.scene_file_path if tree.current_scene else ""
+		if scene_now != SHATTER_SCENE:
+			break
+		if not dm.dialogue_history.is_empty() and dm.dialogue_history.back()["text"] == target:
+			reached = true   # fully typed and now waiting for the advance key
+			break
+		if dm._is_visible:
+			if dm._is_typing:
+				dm._skip_typing = true
+			else:
+				dm._advance_requested = true
+		await _wait(0.12)
+	if reached:
+		await _wait(0.4)   # nothing taps advance now, so the line stays up
+		if not dm.dialogue_history.is_empty() and dm.dialogue_history.back()["text"] != target:
+			reached = false
+	if reached:
+		_check_inside(id, "dialogue box", dm._panel, notes)
+	else:
+		var why := "the `%s` line never appeared" % dlg_node
+		notes.append("PROBLEM: " + why)
+		_problems.append("%s: %s" % [id, why])
+	await _capture(id, "scene", SHATTER_SCENE, notes)
 
 
 func _ui_shots() -> void:
