@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-T05 (`production/plan/_source/Y1-P0.json#Y1-P0-T05`)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Feature
 > **Type**: Integration
 > **Estimate**: 1.5 days (plan said 1; the two new flags, the resolver change and the scene-aware arrows add ~0.5)
@@ -216,7 +216,7 @@ per case group. Watch each new case fail against the unchanged resolver before t
 **Required evidence**: `tests/integration/story/chapter1_route_test.gd` (extended) passing, with the golden
 baseline beside it and a log in `production/qa/evidence/2026-10-breadcrumbs/`; the HUD screenshot in AC-9.
 
-**Status**: [ ] Not yet created
+**Status**: [x] Created — chapter1_route_test.gd (391/0), breadcrumb_golden.json, production/qa/evidence/2026-10-breadcrumbs/
 
 ---
 
@@ -226,3 +226,17 @@ baseline beside it and a log in `production/qa/evidence/2026-10-breadcrumbs/`; t
   for the T06/T08 strings), Y1-P0-T04 (Complete; shares `chapter1_route_test.gd`). T03 and S02 have no story
   files by sprint decision; their status is in `production/sprint-status.yaml`.
 - Unlocks: Y1-P0-S07 (Act 1 playtest).
+
+---
+
+## Completion Notes
+**Completed**: 2026-10-20
+**Criteria**: 9/9 passing (notes on AC-5, AC-6c, AC-8a below). Nothing deferred.
+**Deviations**:
+- NOT ASSESSED: GDD / ADR / TR-registry traceability (none exist); judged against decision 4A and the ACs, no deviation found.
+- ADVISORY: AC-6c is checked at name level (literal flag writers in `scripts/chapter1` + `dialogue/ch1` vs a 70-name list frozen from HEAD d5ca821, recomputed independently) plus a manual diff review, not by comparing end-of-route flag sets. AC-8a samples the resolver/HUD with flags set in route order, not during the real kill route. AC-5 "Chapter 2+ arrows behave as before" is code-verified (guard skipped when `_target_scene == ""`), not tested.
+- Accepted LP-CODE-REVIEW concerns (user, 2026-10-20): `_entry_active` cyclomatic complexity 13 (split into `_blocked()` / `_requirements_met()`); `_process` ~11 and allocates per frame (pre-existing; move arrow text/colour updates to on-change); four test/debug functions over 40 lines (`_test_bc_arrows_hook`, `_stew_run`, `_test_bc_arrows_village`, `_breadcrumb_shot`).
+- Design findings (outside T05, recorded in the session checkpoint): steps 0–4 are never visible in play (the crash site hides the breadcrumb; the Elara meeting and Broken Mile never enter EXPLORATION; the gate dialogue ends step 4 first): game-designer to decide. The breadcrumb panel overlaps the village HUD's Location/Glitch text (pre-existing layout): T12 candidate.
+**Test Evidence**: Integration — `AethelgardPrototype/tests/integration/story/chapter1_route_test.gd` (run green 391/0 on 2026-10-20); golden `AethelgardPrototype/tests/integration/story/breadcrumb_golden.json`; full suite 10/10, 1047 s (`production/qa/evidence/2026-10-breadcrumbs/run_all.log`); live-renderer HUD shot `production/qa/evidence/2026-10-breadcrumbs/ch1_breadcrumb_oakhaven.png` (step 6, `ch1_stew_done` set by the real stew). Watched fail: expected step text, golden target, stale-string list, AC-7 expectation, AC-6c both directions, field-run deadline (mutations recorded in agent reports; not against the unchanged resolver for every case).
+**Code Review**: Complete — /code-review CHANGES REQUIRED → fixed (field-run deadlines; AC-6c automated; AC-1b `= false` scan bug) → APPROVED WITH SUGGESTIONS; LP-CODE-REVIEW CONCERNS (accepted); QL-TEST-COVERAGE GAPS (advisory).
+**Follow-up (recommend a follow-up story)**: AC-6c end-of-route flag-set diff; AC-8a live kill-route sampling; Chapter 2+ arrow `_process` test and the within-100 px branch; make the mid-run stew case able to fail; exercise `_on_bridge_trigger`; `Node2D` cast in `_cache_scene_target`; `found.get("text", "")`; refresh on scene change (2 s arrow lag); the LP complexity/length items above; doc comments on `hide_breadcrumb`/`show_breadcrumb`/`get_current_objective`/`force_refresh`.
