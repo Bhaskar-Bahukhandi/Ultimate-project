@@ -176,6 +176,8 @@ func _play_entrance() -> void:
 	if not is_inside_tree(): return
 	await _run("elara_house", "start")
 	if not is_inside_tree(): return
+	# Y1-P0-T05: read by the breadcrumb to move from step 5 to step 6.
+	GameManager.set_story_flag("ch1_stew_done", true)
 	await _fade(0.0, 0.8)
 	_entrance_done = true
 

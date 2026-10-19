@@ -21,63 +21,108 @@ var _current_objective: String = ""
 var _current_hint: String = ""
 var _target_position: Vector2 = Vector2.ZERO
 var _has_target: bool = false
+var _target_scene: String = ""  # scene path a Chapter 1 arrow is bound to ("" = any scene)
 var _visible: bool = true
 
-# ── Objective database: ordered by priority (first matching = active) ──
-# Each entry: {flag_required (must be true), flag_blocker (if true, skip),
-#              text, hint, target_pos (in current region)}
+# ── Objective database ──
+# Each entry may carry:
+#   required      one flag that must be set ("" = none)
+#   required_any  a list of flags, at least one of which must be set
+#   blocker, blocker_alt   single flags that end the entry when set
+#   blockers      a list of flags, any of which ends the entry
+#   text, hint, target (a fixed Vector2; Vector2.ZERO = no arrow)
+# Chapter 1 entries ("chapter1": true) have no hint and no fixed target. An arrow is
+# optional: "scene" (res:// path) plus "target_node" (node path inside that scene) aim
+# it at that node, and only while that scene is the current scene.
+# Chapter 2+ entries: first matching entry in table order wins.
+# Chapter 1 entries (until "ch1_complete" is set): the LATEST matching step wins, so a
+# later beat (an early alarm, a skipped step) moves the objective forward.
 const OBJECTIVES: Array = [
-	# 10N-A2 first-minute opening hook objectives.
-	{
-		"blocker": "ch1_opening_hook_signal_found",
+	# ── Chapter 1 (Y1-P0-T05; texts approved 2026-10-18, step 0 from crash_site.dlg) ──
+	{  # step 0
+		"chapter1": true,
 		"required": "ch1_opening_hook_started",
-		"text": "Stand up. Find a signal.",
-		"hint": "Move, then inspect the broken signal fragment near the crater.",
-		"region": "opening_crash_site",
-		"target": Vector2(545, 370),
+		"blockers": ["ch1_crash_trace_seen"],
+		"text": "Find the plane. Look for survivors.",
+		"hint": "",
+		"scene": "res://scenes/chapter1/opening_crash_site_hook.tscn",
+		"target_node": "SignalFragment",
 	},
-	{
-		"blocker": "ch1_opening_hook_complete",
-		"required": "ch1_opening_hook_signal_found",
-		"text": "Follow the Oakhaven signal.",
-		"hint": "Avoid the unstable pulse and head east through the safe gap.",
-		"region": "opening_crash_site",
-		"target": Vector2(1030, 370),
+	{  # step 1
+		"chapter1": true,
+		"required": "ch1_crash_trace_seen",
+		"blockers": ["elara_met"],
+		"text": "Find people. A settlement east may know what happened to Flight 707.",
+		"hint": "",
+		"scene": "res://scenes/chapter1/opening_crash_site_hook.tscn",
+		"target_node": "OakhavenPath",
 	},
-	{
-		"blocker": "ch1_oakhaven_entered",
-		"required": "ch1_opening_hook_complete",
-		"text": "Reach Oakhaven.",
-		"hint": "The signal points to a village that should not know your name.",
-		"region": "overworld",
-		"target": Vector2(350, 480),
+	{  # step 2
+		"chapter1": true,
+		"required": "elara_met",
+		"blockers": ["ch1_broken_mile_entered"],
+		"text": "Reach Oakhaven. Follow the first lead on the missing passengers.",
+		"hint": "",
 	},
-
-	# ── Chapter 1 ──
-	{
-		"blocker": "tutorial_completed",
-		"required": "",
-		"text": "Survive the crash site",
-		"hint": "Follow the glowing path out of the crater",
-		"region": "oakhaven",
-		"target": Vector2(400, 300),
+	{  # step 3
+		"chapter1": true,
+		"required": "ch1_broken_mile_entered",
+		"blockers": ["ch1_personal_goal_set"],
+		"text": "Get through the Broken Mile with Elara.",
+		"hint": "",
 	},
-	{
-		"blocker": "ch1_knight_spared",  # OR ch1_knight_killed
-		"blocker_alt": "ch1_knight_killed",
-		"required": "tutorial_completed",
-		"text": "Defeat the Corrupted Sentinel",
-		"hint": "The sentinel guards the path ahead — prepare for battle",
-		"region": "oakhaven",
-		"target": Vector2(2200, 1100),
+	{  # step 4
+		"chapter1": true,
+		"required": "ch1_personal_goal_set",
+		"blockers": ["ch1_oakhaven_entered"],
+		"text": "Ask about Flight 707. Find a safe route to Ironhold.",
+		"hint": "",
 	},
-	{
-		"blocker": "ch1_complete",
-		"required": "tutorial_completed",
-		"text": "Explore Oakhaven & find Elara",
-		"hint": "Talk to the villagers and investigate the corruption",
-		"region": "oakhaven",
-		"target": Vector2(1200, 800),
+	{  # step 5
+		"chapter1": true,
+		"required": "ch1_oakhaven_entered",
+		"blockers": ["ch1_stew_done"],
+		"text": "Go to Elara's house. She's making stew.",
+		"hint": "",
+	},
+	{  # step 6
+		"chapter1": true,
+		"required": "ch1_stew_done",
+		"blockers": ["ch1_north_field_helped", "ch1_north_field_refused"],
+		"text": "Spend the afternoon in Oakhaven. Meet the people here.",
+		"hint": "",
+	},
+	{  # step 7 (never shown on the refuse path)
+		"chapter1": true,
+		"required": "ch1_north_field_helped",
+		"blockers": ["ch1_corrupted_boar_defeated"],
+		"text": "Answer the alarm in the north field.",
+		"hint": "",
+		"scene": "res://scenes/chapter1/oakhaven_village.tscn",
+		"target_node": "Triggers/BoarTrigger",
+	},
+	{  # step 8
+		"chapter1": true,
+		"required_any": ["ch1_corrupted_boar_defeated", "ch1_north_field_refused"],
+		"blockers": ["ch1_bridge_repair_accepted", "ch1_bridge_evacuated", "ch1_bridge_ignored"],
+		"text": "Deal with the north bridge before dark.",
+		"hint": "",
+		"scene": "res://scenes/chapter1/oakhaven_village.tscn",
+		"target_node": "Triggers/BridgeTrigger",
+	},
+	{  # step 9 (no arrow: the boss node moves and is created at runtime)
+		"chapter1": true,
+		"required_any": ["ch1_bridge_repair_accepted", "ch1_bridge_evacuated", "ch1_bridge_ignored"],
+		"blockers": ["ch1_tutorial_knight_defeated"],
+		"text": "Stop Aldric.",
+		"hint": "",
+	},
+	{  # step 10
+		"chapter1": true,
+		"required": "ch1_tutorial_knight_defeated",
+		"blockers": ["ch1_complete"],
+		"text": "Go down to the shrine. Then decide what to tell the village.",
+		"hint": "",
 	},
 
 	# ── Chapter 2 ──
@@ -469,40 +514,113 @@ func _refresh_objective() -> void:
 		return
 	_hud_layer.visible = _visible
 
-	var new_obj = ""
-	var new_hint = ""
+	var flags := {}
+	for flag_name in GameManager.story_flags:
+		if GameManager.get_story_flag(flag_name):
+			flags[flag_name] = true
+	var res := resolve_objective(flags)
+
 	_has_target = false
+	_target_scene = ""
+	if res["has_target"]:
+		_target_position = res["target"]
+		_has_target = true
+	elif res["scene"] != "" and res["target_node"] != "":
+		_cache_scene_target(res["scene"], res["target_node"])
 
-	for obj in OBJECTIVES:
-		# Check if blocker flag is set (means this objective is done)
-		var blocked = false
-		if obj["blocker"] != "":
-			if GameManager.get_story_flag(obj["blocker"]):
-				blocked = true
-		if obj.has("blocker_alt") and obj["blocker_alt"] != "":
-			if GameManager.get_story_flag(obj["blocker_alt"]):
-				blocked = true
-		if blocked:
-			continue
-
-		# Check if required flag is set (means prerequisites are met)
-		if obj["required"] != "":
-			if not GameManager.get_story_flag(obj["required"]):
-				continue
-
-		# This is our current objective
-		new_obj = obj["text"]
-		new_hint = obj["hint"]
-		if obj["target"] != Vector2.ZERO:
-			_target_position = obj["target"]
-			_has_target = true
-		break
-
+	var new_obj: String = res["text"]
 	if new_obj != _current_objective:
 		_current_objective = new_obj
-		_current_hint = new_hint
+		_current_hint = res["hint"]
 		_update_display()
 		objective_changed.emit(new_obj)
+
+
+## Pure resolver: which objective applies for a given set of story flags.
+## `flags` maps flag name -> bool; a missing key counts as false. Touches no
+## game state, so tests can call it directly.
+## Until "ch1_complete" is set, the Chapter 1 entries are tried from the last step
+## to the first and the first match wins (latest step wins); once it is set they
+## are skipped. Every other entry resolves first-match-wins in table order.
+## Returns {"text", "hint", "scene", "target_node", "target": Vector2,
+## "has_target": bool}. `text` is "" when nothing applies. `has_target` and
+## `target` are the entry's fixed `target` (Chapter 2+). A Chapter 1 arrow is
+## described by `scene` + `target_node` instead (has_target stays false); the
+## node position is looked up by _refresh_objective().
+func resolve_objective(flags: Dictionary) -> Dictionary:
+	var found := {}
+	if not flags.get("ch1_complete", false):
+		for i in range(OBJECTIVES.size() - 1, -1, -1):
+			var entry: Dictionary = OBJECTIVES[i]
+			if entry.get("chapter1", false) and _entry_active(entry, flags):
+				found = entry
+				break
+	if found.is_empty():
+		for entry: Dictionary in OBJECTIVES:
+			if entry.get("chapter1", false):
+				continue
+			if _entry_active(entry, flags):
+				found = entry
+				break
+	var result := {
+		"text": "", "hint": "", "scene": "", "target_node": "",
+		"target": Vector2.ZERO, "has_target": false,
+	}
+	if found.is_empty():
+		return result
+	result["text"] = found["text"]
+	result["hint"] = found.get("hint", "")
+	result["scene"] = found.get("scene", "")
+	result["target_node"] = found.get("target_node", "")
+	var target: Vector2 = found.get("target", Vector2.ZERO)
+	if target != Vector2.ZERO:
+		result["target"] = target
+		result["has_target"] = true
+	return result
+
+
+## True when `entry` applies to `flags`: no blocker flag set, `required` set (if
+## given) and at least one `required_any` flag set (if given).
+func _entry_active(entry: Dictionary, flags: Dictionary) -> bool:
+	var single_blocker: String = entry.get("blocker", "")
+	if single_blocker != "" and flags.get(single_blocker, false):
+		return false
+	var alt_blocker: String = entry.get("blocker_alt", "")
+	if alt_blocker != "" and flags.get(alt_blocker, false):
+		return false
+	for blocker_flag: String in entry.get("blockers", []):
+		if flags.get(blocker_flag, false):
+			return false
+	var required: String = entry.get("required", "")
+	if required != "" and not flags.get(required, false):
+		return false
+	var required_any: Array = entry.get("required_any", [])
+	if not required_any.is_empty():
+		var any_set := false
+		for required_flag: String in required_any:
+			if flags.get(required_flag, false):
+				any_set = true
+				break
+		if not any_set:
+			return false
+	return true
+
+
+## Caches the arrow target for a scene-bound entry: only when `scene_path` is the
+## current scene and `node_path` exists in it. _process() compares the cached
+## scene path, so there is no per-frame node lookup.
+func _cache_scene_target(scene_path: String, node_path: String) -> void:
+	var tree := get_tree()
+	if tree == null or tree.current_scene == null:
+		return
+	var current := tree.current_scene
+	if current.scene_file_path != scene_path:
+		return
+	var node := current.get_node_or_null(NodePath(node_path))
+	if node is Node2D or node is Control:
+		_target_position = node.global_position
+		_target_scene = scene_path
+		_has_target = true
 
 
 func _update_display() -> void:
@@ -514,7 +632,10 @@ func _update_display() -> void:
 		return
 
 	_objective_panel.visible = true
-	_objective_label.text = "[color=#4488CC][b]►[/b][/color] [color=#CCDDEE]%s[/color]\n[color=#667788][i]%s[/i][/color]" % [_current_objective, _current_hint]
+	if _current_hint.is_empty():
+		_objective_label.text = "[color=#4488CC][b]►[/b][/color] [color=#CCDDEE]%s[/color]" % _current_objective
+	else:
+		_objective_label.text = "[color=#4488CC][b]►[/b][/color] [color=#CCDDEE]%s[/color]\n[color=#667788][i]%s[/i][/color]" % [_current_objective, _current_hint]
 
 	# Subtle pulse on objective change
 	if _pulse_tween and _pulse_tween.is_valid():
@@ -529,6 +650,13 @@ func _process(_delta: float) -> void:
 		if _arrow_indicator:
 			_arrow_indicator.text = ""
 		return
+
+	# A scene-bound target (Chapter 1) only shows while its scene is still current.
+	if _target_scene != "":
+		var current := get_tree().current_scene if is_inside_tree() else null
+		if current == null or current.scene_file_path != _target_scene:
+			_arrow_indicator.text = ""
+			return
 
 	# Get player position if available
 	var player = _get_player()
@@ -587,3 +715,24 @@ func get_current_objective() -> String:
 
 func force_refresh() -> void:
 	_refresh_objective()
+
+## The text currently rendered in the objective label ("" before the HUD is built
+## or while no objective has been shown).
+func get_objective_label_text() -> String:
+	return _objective_label.text if _objective_label else ""
+
+## Cached arrow target position (valid when has_arrow_target() is true).
+func get_arrow_target() -> Vector2:
+	return _target_position
+
+## True when the current objective has a cached arrow target.
+func has_arrow_target() -> bool:
+	return _has_target
+
+## Scene path the cached arrow target is bound to ("" for Chapter 2+ fixed targets).
+func get_arrow_scene() -> String:
+	return _target_scene
+
+## Text of the on-screen arrow ("" when hidden). Updated by _process().
+func get_arrow_text() -> String:
+	return _arrow_indicator.text if _arrow_indicator else ""

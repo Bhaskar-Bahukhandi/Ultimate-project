@@ -3,6 +3,16 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-20 — Chapter 1 breadcrumb objectives follow the rewritten route (Y1-P0-T05)
+
+- **fix(story):** the HUD breadcrumb shows the 11 approved Chapter 1 objectives (plane, people,
+  Oakhaven, Broken Mile, Flight 707, stew, afternoon, alarm, bridge, Aldric, shrine) in place of
+  the old placeholder lines. The latest reached step wins, so an early alarm moves it with it.
+  Chapter 1 lines have no hint line, and their arrows aim at real nodes in their own scene only.
+  Chapter 2+ objectives are unchanged.
+- Two new story flags feed it: `ch1_broken_mile_entered` (first node of `broken_mile.dlg`) and
+  `ch1_stew_done` (after the stew scene). No dialogue text changed.
+
 ## 2026-10-18 — Chapter 1 shatter scene from dialogue (Y1-P0-T04)
 
 - **fix(story):** the Chapter 1 shatter scene now plays entirely from `dialogue/ch1/shatter.dlg`

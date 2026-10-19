@@ -55,6 +55,21 @@ const SHATTER_ROUTES := [
 		"ch1_root_purge": true, "ch1_knight_spared": true,
 		"ch1_oakhaven_warned_villagers": true, "ch1_elara_trusted": true}],
 ]
+## Chapter 1 breadcrumb in the HUD (story Y1-P0-T05, AC-9). The breadcrumb only shows in
+## EXPLORATION, and the plain scene stops capture mid-dialogue (the crash site hides it for
+## its whole run; the Broken Mile never leaves PROLOGUE). This stop presets the flags the
+## scenes before Oakhaven leave, plays the REAL village (entrance, then Elara's stew; every
+## choice gets the first option, as in chapter1_route_test) and captures the step-6 afternoon
+## objective once the player is exploring. ch1_oakhaven_entered and ch1_stew_done are NOT
+## preset: the real entrance and stew must set them.
+const BREADCRUMB_ID := "ch1_breadcrumb_oakhaven"
+const BREADCRUMB_SCENE := "res://scenes/chapter1/oakhaven_village.tscn"
+const BREADCRUMB_OBJECTIVE := "Spend the afternoon in Oakhaven. Meet the people here."
+const BREADCRUMB_FLAGS := {
+	"ch1_opening_hook_started": true, "ch1_crash_trace_seen": true,
+	"ch1_opening_hook_complete": true, "elara_met": true, "ch1_elara_trusted": true,
+	"ch1_broken_mile_entered": true, "ch1_personal_goal_set": true}
+const BREADCRUMB_TIMEOUT := 90.0   # real seconds
 const DLG_DIRS := ["res://dialogue/prologue", "res://dialogue/ch1", "res://dialogue/ch2"]
 const BACKDROP := "res://scenes/regions/oakhaven_region.tscn"
 const THUMB := Vector2i(320, 180)
@@ -98,6 +113,8 @@ func run() -> int:
 	for r in SHATTER_ROUTES:
 		if _wanted(r[0]):
 			await _shatter_route_shot(r[0], r[1], r[2])
+	if _wanted(BREADCRUMB_ID):
+		await _breadcrumb_shot(BREADCRUMB_ID)
 	if _wanted("ui"):
 		await _ui_shots()
 	if _wanted("dlg"):
@@ -207,6 +224,87 @@ func _shatter_route_shot(id: String, dlg_node: String, flags: Dictionary) -> voi
 		notes.append("PROBLEM: " + why)
 		_problems.append("%s: %s" % [id, why])
 	await _capture(id, "scene", SHATTER_SCENE, notes)
+
+
+## Plays the real BREADCRUMB_SCENE with BREADCRUMB_FLAGS set and captures the HUD breadcrumb
+## once the player is exploring with BREADCRUMB_OBJECTIVE shown. Like _shatter_route_shot,
+## nothing is faked: on timeout (or if the scene moves on) the shot is flagged as a PROBLEM
+## and shows whatever was on screen.
+func _breadcrumb_shot(id: String) -> void:
+	var dm := _dm()
+	var gm := _gm()
+	var bc := tree.root.get_node("ProgressionBreadcrumb")
+	# Looked up at runtime: naming the GameManager autoload here would compile before it exists.
+	var exploration: int = gm.get_script().get_script_constant_map()["GameState"]["EXPLORATION"]
+	gm.reset_game()
+	for f in BREADCRUMB_FLAGS:
+		gm.set_story_flag(f, BREADCRUMB_FLAGS[f])
+	await _load_scene(BREADCRUMB_SCENE, 0.0)
+	var notes: Array[String] = ["real scene run; Chapter 1 step-6 breadcrumb"]
+	var started := Time.get_ticks_msec()
+	var reached := false
+	var why := ""
+	var choices_answered := 0
+	while (Time.get_ticks_msec() - started) < int(BREADCRUMB_TIMEOUT * 1000.0):
+		var scene_now: String = tree.current_scene.scene_file_path if tree.current_scene else ""
+		if scene_now != BREADCRUMB_SCENE:
+			why = "the scene moved on to %s before the breadcrumb showed" % scene_now.get_file()
+			break
+		bc.force_refresh()   # it refreshes itself only every 2 s
+		if gm.current_state == exploration and not dm._is_visible \
+				and bc.get_current_objective() == BREADCRUMB_OBJECTIVE \
+				and _breadcrumb_panel_shown(bc):
+			reached = true
+			break
+		if dm._awaiting_choice:
+			# First option, the way chapter1_route_test's fake player answers.
+			if dm._choice_result == -1 and dm._choice_container != null:
+				dm._on_choice_pressed(0)
+				choices_answered += 1
+		elif dm._is_visible:
+			if dm._is_typing:
+				dm._skip_typing = true
+			else:
+				dm._advance_requested = true
+		await _wait(0.12)
+	notes.append("%d choice(s) answered with option 1" % choices_answered)
+	if reached:
+		await _wait(0.5)   # nothing taps advance now; let the arrow update and the pulse settle
+		bc.force_refresh()
+		if gm.current_state != exploration or bc.get_current_objective() != BREADCRUMB_OBJECTIVE \
+				or not _breadcrumb_panel_shown(bc):
+			reached = false
+			why = "the breadcrumb left the screen during the 0.5 s settle"
+	elif why == "":
+		why = "no EXPLORATION + `%s` breadcrumb within %d s (state %d, objective `%s`)" % [
+			BREADCRUMB_OBJECTIVE, int(BREADCRUMB_TIMEOUT), int(gm.current_state), bc.get_current_objective()]
+	if reached:
+		var arrow: String = bc.get_arrow_text()
+		notes.append("objective `%s`" % bc.get_current_objective())
+		notes.append("ch1_stew_done set by the real stew: %s; ch1_oakhaven_entered: %s" % [
+			gm.get_story_flag("ch1_stew_done"), gm.get_story_flag("ch1_oakhaven_entered")])
+		notes.append("arrow target cached: %s; arrow text %s" % [bc.has_arrow_target(),
+			"`%s`" % arrow.strip_edges() if arrow.strip_edges() != "" else "EMPTY"])
+		var panel = bc.get("_objective_panel")
+		if panel is Control:
+			_check_inside(id, "breadcrumb panel", panel, notes)
+		else:
+			notes.append("breadcrumb panel node not reachable; on-screen check skipped")
+	else:
+		notes.append("PROBLEM: " + why)
+		_problems.append("%s: %s" % [id, why])
+	await _capture(id, "scene", BREADCRUMB_SCENE, notes)
+
+
+## True when the breadcrumb HUD layer and its panel are both visible with label text.
+## (The panel node is private to ProgressionBreadcrumb; read through get() so a rename
+## degrades to "not shown" rather than a script error.)
+func _breadcrumb_panel_shown(bc: Node) -> bool:
+	var layer = bc.get("_hud_layer")
+	var panel = bc.get("_objective_panel")
+	if not (layer is CanvasLayer and panel is Control):
+		return bc.get_objective_label_text() != ""
+	return layer.visible and panel.visible and bc.get_objective_label_text() != ""
 
 
 func _ui_shots() -> void:

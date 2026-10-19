@@ -8,6 +8,7 @@
 
 # A1-P03: a tree flickers between healthy and burnt.
 ~ tree_flicker
+set ch1_broken_mile_entered
 Kaelen: Did you see that? The tree, just there.
 Elara: Which part of it?
 Kaelen: It was burnt black, and then it wasn't. Like someone flicked a switch.

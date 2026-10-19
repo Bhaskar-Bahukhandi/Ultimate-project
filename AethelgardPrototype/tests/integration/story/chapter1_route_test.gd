@@ -59,6 +59,23 @@ func _run() -> void:
 	await _test_village_afternoon()
 	await _test_crash_site_interactions()
 	await _test_village_interactions()
+	# Y1-P0-T05 breadcrumb tests (pure resolver cases first, then the live scenes)
+	await _end_scene()
+	_test_bc_table_text()
+	_test_bc_flag_writers()
+	_test_bc_golden_regression()
+	_test_bc_any_of()
+	_test_bc_load_cases()
+	_test_bc_bridge_flags()
+	_test_bc_dlg_objective_lines()
+	_test_bc_label_format()
+	_test_bc_kill_route_samples()
+	_test_bc_new_flags_registered()
+	await _test_bc_broken_mile_flag()
+	await _test_bc_arrows_hook()
+	await _test_bc_arrows_village()
+	await _test_bc_stew_flag()
+	await _test_bc_alarm_routes()
 	Engine.time_scale = 1.0
 	print("")
 	print("CH1 RESULT: %d passed, %d failed" % [_passes, _failures.size()])
@@ -748,4 +765,783 @@ func _test_shatter_slow_reader() -> void:
 		"'do desaturate' isn't awaited at the event: red is mid-drain while the lamps line shows (%d samples)" % reds.size())
 	_check(held and reds.any(func(r): return is_equal_approx(r, 0.6)), "a slow reader sees the drain finish on the lamps line")
 	_check(recon, "after a slow read the scene still reaches RECONSTRUCTION COMPLETE (no wait on a finished tween)")
+	await _end_scene()
+
+
+# ══ Y1-P0-T05: Chapter 1 breadcrumb objectives ═══════════════════════════════
+# Story: production/epics/y1-p0-stabilize/story-t05-ch1-breadcrumbs.md (AC-1..AC-8).
+# Pure cases call ProgressionBreadcrumb.resolve_objective(); live cases drive the
+# real village / crash-site scenes. The golden file is frozen (do not regenerate).
+
+const BC_GOLDEN := "res://tests/integration/story/breadcrumb_golden.json"
+const BC_BIBLE := "res://story/STORY_BIBLE.md"
+const BC_DLG_DIR := "res://dialogue/ch1"
+const BC_BROKEN_MILE := "res://dialogue/ch1/broken_mile.dlg"
+## The 11 Chapter 1 objective lines, step 0..10 (story table).
+const BC_STEPS: Array = [
+	"Find the plane. Look for survivors.",
+	"Find people. A settlement east may know what happened to Flight 707.",
+	"Reach Oakhaven. Follow the first lead on the missing passengers.",
+	"Get through the Broken Mile with Elara.",
+	"Ask about Flight 707. Find a safe route to Ironhold.",
+	"Go to Elara's house. She's making stew.",
+	"Spend the afternoon in Oakhaven. Meet the people here.",
+	"Answer the alarm in the north field.",
+	"Deal with the north bridge before dark.",
+	"Stop Aldric.",
+	"Go down to the shrine. Then decide what to tell the village.",
+]
+## The flag that starts each step (cumulative sets S0..S10 are prefixes of this list).
+const BC_START_FLAGS: Array = [
+	"ch1_opening_hook_started", "ch1_crash_trace_seen", "elara_met", "ch1_broken_mile_entered",
+	"ch1_personal_goal_set", "ch1_oakhaven_entered", "ch1_stew_done", "ch1_north_field_helped",
+	"ch1_corrupted_boar_defeated", "ch1_bridge_repair_accepted", "ch1_tutorial_knight_defeated",
+]
+const BC_BRIDGE_FLAGS: Array = ["ch1_bridge_repair_accepted", "ch1_bridge_evacuated", "ch1_bridge_ignored"]
+## The six stale entries T05 replaced (the third had a hint, see _test_bc_table_text).
+const BC_STALE_TEXTS: Array = [
+	"Stand up. Find a signal.", "Follow the Oakhaven signal.", "Reach Oakhaven.",
+	"Survive the crash site", "Defeat the Corrupted Sentinel", "Explore Oakhaven & find Elara",
+]
+const BC_STALE_HINT := "a village that should not know your name"
+const BC_NEXT_CHAPTER := "Travel to Ironhold"
+## Every story flag a Chapter 1 writer set before T05: literal names in
+## set_story_flag("<name>" in scripts/chapter1/**/*.gd and `set <name>` lines in
+## dialogue/ch1/*.dlg (calls passing false and `set <name> = false` excluded).
+## Captured from commit d5ca821 on 2026-10-20 (git show HEAD:<path>, not the working
+## tree). Update it only when a story adds a Chapter 1 progression flag with the
+## user's approval (AGENTS.md: story progression is protected).
+const BC_CH1_FLAG_WRITES_D5CA821: Array = [
+	"ch1_aldric_kill_justified", "ch1_aldric_kill_owned", "ch1_aldric_kill_unsure",
+	"ch1_aldric_outcome_reward_claimed", "ch1_apothecary_visited", "ch1_auction_house_visited",
+	"ch1_awakening_complete", "ch1_boar_calmed", "ch1_boar_fought", "ch1_boar_nest_rebuilt",
+	"ch1_bridge_evacuated", "ch1_bridge_fell", "ch1_bridge_ignored", "ch1_bridge_repair_accepted",
+	"ch1_bridge_saved", "ch1_child_sword_found", "ch1_child_sword_returned", "ch1_complete",
+	"ch1_corrupted_boar_defeated", "ch1_crafting_materials_intro_seen", "ch1_crash_trace_seen",
+	"ch1_data_vision_secret_found", "ch1_data_vision_unlocked", "ch1_elara_arm_talked", "ch1_elara_cautious",
+	"ch1_elara_glitch_witch_met", "ch1_elara_joined", "ch1_elara_trusted", "ch1_flight_fragment_found",
+	"ch1_glitch_crater_complete", "ch1_ironhold_lead", "ch1_knight_killed", "ch1_knight_spared", "ch1_mara_met",
+	"ch1_north_field_helped", "ch1_north_field_injuries", "ch1_north_field_refused",
+	"ch1_northfall_registry_seen", "ch1_oakhaven_entered", "ch1_oakhaven_left_quietly",
+	"ch1_oakhaven_warned_leaders", "ch1_oakhaven_warned_villagers", "ch1_opening_hook_complete",
+	"ch1_opening_hook_danger_seen", "ch1_opening_hook_signal_found", "ch1_opening_hook_started",
+	"ch1_personal_goal_set", "ch1_root_discovered_unused", "ch1_root_first_edit", "ch1_root_purge",
+	"ch1_root_purge_used", "ch1_shatter_witnessed", "ch1_slime_root_access_tutorial", "ch1_sluice_dug",
+	"ch1_sluice_edited", "ch1_sluice_isolated", "ch1_stew_asked_fracture", "ch1_stew_asked_magic",
+	"ch1_stew_asked_where", "ch1_tutorial_knight_defeated", "elara_arm_noticed", "elara_arm_respected_silence",
+	"elara_first_cautious", "elara_first_deflect", "elara_first_truth", "elara_met", "plane_crash_completed",
+	"player_died", "root_access_unlocked", "tutorial_completed",
+]
+## The only flag writes T05 may add (user decision 2026-10-19).
+const BC_T05_NEW_FLAGS: Array = ["ch1_broken_mile_entered", "ch1_stew_done"]
+## A field run that has not returned by then counts as stalled (a check fails).
+const BC_FIELD_TIMEOUT_SEC := 120.0
+
+
+func _bc() -> Node: return get_root().get_node("ProgressionBreadcrumb")
+
+
+func _res(flags: Dictionary) -> Dictionary: return _bc().resolve_objective(flags)
+
+
+func _objectives() -> Array:
+	return _bc().get_script().get_script_constant_map()["OBJECTIVES"]
+
+
+## Cumulative set S`n` (flags BC_START_FLAGS[0..n]) plus `extra`, minus `drop`.
+func _sset(n: int, extra: Array = [], drop: Array = []) -> Dictionary:
+	var f := {}
+	for i in range(n + 1):
+		f[BC_START_FLAGS[i]] = true
+	for e in extra:
+		f[e] = true
+	for d in drop:
+		f.erase(d)
+	return f
+
+
+## Index (0..10) of the Chapter 1 step `res` resolved to, -1 if it is not one.
+func _step_of(res: Dictionary) -> int:
+	return BC_STEPS.find(res["text"])
+
+
+## Every story flag that is true in the real GameManager (what the HUD resolves from).
+func _live_flags() -> Dictionary:
+	var f := {}
+	for k in _gm().story_flags:
+		if _gm().get_story_flag(k):
+			f[k] = true
+	return f
+
+
+func _force_explore() -> void:
+	_gm().current_state = _gm().GameState.EXPLORATION
+
+
+## Resolves `flags` and checks it is exactly Chapter 1 step `want`.
+func _check_step(flags: Dictionary, want: int, name: String) -> void:
+	var res := _res(flags)
+	var got := _step_of(res)
+	_check(got == want and res["text"] == BC_STEPS[want],
+		"%s -> step %d (got step %d '%s')" % [name, want, got, res["text"]])
+
+
+func _read_text(path: String) -> String:
+	return FileAccess.get_file_as_string(path)
+
+
+## Every .gd under `dir`, recursively (res:// paths).
+func _gd_files(dir: String) -> Array:
+	var out: Array = []
+	for f in DirAccess.get_files_at(dir):
+		if f.ends_with(".gd"):
+			out.append(dir.path_join(f))
+	for d in DirAccess.get_directories_at(dir):
+		out.append_array(_gd_files(dir.path_join(d)))
+	return out
+
+
+## Lines of every dialogue/ch1/*.dlg as {file, line}. Empty means the scan found nothing.
+func _dlg_lines() -> Array:
+	var out: Array = []
+	for f in DirAccess.get_files_at(BC_DLG_DIR):
+		if not f.ends_with(".dlg"):
+			continue
+		for l in _read_text(BC_DLG_DIR.path_join(f)).split("\n"):
+			out.append({"file": f, "line": l.strip_edges()})
+	return out
+
+
+## Flag a .dlg `set` line writes to true, or "" (not a set line, or `set <flag> = false`).
+## Mirrors dialogue_script.gd: an optional leading [if ...] condition, then
+## `set <flag>` or `set <flag> = true|false`.
+func _dlg_set_flag(line: String) -> String:
+	var l := RegEx.create_from_string("^(\\[[^\\]]*\\]\\s*)+").sub(line.strip_edges(), "").strip_edges()
+	if not l.begins_with("set "):
+		return ""
+	var body := l.substr(4).strip_edges()
+	var value := "true"
+	if body.contains("="):
+		var parts := body.split("=", true, 1)
+		body = parts[0].strip_edges()
+		value = parts[1].strip_edges().to_lower()
+	if value == "false" or body.is_empty() or body.contains(" "):
+		return ""
+	return body
+
+
+## Literal Chapter 1 flag writes in the working tree (same rules as the frozen list):
+## {"names": {name: true}, "files": int}.
+func _ch1_flag_writes() -> Dictionary:
+	var names := {}
+	var files := 0
+	var re := RegEx.create_from_string("set_story_flag\\(\\s*\"([^\"]+)\"\\s*(?:,\\s*([A-Za-z_]+))?")
+	for p in _gd_files("res://scripts/chapter1"):
+		files += 1
+		for m in re.search_all(_read_text(p)):
+			if m.get_string(2) != "false":
+				names[m.get_string(1)] = true
+	for f in DirAccess.get_files_at(BC_DLG_DIR):
+		if not f.ends_with(".dlg"):
+			continue
+		files += 1
+		for l in _read_text(BC_DLG_DIR.path_join(f)).split("
+"):
+			var flag := _dlg_set_flag(l)
+			if flag != "":
+				names[flag] = true
+	return {"names": names, "files": files}
+
+
+# AC-1a ───────────────────────────────────────────────────────────────────────
+func _test_bc_table_text() -> void:
+	print("[Breadcrumb AC-1a: the 11 Chapter 1 lines]")
+	_gm().reset_game()
+	var objs := _objectives()
+	var ch1 := objs.filter(func(e): return e.get("chapter1", false))
+	_check(ch1.size() == BC_STEPS.size(), "OBJECTIVES holds exactly %d Chapter 1 entries (has %d)" % [BC_STEPS.size(), ch1.size()])
+	_check(_res({})["text"] == "", "no flags set -> no objective")
+	for n in BC_STEPS.size():
+		var res := _res(_sset(n))
+		_check(res["text"] == BC_STEPS[n] and res["hint"] == "" and not res["has_target"],
+			"S%d resolves to step %d exactly: '%s' (got '%s', hint '%s')" % [n, n, BC_STEPS[n], res["text"], res["hint"]])
+	_check(objs.size() > 0, "the OBJECTIVES scan found entries")
+	for stale in BC_STALE_TEXTS:
+		var hits := objs.filter(func(e): return e.get("text", "") == stale)
+		_check(hits.is_empty(), "stale entry gone from OBJECTIVES: '%s'" % stale)
+	var hint_hits := objs.filter(func(e): return String(e.get("hint", "")).contains(BC_STALE_HINT))
+	_check(hint_hits.is_empty(), "stale hint gone from OBJECTIVES: '%s'" % BC_STALE_HINT)
+
+
+# AC-1b ───────────────────────────────────────────────────────────────────────
+func _test_bc_flag_writers() -> void:
+	print("[Breadcrumb AC-1b: every table flag has a writer]")
+	var table_flags := {}
+	for e in _objectives():
+		if not e.get("chapter1", false):
+			continue
+		if e.get("required", "") != "":
+			table_flags[e["required"]] = true
+		for f in e.get("required_any", []):
+			table_flags[f] = true
+		for f in e.get("blockers", []):
+			table_flags[f] = true
+	_check(table_flags.size() >= BC_START_FLAGS.size(), "table names %d distinct flags (derived from OBJECTIVES)" % table_flags.size())
+	var dlg := _dlg_lines()
+	_check(dlg.size() > 0, "dialogue/ch1 scan read %d lines" % dlg.size())
+	var gd_texts: Array = []
+	for p in _gd_files("res://scripts"):
+		gd_texts.append({"path": p, "text": _read_text(p)})
+	_check(gd_texts.size() > 0, "scripts/ scan read %d files" % gd_texts.size())
+	for flag in table_flags:
+		var writers: Array = []
+		for d in dlg:
+			if _dlg_set_flag(d["line"]) == flag:
+				writers.append("%s: %s" % [d["file"], d["line"]])
+		var needle := "set_story_flag(\"%s\"" % flag
+		for g in gd_texts:
+			for l in String(g["text"]).split("\n"):
+				if l.contains(needle) and not l.contains(", false"):
+					writers.append(String(g["path"]).get_file())
+					break
+		_check(not writers.is_empty(), "flag '%s' has a writer %s" % [flag, writers])
+
+
+# AC-2a ───────────────────────────────────────────────────────────────────────
+func _test_bc_golden_regression() -> void:
+	print("[Breadcrumb AC-2a: Chapter 2+ results match the frozen golden baseline]")
+	var gm := _gm()
+	var data = JSON.parse_string(_read_text(BC_GOLDEN))
+	_check(data is Dictionary and data.has("cases"), "golden file parses")
+	var cases: Array = data["cases"]
+	_check(cases.size() == 71, "golden file holds 71 cases (has %d)" % cases.size())
+	var bc := _bc()
+	for c in cases:
+		gm.reset_game()
+		for f in c["flags"]:
+			gm.set_story_flag(f, true)
+		var live := _live_flags()
+		var res := _res(live)
+		_force_explore()
+		bc.force_refresh()
+		var want_t := Vector2(c["target"][0], c["target"][1])
+		var ok: bool = res["text"] == c["text"] and res["hint"] == c["hint"] \
+			and res["has_target"] == c["has_target"] and res["target"] == want_t \
+			and bc.get_current_objective() == c["text"] and _step_of(res) == -1 \
+			and live.size() == c["flags"].size()
+		_check(ok, "golden '%s' -> '%s' / has_target %s %s (got '%s', hint ok %s, target %s, live '%s', flags %d vs %d)" % [
+			c["name"], c["text"], c["has_target"], want_t, res["text"], res["hint"] == c["hint"],
+			res["target"], bc.get_current_objective(), live.size(), c["flags"].size()])
+	var b: Dictionary = data["boundary"]
+	var bset := {}
+	for f in b["flags"]:
+		bset[f] = true
+	_check(bset.size() == 3 and bset.has("ch1_complete") and bset.has("ch1_oakhaven_entered") and bset.has("ch1_tutorial_knight_defeated"),
+		"boundary set is {ch1_complete, ch1_oakhaven_entered, ch1_tutorial_knight_defeated}")
+	_check(b["text"] == "Survive the crash site", "the old resolver stuck on a stale Chapter 1 entry here (so this boundary is a real change)")
+	var res_b := _res(bset)
+	_check(res_b["text"] == BC_NEXT_CHAPTER and _step_of(res_b) == -1,
+		"boundary set resolves to '%s', never a Chapter 1 step (got '%s')" % [BC_NEXT_CHAPTER, res_b["text"]])
+	var res_c := _res(_sset(10, ["ch1_complete"]))
+	_check(res_c["text"] == BC_NEXT_CHAPTER and res_c["has_target"], "S10 + ch1_complete -> Chapter 2 entry with its target")
+
+
+# AC-2b ───────────────────────────────────────────────────────────────────────
+func _test_bc_any_of() -> void:
+	print("[Breadcrumb AC-2b: any-of required and blocker lists]")
+	var bc := _bc()
+	# _entry_active is private by convention only; GDScript lets the test call it
+	# directly on a synthetic entry, which is the only way to isolate the list logic.
+	var entry := {"required_any": ["A", "B"], "blockers": ["X", "Y"], "text": "t"}
+	_check(bc._entry_active(entry, {"B": true}), "required_any: eligible with only the second flag")
+	_check(bc._entry_active(entry, {"A": true}), "required_any: eligible with only the first flag")
+	_check(not bc._entry_active(entry, {}), "required_any: not eligible with neither flag")
+	_check(not bc._entry_active(entry, {"A": true, "X": true}), "blockers: first blocker ends it")
+	_check(not bc._entry_active(entry, {"A": true, "Y": true}), "blockers: second blocker ends it")
+	var both := {"required": "R", "required_any": ["A", "B"], "text": "t"}
+	_check(not bc._entry_active(both, {"R": true}) and not bc._entry_active(both, {"A": true}) and bc._entry_active(both, {"R": true, "A": true}),
+		"required and required_any are ANDed")
+	# The same logic through the real table.
+	_check_step(_sset(6, ["ch1_corrupted_boar_defeated"]), 8, "S6 + boar defeated only (any-of: first flag)")
+	_check_step(_sset(6, ["ch1_north_field_refused"]), 8, "S6 + refused only (any-of: second flag)")
+	_check_step(_sset(6), 6, "S6 alone (neither any-of flag)")
+	_check_step(_sset(6, ["ch1_north_field_helped"]), 7, "S6 + helped (ends step 6 through the blockers list)")
+	_check_step(_sset(6, ["ch1_north_field_refused"]), 8, "S6 + refused (ends step 6 through the second blocker)")
+
+
+# AC-3a/3b/3c/3d, AC-8b pure ──────────────────────────────────────────────────
+func _test_bc_load_cases() -> void:
+	print("[Breadcrumb AC-3 / AC-8b: old saves, early alarm, later flag wins, chapter end]")
+	var old_save := {"ch1_oakhaven_entered": true, "ch1_personal_goal_set": true, "elara_met": true, "ch1_mara_met": true}
+	_check_step(old_save, 5, "AC-3a old save (no stew_done, no broken_mile_entered)")
+	_check_step(_sset(6, ["ch1_north_field_helped"]), 7, "AC-3b S6 + helped, no boar flag")
+	_check_step(_sset(7, ["ch1_corrupted_boar_defeated"]), 8, "AC-3b same + boar defeated")
+	_check_step(_sset(10, [], ["ch1_stew_done"]), 10, "AC-3c S10 without ch1_stew_done: the later flag wins")
+	_check_step({"ch1_tutorial_knight_defeated": true}, 10, "AC-3c only the knight flag set")
+	_check_step(_sset(10, ["ch1_elara_joined"]), 10, "AC-3d S10 + ch1_elara_joined, no ch1_complete")
+	var done := _res(_sset(10, ["ch1_elara_joined", "ch1_complete"]))
+	_check(done["text"] == BC_NEXT_CHAPTER and _step_of(done) == -1, "AC-3d + ch1_complete -> Chapter 2 entry (got '%s')" % done["text"])
+	_check_step(_sset(6, ["ch1_north_field_refused"]), 8, "AC-8b S6 + refused skips step 7")
+	var s6_only := _res(_sset(6))
+	_check(s6_only["text"] == BC_STEPS[6], "AC-8b S6 alone is still step 6 (so the refused result above is a real move)")
+	# Unreachable in play (north_field.dlg's help and refuse branches are exclusive);
+	# documents what latest-step-wins does with it: step 8 (refused satisfies its any-of).
+	_check_step(_sset(6, ["ch1_north_field_helped", "ch1_north_field_refused"]), 8, "S6 + helped + refused (unreachable)")
+	var only_done := _res({"ch1_complete": true})
+	_check(only_done["text"] == BC_NEXT_CHAPTER and _step_of(only_done) == -1, "{ch1_complete} alone -> '%s' (got '%s')" % [BC_NEXT_CHAPTER, only_done["text"]])
+
+
+# AC-8c ───────────────────────────────────────────────────────────────────────
+func _test_bc_bridge_flags() -> void:
+	print("[Breadcrumb AC-8c: each bridge end flag moves to step 9]")
+	_check_step(_sset(8), 8, "S8 before any bridge flag")
+	_check_step(_sset(6, ["ch1_north_field_refused"]), 8, "S6 + refused before any bridge flag")
+	for f in BC_BRIDGE_FLAGS:
+		_check_step(_sset(8, [f]), 9, "S8 + %s" % f)
+		_check_step(_sset(6, ["ch1_north_field_refused", f]), 9, "S6 + refused + %s" % f)
+
+
+# AC-7 ────────────────────────────────────────────────────────────────────────
+func _test_bc_dlg_objective_lines() -> void:
+	print("[Breadcrumb AC-7: exactly four 'do objective' lines, each equal to its step]")
+	var re := RegEx.create_from_string("^do objective (.+)$")
+	var found: Array = []
+	for d in _dlg_lines():
+		var m := re.search(String(d["line"]))
+		if m:
+			found.append({"file": d["file"], "text": m.get_string(1)})
+	_check(found.size() == 4, "exactly 4 'do objective' lines in dialogue/ch1 (found %d)" % found.size())
+	var want := [["crash_site.dlg", 0], ["crash_site.dlg", 1], ["elara_meeting.dlg", 2], ["broken_mile.dlg", 4]]
+	for w in want:
+		var hit := found.filter(func(f): return f["file"] == w[0] and f["text"] == BC_STEPS[w[1]])
+		_check(hit.size() == 1, "%s has the 'do objective' line of step %d" % [w[0], w[1]])
+
+
+# AC-4 ────────────────────────────────────────────────────────────────────────
+func _test_bc_label_format() -> void:
+	print("[Breadcrumb AC-4: label text with and without a hint]")
+	var gm := _gm()
+	var bc := _bc()
+	var arrow := String.chr(0x25BA)
+	var old_fmt := "[color=#4488CC][b]" + arrow + "[/b][/color] [color=#CCDDEE]%s[/color]\n[color=#667788][i]%s[/i][/color]"
+	# Prime with a Chapter 2 entry so the Chapter 1 entry below is a real change and re-renders.
+	gm.reset_game()
+	gm.set_story_flag("ch1_complete", true)
+	_force_explore()
+	bc.force_refresh()
+	_check(bc.get_current_objective() == BC_NEXT_CHAPTER, "primed with the Chapter 2 entry")
+	gm.reset_game()
+	for i in range(4):
+		gm.set_story_flag(BC_START_FLAGS[i], true)
+	_force_explore()
+	bc.force_refresh()
+	var label: String = bc.get_objective_label_text()
+	_check(bc.get_current_objective() == BC_STEPS[3], "Chapter 1 step 3 is current")
+	var want1 := "[color=#4488CC][b]" + arrow + "[/b][/color] [color=#CCDDEE]" + BC_STEPS[3] + "[/color]"
+	_check(label == want1, "Chapter 1 label is just the objective line (got '%s')" % label)
+	_check(not label.contains("[i]") and not label.contains("[/i]") and not label.ends_with("\n") and not label.contains("\n"),
+		"Chapter 1 label has no [i], [/i], line break")
+	gm.reset_game()
+	gm.set_story_flag("ch1_complete", true)
+	_force_explore()
+	bc.force_refresh()
+	var res := _res({"ch1_complete": true})
+	_check(res["hint"] != "", "the Chapter 2 entry has a hint")
+	_check(bc.get_objective_label_text() == old_fmt % [res["text"], res["hint"]],
+		"Chapter 2 label equals the old format string byte for byte (got '%s')" % bc.get_objective_label_text())
+
+
+# AC-8a ───────────────────────────────────────────────────────────────────────
+## Sets each step's start flag in route order on the live GameManager (the order the
+## kill route sets them) and reads the live HUD objective every time. The flags are set
+## directly: the dialogue-driven kill route is covered by the route tests above.
+func _test_bc_kill_route_samples() -> void:
+	print("[Breadcrumb AC-8a: live HUD at each step's start flag]")
+	var gm := _gm()
+	var bc := _bc()
+	gm.reset_game()
+	_force_explore()
+	bc.force_refresh()   # empty flags: clears any stale objective so the first step is a change
+	var emitted: Array = []
+	var rec := func(t: String) -> void: emitted.append(t)
+	bc.objective_changed.connect(rec)
+	for n in BC_STEPS.size():
+		gm.set_story_flag(BC_START_FLAGS[n], true)
+		_force_explore()
+		bc.force_refresh()
+		_check(bc.get_current_objective() == BC_STEPS[n], "after %s the HUD shows step %d (got '%s')" % [BC_START_FLAGS[n], n, bc.get_current_objective()])
+	gm.set_story_flag("ch1_elara_joined", true)
+	bc.force_refresh()
+	_check(bc.get_current_objective() == BC_STEPS[10], "ch1_elara_joined leaves step 10 up")
+	gm.set_story_flag("ch1_complete", true)
+	bc.force_refresh()
+	_check(bc.get_current_objective() == BC_NEXT_CHAPTER, "ch1_complete moves the HUD to the Chapter 2 entry")
+	bc.objective_changed.disconnect(rec)
+	var want: Array = BC_STEPS.duplicate()
+	want.append(BC_NEXT_CHAPTER)
+	_check(emitted == want, "objective_changed fired once per step, in order (got %d: %s)" % [emitted.size(), emitted])
+
+
+# AC-6a ───────────────────────────────────────────────────────────────────────
+## Runs one .dlg node and reports `flag` at the first visible line and at the end.
+func _probe_dlg(path: String, node: String, flag: String) -> Dictionary:
+	var gm := _gm()
+	var dm := _dm()
+	var st := {"done": false, "seen_first": false, "flag_at_first_line": false}
+	var runner := func() -> void:
+		await dm.run(path, node)
+		st["done"] = true
+	runner.call()
+	var deadline := Time.get_ticks_msec() + 60000
+	while not st["done"] and Time.get_ticks_msec() < deadline:
+		if not st["seen_first"] and dm._is_visible and dm._text_label.text != "":
+			st["seen_first"] = true
+			st["flag_at_first_line"] = gm.has_flag(flag)
+		await process_frame
+	st["flag_at_end"] = gm.has_flag(flag)
+	return st
+
+
+func _test_bc_broken_mile_flag() -> void:
+	print("[Breadcrumb AC-6a: ch1_broken_mile_entered is set by the first node]")
+	var gm := _gm()
+	var flag := "ch1_broken_mile_entered"
+	gm.reset_game()
+	_seen_text.clear()
+	_start([])
+	_check(not gm.has_flag(flag), "flag is unset before the walk")
+	var first := await _probe_dlg(BC_BROKEN_MILE, "tree_flicker", flag)
+	_check(first["done"] and first["seen_first"], "tree_flicker ran and showed a line")
+	_check(first["flag_at_first_line"], "flag is already set when tree_flicker's first line shows")
+	_check(first["flag_at_end"], "flag is set after tree_flicker")
+	_dm().force_reset()
+	gm.reset_game()
+	var other := await _probe_dlg(BC_BROKEN_MILE, "walk_manifest", flag)
+	_check(other["done"] and other["seen_first"], "walk_manifest ran and showed a line")
+	_check(not other["flag_at_first_line"] and not other["flag_at_end"], "running walk_manifest first does not set the flag")
+	_driving = false
+	await _end_scene()
+
+
+# AC-6c ───────────────────────────────────────────────────────────────────────
+## The kill/refuse routes cannot be compared against a pre-T05 flag set without the
+## old code, so this checks the parts that can be proved without it: each new flag has
+## exactly one writer, in the place the story names, and both are in the bible's §5.
+func _test_bc_new_flags_registered() -> void:
+	print("[Breadcrumb AC-6c: the two new flags have one writer each and are in the bible]")
+	var dlg := _dlg_lines()
+	var sets_mile := dlg.filter(func(d): return d["line"] == "set ch1_broken_mile_entered")
+	var sets_stew := dlg.filter(func(d): return String(d["line"]).begins_with("set ch1_stew_done"))
+	_check(sets_mile.size() == 1 and sets_mile[0]["file"] == "broken_mile.dlg", "ch1_broken_mile_entered: one 'set' line, in broken_mile.dlg (%d)" % sets_mile.size())
+	_check(sets_stew.is_empty(), "ch1_stew_done is not set from a .dlg")
+	var script_hits := {"ch1_stew_done": 0, "ch1_broken_mile_entered": 0}
+	var files := _gd_files("res://scripts")
+	_check(files.size() > 0, "scripts/ scan found files")
+	for p in files:
+		var text := _read_text(p)
+		for flag in script_hits:
+			script_hits[flag] += text.count("set_story_flag(\"%s\"" % flag)
+	_check(script_hits["ch1_stew_done"] == 1, "ch1_stew_done: exactly one set_story_flag in scripts/ (%d)" % script_hits["ch1_stew_done"])
+	_check(script_hits["ch1_broken_mile_entered"] == 0, "ch1_broken_mile_entered is not set from scripts/ (%d)" % script_hits["ch1_broken_mile_entered"])
+	var bible := _read_text(BC_BIBLE)
+	var s5 := bible.find("## 5. ")
+	var s6 := bible.find("## 6. ")
+	_check(s5 >= 0 and s6 > s5, "STORY_BIBLE.md has sections 5 and 6")
+	var section := bible.substr(s5, s6 - s5)
+	_check(section.contains("| `ch1_broken_mile_entered` |"), "STORY_BIBLE §5 has the ch1_broken_mile_entered row")
+	_check(section.contains("| `ch1_stew_done` |"), "STORY_BIBLE §5 has the ch1_stew_done row")
+	# No other Chapter 1 flag write was added (or removed) relative to the pre-T05 commit.
+	var scan := _ch1_flag_writes()
+	var cur: Dictionary = scan["names"]
+	_check(scan["files"] > 0 and cur.size() > 0 and BC_CH1_FLAG_WRITES_D5CA821.size() > 0,
+		"Chapter 1 flag-write scan read %d files, found %d names (frozen list %d)" % [scan["files"], cur.size(), BC_CH1_FLAG_WRITES_D5CA821.size()])
+	var want := {}
+	for f in BC_CH1_FLAG_WRITES_D5CA821:
+		want[f] = true
+	for f in BC_T05_NEW_FLAGS:
+		want[f] = true
+	var added := cur.keys().filter(func(f): return not want.has(f))
+	var missing := want.keys().filter(func(f): return not cur.has(f))
+	added.sort()
+	missing.sort()
+	_check(added.is_empty() and missing.is_empty() and cur.size() == want.size(),
+		"Chapter 1 flag writes == d5ca821 set + T05's two (%d names; written but not expected: %s; expected but not written: %s)" % [cur.size(), added, missing])
+
+
+# AC-5 ────────────────────────────────────────────────────────────────────────
+func _arrow_frames() -> void:
+	await process_frame
+	await process_frame
+
+
+func _put_player_far(scene: Node) -> Node2D:
+	var player: Node2D = scene.get_node("Player")
+	if not player.is_in_group("player"):
+		player.add_to_group("player")
+	player.global_position = Vector2(60, 60)
+	return player
+
+
+func _test_bc_arrows_hook() -> void:
+	print("[Breadcrumb AC-5: arrows at the crash site]")
+	var gm := _gm()
+	var bc := _bc()
+	var arrow_entries := _objectives().filter(func(e): return e.get("chapter1", false) and e.get("scene", "") != "")
+	_check(arrow_entries.size() == 4, "4 Chapter 1 entries have an arrow (got %d)" % arrow_entries.size())
+	_check(arrow_entries.all(func(e): return String(e["scene"]).begins_with("res://") and ResourceLoader.exists(e["scene"]) and String(e.get("target_node", "")) != ""),
+		"each arrow entry names an existing res:// scene and a target node")
+	var no_arrow := _objectives().filter(func(e): return e.get("chapter1", false) and e.get("scene", "") == "")
+	_check(no_arrow.size() == 7 and no_arrow.all(func(e): return not e.has("target") and not e.has("target_node")),
+		"the other 7 Chapter 1 entries have no scene, node or fixed target")
+	await _end_scene()
+	gm.reset_game()
+	_seen_text.clear()
+	_start([])
+	change_scene_to_file(HOOK)
+	for i in 4:
+		await process_frame
+	var hook := current_scene
+	var deadline := Time.get_ticks_msec() + 30000
+	while hook._dialogue_busy and Time.get_ticks_msec() < deadline:
+		await process_frame
+	_driving = false
+	var player := _put_player_far(hook)
+	_check(hook.get_node_or_null("SignalFragment") != null and hook.get_node_or_null("OakhavenPath") != null, "SignalFragment and OakhavenPath exist in the crash-site scene")
+	gm.set_story_flag("ch1_opening_hook_started", true)
+	_check(not gm.has_flag("ch1_crash_trace_seen"), "precondition: crash trace not seen yet")
+	_force_explore()
+	bc.force_refresh()
+	await _arrow_frames()
+	_check(bc.get_current_objective() == BC_STEPS[0] and bc.has_arrow_target() and bc.get_arrow_scene() == HOOK, "step 0 caches an arrow bound to the crash site")
+	_check(bc.get_arrow_target() == Vector2(545, 370), "step 0 arrow aims at (545,370) (got %s)" % bc.get_arrow_target())
+	_check(bc.get_arrow_text().contains("away"), "step 0 arrow is shown when the player is far (got '%s')" % bc.get_arrow_text())
+	gm.set_story_flag("ch1_crash_trace_seen", true)
+	bc.force_refresh()
+	await _arrow_frames()
+	_check(bc.get_current_objective() == BC_STEPS[1] and bc.get_arrow_target() == Vector2(1030, 370),
+		"step 1 arrow aims at (1030,370) (got %s)" % bc.get_arrow_target())
+	_check(bc.get_arrow_text().contains("away"), "step 1 arrow is shown (got '%s')" % bc.get_arrow_text())
+	# Hide case 1: the cached scene is not the current one. The same player, target and
+	# cache are kept, only the scene path differs, so the empty text can only come from
+	# the scene check; restoring the path proves the arrow can come back.
+	hook.scene_file_path = "res://scenes/chapter1/not_the_crash_site.tscn"
+	await _arrow_frames()
+	_check(bc.get_arrow_text() == "", "arrow text is empty when the cached scene is not the current scene (got '%s')" % bc.get_arrow_text())
+	hook.scene_file_path = HOOK
+	bc.force_refresh()
+	await _arrow_frames()
+	_check(bc.get_arrow_text().contains("away"), "arrow is back once the scene matches again (got '%s')" % bc.get_arrow_text())
+	# Hide case 2: the target node is missing.
+	var path_node := hook.get_node("OakhavenPath")
+	path_node.name = "OakhavenPath_gone"
+	bc.force_refresh()
+	await _arrow_frames()
+	_check(not bc.has_arrow_target() and bc.get_arrow_text() == "", "arrow is hidden when the target node is missing (got '%s')" % bc.get_arrow_text())
+	path_node.name = "OakhavenPath"
+	bc.force_refresh()
+	await _arrow_frames()
+	_check(bc.has_arrow_target() and bc.get_arrow_text().contains("away"), "arrow returns when the node is back (got '%s')" % bc.get_arrow_text())
+	# Hide case 3: an entry with no target (step 2).
+	gm.set_story_flag("elara_met", true)
+	bc.force_refresh()
+	await _arrow_frames()
+	_check(bc.get_current_objective() == BC_STEPS[2] and not bc.has_arrow_target() and bc.get_arrow_text() == "",
+		"step 2 has no arrow even though the player is in the crash site (got '%s')" % bc.get_arrow_text())
+	_check(player.is_inside_tree(), "the player stayed in the scene for the hide cases (so empty text is not 'no player')")
+	await _end_scene()
+
+
+func _test_bc_arrows_village() -> void:
+	print("[Breadcrumb AC-5: arrows in Oakhaven]")
+	var gm := _gm()
+	var bc := _bc()
+	gm.reset_game()
+	_seen_text.clear()
+	change_scene_to_file(VILLAGE)
+	for i in 4:
+		await process_frame
+	var s := current_scene
+	_put_player_far(s)
+	var boar: Node2D = s.get_node("Triggers/BoarTrigger")
+	var bridge: Node2D = s.get_node("Triggers/BridgeTrigger")
+	_check(boar.global_position != bridge.global_position, "the two triggers are at different places")
+	for i in range(8):
+		gm.set_story_flag(BC_START_FLAGS[i], true)
+	_force_explore()
+	bc.force_refresh()
+	await _arrow_frames()
+	_check(bc.get_current_objective() == BC_STEPS[7] and bc.get_arrow_scene() == VILLAGE and bc.get_arrow_target() == boar.global_position,
+		"step 7 arrow aims at Triggers/BoarTrigger %s (got %s)" % [boar.global_position, bc.get_arrow_target()])
+	_check(bc.get_arrow_text().contains("away"), "step 7 arrow is shown (got '%s')" % bc.get_arrow_text())
+	gm.set_story_flag("ch1_corrupted_boar_defeated", true)
+	bc.force_refresh()
+	await _arrow_frames()
+	_check(bc.get_current_objective() == BC_STEPS[8] and bc.get_arrow_target() == bridge.global_position,
+		"step 8 arrow aims at Triggers/BridgeTrigger %s (got %s)" % [bridge.global_position, bc.get_arrow_target()])
+	_check(bc.get_arrow_text().contains("away"), "step 8 arrow is shown (got '%s')" % bc.get_arrow_text())
+	s.scene_file_path = HOOK
+	await _arrow_frames()
+	_check(bc.get_arrow_text() == "", "step 8 arrow hides when the current scene is another scene (got '%s')" % bc.get_arrow_text())
+	s.scene_file_path = VILLAGE
+	await _end_scene()
+
+
+# AC-6b ───────────────────────────────────────────────────────────────────────
+## Loads the village and watches the stew. `picks` answer the stew topics; `skip_all`
+## calls DialogueManager.skip_all() on the stew's second line; `abort` frees the
+## scene after the first topic, while the stew run is still open.
+func _stew_run(label: String, picks: Array, skip_all: bool, abort: bool) -> void:
+	var gm := _gm()
+	var dm := _dm()
+	var flag := "ch1_stew_done"
+	gm.reset_game()
+	_seen_text.clear()
+	_start(picks)
+	change_scene_to_file(VILLAGE)
+	for i in 4:
+		await process_frame
+	var s := current_scene
+	var early := false
+	var saw_choice := false
+	var at_stew_line := true
+	var stew_frames := 0
+	var skipped := false
+	var aborted := false
+	var entrance_done_at_abort := true
+	var deadline := Time.get_ticks_msec() + 90000
+	while Time.get_ticks_msec() < deadline and not s._entrance_done:
+		# Marker: the stew's second line. (skip-all fast-forwards the later lines, so the
+		# last stew line may never be on screen for a frame.)
+		var in_stew := _saw("That's a category, not a recipe.")
+		if dm._awaiting_choice and in_stew:
+			saw_choice = true
+			early = early or gm.has_flag(flag)
+		if in_stew and not saw_choice:
+			stew_frames += 1
+			at_stew_line = at_stew_line and not gm.has_flag(flag)
+		if skip_all and not skipped and _saw("That's a category, not a recipe."):
+			skipped = true
+			dm.skip_all()
+		if abort and gm.has_flag("ch1_stew_asked_where"):
+			entrance_done_at_abort = s._entrance_done
+			aborted = true
+			s.queue_free()
+			break
+		await process_frame
+	if abort:
+		for i in 15:
+			await process_frame
+		_check(aborted and not entrance_done_at_abort, "%s: the scene was left mid-run (after the first topic)" % label)
+		_check(not gm.has_flag(flag), "%s: ch1_stew_done is not set when the scene is left mid-run" % label)
+		await _end_scene()
+		return
+	_check(saw_choice and not early, "%s: the stew choices were seen and ch1_stew_done was not set while they were open" % label)
+	_check(at_stew_line and stew_frames > 0, "%s: ch1_stew_done not set while the stew lines play (%d frames watched)" % [label, stew_frames])
+	_check(s._entrance_done and gm.has_flag(flag), "%s: ch1_stew_done is set once the stew run has returned" % label)
+	if skip_all:
+		_check(skipped, "%s: skip_all was requested during the stew" % label)
+	await _end_scene()
+
+
+func _test_bc_stew_flag() -> void:
+	print("[Breadcrumb AC-6b: ch1_stew_done on every stew path]")
+	var gm := _gm()
+	await _stew_run("topics then (Just eat.)", [0, 3], false, false)
+	_check(gm.has_flag("ch1_stew_asked_where") and not gm.has_flag("ch1_stew_asked_fracture"), "that path asked one topic, then ate")
+	await _stew_run("(Just eat.) straight away", [4], false, false)
+	_check(not gm.has_flag("ch1_stew_asked_where") and not gm.has_flag("ch1_stew_asked_fracture"), "that path asked no topic")
+	await _stew_run("skip-all", [4], true, false)
+	_check(not gm.has_flag("ch1_stew_asked_where"), "the skip-all path asked no topic")
+	await _stew_run("scene left mid-run", [0], false, true)
+
+
+# AC-3b integration, AC-8b / hesitate-then-help live ───────────────────────────
+## Village entrance done (stew topics answered by the default first option), no
+## afternoon beats. Returns the scene.
+func _village_after_entrance() -> Node:
+	_gm().reset_game()
+	_seen_text.clear()
+	_start([])
+	change_scene_to_file(VILLAGE)
+	for i in 4:
+		await process_frame
+	var s := current_scene
+	var deadline := Time.get_ticks_msec() + 90000
+	while not s._entrance_done and Time.get_ticks_msec() < deadline:
+		await process_frame
+	await process_frame
+	return s
+
+
+## Runs s._run_north_field() under a deadline, so a stalled run (e.g. a pick that does
+## not exist in the dialogue) fails a check instead of hanging the suite.
+## Returns true when the run returned in time.
+func _run_field_bounded(s: Node, timeout_sec: float) -> bool:
+	var st := {"done": false}
+	var runner := func() -> void:
+		await s._run_north_field()
+		st["done"] = true
+	runner.call()
+	var deadline := Time.get_ticks_msec() + int(timeout_sec * 1000.0)
+	while not st["done"] and Time.get_ticks_msec() < deadline:
+		await process_frame
+	return st["done"]
+
+
+func _test_bc_alarm_routes() -> void:
+	print("[Breadcrumb AC-3b / AC-8b: the alarm on the live village route]")
+	var gm := _gm()
+	var bc := _bc()
+	# Early alarm, help (the bridge trigger runs the field first).
+	var s := await _village_after_entrance()
+	_check(s._entrance_done and gm.has_flag("ch1_stew_done"), "early alarm: entrance done, stew done")
+	_force_explore()
+	bc.force_refresh()
+	_check(bc.get_current_objective() == BC_STEPS[6], "early alarm: step 6 before the alarm (got '%s')" % bc.get_current_objective())
+	_start([0])
+	_check(await _run_field_bounded(s, BC_FIELD_TIMEOUT_SEC), "early alarm: the field run finished within %ds" % int(BC_FIELD_TIMEOUT_SEC))
+	_check(gm.has_flag("ch1_north_field_helped") and gm.has_flag("ch1_corrupted_boar_defeated"), "early alarm: helped, field resolved, boar flag set")
+	_force_explore()
+	bc.force_refresh()
+	_check(bc.get_current_objective() == BC_STEPS[8], "early alarm: a forced refresh shows step 8 (got '%s')" % bc.get_current_objective())
+	_driving = false
+	await _end_scene()
+	# Refuse: picks [1, 1] = "This isn't my..." then "I'm staying here.".
+	# Note: refresh is suppressed outside EXPLORATION, so objective_changed history
+	# cannot prove step 7 was never shown (it would pass vacuously); the proof is that
+	# ch1_north_field_helped is never set and step 8 follows step 6 directly.
+	s = await _village_after_entrance()
+	_force_explore()
+	bc.force_refresh()
+	_check(bc.get_current_objective() == BC_STEPS[6], "refuse: step 6 before the alarm (got '%s')" % bc.get_current_objective())
+	_start([1, 1])
+	_check(await _run_field_bounded(s, BC_FIELD_TIMEOUT_SEC), "refuse: the field run finished within %ds" % int(BC_FIELD_TIMEOUT_SEC))
+	_check(gm.has_flag("ch1_north_field_refused") and not gm.has_flag("ch1_north_field_helped"), "refuse: refused set, helped never set")
+	_check(not gm.has_flag("ch1_corrupted_boar_defeated") and s._field_resolved, "refuse: the aftermath ended, no boar flag")
+	_force_explore()
+	bc.force_refresh()
+	_check(bc.get_current_objective() == BC_STEPS[8], "refuse: a forced refresh shows step 8 (got '%s')" % bc.get_current_objective())
+	_driving = false
+	await _end_scene()
+	# Hesitate, then help: picks [1, 0].
+	s = await _village_after_entrance()
+	_start([1, 0])
+	var st := {"done": false}
+	var runner := func() -> void:
+		await s._run_north_field()
+		st["done"] = true
+	runner.call()
+	var step_when_helped := -2
+	var refused_when_helped := true
+	var deadline := Time.get_ticks_msec() + int(BC_FIELD_TIMEOUT_SEC * 1000.0)
+	while not st["done"] and Time.get_ticks_msec() < deadline:
+		if step_when_helped == -2 and gm.has_flag("ch1_north_field_helped") and not gm.has_flag("ch1_corrupted_boar_defeated"):
+			# Pure resolve on the live flags: state is DIALOGUE here, so the HUD would not refresh.
+			step_when_helped = _step_of(_res(_live_flags()))
+			refused_when_helped = gm.has_flag("ch1_north_field_refused")
+		await process_frame
+	_check(st["done"], "hesitate-then-help: the field run finished")
+	_check(step_when_helped == 7 and not refused_when_helped, "hesitate-then-help: helped set -> step 7 while the boar is open (got step %d)" % step_when_helped)
+	_check(not gm.has_flag("ch1_north_field_refused"), "hesitate-then-help: refused never set")
+	_driving = false
 	await _end_scene()
