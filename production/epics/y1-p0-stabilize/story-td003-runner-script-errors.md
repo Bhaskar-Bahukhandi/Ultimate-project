@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: TD-003 (`docs/tech-debt-register.md#TD-003`; follow-up of Y1-P0-T08, due before Y1-P0-T15)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Foundation (test tooling)
 > **Type**: Integration
 > **Estimate**: 0.5 day (register effort: S)
@@ -55,32 +55,32 @@ Files: `AethelgardPrototype/tests/run_phase0_tests.ps1`, `AethelgardPrototype/te
 
 ## Acceptance Criteria
 
-- [ ] AC-1 `run_phase0_tests.ps1` prints every Godot output line (stdout and stderr) to the console exactly once,
+- [x] AC-1 `run_phase0_tests.ps1` prints every Godot output line (stdout and stderr) to the console exactly once,
       in order, as it arrives. When that output contains a line matching `SCRIPT ERROR` or `Parse Error`
       (case-sensitive, as in ci.yml) and Godot exited 0, the runner exits **1**; when Godot exited non-zero, the
       runner exits with **Godot's code** whether or not a line matched. On a match it prints, after the output:
       `RUNNER FAIL <script>: <N> script error line(s)` (`<script>` as passed to `-Script`, `<N>` the number of
       matching lines), then each matching line and the line after it (the `at: <func> (<file>:<line>)` location),
       indented two spaces.
-- [ ] AC-2 `run_tests.sh` does the same on Linux/CI (`2>&1 | tee` to a temp log, `PIPESTATUS`, grep), with the same
+- [x] AC-2 `run_tests.sh` does the same on Linux/CI (`2>&1 | tee` to a temp log, `PIPESTATUS`, grep), with the same
       exit codes and the same `RUNNER FAIL` text; when `GITHUB_ACTIONS=true` it also prints
       `::error::RUNNER FAIL <script>: <N> script error line(s)`, and not otherwise. Its temp log and isolated dir
       are removed on exit, on the failing path too.
-- [ ] AC-3 Isolation is unchanged: `APPDATA` (Windows) / `XDG_DATA_HOME` (Linux) still point at a fresh
+- [x] AC-3 Isolation is unchanged: `APPDATA` (Windows) / `XDG_DATA_HOME` (Linux) still point at a fresh
       `aeth_phase0_test_*` dir that is removed afterwards (after a passing and after a failing run), and `APPDATA`
       is restored; suites' isolation guard still passes.
-- [ ] AC-4 Probes (R1–R8 below), old runner vs new, both runners. The old runners are taken from
+- [x] AC-4 Probes (R1–R8 below), old runner vs new, both runners. The old runners are taken from
       `git show HEAD:<path>` into the scratchpad before any change, so the "before" runs are reproducible.
       The runtime-error probe (R1) and the loaded-broken-helper probe (R2b) exit 0 before and 1 after, with the
       `RUNNER FAIL` summary; the top-level parse-error probe (R2) exits non-zero before and after; the clean probe
       (R3) and the lowercase probe (R8) exit 0 before and after; `quit(3)` probes (R7) exit 3 after. Logs kept in
       `production/qa/evidence/2026-10-runner/`. If Godot's real output for R2b does not contain `Parse Error`,
       that is recorded as a hole in the pattern, not hidden.
-- [ ] AC-5 Full suite through `run_all_tests.ps1` (all 16 entries of its suite list, without `-Quick`) on the new
+- [x] AC-5 Full suite through `run_all_tests.ps1` (all 16 entries of its suite list, without `-Quick`) on the new
       runner: 16/16 pass with 0 `SCRIPT ERROR` / `Parse Error` lines; the log in the evidence folder records the
       commit and working-tree state it ran on. If any suite fails on a real pre-existing script error, the story
       stops and reports it; nothing is suppressed or allow-listed.
-- [ ] AC-6 `git diff --check` clean; TD-003 marked Resolved in `docs/tech-debt-register.md`.
+- [x] AC-6 `git diff --check` clean; TD-003 marked Resolved in `docs/tech-debt-register.md`.
 - [ ] AC-7 (DEFERRED to the next push, which needs the user's OK) The first CI run on the branch after this change
       is green on all 16 test steps; its run URL is recorded here. The Phase 0 step's outer
       `| tee phase0.log; exit "${PIPESTATUS[0]}"` still passes the runner's exit code through. A Linux-only script
@@ -146,9 +146,9 @@ AC-7 and the tightened R4/R6 adopted).*
 **Story Type**: Integration (test tooling)
 **Required evidence**: probe logs (old and new runner, PowerShell and bash) and the full-suite log in
 `production/qa/evidence/2026-10-runner/`.
-**Run result**: N/A — nothing player-observable changes.
+**Run result**: N/A — test tooling only; nothing player-observable changes (probe and full-suite logs are the evidence).
 
-**Status**: [ ] Not yet created
+**Status**: [x] Created — production/qa/evidence/2026-10-runner/ (README.md maps every AC to its log); no test file in tests/ by design (throwaway probes)
 
 ---
 
@@ -156,3 +156,17 @@ AC-7 and the tightened R4/R6 adopted).*
 
 - Depends on: Y1-P0-T08 (done; raised TD-003).
 - Unlocks: Y1-P0-T15 (Phase 0 exit playthrough relies on the suite verdicts).
+
+---
+
+## Completion Notes
+**Completed**: 2026-10-20
+**Criteria**: 6/7 passing; AC-7 DEFERRED — the first CI run on the branch needs a push (user's OK). It is also the only check of the Linux `XDG_DATA_HOME` side of `run_tests.sh`; when it runs, add the run URL to `production/qa/evidence/2026-10-runner/README.md` and here. A Linux-only script error there falls under the AC-5 rule (stop, report, no suppression).
+**Deviations** (advisory):
+- NOT ASSESSED: GDD / ADR / TR-registry traceability (none exist for test tooling); judged against TD-003 and the ACs.
+- Routing: implemented by `devops-engineer` instead of the routing table's `engine-programmer` + GDScript specialist (no GDScript or engine API is touched).
+- The code-review listing dedupe (one line in `run_phase0_tests.ps1`) was applied by the orchestrator directly, watched failing first (R9, `probe_dedupe.log`).
+- Scope: `.gitattributes` gained `production/qa/evidence/**/*.log -whitespace` (`dd79c9c`, user-approved). Three already-committed run logs had trailing spaces that would fail CI's whitespace step on the next push, blocking AC-7.
+**Test Evidence**: Integration (test tooling) — `production/qa/evidence/2026-10-runner/`: probe matrices old vs new for both runners (`probe_matrix_ps.log`, `probe_matrix_sh.log`), in-process APPDATA restore, listing dedupe, hang check, and the full suite on the final code (16/16, counts equal to 2026-10-flash, 0 `SCRIPT ERROR` / `Parse Error` / `RUNNER FAIL`).
+**Code Review**: Complete — /code-review APPROVED WITH SUGGESTIONS (godot-specialist + qa-tester; dedupe applied, rest → TD-007); QL-TEST-COVERAGE ADEQUATE (low gaps: "live" streaming not provable from a log; end-to-end `run_all` FAILED report shown only by composition); LP-CODE-REVIEW CONCERNS, none blocking: TD-003 row now says Linux/CI pending AC-7 and lists `run_tests.sh`; `$ErrorActionPreference` not restored to Stop, the bash listing's `--` filter and binary-file output, and the TD-007(a) timeout wording were handed to the TD-007 session, which owns those files.
+**Follow-ups**: TD-007 (in progress in its own session): per-suite timeout (a script error in `quit()`'s own function hangs Godot on old and new runners), `ERROR:`-only failures, minimum executed checks, plus the LP items above and a runner killed before `finally` leaking its isolated dir.
