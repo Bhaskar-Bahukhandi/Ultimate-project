@@ -543,6 +543,16 @@ func start_new_game_plus() -> void:
 	var carry_stats: Dictionary = stats.duplicate(true)  # Lifetime stats carry over
 	var carry_ending_route: String = _get_final_route_key()
 
+	# Choice buffs are baked into base_attack/base_defense/max_hp, so carrying them as-is would
+	# stack them again whenever the same choices are made in the next cycle (decision 6A,
+	# Y1-P0-T07). Subtract this run's choice-buff totals now; reset_game() clears the buffs.
+	if has_node("/root/ChoiceConsequences"):
+		var choice_mods: Dictionary = ChoiceConsequences.get_total_stat_mods()
+		carry_attack -= int(choice_mods.get("attack", 0))
+		carry_defense -= int(choice_mods.get("defense", 0))
+		carry_hp -= int(choice_mods.get("max_hp", 0))
+		carry_hp = maxi(carry_hp, 1)
+
 	# Save inventory items and equipment before reset
 	var carry_items: Dictionary = {}
 	var carry_equipment: Dictionary = {"weapon": null, "armor": null, "accessory": null}

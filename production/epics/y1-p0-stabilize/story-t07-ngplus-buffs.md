@@ -2,12 +2,12 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-T07 (`production/plan/_source/Y1-P0.json#Y1-P0-T07`)
-> **Status**: Ready
+> **Status**: In Progress
 > **Layer**: Feature
 > **Type**: Integration
 > **Estimate**: 1 day
 > **Manifest Version**: N/A — `docs/architecture/control-manifest.md` does not exist
-> **Last Updated**: [set by /dev-story when implementation begins]
+> **Last Updated**: 2026-10-20
 
 ## Context
 
@@ -72,7 +72,15 @@ other NG+ carry behaviour changes; story flags, combat, saves, Source Key untouc
 
 **Known limitation**: `_apply_stat_mods` floors `max_hp` at 1 during the run, so subtracting the full buff total
 at NG+ could over-correct only if a run's max_hp were ≤ ~14 with a −15 buff. Real max_hp starts at 100 and only
-grows (lowest reachable 85), so this is unreachable; no test pins an over-corrected value.
+grows (lowest reachable 85), so this is unreachable through play. T7 pins only the floor contract (injected
+max_hp values give 2/1/1/1), not an over-correction reached in a real run.
+
+**Known limitation (code review, 2026-10-20)**: saves older than v1.2 are migrated to `choice_consequences = {}`
+(`game_manager.gd:2041`), so loading one calls `ChoiceConsequences.rebuild_from_flags()`. That rebuilds
+`active_buffs` from flags and the *current* `CHOICE_BUFFS` table without applying the mods to `player_stats`.
+If such a save's stats never received the buffs, the NG+ subtraction removes buffs that were never added
+(attack/defense have no floor). Whether any pre-v1.2 save exists is unknown. A guard belongs in
+`choice_consequences.gd`, which is out of scope here; recorded as a follow-up with a save -> load -> NG+ test.
 
 ---
 
@@ -100,8 +108,8 @@ grows (lowest reachable 85), so this is unreachable; no test pins an over-correc
       after a level-up during the run, the carried `level`, `base_attack`, `base_defense`, `max_hp` and `max_mp`
       equal a no-buff control run that earned the same XP.
 - [ ] AC-5 An NG+ with no active buffs leaves `base_attack`, `base_defense` and `max_hp` equal to the run's values.
-      The sorted top-level keys of `GameManager.get_save_data()`, and the key set of its `choice_consequences`
-      entry, equal a literal list frozen in the test from HEAD before implementation, and are equal before and
+      The sorted top-level keys of the save JSON written by `GameManager.save_game()` (there is no
+      `get_save_data()` on GameManager), and the key set of its `choice_consequences` entry, equal a literal list frozen in the test from HEAD before implementation, and are equal before and
       after an NG+ call; `start_new_game_plus()` writes no file in the isolated `user://` save directory. Old saves
       that already stacked are not modified.
 - [ ] AC-6 `tests/unit/ngplus/ngplus_buff_stacking_test.gd` exists and passes, with its `.uid`, and is listed in
@@ -165,13 +173,16 @@ Watch it fail first: T1–T7 must fail on unfixed HEAD; T8–T9 are characteriza
 - **T8 carry (AC-3)** — no-buff run at level ≥ 3, gold 101, one charm unlocked and equipped (not `null_cloak`),
   one carried item, a non-default arena_stats value, nonzero lifetime stats with `death_count` 4; NG+ from cycle 0
   and from a preset cycle 5: every AC-3 field holds; repeat with the kill flags: all non-buff fields (and
-  `max_mp`) equal the no-buff run.
+  `max_mp`) equal the no-buff run. Code review added: armor equipped too (defense == base_defense + 5), and the kill
+  and spare runs match the no-buff run on base_attack/base_defense/max_hp/attack/defense after NG+.
 - **T9 no buffs and partial keys (AC-5)** — no flags: P == E, nothing errors on `{}`; only `ch1_root_purge_used`:
   totals hold only `max_hp`, attack and defense stay at B; save keys (literal list frozen from HEAD) equal before
   and after NG+; the `user://` save directory listing is unchanged.
 - **T10 data guard** — every `attack`/`defense`/`max_hp` value in `ChoiceConsequences.CHOICE_BUFFS` is integral, so
-  `int()` truncation is exact.
+  `int()` truncation is exact. Code review added: no entry modifies `max_mp` (NG+ does not subtract it).
 - **T11 soul_gain_bonus** — after NG+ with the kill route, `player_stats` has no `soul_gain_bonus` or it is 0.0.
+- **T12 NG+ twice (code review, characterization)** — NG+ straight after NG+ with no run between changes nothing
+  but the cycle (P2 == P1 on base_attack/base_defense/max_hp/level).
 - **AC-6** — layout guard and full suite pass; `git diff --check` clean; evidence table: route | E (before NG+) |
   P (after) | B.
 

@@ -1,0 +1,720 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+-- T1 kill route, three cycles
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CHOICE-FX] Applied buff: elara_bond_wary — Cautious Alliance: +3 ATK. Elara reveals enemy HP bars and weaknesses.
+[CHOICE-FX] Applied buff: hardened_heart — Hardened Heart: +6 ATK, +15% Soul gain. Spells deal 20% more damage.
+[CHOICE-FX] Applied buff: wraith_power — Wraith Absorption: +10 ATK, -15 Max HP. Dash phases through enemies dealing damage.
+[CHOICE-FX] Applied buff: ranger_ally — Lyra's Bow: +3 ATK. Lyra fires ranged support shots in combat (15 dmg every 5s).
+[CHOICE-FX] Applied buff: battle_tested — Battle-Tested: +6 ATK, +10 Max HP. Root Access attacks deal 25% more damage to bosses.
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[ACHIEVEMENT] Unlocked: Lore Seeker — Discover your first optional lore entry.
+[NG+] Started cycle 1 — Level 1, 0 gold, 0 charms, 1 items
+  T1 E_1={ "base_attack": 51, "base_defense": 0, "max_hp": 95, "attack": 51, "defense": 0, "hp": 95, "mp": 50, "max_mp": 50, "level": 1 }
+  T1 P_1={ "base_attack": 51, "base_defense": 0, "max_hp": 95, "attack": 51, "defense": 0, "hp": 95, "mp": 50, "max_mp": 50, "level": 1 }
+  PASS: T1 cycle 1: E_1 differs from B (buffs applied)
+  PASS: T1 cycle 1: E_1 is ATK 51 / DEF 0 / HP 95 (literal)
+  FAIL: T1 cycle 1: P_1 base_attack/base_defense/max_hp == B (got [51, 0, 95])
+  PASS: T1 cycle 1: ng_plus_cycle == 1 (got 1)
+  PASS: T1 cycle 1: active_buffs empty after NG+
+  PASS: T1 cycle 1: hp == max_hp and mp == max_mp
+  PASS: T1 cycle 1: carried stats are TYPE_INT
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CHOICE-FX] Applied buff: elara_bond_wary — Cautious Alliance: +3 ATK. Elara reveals enemy HP bars and weaknesses.
+[CHOICE-FX] Applied buff: hardened_heart — Hardened Heart: +6 ATK, +15% Soul gain. Spells deal 20% more damage.
+[CHOICE-FX] Applied buff: wraith_power — Wraith Absorption: +10 ATK, -15 Max HP. Dash phases through enemies dealing damage.
+[CHOICE-FX] Applied buff: ranger_ally — Lyra's Bow: +3 ATK. Lyra fires ranged support shots in combat (15 dmg every 5s).
+[CHOICE-FX] Applied buff: battle_tested — Battle-Tested: +6 ATK, +10 Max HP. Root Access attacks deal 25% more damage to bosses.
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 2 — Level 1, 0 gold, 0 charms, 1 items
+  T1 E_2={ "base_attack": 87, "base_defense": 0, "max_hp": 90, "attack": 87, "defense": 0, "hp": 90, "mp": 50, "max_mp": 50, "level": 1 }
+  T1 P_2={ "base_attack": 87, "base_defense": 0, "max_hp": 90, "attack": 87, "defense": 0, "hp": 90, "mp": 50, "max_mp": 50, "level": 1 }
+  PASS: T1 cycle 2: E_2 differs from B (buffs applied)
+  FAIL: T1 cycle 2: E_2 is ATK 51 / DEF 0 / HP 95 (literal)
+  FAIL: T1 cycle 2: P_2 base_attack/base_defense/max_hp == B (got [87, 0, 90])
+  PASS: T1 cycle 2: ng_plus_cycle == 2 (got 2)
+  PASS: T1 cycle 2: active_buffs empty after NG+
+  PASS: T1 cycle 2: hp == max_hp and mp == max_mp
+  PASS: T1 cycle 2: carried stats are TYPE_INT
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CHOICE-FX] Applied buff: elara_bond_wary — Cautious Alliance: +3 ATK. Elara reveals enemy HP bars and weaknesses.
+[CHOICE-FX] Applied buff: hardened_heart — Hardened Heart: +6 ATK, +15% Soul gain. Spells deal 20% more damage.
+[CHOICE-FX] Applied buff: wraith_power — Wraith Absorption: +10 ATK, -15 Max HP. Dash phases through enemies dealing damage.
+[CHOICE-FX] Applied buff: ranger_ally — Lyra's Bow: +3 ATK. Lyra fires ranged support shots in combat (15 dmg every 5s).
+[CHOICE-FX] Applied buff: battle_tested — Battle-Tested: +6 ATK, +10 Max HP. Root Access attacks deal 25% more damage to bosses.
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 3 — Level 1, 0 gold, 0 charms, 1 items
+  T1 E_3={ "base_attack": 123, "base_defense": 0, "max_hp": 85, "attack": 123, "defense": 0, "hp": 85, "mp": 50, "max_mp": 50, "level": 1 }
+  T1 P_3={ "base_attack": 123, "base_defense": 0, "max_hp": 85, "attack": 123, "defense": 0, "hp": 85, "mp": 50, "max_mp": 50, "level": 1 }
+  PASS: T1 cycle 3: E_3 differs from B (buffs applied)
+  FAIL: T1 cycle 3: E_3 is ATK 51 / DEF 0 / HP 95 (literal)
+  FAIL: T1 cycle 3: P_3 base_attack/base_defense/max_hp == B (got [123, 0, 85])
+  PASS: T1 cycle 3: ng_plus_cycle == 3 (got 3)
+  PASS: T1 cycle 3: active_buffs empty after NG+
+  PASS: T1 cycle 3: hp == max_hp and mp == max_mp
+  PASS: T1 cycle 3: carried stats are TYPE_INT
+  FAIL: T1 E_1 == E_2 == E_3 (no stacking)
+-- T2 spare and purge
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CHOICE-FX] Applied buff: ironhold_defender — Ironhold Defender: +8 DEF. Seraphina sends supply drops (+2 potions per chapter).
+[CHOICE-FX] Applied buff: wraith_gratitude — Wraith's Gratitude: +5 DEF, +10 Max HP. Spectral ally occasionally blocks attacks.
+[CHOICE-FX] Applied buff: storm_navigator — Storm Navigator: +5 DEF. 30% reduced environmental damage. Storm map reveals hidden paths.
+[CHOICE-FX] Applied buff: independent_mind — Independent Mind: +5 DEF, +3 ATK. Immune to confusion/charm effects.
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 1, 0 gold, 0 charms, 1 items
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CHOICE-FX] Applied buff: ironhold_defender — Ironhold Defender: +8 DEF. Seraphina sends supply drops (+2 potions per chapter).
+[CHOICE-FX] Applied buff: wraith_gratitude — Wraith's Gratitude: +5 DEF, +10 Max HP. Spectral ally occasionally blocks attacks.
+[CHOICE-FX] Applied buff: storm_navigator — Storm Navigator: +5 DEF. 30% reduced environmental damage. Storm map reveals hidden paths.
+[CHOICE-FX] Applied buff: independent_mind — Independent Mind: +5 DEF, +3 ATK. Immune to confusion/charm effects.
+[CHOICE-FX] Applied buff: root_mastery — Root Mastery: -10 Max HP (corruption cost), but Root Access hacks cost 30% less corruption.
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 1, 0 gold, 0 charms, 1 items
+  PASS: T2 spare: E differs from B (buffs applied)
+  PASS: T2 spare: E is ATK 18 / DEF 31 / HP 135 (literal)
+  PASS: T2 purge: E.max_hp == spare E.max_hp - 10 (125)
+  FAIL: T2 spare: P == B (got [18, 31, 135])
+  FAIL: T2 purge: P == B (got [18, 31, 125])
+-- T3 negative max_hp total
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: wraith_power — Wraith Absorption: +10 ATK, -15 Max HP. Dash phases through enemies dealing damage.
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 1, 0 gold, 0 charms, 1 items
+  PASS: T3 E.max_hp == 85 and base_attack == 25 (buff applied)
+  FAIL: T3 P.max_hp == 100 (got 85)
+  FAIL: T3 P.base_attack == 15 (got 25)
+-- T4 level-up vs a no-buff control
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 3 popup: +23 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 4 popup: +23 HP, +11 MP, +3 ATK
+  PASS: T4 precondition: control level >= 3 (got 4)
+  PASS: T4 precondition: the level-up grew hp, attack and mp
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 3 popup: +23 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 4 popup: +23 HP, +11 MP, +3 ATK
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CHOICE-FX] Applied buff: elara_bond_wary — Cautious Alliance: +3 ATK. Elara reveals enemy HP bars and weaknesses.
+[CHOICE-FX] Applied buff: hardened_heart — Hardened Heart: +6 ATK, +15% Soul gain. Spells deal 20% more damage.
+[CHOICE-FX] Applied buff: wraith_power — Wraith Absorption: +10 ATK, -15 Max HP. Dash phases through enemies dealing damage.
+[CHOICE-FX] Applied buff: ranger_ally — Lyra's Bow: +3 ATK. Lyra fires ranged support shots in combat (15 dmg every 5s).
+[CHOICE-FX] Applied buff: battle_tested — Battle-Tested: +6 ATK, +10 Max HP. Root Access attacks deal 25% more damage to bosses.
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 4, 0 gold, 0 charms, 1 items
+  PASS: T4 kill, flags after XP: same level as control (4)
+  PASS: T4 kill, flags after XP: E differs from the control (buffs applied)
+  FAIL: T4 kill, flags after XP: P level/ATK/DEF/HP/MP == control [4, 24, 3, 170, 83] (got [4, 60, 3, 165, 83])
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CHOICE-FX] Applied buff: elara_bond_wary — Cautious Alliance: +3 ATK. Elara reveals enemy HP bars and weaknesses.
+[CHOICE-FX] Applied buff: hardened_heart — Hardened Heart: +6 ATK, +15% Soul gain. Spells deal 20% more damage.
+[CHOICE-FX] Applied buff: wraith_power — Wraith Absorption: +10 ATK, -15 Max HP. Dash phases through enemies dealing damage.
+[CHOICE-FX] Applied buff: ranger_ally — Lyra's Bow: +3 ATK. Lyra fires ranged support shots in combat (15 dmg every 5s).
+[CHOICE-FX] Applied buff: battle_tested — Battle-Tested: +6 ATK, +10 Max HP. Root Access attacks deal 25% more damage to bosses.
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 3 popup: +23 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 4 popup: +23 HP, +11 MP, +3 ATK
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 4, 0 gold, 0 charms, 1 items
+  PASS: T4 kill, flags before XP: same level as control (4)
+  PASS: T4 kill, flags before XP: E differs from the control (buffs applied)
+  FAIL: T4 kill, flags before XP: P level/ATK/DEF/HP/MP == control [4, 24, 3, 170, 83] (got [4, 60, 3, 165, 83])
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 3 popup: +23 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 4 popup: +23 HP, +11 MP, +3 ATK
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CHOICE-FX] Applied buff: ironhold_defender — Ironhold Defender: +8 DEF. Seraphina sends supply drops (+2 potions per chapter).
+[CHOICE-FX] Applied buff: wraith_gratitude — Wraith's Gratitude: +5 DEF, +10 Max HP. Spectral ally occasionally blocks attacks.
+[CHOICE-FX] Applied buff: storm_navigator — Storm Navigator: +5 DEF. 30% reduced environmental damage. Storm map reveals hidden paths.
+[CHOICE-FX] Applied buff: independent_mind — Independent Mind: +5 DEF, +3 ATK. Immune to confusion/charm effects.
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 4, 0 gold, 0 charms, 1 items
+  PASS: T4 spare, flags after XP: same level as control (4)
+  PASS: T4 spare, flags after XP: E differs from the control (buffs applied)
+  FAIL: T4 spare, flags after XP: P level/ATK/DEF/HP/MP == control [4, 24, 3, 170, 83] (got [4, 27, 34, 205, 83])
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CHOICE-FX] Applied buff: ironhold_defender — Ironhold Defender: +8 DEF. Seraphina sends supply drops (+2 potions per chapter).
+[CHOICE-FX] Applied buff: wraith_gratitude — Wraith's Gratitude: +5 DEF, +10 Max HP. Spectral ally occasionally blocks attacks.
+[CHOICE-FX] Applied buff: storm_navigator — Storm Navigator: +5 DEF. 30% reduced environmental damage. Storm map reveals hidden paths.
+[CHOICE-FX] Applied buff: independent_mind — Independent Mind: +5 DEF, +3 ATK. Immune to confusion/charm effects.
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 3 popup: +23 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 4 popup: +23 HP, +11 MP, +3 ATK
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 4, 0 gold, 0 charms, 1 items
+  PASS: T4 spare, flags before XP: same level as control (4)
+  PASS: T4 spare, flags before XP: E differs from the control (buffs applied)
+  FAIL: T4 spare, flags before XP: P level/ATK/DEF/HP/MP == control [4, 24, 3, 170, 83] (got [4, 27, 34, 205, 83])
+-- T5 exclusive-group flip
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+WARNING: [STORY] Clearing mutually exclusive flag 'ch1_knight_killed' (new: 'ch1_knight_spared')
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] set_story_flag (res://scripts/game_manager.gd:705)
+       [1] _test_t5_exclusive_flip (res://tests/unit/ngplus/ngplus_buff_stacking_test.gd:244)
+       [2] _run (res://tests/unit/ngplus/ngplus_buff_stacking_test.gd:72)
+[CHOICE-FX] Removed buff: executioner_edge (flag ch1_knight_killed cleared)
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+  PASS: T5 knight: active_buffs holds only guardian_blessing (got ["guardian_blessing"])
+  PASS: T5 knight: E is ATK 15 / DEF 5 / HP 115 (only the spared buff)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 1, 0 gold, 0 charms, 1 items
+  FAIL: T5 knight: P == B (got [15, 5, 115])
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: wraith_power — Wraith Absorption: +10 ATK, -15 Max HP. Dash phases through enemies dealing damage.
+WARNING: [STORY] Clearing mutually exclusive flag 'ch2_data_wraith_absorbed' (new: 'ch2_data_wraith_restored')
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] set_story_flag (res://scripts/game_manager.gd:705)
+       [1] _test_t5_exclusive_flip (res://tests/unit/ngplus/ngplus_buff_stacking_test.gd:253)
+       [2] _run (res://tests/unit/ngplus/ngplus_buff_stacking_test.gd:72)
+[CHOICE-FX] Removed buff: wraith_power (flag ch2_data_wraith_absorbed cleared)
+[CHOICE-FX] Applied buff: wraith_gratitude — Wraith's Gratitude: +5 DEF, +10 Max HP. Spectral ally occasionally blocks attacks.
+  PASS: T5 wraith: active_buffs holds only wraith_gratitude (got ["wraith_gratitude"])
+  PASS: T5 wraith: E is ATK 15 / DEF 5 / HP 110 (only the restored buff)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 1, 0 gold, 0 charms, 1 items
+  FAIL: T5 wraith: P == B (got [15, 5, 110])
+-- T6 duplicate set
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: T6 same flag twice: one active_buffs entry (got 1)
+  PASS: T6 E.base_attack == 23 (+8 once)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 1, 0 gold, 0 charms, 1 items
+  FAIL: T6 P == B (got [23, 0, 100])
+-- T7 max_hp floor
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CHOICE-FX] Applied buff: ironhold_defender — Ironhold Defender: +8 DEF. Seraphina sends supply drops (+2 potions per chapter).
+[CHOICE-FX] Applied buff: wraith_gratitude — Wraith's Gratitude: +5 DEF, +10 Max HP. Spectral ally occasionally blocks attacks.
+[CHOICE-FX] Applied buff: storm_navigator — Storm Navigator: +5 DEF. 30% reduced environmental damage. Storm map reveals hidden paths.
+[CHOICE-FX] Applied buff: independent_mind — Independent Mind: +5 DEF, +3 ATK. Immune to confusion/charm effects.
+  PASS: T7 precondition: spare max_hp total T == 35 (got 35)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CHOICE-FX] Applied buff: ironhold_defender — Ironhold Defender: +8 DEF. Seraphina sends supply drops (+2 potions per chapter).
+[CHOICE-FX] Applied buff: wraith_gratitude — Wraith's Gratitude: +5 DEF, +10 Max HP. Spectral ally occasionally blocks attacks.
+[CHOICE-FX] Applied buff: storm_navigator — Storm Navigator: +5 DEF. 30% reduced environmental damage. Storm map reveals hidden paths.
+[CHOICE-FX] Applied buff: independent_mind — Independent Mind: +5 DEF, +3 ATK. Immune to confusion/charm effects.
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 1, 0 gold, 0 charms, 1 items
+  FAIL: T7 max_hp 37 before NG+ -> 2 (got 37)
+  PASS: T7 max_hp 37: max_hp > 0 and hp == max_hp
+  PASS: T7 max_hp 37: result is TYPE_INT
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CHOICE-FX] Applied buff: ironhold_defender — Ironhold Defender: +8 DEF. Seraphina sends supply drops (+2 potions per chapter).
+[CHOICE-FX] Applied buff: wraith_gratitude — Wraith's Gratitude: +5 DEF, +10 Max HP. Spectral ally occasionally blocks attacks.
+[CHOICE-FX] Applied buff: storm_navigator — Storm Navigator: +5 DEF. 30% reduced environmental damage. Storm map reveals hidden paths.
+[CHOICE-FX] Applied buff: independent_mind — Independent Mind: +5 DEF, +3 ATK. Immune to confusion/charm effects.
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 1, 0 gold, 0 charms, 1 items
+  FAIL: T7 max_hp 36 before NG+ -> 1 (got 36)
+  PASS: T7 max_hp 36: max_hp > 0 and hp == max_hp
+  PASS: T7 max_hp 36: result is TYPE_INT
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CHOICE-FX] Applied buff: ironhold_defender — Ironhold Defender: +8 DEF. Seraphina sends supply drops (+2 potions per chapter).
+[CHOICE-FX] Applied buff: wraith_gratitude — Wraith's Gratitude: +5 DEF, +10 Max HP. Spectral ally occasionally blocks attacks.
+[CHOICE-FX] Applied buff: storm_navigator — Storm Navigator: +5 DEF. 30% reduced environmental damage. Storm map reveals hidden paths.
+[CHOICE-FX] Applied buff: independent_mind — Independent Mind: +5 DEF, +3 ATK. Immune to confusion/charm effects.
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 1, 0 gold, 0 charms, 1 items
+  FAIL: T7 max_hp 35 before NG+ -> 1 (got 35)
+  PASS: T7 max_hp 35: max_hp > 0 and hp == max_hp
+  PASS: T7 max_hp 35: result is TYPE_INT
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CHOICE-FX] Applied buff: ironhold_defender — Ironhold Defender: +8 DEF. Seraphina sends supply drops (+2 potions per chapter).
+[CHOICE-FX] Applied buff: wraith_gratitude — Wraith's Gratitude: +5 DEF, +10 Max HP. Spectral ally occasionally blocks attacks.
+[CHOICE-FX] Applied buff: storm_navigator — Storm Navigator: +5 DEF. 30% reduced environmental damage. Storm map reveals hidden paths.
+[CHOICE-FX] Applied buff: independent_mind — Independent Mind: +5 DEF, +3 ATK. Immune to confusion/charm effects.
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 1, 0 gold, 0 charms, 1 items
+  PASS: T7 max_hp 1 before NG+ -> 1 (got 1)
+  PASS: T7 max_hp 1: max_hp > 0 and hp == max_hp
+  PASS: T7 max_hp 1: result is TYPE_INT
+-- T8 carry (AC-3)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 3 popup: +23 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 4 popup: +23 HP, +11 MP, +3 ATK
+[CHARM] Unlocked: extended_parry (equip via pause menu)
+[CHARM] Equipped: extended_parry (1/3 slots)
+[INVENTORY] Added 1 x Blue Potion
+[INVENTORY] Added 1 x Iron Sword
+[INVENTORY] Equipped Iron Sword to weapon
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Leather Armor
+[INVENTORY] Equipped Leather Armor to armor
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 4, 50 gold, 1 charms, 2 items
+  PASS: T8 no-buff cycle 0: setup populated every carried field
+  PASS: T8 no-buff cycle 0: level carried (4)
+  PASS: T8 no-buff cycle 0: max_mp carried (83)
+  PASS: T8 no-buff cycle 0: both gold fields 101 -> 50 (got 50 / 50)
+  PASS: T8 no-buff cycle 0: unlocked_charms carried
+  PASS: T8 no-buff cycle 0: equipped_charms carried
+  PASS: T8 no-buff cycle 0: arena_stats carried
+  PASS: T8 no-buff cycle 0: Inventory.equipment carried
+  PASS: T8 no-buff cycle 0: Inventory.items carried plus exactly one glitch_stabilizer
+  PASS: T8 no-buff cycle 0: lifetime stats carried, death_count 0
+  PASS: T8 no-buff cycle 0: ng_plus_cycle 0 -> 1 (got 1)
+  PASS: T8 no-buff cycle 0: ng_plus_available false
+  PASS: T8 no-buff cycle 0: ng_plus_route_recap_available true
+  PASS: T8 no-buff cycle 0: hp == max_hp and mp == max_mp
+  PASS: T8 no-buff cycle 0: equipped weapon bonus re-applied (+10 attack)
+  PASS: T8 no-buff cycle 0: equipped armor bonus re-applied (+5 defense, got 8 on base 3)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CHOICE-FX] Applied buff: elara_bond_wary — Cautious Alliance: +3 ATK. Elara reveals enemy HP bars and weaknesses.
+[CHOICE-FX] Applied buff: hardened_heart — Hardened Heart: +6 ATK, +15% Soul gain. Spells deal 20% more damage.
+[CHOICE-FX] Applied buff: wraith_power — Wraith Absorption: +10 ATK, -15 Max HP. Dash phases through enemies dealing damage.
+[CHOICE-FX] Applied buff: ranger_ally — Lyra's Bow: +3 ATK. Lyra fires ranged support shots in combat (15 dmg every 5s).
+[CHOICE-FX] Applied buff: battle_tested — Battle-Tested: +6 ATK, +10 Max HP. Root Access attacks deal 25% more damage to bosses.
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 3 popup: +23 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 4 popup: +23 HP, +11 MP, +3 ATK
+[CHARM] Unlocked: extended_parry (equip via pause menu)
+[CHARM] Equipped: extended_parry (1/3 slots)
+[INVENTORY] Added 1 x Blue Potion
+[INVENTORY] Added 1 x Iron Sword
+[INVENTORY] Equipped Iron Sword to weapon
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Leather Armor
+[INVENTORY] Equipped Leather Armor to armor
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 4, 50 gold, 1 charms, 2 items
+  PASS: T8 kill-route cycle 0: setup populated every carried field
+  PASS: T8 kill-route cycle 0: level carried (4)
+  PASS: T8 kill-route cycle 0: max_mp carried (83)
+  PASS: T8 kill-route cycle 0: both gold fields 101 -> 50 (got 50 / 50)
+  PASS: T8 kill-route cycle 0: unlocked_charms carried
+  PASS: T8 kill-route cycle 0: equipped_charms carried
+  PASS: T8 kill-route cycle 0: arena_stats carried
+  PASS: T8 kill-route cycle 0: Inventory.equipment carried
+  PASS: T8 kill-route cycle 0: Inventory.items carried plus exactly one glitch_stabilizer
+  PASS: T8 kill-route cycle 0: lifetime stats carried, death_count 0
+  PASS: T8 kill-route cycle 0: ng_plus_cycle 0 -> 1 (got 1)
+  PASS: T8 kill-route cycle 0: ng_plus_available false
+  PASS: T8 kill-route cycle 0: ng_plus_route_recap_available true
+  PASS: T8 kill-route cycle 0: hp == max_hp and mp == max_mp
+  PASS: T8 kill-route cycle 0: equipped weapon bonus re-applied (+10 attack)
+  PASS: T8 kill-route cycle 0: equipped armor bonus re-applied (+5 defense, got 8 on base 3)
+  FAIL: T8 cycle 0: kill route equals the no-buff run on every carried field and stat ["base_attack: 24 vs 60", "max_hp: 170 vs 165", "attack: 34 vs 70"]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CHOICE-FX] Applied buff: ironhold_defender — Ironhold Defender: +8 DEF. Seraphina sends supply drops (+2 potions per chapter).
+[CHOICE-FX] Applied buff: wraith_gratitude — Wraith's Gratitude: +5 DEF, +10 Max HP. Spectral ally occasionally blocks attacks.
+[CHOICE-FX] Applied buff: storm_navigator — Storm Navigator: +5 DEF. 30% reduced environmental damage. Storm map reveals hidden paths.
+[CHOICE-FX] Applied buff: independent_mind — Independent Mind: +5 DEF, +3 ATK. Immune to confusion/charm effects.
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 3 popup: +23 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 4 popup: +23 HP, +11 MP, +3 ATK
+[CHARM] Unlocked: extended_parry (equip via pause menu)
+[CHARM] Equipped: extended_parry (1/3 slots)
+[INVENTORY] Added 1 x Blue Potion
+[INVENTORY] Added 1 x Iron Sword
+[INVENTORY] Equipped Iron Sword to weapon
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Leather Armor
+[INVENTORY] Equipped Leather Armor to armor
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 4, 50 gold, 1 charms, 2 items
+  PASS: T8 spare-route cycle 0: setup populated every carried field
+  PASS: T8 spare-route cycle 0: level carried (4)
+  PASS: T8 spare-route cycle 0: max_mp carried (83)
+  PASS: T8 spare-route cycle 0: both gold fields 101 -> 50 (got 50 / 50)
+  PASS: T8 spare-route cycle 0: unlocked_charms carried
+  PASS: T8 spare-route cycle 0: equipped_charms carried
+  PASS: T8 spare-route cycle 0: arena_stats carried
+  PASS: T8 spare-route cycle 0: Inventory.equipment carried
+  PASS: T8 spare-route cycle 0: Inventory.items carried plus exactly one glitch_stabilizer
+  PASS: T8 spare-route cycle 0: lifetime stats carried, death_count 0
+  PASS: T8 spare-route cycle 0: ng_plus_cycle 0 -> 1 (got 1)
+  PASS: T8 spare-route cycle 0: ng_plus_available false
+  PASS: T8 spare-route cycle 0: ng_plus_route_recap_available true
+  PASS: T8 spare-route cycle 0: hp == max_hp and mp == max_mp
+  PASS: T8 spare-route cycle 0: equipped weapon bonus re-applied (+10 attack)
+  PASS: T8 spare-route cycle 0: equipped armor bonus re-applied (+5 defense, got 39 on base 34)
+  FAIL: T8 cycle 0: spare route equals the no-buff run on every carried field and stat ["base_attack: 24 vs 27", "base_defense: 3 vs 34", "max_hp: 170 vs 205", "attack: 34 vs 37", "defense: 8 vs 39"]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 3 popup: +23 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 4 popup: +23 HP, +11 MP, +3 ATK
+[CHARM] Unlocked: extended_parry (equip via pause menu)
+[CHARM] Equipped: extended_parry (1/3 slots)
+[INVENTORY] Added 1 x Blue Potion
+[INVENTORY] Added 1 x Iron Sword
+[INVENTORY] Equipped Iron Sword to weapon
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Leather Armor
+[INVENTORY] Equipped Leather Armor to armor
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 6 — Level 4, 50 gold, 1 charms, 2 items
+  PASS: T8 no-buff cycle 5: setup populated every carried field
+  PASS: T8 no-buff cycle 5: level carried (4)
+  PASS: T8 no-buff cycle 5: max_mp carried (83)
+  PASS: T8 no-buff cycle 5: both gold fields 101 -> 50 (got 50 / 50)
+  PASS: T8 no-buff cycle 5: unlocked_charms carried
+  PASS: T8 no-buff cycle 5: equipped_charms carried
+  PASS: T8 no-buff cycle 5: arena_stats carried
+  PASS: T8 no-buff cycle 5: Inventory.equipment carried
+  PASS: T8 no-buff cycle 5: Inventory.items carried plus exactly one glitch_stabilizer
+  PASS: T8 no-buff cycle 5: lifetime stats carried, death_count 0
+  PASS: T8 no-buff cycle 5: ng_plus_cycle 5 -> 6 (got 6)
+  PASS: T8 no-buff cycle 5: ng_plus_available false
+  PASS: T8 no-buff cycle 5: ng_plus_route_recap_available true
+  PASS: T8 no-buff cycle 5: hp == max_hp and mp == max_mp
+  PASS: T8 no-buff cycle 5: equipped weapon bonus re-applied (+10 attack)
+  PASS: T8 no-buff cycle 5: equipped armor bonus re-applied (+5 defense, got 8 on base 3)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CHOICE-FX] Applied buff: elara_bond_wary — Cautious Alliance: +3 ATK. Elara reveals enemy HP bars and weaknesses.
+[CHOICE-FX] Applied buff: hardened_heart — Hardened Heart: +6 ATK, +15% Soul gain. Spells deal 20% more damage.
+[CHOICE-FX] Applied buff: wraith_power — Wraith Absorption: +10 ATK, -15 Max HP. Dash phases through enemies dealing damage.
+[CHOICE-FX] Applied buff: ranger_ally — Lyra's Bow: +3 ATK. Lyra fires ranged support shots in combat (15 dmg every 5s).
+[CHOICE-FX] Applied buff: battle_tested — Battle-Tested: +6 ATK, +10 Max HP. Root Access attacks deal 25% more damage to bosses.
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 3 popup: +23 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 4 popup: +23 HP, +11 MP, +3 ATK
+[CHARM] Unlocked: extended_parry (equip via pause menu)
+[CHARM] Equipped: extended_parry (1/3 slots)
+[INVENTORY] Added 1 x Blue Potion
+[INVENTORY] Added 1 x Iron Sword
+[INVENTORY] Equipped Iron Sword to weapon
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Leather Armor
+[INVENTORY] Equipped Leather Armor to armor
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 6 — Level 4, 50 gold, 1 charms, 2 items
+  PASS: T8 kill-route cycle 5: setup populated every carried field
+  PASS: T8 kill-route cycle 5: level carried (4)
+  PASS: T8 kill-route cycle 5: max_mp carried (83)
+  PASS: T8 kill-route cycle 5: both gold fields 101 -> 50 (got 50 / 50)
+  PASS: T8 kill-route cycle 5: unlocked_charms carried
+  PASS: T8 kill-route cycle 5: equipped_charms carried
+  PASS: T8 kill-route cycle 5: arena_stats carried
+  PASS: T8 kill-route cycle 5: Inventory.equipment carried
+  PASS: T8 kill-route cycle 5: Inventory.items carried plus exactly one glitch_stabilizer
+  PASS: T8 kill-route cycle 5: lifetime stats carried, death_count 0
+  PASS: T8 kill-route cycle 5: ng_plus_cycle 5 -> 6 (got 6)
+  PASS: T8 kill-route cycle 5: ng_plus_available false
+  PASS: T8 kill-route cycle 5: ng_plus_route_recap_available true
+  PASS: T8 kill-route cycle 5: hp == max_hp and mp == max_mp
+  PASS: T8 kill-route cycle 5: equipped weapon bonus re-applied (+10 attack)
+  PASS: T8 kill-route cycle 5: equipped armor bonus re-applied (+5 defense, got 8 on base 3)
+  FAIL: T8 cycle 5: kill route equals the no-buff run on every carried field and stat ["base_attack: 24 vs 60", "max_hp: 170 vs 165", "attack: 34 vs 70"]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CHOICE-FX] Applied buff: ironhold_defender — Ironhold Defender: +8 DEF. Seraphina sends supply drops (+2 potions per chapter).
+[CHOICE-FX] Applied buff: wraith_gratitude — Wraith's Gratitude: +5 DEF, +10 Max HP. Spectral ally occasionally blocks attacks.
+[CHOICE-FX] Applied buff: storm_navigator — Storm Navigator: +5 DEF. 30% reduced environmental damage. Storm map reveals hidden paths.
+[CHOICE-FX] Applied buff: independent_mind — Independent Mind: +5 DEF, +3 ATK. Immune to confusion/charm effects.
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 3 popup: +23 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 4 popup: +23 HP, +11 MP, +3 ATK
+[CHARM] Unlocked: extended_parry (equip via pause menu)
+[CHARM] Equipped: extended_parry (1/3 slots)
+[INVENTORY] Added 1 x Blue Potion
+[INVENTORY] Added 1 x Iron Sword
+[INVENTORY] Equipped Iron Sword to weapon
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Leather Armor
+[INVENTORY] Equipped Leather Armor to armor
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 6 — Level 4, 50 gold, 1 charms, 2 items
+  PASS: T8 spare-route cycle 5: setup populated every carried field
+  PASS: T8 spare-route cycle 5: level carried (4)
+  PASS: T8 spare-route cycle 5: max_mp carried (83)
+  PASS: T8 spare-route cycle 5: both gold fields 101 -> 50 (got 50 / 50)
+  PASS: T8 spare-route cycle 5: unlocked_charms carried
+  PASS: T8 spare-route cycle 5: equipped_charms carried
+  PASS: T8 spare-route cycle 5: arena_stats carried
+  PASS: T8 spare-route cycle 5: Inventory.equipment carried
+  PASS: T8 spare-route cycle 5: Inventory.items carried plus exactly one glitch_stabilizer
+  PASS: T8 spare-route cycle 5: lifetime stats carried, death_count 0
+  PASS: T8 spare-route cycle 5: ng_plus_cycle 5 -> 6 (got 6)
+  PASS: T8 spare-route cycle 5: ng_plus_available false
+  PASS: T8 spare-route cycle 5: ng_plus_route_recap_available true
+  PASS: T8 spare-route cycle 5: hp == max_hp and mp == max_mp
+  PASS: T8 spare-route cycle 5: equipped weapon bonus re-applied (+10 attack)
+  PASS: T8 spare-route cycle 5: equipped armor bonus re-applied (+5 defense, got 39 on base 34)
+  FAIL: T8 cycle 5: spare route equals the no-buff run on every carried field and stat ["base_attack: 24 vs 27", "base_defense: 3 vs 34", "max_hp: 170 vs 205", "attack: 34 vs 37", "defense: 8 vs 39"]
+-- T9 no buffs, partial keys, save keys (AC-5)
+  PASS: T9 control: the user:// listing detects a new file
+  PASS: T9 control: the listing is stable once the probe file is removed
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 3 popup: +23 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 4 popup: +23 HP, +11 MP, +3 ATK
+  PASS: T9 no flags: get_total_stat_mods() is {}
+  PASS: T9 no flags: run is above B (level-up applied)
+[SAVE] Slot 1 saved successfully (v1.2.0)
+  PASS: T9 save captured before NG+
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 4, 0 gold, 0 charms, 1 items
+[SAVE] Slot 1 saved successfully (v1.2.0)
+  PASS: T9 no flags: P base_attack/base_defense/max_hp == E (got [24, 3, 170], want [24, 3, 170])
+  PASS: T9 save top-level keys before NG+ equal the frozen HEAD list ["_checksum", "achievements", "arena_stats", "boss_checkpoints", "choice_consequences", "corruption_level", "current_chapter", "current_region", "current_scene", "current_state", "dda_performance_score", "dda_recent_deaths", "dda_recent_kills", "equipped_charms", "free_travel_story_scene", "glitch_meter", "inventory_equipment", "inventory_gold", "inventory_items", "lore_journal", "ng_plus_cycle", "perfect_delete_charges", "perfect_delete_used", "player_overworld_position", "player_stats", "playtime_seconds", "relationships", "shop_discount", "side_quests", "source_key_count", "speedrun_active", "stats", "story_flags", "timestamp", "titles_earned", "unlocked_charms", "version"]
+  PASS: T9 choice_consequences keys before NG+ equal the frozen list ["active_buffs", "party_combat_members"]
+  PASS: T9 save top-level keys after NG+ equal the frozen list ["_checksum", "achievements", "arena_stats", "boss_checkpoints", "choice_consequences", "corruption_level", "current_chapter", "current_region", "current_scene", "current_state", "dda_performance_score", "dda_recent_deaths", "dda_recent_kills", "equipped_charms", "free_travel_story_scene", "glitch_meter", "inventory_equipment", "inventory_gold", "inventory_items", "lore_journal", "ng_plus_cycle", "perfect_delete_charges", "perfect_delete_used", "player_overworld_position", "player_stats", "playtime_seconds", "relationships", "shop_discount", "side_quests", "source_key_count", "speedrun_active", "stats", "story_flags", "timestamp", "titles_earned", "unlocked_charms", "version"]
+  PASS: T9 choice_consequences keys after NG+ equal the frozen list ["active_buffs", "party_combat_members"]
+  PASS: T9 save keys equal before and after NG+
+  PASS: T9 NG+ wrote no file in the user:// save directory (["d:logs", "f:achievements.save"] vs ["d:logs", "f:achievements.save"])
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: root_mastery — Root Mastery: -10 Max HP (corruption cost), but Root Access hacks cost 30% less corruption.
+  PASS: T9 purge only: totals hold only max_hp -10 (got { "max_hp": -10.0 })
+  PASS: T9 purge only: E is ATK 15 / DEF 0 / HP 90 (buff applied)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 1, 0 gold, 0 charms, 1 items
+  PASS: T9 purge only: attack and defense stay at B (missing keys count as 0)
+  FAIL: T9b purge only: P.max_hp == 100 (got 90)
+-- T10 CHOICE_BUFFS integral guard
+  PASS: T10 control: the predicate rejects 2.5 and accepts -15 and 8.0
+  PASS: T10 CHOICE_BUFFS read (17 entries)
+  PASS: T10 checked 26 attack/defense/max_hp values covering all three stats
+  PASS: T10 every attack/defense/max_hp buff value is integral []
+  PASS: T10 no CHOICE_BUFFS entry modifies max_mp (NG+ does not subtract it) []
+-- T11 soul_gain_bonus not carried
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CHOICE-FX] Applied buff: elara_bond_wary — Cautious Alliance: +3 ATK. Elara reveals enemy HP bars and weaknesses.
+[CHOICE-FX] Applied buff: hardened_heart — Hardened Heart: +6 ATK, +15% Soul gain. Spells deal 20% more damage.
+[CHOICE-FX] Applied buff: wraith_power — Wraith Absorption: +10 ATK, -15 Max HP. Dash phases through enemies dealing damage.
+[CHOICE-FX] Applied buff: ranger_ally — Lyra's Bow: +3 ATK. Lyra fires ranged support shots in combat (15 dmg every 5s).
+[CHOICE-FX] Applied buff: battle_tested — Battle-Tested: +6 ATK, +10 Max HP. Root Access attacks deal 25% more damage to bosses.
+  PASS: T11 precondition: the kill route set soul_gain_bonus 0.35 (got 0.35)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 1, 0 gold, 0 charms, 1 items
+  PASS: T11 soul_gain_bonus is absent or 0.0 after NG+ (got 0.0)
+-- T12 NG+ twice in a row
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 3 popup: +23 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 4 popup: +23 HP, +11 MP, +3 ATK
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CHOICE-FX] Applied buff: elara_bond_wary — Cautious Alliance: +3 ATK. Elara reveals enemy HP bars and weaknesses.
+[CHOICE-FX] Applied buff: hardened_heart — Hardened Heart: +6 ATK, +15% Soul gain. Spells deal 20% more damage.
+[CHOICE-FX] Applied buff: wraith_power — Wraith Absorption: +10 ATK, -15 Max HP. Dash phases through enemies dealing damage.
+[CHOICE-FX] Applied buff: ranger_ally — Lyra's Bow: +3 ATK. Lyra fires ranged support shots in combat (15 dmg every 5s).
+[CHOICE-FX] Applied buff: battle_tested — Battle-Tested: +6 ATK, +10 Max HP. Root Access attacks deal 25% more damage to bosses.
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 4, 0 gold, 0 charms, 1 items
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 2 — Level 4, 0 gold, 0 charms, 1 items
+  PASS: T12 precondition: the level-up carried (P1 above B)
+  PASS: T12 P2 base_attack/base_defense/max_hp/level == P1 (got [60, 3, 165], want [60, 3, 165])
+  PASS: T12 ng_plus_cycle == 2 (got 2)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+
+NGPLUS UNIT RESULT: 167 passed, 25 failed
+  FAIL: T1 cycle 1: P_1 base_attack/base_defense/max_hp == B (got [51, 0, 95])
+  FAIL: T1 cycle 2: E_2 is ATK 51 / DEF 0 / HP 95 (literal)
+  FAIL: T1 cycle 2: P_2 base_attack/base_defense/max_hp == B (got [87, 0, 90])
+  FAIL: T1 cycle 3: E_3 is ATK 51 / DEF 0 / HP 95 (literal)
+  FAIL: T1 cycle 3: P_3 base_attack/base_defense/max_hp == B (got [123, 0, 85])
+  FAIL: T1 E_1 == E_2 == E_3 (no stacking)
+  FAIL: T2 spare: P == B (got [18, 31, 135])
+  FAIL: T2 purge: P == B (got [18, 31, 125])
+  FAIL: T3 P.max_hp == 100 (got 85)
+  FAIL: T3 P.base_attack == 15 (got 25)
+  FAIL: T4 kill, flags after XP: P level/ATK/DEF/HP/MP == control [4, 24, 3, 170, 83] (got [4, 60, 3, 165, 83])
+  FAIL: T4 kill, flags before XP: P level/ATK/DEF/HP/MP == control [4, 24, 3, 170, 83] (got [4, 60, 3, 165, 83])
+  FAIL: T4 spare, flags after XP: P level/ATK/DEF/HP/MP == control [4, 24, 3, 170, 83] (got [4, 27, 34, 205, 83])
+  FAIL: T4 spare, flags before XP: P level/ATK/DEF/HP/MP == control [4, 24, 3, 170, 83] (got [4, 27, 34, 205, 83])
+  FAIL: T5 knight: P == B (got [15, 5, 115])
+  FAIL: T5 wraith: P == B (got [15, 5, 110])
+  FAIL: T6 P == B (got [23, 0, 100])
+  FAIL: T7 max_hp 37 before NG+ -> 2 (got 37)
+  FAIL: T7 max_hp 36 before NG+ -> 1 (got 36)
+  FAIL: T7 max_hp 35 before NG+ -> 1 (got 35)
+  FAIL: T8 cycle 0: kill route equals the no-buff run on every carried field and stat ["base_attack: 24 vs 60", "max_hp: 170 vs 165", "attack: 34 vs 70"]
+  FAIL: T8 cycle 0: spare route equals the no-buff run on every carried field and stat ["base_attack: 24 vs 27", "base_defense: 3 vs 34", "max_hp: 170 vs 205", "attack: 34 vs 37", "defense: 8 vs 39"]
+  FAIL: T8 cycle 5: kill route equals the no-buff run on every carried field and stat ["base_attack: 24 vs 60", "max_hp: 170 vs 165", "attack: 34 vs 70"]
+  FAIL: T8 cycle 5: spare route equals the no-buff run on every carried field and stat ["base_attack: 24 vs 27", "base_defense: 3 vs 34", "max_hp: 170 vs 205", "attack: 34 vs 37", "defense: 8 vs 39"]
+  FAIL: T9b purge only: P.max_hp == 100 (got 90)
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)

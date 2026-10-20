@@ -3,6 +3,12 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-20 — New Game+ no longer stacks choice buffs (Y1-P0-T07)
+
+- **fix(ng+):** carried attack, defense and max HP now exclude the finished run's choice buffs,
+  so making the same choices again each cycle no longer piles them up. Saves that already
+  stacked are left as they are.
+
 ## 2026-10-20 — Side quests do what they say (Y1-P0-T06)
 
 - **fix(quests):** Arena Legend starts when you reach the arena's tier selection (also on saves

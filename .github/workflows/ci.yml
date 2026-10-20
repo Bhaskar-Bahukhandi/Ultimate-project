@@ -115,6 +115,10 @@ jobs:
         working-directory: ${{ env.PROJECT_DIR }}
         run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/unit/quests/side_quest_rewards_test.gd
 
+      - name: NG+ buff stacking (Y1-P0-T07: cycle restart, purge, flip, save keys)
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/unit/ngplus/ngplus_buff_stacking_test.gd
+
       - name: Chapter 1 route (rewritten dialogue, end to end)
         working-directory: ${{ env.PROJECT_DIR }}
         timeout-minutes: 15
