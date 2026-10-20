@@ -62,10 +62,9 @@ func _entry_dialogue() -> void:
 	if OS.is_debug_build():
 		print("[CHECKPOINT] Underground Network — entry auto-save")
 
-	# PASS-35 FIX: Discover and start underground side quest
+	# Y1-P0-T06: The Data Hoard step 1 (starts it; re-entry never advances twice)
 	if has_node("/root/SideQuestManager"):
-		SideQuestManager.discover_quest("ironhold_underground_data")
-		SideQuestManager.start_quest("ironhold_underground_data")
+		SideQuestManager.data_hoard_entered()
 
 	await DialogueManager.run(UG_DLG, "entry", _on_ug_event)
 
@@ -368,9 +367,9 @@ func _on_puzzle_trigger(body) -> void:
 	if OS.is_debug_build():
 		print("[CHECKPOINT] Underground Network — puzzle chamber auto-save")
 
-	# PASS-35 FIX: Advance data cache quest
-	if has_node("/root/SideQuestManager") and SideQuestManager.is_quest_active("ironhold_underground_data"):
-		SideQuestManager.advance_quest("ironhold_underground_data")
+	# Y1-P0-T06: The Data Hoard step 2 (guarded by quest state, not _puzzle_solved)
+	if has_node("/root/SideQuestManager"):
+		SideQuestManager.data_hoard_junction_fixed()
 
 	await DialogueManager.run(UG_DLG, "workers", _on_ug_event)
 	if not is_inside_tree(): return
@@ -391,6 +390,9 @@ func _on_data_wraith_defeated() -> void:
 	## comes later, after the Administrator Proxy (C2-S15).
 	data_wraith_defeated = true
 	GameManager.set_story_flag("ch2_data_wraith_defeated", true)
+	# Y1-P0-T06: The Data Hoard completes here (from any ACTIVE step), before the autosave
+	if has_node("/root/SideQuestManager"):
+		SideQuestManager.data_hoard_wraith_defeated()
 	GameManager.auto_save()  # Autosave on boss defeat
 
 	await get_tree().create_timer(1.0, false).timeout

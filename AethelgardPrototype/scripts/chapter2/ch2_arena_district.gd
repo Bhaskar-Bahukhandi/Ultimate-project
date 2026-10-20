@@ -251,6 +251,11 @@ func _fit_hud_around_player_hud(hud: CanvasLayer, top_bar: ColorRect) -> void:
 
 func _show_tier_selection() -> void:
 	## Show tier selection dialogue
+	# Y1-P0-T06: start Arena Legend on every visit (HIDDEN/DISCOVERED only) and sync
+	# it with tiers already cleared, before the first-visit branch and any early return.
+	if has_node("/root/SideQuestManager"):
+		SideQuestManager.start_arena_legend()
+
 	# C2-S08 — the first visit gets Vex's welcome and the corner advice.
 	if not GameManager.has_flag("ch2_arena_entered"):
 		GameManager.set_story_flag("ch2_arena_entered", true)

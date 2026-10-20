@@ -31,7 +31,7 @@ const QUEST_DATABASE: Dictionary = {
 		"chapter": 1,
 		"description": "Find 3 corrupted memory fragments scattered around Oakhaven to unlock a hidden NPC's backstory.",
 		"steps": ["Find Memory Fragment 1 (near the well)", "Find Memory Fragment 2 (behind the apothecary)", "Find Memory Fragment 3 (in the auction house basement)", "Return to the flickering NPC"],
-		"rewards": {"xp": 150, "gold": 75, "item": "memory_crystal"},
+		"rewards": {"xp": 150, "gold": 75, "item": "memory_shard", "item_quantity": 1},
 		"discovery_hint": "A flickering NPC near the village square seems stuck in a loop, murmuring about 'pieces of herself'...",
 	},
 	"oakhaven_corrupted_cellar": {
@@ -39,7 +39,7 @@ const QUEST_DATABASE: Dictionary = {
 		"chapter": 1,
 		"description": "A hidden cellar beneath the blacksmith contains a mini-boss: a Corrupted Forge Golem.",
 		"steps": ["Discover the cellar entrance", "Defeat the Corrupted Forge Golem", "Claim the Forge Heart"],
-		"rewards": {"xp": 200, "gold": 100, "item": "forge_heart", "stat_boost": {"attack": 3}},
+		"rewards": {"xp": 200, "gold": 100, "item": "data_ore", "item_quantity": 2, "stat_boost": {"attack": 3}},
 		"discovery_hint": "The blacksmith's hammer strikes create sparks that phase through the floor...",
 	},
 	"oakhaven_herbalist_favor": {
@@ -47,7 +47,7 @@ const QUEST_DATABASE: Dictionary = {
 		"chapter": 1,
 		"description": "Gather 3 Glitch Herbs from the outskirts for the apothecary. Unlocks a new potion recipe.",
 		"steps": ["Talk to the Apothecary about rare herbs", "Gather Glitch Herb (forest edge)", "Gather Glitch Herb (crater rim)", "Gather Glitch Herb (corrupted grove)", "Return to the Apothecary"],
-		"rewards": {"xp": 100, "gold": 50, "unlock": "null_heal_potion"},
+		"rewards": {"xp": 100, "gold": 50, "item": "null_potion", "item_quantity": 1},
 		"discovery_hint": "The apothecary sighs, staring at empty shelves where rare ingredients once sat.",
 	},
 
@@ -55,17 +55,17 @@ const QUEST_DATABASE: Dictionary = {
 	"ironhold_arena_legend": {
 		"name": "Arena Legend",
 		"chapter": 2,
-		"description": "Complete all 4 arena tiers and defeat the secret 5th challenger: The Phantom Champion.",
-		"steps": ["Complete Bronze tier", "Complete Silver tier", "Complete Gold tier", "Complete Platinum tier", "Challenge the Phantom Champion"],
-		"rewards": {"xp": 500, "gold": 300, "charm": "arena_veteran", "title": "Arena Legend"},
-		"discovery_hint": "Arena regulars whisper about a fighter who appears only when all tiers are conquered...",
+		"description": "Conquer all 4 arena tiers, from Bronze to Platinum, and earn the title of Arena Legend.",
+		"steps": ["Complete Bronze tier", "Complete Silver tier", "Complete Gold tier", "Complete Platinum tier"],
+		"rewards": {"xp": 500, "gold": 300, "charm": "extended_parry", "title": "Arena Legend"},
+		"discovery_hint": "Arena regulars whisper that anyone who conquers every tier becomes a legend...",
 	},
 	"ironhold_underground_data": {
 		"name": "The Data Hoard",
 		"chapter": 2,
-		"description": "Discover 5 hidden data caches in the underground network, each containing corrupted archives.",
-		"steps": ["Find Data Cache 1 (entry tunnel)", "Find Data Cache 2 (waterway junction)", "Find Data Cache 3 (collapsed sector)", "Find Data Cache 4 (server alcove)", "Find Data Cache 5 (deepest chamber)", "Decode all caches at the terminal"],
-		"rewards": {"xp": 300, "gold": 200, "lore": "sovereign_origin_fragment"},
+		"description": "Descend into the underground network, repair its routing junction, and defeat the Data Wraith guarding the hoard of corrupted archives.",
+		"steps": ["Enter the Underground", "Fix the routing junction", "Defeat the Data Wraith"],
+		"rewards": {"xp": 300, "gold": 200, "lore": "ironhold_lore_3"},
 		"discovery_hint": "Faint data pulses echo from hidden alcoves in the underground tunnels...",
 	},
 	"ironhold_merchant_guild": {
@@ -83,7 +83,7 @@ const QUEST_DATABASE: Dictionary = {
 		"chapter": 3,
 		"description": "Track and defeat 3 Echo Wraiths — ghosts of failed processes that haunt the wastes.",
 		"steps": ["Find Echo Wraith near the tower", "Find Echo Wraith in the recursive garden", "Find Echo Wraith in the data conduit", "Collect all Echo Cores"],
-		"rewards": {"xp": 350, "gold": 150, "ability": "echo_sense"},
+		"rewards": {"xp": 350, "gold": 150, "item": "glitch_stabilizer", "item_quantity": 2},
 		"discovery_hint": "Translucent figures flicker at the edge of vision, disappearing when approached directly...",
 	},
 	"wastes_survivor_cache": {
@@ -91,7 +91,7 @@ const QUEST_DATABASE: Dictionary = {
 		"chapter": 3,
 		"description": "Find the hidden cache of a previous explorer who tried to reach the server room.",
 		"steps": ["Find the explorer's journal (in shelter)", "Follow the journal clues", "Locate the cache entrance", "Solve the lock puzzle", "Claim the survivor's gear"],
-		"rewards": {"xp": 250, "gold": 200, "item": "stabilizer_mk2", "stat_boost": {"defense": 5, "max_hp": 20}},
+		"rewards": {"xp": 250, "gold": 200, "item": "glitch_stabilizer", "item_quantity": 2, "stat_boost": {"defense": 5, "max_hp": 20}},
 		"discovery_hint": "Scratched marks on the shelter wall form a crude map pointing to something hidden...",
 	},
 	"wastes_lyra_past": {
@@ -100,7 +100,7 @@ const QUEST_DATABASE: Dictionary = {
 		"description": "Help Lyra recover memories from her old shop in the marketplace ruins.",
 		"requires_flag": "ch3_lyra_recruited",
 		"steps": ["Ask Lyra about her past", "Find Lyra's old shop in the market", "Recover the memory crystal", "Watch Lyra's memories together"],
-		"rewards": {"xp": 200, "gold": 0, "relationship": {"lyra": 15}, "ability": "lyra_power_shot"},
+		"rewards": {"xp": 200, "gold": 0, "relationship": {"lyra": 15}},
 		"discovery_hint": "Lyra pauses near the marketplace, her eyes clouded with recognition...",
 	},
 
@@ -151,7 +151,7 @@ const QUEST_DATABASE: Dictionary = {
 		"chapter": 0,
 		"description": "Find the hidden developer debug room — a glitch in the world's foundation.",
 		"steps": ["Discover 3 developer signatures hidden in environments", "Find the hidden entrance", "Access the Debug Room"],
-		"rewards": {"xp": 1000, "gold": 500, "charm": "developer_insight", "title": "Code Archaeologist"},
+		"rewards": {"xp": 1000, "gold": 500, "charm": "null_cloak", "title": "Code Archaeologist"},
 		"discovery_hint": "Sometimes, in quiet moments, you catch glimpses of text that doesn't belong: '// TODO: remove before production'...",
 	},
 }
@@ -274,14 +274,35 @@ func complete_quest(quest_id: String) -> void:
 	quests[quest_id]["state"] = QuestState.COMPLETED
 	var quest_data: Dictionary = QUEST_DATABASE[quest_id]
 
-	# Grant rewards
-	var rewards: Dictionary = quest_data.get("rewards", {})
+	# Grant rewards (unknown ids are reported and skipped inside grant_rewards)
+	grant_rewards(quest_id, quest_data.get("rewards", {}))
+	if GameManager:
+		GameManager.set_story_flag("side_quest_%s_complete" % quest_id, true)
+
+	print("[SIDE QUEST] Completed: %s!" % quest_data["name"])
+	quest_completed.emit(quest_id)
+	_queue_notification("QUEST COMPLETE: %s" % quest_data["name"], Color(0.3, 1.0, 0.5))
+	_update_hud_tracker()
+
+## Grant a reward dictionary for [param quest_id] (see QUEST_DATABASE "rewards").
+## Valid keys: xp, gold, item (+ item_quantity), stat_boost, relationship, charm,
+## title, shop_discount, lore. Unknown item / charm / lore ids and the retired
+## `ability` / `unlock` keys raise exactly one push_error naming the quest and the
+## reward, are skipped (no flag, no empty lore page, no stored charm) and are
+## returned as descriptive strings; every other reward is still granted.
+## Does not touch quest state or emit signals; complete_quest does that.
+func grant_rewards(quest_id: String, rewards: Dictionary) -> Array[String]:
+	var skipped: Array[String] = []
 	if rewards.has("xp") and GameManager:
 		GameManager.add_xp(rewards["xp"])
 	if rewards.has("gold") and GameManager:
 		GameManager.add_gold(rewards["gold"])
 	if rewards.has("item") and has_node("/root/Inventory"):
-		Inventory.add_item(rewards["item"], int(rewards.get("item_quantity", 1)))
+		var item_id: String = str(rewards["item"])
+		if Inventory.ITEMS.has(item_id):
+			Inventory.add_item(item_id, int(rewards.get("item_quantity", 1)))
+		else:
+			_skip_reward(skipped, quest_id, "item", item_id)
 	if rewards.has("stat_boost") and GameManager:
 		var boosts: Dictionary = rewards["stat_boost"]
 		for s in boosts:
@@ -296,7 +317,11 @@ func complete_quest(quest_id: String) -> void:
 		for r in rels:
 			GameManager.relationships[r] = GameManager.relationships.get(r, 0) + rels[r]
 	if rewards.has("charm") and GameManager:
-		GameManager.unlock_charm(rewards["charm"])
+		var charm_id: String = str(rewards["charm"])
+		if GameManager.CHARM_INFO.has(charm_id):
+			GameManager.unlock_charm(charm_id)
+		else:
+			_skip_reward(skipped, quest_id, "charm", charm_id)
 	# PASS-35 FIX: Handle remaining reward types
 	if rewards.has("title") and GameManager:
 		GameManager.titles_earned.append(rewards["title"])
@@ -304,23 +329,103 @@ func complete_quest(quest_id: String) -> void:
 	if rewards.has("shop_discount") and GameManager:
 		GameManager.shop_discount = maxf(GameManager.shop_discount, rewards["shop_discount"])
 		print("[SIDE QUEST] Shop discount: %d%%" % int(rewards["shop_discount"] * 100))
-	if rewards.has("unlock") and GameManager:
-		GameManager.set_story_flag("unlocked_" + rewards["unlock"], true)
-		print("[SIDE QUEST] Unlocked: %s" % rewards["unlock"])
-	if rewards.has("ability") and GameManager:
-		GameManager.set_story_flag("ability_" + rewards["ability"], true)
-		print("[SIDE QUEST] Ability unlocked: %s" % rewards["ability"])
+	# Nothing reads `unlock` / `ability`; they used to set flags no system checked.
+	if rewards.has("unlock"):
+		_skip_reward(skipped, quest_id, "unlock", str(rewards["unlock"]))
+	if rewards.has("ability"):
+		_skip_reward(skipped, quest_id, "ability", str(rewards["ability"]))
 	if rewards.has("lore") and GameManager:
-		GameManager.set_story_flag("lore_" + rewards["lore"], true)
-		if has_node("/root/LoreJournal") and LoreJournal.has_method("discover"):
-			LoreJournal.discover(str(rewards["lore"]))
-	if GameManager:
-		GameManager.set_story_flag("side_quest_%s_complete" % quest_id, true)
+		var lore_id: String = str(rewards["lore"])
+		if has_node("/root/LoreJournal") and LoreJournal.has_entry(lore_id):
+			GameManager.set_story_flag("lore_" + lore_id, true)
+			LoreJournal.discover(lore_id)
+		else:
+			_skip_reward(skipped, quest_id, "lore", lore_id)
+	return skipped
 
-	print("[SIDE QUEST] Completed: %s!" % quest_data["name"])
-	quest_completed.emit(quest_id)
-	_queue_notification("QUEST COMPLETE: %s" % quest_data["name"], Color(0.3, 1.0, 0.5))
-	_update_hud_tracker()
+func _skip_reward(skipped: Array[String], quest_id: String, kind: String, id: String) -> void:
+	var kind_text: String = kind if kind in ["ability", "unlock"] else "unknown " + kind
+	push_error("[SideQuest] %s: %s '%s' (reward skipped)" % [quest_id, kind_text, id])
+	skipped.append("%s '%s'" % [kind_text, id])
+
+
+# -- Arena Legend (ironhold_arena_legend) --------------------------------
+const ARENA_LEGEND_ID := "ironhold_arena_legend"
+const ARENA_TIER_FLAGS: Array[String] = [
+	"ch2_arena_bronze_complete", "ch2_arena_silver_complete",
+	"ch2_arena_gold_complete", "ch2_arena_platinum_complete",
+]
+
+## Advance Arena Legend to match the arena tiers already cleared. Idempotent:
+## with h = highest cleared tier index (bronze 0 ... platinum 3, -1 if none) it
+## advances while the quest is ACTIVE and current_step <= h, so a Gold clear counts
+## Bronze and Silver too and a repeat win never advances. Completion goes through
+## advance_quest, so the reward is granted once.
+func sync_arena_legend() -> void:
+	if not quests.has(ARENA_LEGEND_ID) or not GameManager:
+		return
+	var highest: int = -1
+	for i in ARENA_TIER_FLAGS.size():
+		if GameManager.has_flag(ARENA_TIER_FLAGS[i]):
+			highest = i
+	while is_quest_active(ARENA_LEGEND_ID) and int(quests[ARENA_LEGEND_ID]["current_step"]) <= highest:
+		advance_quest(ARENA_LEGEND_ID)
+
+## Start Arena Legend if it is HIDDEN or DISCOVERED, then sync with the cleared
+## tiers (catch-up for saves that cleared tiers before the quest started). No
+## effect on a COMPLETED quest; an ACTIVE one is only synced.
+func start_arena_legend() -> void:
+	var state: int = get_quest_state(ARENA_LEGEND_ID)
+	if state == QuestState.HIDDEN or state == QuestState.DISCOVERED:
+		start_quest(ARENA_LEGEND_ID)
+	sync_arena_legend()
+
+
+# -- The Data Hoard (ironhold_underground_data) --------------------------
+const DATA_HOARD_ID := "ironhold_underground_data"
+
+## Underground Network entered. A HIDDEN / DISCOVERED quest is started and
+## "Enter the Underground" counted (step 1 done). An ACTIVE quest is only synced
+## (sync_data_hoard), so re-entry never advances past step 1 but an old save left
+## at step 0 catches up. COMPLETED: no-op.
+func data_hoard_entered() -> void:
+	var state: int = get_quest_state(DATA_HOARD_ID)
+	if state == QuestState.COMPLETED:
+		return
+	if state == QuestState.ACTIVE:
+		sync_data_hoard()
+		return
+	start_quest(DATA_HOARD_ID)
+	if is_quest_active(DATA_HOARD_ID):
+		advance_quest(DATA_HOARD_ID)
+
+## Routing junction fixed. Advances only when ACTIVE and at step 1, so re-solving
+## the puzzle (e.g. after a scene reload) never advances twice.
+func data_hoard_junction_fixed() -> void:
+	if is_quest_active(DATA_HOARD_ID) and int(quests[DATA_HOARD_ID]["current_step"]) == 1:
+		advance_quest(DATA_HOARD_ID)
+
+## Data Wraith defeated. Completes the quest from ANY ACTIVE step (skipped steps
+## are not notified); no-op if the quest is not ACTIVE or already COMPLETED.
+func data_hoard_wraith_defeated() -> void:
+	if not is_quest_active(DATA_HOARD_ID):
+		return
+	var last_step: int = QUEST_DATABASE[DATA_HOARD_ID]["steps"].size() - 1
+	if int(quests[DATA_HOARD_ID]["current_step"]) < last_step:
+		quests[DATA_HOARD_ID]["current_step"] = last_step
+	advance_quest(DATA_HOARD_ID)
+
+## Repair old-save Data Hoard progress. Idempotent; only acts on an ACTIVE quest.
+## Pre-T06 builds restarted the quest at step 0 on every entry, which would stall
+## the junction guard: step 0 is advanced to 1 here. If the Data Wraith is already
+## dead (`ch2_data_wraith_defeated`; the Underground cannot be re-entered after
+## the chapter), the quest is completed through data_hoard_wraith_defeated, so the
+## reward is granted once. Never called from load_save_data (loading grants nothing).
+func sync_data_hoard() -> void:
+	if is_quest_active(DATA_HOARD_ID) and int(quests[DATA_HOARD_ID]["current_step"]) == 0:
+		advance_quest(DATA_HOARD_ID)
+	if is_quest_active(DATA_HOARD_ID) and GameManager and GameManager.has_flag("ch2_data_wraith_defeated"):
+		data_hoard_wraith_defeated()
 
 func complete_optional_objective(quest_id: String) -> void:
 	## Phase 10J helper for short optional objectives wired from chapter scenes.
@@ -593,9 +698,18 @@ func load_save_data(data: Dictionary) -> void:
 			if not QUEST_DATABASE.has(quest_id) or not entry is Dictionary:
 				continue
 			var entry_data = entry.get("data", {})
+			var state: int = int(entry.get("state", QuestState.HIDDEN))
+			var step: int = int(entry.get("current_step", 0))
+			# Quests can lose steps between builds (Data Hoard 6 -> 3, Arena Legend
+			# 5 -> 4); an out-of-range index would crash the tracker and quest log.
+			var step_count: int = QUEST_DATABASE[quest_id]["steps"].size()
+			if state == QuestState.ACTIVE:
+				step = clampi(step, 0, maxi(step_count - 1, 0))
+			elif state == QuestState.COMPLETED:
+				step = step_count
 			quests[quest_id] = {
-				"state": int(entry.get("state", QuestState.HIDDEN)),
-				"current_step": int(entry.get("current_step", 0)),
+				"state": state,
+				"current_step": step,
 				"data": entry_data if entry_data is Dictionary else {},
 			}
 	var saved_secrets = data.get("secrets_found", [])

@@ -69,6 +69,12 @@ func register_lore(id: String, title: String, text: String, category: String = "
 	_entries[id] = entry
 
 
+## True if a lore entry with this id is registered. Unlike discover(), this never
+## registers anything, so callers can validate ids without creating an empty page.
+func has_entry(id: String) -> bool:
+	return _entries.has(id)
+
+
 ## Discover a lore entry (mark as found)
 func discover(lore_id: String) -> void:
 	if not _entries.has(lore_id):

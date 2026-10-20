@@ -595,9 +595,10 @@ func _arena_win() -> void:
 		"gold":     GameManager.set_story_flag("ch2_arena_gold_complete", true)
 		"platinum": GameManager.set_story_flag("ch2_arena_platinum_complete", true)
 
-	# PASS-35 FIX: Advance arena legend side quest on tier completion
-	if has_node("/root/SideQuestManager") and SideQuestManager.is_quest_active("ironhold_arena_legend"):
-		SideQuestManager.advance_quest("ironhold_arena_legend")
+	# Y1-P0-T06: Arena Legend catches up from the tier flags set just above
+	# (idempotent; a Gold win also counts Bronze and Silver, a repeat win nothing).
+	if has_node("/root/SideQuestManager"):
+		SideQuestManager.sync_arena_legend()
 
 	if _has_dm():
 		var lines: Array = ANNOUNCER["victory"]

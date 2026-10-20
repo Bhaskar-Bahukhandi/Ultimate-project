@@ -111,6 +111,10 @@ jobs:
         working-directory: ${{ env.PROJECT_DIR }}
         run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/integration/input/input_test.gd
 
+      - name: Side quest rewards (Y1-P0-T06: reward resolution, grant_rewards, prices, saves)
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/unit/quests/side_quest_rewards_test.gd
+
       - name: Chapter 1 route (rewritten dialogue, end to end)
         working-directory: ${{ env.PROJECT_DIR }}
         timeout-minutes: 15
@@ -128,6 +132,11 @@ jobs:
       - name: Reachability (collision never walls off an NPC, shop, gate or trigger)
         working-directory: ${{ env.PROJECT_DIR }}
         run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/integration/level/reachability_test.gd
+
+      - name: Act 1 side quests completable (Y1-P0-T06: arena, Underground, Iris, Garro, shop)
+        working-directory: ${{ env.PROJECT_DIR }}
+        timeout-minutes: 15
+        run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/integration/quests/act1_quests_completable_test.gd
 
       - name: Phase 0 regression tests
         working-directory: ${{ env.PROJECT_DIR }}

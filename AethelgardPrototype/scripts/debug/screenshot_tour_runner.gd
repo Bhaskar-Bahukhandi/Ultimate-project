@@ -4,6 +4,7 @@ extends RefCounted
 ## the headless tests can't do:
 ##   1. Scenes: each Act 1 scene, a few seconds after it loads.
 ##   2. UI: the pause screen and the Controls screen, over Oakhaven.
+##      Plus t06_shop_discount: the apothecary after Forge Line Supply's 5 % discount.
 ##   3. Dialogue stress: for every authored .dlg (prologue, ch1, ch2), the
 ##      longest line and the longest choice, shown in the real dialogue box.
 ##      Checked automatically: the box stays on screen, the choices stay on
@@ -70,6 +71,19 @@ const BREADCRUMB_FLAGS := {
 	"ch1_opening_hook_complete": true, "elara_met": true, "ch1_elara_trusted": true,
 	"ch1_broken_mile_entered": true, "ch1_personal_goal_set": true}
 const BREADCRUMB_TIMEOUT := 90.0   # real seconds
+## Forge Line Supply discount in the real shop (story Y1-P0-T06, AC-3/AC-7). Garro's quest is
+## completed through SideQuestManager.complete_optional_objective, so the 0.05 discount comes
+## from its real grant_rewards, not from setting GameManager.shop_discount by hand. The real
+## apothecary is then opened over BACKDROP and the health_potion row must read the discounted
+## price before the capture; a mismatch is a PROBLEM, never patched up.
+const SHOP_DISCOUNT_ID := "t06_shop_discount"
+const SHOP_QUEST := "ironhold_blacksmith_material_request"
+const SHOP_KIND := "apothecary"
+const SHOP_ITEM := "health_potion"
+const SHOP_DISCOUNT := 0.05        # Forge Line Supply's shop_discount reward
+const SHOP_RAW_PRICE := 30         # ShopSystem.SHOP_ITEMS["health_potion"]["buy_price"]
+const SHOP_SHOWN_PRICE := 29       # 30 at 5 % off, as get_buy_price rounds it
+const SHOP_GOLD := 999             # enough that the row is affordable (enabled)
 const DLG_DIRS := ["res://dialogue/prologue", "res://dialogue/ch1", "res://dialogue/ch2"]
 const BACKDROP := "res://scenes/regions/oakhaven_region.tscn"
 const THUMB := Vector2i(320, 180)
@@ -117,6 +131,8 @@ func run() -> int:
 		await _breadcrumb_shot(BREADCRUMB_ID)
 	if _wanted("ui"):
 		await _ui_shots()
+	if _wanted(SHOP_DISCOUNT_ID):
+		await _shop_discount_shot(SHOP_DISCOUNT_ID)
 	if _wanted("dlg"):
 		await _dialogue_shots()
 	await _contact_sheet("contact_scenes.png", _shots.filter(func(x): return x["group"] != "dialogue"))
@@ -323,6 +339,80 @@ func _ui_shots() -> void:
 	if is_instance_valid(menu):
 		menu.queue_free()
 	await _wait(0.3)
+
+
+## Completes Forge Line Supply through the real SideQuestManager API, opens the real
+## ShopSystem apothecary over BACKDROP and captures it once the health_potion row is checked:
+## its button must read "BUY <SHOP_SHOWN_PRICE>G" and get_buy_price must agree. Any mismatch
+## is a PROBLEM on the shot. The shop is closed with its own close_shop afterwards.
+func _shop_discount_shot(id: String) -> void:
+	var gm := _gm()
+	var sqm := tree.root.get_node("SideQuestManager")
+	var shop := tree.root.get_node("ShopSystem")
+	var inv := tree.root.get_node("Inventory")
+	gm.reset_game()
+	await _load_scene(BACKDROP, 2.0)
+	sqm.complete_optional_objective(SHOP_QUEST)
+	# Inventory.gold and GameManager.player_stats["gold"] are separate fields.
+	gm.player_stats["gold"] = SHOP_GOLD
+	inv.gold = SHOP_GOLD
+	var notes: Array[String] = []
+	var discount: float = gm.shop_discount
+	var completed: int = sqm.get_script().get_script_constant_map()["QuestState"]["COMPLETED"]
+	var quest_state: int = int(sqm.quests.get(SHOP_QUEST, {}).get("state", -1))
+	notes.append("discount %.2f from Forge Line Supply (quest state %s)" % [discount,
+		"COMPLETED" if quest_state == completed else str(quest_state)])
+	if quest_state != completed:
+		_shop_problem(id, notes, "Forge Line Supply did not complete (state %d)" % quest_state)
+	if not is_equal_approx(discount, SHOP_DISCOUNT):
+		_shop_problem(id, notes, "shop_discount is %.2f, expected %.2f" % [discount, SHOP_DISCOUNT])
+	shop.open_shop(SHOP_KIND)
+	await _wait(0.6)   # rows built on open; 0.25 s pop-in tween
+	if not shop._is_open:
+		_shop_problem(id, notes, "the %s shop did not open" % SHOP_KIND)
+	else:
+		var raw: int = int(shop.SHOP_ITEMS[SHOP_ITEM]["buy_price"])
+		var priced: int = shop.get_buy_price(SHOP_ITEM)
+		var btn := _shop_buy_button(shop, SHOP_ITEM)
+		var shown: String = btn.text if btn != null else "(no row)"
+		notes.append("%s raw %dG, get_buy_price %dG, button `%s`" % [SHOP_ITEM, raw, priced, shown])
+		if raw != SHOP_RAW_PRICE:
+			_shop_problem(id, notes, "raw %s price is %d, expected %d" % [SHOP_ITEM, raw, SHOP_RAW_PRICE])
+		if priced != SHOP_SHOWN_PRICE:
+			_shop_problem(id, notes, "get_buy_price(%s) is %d, expected %d" % [SHOP_ITEM, priced, SHOP_SHOWN_PRICE])
+		if btn == null:
+			_shop_problem(id, notes, "no %s row in the %s shop" % [SHOP_ITEM, SHOP_KIND])
+		else:
+			if btn.text != "BUY %dG" % SHOP_SHOWN_PRICE:
+				_shop_problem(id, notes, "%s button reads `%s`, expected `BUY %dG`" % [SHOP_ITEM, btn.text, SHOP_SHOWN_PRICE])
+			if btn.disabled:
+				_shop_problem(id, notes, "%s button is disabled with %d gold" % [SHOP_ITEM, SHOP_GOLD])
+		if shop._panel is Control:
+			_check_inside(id, "shop panel", shop._panel, notes)
+	await _capture(id, "ui", BACKDROP, notes)
+	shop.close_shop()
+	await _wait(0.5)   # close fade; the shop also releases the pause it took
+
+
+func _shop_problem(id: String, notes: Array[String], why: String) -> void:
+	notes.append("PROBLEM: " + why)
+	_problems.append("%s: %s" % [id, why])
+
+
+## The live buy button of `item` in the open shop: the row whose first Label is the item's
+## shop name (same lookup as tests/integration/quests/act1_quests_completable_test.gd).
+func _shop_buy_button(shop: Node, item: String) -> Button:
+	var want: String = shop.SHOP_ITEMS[item]["name"]
+	for row in shop._item_container.get_children():
+		if row.is_queued_for_deletion() or not row is PanelContainer:
+			continue
+		var labels: Array = row.find_children("*", "Label", true, false)
+		if labels.is_empty() or labels[0].text != want:
+			continue
+		var buttons: Array = row.find_children("*", "Button", true, false)
+		if not buttons.is_empty():
+			return buttons[0]
+	return null
 
 
 # ── Dialogue stress ─────────────────────────────────────────────────────────

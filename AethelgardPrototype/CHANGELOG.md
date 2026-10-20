@@ -3,6 +3,18 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-20 — Side quests do what they say (Y1-P0-T06)
+
+- **fix(quests):** Arena Legend starts when you reach the arena's tier selection (also on saves
+  that already visited) and counts tier clears from the `ch2_arena_*_complete` flags, so a Gold
+  win also counts Bronze and Silver and a repeat win counts nothing. The Data Hoard has 3 real
+  steps (enter the Underground, fix the routing junction, defeat the Data Wraith) and never
+  advances twice.
+- Every quest reward is real (gold, XP, items, charms, lore); an unknown reward id is reported as
+  an error instead of silently doing nothing.
+- The Forge Line Supply shop discount now lowers buy prices: the shown price, the affordability
+  check and the gold paid all come from `ShopSystem.get_buy_price()`. Sell prices are unchanged.
+
 ## 2026-10-20 — Chapter 1 breadcrumb objectives follow the rewritten route (Y1-P0-T05)
 
 - **fix(story):** the HUD breadcrumb shows the 11 approved Chapter 1 objectives (plane, people,

@@ -738,7 +738,7 @@ func _add_buy_row(item_id: String, item: Dictionary) -> void:
 	
 	# Buy button
 	var buy_btn = Button.new()
-	var price = item.get("buy_price", 0)
+	var price: int = get_buy_price(item)
 	buy_btn.text = "BUY %dG" % price
 	buy_btn.custom_minimum_size = Vector2(90, 36)
 	buy_btn.pressed.connect(_buy_item.bind(item_id))
@@ -882,7 +882,7 @@ func _buy_item(item_id: String) -> void:
 		return
 	
 	var item = SHOP_ITEMS[item_id]
-	var price = item.get("buy_price", 0)
+	var price: int = get_buy_price(item)
 	var gold = GameManager.player_stats.get("gold", 0)
 	
 	if gold < price:
@@ -946,6 +946,28 @@ func _buy_item(item_id: String) -> void:
 
 	# Refresh display
 	_refresh_after_trade()
+
+## Buy price after the quest shop discount (Y1-P0-T06, AC-3). The one place a
+## buy price is computed: the shop row, affordability, the "Need %dG" message,
+## the tooltip and the gold deducted all use it. `item` is an item id (String,
+## looked up in SHOP_ITEMS then Inventory.ITEMS) or an item Dictionary with a
+## "buy_price" key. Integer rule: pct = clampi(roundi(shop_discount * 100), 0, 100);
+## price = (base * (100 - pct) + 50) / 100 (half-up); at least 1 when base > 0;
+## base <= 0 (or an unknown item) gives 0. With shop_discount 0 it returns base.
+func get_buy_price(item: Variant) -> int:
+	var data: Dictionary = {}
+	if item is Dictionary:
+		data = item
+	elif item is String or item is StringName:
+		data = _get_combined_item_data(String(item))
+	var base: int = int(data.get("buy_price", 0))
+	if base <= 0:
+		return 0
+	var discount: float = GameManager.shop_discount if GameManager else 0.0
+	var pct: int = clampi(roundi(discount * 100.0), 0, 100)
+	@warning_ignore("integer_division")
+	var price: int = (base * (100 - pct) + 50) / 100
+	return maxi(1, price)
 
 ## ─── SELL LOGIC ──────────────────────────────────────────────────────
 
@@ -1043,7 +1065,7 @@ func _show_tooltip(item_id: String, item: Dictionary) -> void:
 		bbcode += "\n[color=#aaffaa]Effect: %s (%.0f)[/color]" % [item["effect"], item.get("value", 0)]
 	
 	bbcode += "\n[color=#ffee88]Buy: %dG[/color]  [color=#ddaa55]Sell: %dG[/color]" % [
-		item.get("buy_price", 0),
+		get_buy_price(item),
 		item.get("sell_price", int(item.get("buy_price", 10) * 0.4))
 	]
 	

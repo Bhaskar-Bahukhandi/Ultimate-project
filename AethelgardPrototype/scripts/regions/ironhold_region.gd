@@ -76,6 +76,8 @@ func _ready() -> void:
 		_player.global_position = return_point
 	if has_node("/root/RandomEncounterSystem"):
 		RandomEncounterSystem.show_pending_farming_result("ironhold_training_yard", self)
+	if has_node("/root/SideQuestManager"):
+		SideQuestManager.sync_data_hoard()
 
 
 func _process(_delta: float) -> void:
