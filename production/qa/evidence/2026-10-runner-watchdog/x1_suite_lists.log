@@ -1,0 +1,4 @@
+suite_limits.txt: 16 entries; run_all_tests.ps1: 16 suites; ci.yml (+ run_tests.sh default): 16 suites
+duplicates in suite_limits.txt: 0
+suite_limits.txt == run_all: identical
+suite_limits.txt == ci: identical

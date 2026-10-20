@@ -1,0 +1,7 @@
+TD-007 AC-4 CRLF lookup check: the runners' own lookup code run against a CRLF copy of tests/suite_limits.txt (38 CRLF lines). 2026-10-20T22:00:56+05:30
+ps    res://tests/integration/story/chapter1_route_test.gd -> min=391 timeout=1620
+bash awk program (verbatim from run_tests.sh:37, grep -cF finds it once): { gsub(/\r/, ""); sub(/#.*/, "") } $1 == s && NF >= 3 { print $2, $3; exit }
+PowerShell: Get-Content splits CRLF lines itself and the runner strips any stray CR; result above.
+bash  res://tests/integration/story/chapter1_route_test.gd -> bytes:  3 9 1 1 6 2 0 \n
+bash  res://tests/integration/playthrough/phase0_blockers_test.gd -> bytes:  8 1 9 6 0 \n
+(An earlier grep-based 'contains CR' column in this harness reported 1 for these same strings; it was unreliable as written and is dropped. The od byte dumps above are the evidence: no \r in either result.)

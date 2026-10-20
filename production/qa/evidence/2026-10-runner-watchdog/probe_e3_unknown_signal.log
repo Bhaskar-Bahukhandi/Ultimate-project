@@ -1,0 +1,26 @@
+TD-007 probe E3 (Node.emit_signal of an unknown signal, then quit(0)), OLD vs NEW PowerShell runner. 2026-10-20T21:58:48
+Probe: extends SceneTree; var n := Node.new(); n.emit_signal("no_such_signal_td007"); n.free(); print("TD007 E3 RESULT: 1 passed, 0 failed"); quit(0)
+
+##### E3 | OLD runner
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD007 E3 RESULT: 1 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0 lines=9 ERROR lines=0
+
+##### E3 | NEW runner
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD007 E3 RESULT: 1 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0 lines=9 ERROR lines=0

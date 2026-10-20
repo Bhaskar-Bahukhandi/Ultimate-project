@@ -2,6 +2,8 @@
 # Keep SUITES in sync with the ci.yml steps when adding or removing a suite.
 # Each suite goes through run_phase0_tests.ps1, so user:// stays isolated. A suite also
 # fails on any SCRIPT ERROR / Parse Error line in its output (TD-003), not only on a non-zero exit.
+# Each suite's time limit and minimum check count come from tests/suite_limits.txt (TD-007): a new
+# suite needs a line there, or the runner refuses it.
 # Usage (from AethelgardPrototype/ or the repo root):
 #   powershell -File tests/run_all_tests.ps1          # all 16 suites
 #   powershell -File tests/run_all_tests.ps1 -Quick   # skip the long route and phase0 suites

@@ -1,0 +1,38 @@
+# Per-suite limits, read by BOTH runners (run_phase0_tests.ps1 and run_tests.sh), TD-007.
+# One line per suite:  <res:// path> <min_checks> <timeout_seconds>
+# '#' starts a comment; fields are split on whitespace; a trailing CR is ignored.
+#
+# min_checks       fewest checks (passed + failed) the suite must report on its result line
+#                  ("RESULT: <N> passed, <M> failed", or load_all's "ok=<N> bad=<M>"). A suite
+#                  that reports fewer, or no result line, fails: a test function that returns
+#                  early without an error would otherwise pass.
+# timeout_seconds  the runner stops Godot after this long and fails the suite (exit 124).
+#                  3x the suite's measured Windows time, rounded up to a whole minute, at least
+#                  120 s, and below the suite's timeout-minutes in .github/workflows/ci.yml.
+#
+# A script with no line here gets 600 s and no minimum, unless it is a *_test.gd under
+# res://tests/: the runners refuse that, so a new suite cannot run unchecked. Add its line
+# here, and its step to ci.yml and tests/run_all_tests.ps1.
+#
+# Who keeps it current: whoever changes a suite sets that suite's min_checks to its new
+# count in the same change, whenever a change adds, removes or splits checks in it, or
+# adds or deletes scripts or scenes (load_all_test.gd counts them). A suite whose time
+# grows toward a third of its limit gets a higher timeout_seconds here, and nowhere else.
+# Counts below are from production/qa/evidence/2026-10-runner/run_all.log.
+
+res://tests/integration/meta/test_layout_test.gd            6   120
+res://tests/integration/project/load_all_test.gd          206   120
+res://tests/integration/dialogue/dialogue_test.gd          47   120
+res://tests/integration/core/context_stack_test.gd         33   120
+res://tests/integration/input/input_test.gd                52   120
+res://tests/unit/quests/side_quest_rewards_test.gd        134   120
+res://tests/unit/ngplus/ngplus_buff_stacking_test.gd      192   120
+res://tests/unit/achievements/fragment_achievement_test.gd 21   120
+res://tests/unit/items/null_potion_test.gd                 83   120
+res://tests/integration/vfx/screen_flash_test.gd          107   120
+res://tests/integration/story/chapter1_route_test.gd      391  1620
+res://tests/integration/story/chapter2_route_test.gd       49   480
+res://tests/integration/combat/combat_fixes_test.gd        10   120
+res://tests/integration/level/reachability_test.gd         21   120
+res://tests/integration/quests/act1_quests_completable_test.gd 114 180
+res://tests/integration/playthrough/phase0_blockers_test.gd 81  960

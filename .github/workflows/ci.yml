@@ -92,6 +92,8 @@ jobs:
           fi
 
       # Every test step below runs through tests/run_tests.sh, which also fails the step on any SCRIPT ERROR / Parse Error line in the suite's output (TD-003).
+      # run_tests.sh stops a hung suite and fails one that ran fewer checks than expected, using tests/suite_limits.txt (TD-007).
+      # Each suite's limit there stays below its step's timeout-minutes, which is only a backstop.
       - name: Test layout (suites under tests/unit or tests/integration, all run here)
         working-directory: ${{ env.PROJECT_DIR }}
         run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/integration/meta/test_layout_test.gd
@@ -134,7 +136,7 @@ jobs:
 
       - name: Chapter 1 route (rewritten dialogue, end to end)
         working-directory: ${{ env.PROJECT_DIR }}
-        timeout-minutes: 15
+        timeout-minutes: 30
         run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/integration/story/chapter1_route_test.gd
 
       - name: Chapter 2 route (rewritten dialogue, end to end)

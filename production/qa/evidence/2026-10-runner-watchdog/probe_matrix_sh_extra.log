@@ -1,0 +1,109 @@
+TD-007 supplementary bash cases (Git Bash on Windows). 2026-10-20T23:00:18+05:30
+repo HEAD 8e37f5d; NEW = working-tree tests/run_tests.sh
+
+##### G1 non-GNU timeout, local | env: GODOT=/c/Godot/Godot_v4.6.3-stable_win64_console.exe PATH=/c/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/stub/bsdbin:/c/Users/BHASKAR BAHUKHANDI/bin:/mingw64/bin:/usr/local/bin:/usr/bin:/bin:/mingw64/bin:/usr/bin:/c/Users/BHASKAR BAHUKHANDI/bin:/c/Program Files/Microsoft SDKs/Azure/CLI2/wbin:/c/Windows/system32:/c/Windows:/c/Windows/System32/Wbem:/c/Windows/System32/WindowsPowerShell/v1.0:/c/Windows/System32/OpenSSH:/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/c/Program Files/dotnet:/c/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR:/cmd:/c/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit:/c/Program Files/Docker/Docker/resources/bin:/c/Program Files/nodejs:/c/Program Files/PowerShell/7:/c/Users/BHASKAR BAHUKHANDI/AppData/Local/Programs/Python/Python313/Scripts:/c/Users/BHASKAR BAHUKHANDI/AppData/Local/Programs/Python/Python313:/c/Users/BHASKAR BAHUKHANDI/AppData/Local/Microsoft/WindowsApps:/c/Users/BHASKAR BAHUKHANDI/AppData/Local/Programs/Microsoft VS Code/bin:/c/Users/BHASKAR BAHUKHANDI/.dotnet/tools:/d/PyCharm 2025.2.4/bin:/c/Users/BHASKAR BAHUKHANDI/AppData/Local/Microsoft/WinGet/Packages/BrechtSanders.WinLibs.MCF.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe/mingw64/bin:/e/cursor/resources/app/bin:/c/Users/BHASKAR BAHUKHANDI/AppData/Roaming/npm:/c/Users/BHASKAR BAHUKHANDI/AppData/Local/Programs/Python/Python313:/c/Program Files/nodejs:/mingw64/bin:/usr/bin/vendor_perl:/usr/bin/core_perl | script: C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/probe003/td003_clean_probe.gd
+WARNING: GNU timeout(1) not found; running without a time limit
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD003 CLEAN PROBE RESULT: 1 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0 elapsed=3s TMPDIR entries left=0
+
+##### G2 non-GNU timeout, GitHub Actions | env: GODOT=/c/Godot/Godot_v4.6.3-stable_win64_console.exe PATH=/c/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/stub/bsdbin:/c/Users/BHASKAR BAHUKHANDI/bin:/mingw64/bin:/usr/local/bin:/usr/bin:/bin:/mingw64/bin:/usr/bin:/c/Users/BHASKAR BAHUKHANDI/bin:/c/Program Files/Microsoft SDKs/Azure/CLI2/wbin:/c/Windows/system32:/c/Windows:/c/Windows/System32/Wbem:/c/Windows/System32/WindowsPowerShell/v1.0:/c/Windows/System32/OpenSSH:/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/c/Program Files/dotnet:/c/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR:/cmd:/c/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit:/c/Program Files/Docker/Docker/resources/bin:/c/Program Files/nodejs:/c/Program Files/PowerShell/7:/c/Users/BHASKAR BAHUKHANDI/AppData/Local/Programs/Python/Python313/Scripts:/c/Users/BHASKAR BAHUKHANDI/AppData/Local/Programs/Python/Python313:/c/Users/BHASKAR BAHUKHANDI/AppData/Local/Microsoft/WindowsApps:/c/Users/BHASKAR BAHUKHANDI/AppData/Local/Programs/Microsoft VS Code/bin:/c/Users/BHASKAR BAHUKHANDI/.dotnet/tools:/d/PyCharm 2025.2.4/bin:/c/Users/BHASKAR BAHUKHANDI/AppData/Local/Microsoft/WinGet/Packages/BrechtSanders.WinLibs.MCF.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe/mingw64/bin:/e/cursor/resources/app/bin:/c/Users/BHASKAR BAHUKHANDI/AppData/Roaming/npm:/c/Users/BHASKAR BAHUKHANDI/AppData/Local/Programs/Python/Python313:/c/Program Files/nodejs:/mingw64/bin:/usr/bin/vendor_perl:/usr/bin/core_perl GITHUB_ACTIONS=true | script: C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/probe003/td003_clean_probe.gd
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/probe003/td003_clean_probe.gd: GNU timeout(1) not found
+::error::RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/probe003/td003_clean_probe.gd: GNU timeout(1) not found
+##### exit=1 elapsed=0s TMPDIR entries left=0
+
+##### K1 ignores SIGTERM, limit 3 s | env: GODOT=/c/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/stub/godot_ignores_term.sh TEST_TIMEOUT=3 | script: res://probe/stub_k1.gd
+STUB K1: ignoring SIGTERM
+/c/Users/BHASKAR BAHUKHANDI/OneDrive/Desktop/Ultimate project/AethelgardPrototype/tests/run_tests.sh: line 81:  3106 Killed                  XDG_DATA_HOME="$isolated" ${watchdog[@]+"${watchdog[@]}"} "$godot" --headless --path "$project" --script "$script" 2>&1
+      3107 Done                    | tee "$log"
+
+RUNNER FAIL res://probe/stub_k1.gd: timed out after 3 s
+##### exit=124 elapsed=14s TMPDIR entries left=0
+
+##### K2 SIGKILL at 1 s, limit 20 s | env: GODOT=/c/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/stub/godot_killed_early.sh TEST_TIMEOUT=20 | script: res://probe/stub_k2.gd
+STUB K2: about to be SIGKILLed
+/c/Users/BHASKAR BAHUKHANDI/OneDrive/Desktop/Ultimate project/AethelgardPrototype/tests/run_tests.sh: line 81:  3145 Killed                  XDG_DATA_HOME="$isolated" ${watchdog[@]+"${watchdog[@]}"} "$godot" --headless --path "$project" --script "$script" 2>&1
+      3146 Done                    | tee "$log"
+##### exit=137 elapsed=2s TMPDIR entries left=0
+
+##### V1 MIN_CHECKS=abc | env: GODOT=/c/Godot/Godot_v4.6.3-stable_win64_console.exe MIN_CHECKS=abc | script: C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/probe003/td003_clean_probe.gd
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/probe003/td003_clean_probe.gd: MIN_CHECKS must be a whole number, got 'abc'
+##### exit=1 elapsed=0s TMPDIR entries left=0
+
+##### V2 TEST_TIMEOUT=0 | env: GODOT=/c/Godot/Godot_v4.6.3-stable_win64_console.exe TEST_TIMEOUT=0 | script: C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/probe003/td003_clean_probe.gd
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/probe003/td003_clean_probe.gd: TEST_TIMEOUT must be a whole number of seconds above 0, got '0'
+##### exit=1 elapsed=1s TMPDIR entries left=0
+
+##### R8 lowercase look-alikes | OLD | env: GODOT=/c/Godot/Godot_v4.6.3-stable_win64_console.exe | script: C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/probe003/td003_lowercase_probe.gd
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD003 R8 PROBE: no script error here; no parse error either
+TD003 R8 PROBE: Script Error (mixed case) and SCRIPT  ERROR (two spaces) are not matches
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0 elapsed=2s TMPDIR entries left=0
+
+##### R8 lowercase look-alikes | NEW | env: GODOT=/c/Godot/Godot_v4.6.3-stable_win64_console.exe | script: C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/probe003/td003_lowercase_probe.gd
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD003 R8 PROBE: no script error here; no parse error either
+TD003 R8 PROBE: Script Error (mixed case) and SCRIPT  ERROR (two spaces) are not matches
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0 elapsed=3s TMPDIR entries left=0
+
+##### R9 adjacent matches | OLD | env: GODOT=/c/Godot/Godot_v4.6.3-stable_win64_console.exe | script: C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/probe003/td003_adjacent_probe.gd
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+SCRIPT ERROR: R9 adjacent line A (printed by the probe)
+SCRIPT ERROR: R9 adjacent line B (printed by the probe)
+R9 last line
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/probe003/td003_adjacent_probe.gd: 2 script error line(s)
+  SCRIPT ERROR: R9 adjacent line A (printed by the probe)
+  SCRIPT ERROR: R9 adjacent line B (printed by the probe)
+  R9 last line
+##### exit=1 elapsed=3s TMPDIR entries left=0
+
+##### R9 adjacent matches | NEW | env: GODOT=/c/Godot/Godot_v4.6.3-stable_win64_console.exe | script: C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/probe003/td003_adjacent_probe.gd
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+SCRIPT ERROR: R9 adjacent line A (printed by the probe)
+SCRIPT ERROR: R9 adjacent line B (printed by the probe)
+R9 last line
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/probe003/td003_adjacent_probe.gd: 2 script error line(s)
+  SCRIPT ERROR: R9 adjacent line A (printed by the probe)
+  SCRIPT ERROR: R9 adjacent line B (printed by the probe)
+  R9 last line
+##### exit=1 elapsed=3s TMPDIR entries left=0
