@@ -1,0 +1,116 @@
+TD-003 code-review suggestion 1 (PS listing dedupe). PRE = edited runner with the dedupe line reverted (project path pinned); NEW = working tree. 2026-10-20T19:22:29
+
+##### R9 td003_adjacent_probe | PRE runner
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+SCRIPT ERROR: R9 adjacent line A (printed by the probe)
+SCRIPT ERROR: R9 adjacent line B (printed by the probe)
+R9 last line
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_adjacent_probe.gd: 2 script error line(s)
+  SCRIPT ERROR: R9 adjacent line A (printed by the probe)
+  SCRIPT ERROR: R9 adjacent line B (printed by the probe)
+  SCRIPT ERROR: R9 adjacent line B (printed by the probe)
+  R9 last line
+##### exit=1 lines=17
+
+##### R9 td003_adjacent_probe | NEW runner
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+SCRIPT ERROR: R9 adjacent line A (printed by the probe)
+SCRIPT ERROR: R9 adjacent line B (printed by the probe)
+R9 last line
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_adjacent_probe.gd: 2 script error line(s)
+  SCRIPT ERROR: R9 adjacent line A (printed by the probe)
+  SCRIPT ERROR: R9 adjacent line B (printed by the probe)
+  R9 last line
+##### exit=1 lines=16
+
+##### R1 td003_runtime_error_probe | NEW runner
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+SCRIPT ERROR: Invalid call. Nonexistent function 'this_method_does_not_exist' in base 'Node'.
+   at: _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd:29)
+   GDScript backtrace (most recent call first):
+       [0] _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd:29)
+       [1] _run (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd:20)
+
+TD003 PROBE RESULT: 1 passed, 0 failed
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd: 1 script error line(s)
+  SCRIPT ERROR: Invalid call. Nonexistent function 'this_method_does_not_exist' in base 'Node'.
+     at: _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd:29)
+##### exit=1 lines=19
+
+##### R7b td003_quit3_error_probe | NEW runner
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+SCRIPT ERROR: Invalid call. Nonexistent function 'no_such_method_r7' in base 'Node'.
+   at: _dies (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_quit3_error_probe.gd:14)
+   GDScript backtrace (most recent call first):
+       [0] _dies (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_quit3_error_probe.gd:14)
+       [1] _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_quit3_error_probe.gd:5)
+TD003 R7B PROBE: quitting with 3
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_quit3_error_probe.gd: 1 script error line(s)
+  SCRIPT ERROR: Invalid call. Nonexistent function 'no_such_method_r7' in base 'Node'.
+     at: _dies (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_quit3_error_probe.gd:14)
+##### exit=3 lines=20
+
+##### R3 td003_clean_probe | NEW runner
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD003 CLEAN PROBE RESULT: 1 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0 lines=9
+
+##### R9 td003_adjacent_probe | NEW bash runner (reference listing)
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+SCRIPT ERROR: R9 adjacent line A (printed by the probe)
+SCRIPT ERROR: R9 adjacent line B (printed by the probe)
+R9 last line
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_adjacent_probe.gd: 2 script error line(s)
+  SCRIPT ERROR: R9 adjacent line A (printed by the probe)
+  SCRIPT ERROR: R9 adjacent line B (printed by the probe)
+  R9 last line
+##### exit=1

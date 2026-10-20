@@ -1,0 +1,41 @@
+TD-003 hang check: SCRIPT ERROR in the same function as quit(), OLD vs NEW runner, 45 s timeout each. 2026-10-20T19:06:09
+
+##### OLD runner: STILL RUNNING after 45 s (hang)
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD003 SAME-FRAME PROBE: before the error
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+SCRIPT ERROR: Invalid call. Nonexistent function 'no_such_method_same_frame' in base 'Node'.
+   at: _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_same_frame_error_probe.gd:7)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_same_frame_error_probe.gd:7)
+
+##### NEW runner: exited code -196608
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Processing -File 'C:\Users\BHASKAR' failed because the file does not have a '.ps1' extension. Specify a valid Windows PowerShell script file name, and then try again.
+
+##### NEW runner (rerun, path quoted; the first NEW attempt above never started): STILL RUNNING after 45 s (hang); after stopping only this probe's Godot the runner exited code -1
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD003 SAME-FRAME PROBE: before the error
+SCRIPT ERROR: Invalid call. Nonexistent function 'no_such_method_same_frame' in base 'Node'.
+   at: _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_same_frame_error_probe.gd:7)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_same_frame_error_probe.gd:7)
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_same_frame_error_probe.gd: 1 script error line(s)
+  SCRIPT ERROR: Invalid call. Nonexistent function 'no_such_method_same_frame' in base 'Node'.
+     at: _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_same_frame_error_probe.gd:7)

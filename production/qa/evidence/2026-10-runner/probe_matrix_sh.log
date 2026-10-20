@@ -1,0 +1,280 @@
+TD-003 probe matrix, bash runner (Git Bash on Windows). 2026-10-20T18:58:09+05:30
+repo HEAD 9749085; NEW = working tree tests/run_tests.sh (uncommitted TD-003 change);
+OLD = git show HEAD:AethelgardPrototype/tests/run_tests.sh with only the project= line pinned to the repo path
+GODOT = Windows console exe; APPDATA pointed at an isolated dir (XDG_DATA_HOME is Linux-only, so the
+script's own isolation line is not exercised here; CI covers Linux); TMPDIR = a fresh empty dir
+
+##### R1 td003_runtime_error_probe | OLD runner | GITHUB_ACTIONS=''
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+SCRIPT ERROR: Invalid call. Nonexistent function 'this_method_does_not_exist' in base 'Node'.
+   at: _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd:29)
+   GDScript backtrace (most recent call first):
+       [0] _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd:29)
+       [1] _run (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd:20)
+
+TD003 PROBE RESULT: 1 passed, 0 failed
+##### exit=0 lines=15 leftover entries in TMPDIR=0
+
+##### R1 td003_runtime_error_probe | NEW runner | GITHUB_ACTIONS=''
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+SCRIPT ERROR: Invalid call. Nonexistent function 'this_method_does_not_exist' in base 'Node'.
+   at: _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd:29)
+   GDScript backtrace (most recent call first):
+       [0] _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd:29)
+       [1] _run (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd:20)
+
+TD003 PROBE RESULT: 1 passed, 0 failed
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd: 1 script error line(s)
+  SCRIPT ERROR: Invalid call. Nonexistent function 'this_method_does_not_exist' in base 'Node'.
+     at: _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd:29)
+##### exit=1 lines=19 leftover entries in TMPDIR=0
+
+##### R2 td003_parse_error_probe | OLD runner | GITHUB_ACTIONS=''
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Expected expression after "+" operator.
+   at: GDScript::reload (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_parse_error_probe.gd:5)
+ERROR: Failed to load script "C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_parse_error_probe.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2907)
+##### exit=1 lines=6 leftover entries in TMPDIR=0
+
+##### R2 td003_parse_error_probe | NEW runner | GITHUB_ACTIONS=''
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Expected expression after "+" operator.
+   at: GDScript::reload (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_parse_error_probe.gd:5)
+ERROR: Failed to load script "C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_parse_error_probe.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2907)
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_parse_error_probe.gd: 1 script error line(s)
+  SCRIPT ERROR: Parse Error: Expected expression after "+" operator.
+     at: GDScript::reload (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_parse_error_probe.gd:5)
+##### exit=1 lines=10 leftover entries in TMPDIR=0
+
+##### R2b td003_loaded_parse_error_probe | OLD runner | GITHUB_ACTIONS=''
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Expected expression after "+" operator.
+   at: GDScript::reload (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_broken_helper.gd:5)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_loaded_parse_error_probe.gd:5)
+ERROR: Failed to load script "C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_broken_helper.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2907)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_loaded_parse_error_probe.gd:5)
+TD003 R2B PROBE: helper loaded = true
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0 lines=17 leftover entries in TMPDIR=0
+
+##### R2b td003_loaded_parse_error_probe | NEW runner | GITHUB_ACTIONS=''
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Expected expression after "+" operator.
+   at: GDScript::reload (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_broken_helper.gd:5)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_loaded_parse_error_probe.gd:5)
+ERROR: Failed to load script "C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_broken_helper.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2907)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_loaded_parse_error_probe.gd:5)
+TD003 R2B PROBE: helper loaded = true
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_loaded_parse_error_probe.gd: 1 script error line(s)
+  SCRIPT ERROR: Parse Error: Expected expression after "+" operator.
+     at: GDScript::reload (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_broken_helper.gd:5)
+##### exit=1 lines=21 leftover entries in TMPDIR=0
+
+##### R3 td003_clean_probe | OLD runner | GITHUB_ACTIONS=''
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD003 CLEAN PROBE RESULT: 1 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0 lines=9 leftover entries in TMPDIR=0
+
+##### R3 td003_clean_probe | NEW runner | GITHUB_ACTIONS=''
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD003 CLEAN PROBE RESULT: 1 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0 lines=9 leftover entries in TMPDIR=0
+
+##### R7a td003_quit3_clean_probe | OLD runner | GITHUB_ACTIONS=''
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD003 R7A PROBE: quitting with 3
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=3 lines=9 leftover entries in TMPDIR=0
+
+##### R7a td003_quit3_clean_probe | NEW runner | GITHUB_ACTIONS=''
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD003 R7A PROBE: quitting with 3
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=3 lines=9 leftover entries in TMPDIR=0
+
+##### R7b td003_quit3_error_probe | OLD runner | GITHUB_ACTIONS=''
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+SCRIPT ERROR: Invalid call. Nonexistent function 'no_such_method_r7' in base 'Node'.
+   at: _dies (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_quit3_error_probe.gd:14)
+   GDScript backtrace (most recent call first):
+       [0] _dies (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_quit3_error_probe.gd:14)
+       [1] _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_quit3_error_probe.gd:5)
+TD003 R7B PROBE: quitting with 3
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)
+##### exit=3 lines=16 leftover entries in TMPDIR=0
+
+##### R7b td003_quit3_error_probe | NEW runner | GITHUB_ACTIONS=''
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+SCRIPT ERROR: Invalid call. Nonexistent function 'no_such_method_r7' in base 'Node'.
+   at: _dies (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_quit3_error_probe.gd:14)
+   GDScript backtrace (most recent call first):
+       [0] _dies (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_quit3_error_probe.gd:14)
+       [1] _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_quit3_error_probe.gd:5)
+TD003 R7B PROBE: quitting with 3
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_quit3_error_probe.gd: 1 script error line(s)
+  SCRIPT ERROR: Invalid call. Nonexistent function 'no_such_method_r7' in base 'Node'.
+     at: _dies (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_quit3_error_probe.gd:14)
+##### exit=3 lines=20 leftover entries in TMPDIR=0
+
+##### R8 td003_lowercase_probe | OLD runner | GITHUB_ACTIONS=''
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD003 R8 PROBE: no script error here; no parse error either
+TD003 R8 PROBE: Script Error (mixed case) and SCRIPT  ERROR (two spaces) are not matches
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0 lines=10 leftover entries in TMPDIR=0
+
+##### R8 td003_lowercase_probe | NEW runner | GITHUB_ACTIONS=''
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD003 R8 PROBE: no script error here; no parse error either
+TD003 R8 PROBE: Script Error (mixed case) and SCRIPT  ERROR (two spaces) are not matches
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0 lines=10 leftover entries in TMPDIR=0
+
+##### R1 td003_runtime_error_probe | NEW runner | GITHUB_ACTIONS='true'
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+SCRIPT ERROR: Invalid call. Nonexistent function 'this_method_does_not_exist' in base 'Node'.
+   at: _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd:29)
+   GDScript backtrace (most recent call first):
+       [0] _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd:29)
+       [1] _run (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd:20)
+
+TD003 PROBE RESULT: 1 passed, 0 failed
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd: 1 script error line(s)
+  SCRIPT ERROR: Invalid call. Nonexistent function 'this_method_does_not_exist' in base 'Node'.
+     at: _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd:29)
+::error::RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd: 1 script error line(s)
+##### exit=1 lines=20 leftover entries in TMPDIR=0
+
+##### R3 td003_clean_probe | NEW runner | GITHUB_ACTIONS='true'
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD003 CLEAN PROBE RESULT: 1 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0 lines=9 leftover entries in TMPDIR=0
+
+##### SUMMARY
+R1   OLD gha=     exit=0  lines=15  left=0 
+R1   NEW gha=     exit=1  lines=19  left=0 RUNNER FAIL <probe>/td003_runtime_error_probe.gd: 1 script error line(s) 
+R2   OLD gha=     exit=1  lines=6   left=0 
+R2   NEW gha=     exit=1  lines=10  left=0 RUNNER FAIL <probe>/td003_parse_error_probe.gd: 1 script error line(s) 
+R2b  OLD gha=     exit=0  lines=17  left=0 
+R2b  NEW gha=     exit=1  lines=21  left=0 RUNNER FAIL <probe>/td003_loaded_parse_error_probe.gd: 1 script error line(s) 
+R3   OLD gha=     exit=0  lines=9   left=0 
+R3   NEW gha=     exit=0  lines=9   left=0 
+R7a  OLD gha=     exit=3  lines=9   left=0 
+R7a  NEW gha=     exit=3  lines=9   left=0 
+R7b  OLD gha=     exit=3  lines=16  left=0 
+R7b  NEW gha=     exit=3  lines=20  left=0 RUNNER FAIL <probe>/td003_quit3_error_probe.gd: 1 script error line(s) 
+R8   OLD gha=     exit=0  lines=10  left=0 
+R8   NEW gha=     exit=0  lines=10  left=0 
+R1   NEW gha=true exit=1  lines=20  left=0 RUNNER FAIL <probe>/td003_runtime_error_probe.gd: 1 script error line(s) ::error::RUNNER FAIL <probe>/td003_runtime_error_probe.gd: 1 script error line(s) 
+R3   NEW gha=true exit=0  lines=9   left=0 

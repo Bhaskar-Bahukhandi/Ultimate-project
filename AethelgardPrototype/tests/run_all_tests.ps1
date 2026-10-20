@@ -1,6 +1,7 @@
 # Runs every headless test suite, in the same order as .github/workflows/ci.yml.
 # Keep SUITES in sync with the ci.yml steps when adding or removing a suite.
-# Each suite goes through run_phase0_tests.ps1, so user:// stays isolated.
+# Each suite goes through run_phase0_tests.ps1, so user:// stays isolated. A suite also
+# fails on any SCRIPT ERROR / Parse Error line in its output (TD-003), not only on a non-zero exit.
 # Usage (from AethelgardPrototype/ or the repo root):
 #   powershell -File tests/run_all_tests.ps1          # all 16 suites
 #   powershell -File tests/run_all_tests.ps1 -Quick   # skip the long route and phase0 suites

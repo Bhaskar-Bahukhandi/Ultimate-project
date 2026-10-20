@@ -1,0 +1,35 @@
+TD-003 R6: NEW run_phase0_tests.ps1 invoked IN-PROCESS (& script, same PowerShell session), so its finally-block APPDATA restore is observable. 2026-10-20T19:01:14
+
+##### td003_runtime_error_probe (in-process)
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+SCRIPT ERROR: Invalid call. Nonexistent function 'this_method_does_not_exist' in base 'Node'.
+   at: _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd:29)
+   GDScript backtrace (most recent call first):
+       [0] _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd:29)
+       [1] _run (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd:20)
+
+TD003 PROBE RESULT: 1 passed, 0 failed
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd: 1 script error line(s)
+  SCRIPT ERROR: Invalid call. Nonexistent function 'this_method_does_not_exist' in base 'Node'.
+     at: _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/8f1302fe-c92f-4050-b767-ceb41fdf210e/scratchpad/probe/td003_runtime_error_probe.gd:29)
+##### exit=1 APPDATA before='C:\Users\BHASKAR BAHUKHANDI\AppData\Roaming' after='C:\Users\BHASKAR BAHUKHANDI\AppData\Roaming' restored=True aeth_phase0_test_* dirs before=2 after=2
+
+##### td003_clean_probe (in-process)
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD003 CLEAN PROBE RESULT: 1 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0 APPDATA before='C:\Users\BHASKAR BAHUKHANDI\AppData\Roaming' after='C:\Users\BHASKAR BAHUKHANDI\AppData\Roaming' restored=True aeth_phase0_test_* dirs before=2 after=2
