@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-T06 (`production/plan/_source/Y1-P0.json#Y1-P0-T06`)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Feature
 > **Type**: Integration
 > **Estimate**: 3 days
@@ -255,7 +255,7 @@ scenes" note. Watch each new case fail before trusting it.*
 `tests/integration/quests/act1_quests_completable_test.gd` passing, with a log in
 `production/qa/evidence/2026-10-side-quests/`.
 
-**Status**: [ ] Not yet created
+**Status**: [x] Created — tests/unit/quests/side_quest_rewards_test.gd (134/0), tests/integration/quests/act1_quests_completable_test.gd (114/0), production/qa/evidence/2026-10-side-quests/
 
 ---
 
@@ -264,3 +264,19 @@ scenes" note. Watch each new case fail before trusting it.*
 - Depends on: Y1-P0-T02 (done), Y1-P0-T03 (done; decision 5A). No story files for these by sprint decision;
   status in `production/sprint-status.yaml`.
 - Unlocks: Y1-P0-T14a (playthrough bot Ch4–10 legs need completable quests), Y1-P0-S07.
+
+---
+
+## Completion Notes
+**Completed**: 2026-10-20
+**Criteria**: 9/9 passing (notes on AC-2, AC-4, AC-8 below). Nothing deferred.
+**Deviations**:
+- NOT ASSESSED: GDD / ADR / TR-registry traceability (none exist); judged against decision 5A and user decisions 1–8, no deviation found.
+- ADVISORY: AC-2 "exactly one push_error naming the quest id" and AC-8 "loading raises no error" are verified by reading `production/qa/evidence/2026-10-side-quests/run_all.log` (exactly six `[SideQuest] q_test: …` lines, one per unknown-kind case; no other `[SideQuest]` error in the 12-suite run), not by a test (the 4.5+ Logger API is not covered by `docs/engine-reference`). QA case 4h is verified at quest-logic level, without level mechanics (protected combat code). QA case 4c wording: Bronze opens at level 1, so the "no tier" path is level 0 (tested).
+- Added after code review (user, 2026-10-20): `sync_data_hoard()` on Underground entry and Ironhold region load (`scripts/regions/ironhold_region.gd`, one guarded call) repairs old saves; loading itself still grants nothing.
+- Accepted LP-CODE-REVIEW concerns (user, 2026-10-20): `grant_rewards` cyclomatic complexity ~15–20 and 46 lines (split into per-kind helpers); the two catch-ups run from scene code, not after load (a post-load reconcile hook is the alternative).
+- Data Hoard lore reward `ironhold_lore_3` is also a world pickup (`ironhold_region.gd:45`); a player who found it first gets the XP and gold but no new page. Kept; flagged for game-designer to pick a unique Underground entry (user, 2026-10-20).
+- Observations outside T06: shop Null Potion text still "Blinds for 5s" (T08, decision 9); top-bar gold vs shop gold differ (Inventory.gold vs player_stats gold); "Lambda capture freed" engine errors from `data_sprite.gd` on Underground re-entry (pre-existing).
+**Test Evidence**: Integration — `AethelgardPrototype/tests/unit/quests/side_quest_rewards_test.gd` (134/0) and `AethelgardPrototype/tests/integration/quests/act1_quests_completable_test.gd` (114/0, real scenes headless), registered in `tests/run_all_tests.ps1` and `.github/workflows/ci.yml`; full suite 12/12, 1118 s (`production/qa/evidence/2026-10-side-quests/run_all.log`); live-renderer shop shot `production/qa/evidence/2026-10-side-quests/t06_shop_discount.png` (Red Potion BUY 29G at 5%). Watched fail: price vector, mapped quantity, clamp map, dead-quest step count, guild id, step-0 repair and Wraith flag (production mutations), plus the real regression it caught (dropped `side_quest_<id>_complete`, restored).
+**Code Review**: Complete — /code-review APPROVED WITH SUGGESTIONS (Data Hoard old-save catch-up applied); LP-CODE-REVIEW CONCERNS (accepted); QL-TEST-COVERAGE GAPS (advisory).
+**Follow-up (recommend a follow-up story)**: split `grant_rewards`; post-load reconcile hook for the catch-ups; capture push_error via a Logger once the engine reference covers it; non-literal dead-quest scan and pinning unchanged rewards; live captures of the arena quest start and Underground flow; unique lore reward for the Data Hoard (game-designer); content pass for the four dead quests; NG+ re-granting quest rewards (T07); orphaned `scenes/exploration/oakhaven.tscn` and `scenes/chapter2/ironhold_city.tscn`; Mara apothecary vs baker (lore).
