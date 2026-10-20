@@ -2,7 +2,7 @@
 # Keep SUITES in sync with the ci.yml steps when adding or removing a suite.
 # Each suite goes through run_phase0_tests.ps1, so user:// stays isolated.
 # Usage (from AethelgardPrototype/ or the repo root):
-#   powershell -File tests/run_all_tests.ps1          # all 13 suites
+#   powershell -File tests/run_all_tests.ps1          # all 16 suites
 #   powershell -File tests/run_all_tests.ps1 -Quick   # skip the long route and phase0 suites
 param(
     [switch]$Quick
@@ -16,6 +16,9 @@ $suites = @(
     @{ Script = "res://tests/integration/input/input_test.gd";                Long = $false }
     @{ Script = "res://tests/unit/quests/side_quest_rewards_test.gd";         Long = $false }
     @{ Script = "res://tests/unit/ngplus/ngplus_buff_stacking_test.gd";       Long = $false }
+    @{ Script = "res://tests/unit/achievements/fragment_achievement_test.gd"; Long = $false }
+    @{ Script = "res://tests/unit/items/null_potion_test.gd";                Long = $false }
+    @{ Script = "res://tests/integration/vfx/screen_flash_test.gd";          Long = $false }
     @{ Script = "res://tests/integration/story/chapter1_route_test.gd";       Long = $true }
     @{ Script = "res://tests/integration/story/chapter2_route_test.gd";       Long = $true }
     @{ Script = "res://tests/integration/combat/combat_fixes_test.gd";        Long = $false }

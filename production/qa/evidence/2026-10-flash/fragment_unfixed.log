@@ -1,0 +1,49 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+-- A1 fragment_4 threshold (AC-6)
+[ACHIEVEMENT] Unlocked: First Fragment — Collect your first Source Key Fragment.
+[ACHIEVEMENT] Unlocked: Key Collector — Collect all available Source Key Fragments.
+  FAIL: A1 count 2: fragment_4 absent
+  FAIL: A1 count 3: fragment_4 absent
+  PASS: A1 count 4: fragment_4 present
+-- A1 fragment_4 definition (AC-6)
+  PASS: A1 ACHIEVEMENTS has fragment_4
+  FAIL: A1 name == "Halfway to Root" (got Key Collector)
+  FAIL: A1 desc == "Collect four Source Key fragments." (got Collect all available Source Key Fragments.)
+  PASS: A1 icon unchanged (key)
+  PASS: A1 category == "story"
+-- A1 fragment_1 and source_key_complete unchanged (AC-6)
+  PASS: A1 count 0: fragment_1 absent
+[ACHIEVEMENT] Unlocked: First Fragment — Collect your first Source Key Fragment.
+  PASS: A1 count 1: fragment_1 present
+  PASS: A1 count 1: fragment_4 and source_key_complete absent
+[ACHIEVEMENT] Unlocked: Key Collector — Collect all available Source Key Fragments.
+  PASS: A1 count 6: source_key_complete absent
+  PASS: A1 count 6: fragment_4 present
+[ACHIEVEMENT] Unlocked: Source Key Complete — Collect all seven Source Key fragments.
+  PASS: A1 count 7: source_key_complete present
+-- A2 already-unlocked fragment_4 is kept (AC-7) [REGRESSION GUARD: passes on unfixed code]
+  PASS: A2 fixture file opened for writing
+[ACHIEVEMENTS] Loaded 1/44 from disk
+  PASS: A2 after real load: fragment_4 present
+[ACHIEVEMENT] Unlocked: First Fragment — Collect your first Source Key Fragment.
+  PASS: A2 count 2 after load: fragment_4 still present
+  PASS: A2 count 3 after load: fragment_4 still present
+  PASS: A2 control fixture file opened for writing
+[ACHIEVEMENTS] Loaded 1/44 from disk
+  PASS: A2 control after real load: fragment_1 present, fragment_4 absent
+[ACHIEVEMENT] Unlocked: Key Collector — Collect all available Source Key Fragments.
+  FAIL: A2 control count 2 after load: fragment_4 still locked
+
+FRAGMENT ACHIEVEMENT UNIT RESULT: 16 passed, 5 failed
+  FAIL: A1 count 2: fragment_4 absent
+  FAIL: A1 count 3: fragment_4 absent
+  FAIL: A1 name == "Halfway to Root" (got Key Collector)
+  FAIL: A1 desc == "Collect four Source Key fragments." (got Collect all available Source Key Fragments.)
+  FAIL: A2 control count 2 after load: fragment_4 still locked

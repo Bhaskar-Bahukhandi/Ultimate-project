@@ -84,6 +84,26 @@ const SHOP_DISCOUNT := 0.05        # Forge Line Supply's shop_discount reward
 const SHOP_RAW_PRICE := 30         # ShopSystem.SHOP_ITEMS["health_potion"]["buy_price"]
 const SHOP_SHOWN_PRICE := 29       # 30 at 5 % off, as get_buy_price rounds it
 const SHOP_GOLD := 999             # enough that the row is affordable (enabled)
+## Screen flashes through SceneTransitions.flash() (story Y1-P0-T08, AC-5). Each stop resets the
+## run (GameManager.reset_game(), no flags preset), loads the REAL scene, waits out its own 1.5 s
+## fade-in, triggers one flash and captures the first rendered frame after it: the ease-out is
+## exponential, so at 0.1-0.2 s only ~20-35 % of the peak is left; the overlay alpha read just
+## before the capture is written to the notes. [id, scene, how the flash is triggered]
+##   ch3_archive_flash: the scene's own floor-4 call sits inside the Source Key coroutine, so the
+##     stop calls SceneTransitions.flash with the archive floor-4 arguments; the routing itself is
+##     proven by tests/integration/vfx/screen_flash_test.gd F1. Side effects of loading the scene
+##     (its _ready): ch3_archive_entered, current_chapter 3, an auto-save into the isolated
+##     user:// dir, two Chapter 3 side quests discovered; the next stop's reset_game() clears the
+##     GameManager part.
+##   ch1_oakhaven_flash: drives the scene's own _on_dlg_event("fracture_spreads") (purple tint).
+const FLASH_SETTLE := 1.8          # the scenes' own fade-in is 1.5 s
+const FLASH_STOPS := [
+	["ch3_archive_flash", "res://scenes/chapter3/archive_depths.tscn", "direct"],
+	["ch1_oakhaven_flash", "res://scenes/chapter1/oakhaven_village.tscn", "fracture_spreads"],
+]
+const ARCHIVE_FLASH_COLOR := Color(0.2, 0.6, 1.0, 0.4)   # ch3_archive_depths.gd floor-4 call
+const ARCHIVE_FLASH_SECONDS := 0.8
+const FLASH_MIN_SHIFT := 0.01      # mean-colour shift toward the flash colour a flash frame must show
 const DLG_DIRS := ["res://dialogue/prologue", "res://dialogue/ch1", "res://dialogue/ch2"]
 const BACKDROP := "res://scenes/regions/oakhaven_region.tscn"
 const THUMB := Vector2i(320, 180)
@@ -133,6 +153,9 @@ func run() -> int:
 		await _ui_shots()
 	if _wanted(SHOP_DISCOUNT_ID):
 		await _shop_discount_shot(SHOP_DISCOUNT_ID)
+	for f in FLASH_STOPS:
+		if _wanted(f[0]):
+			await _flash_shot(f[0], f[1], f[2])
 	if _wanted("dlg"):
 		await _dialogue_shots()
 	await _contact_sheet("contact_scenes.png", _shots.filter(func(x): return x["group"] != "dialogue"))
@@ -240,6 +263,91 @@ func _shatter_route_shot(id: String, dlg_node: String, flags: Dictionary) -> voi
 		notes.append("PROBLEM: " + why)
 		_problems.append("%s: %s" % [id, why])
 	await _capture(id, "scene", SHATTER_SCENE, notes)
+
+
+## Loads `path` after a reset, waits out its fade-in, triggers one flash (`trigger` "direct":
+## SceneTransitions.flash with the archive floor-4 arguments; anything else: that dialogue event
+## through the scene's own _on_dlg_event) and captures near the peak. A flash that never starts
+## (overlay alpha still 0) or a scene that moved on is a PROBLEM on the shot. A baseline frame
+## `<id>_before` is captured just before the trigger; the mean colour of the two frames must move
+## toward the flash colour, so the evidence does not depend on judging a tint by eye.
+func _flash_shot(id: String, path: String, trigger: String) -> void:
+	_gm().reset_game()
+	await _load_scene(path, FLASH_SETTLE)
+	var notes: Array[String] = []
+	var scene := tree.current_scene
+	var transitions := tree.root.get_node_or_null("SceneTransitions")
+	var overlay: ColorRect = transitions.get_node_or_null("FlashOverlay") if transitions else null
+	var why := ""
+	if scene == null or scene.scene_file_path != path:
+		why = "the scene moved on to %s before the flash" % (scene.scene_file_path.get_file() if scene else "(none)")
+	elif overlay == null:
+		why = "SceneTransitions/FlashOverlay not found"
+	if why == "":
+		await _capture(id + "_before", "scene", path, ["baseline: same scene, no flash yet"] as Array[String])
+	var flash_color := ARCHIVE_FLASH_COLOR
+	if why != "":
+		pass  # already a PROBLEM; nothing to trigger
+	elif trigger == "direct":
+		notes.append("SceneTransitions.flash(%s, %s) called by the stop (scene call is inside the Source Key coroutine; routing proven by screen_flash_test F1)" % [ARCHIVE_FLASH_COLOR, ARCHIVE_FLASH_SECONDS])
+		transitions.flash(ARCHIVE_FLASH_COLOR, ARCHIVE_FLASH_SECONDS)
+	elif scene.has_method("_on_dlg_event"):
+		notes.append("real scene _on_dlg_event(\"%s\")" % trigger)
+		scene._on_dlg_event(trigger)
+		flash_color = overlay.color
+	else:
+		why = "the scene has no _on_dlg_event"
+	if why == "" and overlay.modulate.a <= 0.0:
+		why = "the flash overlay did not start (modulate.a %s)" % overlay.modulate.a
+	if why == "":
+		notes.append("overlay colour %s, modulate.a %.3f just before the capture" % [overlay.color, overlay.modulate.a])
+	else:
+		notes.append("PROBLEM: " + why)
+		_problems.append("%s: %s" % [id, why])
+	await _capture(id, "scene", path, notes)
+	if why == "":
+		_check_flash_shift(id, flash_color, notes)
+
+
+## Compares the mean colour of `<id>_before.png` and `<id>.png`: the flash frame must have moved
+## toward `flash_color` (positive projection of the shift on the direction to the flash colour,
+## at least FLASH_MIN_SHIFT). The numbers go into the shot's notes; no shift is a PROBLEM.
+func _check_flash_shift(id: String, flash_color: Color, notes: Array[String]) -> void:
+	var before := Image.load_from_file(_out.path_join(id + "_before.png"))
+	var after := Image.load_from_file(_out.path_join(id + ".png"))
+	if before == null or after == null or before.is_empty() or after.is_empty():
+		notes.append("PROBLEM: could not reload the before/after frames")
+		_problems.append("%s: could not reload the before/after frames" % id)
+		return
+	var b := _mean_rgb(before)
+	var a := _mean_rgb(after)
+	var to_flash := Vector3(flash_color.r - b.x, flash_color.g - b.y, flash_color.b - b.z)
+	var shift := a - b
+	var along := shift.dot(to_flash.normalized()) if to_flash.length() > 0.0001 else 0.0
+	var line := "mean RGB before %s -> flash frame %s; shift toward the flash colour %.3f (min %.3f)" % [
+			_fmt3(b), _fmt3(a), along, FLASH_MIN_SHIFT]
+	notes.append(line)
+	print("  shot %-34s %s" % [id, line])
+	if along < FLASH_MIN_SHIFT:
+		notes.append("PROBLEM: the flash frame did not move toward the flash colour")
+		_problems.append("%s: the flash frame did not move toward the flash colour (%.3f)" % [id, along])
+
+
+## Mean colour of a 64x36 downscale, as a Vector3 (r, g, b).
+func _mean_rgb(img: Image) -> Vector3:
+	var small: Image = img.duplicate()
+	small.convert(Image.FORMAT_RGBA8)
+	small.resize(64, 36, Image.INTERPOLATE_BILINEAR)
+	var sum := Vector3.ZERO
+	for y in small.get_height():
+		for x in small.get_width():
+			var p := small.get_pixel(x, y)
+			sum += Vector3(p.r, p.g, p.b)
+	return sum / float(small.get_width() * small.get_height())
+
+
+func _fmt3(v: Vector3) -> String:
+	return "(%.3f, %.3f, %.3f)" % [v.x, v.y, v.z]
 
 
 ## Plays the real BREADCRUMB_SCENE with BREADCRUMB_FLAGS set and captures the HUD breadcrumb

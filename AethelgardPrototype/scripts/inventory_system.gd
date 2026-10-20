@@ -7,6 +7,14 @@ signal item_added(item_id: String, quantity: int)
 signal item_removed(item_id: String, quantity: int)
 signal item_used(item_id: String)
 signal equipment_changed(slot: String, item_id: String)
+## Emitted when use_item() refuses a consumable (nothing consumed, nothing changed).
+## `reason` is a short player-readable sentence; the pause screen does not show it yet (story T08 decision 5).
+signal item_use_refused(item_id: String, reason: String)
+
+## Refusal reasons for the Null Potion (story Y1-P0-T08 AC-10, checked in this order).
+const NULL_POTION_REASON_NO_PLAYER := "No one to heal."
+const NULL_POTION_REASON_FULL_HP := "HP is already full."
+const NULL_POTION_REASON_CORRUPTION := "Corruption would reach 100%."
 
 # Item database
 var ITEMS = {
@@ -79,10 +87,10 @@ var ITEMS = {
 	},
 	"null_potion": {
 		"name": "Null Potion",
-		"description": "Full heal. Blinds for 5s. Adds 3% corruption.",
+		"description": "Full heal. Adds 3% corruption.",
 		"type": "consumable",
 		"effect": "null_heal",
-		"value": 100.0,
+		"corruption_cost": 3.0,
 		"buy_price": 500,
 		"sell_price": 200,
 		"max_stack": 99
@@ -335,7 +343,7 @@ func use_item(item_id: String) -> bool:
 		return false
 	
 	# Apply item effect
-	var success = _apply_item_effect(item_data)
+	var success = _apply_item_effect(item_data, item_id)
 	
 	if success:
 		remove_item(item_id, 1)
@@ -347,8 +355,8 @@ func use_item(item_id: String) -> bool:
 	
 	return success
 
-func _apply_item_effect(item_data: Dictionary) -> bool:
-	## Apply the effect of a consumable item
+func _apply_item_effect(item_data: Dictionary, item_id: String = "") -> bool:
+	## Apply the effect of a consumable item. `item_id` is only used to label refusals.
 	if not has_node("/root/GameManager"):
 		push_error("[INVENTORY] GameManager not available")
 		return false
@@ -373,14 +381,7 @@ func _apply_item_effect(item_data: Dictionary) -> bool:
 			return true
 		
 		"null_heal":
-			# Heal HP + reduce corruption
-			var players2 = get_tree().get_nodes_in_group("player")
-			if players2.size() > 0:
-				var player2 = players2[0]
-				if player2.has_method("heal"):
-					player2.heal(item_data.value)
-			GameManager.add_glitch_corruption(-10.0)
-			return true
+			return _use_null_heal(item_data, item_id)
 		
 		"reduce_glitch":
 			GameManager.add_glitch_corruption(-item_data.value)
@@ -391,6 +392,30 @@ func _apply_item_effect(item_data: Dictionary) -> bool:
 			return false
 	
 	return false
+
+func _use_null_heal(item_data: Dictionary, item_id: String) -> bool:
+	## Null Potion (story Y1-P0-T08, AC-9/AC-10): heal the player to max HP and add
+	## item_data.corruption_cost through GameManager.add_glitch_corruption. Refuses without
+	## changing anything (and emits item_use_refused) when there is no player node, HP is
+	## already full, or the cost would bring corruption to 100.
+	var players := get_tree().get_nodes_in_group("player")
+	if players.is_empty() or not players[0].has_method("heal"):
+		item_use_refused.emit(item_id, NULL_POTION_REASON_NO_PLAYER)
+		return false
+	var player = players[0]
+	if player.current_health >= player.max_health:
+		item_use_refused.emit(item_id, NULL_POTION_REASON_FULL_HP)
+		return false
+	# Same arithmetic as GameManager.add_glitch_corruption (charm scaling, then >= 100.0).
+	var cost: float = float(item_data.get("corruption_cost", 0.0))
+	if cost > 0.0 and GameManager.has_charm("corruption_resist"):
+		cost *= GameManager.get_charm_value("corruption_resist")
+	if GameManager.glitch_meter + cost >= 100.0:
+		item_use_refused.emit(item_id, NULL_POTION_REASON_CORRUPTION)
+		return false
+	player.heal(player.max_health)
+	GameManager.add_glitch_corruption(float(item_data.get("corruption_cost", 0.0)))
+	return true
 
 func equip_item(item_id: String, slot: String) -> bool:
 	## Equip an item to an equipment slot

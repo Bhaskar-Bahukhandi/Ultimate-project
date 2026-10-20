@@ -39,7 +39,6 @@ var _sword_pickup: Area2D = null
 var shop_items = [
 	{"id": "red_potion", "name": "Red Potion", "desc": "Restores 50 HP (Integrity)", "cost": 10, "effect": "heal", "value": 50},
 	{"id": "blue_potion", "name": "Blue Potion", "desc": "Restores 10MB RAM (Mana)", "cost": 15, "effect": "restore_mana", "value": 10},
-	{"id": "null_potion", "name": "Null Potion", "desc": "Restores 100% Integrity. Blinds for 5s.", "cost": 500, "effect": "null_heal", "value": 100},
 ]
 
 func _ready() -> void:
@@ -127,10 +126,13 @@ func _on_dlg_event(event: String) -> void:
 		"boar_stunned":
 			await get_tree().create_timer(0.3, false).timeout
 		"fracture_spreads":
-			_flash(Color(0.55, 0.0, 0.7, 0.35))
+			# TODO(bhaskar): Y1-P1 reduce-flash option
+			if has_node("/root/SceneTransitions"):
+				SceneTransitions.flash(Color(0.55, 0.0, 0.7, 0.35), 0.5)
 		"root_edit":
 			GameManager.add_glitch_corruption(5.0)
-			_flash(Color(0.0, 1.0, 0.5, 0.3))
+			if has_node("/root/SceneTransitions"):
+				SceneTransitions.flash(Color(0.0, 1.0, 0.5, 0.3), 0.5)
 		"time_passes":
 			await _fade(1.0, 0.8)
 			await get_tree().create_timer(0.6, false).timeout
@@ -144,16 +146,6 @@ func _fade(alpha: float, seconds: float) -> void:
 	var t := create_tween()
 	t.tween_property(fade_rect, "modulate:a", alpha, seconds)
 	await t.finished
-
-func _flash(color: Color) -> void:
-	if not fade_rect:
-		return
-	var old: Color = fade_rect.color
-	fade_rect.color = Color(color.r, color.g, color.b)
-	fade_rect.modulate.a = color.a
-	var t := create_tween()
-	t.tween_property(fade_rect, "modulate:a", 0.0, 0.35)
-	t.tween_callback(func(): fade_rect.color = old)
 
 func _shake(strength: float) -> void:
 	var camera = get_viewport().get_camera_2d()

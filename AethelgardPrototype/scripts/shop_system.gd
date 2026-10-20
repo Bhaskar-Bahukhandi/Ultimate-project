@@ -23,8 +23,10 @@ const SHOP_CATALOGS = {
 	"all": []  # Filled dynamically with everything
 }
 
-# Full item database with prices — extends the Inventory ITEMS
-const SHOP_ITEMS = {
+# Full item database with prices — extends the Inventory ITEMS.
+# A var, not a const: "null_potion" is copied from Inventory.ITEMS in _ready() so the potion
+# has ONE definition (story Y1-P0-T08, AC-8).
+var SHOP_ITEMS = {
 	# ── Consumables ──
 	"health_potion": {
 		"name": "Red Potion",
@@ -52,15 +54,6 @@ const SHOP_ITEMS = {
 		"sell_price": 48,
 		"effect": "reduce_glitch",
 		"value": 20.0
-	},
-	"null_potion": {
-		"name": "Null Potion",
-		"description": "Full heal. Blinds for 5s. Adds 3% corruption.",
-		"type": "consumable",
-		"buy_price": 800,
-		"sell_price": 320,
-		"effect": "null_heal",
-		"value": 100.0
 	},
 	"antidote": {
 		"name": "System Patch",
@@ -207,12 +200,25 @@ var _fade_tween: Tween = null  # close fade; killed if the shop reopens before i
 
 func _ready() -> void:
 	process_mode = PROCESS_MODE_ALWAYS
+	_copy_single_definition_items()
 	_build_ui()
 	_build_tooltip()
 	_hide_shop()
 	
 	# Register shop items with Inventory if they don't exist
 	_sync_items_to_inventory()
+
+func _copy_single_definition_items() -> void:
+	## Items whose one definition lives in Inventory.ITEMS (Inventory is an earlier autoload).
+	## The shop gets a deep COPY, never an alias, so a shop edit cannot change the inventory entry.
+	if not has_node("/root/Inventory"):
+		push_warning("[SHOP] Inventory autoload missing: single-definition items are not in the shop")
+		return
+	for item_id in ["null_potion"]:
+		if Inventory.ITEMS.has(item_id):
+			SHOP_ITEMS[item_id] = Inventory.ITEMS[item_id].duplicate(true)
+		else:
+			push_warning("[SHOP] %s missing from Inventory.ITEMS: not sold" % item_id)
 
 func _sync_items_to_inventory() -> void:
 	## Ensure all shop items exist in the Inventory ITEMS database
@@ -1177,9 +1183,6 @@ func _apply_consumable_effect(item: Dictionary) -> void:
 				GameManager.player_stats["max_mp"])
 		"reduce_glitch":
 			GameManager.add_glitch_corruption(-value)
-		"null_heal":
-			GameManager.player_stats["hp"] = GameManager.player_stats["max_hp"]
-			GameManager.add_glitch_corruption(3.0)  # Corruption cost
 
 func _input(event: InputEvent) -> void:
 	if not _is_open:

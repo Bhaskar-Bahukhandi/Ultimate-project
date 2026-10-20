@@ -26,7 +26,7 @@ const ACHIEVEMENTS: Dictionary = {
 	"ch3_complete": {"name": "The Source Code", "desc": "Complete Chapter 3.", "icon": "📖", "category": "story"},
 	"root_access": {"name": "Sudo Mode", "desc": "Unlock Root Access.", "icon": "💻", "category": "story"},
 	"fragment_1": {"name": "First Fragment", "desc": "Collect your first Source Key Fragment.", "icon": "🔑", "category": "story"},
-	"fragment_4": {"name": "Key Collector", "desc": "Collect all available Source Key Fragments.", "icon": "🔑", "category": "story"},
+	"fragment_4": {"name": "Halfway to Root", "desc": "Collect four Source Key fragments.", "icon": "🔑", "category": "story"},
 
 	"source_key_complete": {"name": "Source Key Complete", "desc": "Collect all seven Source Key fragments.", "icon": "*", "category": "story"},
 	"true_ending": {"name": "True Ending", "desc": "Reach a true ending of Aethelgard.", "icon": "*", "category": "story"},
@@ -166,7 +166,7 @@ func _check_stat_achievements() -> void:
 
 	# Source Key fragments
 	if GameManager.source_key_count >= 1: _try_unlock("fragment_1")
-	if GameManager.source_key_count >= 2: _try_unlock("fragment_4")
+	if GameManager.source_key_count >= 4: _try_unlock("fragment_4")
 	if GameManager.source_key_count >= 7: _try_unlock("source_key_complete")
 	if GameManager.story_flags.get("true_ending_seen", false): _try_unlock("true_ending")
 	if GameManager.story_flags.get("ng_plus_unlocked", false): _try_unlock("ng_plus_unlocked")

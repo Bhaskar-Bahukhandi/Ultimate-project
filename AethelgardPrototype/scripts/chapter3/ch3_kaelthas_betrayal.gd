@@ -581,20 +581,6 @@ func _show_dialogue(speaker: String, text: String) -> bool:
 	await DialogueManager.say(speaker, text)
 	return is_inside_tree()
 
-func _screen_flash(color: Color, duration: float) -> void:
-	if not is_instance_valid(fade_rect): return
-	var old_z = fade_rect.z_index
-	fade_rect.z_index = 100
-	fade_rect.color = color
-	fade_rect.modulate = Color(1, 1, 1, 0)
-	var tw = create_tween()
-	tw.tween_property(fade_rect, "modulate:a", 0.8, duration * 0.3)
-	tw.tween_property(fade_rect, "modulate:a", 0.0, duration * 0.7)
-	await tw.finished
-	if not is_inside_tree(): return
-	fade_rect.color = Color.BLACK
-	fade_rect.z_index = old_z
-
 func _fade_to_black(duration: float) -> void:
 	if not is_instance_valid(fade_rect): return
 	fade_rect.z_index = 100

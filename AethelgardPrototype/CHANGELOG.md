@@ -3,6 +3,18 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-20 — Flashes show, fragment_4 at four, Null Potion matches its text (Y1-P0-T08)
+
+- **fix(vfx):** the story-beat screen flashes in the Chapter 3 archive, wastes and Ironhold
+  departure and in Oakhaven now appear (they were drawn on a zero-size rect). They use the
+  shared `SceneTransitions.flash()`, stay soft (peak opacity ≤ 0.5, at least 0.5 s) and show
+  their colour. The scene fades from black are unchanged.
+- **fix(achievements):** `fragment_4` is now "Halfway to Root" and unlocks at four Source Key
+  fragments instead of two. Anyone who already has it keeps it.
+- **fix(items):** the Null Potion has one definition: 500 gold, "Full heal. Adds 3% corruption."
+  It heals to full and adds 3% corruption (less with the Firewall charm). It is refused, and not
+  used up, at full HP, with no one to heal, or when it would push corruption to 100%.
+
 ## 2026-10-20 — New Game+ no longer stacks choice buffs (Y1-P0-T07)
 
 - **fix(ng+):** carried attack, defense and max HP now exclude the finished run's choice buffs,

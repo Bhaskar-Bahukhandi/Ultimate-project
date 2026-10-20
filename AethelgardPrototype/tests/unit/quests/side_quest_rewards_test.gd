@@ -201,7 +201,7 @@ func _test_a1_resolution() -> void:
 	var base_inv: Node = load(INVENTORY_SCRIPT).new()
 	var base_items: Dictionary = base_inv.ITEMS.duplicate()
 	base_inv.free()
-	var shop_items: Dictionary = _const(_shop(), "SHOP_ITEMS")
+	var shop_items: Dictionary = _shop().SHOP_ITEMS
 	var craft_items: Dictionary = _const(_craft(), "MATERIAL_ITEMS")
 	var shop_probe_ok: bool = shop_items.has(SHOP_ONLY_ID) and not base_items.has(SHOP_ONLY_ID) \
 			and inv.ITEMS.has(SHOP_ONLY_ID)
@@ -333,7 +333,7 @@ func _test_ac3_buy_price() -> void:
 	print("-- AC-3a get_buy_price")
 	_reset()
 	var shop := _shop()
-	var shop_items: Dictionary = _const(shop, "SHOP_ITEMS")
+	var shop_items: Dictionary = shop.SHOP_ITEMS
 	_gm().shop_discount = 0.05
 	for v in DISCOUNT_VECTORS_5PCT:
 		var got: int = shop.get_buy_price({"buy_price": v[0]})
@@ -381,7 +381,7 @@ func _sell_button_price(item_id: String, data: Dictionary) -> int:
 func _test_ac3_sell_price() -> void:
 	print("-- AC-3c sell prices")
 	_reset()
-	var shop_items: Dictionary = _const(_shop(), "SHOP_ITEMS")
+	var shop_items: Dictionary = _shop().SHOP_ITEMS
 	var differ: Array[String] = []
 	var unread: Array[String] = []
 	for id in shop_items:

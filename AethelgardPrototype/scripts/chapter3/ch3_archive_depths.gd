@@ -333,7 +333,9 @@ func _floor_1_original_design() -> void:
 	GameManager.set_story_flag("ch3_archive_floor1_complete", true)
 	GameManager.auto_save()  # PASS-34 FIX: Checkpoint between floors
 
-	await _screen_flash(Color(0.3, 0.5, 0.8, 0.3), 0.5)
+	# TODO(bhaskar): Y1-P1 reduce-flash option
+	if has_node("/root/SceneTransitions"):
+		await SceneTransitions.flash(Color(0.3, 0.5, 0.8, 0.3), 0.5)
 
 	await _show_dialogue("NARRATOR", "The first floor of the Archive is a cathedral of memory. Crystallized data structures hang from the ceiling like chandeliers, each one a preserved snapshot of Aethelgard's earliest days.")
 
@@ -430,7 +432,8 @@ func _floor_2_aethercorp() -> void:
 	GameManager.set_story_flag("ch3_archive_floor2_complete", true)
 	GameManager.auto_save()  # PASS-34 FIX: Checkpoint between floors
 
-	await _screen_flash(Color(0.5, 0.3, 0.1, 0.3), 0.5)
+	if has_node("/root/SceneTransitions"):
+		await SceneTransitions.flash(Color(0.5, 0.3, 0.1, 0.3), 0.5)
 
 	await _show_dialogue("The Archivist", "// FLOOR 2: AetherCorp Acquisition Records")
 	await _show_dialogue("The Archivist", "// Document retrieved: 'AetherCorp Acquisition Report — Code Asset #7707'")
@@ -498,7 +501,8 @@ func _floor_3_sovereign() -> void:
 	GameManager.set_story_flag("ch3_archive_floor3_complete", true)
 	GameManager.auto_save()  # PASS-34 FIX: Checkpoint between floors
 
-	await _screen_flash(Color(0.8, 0.2, 0.2, 0.3), 0.5)
+	if has_node("/root/SceneTransitions"):
+		await SceneTransitions.flash(Color(0.8, 0.2, 0.2, 0.3), 0.5)
 	if has_node("/root/GlitchOverlay"):
 		GlitchOverlay.flash_glitch(0.3)
 
@@ -580,7 +584,8 @@ func _floor_4_source_key() -> void:
 	GameManager.set_story_flag("ch3_archive_floor4_complete", true)
 	GameManager.auto_save()  # PASS-34 FIX: Checkpoint at Source Key floor
 
-	await _screen_flash(Color(0.2, 0.6, 1.0, 0.4), 0.8)
+	if has_node("/root/SceneTransitions"):
+		await SceneTransitions.flash(Color(0.2, 0.6, 1.0, 0.4), 0.8)
 
 	await _show_dialogue("The Archivist", "// DEEPEST LEVEL: The Source Key Chamber")
 	await _show_dialogue("The Archivist", "// The seven fragments you seek are the world's ORIGINAL admin password.")
@@ -594,7 +599,8 @@ func _floor_4_source_key() -> void:
 		GlitchOverlay.flash_glitch(0.8)
 	if has_node("/root/SFXManager"):
 		SFXManager.play("source_key")
-	await _screen_flash(Color(0.3, 0.7, 1.0, 0.5), 1.0)
+	if has_node("/root/SceneTransitions"):
+		await SceneTransitions.flash(Color(0.3, 0.7, 1.0, 0.5), 1.0)
 
 	GameManager.set_story_flag("ch3_fragment_4_collected", true)
 	GameManager.collect_source_key(4)
@@ -653,20 +659,6 @@ func _show_dialogue(speaker: String, text: String) -> bool:
 func _update_floor_label(text: String) -> void:
 	if is_instance_valid(floor_label):
 		floor_label.text = text
-
-func _screen_flash(color: Color, duration: float) -> void:
-	if not is_instance_valid(fade_rect): return
-	var old_z = fade_rect.z_index
-	fade_rect.z_index = 100
-	fade_rect.color = color
-	fade_rect.modulate = Color(1, 1, 1, 0)
-	var tw = create_tween()
-	tw.tween_property(fade_rect, "modulate:a", 0.8, duration * 0.3)
-	tw.tween_property(fade_rect, "modulate:a", 0.0, duration * 0.7)
-	await tw.finished
-	if not is_inside_tree(): return
-	fade_rect.color = Color.BLACK
-	fade_rect.z_index = old_z
 
 func _fade_to_black(duration: float) -> void:
 	if not is_instance_valid(fade_rect): return

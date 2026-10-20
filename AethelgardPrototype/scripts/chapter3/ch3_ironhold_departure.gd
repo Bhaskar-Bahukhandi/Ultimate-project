@@ -90,7 +90,9 @@ func _start_departure() -> void:
 	await _show_dialogue("Kaelen", "The Administrator was just a proxy. SOVEREIGN was pulling strings the whole time... I can't keep reacting. I need to understand what SOVEREIGN actually IS.")
 
 	# System warning
-	await _screen_flash(Color(0.2, 0.8, 0.2, 0.4), 0.3)
+	# TODO(bhaskar): Y1-P1 reduce-flash option
+	if has_node("/root/SceneTransitions"):
+		await SceneTransitions.flash(Color(0.2, 0.8, 0.2, 0.4), 0.5)
 	await _show_dialogue("SYSTEM", "// WARNING: Entering deprecated region. Stability not guaranteed. Proceed at own risk.")
 
 	if has_elara:
@@ -128,20 +130,6 @@ func _start_departure() -> void:
 func _show_dialogue(speaker: String, text: String) -> bool:
 	await DialogueManager.say(speaker, text)
 	return is_inside_tree()
-
-func _screen_flash(color: Color, duration: float) -> void:
-	if not is_instance_valid(fade_rect): return
-	var old_z = fade_rect.z_index
-	fade_rect.z_index = 100
-	fade_rect.color = color
-	fade_rect.modulate = Color(1, 1, 1, 0)
-	var tw = create_tween()
-	tw.tween_property(fade_rect, "modulate:a", 0.8, duration * 0.3)
-	tw.tween_property(fade_rect, "modulate:a", 0.0, duration * 0.7)
-	await tw.finished
-	if not is_inside_tree(): return
-	fade_rect.color = Color.BLACK
-	fade_rect.z_index = old_z
 
 func _fade_to_black(duration: float) -> void:
 	if not is_instance_valid(fade_rect): return

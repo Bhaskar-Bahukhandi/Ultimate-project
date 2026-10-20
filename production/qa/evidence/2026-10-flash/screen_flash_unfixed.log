@@ -1,0 +1,169 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+-- F1 routing scan (AC-1 / AC-2)
+  FAIL: F1 ch3_archive_depths.gd: 5 SceneTransitions.flash call(s) (found 0)
+  FAIL: F1 ch3_fractured_wastes.gd: 1 SceneTransitions.flash call(s) (found 0)
+  FAIL: F1 ch3_ironhold_departure.gd: 1 SceneTransitions.flash call(s) (found 0)
+  FAIL: F1 ch1_oakhaven_village.gd: 2 SceneTransitions.flash call(s) (found 0)
+  PASS: F1 control: found the chapter script folders (["chapter1", "chapter10", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9"])
+  PASS: F1 control: scanned 51 chapter scripts
+  FAIL: F1 no `func _screen_flash` remains in scripts/chapter*/ ["chapter3/ch3_archive_depths.gd", "chapter3/ch3_fractured_wastes.gd", "chapter3/ch3_ironhold_departure.gd", "chapter3/ch3_kaelthas_betrayal.gd"]
+  FAIL: F1 Kaelthas dead copy of _screen_flash is deleted
+  FAIL: F1 Oakhaven `func _flash(` is gone
+  FAIL: F1 ch3_archive_depths.gd has exactly one `# TODO(bhaskar): Y1-P1 reduce-flash option` (found 0)
+  FAIL: F1 ch3_fractured_wastes.gd has exactly one `# TODO(bhaskar): Y1-P1 reduce-flash option` (found 0)
+  FAIL: F1 ch3_ironhold_departure.gd has exactly one `# TODO(bhaskar): Y1-P1 reduce-flash option` (found 0)
+  FAIL: F1 ch1_oakhaven_village.gd has exactly one `# TODO(bhaskar): Y1-P1 reduce-flash option` (found 0)
+-- F3 flag / auto-save / Source Key / corruption lines unchanged and in order (AC-4)
+  PASS: F3 ch3_archive_depths.gd: all 20 frozen lines present in order (first missing: ``)
+  PASS: F3 ch3_archive_depths.gd: no extra flag / save / Source Key / corruption line between frozen lines []
+  PASS: F3 ch3_fractured_wastes.gd: all 6 frozen lines present in order (first missing: ``)
+  PASS: F3 ch3_fractured_wastes.gd: no extra flag / save / Source Key / corruption line between frozen lines []
+  PASS: F3 ch3_ironhold_departure.gd: all 2 frozen lines present in order (first missing: ``)
+  PASS: F3 ch3_ironhold_departure.gd: no extra flag / save / Source Key / corruption line between frozen lines []
+  PASS: F3 ch1_oakhaven_village.gd: all 5 frozen lines present in order (first missing: ``)
+  PASS: F3 ch1_oakhaven_village.gd: no extra flag / save / Source Key / corruption line between frozen lines []
+-- F2 Oakhaven flashes show in the real scene (AC-3)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [AssetManager] Production art slot missing for Kaelen top-down sheet at res://assets/production_art/characters/player/kaelen_topdown_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_missing_production_art (res://scripts/asset_manager.gd:1137)
+       [1] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [2] try_build_animated_player (res://scripts/asset_manager.gd:1000)
+       [3] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [4] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [5] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [6] _load_oakhaven (res://tests/integration/vfx/screen_flash_test.gd:306)
+       [7] _test_f2_oakhaven_renders (res://tests/integration/vfx/screen_flash_test.gd:324)
+       [8] _run (res://tests/integration/vfx/screen_flash_test.gd:119)
+WARNING: [AssetManager] V2 top-down player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] try_build_animated_player (res://scripts/asset_manager.gd:1009)
+       [1] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [2] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [3] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [4] _load_oakhaven (res://tests/integration/vfx/screen_flash_test.gd:306)
+       [5] _test_f2_oakhaven_renders (res://tests/integration/vfx/screen_flash_test.gd:324)
+       [6] _run (res://tests/integration/vfx/screen_flash_test.gd:119)
+WARNING: [AssetManager] V2 top-down player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] try_build_animated_player (res://scripts/asset_manager.gd:1009)
+       [1] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [2] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:58)
+       [3] _load_oakhaven (res://tests/integration/vfx/screen_flash_test.gd:306)
+       [4] _test_f2_oakhaven_renders (res://tests/integration/vfx/screen_flash_test.gd:324)
+       [5] _run (res://tests/integration/vfx/screen_flash_test.gd:119)
+WARNING: [AssetManager] Production art slot missing for Elara NPC sheet at res://assets/production_art/characters/npcs/elara_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/npcs/elara_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_missing_production_art (res://scripts/asset_manager.gd:1137)
+       [1] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [2] try_build_v2_npc (res://scripts/asset_manager.gd:1066)
+       [3] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:494)
+       [4] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:59)
+       [5] _load_oakhaven (res://tests/integration/vfx/screen_flash_test.gd:306)
+       [6] _test_f2_oakhaven_renders (res://tests/integration/vfx/screen_flash_test.gd:324)
+       [7] _run (res://tests/integration/vfx/screen_flash_test.gd:119)
+WARNING: [AssetManager] NPC sheet failed to load for Elara; using existing NPC fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] try_build_v2_npc (res://scripts/asset_manager.gd:1074)
+       [1] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:494)
+       [2] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:59)
+       [3] _load_oakhaven (res://tests/integration/vfx/screen_flash_test.gd:306)
+       [4] _test_f2_oakhaven_renders (res://tests/integration/vfx/screen_flash_test.gd:324)
+       [5] _run (res://tests/integration/vfx/screen_flash_test.gd:119)
+  PASS: F2 setup: real scene loaded and SceneTransitions/FlashOverlay found
+  PASS: F2 fracture_spreads precondition: overlay idle (a == 0) and colour is the white sentinel
+  PASS: F2 fracture_spreads precondition: the expected colour differs from the sentinel
+  FAIL: F2 fracture_spreads: right after the call overlay modulate.a == 0.8 (got 0.0)
+  FAIL: F2 fracture_spreads: overlay colour is the literal (0.55, 0.0, 0.7, 0.35) (got (1.0, 1.0, 1.0, 1.0))
+  PASS: F2 fracture_spreads: overlay rect [P: (0.0, 0.0), S: (1280.0, 720.0)] covers the visible rect [P: (0.0, 0.0), S: (1280.0, 720.0)] (regression guard)
+  FAIL: F2 fracture_spreads: one frame later 0 < a <= 0.8 (got 0.0)
+  PASS: F2 fracture_spreads: after 0.5 s + margin the overlay is back to a == 0 (got 0.0)
+  PASS: F2 fracture_spreads: glitch_meter rose by 0.0 (got 0.0)
+  PASS: F2 root_edit precondition: overlay idle (a == 0) and colour is the white sentinel
+  PASS: F2 root_edit precondition: the expected colour differs from the sentinel
+  FAIL: F2 root_edit: right after the call overlay modulate.a == 0.8 (got 0.0)
+  FAIL: F2 root_edit: overlay colour is the literal (0.0, 1.0, 0.5, 0.3) (got (1.0, 1.0, 1.0, 1.0))
+  PASS: F2 root_edit: overlay rect [P: (0.0, 0.0), S: (1280.0, 720.0)] covers the visible rect [P: (0.0, 0.0), S: (1280.0, 720.0)] (regression guard)
+  FAIL: F2 root_edit: one frame later 0 < a <= 0.8 (got 0.0)
+  PASS: F2 root_edit: after 0.5 s + margin the overlay is back to a == 0 (got 0.0)
+  PASS: F2 root_edit: glitch_meter rose by 5.0 (got 5.0)
+-- F2b flash while paused and under hitstop (characterization)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [AssetManager] V2 top-down player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] try_build_animated_player (res://scripts/asset_manager.gd:1009)
+       [1] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [2] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [3] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [4] _load_oakhaven (res://tests/integration/vfx/screen_flash_test.gd:306)
+       [5] _test_f2b_paused_and_hitstop (res://tests/integration/vfx/screen_flash_test.gd:358)
+       [6] _run (res://tests/integration/vfx/screen_flash_test.gd:120)
+       [7] _test_f2_oakhaven_renders (res://tests/integration/vfx/screen_flash_test.gd:351)
+       [8] _real_wait (res://tests/integration/vfx/screen_flash_test.gd:151)
+WARNING: [AssetManager] V2 top-down player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] try_build_animated_player (res://scripts/asset_manager.gd:1009)
+       [1] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [2] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:58)
+       [3] _load_oakhaven (res://tests/integration/vfx/screen_flash_test.gd:306)
+       [4] _test_f2b_paused_and_hitstop (res://tests/integration/vfx/screen_flash_test.gd:358)
+       [5] _run (res://tests/integration/vfx/screen_flash_test.gd:120)
+       [6] _test_f2_oakhaven_renders (res://tests/integration/vfx/screen_flash_test.gd:351)
+       [7] _real_wait (res://tests/integration/vfx/screen_flash_test.gd:151)
+WARNING: [AssetManager] NPC sheet failed to load for Elara; using existing NPC fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] try_build_v2_npc (res://scripts/asset_manager.gd:1074)
+       [1] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:494)
+       [2] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:59)
+       [3] _load_oakhaven (res://tests/integration/vfx/screen_flash_test.gd:306)
+       [4] _test_f2b_paused_and_hitstop (res://tests/integration/vfx/screen_flash_test.gd:358)
+       [5] _run (res://tests/integration/vfx/screen_flash_test.gd:120)
+       [6] _test_f2_oakhaven_renders (res://tests/integration/vfx/screen_flash_test.gd:351)
+       [7] _real_wait (res://tests/integration/vfx/screen_flash_test.gd:151)
+  FAIL: F2b paused: the flash started (a == 0.8, got 0.0)
+  PASS: F2b paused: the flash still ends while the tree is paused (a == 0, got 0.0)
+  FAIL: F2b hitstop: the flash started (a == 0.8, got 0.0)
+  FAIL: F2b hitstop precondition: the flash is still showing (a == 0.0)
+  PASS: F2b hitstop: time_scale 0 holds the flash (a still 0.0, got 0.0)
+  PASS: F2b hitstop: after time_scale is restored the flash ends (a == 0, got 0.0)
+
+SCREEN FLASH RESULT: 24 passed, 20 failed
+  FAIL: F1 ch3_archive_depths.gd: 5 SceneTransitions.flash call(s) (found 0)
+  FAIL: F1 ch3_fractured_wastes.gd: 1 SceneTransitions.flash call(s) (found 0)
+  FAIL: F1 ch3_ironhold_departure.gd: 1 SceneTransitions.flash call(s) (found 0)
+  FAIL: F1 ch1_oakhaven_village.gd: 2 SceneTransitions.flash call(s) (found 0)
+  FAIL: F1 no `func _screen_flash` remains in scripts/chapter*/ ["chapter3/ch3_archive_depths.gd", "chapter3/ch3_fractured_wastes.gd", "chapter3/ch3_ironhold_departure.gd", "chapter3/ch3_kaelthas_betrayal.gd"]
+  FAIL: F1 Kaelthas dead copy of _screen_flash is deleted
+  FAIL: F1 Oakhaven `func _flash(` is gone
+  FAIL: F1 ch3_archive_depths.gd has exactly one `# TODO(bhaskar): Y1-P1 reduce-flash option` (found 0)
+  FAIL: F1 ch3_fractured_wastes.gd has exactly one `# TODO(bhaskar): Y1-P1 reduce-flash option` (found 0)
+  FAIL: F1 ch3_ironhold_departure.gd has exactly one `# TODO(bhaskar): Y1-P1 reduce-flash option` (found 0)
+  FAIL: F1 ch1_oakhaven_village.gd has exactly one `# TODO(bhaskar): Y1-P1 reduce-flash option` (found 0)
+  FAIL: F2 fracture_spreads: right after the call overlay modulate.a == 0.8 (got 0.0)
+  FAIL: F2 fracture_spreads: overlay colour is the literal (0.55, 0.0, 0.7, 0.35) (got (1.0, 1.0, 1.0, 1.0))
+  FAIL: F2 fracture_spreads: one frame later 0 < a <= 0.8 (got 0.0)
+  FAIL: F2 root_edit: right after the call overlay modulate.a == 0.8 (got 0.0)
+  FAIL: F2 root_edit: overlay colour is the literal (0.0, 1.0, 0.5, 0.3) (got (1.0, 1.0, 1.0, 1.0))
+  FAIL: F2 root_edit: one frame later 0 < a <= 0.8 (got 0.0)
+  FAIL: F2b paused: the flash started (a == 0.8, got 0.0)
+  FAIL: F2b hitstop: the flash started (a == 0.8, got 0.0)
+  FAIL: F2b hitstop precondition: the flash is still showing (a == 0.0)
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)

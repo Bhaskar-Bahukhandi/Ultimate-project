@@ -559,7 +559,9 @@ func _phase_fragment() -> void:
 		GlitchOverlay.flash_glitch(0.6)
 	if has_node("/root/SFXManager"):
 		SFXManager.play("source_key")
-	await _screen_flash(Color(0.2, 0.6, 1.0, 0.5), 0.8)
+	# TODO(bhaskar): Y1-P1 reduce-flash option
+	if has_node("/root/SceneTransitions"):
+		await SceneTransitions.flash(Color(0.2, 0.6, 1.0, 0.5), 0.8)
 
 	GameManager.set_story_flag("ch3_fragment_3_collected", true)
 	GameManager.collect_source_key(3)
@@ -721,20 +723,6 @@ func _show_explore_hint(text: String) -> void:
 	if is_instance_valid(explore_hint):
 		explore_hint.text = text
 		explore_hint.modulate.a = 1.0
-
-func _screen_flash(color: Color, duration: float) -> void:
-	if not is_instance_valid(fade_rect): return
-	var old_z = fade_rect.z_index
-	fade_rect.z_index = 100
-	fade_rect.color = color
-	fade_rect.modulate = Color(1, 1, 1, 0)
-	var tw = create_tween()
-	tw.tween_property(fade_rect, "modulate:a", 0.8, duration * 0.3)
-	tw.tween_property(fade_rect, "modulate:a", 0.0, duration * 0.7)
-	await tw.finished
-	if not is_inside_tree(): return
-	fade_rect.color = Color.BLACK
-	fade_rect.z_index = old_z
 
 func _fade_to_black(duration: float) -> void:
 	if not is_instance_valid(fade_rect): return
