@@ -27,3 +27,7 @@
 *.wav binary
 *.ogg binary
 *.zip binary
+
+# Evidence logs are raw tool output kept verbatim (production/qa/evidence/README.md); trailing
+# spaces in them are not a whitespace error (TD-003: CI runs git diff --check on every push).
+production/qa/evidence/**/*.log -whitespace
