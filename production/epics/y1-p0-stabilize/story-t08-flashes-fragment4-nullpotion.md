@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-T08 (`production/plan/_source/Y1-P0.json#Y1-P0-T08`)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Feature
 > **Type**: Integration
 > **Estimate**: 2 days
@@ -115,15 +115,15 @@ in order. `SceneTransitions.flash()` and its combat callers (`player_combat.gd:5
 ## Acceptance Criteria
 
 **Flashes (7A)**
-- [ ] AC-1 Every live per-scene flash call (`ch3_archive_depths.gd` ×5, `ch3_fractured_wastes.gd` ×1,
+- [x] AC-1 Every live per-scene flash call (`ch3_archive_depths.gd` ×5, `ch3_fractured_wastes.gd` ×1,
       `ch3_ironhold_departure.gd` ×1, `ch1_oakhaven_village.gd` ×2) calls `SceneTransitions.flash(color, duration)`
       with literal arguments; the ch3 calls keep their `await` and colour; Oakhaven stays fire-and-forget. No
       `func _screen_flash` remains in `scripts/chapter*/` (Kaelthas copy deleted) and Oakhaven's `_flash` is gone.
-- [ ] AC-2 Soft: every routed call has `color.a ≤ 0.625` (visible peak 0.8 × a ≤ 0.5) and `duration ≥ 0.5`;
+- [x] AC-2 Soft: every routed call has `color.a ≤ 0.625` (visible peak 0.8 × a ≤ 0.5) and `duration ≥ 0.5`;
       Ironhold `:93` and the two Oakhaven calls use 0.5 s; other durations unchanged. Each of the four touched
       scene files has one `# TODO(<owner>): Y1-P1 reduce-flash option` above its first routed call (review
       checklist item, not an automated assertion). `scene_transition_manager.gd` is not edited.
-- [ ] AC-3 In the real Oakhaven scene (isolated runner, after its 1.5 s fade-in), calling
+- [x] AC-3 In the real Oakhaven scene (isolated runner, after its 1.5 s fade-in), calling
       `_on_dlg_event("fracture_spreads")` and `_on_dlg_event("root_edit")` makes `SceneTransitions`' flash overlay
       show the requested colour: right after the call `modulate.a == 0.8` and the overlay colour equals the
       literal (purple / green), and its global rect covers `get_viewport().get_visible_rect()`. On today's code
@@ -131,9 +131,9 @@ in order. `SceneTransitions.flash()` and its combat callers (`player_combat.gd:5
       size check is a regression guard. After `duration` + margin the overlay is back to `modulate.a == 0`, also
       while the tree is paused; with `Engine.time_scale = 0` (hitstop) the flash finishes once time_scale is
       restored (characterization; `flash()` is not changed). The `root_edit` event still adds 5.0 corruption.
-- [ ] AC-4 The flags, auto-saves, Source Key collection and `add_glitch_corruption(5.0)` lines next to the flash
+- [x] AC-4 The flags, auto-saves, Source Key collection and `add_glitch_corruption(5.0)` lines next to the flash
       calls are byte-identical and in the same order (a frozen list from HEAD, asserted in order).
-- [ ] AC-5 Evidence: **live-renderer** screenshots taken mid-flash, retained in
+- [x] AC-5 Evidence: **live-renderer** screenshots taken mid-flash, retained in
       `production/qa/evidence/2026-10-flash/` via new tour stops (`run_screenshots.ps1 -Only <stop> -Evidence
       2026-10-flash`) that wait out the scene's fade-in, trigger the flash and capture near its peak:
       `ch3_archive_flash.png` (the stop loads the archive scene and calls `SceneTransitions.flash` with the archive
@@ -142,23 +142,23 @@ in order. `SceneTransitions.flash()` and its combat callers (`player_combat.gd:5
       `_on_dlg_event("fracture_spreads")`, showing the purple tint).
 
 **fragment_4 (8A)**
-- [ ] AC-6 `fragment_4` unlocks at `source_key_count >= 4` (not at 2 or 3), named "Halfway to Root" with
+- [x] AC-6 `fragment_4` unlocks at `source_key_count >= 4` (not at 2 or 3), named "Halfway to Root" with
       description "Collect four Source Key fragments."; id, icon and category unchanged; `fragment_1` (≥ 1) and
       `source_key_complete` (≥ 7) unchanged.
-- [ ] AC-7 A player whose `achievements.save` already holds `fragment_4` (unlocked at 2) keeps it after load from
+- [x] AC-7 A player whose `achievements.save` already holds `fragment_4` (unlocked at 2) keeps it after load from
       a real fixture file and after a check at count 2 or 3 (regression guard: passes on today's code too).
 
 **Null Potion (9A)**
-- [ ] AC-8 `Inventory.ITEMS["null_potion"]` is the one definition: buy 500, sell 200, desc
+- [x] AC-8 `Inventory.ITEMS["null_potion"]` is the one definition: buy 500, sell 200, desc
       "Full heal. Adds 3% corruption.", `corruption_cost` 3.0. The shop's `null_potion` entry equals it on
       name, desc, buy and sell price and is a copy (shop listing and `get_buy_price` read it; T06 `shop_discount`
       still applies). The village fallback list has no `null_potion` line, `shop_system.gd` has no `null_heal`
       branch, and no "Blinds" text remains in `scripts/`.
-- [ ] AC-9 Using a Null Potion below max HP heals the player to max HP (`player_combat.heal()`: `current_health`,
+- [x] AC-9 Using a Null Potion below max HP heals the player to max HP (`player_combat.heal()`: `current_health`,
       `GameManager.player_stats.hp`, `health_changed`), adds the cost through `add_glitch_corruption` (3.0; 1.8
       with the corruption-resist charm), and consumes one potion. Buying one through `ShopSystem` costs 500 gold
       (450 with a 10 % `shop_discount`).
-- [ ] AC-10 The potion is refused (`use_item` returns false, it is not consumed, HP and corruption are unchanged,
+- [x] AC-10 The potion is refused (`use_item` returns false, it is not consumed, HP and corruption are unchanged,
       no game over: `current_state != GAME_OVER`) and `Inventory.item_use_refused("null_potion", reason)` is
       emitted with a literal reason, when any of:
       (a) `glitch_meter + effective_cost >= 100.0` → "Corruption would reach 100%." (97.0 refused; 96.9 allowed
@@ -167,10 +167,10 @@ in order. `SceneTransitions.flash()` and its combat callers (`player_combat.gd:5
       (c) no node in group `player` → "No one to heal." (today the potion is consumed anyway).
       The local cost check agrees with the real `add_glitch_corruption` game-over path for a sweep of values, with
       and without the charm.
-- [ ] AC-11 The herbalist quest still rewards `null_potion` (`side_quest_rewards_test` passes unchanged).
+- [x] AC-11 The herbalist quest still rewards `null_potion` (`side_quest_rewards_test` passes unchanged).
 
 **All**
-- [ ] AC-12 New tests pass and are registered (`.uid`, `tests/run_all_tests.ps1`, `.github/workflows/ci.yml`;
+- [x] AC-12 New tests pass and are registered (`.uid`, `tests/run_all_tests.ps1`, `.github/workflows/ci.yml`;
       layout guard passes); each watch-fail case was seen failing on unfixed code; the full suite passes;
       `git diff --check` clean; CHANGELOG entry.
 
@@ -268,7 +268,7 @@ on unfixed code; A2, F2b and the parity sweep are regression guards / characteri
 `production/qa/evidence/2026-10-flash/`, and the two live-renderer screenshots in AC-5.
 **Run result**: required: the flashes are player-visible (AC-5 screenshots). No UI screen changes (decision 5).
 
-**Status**: [ ] Not yet created
+**Status**: [x] Created — tests/integration/vfx/screen_flash_test.gd (107), tests/unit/achievements/fragment_achievement_test.gd (21), tests/unit/items/null_potion_test.gd (83); production/qa/evidence/2026-10-flash/
 
 ---
 
@@ -277,3 +277,31 @@ on unfixed code; A2, F2b and the parity sweep are regression guards / characteri
 - Depends on: Y1-P0-T03 (done; decisions 7–9), Y1-P0-S02 (done; the approved string), Y1-P0-T06 (done;
   herbalist reward). No story files for T03/S02 by sprint decision; status in `production/sprint-status.yaml`.
 - Unlocks: Y1-P0-T15 (Phase 0 exit playthrough).
+
+---
+
+## Completion Notes
+**Completed**: 2026-10-20
+**Criteria**: 12/12 passing. Run result OBSERVED: live-renderer before/after pairs in
+`production/qa/evidence/2026-10-flash/` (archive near-black -> blue wash, mean RGB (0.036, 0.046, 0.092) ->
+(0.070, 0.161, 0.281); Oakhaven green village -> purple wash, shift 0.095). The shots were taken on the final
+code: all review fixes were applied before the 17:15 tour run and no code changed before commit `17bc358`.
+**Deviations** (advisory):
+- Decision 7A named `cinematic_vfx.gd screen_flash()`; T08 routes to the live `SceneTransitions.flash()` (user decision 1).
+- AC-11 said `side_quest_rewards_test` passes unchanged; its 3 `SHOP_ITEMS` reads were adapted to property reads
+  (user-approved) because `SHOP_ITEMS` became a var and the suite had reported a false green (SCRIPT ERROR, 112/0).
+- The archive tour stop calls `SceneTransitions.flash` with the floor-4 arguments rather than the scene's own call
+  (decision 7); routing is proven by F1.
+- NOT ASSESSED: GDD / ADR / TR-registry traceability (none exist); judged against decisions 7A/8A/9A and the ACs.
+**Test Evidence**: Integration — screen_flash 107/0, fragment_achievement 21/0, null_potion 83/0; against the unfixed
+code (HEAD d4bc971, scratch worktree) 24/20, 16/5, 33/48 (`*_unfixed.log`); full suite 16/16, 0 SCRIPT ERROR
+(`run_all.log`); layout guard 6/0.
+**Code Review**: Complete — /code-review APPROVED WITH SUGGESTIONS (6 applied: archive baseline frame + colour-shift
+check, F3 no-inserted-state-line check + uncommented flash match, N7 true precondition, A2 negative control, parity
+sweep step 0.1, shop push_warning; F2b re-watched failing); LP-CODE-REVIEW APPROVE; QL-TEST-COVERAGE ADEQUATE.
+**Follow-ups**: tech debt TD-003 (test runner counts SCRIPT ERROR as a pass; before T15), TD-004 (no runtime check of the
+four ch3 flash scenes; before T15), TD-005 (`SceneTransitions.flash` overlapping tweens / hitstop stretch), TD-006
+(scene fades from black still invisible, same zero-size `fade_rect`). Also: pause screen should show the
+`item_use_refused` reason (T12); abrupt flash onset vs the reduce-flash option (Y1-P1 accessibility, TODO(bhaskar) at
+each call site); add the archive floor-3/4 flash + GlitchOverlay combination to the T15 playtest checklist; healing
+potions cannot be used in top-down scenes (pre-existing, `player_topdown.gd` has no `heal()`; design question).
