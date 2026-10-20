@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-T07 (`production/plan/_source/Y1-P0.json#Y1-P0-T07`)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Feature
 > **Type**: Integration
 > **Estimate**: 1 day
@@ -86,33 +86,33 @@ If such a save's stats never received the buffs, the NG+ subtraction removes buf
 
 ## Acceptance Criteria
 
-- [ ] AC-1 `start_new_game_plus()` reads `ChoiceConsequences.get_total_stat_mods()` **before** `reset_game()` and
+- [x] AC-1 `start_new_game_plus()` reads `ChoiceConsequences.get_total_stat_mods()` **before** `reset_game()` and
       subtracts `int(total.get("attack", 0))` from the carried `base_attack`, likewise `defense` from
       `base_defense` and `max_hp` from `max_hp` (a missing key counts as 0: the function returns `{}` with no
       buffs and only the keys some buff touched); `max_hp` is then clamped to ≥ 1; after the reset, `attack` and
       `defense` are set from the reduced base values (equipment bonuses re-applied as today); `hp` and `mp` are
       refilled to max; all three carried stats are ints.
-- [ ] AC-2 Three simulated NG+ cycles that make the same choices end each run with identical `base_attack`,
+- [x] AC-2 Three simulated NG+ cycles that make the same choices end each run with identical `base_attack`,
       `base_defense` and `max_hp`, and the stats carried into each NG+ equal that run's stats minus its buffs
       (i.e. level growth only); `ChoiceConsequences.active_buffs` is empty after each NG+.
-- [ ] AC-3 After `start_new_game_plus()`: `level` and `max_mp` equal their pre-call values; `player_stats.gold`
+- [x] AC-3 After `start_new_game_plus()`: `level` and `max_mp` equal their pre-call values; `player_stats.gold`
       and `Inventory.gold` both equal `int(pre_gold * 0.5)` (101 → 50); `unlocked_charms`, `equipped_charms`,
       `arena_stats`, `Inventory.equipment` and `Inventory.items` (plus exactly one extra `glitch_stabilizer`) equal
       their pre-call snapshots; lifetime `stats` equal their snapshot except `stats.death_count == 0`;
       `ng_plus_cycle == pre_cycle + 1` (0 → 1, a preset 5 → 6); `ng_plus_available == false`;
       `story_flags.ng_plus_route_recap_available == true`; `hp == max_hp` and `mp == max_mp`. These fields are
       identical between a run with buffs and a no-buff control run at the same level.
-- [ ] AC-4 Route coverage: a kill route, a spare route and a purge route (the spare flags plus the unexclusive
+- [x] AC-4 Route coverage: a kill route, a spare route and a purge route (the spare flags plus the unexclusive
       `ch1_root_purge_used`, −10 max_hp) each round-trip with zero stacking; a run whose **max_hp** buff total is
       negative (`ch2_data_wraith_absorbed` alone: −15 max_hp, +10 attack) gets max_hp back to the pre-buff value;
       after a level-up during the run, the carried `level`, `base_attack`, `base_defense`, `max_hp` and `max_mp`
       equal a no-buff control run that earned the same XP.
-- [ ] AC-5 An NG+ with no active buffs leaves `base_attack`, `base_defense` and `max_hp` equal to the run's values.
+- [x] AC-5 An NG+ with no active buffs leaves `base_attack`, `base_defense` and `max_hp` equal to the run's values.
       The sorted top-level keys of the save JSON written by `GameManager.save_game()` (there is no
       `get_save_data()` on GameManager), and the key set of its `choice_consequences` entry, equal a literal list frozen in the test from HEAD before implementation, and are equal before and
       after an NG+ call; `start_new_game_plus()` writes no file in the isolated `user://` save directory. Old saves
       that already stacked are not modified.
-- [ ] AC-6 `tests/unit/ngplus/ngplus_buff_stacking_test.gd` exists and passes, with its `.uid`, and is listed in
+- [x] AC-6 `tests/unit/ngplus/ngplus_buff_stacking_test.gd` exists and passes, with its `.uid`, and is listed in
       `tests/run_all_tests.ps1` and `.github/workflows/ci.yml` (the layout guard
       `tests/integration/meta/test_layout_test.gd` passes); the full suite passes (baseline recorded first);
       `git diff --check` is clean; a table of each route's before-NG+ / after-NG+ / baseline stats is recorded in
@@ -195,7 +195,7 @@ Watch it fail first: T1–T7 must fail on unfixed HEAD; T8–T9 are characteriza
 numbers in `production/qa/evidence/2026-10-ngplus/`.
 **Run result**: N/A — waived by the user (decision 4): carried stat numbers only, no new screen; numbers asserted by tests and tabulated in evidence; Y1-P0-T15 observes NG+ on a real build.
 
-**Status**: [ ] Not yet created
+**Status**: [x] Created — tests/unit/ngplus/ngplus_buff_stacking_test.gd (192/0), production/qa/evidence/2026-10-ngplus/
 
 ---
 
@@ -204,3 +204,16 @@ numbers in `production/qa/evidence/2026-10-ngplus/`.
 - Depends on: Y1-P0-T02 (done), Y1-P0-T03 (done; decision 6A). No story files for these by sprint decision;
   status in `production/sprint-status.yaml`.
 - Unlocks: Y1-P0-T15 (Phase 0 exit playthrough includes NG+).
+
+---
+
+## Completion Notes
+**Completed**: 2026-10-20
+**Criteria**: 6/6 passing. DEFERRED: NG+ observed on a real build in the Phase 0 exit playthrough (Y1-P0-T15); run-and-observe waived by the user (decision 4).
+**Deviations** (advisory):
+- NOT ASSESSED: GDD / ADR / TR-registry traceability (none exist for NG+); judged against decision 6A and the ACs.
+- AC-5: `GameManager.get_save_data()` does not exist; the test reads the save JSON written by `save_game(1)` (wording corrected).
+- Evidence table AFTER column came from a deleted throwaway script; the suite's literal assertions and logs back the key rows.
+**Test Evidence**: Integration — `AethelgardPrototype/tests/unit/ngplus/ngplus_buff_stacking_test.gd` (T1–T12, 192 checks): 167 passed / 25 failed on unfixed HEAD (`ngplus_unit_unfixed.log`), 192/0 fixed (`ngplus_unit.log`); full suite 13/13 on the final code (`production/qa/evidence/2026-10-ngplus/run_all.log`); layout guard 6/0.
+**Code Review**: Complete — /code-review APPROVED WITH SUGGESTIONS (suggestions applied: armor/defense + spare route in T8, max_mp guard in T10, T12); LP-CODE-REVIEW APPROVE (condition: track the old-save follow-up → TD-001); QL-TEST-COVERAGE ADEQUATE (advisory gaps).
+**Follow-ups**: TD-001 pre-v1.2 saves rebuilt via `rebuild_from_flags()` can under-carry at NG+ (guard in `choice_consequences.gd`); TD-002 no v1.2 save → load → NG+ round-trip test (before T15); NG+ after restart carries nothing (option B memo `77233cc`); Ch3 one-off max-HP bonuses stack each NG+; T11 is characterization only. LP note: `start_new_game_plus()` ~70 lines (pre-existing), helper extraction later; large logs in evidence are heavy in git.

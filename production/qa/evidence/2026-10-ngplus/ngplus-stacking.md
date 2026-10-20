@@ -5,7 +5,7 @@
 - **Engine**: Godot 4.6.3.stable (headless)
 - **Suite**: `AethelgardPrototype/tests/unit/ngplus/ngplus_buff_stacking_test.gd`
 - **Result**: `NGPLUS UNIT RESULT: 192 passed, 0 failed` (exit 0). Full output: `ngplus_unit.log` in this folder.
-  (150/0 before the code-review additions; the full-suite log `run_all.log` is from that 150-check version.)
+  (150/0 before the code-review additions.) Full suite on the final code: 13/13, NG+ 192/0 (`run_all.log`, re-run 2026-10-20 at story close).
 
 ## What the test proves
 

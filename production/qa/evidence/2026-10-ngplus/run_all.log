@@ -1075,8 +1075,6 @@ ERROR: [SideQuest] q_test: unknown item 'nope' (reward skipped)
 [INVENTORY] Added 2 x Glitch Stabilizer
 
 QUESTS UNIT RESULT: 134 passed, 0 failed
-WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
-   at: cleanup (core/object/object.cpp:2663)
 === res://tests/unit/ngplus/ngplus_buff_stacking_test.gd
 Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
 
@@ -1303,8 +1301,8 @@ WARNING: [STORY] Clearing mutually exclusive flag 'ch1_knight_killed' (new: 'ch1
    at: push_warning (core/variant/variant_utility.cpp:1034)
    GDScript backtrace (most recent call first):
        [0] set_story_flag (res://scripts/game_manager.gd:715)
-       [1] _test_t5_exclusive_flip (res://tests/unit/ngplus/ngplus_buff_stacking_test.gd:242)
-       [2] _run (res://tests/unit/ngplus/ngplus_buff_stacking_test.gd:71)
+       [1] _test_t5_exclusive_flip (res://tests/unit/ngplus/ngplus_buff_stacking_test.gd:244)
+       [2] _run (res://tests/unit/ngplus/ngplus_buff_stacking_test.gd:72)
 [CHOICE-FX] Removed buff: executioner_edge (flag ch1_knight_killed cleared)
 [CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
   PASS: T5 knight: active_buffs holds only guardian_blessing (got ["guardian_blessing"])
@@ -1322,8 +1320,8 @@ WARNING: [STORY] Clearing mutually exclusive flag 'ch2_data_wraith_absorbed' (ne
    at: push_warning (core/variant/variant_utility.cpp:1034)
    GDScript backtrace (most recent call first):
        [0] set_story_flag (res://scripts/game_manager.gd:715)
-       [1] _test_t5_exclusive_flip (res://tests/unit/ngplus/ngplus_buff_stacking_test.gd:251)
-       [2] _run (res://tests/unit/ngplus/ngplus_buff_stacking_test.gd:71)
+       [1] _test_t5_exclusive_flip (res://tests/unit/ngplus/ngplus_buff_stacking_test.gd:253)
+       [2] _run (res://tests/unit/ngplus/ngplus_buff_stacking_test.gd:72)
 [CHOICE-FX] Removed buff: wraith_power (flag ch2_data_wraith_absorbed cleared)
 [CHOICE-FX] Applied buff: wraith_gratitude — Wraith's Gratitude: +5 DEF, +10 Max HP. Spectral ally occasionally blocks attacks.
   PASS: T5 wraith: active_buffs holds only wraith_gratitude (got ["wraith_gratitude"])
@@ -1435,9 +1433,12 @@ WARNING: [STORY] Clearing mutually exclusive flag 'ch2_data_wraith_absorbed' (ne
 [INVENTORY] Added 1 x Iron Sword
 [INVENTORY] Equipped Iron Sword to weapon
 [INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Leather Armor
+[INVENTORY] Equipped Leather Armor to armor
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
 [INVENTORY] Added 3 x Health Potion
 [INVENTORY] Added 2 x Glitch Stabilizer
-[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
 [INVENTORY] Added 1 x Glitch Stabilizer
 [NG+] Started cycle 1 — Level 4, 50 gold, 1 charms, 2 items
   PASS: T8 no-buff cycle 0: setup populated every carried field
@@ -1455,6 +1456,7 @@ WARNING: [STORY] Clearing mutually exclusive flag 'ch2_data_wraith_absorbed' (ne
   PASS: T8 no-buff cycle 0: ng_plus_route_recap_available true
   PASS: T8 no-buff cycle 0: hp == max_hp and mp == max_mp
   PASS: T8 no-buff cycle 0: equipped weapon bonus re-applied (+10 attack)
+  PASS: T8 no-buff cycle 0: equipped armor bonus re-applied (+5 defense, got 8 on base 3)
 [INVENTORY] Added 3 x Health Potion
 [INVENTORY] Added 2 x Glitch Stabilizer
 [CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
@@ -1475,9 +1477,12 @@ WARNING: [STORY] Clearing mutually exclusive flag 'ch2_data_wraith_absorbed' (ne
 [INVENTORY] Added 1 x Iron Sword
 [INVENTORY] Equipped Iron Sword to weapon
 [INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Leather Armor
+[INVENTORY] Equipped Leather Armor to armor
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
 [INVENTORY] Added 3 x Health Potion
 [INVENTORY] Added 2 x Glitch Stabilizer
-[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
 [INVENTORY] Added 1 x Glitch Stabilizer
 [NG+] Started cycle 1 — Level 4, 50 gold, 1 charms, 2 items
   PASS: T8 kill-route cycle 0: setup populated every carried field
@@ -1495,7 +1500,53 @@ WARNING: [STORY] Clearing mutually exclusive flag 'ch2_data_wraith_absorbed' (ne
   PASS: T8 kill-route cycle 0: ng_plus_route_recap_available true
   PASS: T8 kill-route cycle 0: hp == max_hp and mp == max_mp
   PASS: T8 kill-route cycle 0: equipped weapon bonus re-applied (+10 attack)
-  PASS: T8 cycle 0: kill route equals the no-buff run on every non-buff field []
+  PASS: T8 kill-route cycle 0: equipped armor bonus re-applied (+5 defense, got 8 on base 3)
+  PASS: T8 cycle 0: kill route equals the no-buff run on every carried field and stat []
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CHOICE-FX] Applied buff: ironhold_defender — Ironhold Defender: +8 DEF. Seraphina sends supply drops (+2 potions per chapter).
+[CHOICE-FX] Applied buff: wraith_gratitude — Wraith's Gratitude: +5 DEF, +10 Max HP. Spectral ally occasionally blocks attacks.
+[CHOICE-FX] Applied buff: storm_navigator — Storm Navigator: +5 DEF. 30% reduced environmental damage. Storm map reveals hidden paths.
+[CHOICE-FX] Applied buff: independent_mind — Independent Mind: +5 DEF, +3 ATK. Immune to confusion/charm effects.
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 3 popup: +23 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 4 popup: +23 HP, +11 MP, +3 ATK
+[CHARM] Unlocked: extended_parry (equip via pause menu)
+[CHARM] Equipped: extended_parry (1/3 slots)
+[INVENTORY] Added 1 x Blue Potion
+[INVENTORY] Added 1 x Iron Sword
+[INVENTORY] Equipped Iron Sword to weapon
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Leather Armor
+[INVENTORY] Equipped Leather Armor to armor
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 4, 50 gold, 1 charms, 2 items
+  PASS: T8 spare-route cycle 0: setup populated every carried field
+  PASS: T8 spare-route cycle 0: level carried (4)
+  PASS: T8 spare-route cycle 0: max_mp carried (83)
+  PASS: T8 spare-route cycle 0: both gold fields 101 -> 50 (got 50 / 50)
+  PASS: T8 spare-route cycle 0: unlocked_charms carried
+  PASS: T8 spare-route cycle 0: equipped_charms carried
+  PASS: T8 spare-route cycle 0: arena_stats carried
+  PASS: T8 spare-route cycle 0: Inventory.equipment carried
+  PASS: T8 spare-route cycle 0: Inventory.items carried plus exactly one glitch_stabilizer
+  PASS: T8 spare-route cycle 0: lifetime stats carried, death_count 0
+  PASS: T8 spare-route cycle 0: ng_plus_cycle 0 -> 1 (got 1)
+  PASS: T8 spare-route cycle 0: ng_plus_available false
+  PASS: T8 spare-route cycle 0: ng_plus_route_recap_available true
+  PASS: T8 spare-route cycle 0: hp == max_hp and mp == max_mp
+  PASS: T8 spare-route cycle 0: equipped weapon bonus re-applied (+10 attack)
+  PASS: T8 spare-route cycle 0: equipped armor bonus re-applied (+5 defense, got 8 on base 3)
+  PASS: T8 cycle 0: spare route equals the no-buff run on every carried field and stat []
 [INVENTORY] Added 3 x Health Potion
 [INVENTORY] Added 2 x Glitch Stabilizer
 [INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
@@ -1510,9 +1561,12 @@ WARNING: [STORY] Clearing mutually exclusive flag 'ch2_data_wraith_absorbed' (ne
 [INVENTORY] Added 1 x Iron Sword
 [INVENTORY] Equipped Iron Sword to weapon
 [INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Leather Armor
+[INVENTORY] Equipped Leather Armor to armor
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
 [INVENTORY] Added 3 x Health Potion
 [INVENTORY] Added 2 x Glitch Stabilizer
-[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
 [INVENTORY] Added 1 x Glitch Stabilizer
 [NG+] Started cycle 6 — Level 4, 50 gold, 1 charms, 2 items
   PASS: T8 no-buff cycle 5: setup populated every carried field
@@ -1530,6 +1584,7 @@ WARNING: [STORY] Clearing mutually exclusive flag 'ch2_data_wraith_absorbed' (ne
   PASS: T8 no-buff cycle 5: ng_plus_route_recap_available true
   PASS: T8 no-buff cycle 5: hp == max_hp and mp == max_mp
   PASS: T8 no-buff cycle 5: equipped weapon bonus re-applied (+10 attack)
+  PASS: T8 no-buff cycle 5: equipped armor bonus re-applied (+5 defense, got 8 on base 3)
 [INVENTORY] Added 3 x Health Potion
 [INVENTORY] Added 2 x Glitch Stabilizer
 [CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
@@ -1550,9 +1605,12 @@ WARNING: [STORY] Clearing mutually exclusive flag 'ch2_data_wraith_absorbed' (ne
 [INVENTORY] Added 1 x Iron Sword
 [INVENTORY] Equipped Iron Sword to weapon
 [INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Leather Armor
+[INVENTORY] Equipped Leather Armor to armor
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
 [INVENTORY] Added 3 x Health Potion
 [INVENTORY] Added 2 x Glitch Stabilizer
-[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
 [INVENTORY] Added 1 x Glitch Stabilizer
 [NG+] Started cycle 6 — Level 4, 50 gold, 1 charms, 2 items
   PASS: T8 kill-route cycle 5: setup populated every carried field
@@ -1570,7 +1628,53 @@ WARNING: [STORY] Clearing mutually exclusive flag 'ch2_data_wraith_absorbed' (ne
   PASS: T8 kill-route cycle 5: ng_plus_route_recap_available true
   PASS: T8 kill-route cycle 5: hp == max_hp and mp == max_mp
   PASS: T8 kill-route cycle 5: equipped weapon bonus re-applied (+10 attack)
-  PASS: T8 cycle 5: kill route equals the no-buff run on every non-buff field []
+  PASS: T8 kill-route cycle 5: equipped armor bonus re-applied (+5 defense, got 8 on base 3)
+  PASS: T8 cycle 5: kill route equals the no-buff run on every carried field and stat []
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CHOICE-FX] Applied buff: ironhold_defender — Ironhold Defender: +8 DEF. Seraphina sends supply drops (+2 potions per chapter).
+[CHOICE-FX] Applied buff: wraith_gratitude — Wraith's Gratitude: +5 DEF, +10 Max HP. Spectral ally occasionally blocks attacks.
+[CHOICE-FX] Applied buff: storm_navigator — Storm Navigator: +5 DEF. 30% reduced environmental damage. Storm map reveals hidden paths.
+[CHOICE-FX] Applied buff: independent_mind — Independent Mind: +5 DEF, +3 ATK. Immune to confusion/charm effects.
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 3 popup: +23 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 4 popup: +23 HP, +11 MP, +3 ATK
+[CHARM] Unlocked: extended_parry (equip via pause menu)
+[CHARM] Equipped: extended_parry (1/3 slots)
+[INVENTORY] Added 1 x Blue Potion
+[INVENTORY] Added 1 x Iron Sword
+[INVENTORY] Equipped Iron Sword to weapon
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Leather Armor
+[INVENTORY] Equipped Leather Armor to armor
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +10, DEF: +5 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 6 — Level 4, 50 gold, 1 charms, 2 items
+  PASS: T8 spare-route cycle 5: setup populated every carried field
+  PASS: T8 spare-route cycle 5: level carried (4)
+  PASS: T8 spare-route cycle 5: max_mp carried (83)
+  PASS: T8 spare-route cycle 5: both gold fields 101 -> 50 (got 50 / 50)
+  PASS: T8 spare-route cycle 5: unlocked_charms carried
+  PASS: T8 spare-route cycle 5: equipped_charms carried
+  PASS: T8 spare-route cycle 5: arena_stats carried
+  PASS: T8 spare-route cycle 5: Inventory.equipment carried
+  PASS: T8 spare-route cycle 5: Inventory.items carried plus exactly one glitch_stabilizer
+  PASS: T8 spare-route cycle 5: lifetime stats carried, death_count 0
+  PASS: T8 spare-route cycle 5: ng_plus_cycle 5 -> 6 (got 6)
+  PASS: T8 spare-route cycle 5: ng_plus_available false
+  PASS: T8 spare-route cycle 5: ng_plus_route_recap_available true
+  PASS: T8 spare-route cycle 5: hp == max_hp and mp == max_mp
+  PASS: T8 spare-route cycle 5: equipped weapon bonus re-applied (+10 attack)
+  PASS: T8 spare-route cycle 5: equipped armor bonus re-applied (+5 defense, got 8 on base 3)
+  PASS: T8 cycle 5: spare route equals the no-buff run on every carried field and stat []
 -- T9 no buffs, partial keys, save keys (AC-5)
   PASS: T9 control: the user:// listing detects a new file
   PASS: T9 control: the listing is stable once the probe file is removed
@@ -1616,6 +1720,7 @@ WARNING: [STORY] Clearing mutually exclusive flag 'ch2_data_wraith_absorbed' (ne
   PASS: T10 CHOICE_BUFFS read (17 entries)
   PASS: T10 checked 26 attack/defense/max_hp values covering all three stats
   PASS: T10 every attack/defense/max_hp buff value is integral []
+  PASS: T10 no CHOICE_BUFFS entry modifies max_mp (NG+ does not subtract it) []
 -- T11 soul_gain_bonus not carried
 [INVENTORY] Added 3 x Health Potion
 [INVENTORY] Added 2 x Glitch Stabilizer
@@ -1632,12 +1737,38 @@ WARNING: [STORY] Clearing mutually exclusive flag 'ch2_data_wraith_absorbed' (ne
 [INVENTORY] Added 1 x Glitch Stabilizer
 [NG+] Started cycle 1 — Level 1, 0 gold, 0 charms, 1 items
   PASS: T11 soul_gain_bonus is absent or 0.0 after NG+ (got 0.0)
+-- T12 NG+ twice in a row
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 3 popup: +23 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 4 popup: +23 HP, +11 MP, +3 ATK
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CHOICE-FX] Applied buff: elara_bond_wary — Cautious Alliance: +3 ATK. Elara reveals enemy HP bars and weaknesses.
+[CHOICE-FX] Applied buff: hardened_heart — Hardened Heart: +6 ATK, +15% Soul gain. Spells deal 20% more damage.
+[CHOICE-FX] Applied buff: wraith_power — Wraith Absorption: +10 ATK, -15 Max HP. Dash phases through enemies dealing damage.
+[CHOICE-FX] Applied buff: ranger_ally — Lyra's Bow: +3 ATK. Lyra fires ranged support shots in combat (15 dmg every 5s).
+[CHOICE-FX] Applied buff: battle_tested — Battle-Tested: +6 ATK, +10 Max HP. Root Access attacks deal 25% more damage to bosses.
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 4, 0 gold, 0 charms, 1 items
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 2 — Level 4, 0 gold, 0 charms, 1 items
+  PASS: T12 precondition: the level-up carried (P1 above B)
+  PASS: T12 P2 base_attack/base_defense/max_hp/level == P1 (got [24, 3, 170], want [24, 3, 170])
+  PASS: T12 ng_plus_cycle == 2 (got 2)
 [INVENTORY] Added 3 x Health Potion
 [INVENTORY] Added 2 x Glitch Stabilizer
 
-NGPLUS UNIT RESULT: 150 passed, 0 failed
-WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
-   at: cleanup (core/object/object.cpp:2663)
+NGPLUS UNIT RESULT: 192 passed, 0 failed
 === res://tests/integration/story/chapter1_route_test.gd
 Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
 
@@ -2470,7 +2601,7 @@ WARNING: [CH1-SHATTER] unhandled dialogue event: not_an_event
 [CH1-SHATTER] Environmental shift begins
 [CUTSCENE] Finished
 [CH1-SHATTER] Executing THE SHATTER
-  PASS: 'do desaturate' isn't awaited at the event: red is mid-drain while the lamps line shows (398 samples)
+  PASS: 'do desaturate' isn't awaited at the event: red is mid-drain while the lamps line shows (415 samples)
   PASS: a slow reader sees the drain finish on the lamps line
   PASS: after a slow read the scene still reaches RECONSTRUCTION COMPLETE (no wait on a finished tween)
 [Oakhaven: a normal afternoon, then the alarm]
@@ -3065,7 +3196,7 @@ WARNING: [AssetManager] NPC sheet failed to load for Elara; using existing NPC f
        [1] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:494)
        [2] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:59)
   PASS: topics then (Just eat.): the stew choices were seen and ch1_stew_done was not set while they were open
-  PASS: topics then (Just eat.): ch1_stew_done not set while the stew lines play (8 frames watched)
+  PASS: topics then (Just eat.): ch1_stew_done not set while the stew lines play (9 frames watched)
   PASS: topics then (Just eat.): ch1_stew_done is set once the stew run has returned
   PASS: that path asked one topic, then ate
 [INVENTORY] Added 3 x Health Potion
@@ -3090,7 +3221,7 @@ WARNING: [AssetManager] NPC sheet failed to load for Elara; using existing NPC f
        [1] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:494)
        [2] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:59)
   PASS: (Just eat.) straight away: the stew choices were seen and ch1_stew_done was not set while they were open
-  PASS: (Just eat.) straight away: ch1_stew_done not set while the stew lines play (8 frames watched)
+  PASS: (Just eat.) straight away: ch1_stew_done not set while the stew lines play (10 frames watched)
   PASS: (Just eat.) straight away: ch1_stew_done is set once the stew run has returned
   PASS: that path asked no topic
 [INVENTORY] Added 3 x Health Potion
@@ -4193,7 +4324,7 @@ AssetManager initialized - Scanning for asset availability...
   PASS: x0.4 zone gives about 40% speed (132 vs 132), not 17%
   PASS: no zone: normal run speed (330 vs 330)
 [placeholder sprites flip around their centre]
-  PASS: facing left, the placeholder is drawn centred on the body (1144.6 vs 1144.6; size (31.44846, 32.73539))
+  PASS: facing left, the placeholder is drawn centred on the body (1144.6 vs 1144.6; size (31.42154, 32.77128))
 [combat feel: overlap hits, jump-cancel, dash buffer, hit-pause]
 [INVENTORY] Added 3 x Health Potion
 [INVENTORY] Added 2 x Glitch Stabilizer
@@ -4455,7 +4586,7 @@ WARNING: [AssetManager] V2 top-down player sheet missing; using existing player 
        [4] _spawn_player (res://scripts/regions/oakhaven_region.gd:411)
        [5] _ready (res://scripts/regions/oakhaven_region.gd:75)
   PASS: oakhaven_region (load 1): the player spawns in free space at (1050, 1250)
-  oakhaven_region (load 1): 22 targets, 29707/30000 cells free, 29707 reachable
+  oakhaven_region (load 1): 22 targets, 29706/30000 cells free, 29706 reachable
   PASS: oakhaven_region (load 1): every trigger area is reachable []
 [INVENTORY] Added 3 x Health Potion
 [INVENTORY] Added 2 x Glitch Stabilizer
@@ -4586,7 +4717,7 @@ WARNING: [AssetManager] V2 top-down player sheet missing; using existing player 
        [4] _spawn_player (res://scripts/regions/oakhaven_region.gd:411)
        [5] _ready (res://scripts/regions/oakhaven_region.gd:75)
   PASS: oakhaven_region (load 2): the player spawns in free space at (1050, 1250)
-  oakhaven_region (load 2): 22 targets, 29697/30000 cells free, 29697 reachable
+  oakhaven_region (load 2): 22 targets, 29705/30000 cells free, 29705 reachable
   PASS: oakhaven_region (load 2): every trigger area is reachable []
 [INVENTORY] Added 3 x Health Potion
 [INVENTORY] Added 2 x Glitch Stabilizer
@@ -4718,7 +4849,7 @@ WARNING: [AssetManager] V2 top-down player sheet missing; using existing player 
        [5] _ready (res://scripts/regions/oakhaven_region.gd:75)
 [ENCOUNTER] Zone changed: Oakhaven Village
   PASS: oakhaven_region (load 3): the player spawns in free space at (1050, 1250)
-  oakhaven_region (load 3): 22 targets, 29715/30000 cells free, 29715 reachable
+  oakhaven_region (load 3): 22 targets, 29697/30000 cells free, 29697 reachable
   PASS: oakhaven_region (load 3): every trigger area is reachable []
 [INVENTORY] Added 3 x Health Potion
 [INVENTORY] Added 2 x Glitch Stabilizer
@@ -4805,7 +4936,7 @@ WARNING: [AssetManager] V2 top-down player sheet missing; using existing player 
        [4] _spawn_player (res://scripts/regions/ironhold_region.gd:379)
        [5] _ready (res://scripts/regions/ironhold_region.gd:62)
   PASS: ironhold_region (load 1): the player spawns in free space at (1400, 1100)
-  ironhold_region (load 1): 24 targets, 39039/39375 cells free, 39039 reachable
+  ironhold_region (load 1): 24 targets, 39040/39375 cells free, 39040 reachable
   PASS: ironhold_region (load 1): every trigger area is reachable []
 [INVENTORY] Added 3 x Health Potion
 [INVENTORY] Added 2 x Glitch Stabilizer
@@ -4882,7 +5013,7 @@ WARNING: [AssetManager] V2 top-down player sheet missing; using existing player 
        [4] _spawn_player (res://scripts/regions/ironhold_region.gd:379)
        [5] _ready (res://scripts/regions/ironhold_region.gd:62)
   PASS: ironhold_region (load 2): the player spawns in free space at (1400, 1100)
-  ironhold_region (load 2): 24 targets, 39021/39375 cells free, 39021 reachable
+  ironhold_region (load 2): 24 targets, 39028/39375 cells free, 39028 reachable
   PASS: ironhold_region (load 2): every trigger area is reachable []
 [INVENTORY] Added 3 x Health Potion
 [INVENTORY] Added 2 x Glitch Stabilizer
@@ -4959,7 +5090,7 @@ WARNING: [AssetManager] V2 top-down player sheet missing; using existing player 
        [4] _spawn_player (res://scripts/regions/ironhold_region.gd:379)
        [5] _ready (res://scripts/regions/ironhold_region.gd:62)
   PASS: ironhold_region (load 3): the player spawns in free space at (1400, 1100)
-  ironhold_region (load 3): 24 targets, 39026/39375 cells free, 39026 reachable
+  ironhold_region (load 3): 24 targets, 39045/39375 cells free, 39045 reachable
   PASS: ironhold_region (load 3): every trigger area is reachable []
 [INVENTORY] Added 3 x Health Potion
 [INVENTORY] Added 2 x Glitch Stabilizer
@@ -4973,7 +5104,7 @@ WARNING: [AssetManager] V2 top-down player sheet missing; using existing player 
        [4] _spawn_player (res://scripts/overworld/overworld.gd:248)
        [5] _ready (res://scripts/overworld/overworld.gd:49)
   PASS: overworld (load 1): the player spawns in free space at (1500, 1100)
-  overworld (load 1): 6 targets, 25690/25944 cells free, 25690 reachable
+  overworld (load 1): 6 targets, 25692/25944 cells free, 25692 reachable
   PASS: overworld (load 1): every trigger area is reachable []
 [INVENTORY] Added 3 x Health Potion
 [INVENTORY] Added 2 x Glitch Stabilizer
@@ -4987,7 +5118,7 @@ WARNING: [AssetManager] V2 top-down player sheet missing; using existing player 
        [4] _spawn_player (res://scripts/overworld/overworld.gd:248)
        [5] _ready (res://scripts/overworld/overworld.gd:49)
   PASS: overworld (load 2): the player spawns in free space at (1500, 1100)
-  overworld (load 2): 6 targets, 25695/25944 cells free, 25695 reachable
+  overworld (load 2): 6 targets, 25678/25944 cells free, 25678 reachable
   PASS: overworld (load 2): every trigger area is reachable []
 [INVENTORY] Added 3 x Health Potion
 [INVENTORY] Added 2 x Glitch Stabilizer
@@ -5001,7 +5132,7 @@ WARNING: [AssetManager] V2 top-down player sheet missing; using existing player 
        [4] _spawn_player (res://scripts/overworld/overworld.gd:248)
        [5] _ready (res://scripts/overworld/overworld.gd:49)
   PASS: overworld (load 3): the player spawns in free space at (1500, 1100)
-  overworld (load 3): 6 targets, 25677/25944 cells free, 25677 reachable
+  overworld (load 3): 6 targets, 25688/25944 cells free, 25688 reachable
   PASS: overworld (load 3): every trigger area is reachable []
 [INVENTORY] Added 3 x Health Potion
 [INVENTORY] Added 2 x Glitch Stabilizer
@@ -5247,9 +5378,9 @@ WARNING: [AssetManager] V2 combat player sheet missing; using existing player fa
 [SIDE QUEST] Discovered: Arena Legend
 [SIDE QUEST] Discovered: The Data Hoard
 [SIDE QUEST] Discovered: Merchant's Guild Troubles
+  PASS: 4i: arena district loads
 [ACHIEVEMENT] Unlocked: Silver Warrior — Complete the Silver arena tier.
 [ACHIEVEMENT] Unlocked: Gold Champion — Complete the Gold arena tier.
-  PASS: 4i: arena district loads
 [SIDE QUEST] Started: Arena Legend
 [SIDE QUEST] Arena Legend — Step 1/4: Complete Silver tier
 [SIDE QUEST] Arena Legend — Step 2/4: Complete Gold tier
@@ -5325,13 +5456,13 @@ WARNING: [AssetManager] Enemy sheet failed to load for DataSprite; using existin
        [4] _spawn_enemy_at (res://scripts/chapter2/ch2_underground_network.gd:299)
        [5] _spawn_dungeon_enemies (res://scripts/chapter2/ch2_underground_network.gd:227)
        [6] _ready (res://scripts/chapter2/ch2_underground_network.gd:42)
+[ACHIEVEMENT] Unlocked: Double Digits — Reach level 10.
   PASS: 5a: Underground loads
 [SAVE] Slot 99 saved successfully (v1.2.0)
 [CHECKPOINT] Underground Network — entry auto-save
 [SIDE QUEST] Discovered: The Data Hoard
 [SIDE QUEST] Started: The Data Hoard
 [SIDE QUEST] The Data Hoard — Step 1/3: Fix the routing junction
-[ACHIEVEMENT] Unlocked: Double Digits — Reach level 10.
   PASS: 5a first entry: ACTIVE, step 1 (Enter the Underground done)
 [CH2-UNDERGROUND] Initializing Underground Network dungeon
 WARNING: [AssetManager] V2 combat player sheet missing; using existing player fallback.
@@ -6523,12 +6654,12 @@ WARNING: [AssetManager] V2 top-down player sheet missing; using existing player 
 [CUTSCENE BEAT] Type: character_move
 [CUTSCENE BEAT] Type: camera_move
 [CUTSCENE] Finished
-[ACHIEVEMENT] Unlocked: Sudo Mode — Unlock Root Access.
 [CUTSCENE] Starting: Chapter 1 - The Broken Mile
 [CUTSCENE BEAT] Type: parallel
 [CUTSCENE BEAT] Type: character_move
 [CUTSCENE BEAT] Type: character_move
 [CUTSCENE BEAT] Type: camera_move
+[ACHIEVEMENT] Unlocked: Sudo Mode — Unlock Root Access.
 [CUTSCENE] Finished
 [CH1-SEQ3] Transitioning to Oakhaven Village
 WARNING: [AssetManager] V2 top-down player sheet missing; using existing player fallback.
@@ -6895,6 +7026,7 @@ WARNING: [AssetManager] V2 combat player sheet missing; using existing player fa
        [2] _ready (res://scripts/chapter2/ch2_clock_tower.gd:57)
 DDA: 20.0 (mult=0.75) K:0 D:0.3
 DDA: 20.0 (mult=0.75) K:0 D:0.6
+DDA: 20.0 (mult=0.75) K:0 D:0.9
   PASS: C5: player passes up through floor 2 and stands on it (y=650, floor top 650)
   PASS: camera follows the player in the Clock Tower
 [C6] Underground: walk from the final corridor into the boss chamber
@@ -6938,7 +7070,7 @@ ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
 [SIDE QUEST] The Data Hoard — Step 1/3: Fix the routing junction
   PASS: C6: corridor leads into the boss chamber (x=2938)
 DDA: 20.0 (mult=0.75) K:0 D:0.3
-  PASS: entry corridor leads into the first chamber (x=963)
+  PASS: entry corridor leads into the first chamber (x=964)
   PASS: camera follows the player in the Underground
 [C18] player can still move with the ColorRect fallback (no art)
   PASS: C18: moving left works when the Sprite is a ColorRect (dx=-137)
@@ -6948,7 +7080,7 @@ DDA: 20.0 (mult=0.75) K:0 D:0.6
   PASS: P1-1: a hit at 100 DEF deals half damage (took 20.00, expected 20.00)
 [ECON] MP for spells/heal, Soul from parries / perfect dodges / kills
   PASS: Soul is no longer gained per hit
-  PASS: MP regenerates ~2/s (got 1.92 after 1 s)
+  PASS: MP regenerates ~2/s (got 1.91 after 1 s)
   PASS: a spell costs 15 MP (MP now 35.0)
   PASS: a kill earns Soul
   PASS: a hit during dash i-frames is a perfect dodge: Soul once per dash
@@ -7266,3 +7398,4 @@ WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
    at: cleanup (core/object/object.cpp:2663)
 
 All suites passed.
+exit=0
