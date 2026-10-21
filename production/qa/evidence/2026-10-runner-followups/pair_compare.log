@@ -1,0 +1,152 @@
+== PowerShell matrix (p_OLD_NN_* vs p_NEW_NN_*: stdout .out and stderr .out.err)
+SAME     01_td007_h1_error_then_quit.out stdout
+SAME     01_td007_h1_error_then_quit.out stderr
+SAME     02_td007_h2_never_quits.out stdout
+SAME     02_td007_h2_never_quits.out stderr
+SAME     03_td007_r3_clean.out stdout
+SAME     03_td007_r3_clean.out stderr
+SAME     04_td007_c1_early_return.out stdout
+SAME     04_td007_c1_early_return.out stderr
+SAME     05_td007_c1_early_return.out stdout
+SAME     05_td007_c1_early_return.out stderr
+SAME     06_td007_c2_no_result_line.out stdout
+SAME     06_td007_c2_no_result_line.out stderr
+SAME     07_td007_c2_no_result_line.out stdout
+SAME     07_td007_c2_no_result_line.out stderr
+SAME     08_td007_m3_ok_form.out stdout
+SAME     08_td007_m3_ok_form.out stderr
+SAME     09_td007_m3_ok_form.out stdout
+SAME     09_td007_m3_ok_form.out stderr
+SAME     10_not_registered_test.out stdout
+SAME     10_not_registered_test.out stderr
+SAME     11_td007_w5_near_deadline.out stdout
+SAME     11_td007_w5_near_deadline.out stderr
+SAME     12_td007_m5_two_results.out stdout
+SAME     12_td007_m5_two_results.out stderr
+SAME     13_td007_m6_lowercase.out stdout
+SAME     13_td007_m6_lowercase.out stderr
+SAME     14_td007_m7_failures.out stdout
+SAME     14_td007_m7_failures.out stderr
+SAME     15_td007_m7_failures.out stdout
+SAME     15_td007_m7_failures.out stderr
+SAME     16_td007_e1_push_error.out stdout
+SAME     16_td007_e1_push_error.out stderr
+SAME     17_td007_e2_missing_resource.out stdout
+SAME     17_td007_e2_missing_resource.out stderr
+SAME     18_td003_runtime_error_probe.out stdout
+SAME     18_td003_runtime_error_probe.out stderr
+SAME     19_td003_parse_error_probe.out stdout
+SAME     19_td003_parse_error_probe.out stderr
+SAME     20_td003_loaded_parse_error_probe.out stdout
+SAME     20_td003_loaded_parse_error_probe.out stderr
+SAME     21_td003_clean_probe.out stdout
+SAME     21_td003_clean_probe.out stderr
+SAME     22_td003_quit3_clean_probe.out stdout
+SAME     22_td003_quit3_clean_probe.out stderr
+SAME     23_td003_quit3_error_probe.out stdout
+SAME     23_td003_quit3_error_probe.out stderr
+SAME     24_td003_lowercase_probe.out stdout
+SAME     24_td003_lowercase_probe.out stderr
+SAME     25_td003_adjacent_probe.out stdout
+SAME     25_td003_adjacent_probe.out stderr
+== bash matrix (ps_OLD_NN_* vs ps_NEW_NN_*, stdout+stderr)
+SAME     01_td007_h1_error_then_quit_TEST_TIMEOUT_20_.out
+SAME     02_td007_h1_error_then_quit_TEST_TIMEOUT_20_GITHUB_ACTIONS_true_.out
+SAME     03_td007_h2_never_quits_TEST_TIMEOUT_20_.out
+SAME     04_td007_r3_clean_TEST_TIMEOUT_20_.out
+SAME     05_td007_c1_early_return_MIN_CHECKS_2_.out
+SAME     06_td007_c1_early_return_MIN_CHECKS_2_GITHUB_ACTIONS_true_.out
+SAME     07_td007_c1_early_return_MIN_CHECKS_1_.out
+SAME     08_td007_c2_no_result_line_MIN_CHECKS_1_.out
+SAME     09_td007_c2_no_result_line.out
+SAME     10_td007_m3_ok_form_MIN_CHECKS_5_.out
+SAME     11_td007_m3_ok_form_MIN_CHECKS_6_.out
+SAME     12_not_registered_test.out
+SAME     13_not_registered_test_GITHUB_ACTIONS_true_.out
+SAME     14_td007_w5_near_deadline_TEST_TIMEOUT_20_.out
+SAME     15_td007_m5_two_results_MIN_CHECKS_2_.out
+SAME     16_td007_m6_lowercase_MIN_CHECKS_1_.out
+SAME     17_td007_m7_failures_MIN_CHECKS_2_.out
+SAME     18_td007_m7_failures_MIN_CHECKS_3_.out
+SAME     19_td007_e1_push_error.out
+SAME     20_td003_runtime_error_probe.out
+SAME     21_td003_runtime_error_probe_GITHUB_ACTIONS_true_.out
+SAME     22_td003_parse_error_probe.out
+SAME     23_td003_loaded_parse_error_probe.out
+SAME     24_td003_clean_probe.out
+SAME     25_td003_quit3_clean_probe.out
+SAME     26_td003_quit3_error_probe.out
+SAME     27_td003_lowercase_probe.out
+SAME     28_td003_adjacent_probe.out
+== bash extras (x_*_OLD_.out vs x_*_NEW_.out, stdout+stderr)
+SAME     x_G1_non_GNU_timeout__local__
+SAME     x_G2_non_GNU_timeout__GitHub_Actions__
+SAME*    x_K1_ignores_SIGTERM__limit_3_s__ (equal after normalizing)
+SAME*    x_K2_SIGKILL_at_1_s__limit_20_s__ (equal after normalizing)
+SAME     x_R8_lowercase_look_alikes__
+SAME     x_R9_adjacent_matches__
+SAME     x_V1_MIN_CHECKS_abc__
+SAME     x_V2_TEST_TIMEOUT_0__
+== output pairs same: 86, differing or missing: 0
+== exit codes per pair
+PS 01 W1 H1 error before quit()        OLD=124  NEW=124  same
+PS 02 W2 H2 never quits                OLD=124  NEW=124  same
+PS 03 W3 clean, 20 s limit             OLD=0    NEW=0    same
+PS 04 M1 early return, min 2           OLD=1    NEW=1    same
+PS 05 M1 early return, min 1           OLD=0    NEW=0    same
+PS 06 M2 no result line, min 1         OLD=1    NEW=1    same
+PS 07 M2 no result line, no min        OLD=0    NEW=0    same
+PS 08 M3 ok= form, min 5               OLD=0    NEW=0    same
+PS 09 M3 ok= form, min 6               OLD=1    NEW=1    same
+PS 10 M4 unregistered suite            OLD=1    NEW=1    same
+PS 11 W5 quits at 15 s, 20 s limit     OLD=0    NEW=0    same
+PS 12 M5 two result lines, min 2       OLD=1    NEW=1    same
+PS 13 M6 lowercase result:, min 1      OLD=1    NEW=1    same
+PS 14 M7 1 passed 1 failed, min 2      OLD=1    NEW=1    same
+PS 15 M7 1 passed 1 failed, min 3      OLD=1    NEW=1    same
+PS 16 E1 push_error only               OLD=0    NEW=0    same
+PS 17 E2 missing resource              OLD=0    NEW=0    same
+PS 18 R1 runtime error                 OLD=1    NEW=1    same
+PS 19 R2 parse error                   OLD=1    NEW=1    same
+PS 20 R2b loaded broken helper         OLD=1    NEW=1    same
+PS 21 R3 clean (TD-003)                OLD=0    NEW=0    same
+PS 22 R7a quit(3)                      OLD=3    NEW=3    same
+PS 23 R7b error + quit(3)              OLD=3    NEW=3    same
+PS 24 R8 lowercase look-alikes         OLD=0    NEW=0    same
+PS 25 R9 adjacent matches              OLD=1    NEW=1    same
+SH 01 exit=124   exit=124   same
+SH 02 exit=124   exit=124   same
+SH 03 exit=124   exit=124   same
+SH 04 exit=0     exit=0     same
+SH 05 exit=1     exit=1     same
+SH 06 exit=1     exit=1     same
+SH 07 exit=0     exit=0     same
+SH 08 exit=1     exit=1     same
+SH 09 exit=0     exit=0     same
+SH 10 exit=0     exit=0     same
+SH 11 exit=1     exit=1     same
+SH 12 exit=1     exit=1     same
+SH 13 exit=1     exit=1     same
+SH 14 exit=0     exit=0     same
+SH 15 exit=1     exit=1     same
+SH 16 exit=1     exit=1     same
+SH 17 exit=1     exit=1     same
+SH 18 exit=1     exit=1     same
+SH 19 exit=0     exit=0     same
+SH 20 exit=1     exit=1     same
+SH 21 exit=1     exit=1     same
+SH 22 exit=1     exit=1     same
+SH 23 exit=1     exit=1     same
+SH 24 exit=0     exit=0     same
+SH 25 exit=3     exit=3     same
+SH 26 exit=3     exit=3     same
+SH 27 exit=0     exit=0     same
+SH 28 exit=1     exit=1     same
+X  G1 non-GNU timeout, local            OLD exit=0    NEW exit=0    same
+X  G2 non-GNU timeout, GitHub Actions   OLD exit=1    NEW exit=1    same
+X  K1 ignores SIGTERM, limit 3 s        OLD exit=124  NEW exit=124  same
+X  K2 SIGKILL at 1 s, limit 20 s        OLD exit=137  NEW exit=137  same
+X  R8 lowercase look-alikes             OLD exit=0    NEW exit=0    same
+X  R9 adjacent matches                  OLD exit=1    NEW exit=1    same
+X  V1 MIN_CHECKS=abc                    OLD exit=1    NEW exit=1    same
+X  V2 TEST_TIMEOUT=0                    OLD exit=1    NEW exit=1    same

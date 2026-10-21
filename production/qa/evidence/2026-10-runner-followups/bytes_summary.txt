@@ -1,0 +1,32 @@
+none    OLD    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+nul     OLD    exit=1 listing lines=1  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)|  Binary file <log> matches
+ff      OLD    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+farnul  OLD    exit=1 listing lines=1  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)|  Binary file <log> matches
+none    NEW    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+nul     NEW    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+ff      NEW    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+farnul  NEW    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+none    MU2    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+nul     MU2    exit=1 listing lines=1  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)|  Binary file (standard input) matches
+ff      MU2    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+farnul  MU2    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+none    MU3    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+nul     MU3    exit=1 listing lines=1  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)|  Binary file <log> matches
+ff      MU3    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+farnul  MU3    exit=1 listing lines=1  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)|  Binary file <log> matches
+== the same with LC_ALL=C for the whole runner
+none    OLD-C  exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+nul     OLD-C  exit=1 listing lines=1  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)|  Binary file <log> matches
+ff      OLD-C  exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+farnul  OLD-C  exit=1 listing lines=1  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)|  Binary file <log> matches
+none    NEW-C  exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+nul     NEW-C  exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+ff      NEW-C  exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+farnul  NEW-C  exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+== N0 OLD vs NEW:
+byte-identical
+== L4 bash, GODOT=/no/such/godot
+old exit=127 | timeout: failed to run command '/no/such/godot': No such file or directory|
+new exit=127 | timeout: failed to run command '/no/such/godot': No such file or directory|
+NEW N1 listing == golden (golden_n1_listing.od)
+NEW-C N1 listing == golden (golden_n1_listing.od)

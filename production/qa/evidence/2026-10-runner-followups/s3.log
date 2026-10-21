@@ -1,0 +1,4 @@
+S3: res://tests/integration/meta/test_layout_test.gd through run_tests.sh under Git Bash. 2026-10-21T01:53:11+05:30
+##### OLD exit=0 elapsed=4s result: LAYOUT RESULT: 6 passed, 0 failed
+##### NEW exit=0 elapsed=3s result: LAYOUT RESULT: 6 passed, 0 failed
+run_all.log reference (2026-10-runner-watchdog, timing prefix stripped): LAYOUT RESULT: 6 passed, 0 failed

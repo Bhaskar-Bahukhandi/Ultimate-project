@@ -1,0 +1,378 @@
+TD-009 launch-failure probes. 2026-10-21T01:37:06+05:30
+repo HEAD 249cba4; PowerShell 5.1.26100.9711
+SHA-256:
+f1df79979c5bd624d4929a6c50e1e6c7a1e9a81f8bd2ad302d2dfab3ca1994bc */c/Users/BHASKAR BAHUKHANDI/OneDrive/Desktop/Ultimate project/AethelgardPrototype/tests/run_phase0_tests.ps1
+7b4a6a6c5445a6d93646d2f32db301fba87b9e7d45f5aff246f1db01d35e266e *-
+Scratch copies (each diff is against its source; only these lines differ):
+--- old (vs HEAD)
+32c32
+< $project = Split-Path -Parent $PSScriptRoot
+---
+> $project = 'C:/Users/BHASKAR BAHUKHANDI/OneDrive/Desktop/Ultimate project/AethelgardPrototype'   # pinned: OLD copy outside the repo
+--- new (vs working tree)
+34c34
+< $project = Split-Path -Parent $PSScriptRoot
+---
+> $project = 'C:/Users/BHASKAR BAHUKHANDI/OneDrive/Desktop/Ultimate project/AethelgardPrototype'   # pinned: NEW copy outside the repo
+--- old_missing (vs old)
+33c33
+< $godot = Get-ChildItem "C:\Godot" -Filter "Godot_v4*_console.exe" | Sort-Object Name -Descending | Select-Object -First 1
+---
+> $godot = [IO.FileInfo]'C:/Godot/no_such_godot_console.exe'   # probe: exe line pointed at a missing file
+--- old_textexe (vs old)
+33c33
+< $godot = Get-ChildItem "C:\Godot" -Filter "Godot_v4*_console.exe" | Sort-Object Name -Descending | Select-Object -First 1
+---
+> $godot = [IO.FileInfo]'C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/not_a_program.exe'   # probe: exe line pointed at a text file named .exe
+--- new_missing (vs new)
+35c35
+< $godot = Get-ChildItem "C:\Godot" -Filter "Godot_v4*_console.exe" | Sort-Object Name -Descending | Select-Object -First 1
+---
+> $godot = [IO.FileInfo]'C:/Godot/no_such_godot_console.exe'   # probe: exe line pointed at a missing file
+--- new_textexe (vs new)
+35c35
+< $godot = Get-ChildItem "C:\Godot" -Filter "Godot_v4*_console.exe" | Sort-Object Name -Descending | Select-Object -First 1
+---
+> $godot = [IO.FileInfo]'C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/not_a_program.exe'   # probe: exe line pointed at a text file named .exe
+--- mu1 (vs new_missing)
+89d88
+< $code = $null
+--- mu4 (vs new_missing)
+90d89
+< $lines = $null
+
+##### L1 default suite (min 81) | OLD | args: 
+& : The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or 
+operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try 
+again.
+At C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\claude\C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project\
+fdf22b8c-74b8-4cb8-9598-a692ea0b19ff\scratchpad\old_missing\run_phase0_tests.ps1:90 char:16
++     $lines = & $godot.FullName --headless --path $project --script $S ...
++                ~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Godot\no_such_godot_console.exe:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+
+RUNNER FAIL res://tests/integration/playthrough/phase0_blockers_test.gd: no result line (expected at least 81 checks to run)
+##### exit=0 aeth_phase0_test_* dirs before=0 after=0
+
+##### L2 clean probe, no minimum | OLD | args: -Script C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd
+& : The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or 
+operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try 
+again.
+At C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\claude\C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project\
+fdf22b8c-74b8-4cb8-9598-a692ea0b19ff\scratchpad\old_missing\run_phase0_tests.ps1:90 char:16
++     $lines = & $godot.FullName --headless --path $project --script $S ...
++                ~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Godot\no_such_godot_console.exe:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+##### exit=0 aeth_phase0_test_* dirs before=0 after=0
+
+##### L6 -TimeoutSec 1 -MinChecks 2 | OLD | args: -Script C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd -TimeoutSec 1 -MinChecks 2
+& : The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or 
+operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try 
+again.
+At C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\claude\C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project\
+fdf22b8c-74b8-4cb8-9598-a692ea0b19ff\scratchpad\old_missing\run_phase0_tests.ps1:90 char:16
++     $lines = & $godot.FullName --headless --path $project --script $S ...
++                ~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Godot\no_such_godot_console.exe:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+
+RUNNER FAIL C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd: no result line (expected at least 2 checks to run)
+##### exit=0 aeth_phase0_test_* dirs before=0 after=0
+
+##### L3 after exit 0 in-process after cmd /c exit 0 (caller $code=) | OLD
+The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+##### exit=0 APPDATA unchanged=True
+
+##### L3b after exit 3 in-process after cmd /c exit 3 (caller $code=) | OLD
+The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+##### exit=0 APPDATA unchanged=True
+
+##### L3c caller $code=7, exit 3 in-process after cmd /c exit 3 (caller $code=7) | OLD
+The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+##### exit=7 APPDATA unchanged=True
+
+##### L3d caller $lines has SCRIPT ERROR in-process after cmd /c exit 0 (caller $code=) | OLD
+The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+
+RUNNER FAIL C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd: 1 script error line(s)
+  SCRIPT ERROR: caller's own line
+     at: caller
+##### exit=0 APPDATA unchanged=True
+
+##### L1 default suite (min 81) | NEW | args: 
+& : The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or 
+operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try 
+again.
+At C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\claude\C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project\
+fdf22b8c-74b8-4cb8-9598-a692ea0b19ff\scratchpad\new_missing\run_phase0_tests.ps1:96 char:16
++     $lines = & $godot.FullName --headless --path $project --script $S ...
++                ~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Godot\no_such_godot_console.exe:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+
+RUNNER FAIL res://tests/integration/playthrough/phase0_blockers_test.gd: Godot did not start
+##### exit=1 aeth_phase0_test_* dirs before=0 after=0
+
+##### L2 clean probe, no minimum | NEW | args: -Script C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd
+& : The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or 
+operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try 
+again.
+At C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\claude\C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project\
+fdf22b8c-74b8-4cb8-9598-a692ea0b19ff\scratchpad\new_missing\run_phase0_tests.ps1:96 char:16
++     $lines = & $godot.FullName --headless --path $project --script $S ...
++                ~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Godot\no_such_godot_console.exe:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+
+RUNNER FAIL C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd: Godot did not start
+##### exit=1 aeth_phase0_test_* dirs before=0 after=0
+
+##### L6 -TimeoutSec 1 -MinChecks 2 | NEW | args: -Script C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd -TimeoutSec 1 -MinChecks 2
+& : The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or 
+operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try 
+again.
+At C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\claude\C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project\
+fdf22b8c-74b8-4cb8-9598-a692ea0b19ff\scratchpad\new_missing\run_phase0_tests.ps1:96 char:16
++     $lines = & $godot.FullName --headless --path $project --script $S ...
++                ~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Godot\no_such_godot_console.exe:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+
+RUNNER FAIL C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd: Godot did not start
+##### exit=1 aeth_phase0_test_* dirs before=0 after=0
+
+##### L3 after exit 0 in-process after cmd /c exit 0 (caller $code=) | NEW
+The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+
+RUNNER FAIL C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd: Godot did not start
+##### exit=1 APPDATA unchanged=True
+
+##### L3b after exit 3 in-process after cmd /c exit 3 (caller $code=) | NEW
+The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+
+RUNNER FAIL C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd: Godot did not start
+##### exit=1 APPDATA unchanged=True
+
+##### L3c caller $code=7, exit 3 in-process after cmd /c exit 3 (caller $code=7) | NEW
+The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+
+RUNNER FAIL C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd: Godot did not start
+##### exit=1 APPDATA unchanged=True
+
+##### L3d caller $lines has SCRIPT ERROR in-process after cmd /c exit 0 (caller $code=) | NEW
+The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+
+RUNNER FAIL C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd: Godot did not start
+##### exit=1 APPDATA unchanged=True
+
+##### L1 default suite (min 81) | MU1 | args: 
+& : The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or 
+operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try 
+again.
+At C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\claude\C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project\
+fdf22b8c-74b8-4cb8-9598-a692ea0b19ff\scratchpad\mu1\run_phase0_tests.ps1:95 char:16
++     $lines = & $godot.FullName --headless --path $project --script $S ...
++                ~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Godot\no_such_godot_console.exe:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+
+RUNNER FAIL res://tests/integration/playthrough/phase0_blockers_test.gd: Godot did not start
+##### exit=1 aeth_phase0_test_* dirs before=0 after=0
+
+##### L2 clean probe, no minimum | MU1 | args: -Script C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd
+& : The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or 
+operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try 
+again.
+At C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\claude\C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project\
+fdf22b8c-74b8-4cb8-9598-a692ea0b19ff\scratchpad\mu1\run_phase0_tests.ps1:95 char:16
++     $lines = & $godot.FullName --headless --path $project --script $S ...
++                ~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Godot\no_such_godot_console.exe:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+
+RUNNER FAIL C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd: Godot did not start
+##### exit=1 aeth_phase0_test_* dirs before=0 after=0
+
+##### L6 -TimeoutSec 1 -MinChecks 2 | MU1 | args: -Script C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd -TimeoutSec 1 -MinChecks 2
+& : The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or 
+operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try 
+again.
+At C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\claude\C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project\
+fdf22b8c-74b8-4cb8-9598-a692ea0b19ff\scratchpad\mu1\run_phase0_tests.ps1:95 char:16
++     $lines = & $godot.FullName --headless --path $project --script $S ...
++                ~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Godot\no_such_godot_console.exe:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+
+RUNNER FAIL C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd: Godot did not start
+##### exit=1 aeth_phase0_test_* dirs before=0 after=0
+
+##### L3 after exit 0 in-process after cmd /c exit 0 (caller $code=) | MU1
+The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+
+RUNNER FAIL C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd: Godot did not start
+##### exit=1 APPDATA unchanged=True
+
+##### L3b after exit 3 in-process after cmd /c exit 3 (caller $code=) | MU1
+The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+
+RUNNER FAIL C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd: Godot did not start
+##### exit=1 APPDATA unchanged=True
+
+##### L3c caller $code=7, exit 3 in-process after cmd /c exit 3 (caller $code=7) | MU1
+The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+##### exit=7 APPDATA unchanged=True
+
+##### L3d caller $lines has SCRIPT ERROR in-process after cmd /c exit 0 (caller $code=) | MU1
+The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+
+RUNNER FAIL C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd: Godot did not start
+##### exit=1 APPDATA unchanged=True
+
+##### L1 default suite (min 81) | MU4 | args: 
+& : The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or 
+operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try 
+again.
+At C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\claude\C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project\
+fdf22b8c-74b8-4cb8-9598-a692ea0b19ff\scratchpad\mu4\run_phase0_tests.ps1:95 char:16
++     $lines = & $godot.FullName --headless --path $project --script $S ...
++                ~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Godot\no_such_godot_console.exe:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+
+RUNNER FAIL res://tests/integration/playthrough/phase0_blockers_test.gd: Godot did not start
+##### exit=1 aeth_phase0_test_* dirs before=0 after=0
+
+##### L2 clean probe, no minimum | MU4 | args: -Script C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd
+& : The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or 
+operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try 
+again.
+At C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\claude\C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project\
+fdf22b8c-74b8-4cb8-9598-a692ea0b19ff\scratchpad\mu4\run_phase0_tests.ps1:95 char:16
++     $lines = & $godot.FullName --headless --path $project --script $S ...
++                ~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Godot\no_such_godot_console.exe:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+
+RUNNER FAIL C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd: Godot did not start
+##### exit=1 aeth_phase0_test_* dirs before=0 after=0
+
+##### L6 -TimeoutSec 1 -MinChecks 2 | MU4 | args: -Script C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd -TimeoutSec 1 -MinChecks 2
+& : The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or 
+operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try 
+again.
+At C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\claude\C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project\
+fdf22b8c-74b8-4cb8-9598-a692ea0b19ff\scratchpad\mu4\run_phase0_tests.ps1:95 char:16
++     $lines = & $godot.FullName --headless --path $project --script $S ...
++                ~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Godot\no_such_godot_console.exe:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+
+RUNNER FAIL C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd: Godot did not start
+##### exit=1 aeth_phase0_test_* dirs before=0 after=0
+
+##### L3 after exit 0 in-process after cmd /c exit 0 (caller $code=) | MU4
+The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+
+RUNNER FAIL C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd: Godot did not start
+##### exit=1 APPDATA unchanged=True
+
+##### L3b after exit 3 in-process after cmd /c exit 3 (caller $code=) | MU4
+The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+
+RUNNER FAIL C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd: Godot did not start
+##### exit=1 APPDATA unchanged=True
+
+##### L3c caller $code=7, exit 3 in-process after cmd /c exit 3 (caller $code=7) | MU4
+The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+
+RUNNER FAIL C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd: Godot did not start
+##### exit=1 APPDATA unchanged=True
+
+##### L3d caller $lines has SCRIPT ERROR in-process after cmd /c exit 0 (caller $code=) | MU4
+The term 'C:\Godot\no_such_godot_console.exe' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+
+RUNNER FAIL C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd: Godot did not start
+
+RUNNER FAIL C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd: 1 script error line(s)
+  SCRIPT ERROR: caller's own line
+     at: caller
+##### exit=1 APPDATA unchanged=True
+
+##### L5 text file named .exe | OLD | args: -Script C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd
+Program 'not_a_program.exe' failed to run: The specified executable is not a valid application for this OS platform.At 
+C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\claude\C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project\fdf
+22b8c-74b8-4cb8-9598-a692ea0b19ff\scratchpad\old_textexe\run_phase0_tests.ps1:90 char:14
++ ...    $lines = & $godot.FullName --headless --path $project --script $Sc ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+At C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\claude\C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project\
+fdf22b8c-74b8-4cb8-9598-a692ea0b19ff\scratchpad\old_textexe\run_phase0_tests.ps1:90 char:5
++     $lines = & $godot.FullName --headless --path $project --script $S ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (:) [], ApplicationFailedException
+    + FullyQualifiedErrorId : NativeCommandFailed
+ 
+##### exit=0 aeth_phase0_test_* dirs before=0 after=0
+
+##### L5 text file named .exe | NEW | args: -Script C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd
+Program 'not_a_program.exe' failed to run: The specified executable is not a valid application for this OS platform.At 
+C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\claude\C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project\fdf
+22b8c-74b8-4cb8-9598-a692ea0b19ff\scratchpad\new_textexe\run_phase0_tests.ps1:96 char:14
++ ...    $lines = & $godot.FullName --headless --path $project --script $Sc ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+At C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\claude\C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project\
+fdf22b8c-74b8-4cb8-9598-a692ea0b19ff\scratchpad\new_textexe\run_phase0_tests.ps1:96 char:5
++     $lines = & $godot.FullName --headless --path $project --script $S ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (:) [], ApplicationFailedException
+    + FullyQualifiedErrorId : NativeCommandFailed
+ 
+
+RUNNER FAIL C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_clean_probe.gd: Godot did not start
+##### exit=1 aeth_phase0_test_* dirs before=0 after=0
+
+##### SUMMARY
+L1 default suite (min 81)          OLD    exit=0  RUNNER FAIL lines=1: RUNNER FAIL res://tests/integration/playthrough/phase0_blockers_test.gd: no result line (expected at least 81 checks to run)
+L2 clean probe, no minimum         OLD    exit=0  RUNNER FAIL lines=0: 
+L6 -TimeoutSec 1 -MinChecks 2      OLD    exit=0  RUNNER FAIL lines=1: RUNNER FAIL <clean probe>: no result line (expected at least 2 checks to run)
+L3 after exit 0                    OLD    exit=0  RUNNER FAIL lines=0: 
+L3b after exit 3                   OLD    exit=0  RUNNER FAIL lines=0: 
+L3c caller $code=7, exit 3         OLD    exit=7  RUNNER FAIL lines=0: 
+L3d caller $lines has SCRIPT ERROR OLD    exit=0  RUNNER FAIL lines=1: RUNNER FAIL <clean probe>: 1 script error line(s)
+L1 default suite (min 81)          NEW    exit=1  RUNNER FAIL lines=1: RUNNER FAIL res://tests/integration/playthrough/phase0_blockers_test.gd: Godot did not start
+L2 clean probe, no minimum         NEW    exit=1  RUNNER FAIL lines=1: RUNNER FAIL <clean probe>: Godot did not start
+L6 -TimeoutSec 1 -MinChecks 2      NEW    exit=1  RUNNER FAIL lines=1: RUNNER FAIL <clean probe>: Godot did not start
+L3 after exit 0                    NEW    exit=1  RUNNER FAIL lines=1: RUNNER FAIL <clean probe>: Godot did not start
+L3b after exit 3                   NEW    exit=1  RUNNER FAIL lines=1: RUNNER FAIL <clean probe>: Godot did not start
+L3c caller $code=7, exit 3         NEW    exit=1  RUNNER FAIL lines=1: RUNNER FAIL <clean probe>: Godot did not start
+L3d caller $lines has SCRIPT ERROR NEW    exit=1  RUNNER FAIL lines=1: RUNNER FAIL <clean probe>: Godot did not start
+L1 default suite (min 81)          MU1    exit=1  RUNNER FAIL lines=1: RUNNER FAIL res://tests/integration/playthrough/phase0_blockers_test.gd: Godot did not start
+L2 clean probe, no minimum         MU1    exit=1  RUNNER FAIL lines=1: RUNNER FAIL <clean probe>: Godot did not start
+L6 -TimeoutSec 1 -MinChecks 2      MU1    exit=1  RUNNER FAIL lines=1: RUNNER FAIL <clean probe>: Godot did not start
+L3 after exit 0                    MU1    exit=1  RUNNER FAIL lines=1: RUNNER FAIL <clean probe>: Godot did not start
+L3b after exit 3                   MU1    exit=1  RUNNER FAIL lines=1: RUNNER FAIL <clean probe>: Godot did not start
+L3c caller $code=7, exit 3         MU1    exit=7  RUNNER FAIL lines=0: 
+L3d caller $lines has SCRIPT ERROR MU1    exit=1  RUNNER FAIL lines=1: RUNNER FAIL <clean probe>: Godot did not start
+L1 default suite (min 81)          MU4    exit=1  RUNNER FAIL lines=1: RUNNER FAIL res://tests/integration/playthrough/phase0_blockers_test.gd: Godot did not start
+L2 clean probe, no minimum         MU4    exit=1  RUNNER FAIL lines=1: RUNNER FAIL <clean probe>: Godot did not start
+L6 -TimeoutSec 1 -MinChecks 2      MU4    exit=1  RUNNER FAIL lines=1: RUNNER FAIL <clean probe>: Godot did not start
+L3 after exit 0                    MU4    exit=1  RUNNER FAIL lines=1: RUNNER FAIL <clean probe>: Godot did not start
+L3b after exit 3                   MU4    exit=1  RUNNER FAIL lines=1: RUNNER FAIL <clean probe>: Godot did not start
+L3c caller $code=7, exit 3         MU4    exit=1  RUNNER FAIL lines=1: RUNNER FAIL <clean probe>: Godot did not start
+L3d caller $lines has SCRIPT ERROR MU4    exit=1  RUNNER FAIL lines=2: RUNNER FAIL <clean probe>: Godot did not start | RUNNER FAIL <clean probe>: 1 script error line(s)
+L5 text file named .exe            OLD    exit=0  RUNNER FAIL lines=0: 
+L5 text file named .exe            NEW    exit=1  RUNNER FAIL lines=1: RUNNER FAIL <clean probe>: Godot did not start

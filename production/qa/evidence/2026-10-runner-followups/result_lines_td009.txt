@@ -1,0 +1,16 @@
+LAYOUT RESULT: 6 passed, 0 failed
+LOADALL ok=206 bad=0
+DIALOGUE RESULT: 47 passed, 0 failed
+CONTEXT RESULT: 33 passed, 0 failed
+INPUT RESULT: 52 passed, 0 failed
+QUESTS UNIT RESULT: 134 passed, 0 failed
+NGPLUS UNIT RESULT: 192 passed, 0 failed
+FRAGMENT ACHIEVEMENT UNIT RESULT: 21 passed, 0 failed
+NULL POTION UNIT RESULT: 83 passed, 0 failed
+SCREEN FLASH RESULT: 107 passed, 0 failed
+CH1 RESULT: 391 passed, 0 failed
+CH2 RESULT: 49 passed, 0 failed
+COMBAT FIXES RESULT: 10 passed, 0 failed
+REACH RESULT: 21 passed, 0 failed
+QUESTS ACT1 RESULT: 114 passed, 0 failed
+PHASE0 RESULT: 81 passed, 0 failed

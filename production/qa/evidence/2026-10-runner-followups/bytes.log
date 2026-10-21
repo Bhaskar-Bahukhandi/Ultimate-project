@@ -1,0 +1,785 @@
+TD-009 NUL/0xFF probes (Git Bash). 2026-10-21T02:15:28+05:30
+grep (GNU grep) 3.0
+session locale: LC_CTYPE="C.UTF-8"
+
+##### N-none | OLD runner | env: none | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   S   C   R   I   P
+0000060   T       E   R   R   O   R   :       I   n   v   a   l   i   d
+0000100       c   a   l   l   .       N   o   n   e   x   i   s   t   e
+0000120   n   t       f   u   n   c   t   i   o   n       '   b   o   o
+0000140   m   '       i   n       b   a   s   e       '   N   i   l   '
+0000160   .  \n               a   t   :       p   r   o   b   e       (
+0000200   r   e   s   :   /   /   p   r   o   b   e   .   g   d   :   7
+0000220   )       t   a   i   l  \n   P   a   r   s   e       E   r   r
+0000240   o   r   :       s   e   c   o   n   d       m   a   t   c   h
+0000260  \n   a   f   t   e   r       s   e   c   o   n   d  \n   S   T
+0000300   U   B       R   E   S   U   L   T   :       2       p   a   s
+0000320   s   e   d   ,       0       f   a   i   l   e   d  \n  \n   R
+0000340   U   N   N   E   R       F   A   I   L       r   e   s   :   /
+0000360   /   p   r   o   b   e   /   s   t   u   b   _   b   y   t   e
+0000400   s   .   g   d   :       2       s   c   r   i   p   t       e
+0000420   r   r   o   r       l   i   n   e   (   s   )  \n           S
+0000440   C   R   I   P   T       E   R   R   O   R   :       I   n   v
+0000460   a   l   i   d       c   a   l   l   .       N   o   n   e   x
+0000500   i   s   t   e   n   t       f   u   n   c   t   i   o   n    
+0000520   '   b   o   o   m   '       i   n       b   a   s   e       '
+0000540   N   i   l   '   .  \n                       a   t   :       p
+0000560   r   o   b   e       (   r   e   s   :   /   /   p   r   o   b
+0000600   e   .   g   d   :   7   )       t   a   i   l  \n           P
+0000620   a   r   s   e       E   r   r   o   r   :       s   e   c   o
+0000640   n   d       m   a   t   c   h  \n           a   f   t   e   r
+0000660       s   e   c   o   n   d  \n
+0000670
+##### exit=1
+
+##### N-nul | OLD runner | env: none | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   S   C   R   I   P
+0000060   T       E   R   R   O   R   :       I   n   v   a   l   i   d
+0000100       c   a   l   l   .       N   o   n   e   x   i   s   t   e
+0000120   n   t       f   u   n   c   t   i   o   n       '   b   o   o
+0000140   m   '       i   n       b   a   s   e       '   N   i   l   '
+0000160   .  \n               a   t   :       p   r   o   b   e       (
+0000200   r   e   s   :   /   /   p   r   o   b   e   .   g   d   :   7
+0000220   )      \0   t   a   i   l  \n   P   a   r   s   e       E   r
+0000240   r   o   r   :       s   e   c   o   n   d       m   a   t   c
+0000260   h  \n   a   f   t   e   r       s   e   c   o   n   d  \n   S
+0000300   T   U   B       R   E   S   U   L   T   :       2       p   a
+0000320   s   s   e   d   ,       0       f   a   i   l   e   d  \n  \n
+0000340   R   U   N   N   E   R       F   A   I   L       r   e   s   :
+0000360   /   /   p   r   o   b   e   /   s   t   u   b   _   b   y   t
+0000400   e   s   .   g   d   :       2       s   c   r   i   p   t    
+0000420   e   r   r   o   r       l   i   n   e   (   s   )  \n        
+0000440   B   i   n   a   r   y       f   i   l   e       <   l   o   g
+0000460   >       m   a   t   c   h   e   s  \n
+0000472
+##### exit=1
+
+##### N-ff | OLD runner | env: none | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   S   C   R   I   P
+0000060   T       E   R   R   O   R   :       I   n   v   a   l   i   d
+0000100       c   a   l   l   .       N   o   n   e   x   i   s   t   e
+0000120   n   t       f   u   n   c   t   i   o   n       '   b   o   o
+0000140   m   '       i   n       b   a   s   e       '   N   i   l   '
+0000160   .  \n               a   t   :       p   r   o   b   e       (
+0000200   r   e   s   :   /   /   p   r   o   b   e   .   g   d   :   7
+0000220   )     377   t   a   i   l  \n   P   a   r   s   e       E   r
+0000240   r   o   r   :       s   e   c   o   n   d       m   a   t   c
+0000260   h  \n   a   f   t   e   r       s   e   c   o   n   d  \n   S
+0000300   T   U   B       R   E   S   U   L   T   :       2       p   a
+0000320   s   s   e   d   ,       0       f   a   i   l   e   d  \n  \n
+0000340   R   U   N   N   E   R       F   A   I   L       r   e   s   :
+0000360   /   /   p   r   o   b   e   /   s   t   u   b   _   b   y   t
+0000400   e   s   .   g   d   :       2       s   c   r   i   p   t    
+0000420   e   r   r   o   r       l   i   n   e   (   s   )  \n        
+0000440   S   C   R   I   P   T       E   R   R   O   R   :       I   n
+0000460   v   a   l   i   d       c   a   l   l   .       N   o   n   e
+0000500   x   i   s   t   e   n   t       f   u   n   c   t   i   o   n
+0000520       '   b   o   o   m   '       i   n       b   a   s   e    
+0000540   '   N   i   l   '   .  \n                       a   t   :    
+0000560   p   r   o   b   e       (   r   e   s   :   /   /   p   r   o
+0000600   b   e   .   g   d   :   7   )     377   t   a   i   l  \n    
+0000620       P   a   r   s   e       E   r   r   o   r   :       s   e
+0000640   c   o   n   d       m   a   t   c   h  \n           a   f   t
+0000660   e   r       s   e   c   o   n   d  \n
+0000672
+##### exit=1
+
+##### N-farnul | OLD runner | env: none | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   b   a   n   n   e
+0000060   r      \0       f   a   r       f   r   o   m       a   n   y
+0000100       m   a   t   c   h  \n   l   i   n   e       2  \n   l   i
+0000120   n   e       3  \n   S   C   R   I   P   T       E   R   R   O
+0000140   R   :       I   n   v   a   l   i   d       c   a   l   l   .
+0000160       N   o   n   e   x   i   s   t   e   n   t       f   u   n
+0000200   c   t   i   o   n       '   b   o   o   m   '       i   n    
+0000220   b   a   s   e       '   N   i   l   '   .  \n               a
+0000240   t   :       p   r   o   b   e       (   r   e   s   :   /   /
+0000260   p   r   o   b   e   .   g   d   :   7   )       t   a   i   l
+0000300  \n   P   a   r   s   e       E   r   r   o   r   :       s   e
+0000320   c   o   n   d       m   a   t   c   h  \n   a   f   t   e   r
+0000340       s   e   c   o   n   d  \n   S   T   U   B       R   E   S
+0000360   U   L   T   :       2       p   a   s   s   e   d   ,       0
+0000400       f   a   i   l   e   d  \n  \n   R   U   N   N   E   R    
+0000420   F   A   I   L       r   e   s   :   /   /   p   r   o   b   e
+0000440   /   s   t   u   b   _   b   y   t   e   s   .   g   d   :    
+0000460   2       s   c   r   i   p   t       e   r   r   o   r       l
+0000500   i   n   e   (   s   )  \n           B   i   n   a   r   y    
+0000520   f   i   l   e       <   l   o   g   >       m   a   t   c   h
+0000540   e   s  \n
+0000543
+##### exit=1
+
+##### N-none | NEW runner | env: none | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   S   C   R   I   P
+0000060   T       E   R   R   O   R   :       I   n   v   a   l   i   d
+0000100       c   a   l   l   .       N   o   n   e   x   i   s   t   e
+0000120   n   t       f   u   n   c   t   i   o   n       '   b   o   o
+0000140   m   '       i   n       b   a   s   e       '   N   i   l   '
+0000160   .  \n               a   t   :       p   r   o   b   e       (
+0000200   r   e   s   :   /   /   p   r   o   b   e   .   g   d   :   7
+0000220   )       t   a   i   l  \n   P   a   r   s   e       E   r   r
+0000240   o   r   :       s   e   c   o   n   d       m   a   t   c   h
+0000260  \n   a   f   t   e   r       s   e   c   o   n   d  \n   S   T
+0000300   U   B       R   E   S   U   L   T   :       2       p   a   s
+0000320   s   e   d   ,       0       f   a   i   l   e   d  \n  \n   R
+0000340   U   N   N   E   R       F   A   I   L       r   e   s   :   /
+0000360   /   p   r   o   b   e   /   s   t   u   b   _   b   y   t   e
+0000400   s   .   g   d   :       2       s   c   r   i   p   t       e
+0000420   r   r   o   r       l   i   n   e   (   s   )  \n           S
+0000440   C   R   I   P   T       E   R   R   O   R   :       I   n   v
+0000460   a   l   i   d       c   a   l   l   .       N   o   n   e   x
+0000500   i   s   t   e   n   t       f   u   n   c   t   i   o   n    
+0000520   '   b   o   o   m   '       i   n       b   a   s   e       '
+0000540   N   i   l   '   .  \n                       a   t   :       p
+0000560   r   o   b   e       (   r   e   s   :   /   /   p   r   o   b
+0000600   e   .   g   d   :   7   )       t   a   i   l  \n           P
+0000620   a   r   s   e       E   r   r   o   r   :       s   e   c   o
+0000640   n   d       m   a   t   c   h  \n           a   f   t   e   r
+0000660       s   e   c   o   n   d  \n
+0000670
+##### exit=1
+
+##### N-nul | NEW runner | env: none | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   S   C   R   I   P
+0000060   T       E   R   R   O   R   :       I   n   v   a   l   i   d
+0000100       c   a   l   l   .       N   o   n   e   x   i   s   t   e
+0000120   n   t       f   u   n   c   t   i   o   n       '   b   o   o
+0000140   m   '       i   n       b   a   s   e       '   N   i   l   '
+0000160   .  \n               a   t   :       p   r   o   b   e       (
+0000200   r   e   s   :   /   /   p   r   o   b   e   .   g   d   :   7
+0000220   )      \0   t   a   i   l  \n   P   a   r   s   e       E   r
+0000240   r   o   r   :       s   e   c   o   n   d       m   a   t   c
+0000260   h  \n   a   f   t   e   r       s   e   c   o   n   d  \n   S
+0000300   T   U   B       R   E   S   U   L   T   :       2       p   a
+0000320   s   s   e   d   ,       0       f   a   i   l   e   d  \n  \n
+0000340   R   U   N   N   E   R       F   A   I   L       r   e   s   :
+0000360   /   /   p   r   o   b   e   /   s   t   u   b   _   b   y   t
+0000400   e   s   .   g   d   :       2       s   c   r   i   p   t    
+0000420   e   r   r   o   r       l   i   n   e   (   s   )  \n        
+0000440   S   C   R   I   P   T       E   R   R   O   R   :       I   n
+0000460   v   a   l   i   d       c   a   l   l   .       N   o   n   e
+0000500   x   i   s   t   e   n   t       f   u   n   c   t   i   o   n
+0000520       '   b   o   o   m   '       i   n       b   a   s   e    
+0000540   '   N   i   l   '   .  \n                       a   t   :    
+0000560   p   r   o   b   e       (   r   e   s   :   /   /   p   r   o
+0000600   b   e   .   g   d   :   7   )      \0   t   a   i   l  \n    
+0000620       P   a   r   s   e       E   r   r   o   r   :       s   e
+0000640   c   o   n   d       m   a   t   c   h  \n           a   f   t
+0000660   e   r       s   e   c   o   n   d  \n
+0000672
+##### exit=1
+
+##### N-ff | NEW runner | env: none | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   S   C   R   I   P
+0000060   T       E   R   R   O   R   :       I   n   v   a   l   i   d
+0000100       c   a   l   l   .       N   o   n   e   x   i   s   t   e
+0000120   n   t       f   u   n   c   t   i   o   n       '   b   o   o
+0000140   m   '       i   n       b   a   s   e       '   N   i   l   '
+0000160   .  \n               a   t   :       p   r   o   b   e       (
+0000200   r   e   s   :   /   /   p   r   o   b   e   .   g   d   :   7
+0000220   )     377   t   a   i   l  \n   P   a   r   s   e       E   r
+0000240   r   o   r   :       s   e   c   o   n   d       m   a   t   c
+0000260   h  \n   a   f   t   e   r       s   e   c   o   n   d  \n   S
+0000300   T   U   B       R   E   S   U   L   T   :       2       p   a
+0000320   s   s   e   d   ,       0       f   a   i   l   e   d  \n  \n
+0000340   R   U   N   N   E   R       F   A   I   L       r   e   s   :
+0000360   /   /   p   r   o   b   e   /   s   t   u   b   _   b   y   t
+0000400   e   s   .   g   d   :       2       s   c   r   i   p   t    
+0000420   e   r   r   o   r       l   i   n   e   (   s   )  \n        
+0000440   S   C   R   I   P   T       E   R   R   O   R   :       I   n
+0000460   v   a   l   i   d       c   a   l   l   .       N   o   n   e
+0000500   x   i   s   t   e   n   t       f   u   n   c   t   i   o   n
+0000520       '   b   o   o   m   '       i   n       b   a   s   e    
+0000540   '   N   i   l   '   .  \n                       a   t   :    
+0000560   p   r   o   b   e       (   r   e   s   :   /   /   p   r   o
+0000600   b   e   .   g   d   :   7   )     377   t   a   i   l  \n    
+0000620       P   a   r   s   e       E   r   r   o   r   :       s   e
+0000640   c   o   n   d       m   a   t   c   h  \n           a   f   t
+0000660   e   r       s   e   c   o   n   d  \n
+0000672
+##### exit=1
+
+##### N-farnul | NEW runner | env: none | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   b   a   n   n   e
+0000060   r      \0       f   a   r       f   r   o   m       a   n   y
+0000100       m   a   t   c   h  \n   l   i   n   e       2  \n   l   i
+0000120   n   e       3  \n   S   C   R   I   P   T       E   R   R   O
+0000140   R   :       I   n   v   a   l   i   d       c   a   l   l   .
+0000160       N   o   n   e   x   i   s   t   e   n   t       f   u   n
+0000200   c   t   i   o   n       '   b   o   o   m   '       i   n    
+0000220   b   a   s   e       '   N   i   l   '   .  \n               a
+0000240   t   :       p   r   o   b   e       (   r   e   s   :   /   /
+0000260   p   r   o   b   e   .   g   d   :   7   )       t   a   i   l
+0000300  \n   P   a   r   s   e       E   r   r   o   r   :       s   e
+0000320   c   o   n   d       m   a   t   c   h  \n   a   f   t   e   r
+0000340       s   e   c   o   n   d  \n   S   T   U   B       R   E   S
+0000360   U   L   T   :       2       p   a   s   s   e   d   ,       0
+0000400       f   a   i   l   e   d  \n  \n   R   U   N   N   E   R    
+0000420   F   A   I   L       r   e   s   :   /   /   p   r   o   b   e
+0000440   /   s   t   u   b   _   b   y   t   e   s   .   g   d   :    
+0000460   2       s   c   r   i   p   t       e   r   r   o   r       l
+0000500   i   n   e   (   s   )  \n           S   C   R   I   P   T    
+0000520   E   R   R   O   R   :       I   n   v   a   l   i   d       c
+0000540   a   l   l   .       N   o   n   e   x   i   s   t   e   n   t
+0000560       f   u   n   c   t   i   o   n       '   b   o   o   m   '
+0000600       i   n       b   a   s   e       '   N   i   l   '   .  \n
+0000620                       a   t   :       p   r   o   b   e       (
+0000640   r   e   s   :   /   /   p   r   o   b   e   .   g   d   :   7
+0000660   )       t   a   i   l  \n           P   a   r   s   e       E
+0000700   r   r   o   r   :       s   e   c   o   n   d       m   a   t
+0000720   c   h  \n           a   f   t   e   r       s   e   c   o   n
+0000740   d  \n
+0000742
+##### exit=1
+
+##### N-none | MU2 runner | env: none | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   S   C   R   I   P
+0000060   T       E   R   R   O   R   :       I   n   v   a   l   i   d
+0000100       c   a   l   l   .       N   o   n   e   x   i   s   t   e
+0000120   n   t       f   u   n   c   t   i   o   n       '   b   o   o
+0000140   m   '       i   n       b   a   s   e       '   N   i   l   '
+0000160   .  \n               a   t   :       p   r   o   b   e       (
+0000200   r   e   s   :   /   /   p   r   o   b   e   .   g   d   :   7
+0000220   )       t   a   i   l  \n   P   a   r   s   e       E   r   r
+0000240   o   r   :       s   e   c   o   n   d       m   a   t   c   h
+0000260  \n   a   f   t   e   r       s   e   c   o   n   d  \n   S   T
+0000300   U   B       R   E   S   U   L   T   :       2       p   a   s
+0000320   s   e   d   ,       0       f   a   i   l   e   d  \n  \n   R
+0000340   U   N   N   E   R       F   A   I   L       r   e   s   :   /
+0000360   /   p   r   o   b   e   /   s   t   u   b   _   b   y   t   e
+0000400   s   .   g   d   :       2       s   c   r   i   p   t       e
+0000420   r   r   o   r       l   i   n   e   (   s   )  \n           S
+0000440   C   R   I   P   T       E   R   R   O   R   :       I   n   v
+0000460   a   l   i   d       c   a   l   l   .       N   o   n   e   x
+0000500   i   s   t   e   n   t       f   u   n   c   t   i   o   n    
+0000520   '   b   o   o   m   '       i   n       b   a   s   e       '
+0000540   N   i   l   '   .  \n                       a   t   :       p
+0000560   r   o   b   e       (   r   e   s   :   /   /   p   r   o   b
+0000600   e   .   g   d   :   7   )       t   a   i   l  \n           P
+0000620   a   r   s   e       E   r   r   o   r   :       s   e   c   o
+0000640   n   d       m   a   t   c   h  \n           a   f   t   e   r
+0000660       s   e   c   o   n   d  \n
+0000670
+##### exit=1
+
+##### N-nul | MU2 runner | env: none | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   S   C   R   I   P
+0000060   T       E   R   R   O   R   :       I   n   v   a   l   i   d
+0000100       c   a   l   l   .       N   o   n   e   x   i   s   t   e
+0000120   n   t       f   u   n   c   t   i   o   n       '   b   o   o
+0000140   m   '       i   n       b   a   s   e       '   N   i   l   '
+0000160   .  \n               a   t   :       p   r   o   b   e       (
+0000200   r   e   s   :   /   /   p   r   o   b   e   .   g   d   :   7
+0000220   )      \0   t   a   i   l  \n   P   a   r   s   e       E   r
+0000240   r   o   r   :       s   e   c   o   n   d       m   a   t   c
+0000260   h  \n   a   f   t   e   r       s   e   c   o   n   d  \n   S
+0000300   T   U   B       R   E   S   U   L   T   :       2       p   a
+0000320   s   s   e   d   ,       0       f   a   i   l   e   d  \n  \n
+0000340   R   U   N   N   E   R       F   A   I   L       r   e   s   :
+0000360   /   /   p   r   o   b   e   /   s   t   u   b   _   b   y   t
+0000400   e   s   .   g   d   :       2       s   c   r   i   p   t    
+0000420   e   r   r   o   r       l   i   n   e   (   s   )  \n        
+0000440   B   i   n   a   r   y       f   i   l   e       (   s   t   a
+0000460   n   d   a   r   d       i   n   p   u   t   )       m   a   t
+0000500   c   h   e   s  \n
+0000505
+##### exit=1
+
+##### N-ff | MU2 runner | env: none | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   S   C   R   I   P
+0000060   T       E   R   R   O   R   :       I   n   v   a   l   i   d
+0000100       c   a   l   l   .       N   o   n   e   x   i   s   t   e
+0000120   n   t       f   u   n   c   t   i   o   n       '   b   o   o
+0000140   m   '       i   n       b   a   s   e       '   N   i   l   '
+0000160   .  \n               a   t   :       p   r   o   b   e       (
+0000200   r   e   s   :   /   /   p   r   o   b   e   .   g   d   :   7
+0000220   )     377   t   a   i   l  \n   P   a   r   s   e       E   r
+0000240   r   o   r   :       s   e   c   o   n   d       m   a   t   c
+0000260   h  \n   a   f   t   e   r       s   e   c   o   n   d  \n   S
+0000300   T   U   B       R   E   S   U   L   T   :       2       p   a
+0000320   s   s   e   d   ,       0       f   a   i   l   e   d  \n  \n
+0000340   R   U   N   N   E   R       F   A   I   L       r   e   s   :
+0000360   /   /   p   r   o   b   e   /   s   t   u   b   _   b   y   t
+0000400   e   s   .   g   d   :       2       s   c   r   i   p   t    
+0000420   e   r   r   o   r       l   i   n   e   (   s   )  \n        
+0000440   S   C   R   I   P   T       E   R   R   O   R   :       I   n
+0000460   v   a   l   i   d       c   a   l   l   .       N   o   n   e
+0000500   x   i   s   t   e   n   t       f   u   n   c   t   i   o   n
+0000520       '   b   o   o   m   '       i   n       b   a   s   e    
+0000540   '   N   i   l   '   .  \n                       a   t   :    
+0000560   p   r   o   b   e       (   r   e   s   :   /   /   p   r   o
+0000600   b   e   .   g   d   :   7   )     377   t   a   i   l  \n    
+0000620       P   a   r   s   e       E   r   r   o   r   :       s   e
+0000640   c   o   n   d       m   a   t   c   h  \n           a   f   t
+0000660   e   r       s   e   c   o   n   d  \n
+0000672
+##### exit=1
+
+##### N-farnul | MU2 runner | env: none | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   b   a   n   n   e
+0000060   r      \0       f   a   r       f   r   o   m       a   n   y
+0000100       m   a   t   c   h  \n   l   i   n   e       2  \n   l   i
+0000120   n   e       3  \n   S   C   R   I   P   T       E   R   R   O
+0000140   R   :       I   n   v   a   l   i   d       c   a   l   l   .
+0000160       N   o   n   e   x   i   s   t   e   n   t       f   u   n
+0000200   c   t   i   o   n       '   b   o   o   m   '       i   n    
+0000220   b   a   s   e       '   N   i   l   '   .  \n               a
+0000240   t   :       p   r   o   b   e       (   r   e   s   :   /   /
+0000260   p   r   o   b   e   .   g   d   :   7   )       t   a   i   l
+0000300  \n   P   a   r   s   e       E   r   r   o   r   :       s   e
+0000320   c   o   n   d       m   a   t   c   h  \n   a   f   t   e   r
+0000340       s   e   c   o   n   d  \n   S   T   U   B       R   E   S
+0000360   U   L   T   :       2       p   a   s   s   e   d   ,       0
+0000400       f   a   i   l   e   d  \n  \n   R   U   N   N   E   R    
+0000420   F   A   I   L       r   e   s   :   /   /   p   r   o   b   e
+0000440   /   s   t   u   b   _   b   y   t   e   s   .   g   d   :    
+0000460   2       s   c   r   i   p   t       e   r   r   o   r       l
+0000500   i   n   e   (   s   )  \n           S   C   R   I   P   T    
+0000520   E   R   R   O   R   :       I   n   v   a   l   i   d       c
+0000540   a   l   l   .       N   o   n   e   x   i   s   t   e   n   t
+0000560       f   u   n   c   t   i   o   n       '   b   o   o   m   '
+0000600       i   n       b   a   s   e       '   N   i   l   '   .  \n
+0000620                       a   t   :       p   r   o   b   e       (
+0000640   r   e   s   :   /   /   p   r   o   b   e   .   g   d   :   7
+0000660   )       t   a   i   l  \n           P   a   r   s   e       E
+0000700   r   r   o   r   :       s   e   c   o   n   d       m   a   t
+0000720   c   h  \n           a   f   t   e   r       s   e   c   o   n
+0000740   d  \n
+0000742
+##### exit=1
+
+##### N-none | MU3 runner | env: none | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   S   C   R   I   P
+0000060   T       E   R   R   O   R   :       I   n   v   a   l   i   d
+0000100       c   a   l   l   .       N   o   n   e   x   i   s   t   e
+0000120   n   t       f   u   n   c   t   i   o   n       '   b   o   o
+0000140   m   '       i   n       b   a   s   e       '   N   i   l   '
+0000160   .  \n               a   t   :       p   r   o   b   e       (
+0000200   r   e   s   :   /   /   p   r   o   b   e   .   g   d   :   7
+0000220   )       t   a   i   l  \n   P   a   r   s   e       E   r   r
+0000240   o   r   :       s   e   c   o   n   d       m   a   t   c   h
+0000260  \n   a   f   t   e   r       s   e   c   o   n   d  \n   S   T
+0000300   U   B       R   E   S   U   L   T   :       2       p   a   s
+0000320   s   e   d   ,       0       f   a   i   l   e   d  \n  \n   R
+0000340   U   N   N   E   R       F   A   I   L       r   e   s   :   /
+0000360   /   p   r   o   b   e   /   s   t   u   b   _   b   y   t   e
+0000400   s   .   g   d   :       2       s   c   r   i   p   t       e
+0000420   r   r   o   r       l   i   n   e   (   s   )  \n           S
+0000440   C   R   I   P   T       E   R   R   O   R   :       I   n   v
+0000460   a   l   i   d       c   a   l   l   .       N   o   n   e   x
+0000500   i   s   t   e   n   t       f   u   n   c   t   i   o   n    
+0000520   '   b   o   o   m   '       i   n       b   a   s   e       '
+0000540   N   i   l   '   .  \n                       a   t   :       p
+0000560   r   o   b   e       (   r   e   s   :   /   /   p   r   o   b
+0000600   e   .   g   d   :   7   )       t   a   i   l  \n           P
+0000620   a   r   s   e       E   r   r   o   r   :       s   e   c   o
+0000640   n   d       m   a   t   c   h  \n           a   f   t   e   r
+0000660       s   e   c   o   n   d  \n
+0000670
+##### exit=1
+
+##### N-nul | MU3 runner | env: none | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   S   C   R   I   P
+0000060   T       E   R   R   O   R   :       I   n   v   a   l   i   d
+0000100       c   a   l   l   .       N   o   n   e   x   i   s   t   e
+0000120   n   t       f   u   n   c   t   i   o   n       '   b   o   o
+0000140   m   '       i   n       b   a   s   e       '   N   i   l   '
+0000160   .  \n               a   t   :       p   r   o   b   e       (
+0000200   r   e   s   :   /   /   p   r   o   b   e   .   g   d   :   7
+0000220   )      \0   t   a   i   l  \n   P   a   r   s   e       E   r
+0000240   r   o   r   :       s   e   c   o   n   d       m   a   t   c
+0000260   h  \n   a   f   t   e   r       s   e   c   o   n   d  \n   S
+0000300   T   U   B       R   E   S   U   L   T   :       2       p   a
+0000320   s   s   e   d   ,       0       f   a   i   l   e   d  \n  \n
+0000340   R   U   N   N   E   R       F   A   I   L       r   e   s   :
+0000360   /   /   p   r   o   b   e   /   s   t   u   b   _   b   y   t
+0000400   e   s   .   g   d   :       2       s   c   r   i   p   t    
+0000420   e   r   r   o   r       l   i   n   e   (   s   )  \n        
+0000440   B   i   n   a   r   y       f   i   l   e       <   l   o   g
+0000460   >       m   a   t   c   h   e   s  \n
+0000472
+##### exit=1
+
+##### N-ff | MU3 runner | env: none | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   S   C   R   I   P
+0000060   T       E   R   R   O   R   :       I   n   v   a   l   i   d
+0000100       c   a   l   l   .       N   o   n   e   x   i   s   t   e
+0000120   n   t       f   u   n   c   t   i   o   n       '   b   o   o
+0000140   m   '       i   n       b   a   s   e       '   N   i   l   '
+0000160   .  \n               a   t   :       p   r   o   b   e       (
+0000200   r   e   s   :   /   /   p   r   o   b   e   .   g   d   :   7
+0000220   )     377   t   a   i   l  \n   P   a   r   s   e       E   r
+0000240   r   o   r   :       s   e   c   o   n   d       m   a   t   c
+0000260   h  \n   a   f   t   e   r       s   e   c   o   n   d  \n   S
+0000300   T   U   B       R   E   S   U   L   T   :       2       p   a
+0000320   s   s   e   d   ,       0       f   a   i   l   e   d  \n  \n
+0000340   R   U   N   N   E   R       F   A   I   L       r   e   s   :
+0000360   /   /   p   r   o   b   e   /   s   t   u   b   _   b   y   t
+0000400   e   s   .   g   d   :       2       s   c   r   i   p   t    
+0000420   e   r   r   o   r       l   i   n   e   (   s   )  \n        
+0000440   S   C   R   I   P   T       E   R   R   O   R   :       I   n
+0000460   v   a   l   i   d       c   a   l   l   .       N   o   n   e
+0000500   x   i   s   t   e   n   t       f   u   n   c   t   i   o   n
+0000520       '   b   o   o   m   '       i   n       b   a   s   e    
+0000540   '   N   i   l   '   .  \n                       a   t   :    
+0000560   p   r   o   b   e       (   r   e   s   :   /   /   p   r   o
+0000600   b   e   .   g   d   :   7   )     377   t   a   i   l  \n    
+0000620       P   a   r   s   e       E   r   r   o   r   :       s   e
+0000640   c   o   n   d       m   a   t   c   h  \n           a   f   t
+0000660   e   r       s   e   c   o   n   d  \n
+0000672
+##### exit=1
+
+##### N-farnul | MU3 runner | env: none | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   b   a   n   n   e
+0000060   r      \0       f   a   r       f   r   o   m       a   n   y
+0000100       m   a   t   c   h  \n   l   i   n   e       2  \n   l   i
+0000120   n   e       3  \n   S   C   R   I   P   T       E   R   R   O
+0000140   R   :       I   n   v   a   l   i   d       c   a   l   l   .
+0000160       N   o   n   e   x   i   s   t   e   n   t       f   u   n
+0000200   c   t   i   o   n       '   b   o   o   m   '       i   n    
+0000220   b   a   s   e       '   N   i   l   '   .  \n               a
+0000240   t   :       p   r   o   b   e       (   r   e   s   :   /   /
+0000260   p   r   o   b   e   .   g   d   :   7   )       t   a   i   l
+0000300  \n   P   a   r   s   e       E   r   r   o   r   :       s   e
+0000320   c   o   n   d       m   a   t   c   h  \n   a   f   t   e   r
+0000340       s   e   c   o   n   d  \n   S   T   U   B       R   E   S
+0000360   U   L   T   :       2       p   a   s   s   e   d   ,       0
+0000400       f   a   i   l   e   d  \n  \n   R   U   N   N   E   R    
+0000420   F   A   I   L       r   e   s   :   /   /   p   r   o   b   e
+0000440   /   s   t   u   b   _   b   y   t   e   s   .   g   d   :    
+0000460   2       s   c   r   i   p   t       e   r   r   o   r       l
+0000500   i   n   e   (   s   )  \n           B   i   n   a   r   y    
+0000520   f   i   l   e       <   l   o   g   >       m   a   t   c   h
+0000540   e   s  \n
+0000543
+##### exit=1
+
+##### N-none | OLD-C runner | env: LC_ALL=C | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   S   C   R   I   P
+0000060   T       E   R   R   O   R   :       I   n   v   a   l   i   d
+0000100       c   a   l   l   .       N   o   n   e   x   i   s   t   e
+0000120   n   t       f   u   n   c   t   i   o   n       '   b   o   o
+0000140   m   '       i   n       b   a   s   e       '   N   i   l   '
+0000160   .  \n               a   t   :       p   r   o   b   e       (
+0000200   r   e   s   :   /   /   p   r   o   b   e   .   g   d   :   7
+0000220   )       t   a   i   l  \n   P   a   r   s   e       E   r   r
+0000240   o   r   :       s   e   c   o   n   d       m   a   t   c   h
+0000260  \n   a   f   t   e   r       s   e   c   o   n   d  \n   S   T
+0000300   U   B       R   E   S   U   L   T   :       2       p   a   s
+0000320   s   e   d   ,       0       f   a   i   l   e   d  \n  \n   R
+0000340   U   N   N   E   R       F   A   I   L       r   e   s   :   /
+0000360   /   p   r   o   b   e   /   s   t   u   b   _   b   y   t   e
+0000400   s   .   g   d   :       2       s   c   r   i   p   t       e
+0000420   r   r   o   r       l   i   n   e   (   s   )  \n           S
+0000440   C   R   I   P   T       E   R   R   O   R   :       I   n   v
+0000460   a   l   i   d       c   a   l   l   .       N   o   n   e   x
+0000500   i   s   t   e   n   t       f   u   n   c   t   i   o   n    
+0000520   '   b   o   o   m   '       i   n       b   a   s   e       '
+0000540   N   i   l   '   .  \n                       a   t   :       p
+0000560   r   o   b   e       (   r   e   s   :   /   /   p   r   o   b
+0000600   e   .   g   d   :   7   )       t   a   i   l  \n           P
+0000620   a   r   s   e       E   r   r   o   r   :       s   e   c   o
+0000640   n   d       m   a   t   c   h  \n           a   f   t   e   r
+0000660       s   e   c   o   n   d  \n
+0000670
+##### exit=1
+
+##### N-nul | OLD-C runner | env: LC_ALL=C | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   S   C   R   I   P
+0000060   T       E   R   R   O   R   :       I   n   v   a   l   i   d
+0000100       c   a   l   l   .       N   o   n   e   x   i   s   t   e
+0000120   n   t       f   u   n   c   t   i   o   n       '   b   o   o
+0000140   m   '       i   n       b   a   s   e       '   N   i   l   '
+0000160   .  \n               a   t   :       p   r   o   b   e       (
+0000200   r   e   s   :   /   /   p   r   o   b   e   .   g   d   :   7
+0000220   )      \0   t   a   i   l  \n   P   a   r   s   e       E   r
+0000240   r   o   r   :       s   e   c   o   n   d       m   a   t   c
+0000260   h  \n   a   f   t   e   r       s   e   c   o   n   d  \n   S
+0000300   T   U   B       R   E   S   U   L   T   :       2       p   a
+0000320   s   s   e   d   ,       0       f   a   i   l   e   d  \n  \n
+0000340   R   U   N   N   E   R       F   A   I   L       r   e   s   :
+0000360   /   /   p   r   o   b   e   /   s   t   u   b   _   b   y   t
+0000400   e   s   .   g   d   :       2       s   c   r   i   p   t    
+0000420   e   r   r   o   r       l   i   n   e   (   s   )  \n        
+0000440   B   i   n   a   r   y       f   i   l   e       <   l   o   g
+0000460   >       m   a   t   c   h   e   s  \n
+0000472
+##### exit=1
+
+##### N-ff | OLD-C runner | env: LC_ALL=C | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   S   C   R   I   P
+0000060   T       E   R   R   O   R   :       I   n   v   a   l   i   d
+0000100       c   a   l   l   .       N   o   n   e   x   i   s   t   e
+0000120   n   t       f   u   n   c   t   i   o   n       '   b   o   o
+0000140   m   '       i   n       b   a   s   e       '   N   i   l   '
+0000160   .  \n               a   t   :       p   r   o   b   e       (
+0000200   r   e   s   :   /   /   p   r   o   b   e   .   g   d   :   7
+0000220   )     377   t   a   i   l  \n   P   a   r   s   e       E   r
+0000240   r   o   r   :       s   e   c   o   n   d       m   a   t   c
+0000260   h  \n   a   f   t   e   r       s   e   c   o   n   d  \n   S
+0000300   T   U   B       R   E   S   U   L   T   :       2       p   a
+0000320   s   s   e   d   ,       0       f   a   i   l   e   d  \n  \n
+0000340   R   U   N   N   E   R       F   A   I   L       r   e   s   :
+0000360   /   /   p   r   o   b   e   /   s   t   u   b   _   b   y   t
+0000400   e   s   .   g   d   :       2       s   c   r   i   p   t    
+0000420   e   r   r   o   r       l   i   n   e   (   s   )  \n        
+0000440   S   C   R   I   P   T       E   R   R   O   R   :       I   n
+0000460   v   a   l   i   d       c   a   l   l   .       N   o   n   e
+0000500   x   i   s   t   e   n   t       f   u   n   c   t   i   o   n
+0000520       '   b   o   o   m   '       i   n       b   a   s   e    
+0000540   '   N   i   l   '   .  \n                       a   t   :    
+0000560   p   r   o   b   e       (   r   e   s   :   /   /   p   r   o
+0000600   b   e   .   g   d   :   7   )     377   t   a   i   l  \n    
+0000620       P   a   r   s   e       E   r   r   o   r   :       s   e
+0000640   c   o   n   d       m   a   t   c   h  \n           a   f   t
+0000660   e   r       s   e   c   o   n   d  \n
+0000672
+##### exit=1
+
+##### N-farnul | OLD-C runner | env: LC_ALL=C | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   b   a   n   n   e
+0000060   r      \0       f   a   r       f   r   o   m       a   n   y
+0000100       m   a   t   c   h  \n   l   i   n   e       2  \n   l   i
+0000120   n   e       3  \n   S   C   R   I   P   T       E   R   R   O
+0000140   R   :       I   n   v   a   l   i   d       c   a   l   l   .
+0000160       N   o   n   e   x   i   s   t   e   n   t       f   u   n
+0000200   c   t   i   o   n       '   b   o   o   m   '       i   n    
+0000220   b   a   s   e       '   N   i   l   '   .  \n               a
+0000240   t   :       p   r   o   b   e       (   r   e   s   :   /   /
+0000260   p   r   o   b   e   .   g   d   :   7   )       t   a   i   l
+0000300  \n   P   a   r   s   e       E   r   r   o   r   :       s   e
+0000320   c   o   n   d       m   a   t   c   h  \n   a   f   t   e   r
+0000340       s   e   c   o   n   d  \n   S   T   U   B       R   E   S
+0000360   U   L   T   :       2       p   a   s   s   e   d   ,       0
+0000400       f   a   i   l   e   d  \n  \n   R   U   N   N   E   R    
+0000420   F   A   I   L       r   e   s   :   /   /   p   r   o   b   e
+0000440   /   s   t   u   b   _   b   y   t   e   s   .   g   d   :    
+0000460   2       s   c   r   i   p   t       e   r   r   o   r       l
+0000500   i   n   e   (   s   )  \n           B   i   n   a   r   y    
+0000520   f   i   l   e       <   l   o   g   >       m   a   t   c   h
+0000540   e   s  \n
+0000543
+##### exit=1
+
+##### N-none | NEW-C runner | env: LC_ALL=C | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   S   C   R   I   P
+0000060   T       E   R   R   O   R   :       I   n   v   a   l   i   d
+0000100       c   a   l   l   .       N   o   n   e   x   i   s   t   e
+0000120   n   t       f   u   n   c   t   i   o   n       '   b   o   o
+0000140   m   '       i   n       b   a   s   e       '   N   i   l   '
+0000160   .  \n               a   t   :       p   r   o   b   e       (
+0000200   r   e   s   :   /   /   p   r   o   b   e   .   g   d   :   7
+0000220   )       t   a   i   l  \n   P   a   r   s   e       E   r   r
+0000240   o   r   :       s   e   c   o   n   d       m   a   t   c   h
+0000260  \n   a   f   t   e   r       s   e   c   o   n   d  \n   S   T
+0000300   U   B       R   E   S   U   L   T   :       2       p   a   s
+0000320   s   e   d   ,       0       f   a   i   l   e   d  \n  \n   R
+0000340   U   N   N   E   R       F   A   I   L       r   e   s   :   /
+0000360   /   p   r   o   b   e   /   s   t   u   b   _   b   y   t   e
+0000400   s   .   g   d   :       2       s   c   r   i   p   t       e
+0000420   r   r   o   r       l   i   n   e   (   s   )  \n           S
+0000440   C   R   I   P   T       E   R   R   O   R   :       I   n   v
+0000460   a   l   i   d       c   a   l   l   .       N   o   n   e   x
+0000500   i   s   t   e   n   t       f   u   n   c   t   i   o   n    
+0000520   '   b   o   o   m   '       i   n       b   a   s   e       '
+0000540   N   i   l   '   .  \n                       a   t   :       p
+0000560   r   o   b   e       (   r   e   s   :   /   /   p   r   o   b
+0000600   e   .   g   d   :   7   )       t   a   i   l  \n           P
+0000620   a   r   s   e       E   r   r   o   r   :       s   e   c   o
+0000640   n   d       m   a   t   c   h  \n           a   f   t   e   r
+0000660       s   e   c   o   n   d  \n
+0000670
+##### exit=1
+
+##### N-nul | NEW-C runner | env: LC_ALL=C | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   S   C   R   I   P
+0000060   T       E   R   R   O   R   :       I   n   v   a   l   i   d
+0000100       c   a   l   l   .       N   o   n   e   x   i   s   t   e
+0000120   n   t       f   u   n   c   t   i   o   n       '   b   o   o
+0000140   m   '       i   n       b   a   s   e       '   N   i   l   '
+0000160   .  \n               a   t   :       p   r   o   b   e       (
+0000200   r   e   s   :   /   /   p   r   o   b   e   .   g   d   :   7
+0000220   )      \0   t   a   i   l  \n   P   a   r   s   e       E   r
+0000240   r   o   r   :       s   e   c   o   n   d       m   a   t   c
+0000260   h  \n   a   f   t   e   r       s   e   c   o   n   d  \n   S
+0000300   T   U   B       R   E   S   U   L   T   :       2       p   a
+0000320   s   s   e   d   ,       0       f   a   i   l   e   d  \n  \n
+0000340   R   U   N   N   E   R       F   A   I   L       r   e   s   :
+0000360   /   /   p   r   o   b   e   /   s   t   u   b   _   b   y   t
+0000400   e   s   .   g   d   :       2       s   c   r   i   p   t    
+0000420   e   r   r   o   r       l   i   n   e   (   s   )  \n        
+0000440   S   C   R   I   P   T       E   R   R   O   R   :       I   n
+0000460   v   a   l   i   d       c   a   l   l   .       N   o   n   e
+0000500   x   i   s   t   e   n   t       f   u   n   c   t   i   o   n
+0000520       '   b   o   o   m   '       i   n       b   a   s   e    
+0000540   '   N   i   l   '   .  \n                       a   t   :    
+0000560   p   r   o   b   e       (   r   e   s   :   /   /   p   r   o
+0000600   b   e   .   g   d   :   7   )      \0   t   a   i   l  \n    
+0000620       P   a   r   s   e       E   r   r   o   r   :       s   e
+0000640   c   o   n   d       m   a   t   c   h  \n           a   f   t
+0000660   e   r       s   e   c   o   n   d  \n
+0000672
+##### exit=1
+
+##### N-ff | NEW-C runner | env: LC_ALL=C | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   S   C   R   I   P
+0000060   T       E   R   R   O   R   :       I   n   v   a   l   i   d
+0000100       c   a   l   l   .       N   o   n   e   x   i   s   t   e
+0000120   n   t       f   u   n   c   t   i   o   n       '   b   o   o
+0000140   m   '       i   n       b   a   s   e       '   N   i   l   '
+0000160   .  \n               a   t   :       p   r   o   b   e       (
+0000200   r   e   s   :   /   /   p   r   o   b   e   .   g   d   :   7
+0000220   )     377   t   a   i   l  \n   P   a   r   s   e       E   r
+0000240   r   o   r   :       s   e   c   o   n   d       m   a   t   c
+0000260   h  \n   a   f   t   e   r       s   e   c   o   n   d  \n   S
+0000300   T   U   B       R   E   S   U   L   T   :       2       p   a
+0000320   s   s   e   d   ,       0       f   a   i   l   e   d  \n  \n
+0000340   R   U   N   N   E   R       F   A   I   L       r   e   s   :
+0000360   /   /   p   r   o   b   e   /   s   t   u   b   _   b   y   t
+0000400   e   s   .   g   d   :       2       s   c   r   i   p   t    
+0000420   e   r   r   o   r       l   i   n   e   (   s   )  \n        
+0000440   S   C   R   I   P   T       E   R   R   O   R   :       I   n
+0000460   v   a   l   i   d       c   a   l   l   .       N   o   n   e
+0000500   x   i   s   t   e   n   t       f   u   n   c   t   i   o   n
+0000520       '   b   o   o   m   '       i   n       b   a   s   e    
+0000540   '   N   i   l   '   .  \n                       a   t   :    
+0000560   p   r   o   b   e       (   r   e   s   :   /   /   p   r   o
+0000600   b   e   .   g   d   :   7   )     377   t   a   i   l  \n    
+0000620       P   a   r   s   e       E   r   r   o   r   :       s   e
+0000640   c   o   n   d       m   a   t   c   h  \n           a   f   t
+0000660   e   r       s   e   c   o   n   d  \n
+0000672
+##### exit=1
+
+##### N-farnul | NEW-C runner | env: LC_ALL=C | od -c of the output, log path normalized:
+0000000   G   o   d   o   t       E   n   g   i   n   e       v   4   .
+0000020   6   .   3   .   s   t   a   b   l   e   .   o   f   f   i   c
+0000040   i   a   l       (   s   t   u   b   )  \n   b   a   n   n   e
+0000060   r      \0       f   a   r       f   r   o   m       a   n   y
+0000100       m   a   t   c   h  \n   l   i   n   e       2  \n   l   i
+0000120   n   e       3  \n   S   C   R   I   P   T       E   R   R   O
+0000140   R   :       I   n   v   a   l   i   d       c   a   l   l   .
+0000160       N   o   n   e   x   i   s   t   e   n   t       f   u   n
+0000200   c   t   i   o   n       '   b   o   o   m   '       i   n    
+0000220   b   a   s   e       '   N   i   l   '   .  \n               a
+0000240   t   :       p   r   o   b   e       (   r   e   s   :   /   /
+0000260   p   r   o   b   e   .   g   d   :   7   )       t   a   i   l
+0000300  \n   P   a   r   s   e       E   r   r   o   r   :       s   e
+0000320   c   o   n   d       m   a   t   c   h  \n   a   f   t   e   r
+0000340       s   e   c   o   n   d  \n   S   T   U   B       R   E   S
+0000360   U   L   T   :       2       p   a   s   s   e   d   ,       0
+0000400       f   a   i   l   e   d  \n  \n   R   U   N   N   E   R    
+0000420   F   A   I   L       r   e   s   :   /   /   p   r   o   b   e
+0000440   /   s   t   u   b   _   b   y   t   e   s   .   g   d   :    
+0000460   2       s   c   r   i   p   t       e   r   r   o   r       l
+0000500   i   n   e   (   s   )  \n           S   C   R   I   P   T    
+0000520   E   R   R   O   R   :       I   n   v   a   l   i   d       c
+0000540   a   l   l   .       N   o   n   e   x   i   s   t   e   n   t
+0000560       f   u   n   c   t   i   o   n       '   b   o   o   m   '
+0000600       i   n       b   a   s   e       '   N   i   l   '   .  \n
+0000620                       a   t   :       p   r   o   b   e       (
+0000640   r   e   s   :   /   /   p   r   o   b   e   .   g   d   :   7
+0000660   )       t   a   i   l  \n           P   a   r   s   e       E
+0000700   r   r   o   r   :       s   e   c   o   n   d       m   a   t
+0000720   c   h  \n           a   f   t   e   r       s   e   c   o   n
+0000740   d  \n
+0000742
+##### exit=1
+
+##### SUMMARY
+none    OLD    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+nul     OLD    exit=1 listing lines=1  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)|  Binary file <log> matches
+ff      OLD    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+farnul  OLD    exit=1 listing lines=1  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)|  Binary file <log> matches
+none    NEW    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+nul     NEW    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+ff      NEW    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+farnul  NEW    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+none    MU2    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+nul     MU2    exit=1 listing lines=1  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)|  Binary file (standard input) matches
+ff      MU2    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+farnul  MU2    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+none    MU3    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+nul     MU3    exit=1 listing lines=1  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)|  Binary file <log> matches
+ff      MU3    exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+farnul  MU3    exit=1 listing lines=1  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)|  Binary file <log> matches
+== the same with LC_ALL=C for the whole runner
+none    OLD-C  exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+nul     OLD-C  exit=1 listing lines=1  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)|  Binary file <log> matches
+ff      OLD-C  exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+farnul  OLD-C  exit=1 listing lines=1  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)|  Binary file <log> matches
+none    NEW-C  exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+nul     NEW-C  exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+ff      NEW-C  exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+farnul  NEW-C  exit=1 listing lines=4  RUNNER FAIL res://probe/stub_bytes.gd: 2 script error line(s)
+== N0 OLD vs NEW:
+byte-identical
+== L4 bash, GODOT=/no/such/godot
+old exit=127 | timeout: failed to run command '/no/such/godot': No such file or directory|
+new exit=127 | timeout: failed to run command '/no/such/godot': No such file or directory|
+NEW N1 listing == golden (golden_n1_listing.od)
+NEW-C N1 listing == golden (golden_n1_listing.od)
+
+##### golden N1 listing (od -c)
+0000000   R   U   N   N   E   R       F   A   I   L       r   e   s   :
+0000020   /   /   p   r   o   b   e   /   s   t   u   b   _   b   y   t
+0000040   e   s   .   g   d   :       2       s   c   r   i   p   t    
+0000060   e   r   r   o   r       l   i   n   e   (   s   )  \n        
+0000100   S   C   R   I   P   T       E   R   R   O   R   :       I   n
+0000120   v   a   l   i   d       c   a   l   l   .       N   o   n   e
+0000140   x   i   s   t   e   n   t       f   u   n   c   t   i   o   n
+0000160       '   b   o   o   m   '       i   n       b   a   s   e    
+0000200   '   N   i   l   '   .  \n                       a   t   :    
+0000220   p   r   o   b   e       (   r   e   s   :   /   /   p   r   o
+0000240   b   e   .   g   d   :   7   )      \0   t   a   i   l  \n    
+0000260       P   a   r   s   e       E   r   r   o   r   :       s   e
+0000300   c   o   n   d       m   a   t   c   h  \n           a   f   t
+0000320   e   r       s   e   c   o   n   d  \n
+0000332

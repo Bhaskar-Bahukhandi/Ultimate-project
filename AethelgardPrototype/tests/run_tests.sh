@@ -90,12 +90,16 @@ if [ ${#watchdog[@]} -gt 0 ] && { [ "$code" -eq 124 ] || [ "$code" -eq 137 ]; } 
     fail "timed out after $timeout_sec s"
 fi
 
+# -a and LC_ALL=C, as for the result-line scan below: a NUL or non-UTF-8 byte would make grep
+# print "Binary file ... matches" instead of the lines, and the filter grep reads the listing,
+# which can carry that byte too; sed runs under LC_ALL=C as well (BSD sed can reject a non-UTF-8
+# byte). The filter stays grep -v '^--$' (not GNU-only --no-group-separator) for macOS grep.
 # grep -c exits 1 on zero matches, so guard it against set -e.
-n="$(grep -cE 'SCRIPT ERROR|Parse Error' "$log" || true)"
+n="$(LC_ALL=C grep -a -cE 'SCRIPT ERROR|Parse Error' "$log" || true)"
 if [ "$n" -gt 0 ]; then
     echo
     echo "RUNNER FAIL $script: $n script error line(s)"
-    { grep -E -A1 'SCRIPT ERROR|Parse Error' "$log" || true; } | grep -v '^--$' | sed 's/^/  /'
+    { LC_ALL=C grep -a -E -A1 'SCRIPT ERROR|Parse Error' "$log" || true; } | LC_ALL=C grep -a -v '^--$' | LC_ALL=C sed 's/^/  /'
     if [ "${GITHUB_ACTIONS:-}" = true ]; then
         echo "::error::RUNNER FAIL $script: $n script error line(s)"
     fi

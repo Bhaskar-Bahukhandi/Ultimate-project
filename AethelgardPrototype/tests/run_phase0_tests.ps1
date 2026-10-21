@@ -5,6 +5,8 @@
 # Godot still exits with the code the script chose. The runner then prints
 # "RUNNER FAIL <script>: <N> script error line(s)" with the matching lines, and
 # exits 1 (or keeps Godot's own non-zero code).
+# If Godot never starts (a missing or unrunnable exe, so no exit code), the runner prints
+# "RUNNER FAIL <script>: Godot did not start" and exits 1 (TD-009).
 # Two limits per suite come from tests/suite_limits.txt (TD-007):
 # - a time limit: a script error in the function that would call quit() leaves Godot
 #   running forever, so at the deadline the runner stops Godot together with the real
@@ -82,6 +84,10 @@ $dog = [powershell]::Create()
     }
 }).AddArgument($PID).AddArgument($godot.Name).AddArgument($TimeoutSec).AddArgument($watch)
 $dogRun = $null
+# A launch failure ends the try before $code and $lines are set; without these, the checks
+# below would read an in-process caller's variables of the same name (dynamic scoping).
+$code = $null
+$lines = $null
 try {
     $env:APPDATA = $isolated   # Godot resolves user:// under %APPDATA% on Windows
     $ErrorActionPreference = "Continue"   # Godot writes to stderr; under 2>&1 Stop would throw on it
@@ -105,7 +111,15 @@ try {
     }
 }
 
+# Stop for the rest of the script (it stayed Continue before TD-009); placed after the
+# finally so it also applies when a launch failure skips the rest of the try.
+$ErrorActionPreference = "Stop"
 $failed = $false
+if ($null -eq $code -and -not $watch.TimedOut) {
+    Write-Host ""
+    Write-Host "RUNNER FAIL $($Script): Godot did not start"
+    $failed = $true
+}
 if ($watch.TimedOut) {
     Write-Host ""
     Write-Host "RUNNER FAIL $($Script): timed out after $TimeoutSec s"
@@ -127,8 +141,8 @@ if ($hits.Count -gt 0) {
     $failed = $true
 }
 
-# A suite that timed out has no result line; the timeout is the reason, not the count.
-if ($MinChecks -gt 0 -and -not $watch.TimedOut) {
+# A suite that timed out, or never started, has no result line; that is the reason, not the count.
+if ($MinChecks -gt 0 -and -not $watch.TimedOut -and $null -ne $code) {
     # A result line starts at column 0 with an uppercase name ("LAYOUT RESULT: 6 passed, 0 failed",
     # "LOADALL ok=206 bad=0"), so a check description that quotes one is never counted; the last
     # such line wins, and a lowercase "result:" is not one. The end is not anchored (a trailing CR).
@@ -150,5 +164,5 @@ if ($MinChecks -gt 0 -and -not $watch.TimedOut) {
     }
 }
 
-if ($watch.TimedOut) { $code = 124 } elseif ($failed -and $code -eq 0) { $code = 1 }
+if ($watch.TimedOut) { $code = 124 } elseif ($failed -and ($null -eq $code -or $code -eq 0)) { $code = 1 }
 exit $code

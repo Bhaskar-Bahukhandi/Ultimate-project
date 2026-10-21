@@ -1,0 +1,53 @@
+TD-009 static checks. 2026-10-21T05:34:56+05:30; repo HEAD 249cba4 + working tree
+
+## I1 (AC-1, inspection): ErrorActionPreference and the pre-try initializers in AethelgardPrototype/tests/run_phase0_tests.ps1
+33:$ErrorActionPreference = "Stop"
+89:$code = $null
+90:$lines = $null
+91:try {
+93:    $ErrorActionPreference = "Continue"   # Godot writes to stderr; under 2>&1 Stop would throw on it
+99:} finally {
+116:$ErrorActionPreference = "Stop"
+
+## X2 (AC-6): grep -n timeout-minutes .github/workflows/ci.yml (now; and at 8e37f5d, before TD-007)
+14:    timeout-minutes: 45
+96:      # Each suite's limit there stays below its step's timeout-minutes, which is only a backstop.
+137:      - name: Chapter 1 route (rewritten dialogue, end to end)
+139:        timeout-minutes: 30
+142:      - name: Chapter 2 route (rewritten dialogue, end to end)
+144:        timeout-minutes: 15
+155:      - name: Act 1 side quests completable (Y1-P0-T06: arena, Underground, Iris, Garro, shop)
+157:        timeout-minutes: 15
+160:      - name: Phase 0 regression tests
+162:        timeout-minutes: 30
+-- at 8e37f5d:
+14:    timeout-minutes: 45
+137:        timeout-minutes: 15
+142:        timeout-minutes: 15
+155:        timeout-minutes: 15
+160:        timeout-minutes: 30
+
+## X2: register rows vs header
+3:Total items: 9 (6 open) | Estimated total effort: S + M + S + S + M + M + M + M + S
+rows: 9; open rows (Status column starts with Open): 6
+
+## Matrix harnesses: TD-007 originals (pinned) and the TD-009 pairwise copies and probe scripts (scratchpad)
+31c028938a19725c13aca1ae61eecc2030dce818fe9566e9fb987e601c4efcf0 *matrix_ps.ps1
+eab44c2882cd10a84672a49420a4c38da9fd4aab2b863e97c276c8ec17cc1eef *matrix_sh.sh
+7d0585b21f8e1496b395d7a204002b92f34b9c81e54943d0476836925d94ba62 *matrix_sh_extra.sh
+c77b1e9b692ad522f20a9f4560f479276277e328e7201d0460b39ef83ef71586 *matrix_ps2.ps1
+c9e2649958e0be01d3d1861c2c6ec10567f83f7fed153bbc4805f96192a48efb *matrix_sh2.sh
+1abeaa549e2160ae3be324aef6df0d5806dbc1c5db836abd25f9f90dd1cdeb70 *matrix_sh_extra2.sh
+98410fbe3af4fb06e741997970bd8ecdf209afc5a02ae11c836985684e9cd6bb *compare_pairs.sh
+8da79782b2c96979be45bc091005dfb1e17672033abab7be447f73a8fbdb32a7 *launch.ps1
+6fddd12cf3df70e5198a6edbf4671d337ab4d2d12b796ac2baeea0fc70bfcfe9 *run_launch.sh
+826fa59de3ede13518f9458426b9807cb009a95af3ef889112d5e20381b2bf3a *bytes.sh
+e1b8ea8123b963ea1095ee71d5939d2bca578a0aba468efd7fa03b43b813138c *run_bytes.sh
+f7e63fd1493f77b3b54a4a95f9d09734ad5f89f828940adf7b843fc44b55c571 *stub/godot_bytes.sh
+TD-007 session copies:
+31c028938a19725c13aca1ae61eecc2030dce818fe9566e9fb987e601c4efcf0 *matrix_ps.ps1
+eab44c2882cd10a84672a49420a4c38da9fd4aab2b863e97c276c8ec17cc1eef *matrix_sh.sh
+7d0585b21f8e1496b395d7a204002b92f34b9c81e54943d0476836925d94ba62 *matrix_sh_extra.sh
+
+## git diff --check
+clean

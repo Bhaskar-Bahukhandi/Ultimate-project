@@ -1,0 +1,1100 @@
+TD-009 pairwise re-run of the TD-007 probe matrix, bash runner (Git Bash on Windows, GNU bash, version 5.2.26(1)-release (x86_64-pc-msys)). 2026-10-21T01:44:59+05:30
+repo HEAD 249cba4; NEW = working-tree tests/run_tests.sh + tests/suite_limits.txt
+OLD = git show HEAD:AethelgardPrototype/tests/run_tests.sh (249cba4, TD-007) with only the project= line pinned
+GODOT = Windows console exe; APPDATA and TMPDIR = fresh dirs per run; the harness guard is an outer timeout
+
+##### W1 H1 error before quit() | OLD runner | env: TEST_TIMEOUT=20
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD007 H1: before the error
+SCRIPT ERROR: Invalid call. Nonexistent function 'no_such_method_h1' in base 'Node'.
+   at: _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd:5)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd:5)
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+ERROR: BUG: Unreferenced static string to 0: servers
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: Physics2DConstraintSolveIslands
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: Physics2DConstraintSetup
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: .
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: Variant
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @warning_ignore_restore
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @warning_ignore_start
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @warning_ignore
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @export_range
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @export_multiline
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @export
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @icon
+   at: unref (core/string/string_name.cpp:116)
+WARNING: A Thread object is being destroyed without its completion having been realized.
+Please call wait_to_finish() on it to ensure correct cleanup.
+   at: ~Thread (core/os/thread.cpp:102)
+ERROR: 7 RID allocations of type '23NavMeshGeometryParser2D' were leaked at exit.
+ERROR: 6 RID allocations of type '23NavMeshGeometryParser3D' were leaked at exit.
+ERROR: Pages in use exist at exit in PagedAllocator: N7Variant5Pools11BucketLargeE
+   at: ~PagedAllocator (./core/templates/paged_allocator.h:169)
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd: timed out after 20 s
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd: 1 script error line(s)
+  SCRIPT ERROR: Invalid call. Nonexistent function 'no_such_method_h1' in base 'Node'.
+     at: _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd:5)
+##### exit=124 HANG(guard 90s) elapsed=21s lines=50 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### W1 H1 error before quit() | NEW runner | env: TEST_TIMEOUT=20
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD007 H1: before the error
+SCRIPT ERROR: Invalid call. Nonexistent function 'no_such_method_h1' in base 'Node'.
+   at: _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd:5)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd:5)
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+ERROR: BUG: Unreferenced static string to 0: servers
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: Physics2DConstraintSolveIslands
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: Physics2DConstraintSetup
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: .
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: Variant
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @warning_ignore_restore
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @warning_ignore_start
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @warning_ignore
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @export_range
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @export_multiline
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @export
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @icon
+   at: unref (core/string/string_name.cpp:116)
+WARNING: A Thread object is being destroyed without its completion having been realized.
+Please call wait_to_finish() on it to ensure correct cleanup.
+   at: ~Thread (core/os/thread.cpp:102)
+ERROR: 7 RID allocations of type '23NavMeshGeometryParser2D' were leaked at exit.
+ERROR: 6 RID allocations of type '23NavMeshGeometryParser3D' were leaked at exit.
+ERROR: Pages in use exist at exit in PagedAllocator: N7Variant5Pools11BucketLargeE
+   at: ~PagedAllocator (./core/templates/paged_allocator.h:169)
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd: timed out after 20 s
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd: 1 script error line(s)
+  SCRIPT ERROR: Invalid call. Nonexistent function 'no_such_method_h1' in base 'Node'.
+     at: _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd:5)
+##### exit=124  elapsed=21s lines=50 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### W1 H1 under GitHub Actions | OLD runner | env: TEST_TIMEOUT=20 GITHUB_ACTIONS=true
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD007 H1: before the error
+SCRIPT ERROR: Invalid call. Nonexistent function 'no_such_method_h1' in base 'Node'.
+   at: _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd:5)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd:5)
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+ERROR: BUG: Unreferenced static string to 0: servers
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: Physics2DConstraintSolveIslands
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: Physics2DConstraintSetup
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: .
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: Variant
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @warning_ignore_restore
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @warning_ignore_start
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @warning_ignore
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @export_range
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @export_multiline
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @export
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @icon
+   at: unref (core/string/string_name.cpp:116)
+WARNING: A Thread object is being destroyed without its completion having been realized.
+Please call wait_to_finish() on it to ensure correct cleanup.
+   at: ~Thread (core/os/thread.cpp:102)
+ERROR: 7 RID allocations of type '23NavMeshGeometryParser2D' were leaked at exit.
+ERROR: 6 RID allocations of type '23NavMeshGeometryParser3D' were leaked at exit.
+ERROR: Pages in use exist at exit in PagedAllocator: N7Variant5Pools11BucketLargeE
+   at: ~PagedAllocator (./core/templates/paged_allocator.h:169)
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd: timed out after 20 s
+::error::RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd: timed out after 20 s
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd: 1 script error line(s)
+  SCRIPT ERROR: Invalid call. Nonexistent function 'no_such_method_h1' in base 'Node'.
+     at: _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd:5)
+::error::RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd: 1 script error line(s)
+##### exit=124 HANG(guard 90s) elapsed=21s lines=52 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### W1 H1 under GitHub Actions | NEW runner | env: TEST_TIMEOUT=20 GITHUB_ACTIONS=true
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD007 H1: before the error
+SCRIPT ERROR: Invalid call. Nonexistent function 'no_such_method_h1' in base 'Node'.
+   at: _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd:5)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd:5)
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+ERROR: BUG: Unreferenced static string to 0: servers
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: Physics2DConstraintSolveIslands
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: Physics2DConstraintSetup
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: .
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: Variant
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @warning_ignore_restore
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @warning_ignore_start
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @warning_ignore
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @export_range
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @export_multiline
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @export
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @icon
+   at: unref (core/string/string_name.cpp:116)
+WARNING: A Thread object is being destroyed without its completion having been realized.
+Please call wait_to_finish() on it to ensure correct cleanup.
+   at: ~Thread (core/os/thread.cpp:102)
+ERROR: 7 RID allocations of type '23NavMeshGeometryParser2D' were leaked at exit.
+ERROR: 6 RID allocations of type '23NavMeshGeometryParser3D' were leaked at exit.
+ERROR: Pages in use exist at exit in PagedAllocator: N7Variant5Pools11BucketLargeE
+   at: ~PagedAllocator (./core/templates/paged_allocator.h:169)
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd: timed out after 20 s
+::error::RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd: timed out after 20 s
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd: 1 script error line(s)
+  SCRIPT ERROR: Invalid call. Nonexistent function 'no_such_method_h1' in base 'Node'.
+     at: _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd:5)
+::error::RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h1_error_then_quit.gd: 1 script error line(s)
+##### exit=124  elapsed=20s lines=52 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### W2 H2 never quits | OLD runner | env: TEST_TIMEOUT=20
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD007 H2: waiting forever
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+ERROR: BUG: Unreferenced static string to 0: servers
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: Physics2DConstraintSolveIslands
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: Physics2DConstraintSetup
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: .
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: Variant
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @warning_ignore_restore
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @warning_ignore_start
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @warning_ignore
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @export_range
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @export_multiline
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @export
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @icon
+   at: unref (core/string/string_name.cpp:116)
+WARNING: A Thread object is being destroyed without its completion having been realized.
+Please call wait_to_finish() on it to ensure correct cleanup.
+   at: ~Thread (core/os/thread.cpp:102)
+ERROR: 7 RID allocations of type '23NavMeshGeometryParser2D' were leaked at exit.
+ERROR: 6 RID allocations of type '23NavMeshGeometryParser3D' were leaked at exit.
+ERROR: Pages in use exist at exit in PagedAllocator: N7Variant5Pools11BucketLargeE
+   at: ~PagedAllocator (./core/templates/paged_allocator.h:169)
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h2_never_quits.gd: timed out after 20 s
+##### exit=124 HANG(guard 90s) elapsed=21s lines=42 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### W2 H2 never quits | NEW runner | env: TEST_TIMEOUT=20
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD007 H2: waiting forever
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+ERROR: BUG: Unreferenced static string to 0: servers
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: Physics2DConstraintSolveIslands
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: Physics2DConstraintSetup
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: .
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: Variant
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @warning_ignore_restore
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @warning_ignore_start
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @warning_ignore
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @export_range
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @export_multiline
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @export
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: @icon
+   at: unref (core/string/string_name.cpp:116)
+WARNING: A Thread object is being destroyed without its completion having been realized.
+Please call wait_to_finish() on it to ensure correct cleanup.
+   at: ~Thread (core/os/thread.cpp:102)
+ERROR: 7 RID allocations of type '23NavMeshGeometryParser2D' were leaked at exit.
+ERROR: 6 RID allocations of type '23NavMeshGeometryParser3D' were leaked at exit.
+ERROR: Pages in use exist at exit in PagedAllocator: N7Variant5Pools11BucketLargeE
+   at: ~PagedAllocator (./core/templates/paged_allocator.h:169)
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_h2_never_quits.gd: timed out after 20 s
+##### exit=124  elapsed=21s lines=42 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### W3 clean, 20 s limit | OLD runner | env: TEST_TIMEOUT=20
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+  PASS: one
+  PASS: two
+TD007 R3 RESULT: 2 passed, 0 failed
+Logger class exists: true
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0  elapsed=3s lines=12 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### W3 clean, 20 s limit | NEW runner | env: TEST_TIMEOUT=20
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+  PASS: one
+  PASS: two
+TD007 R3 RESULT: 2 passed, 0 failed
+Logger class exists: true
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0  elapsed=3s lines=12 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M1 early return, min 2 | OLD runner | env: MIN_CHECKS=2
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+  PASS: first check
+TD007 C1 RESULT: 1 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_c1_early_return.gd: 1 check(s) ran, expected at least 2
+##### exit=1  elapsed=3s lines=12 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M1 early return, min 2 | NEW runner | env: MIN_CHECKS=2
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+  PASS: first check
+TD007 C1 RESULT: 1 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_c1_early_return.gd: 1 check(s) ran, expected at least 2
+##### exit=1  elapsed=3s lines=12 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M1 early return, min 2, GHA | OLD runner | env: MIN_CHECKS=2 GITHUB_ACTIONS=true
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+  PASS: first check
+TD007 C1 RESULT: 1 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_c1_early_return.gd: 1 check(s) ran, expected at least 2
+::error::RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_c1_early_return.gd: 1 check(s) ran, expected at least 2
+##### exit=1  elapsed=3s lines=13 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M1 early return, min 2, GHA | NEW runner | env: MIN_CHECKS=2 GITHUB_ACTIONS=true
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+  PASS: first check
+TD007 C1 RESULT: 1 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_c1_early_return.gd: 1 check(s) ran, expected at least 2
+::error::RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_c1_early_return.gd: 1 check(s) ran, expected at least 2
+##### exit=1  elapsed=3s lines=13 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M1 early return, min 1 | OLD runner | env: MIN_CHECKS=1
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+  PASS: first check
+TD007 C1 RESULT: 1 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0  elapsed=3s lines=10 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M1 early return, min 1 | NEW runner | env: MIN_CHECKS=1
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+  PASS: first check
+TD007 C1 RESULT: 1 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0  elapsed=4s lines=10 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M2 no result line, min 1 | OLD runner | env: MIN_CHECKS=1
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD007 C2: nothing to report
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_c2_no_result_line.gd: no result line (expected at least 1 checks to run)
+##### exit=1  elapsed=3s lines=11 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M2 no result line, min 1 | NEW runner | env: MIN_CHECKS=1
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD007 C2: nothing to report
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_c2_no_result_line.gd: no result line (expected at least 1 checks to run)
+##### exit=1  elapsed=3s lines=11 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M2 no result line, no min | OLD runner | env: none
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD007 C2: nothing to report
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0  elapsed=3s lines=9 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M2 no result line, no min | NEW runner | env: none
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD007 C2: nothing to report
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0  elapsed=3s lines=9 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M3 ok= form, min 5 | OLD runner | env: MIN_CHECKS=5
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD007M3 ok=5 bad=0
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0  elapsed=3s lines=9 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M3 ok= form, min 5 | NEW runner | env: MIN_CHECKS=5
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD007M3 ok=5 bad=0
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0  elapsed=4s lines=9 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M3 ok= form, min 6 | OLD runner | env: MIN_CHECKS=6
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD007M3 ok=5 bad=0
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_m3_ok_form.gd: 5 check(s) ran, expected at least 6
+##### exit=1  elapsed=3s lines=11 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M3 ok= form, min 6 | NEW runner | env: MIN_CHECKS=6
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD007M3 ok=5 bad=0
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_m3_ok_form.gd: 5 check(s) ran, expected at least 6
+##### exit=1  elapsed=3s lines=11 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M4 unregistered suite | OLD runner | env: none
+
+RUNNER FAIL res://tests/unit/zz_td007/not_registered_test.gd: no entry in tests/suite_limits.txt
+##### exit=1  elapsed=0s lines=2 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M4 unregistered suite | NEW runner | env: none
+
+RUNNER FAIL res://tests/unit/zz_td007/not_registered_test.gd: no entry in tests/suite_limits.txt
+##### exit=1  elapsed=0s lines=2 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M4 unregistered suite, GHA | OLD runner | env: GITHUB_ACTIONS=true
+
+RUNNER FAIL res://tests/unit/zz_td007/not_registered_test.gd: no entry in tests/suite_limits.txt
+::error::RUNNER FAIL res://tests/unit/zz_td007/not_registered_test.gd: no entry in tests/suite_limits.txt
+##### exit=1  elapsed=0s lines=3 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M4 unregistered suite, GHA | NEW runner | env: GITHUB_ACTIONS=true
+
+RUNNER FAIL res://tests/unit/zz_td007/not_registered_test.gd: no entry in tests/suite_limits.txt
+::error::RUNNER FAIL res://tests/unit/zz_td007/not_registered_test.gd: no entry in tests/suite_limits.txt
+##### exit=1  elapsed=1s lines=3 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### W5 quits at 15 s, 20 s limit | OLD runner | env: TEST_TIMEOUT=20
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+TD007 W5 RESULT: 1 passed, 0 failed
+##### exit=0  elapsed=18s lines=9 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### W5 quits at 15 s, 20 s limit | NEW runner | env: TEST_TIMEOUT=20
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+TD007 W5 RESULT: 1 passed, 0 failed
+##### exit=0  elapsed=18s lines=9 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M5 two result lines, min 2 | OLD runner | env: MIN_CHECKS=2
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+A RESULT: 5 passed, 0 failed
+B RESULT: 1 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_m5_two_results.gd: 1 check(s) ran, expected at least 2
+##### exit=1  elapsed=3s lines=12 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M5 two result lines, min 2 | NEW runner | env: MIN_CHECKS=2
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+A RESULT: 5 passed, 0 failed
+B RESULT: 1 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_m5_two_results.gd: 1 check(s) ran, expected at least 2
+##### exit=1  elapsed=3s lines=12 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M6 lowercase result:, min 1 | OLD runner | env: MIN_CHECKS=1
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+x result: 5 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_m6_lowercase.gd: no result line (expected at least 1 checks to run)
+##### exit=1  elapsed=3s lines=11 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M6 lowercase result:, min 1 | NEW runner | env: MIN_CHECKS=1
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+x result: 5 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_m6_lowercase.gd: no result line (expected at least 1 checks to run)
+##### exit=1  elapsed=4s lines=11 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M7 1 passed 1 failed, min 2 | OLD runner | env: MIN_CHECKS=2
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD007 M7 RESULT: 1 passed, 1 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=1  elapsed=3s lines=9 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M7 1 passed 1 failed, min 2 | NEW runner | env: MIN_CHECKS=2
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD007 M7 RESULT: 1 passed, 1 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=1  elapsed=3s lines=9 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M7 1 passed 1 failed, min 3 | OLD runner | env: MIN_CHECKS=3
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD007 M7 RESULT: 1 passed, 1 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_m7_failures.gd: 2 check(s) ran, expected at least 3
+##### exit=1  elapsed=3s lines=11 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### M7 1 passed 1 failed, min 3 | NEW runner | env: MIN_CHECKS=3
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD007 M7 RESULT: 1 passed, 1 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_m7_failures.gd: 2 check(s) ran, expected at least 3
+##### exit=1  elapsed=3s lines=11 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### E1 push_error only | OLD runner | env: none
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+ERROR: TD007 E1: something went wrong
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_e1_push_error.gd:4)
+TD007 E1 RESULT: 1 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0  elapsed=3s lines=13 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### E1 push_error only | NEW runner | env: none
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+ERROR: TD007 E1: something went wrong
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe/td007_e1_push_error.gd:4)
+TD007 E1 RESULT: 1 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0  elapsed=3s lines=13 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### R1 runtime error | OLD runner | env: none
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+SCRIPT ERROR: Invalid call. Nonexistent function 'this_method_does_not_exist' in base 'Node'.
+   at: _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd:29)
+   GDScript backtrace (most recent call first):
+       [0] _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd:29)
+       [1] _run (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd:20)
+
+TD003 PROBE RESULT: 1 passed, 0 failed
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd: 1 script error line(s)
+  SCRIPT ERROR: Invalid call. Nonexistent function 'this_method_does_not_exist' in base 'Node'.
+     at: _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd:29)
+##### exit=1  elapsed=3s lines=19 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### R1 runtime error | NEW runner | env: none
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+SCRIPT ERROR: Invalid call. Nonexistent function 'this_method_does_not_exist' in base 'Node'.
+   at: _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd:29)
+   GDScript backtrace (most recent call first):
+       [0] _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd:29)
+       [1] _run (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd:20)
+
+TD003 PROBE RESULT: 1 passed, 0 failed
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd: 1 script error line(s)
+  SCRIPT ERROR: Invalid call. Nonexistent function 'this_method_does_not_exist' in base 'Node'.
+     at: _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd:29)
+##### exit=1  elapsed=3s lines=19 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### R1 runtime error, GHA | OLD runner | env: GITHUB_ACTIONS=true
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+SCRIPT ERROR: Invalid call. Nonexistent function 'this_method_does_not_exist' in base 'Node'.
+   at: _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd:29)
+   GDScript backtrace (most recent call first):
+       [0] _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd:29)
+       [1] _run (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd:20)
+
+TD003 PROBE RESULT: 1 passed, 0 failed
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd: 1 script error line(s)
+  SCRIPT ERROR: Invalid call. Nonexistent function 'this_method_does_not_exist' in base 'Node'.
+     at: _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd:29)
+::error::RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd: 1 script error line(s)
+##### exit=1  elapsed=3s lines=20 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### R1 runtime error, GHA | NEW runner | env: GITHUB_ACTIONS=true
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+SCRIPT ERROR: Invalid call. Nonexistent function 'this_method_does_not_exist' in base 'Node'.
+   at: _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd:29)
+   GDScript backtrace (most recent call first):
+       [0] _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd:29)
+       [1] _run (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd:20)
+
+TD003 PROBE RESULT: 1 passed, 0 failed
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd: 1 script error line(s)
+  SCRIPT ERROR: Invalid call. Nonexistent function 'this_method_does_not_exist' in base 'Node'.
+     at: _test_dies_midway (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd:29)
+::error::RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_runtime_error_probe.gd: 1 script error line(s)
+##### exit=1  elapsed=3s lines=20 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### R2 parse error | OLD runner | env: none
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Expected expression after "+" operator.
+   at: GDScript::reload (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_parse_error_probe.gd:5)
+ERROR: Failed to load script "C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_parse_error_probe.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2907)
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_parse_error_probe.gd: 1 script error line(s)
+  SCRIPT ERROR: Parse Error: Expected expression after "+" operator.
+     at: GDScript::reload (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_parse_error_probe.gd:5)
+##### exit=1  elapsed=1s lines=10 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### R2 parse error | NEW runner | env: none
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Expected expression after "+" operator.
+   at: GDScript::reload (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_parse_error_probe.gd:5)
+ERROR: Failed to load script "C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_parse_error_probe.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2907)
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_parse_error_probe.gd: 1 script error line(s)
+  SCRIPT ERROR: Parse Error: Expected expression after "+" operator.
+     at: GDScript::reload (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_parse_error_probe.gd:5)
+##### exit=1  elapsed=1s lines=10 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### R2b loaded broken helper | OLD runner | env: none
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Expected expression after "+" operator.
+   at: GDScript::reload (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/probe003/td003_broken_helper.gd:5)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_loaded_parse_error_probe.gd:5)
+ERROR: Failed to load script "C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/probe003/td003_broken_helper.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2907)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_loaded_parse_error_probe.gd:5)
+TD003 R2B PROBE: helper loaded = true
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_loaded_parse_error_probe.gd: 1 script error line(s)
+  SCRIPT ERROR: Parse Error: Expected expression after "+" operator.
+     at: GDScript::reload (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/probe003/td003_broken_helper.gd:5)
+##### exit=1  elapsed=3s lines=21 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### R2b loaded broken helper | NEW runner | env: none
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Expected expression after "+" operator.
+   at: GDScript::reload (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/probe003/td003_broken_helper.gd:5)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_loaded_parse_error_probe.gd:5)
+ERROR: Failed to load script "C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/probe003/td003_broken_helper.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2907)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_loaded_parse_error_probe.gd:5)
+TD003 R2B PROBE: helper loaded = true
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_loaded_parse_error_probe.gd: 1 script error line(s)
+  SCRIPT ERROR: Parse Error: Expected expression after "+" operator.
+     at: GDScript::reload (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/48de41d0-31db-4565-8cff-ef18c790c554/scratchpad/probe003/td003_broken_helper.gd:5)
+##### exit=1  elapsed=3s lines=21 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### R3 clean (TD-003) | OLD runner | env: none
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD003 CLEAN PROBE RESULT: 1 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0  elapsed=3s lines=9 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### R3 clean (TD-003) | NEW runner | env: none
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD003 CLEAN PROBE RESULT: 1 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0  elapsed=4s lines=9 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### R7a quit(3) | OLD runner | env: none
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD003 R7A PROBE: quitting with 3
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=3  elapsed=3s lines=9 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### R7a quit(3) | NEW runner | env: none
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD003 R7A PROBE: quitting with 3
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=3  elapsed=3s lines=9 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### R7b error + quit(3) | OLD runner | env: none
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+SCRIPT ERROR: Invalid call. Nonexistent function 'no_such_method_r7' in base 'Node'.
+   at: _dies (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_quit3_error_probe.gd:14)
+   GDScript backtrace (most recent call first):
+       [0] _dies (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_quit3_error_probe.gd:14)
+       [1] _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_quit3_error_probe.gd:5)
+TD003 R7B PROBE: quitting with 3
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_quit3_error_probe.gd: 1 script error line(s)
+  SCRIPT ERROR: Invalid call. Nonexistent function 'no_such_method_r7' in base 'Node'.
+     at: _dies (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_quit3_error_probe.gd:14)
+##### exit=3  elapsed=3s lines=20 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### R7b error + quit(3) | NEW runner | env: none
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+SCRIPT ERROR: Invalid call. Nonexistent function 'no_such_method_r7' in base 'Node'.
+   at: _dies (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_quit3_error_probe.gd:14)
+   GDScript backtrace (most recent call first):
+       [0] _dies (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_quit3_error_probe.gd:14)
+       [1] _initialize (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_quit3_error_probe.gd:5)
+TD003 R7B PROBE: quitting with 3
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_quit3_error_probe.gd: 1 script error line(s)
+  SCRIPT ERROR: Invalid call. Nonexistent function 'no_such_method_r7' in base 'Node'.
+     at: _dies (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_quit3_error_probe.gd:14)
+##### exit=3  elapsed=3s lines=20 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### R8 lowercase look-alikes | OLD runner | env: none
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD003 R8 PROBE: no script error here; no parse error either
+TD003 R8 PROBE: Script Error (mixed case) and SCRIPT  ERROR (two spaces) are not matches
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0  elapsed=3s lines=10 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### R8 lowercase look-alikes | NEW runner | env: none
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TD003 R8 PROBE: no script error here; no parse error either
+TD003 R8 PROBE: Script Error (mixed case) and SCRIPT  ERROR (two spaces) are not matches
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+##### exit=0  elapsed=3s lines=10 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### R9 adjacent matches | OLD runner | env: none
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+SCRIPT ERROR: R9 adjacent line A (printed by the probe)
+SCRIPT ERROR: R9 adjacent line B (printed by the probe)
+R9 last line
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_adjacent_probe.gd: 2 script error line(s)
+  SCRIPT ERROR: R9 adjacent line A (printed by the probe)
+  SCRIPT ERROR: R9 adjacent line B (printed by the probe)
+  R9 last line
+##### exit=1  elapsed=3s lines=16 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### R9 adjacent matches | NEW runner | env: none
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+SCRIPT ERROR: R9 adjacent line A (printed by the probe)
+SCRIPT ERROR: R9 adjacent line B (printed by the probe)
+R9 last line
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+
+RUNNER FAIL C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/fdf22b8c-74b8-4cb8-9598-a692ea0b19ff/scratchpad/probe003/td003_adjacent_probe.gd: 2 script error line(s)
+  SCRIPT ERROR: R9 adjacent line A (printed by the probe)
+  SCRIPT ERROR: R9 adjacent line B (printed by the probe)
+  R9 last line
+##### exit=1  elapsed=3s lines=16 probe Godot left (before the harness stopped any)=0 TMPDIR entries left=0
+
+##### SUMMARY
+01 W1 H1 error before quit()    OLD  TEST_TIMEOUT=20                    exit=124  HANG(guard 90s)   21s left=0 tmp=0  RUNNER FAIL <probe>/td007_h1_error_then_quit.gd: timed out after 20 s|RUNNER FAIL <probe>/td007_h1_error_then_quit.gd: 1 script error line(s)
+01 W1 H1 error before quit()    NEW  TEST_TIMEOUT=20                    exit=124                    21s left=0 tmp=0  RUNNER FAIL <probe>/td007_h1_error_then_quit.gd: timed out after 20 s|RUNNER FAIL <probe>/td007_h1_error_then_quit.gd: 1 script error line(s)
+02 W1 H1 under GitHub Actions   OLD  TEST_TIMEOUT=20 GITHUB_ACTIONS=true exit=124  HANG(guard 90s)   21s left=0 tmp=0  RUNNER FAIL <probe>/td007_h1_error_then_quit.gd: timed out after 20 s|::error::RUNNER FAIL <probe>/td007_h1_error_then_quit.gd: timed out after 20 s|RUNNER FAIL <probe>/td007_h1_error_then_quit.gd: 1 script error line(s)|::error::RUNNER FAIL <probe>/td007_h1_error_then_quit.gd: 1 script error line(s)
+02 W1 H1 under GitHub Actions   NEW  TEST_TIMEOUT=20 GITHUB_ACTIONS=true exit=124                    20s left=0 tmp=0  RUNNER FAIL <probe>/td007_h1_error_then_quit.gd: timed out after 20 s|::error::RUNNER FAIL <probe>/td007_h1_error_then_quit.gd: timed out after 20 s|RUNNER FAIL <probe>/td007_h1_error_then_quit.gd: 1 script error line(s)|::error::RUNNER FAIL <probe>/td007_h1_error_then_quit.gd: 1 script error line(s)
+03 W2 H2 never quits            OLD  TEST_TIMEOUT=20                    exit=124  HANG(guard 90s)   21s left=0 tmp=0  RUNNER FAIL <probe>/td007_h2_never_quits.gd: timed out after 20 s
+03 W2 H2 never quits            NEW  TEST_TIMEOUT=20                    exit=124                    21s left=0 tmp=0  RUNNER FAIL <probe>/td007_h2_never_quits.gd: timed out after 20 s
+04 W3 clean, 20 s limit         OLD  TEST_TIMEOUT=20                    exit=0                       3s left=0 tmp=0  
+04 W3 clean, 20 s limit         NEW  TEST_TIMEOUT=20                    exit=0                       3s left=0 tmp=0  
+05 M1 early return, min 2       OLD  MIN_CHECKS=2                       exit=1                       3s left=0 tmp=0  RUNNER FAIL <probe>/td007_c1_early_return.gd: 1 check(s) ran, expected at least 2
+05 M1 early return, min 2       NEW  MIN_CHECKS=2                       exit=1                       3s left=0 tmp=0  RUNNER FAIL <probe>/td007_c1_early_return.gd: 1 check(s) ran, expected at least 2
+06 M1 early return, min 2, GHA  OLD  MIN_CHECKS=2 GITHUB_ACTIONS=true   exit=1                       3s left=0 tmp=0  RUNNER FAIL <probe>/td007_c1_early_return.gd: 1 check(s) ran, expected at least 2|::error::RUNNER FAIL <probe>/td007_c1_early_return.gd: 1 check(s) ran, expected at least 2
+06 M1 early return, min 2, GHA  NEW  MIN_CHECKS=2 GITHUB_ACTIONS=true   exit=1                       3s left=0 tmp=0  RUNNER FAIL <probe>/td007_c1_early_return.gd: 1 check(s) ran, expected at least 2|::error::RUNNER FAIL <probe>/td007_c1_early_return.gd: 1 check(s) ran, expected at least 2
+07 M1 early return, min 1       OLD  MIN_CHECKS=1                       exit=0                       3s left=0 tmp=0  
+07 M1 early return, min 1       NEW  MIN_CHECKS=1                       exit=0                       4s left=0 tmp=0  
+08 M2 no result line, min 1     OLD  MIN_CHECKS=1                       exit=1                       3s left=0 tmp=0  RUNNER FAIL <probe>/td007_c2_no_result_line.gd: no result line (expected at least 1 checks to run)
+08 M2 no result line, min 1     NEW  MIN_CHECKS=1                       exit=1                       3s left=0 tmp=0  RUNNER FAIL <probe>/td007_c2_no_result_line.gd: no result line (expected at least 1 checks to run)
+09 M2 no result line, no min    OLD  -                                  exit=0                       3s left=0 tmp=0  
+09 M2 no result line, no min    NEW  -                                  exit=0                       3s left=0 tmp=0  
+10 M3 ok= form, min 5           OLD  MIN_CHECKS=5                       exit=0                       3s left=0 tmp=0  
+10 M3 ok= form, min 5           NEW  MIN_CHECKS=5                       exit=0                       4s left=0 tmp=0  
+11 M3 ok= form, min 6           OLD  MIN_CHECKS=6                       exit=1                       3s left=0 tmp=0  RUNNER FAIL <probe>/td007_m3_ok_form.gd: 5 check(s) ran, expected at least 6
+11 M3 ok= form, min 6           NEW  MIN_CHECKS=6                       exit=1                       3s left=0 tmp=0  RUNNER FAIL <probe>/td007_m3_ok_form.gd: 5 check(s) ran, expected at least 6
+12 M4 unregistered suite        OLD  -                                  exit=1                       0s left=0 tmp=0  RUNNER FAIL res://tests/unit/zz_td007/not_registered_test.gd: no entry in tests/suite_limits.txt
+12 M4 unregistered suite        NEW  -                                  exit=1                       0s left=0 tmp=0  RUNNER FAIL res://tests/unit/zz_td007/not_registered_test.gd: no entry in tests/suite_limits.txt
+13 M4 unregistered suite, GHA   OLD  GITHUB_ACTIONS=true                exit=1                       0s left=0 tmp=0  RUNNER FAIL res://tests/unit/zz_td007/not_registered_test.gd: no entry in tests/suite_limits.txt|::error::RUNNER FAIL res://tests/unit/zz_td007/not_registered_test.gd: no entry in tests/suite_limits.txt
+13 M4 unregistered suite, GHA   NEW  GITHUB_ACTIONS=true                exit=1                       1s left=0 tmp=0  RUNNER FAIL res://tests/unit/zz_td007/not_registered_test.gd: no entry in tests/suite_limits.txt|::error::RUNNER FAIL res://tests/unit/zz_td007/not_registered_test.gd: no entry in tests/suite_limits.txt
+14 W5 quits at 15 s, 20 s limit OLD  TEST_TIMEOUT=20                    exit=0                      18s left=0 tmp=0  
+14 W5 quits at 15 s, 20 s limit NEW  TEST_TIMEOUT=20                    exit=0                      18s left=0 tmp=0  
+15 M5 two result lines, min 2   OLD  MIN_CHECKS=2                       exit=1                       3s left=0 tmp=0  RUNNER FAIL <probe>/td007_m5_two_results.gd: 1 check(s) ran, expected at least 2
+15 M5 two result lines, min 2   NEW  MIN_CHECKS=2                       exit=1                       3s left=0 tmp=0  RUNNER FAIL <probe>/td007_m5_two_results.gd: 1 check(s) ran, expected at least 2
+16 M6 lowercase result:, min 1  OLD  MIN_CHECKS=1                       exit=1                       3s left=0 tmp=0  RUNNER FAIL <probe>/td007_m6_lowercase.gd: no result line (expected at least 1 checks to run)
+16 M6 lowercase result:, min 1  NEW  MIN_CHECKS=1                       exit=1                       4s left=0 tmp=0  RUNNER FAIL <probe>/td007_m6_lowercase.gd: no result line (expected at least 1 checks to run)
+17 M7 1 passed 1 failed, min 2  OLD  MIN_CHECKS=2                       exit=1                       3s left=0 tmp=0  
+17 M7 1 passed 1 failed, min 2  NEW  MIN_CHECKS=2                       exit=1                       3s left=0 tmp=0  
+18 M7 1 passed 1 failed, min 3  OLD  MIN_CHECKS=3                       exit=1                       3s left=0 tmp=0  RUNNER FAIL <probe>/td007_m7_failures.gd: 2 check(s) ran, expected at least 3
+18 M7 1 passed 1 failed, min 3  NEW  MIN_CHECKS=3                       exit=1                       3s left=0 tmp=0  RUNNER FAIL <probe>/td007_m7_failures.gd: 2 check(s) ran, expected at least 3
+19 E1 push_error only           OLD  -                                  exit=0                       3s left=0 tmp=0  
+19 E1 push_error only           NEW  -                                  exit=0                       3s left=0 tmp=0  
+20 R1 runtime error             OLD  -                                  exit=1                       3s left=0 tmp=0  RUNNER FAIL <probe>003/td003_runtime_error_probe.gd: 1 script error line(s)
+20 R1 runtime error             NEW  -                                  exit=1                       3s left=0 tmp=0  RUNNER FAIL <probe>003/td003_runtime_error_probe.gd: 1 script error line(s)
+21 R1 runtime error, GHA        OLD  GITHUB_ACTIONS=true                exit=1                       3s left=0 tmp=0  RUNNER FAIL <probe>003/td003_runtime_error_probe.gd: 1 script error line(s)|::error::RUNNER FAIL <probe>003/td003_runtime_error_probe.gd: 1 script error line(s)
+21 R1 runtime error, GHA        NEW  GITHUB_ACTIONS=true                exit=1                       3s left=0 tmp=0  RUNNER FAIL <probe>003/td003_runtime_error_probe.gd: 1 script error line(s)|::error::RUNNER FAIL <probe>003/td003_runtime_error_probe.gd: 1 script error line(s)
+22 R2 parse error               OLD  -                                  exit=1                       1s left=0 tmp=0  RUNNER FAIL <probe>003/td003_parse_error_probe.gd: 1 script error line(s)
+22 R2 parse error               NEW  -                                  exit=1                       1s left=0 tmp=0  RUNNER FAIL <probe>003/td003_parse_error_probe.gd: 1 script error line(s)
+23 R2b loaded broken helper     OLD  -                                  exit=1                       3s left=0 tmp=0  RUNNER FAIL <probe>003/td003_loaded_parse_error_probe.gd: 1 script error line(s)
+23 R2b loaded broken helper     NEW  -                                  exit=1                       3s left=0 tmp=0  RUNNER FAIL <probe>003/td003_loaded_parse_error_probe.gd: 1 script error line(s)
+24 R3 clean (TD-003)            OLD  -                                  exit=0                       3s left=0 tmp=0  
+24 R3 clean (TD-003)            NEW  -                                  exit=0                       4s left=0 tmp=0  
+25 R7a quit(3)                  OLD  -                                  exit=3                       3s left=0 tmp=0  
+25 R7a quit(3)                  NEW  -                                  exit=3                       3s left=0 tmp=0  
+26 R7b error + quit(3)          OLD  -                                  exit=3                       3s left=0 tmp=0  RUNNER FAIL <probe>003/td003_quit3_error_probe.gd: 1 script error line(s)
+26 R7b error + quit(3)          NEW  -                                  exit=3                       3s left=0 tmp=0  RUNNER FAIL <probe>003/td003_quit3_error_probe.gd: 1 script error line(s)
+27 R8 lowercase look-alikes     OLD  -                                  exit=0                       3s left=0 tmp=0  
+27 R8 lowercase look-alikes     NEW  -                                  exit=0                       3s left=0 tmp=0  
+28 R9 adjacent matches          OLD  -                                  exit=1                       3s left=0 tmp=0  RUNNER FAIL <probe>003/td003_adjacent_probe.gd: 2 script error line(s)
+28 R9 adjacent matches          NEW  -                                  exit=1                       3s left=0 tmp=0  RUNNER FAIL <probe>003/td003_adjacent_probe.gd: 2 script error line(s)
