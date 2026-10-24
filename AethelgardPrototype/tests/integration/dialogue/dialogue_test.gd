@@ -244,7 +244,8 @@ func _test_voice_lint() -> void:
 		var contracted := 0
 		var clipped: Array = []
 		for m in clipped_re.search_all(FileAccess.get_file_as_string(path)):
-			clipped.append_array(m.get_string(1).split(" ", false))
+			# strip_edges: a file saved with CRLF would otherwise keep "\r" on the last name.
+			clipped.append_array(m.get_string(1).strip_edges().split(" ", false))
 		var counted := 0
 		var short := 0
 		for node_name in s.nodes:
