@@ -2,12 +2,12 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: TD-007 (`docs/tech-debt-register.md#TD-007`; follow-up of TD-003, due before Y1-P0-T15)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Foundation (test tooling)
 > **Type**: Integration
 > **Estimate**: 1 day (register effort: M)
 > **Manifest Version**: N/A — `docs/architecture/control-manifest.md` does not exist
-> **Last Updated**: 2026-10-20
+> **Last Updated**: 2026-10-24
 
 ## Context
 
@@ -99,7 +99,7 @@ sync).
 
 ## Acceptance Criteria
 
-- [ ] AC-1 **Per-suite limits file.** `AethelgardPrototype/tests/suite_limits.txt` lists every suite in
+- [x] AC-1 **Per-suite limits file.** `AethelgardPrototype/tests/suite_limits.txt` lists every suite in
       `run_all_tests.ps1`, one line each: `<res:// path> <min_checks> <timeout_seconds>`, `#` comments allowed.
       `min_checks` equals the suite's count (passed + failed) in `2026-10-runner/run_all.log`; `timeout_seconds`
       is 3× the suite's measured Windows duration rounded up to a whole minute, and at least 120 s: ch1 1620,
@@ -113,7 +113,7 @@ sync).
       comparison, kept in the evidence, shows that the file's paths, the 16 suites in `run_all_tests.ps1` and the
       suites `ci.yml` runs (its `run_tests.sh` arguments plus `run_tests.sh`'s default) are the same set, with no
       stale entry.
-- [ ] AC-2 **Timeout (PowerShell).** Limits, one rule for both runners: `-TimeoutSec` / `-MinChecks` (bash:
+- [x] AC-2 **Timeout (PowerShell).** Limits, one rule for both runners: `-TimeoutSec` / `-MinChecks` (bash:
       `TEST_TIMEOUT` / `MIN_CHECKS`) override the file; else the file's entry; else, for a script that is not a
       `*_test.gd` under `res://tests/`, **600 s** and no minimum (a `*_test.gd` there with no entry is refused,
       AC-4). When Godot is still running at the deadline, the runner stops Godot **and its child**
@@ -123,14 +123,14 @@ sync).
       timeout. Every output line up to the stop is still printed once. After a timeout the isolated dir is still
       removed (retried for up to 5 s while the killed processes release their handles) and `APPDATA` is restored.
       A suite that finishes in time is not affected, and the watchdog is gone when the runner exits.
-- [ ] AC-3 **Timeout (bash/CI).** `run_tests.sh` runs Godot under GNU `timeout -k 10 <N>` with the same limits and
+- [x] AC-3 **Timeout (bash/CI).** `run_tests.sh` runs Godot under GNU `timeout -k 10 <N>` with the same limits and
       the same message, plus a `::error::` line under `GITHUB_ACTIONS=true`. It reports a timeout, and exits 124,
       only when the exit is 124 or 137 **and** the elapsed time (`$SECONDS`) reached the limit; any other 137 (for
       example an OOM kill) passes through as Godot's code with no timeout message. If no GNU `timeout` is found
       (`timeout --version` does not name coreutils), it prints
       `WARNING: GNU timeout(1) not found; running without a time limit` and runs as before; under
       `GITHUB_ACTIONS=true` that is an error instead (`RUNNER FAIL <script>: GNU timeout(1) not found`, exit 1).
-- [ ] AC-4 **Minimum checks (both runners).** For a suite with `min_checks > 0` that did not time out, the runner
+- [x] AC-4 **Minimum checks (both runners).** For a suite with `min_checks > 0` that did not time out, the runner
       reads the **last** line matching `RESULT: <N> passed, <F> failed` or `ok=<N> bad=<F>` (case-sensitive; a
       lowercase `result:` does not count; the line must start at column 0 with an uppercase name such as
       `LAYOUT RESULT:` or `LOADALL ok=`, so a check description quoting such text is never counted, as all 16
@@ -143,11 +143,11 @@ sync).
       the file fails with `RUNNER FAIL <script>: no entry in tests/suite_limits.txt` before Godot starts; other
       scripts (probes, `docs/visual_review/...`) follow AC-2's rule. The lookup ignores a trailing `\r` (a CRLF
       working-tree edit of the file).
-- [ ] AC-5 **TD-003 behaviour unchanged.** The TD-003 probes (R1 runtime error, R2 parse error, R2b loaded broken
+- [x] AC-5 **TD-003 behaviour unchanged.** The TD-003 probes (R1 runtime error, R2 parse error, R2b loaded broken
       helper, R3 clean, R7a/R7b `quit(3)`, R8 lowercase, R9 adjacent matches) give the same exit codes and the same
       `RUNNER FAIL ... script error line(s)` text as on HEAD, both runners. Isolation unchanged (no
       `aeth_phase0_test_*` dir left, `APPDATA` restored), on the timeout path too.
-- [ ] AC-6 **Probes, old vs new, both runners.** H1 and H2 hang on the OLD runner and exit 124 on the NEW one
+- [x] AC-6 **Probes, old vs new, both runners.** H1 and H2 hang on the OLD runner and exit 124 on the NEW one
       within the timeout plus 15 s. On the PowerShell runner no Godot process from the probe is left afterwards,
       the isolated dir is gone and `APPDATA` is restored. Under Git Bash the bash runner is held to the message and
       exit code only, and the number of Godot processes left is recorded (MSYS `timeout` may stop only the console
@@ -155,12 +155,12 @@ sync).
       entry with `min_checks 2` through `-MinChecks` / `MIN_CHECKS` or a scratch copy of the limits file) exit 0
       OLD and 1 NEW with the AC-4 message. E1 and E2 exit 0 on both (part (b) not in this story, recorded).
       Logs in `production/qa/evidence/2026-10-runner-watchdog/`.
-- [ ] AC-7 **Full suite.** `run_all_tests.ps1` (all 16, no `-Quick`) on the new runners: 16/16, `All suites
+- [x] AC-7 **Full suite.** `run_all_tests.ps1` (all 16, no `-Quick`) on the new runners: 16/16, `All suites
       passed.`, no `RUNNER FAIL` line, per-suite counts equal to `2026-10-runner/run_all.log`, per-suite durations
       recorded; the log records the commit and working-tree state it ran on.
-- [ ] AC-8 `git diff --check` clean; TD-007 in `docs/tech-debt-register.md` marked Resolved for (a) and (c), with
+- [x] AC-8 `git diff --check` clean; TD-007 in `docs/tech-debt-register.md` marked Resolved for (a) and (c), with
       (b) recorded as decided (split to TD-008 with the reasons above, or done here if the alternative is chosen).
-- [ ] AC-9 (DEFERRED to the next push, which needs the user's OK) The first CI run after this change is green on
+- [x] AC-9 (DEFERRED to the next push, which needs the user's OK) The first CI run after this change is green on
       all 16 test steps; each step's duration is recorded here and checked against its `timeout_seconds` (at
       least 2× headroom on Linux; a miss is fixed by editing only `tests/suite_limits.txt`). Run URL recorded here.
       - **CI result (2026-10-24):** run [#29](https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/40049178997) on `336f7fb`, `ubuntu-latest`, job 18 min 33 s,
@@ -277,3 +277,29 @@ full-suite log in `production/qa/evidence/2026-10-runner-watchdog/`.
 - Depends on: TD-003 (done, a707a95).
 - Unlocks: Y1-P0-T15 (a hung suite now stops with a reason instead of hanging the playthrough gate).
 - Note for TD-002: a new suite added there needs a line in `tests/suite_limits.txt`, or the runner refuses it.
+
+---
+
+## Completion Notes
+**Completed**: 2026-10-24
+**Criteria**: 9/9 passing. AC-3 is shown under Git Bash only. AC-9 rests on CI run #29's step conclusions
+(all 16 test steps green, every limit at least 3.0× the Linux step time); the step logs were not read (GitHub sign-in),
+so the result-line check on Linux is inferred from the green steps, not read.
+**Deviations** (advisory):
+- NOT ASSESSED: GDD / ADR / TR-registry traceability (none exist for test tooling).
+- The evidence `run_all.log` ran on the `249cba4` runners; `a136d5d` (TD-009) changed both runners afterwards. TD-009's
+  evidence (`2026-10-runner-followups/`) re-ran the TD-007 probe matrices and the full suite, and CI run #29 covers the
+  final code.
+- Part (b), `ERROR:` lines, split to TD-008 (user decision, 2026-10-20).
+**Test Evidence**: Integration (test tooling) — probe matrices, X1 suite-list comparison, CRLF lookup, baseline timing
+and full suite in `production/qa/evidence/2026-10-runner-watchdog/` (README maps every AC to its log); no test file in
+`tests/` by design (throwaway probes, Out of Scope). Re-checked at close: limits file, `run_all_tests.ps1` and `ci.yml`
+name the same 16 suites; `test_layout_test` 6/0 and `null_potion_test` 83/0 through the final runner.
+**Code Review**: Complete — /code-review (godot-specialist + qa-tester) APPROVED WITH SUGGESTIONS, 4 applied;
+LP-CODE-REVIEW APPROVE; QL-TEST-COVERAGE GAPS (all advisory).
+**Follow-ups**: TD-010 (runner self-test with a stub "Godot", which also exercises the Linux timeout path in CI; keep the
+probe, harness and X1 sources in evidence; document the result-line format in `suite_limits.txt` before TD-002 adds a
+suite; flag a `min_checks` left below a suite's real count). Nits for the same item: comment the PowerShell fail-open
+after 10 failed kill attempts and the `$killed = $?` idiom; `grep -v '^--$'` also hides a genuine `--` output line
+from the error listing (cosmetic).
+**Sprint status**: not updated — TD-007 has no entry in `production/sprint-status.yaml` (tech-debt item).
