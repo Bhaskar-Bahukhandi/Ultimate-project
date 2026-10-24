@@ -3,12 +3,12 @@
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: TD-009 (`docs/tech-debt-register.md#TD-009`; follow-ups of TD-003 / TD-007, raised in the TD-003
 > close-out review and confirmed in the TD-007 session)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Foundation (test tooling)
 > **Type**: Integration
 > **Estimate**: 0.5 day (register effort: S)
 > **Manifest Version**: N/A — `docs/architecture/control-manifest.md` does not exist
-> **Last Updated**: 2026-10-21
+> **Last Updated**: 2026-10-24
 
 ## Context
 
@@ -69,7 +69,7 @@ count, and so the verdict, is unaffected). The filter grep gets `LC_ALL=C ... -a
 
 ## Acceptance Criteria
 
-- [ ] AC-1 **Launch failure (PowerShell).** *(Revised in /dev-story with the user, 2026-10-21, after the
+- [x] AC-1 **Launch failure (PowerShell).** *(Revised in /dev-story with the user, 2026-10-21, after the
       corrected fact 1; the `$global:LASTEXITCODE = $null` reset of the first draft was dropped as unobservable.)*
       `run_phase0_tests.ps1` sets `$code = $null` and `$lines = $null` before the `try` (both assignments are skipped
       by a launch failure; `$lines` added in /code-review, probe L3d), and sets `$ErrorActionPreference = "Stop"`
@@ -81,7 +81,7 @@ count, and so the verdict, is unaffected). The filter grep gets `LC_ALL=C ... -a
       unaffected. The `Stop` line has no observable effect on any probe, so it is **inspection-only**:
       `grep -n ErrorActionPreference` in the evidence shows it after the `finally`, and AC-4/AC-5 show the code
       after the `try` still reaches `exit` with the same codes.
-- [ ] AC-2 **Watched failing first.** Scratch copies of the HEAD runner and of the NEW runner (project path pinned,
+- [x] AC-2 **Watched failing first.** Scratch copies of the HEAD runner and of the NEW runner (project path pinned,
       `suite_limits.txt` copied beside each) with only the exe line pointed at a missing file. The evidence holds
       the `diff` of each copy against its source (only those lines differ), the SHA-256 of the OLD and NEW runners
       and the PowerShell version.
@@ -101,7 +101,7 @@ count, and so the verdict, is unaffected). The filter grep gets `LC_ALL=C ... -a
         exit 1.
       - Mutant MU1: NEW without the `$code = $null` line: L3c exits 7 again. Mutant MU4: NEW without the
         `$lines = $null` line: L3d lists the caller's line again. Each line is load-bearing.
-- [ ] AC-3 **NUL byte (bash).** All three greps of the TD-003 block (the count, the listing, the `^--$` filter) use
+- [x] AC-3 **NUL byte (bash).** All three greps of the TD-003 block (the count, the listing, the `^--$` filter) use
       `LC_ALL=C grep -a`, and the listing's `sed` runs under `LC_ALL=C` (added in /code-review: BSD sed may
       reject a non-UTF-8 byte under a UTF-8 locale; unverified here, GNU sed handles N2 either way). A stub Godot prints a `SCRIPT ERROR` line, a following line, a `Parse Error` line and a
       result line, and exits 0. Outputs are kept as `od -c` dumps (a raw NUL breaks diff and whitespace
@@ -122,7 +122,7 @@ count, and so the verdict, is unaffected). The filter grep gets `LC_ALL=C ... -a
           listing on Linux grep ≥ 3.5. A green run never has a script error to list, the step logs (grep version,
           output) need a GitHub sign-in, and macOS (BSD grep/sed) is not in CI. Checking it needs a deliberately
           failing probe with a NUL byte run on Linux, or the logs read by someone signed in.
-- [ ] AC-4 **No other change.** The TD-007 probe matrices (`matrix_ps.ps1`, `matrix_sh.sh`, `matrix_sh_extra.sh`,
+- [x] AC-4 **No other change.** The TD-007 probe matrices (`matrix_ps.ps1`, `matrix_sh.sh`, `matrix_sh_extra.sh`,
       copied from the TD-007 session and pinned by SHA-256 in the evidence) run again with OLD = HEAD `249cba4`
       and NEW = the working tree. Every OLD/NEW pair: the same exit code, and stdout and stderr byte-identical
       once the timing fields (`elapsed=`, and the scratch paths in the harness header lines) are normalized as
@@ -130,11 +130,11 @@ count, and so the verdict, is unaffected). The filter grep gets `LC_ALL=C ... -a
       difference fails. The NEW exit codes equal the NEW column of `2026-10-runner-watchdog/` (H1/H2 are 124 on
       both sides now: HEAD has the watchdog). S3: one fast real suite (`test_layout_test.gd`) through
       `run_tests.sh` under Git Bash: exit 0, its result line equal to `2026-10-runner-watchdog/run_all.log`.
-- [ ] AC-5 **Full suite.** `powershell -NoProfile -File AethelgardPrototype/tests/run_all_tests.ps1` (all 16, no
+- [x] AC-5 **Full suite.** `powershell -NoProfile -File AethelgardPrototype/tests/run_all_tests.ps1` (all 16, no
       `-Quick`) on the new runners: 16/16, `All suites passed.`, no `RUNNER FAIL` line, per-suite counts equal to
       `production/qa/evidence/2026-10-runner-watchdog/run_all.log`; the log names the commit and working-tree
       state it ran on.
-- [ ] AC-6 **Register.** TD-007's description says the long CI steps stop at their own `timeout-minutes` and only
+- [x] AC-6 **Register.** TD-007's description says the long CI steps stop at their own `timeout-minutes` and only
       the short suites wait for the 45-minute job limit, quoting the values `grep -n timeout-minutes
       .github/workflows/ci.yml` shows (kept in the evidence: job 45; ch1 30 since TD-007, 15 before; ch2 15;
       act1_quests 15; phase0 30). TD-009 row added and marked Resolved with this story and the evidence path; the
@@ -204,3 +204,29 @@ the full-suite log, in `production/qa/evidence/2026-10-runner-followups/` with a
 
 - Depends on: TD-007 (`249cba4`).
 - Unlocks: nothing directly; keeps the runners' verdict honest before Y1-P0-T15.
+
+---
+
+## Completion Notes
+**Completed**: 2026-10-24
+**Criteria**: 6/6 passing. DEFERRED: AC-3's Linux sub-item (the NUL-byte listing under grep ≥ 3.5). CI run #29
+(`336f7fb`, after `a136d5d`) is green on all 16 test steps, which shows only that the changed `run_tests.sh` does not
+break a passing suite on Linux; a green run lists no errors and the step logs need a GitHub sign-in. macOS (BSD
+grep/sed) is not covered at all. Both are display-only: the count, and so the verdict, does not depend on the listing.
+**Deviations** (advisory):
+- NOT ASSESSED: GDD / ADR / TR-registry traceability (none exist for test tooling).
+- Fact 1 was corrected in /dev-story: a failed launch is statement-terminating inside the `try`, so the first draft's
+  `$LASTEXITCODE` reset was unobservable and dropped (user decision); the fix initializes `$code` and `$lines`.
+- `LC_ALL=C` is not shown to be load-bearing (N2 shows no OLD/NEW difference on GNU grep 3.0); the `-a` flags are
+  (mutants MU2/MU3). PowerShell 7 not assessed (the runners are called with Windows PowerShell 5.1).
+**Test Evidence**: Integration (test tooling) — `production/qa/evidence/2026-10-runner-followups/` (README maps every AC
+to its log). The runner SHA-256 in `launch_failure.log` and `run_all.log` equal the committed `a136d5d` blobs. Full suite
+16/16, 1149 s. No test file in `tests/` by design (throwaway probes).
+**Code Review**: Complete — /code-review CHANGES REQUIRED → fixed → APPROVED WITH SUGGESTIONS; LP-CODE-REVIEW APPROVE
+(condition: TD-010 stays before T15 and covers the TD-009 cases); QL-TEST-COVERAGE GAPS (all advisory).
+**Follow-ups** (added to TD-010's scope, no new TD id): a deliberately failing NUL-byte stub run on Linux (closes the
+deferred AC-3 item); the TD-009 cases in the stub self-test (missing exe → exit 1, the `$null` initialisation, the NUL
+listing); `run_tests.sh:119` second result-line grep without `-a` / `LC_ALL=C` (could only give a false "no result
+line", never a false pass); hedge the `Godot did not start` text for the fail-closed case where Godot started and the
+pipeline threw; keep the probe sources and `golden_n1_listing.od` in the evidence.
+**Sprint status**: not updated — TD-009 has no entry in `production/sprint-status.yaml` (tech-debt item).
