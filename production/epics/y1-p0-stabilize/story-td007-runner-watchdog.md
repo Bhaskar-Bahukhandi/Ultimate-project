@@ -163,6 +163,38 @@ sync).
 - [ ] AC-9 (DEFERRED to the next push, which needs the user's OK) The first CI run after this change is green on
       all 16 test steps; each step's duration is recorded here and checked against its `timeout_seconds` (at
       least 2× headroom on Linux; a miss is fixed by editing only `tests/suite_limits.txt`). Run URL recorded here.
+      - **CI result (2026-10-24):** run [#29](https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/40049178997) on `336f7fb`, `ubuntu-latest`, job 18 min 33 s,
+        conclusion **success**: all 16 test steps (10-25), the boot check, the whitespace and commit-message
+        steps passed. Strictly, the first push after this change was `eaa330e` (run 40045950890), which failed
+        with no jobs because ci.yml did not parse (six step names with an unquoted ": ", added in T06-T08);
+        `336f7fb` quoted them and changed no step.
+      - **Step durations vs `tests/suite_limits.txt`** (GitHub step wall-clock, whole step including the
+        Godot start, rounded to seconds; headroom = limit / duration; at least 2× required):
+
+        | Suite (CI step) | CI s | limit s | headroom |
+        |---|---|---|---|
+        | test_layout | 1 | 120 | 120× |
+        | load_all | 8 | 120 | 15× |
+        | dialogue | 6 | 120 | 20× |
+        | context_stack | 4 | 120 | 30× |
+        | input | 1 | 120 | 120× |
+        | side_quest_rewards | 2 | 120 | 60× |
+        | ngplus_buff_stacking | 1 | 120 | 120× |
+        | fragment_achievement | 1 | 120 | 120× |
+        | null_potion | 2 | 120 | 60× |
+        | screen_flash | 9 | 120 | 13× |
+        | chapter1_route | 535 | 1620 | 3.0× |
+        | chapter2_route | 147 | 480 | 3.3× |
+        | combat_fixes | 9 | 120 | 13× |
+        | reachability | 2 | 120 | 60× |
+        | act1_quests_completable | 55 | 180 | 3.3× |
+        | phase0_blockers | 307 | 960 | 3.1× |
+
+        Every suite has at least 2× headroom on Linux; the tightest is chapter1_route (3.0×). No limit changed.
+      - **Not verified from this run:** the step logs need a GitHub sign-in (the logs API returns 403), so
+        the per-suite result lines, the absence of `RUNNER FAIL`, the grep version and the locale were not read;
+        the verdict rests on each step's conclusion. A green run never takes a failure path, so the Linux
+        error-listing paths are not exercised by it.
 
 ---
 

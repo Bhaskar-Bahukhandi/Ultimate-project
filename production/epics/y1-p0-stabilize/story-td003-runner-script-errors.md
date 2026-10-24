@@ -81,10 +81,21 @@ Files: `AethelgardPrototype/tests/run_phase0_tests.ps1`, `AethelgardPrototype/te
       commit and working-tree state it ran on. If any suite fails on a real pre-existing script error, the story
       stops and reports it; nothing is suppressed or allow-listed.
 - [x] AC-6 `git diff --check` clean; TD-003 marked Resolved in `docs/tech-debt-register.md`.
-- [ ] AC-7 (DEFERRED to the next push, which needs the user's OK) The first CI run on the branch after this change
+- [x] AC-7 (DEFERRED to the next push, which needs the user's OK) The first CI run on the branch after this change
       is green on all 16 test steps; its run URL is recorded here. The Phase 0 step's outer
       `| tee phase0.log; exit "${PIPESTATUS[0]}"` still passes the runner's exit code through. A Linux-only script
       error caught there falls under the AC-5 rule (stop, report, no suppression).
+      - **CI result (2026-10-24):** run [#29](https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/40049178997) on `336f7fb`, `ubuntu-latest`, job 18 min 33 s,
+        conclusion **success**: all 16 test steps (10-25), the boot check, the whitespace and commit-message
+        steps passed. Strictly, the first push after this change was `eaa330e` (run 40045950890), which failed
+        with no jobs because ci.yml did not parse (six step names with an unquoted ": ", added in T06-T08);
+        `336f7fb` quoted them and changed no step.
+      - The Phase 0 step passed, so its `tee` / `PIPESTATUS` wrapper passed a 0 through; a non-zero exit through
+        it was not exercised. No Linux-only script error surfaced (the AC-5 rule did not trigger).
+      - **Not verified from this run:** the step logs need a GitHub sign-in (the logs API returns 403), so
+        the per-suite result lines, the absence of `RUNNER FAIL`, the grep version and the locale were not read;
+        the verdict rests on each step's conclusion. A green run never takes a failure path, so the Linux
+        error-listing paths are not exercised by it.
 
 ---
 
@@ -161,7 +172,7 @@ AC-7 and the tightened R4/R6 adopted).*
 
 ## Completion Notes
 **Completed**: 2026-10-20
-**Criteria**: 6/7 passing; AC-7 DEFERRED — the first CI run on the branch needs a push (user's OK). It is also the only check of the Linux `XDG_DATA_HOME` side of `run_tests.sh`; when it runs, add the run URL to `production/qa/evidence/2026-10-runner/README.md` and here. A Linux-only script error there falls under the AC-5 rule (stop, report, no suppression).
+**Criteria**: 6/7 passing; AC-7 DEFERRED (now passing: CI run #29, see AC-7 — 7/7) — the first CI run on the branch needs a push (user's OK). It is also the only check of the Linux `XDG_DATA_HOME` side of `run_tests.sh`; when it runs, add the run URL to `production/qa/evidence/2026-10-runner/README.md` and here. A Linux-only script error there falls under the AC-5 rule (stop, report, no suppression).
 **Deviations** (advisory):
 - NOT ASSESSED: GDD / ADR / TR-registry traceability (none exist for test tooling); judged against TD-003 and the ACs.
 - Routing: implemented by `devops-engineer` instead of the routing table's `engine-programmer` + GDScript specialist (no GDScript or engine API is touched).

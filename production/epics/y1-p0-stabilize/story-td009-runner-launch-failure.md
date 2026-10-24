@@ -117,6 +117,11 @@ count, and so the verdict, is unaffected). The filter grep gets `LC_ALL=C ... -a
         binary file correctly); it is there so the count and listing read the log the same way, and is stated so.
       - DEFERRED: Linux, grep ≥ 3.5, where the `Binary file` notice goes to stderr; checked on the first CI run
         after the next push, as TD-007 AC-9.
+        - **CI result (2026-10-24):** run [#29](https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/40049178997) on `336f7fb` is green on all 16 test steps, so the
+          changed `run_tests.sh` runs on Linux without breaking a green suite. **Still unverified:** the NUL-byte
+          listing on Linux grep ≥ 3.5. A green run never has a script error to list, the step logs (grep version,
+          output) need a GitHub sign-in, and macOS (BSD grep/sed) is not in CI. Checking it needs a deliberately
+          failing probe with a NUL byte run on Linux, or the logs read by someone signed in.
 - [ ] AC-4 **No other change.** The TD-007 probe matrices (`matrix_ps.ps1`, `matrix_sh.sh`, `matrix_sh_extra.sh`,
       copied from the TD-007 session and pinned by SHA-256 in the evidence) run again with OLD = HEAD `249cba4`
       and NEW = the working tree. Every OLD/NEW pair: the same exit code, and stdout and stderr byte-identical
