@@ -1,0 +1,198 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized ΓÇö procedural backgrounds active
+  PASS: isolation: user:// is the aeth_phase0_test directory (C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/aeth_phase0_test_3063582bf550464ab047d1dcf580d581/Godot/app_userdata/Aethelgard- The Glitch Sovereign)
+  PASS: isolation: SceneTransitions, DialogueManager and GameManager autoloads present
+  PASS: AC-1 seam: SceneTransitions declares flash_started
+  PASS: isolation: the scene's hand-off transition finished within 10 s before the reset
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  case archive: loading res://scenes/chapter3/archive_depths.tscn
+  PASS: archive: change_scene_to_file(res://scenes/chapter3/archive_depths.tscn) returned OK (got 0)
+[CH3-ARCHIVE] Initializing Archive Depths
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHECKPOINT] Archive Depths ΓÇö entry auto-save
+[SIDE QUEST] Discovered: Echo Hunter
+[SIDE QUEST] Discovered: Survivor's Cache
+[CHOICE-FX] Applied buff: forbidden_knowledge ΓÇö Forbidden Knowledge: -3 ATK (trust exploited). But enemy HP reduced by 15% (Kaelthas's intel).
+[INVENTORY] Added 1 x Memory Shard
+[ACHIEVEMENT] Unlocked: Lore Seeker ΓÇö Discover your first optional lore entry.
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[INVENTORY] Added 1 x Memory Shard
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[ACHIEVEMENT] Unlocked: First Fragment ΓÇö Collect your first Source Key Fragment.
+  case archive: hand-off after 8190 ms, 5 flash(es), 6 choice(s)
+  PASS: AC-2 archive: scene reached its own hand-off (transition_started) within 20 s (emissions seen: 5)
+  PASS: AC-2 archive: exactly 5 flash_started emission(s) (got 5)
+  PASS: AC-2 archive: flash #1 colour (0.3, 0.5, 0.8, 0.3) (got (0.3, 0.5, 0.8, 0.3))
+  PASS: AC-2 archive: flash #1 duration 0.5 s (got 0.5)
+  PASS: AC-2 archive: flash #2 colour (0.5, 0.3, 0.1, 0.3) (got (0.5, 0.3, 0.1, 0.3))
+  PASS: AC-2 archive: flash #2 duration 0.5 s (got 0.5)
+  PASS: AC-2 archive: flash #3 colour (0.8, 0.2, 0.2, 0.3) (got (0.8, 0.2, 0.2, 0.3))
+  PASS: AC-2 archive: flash #3 duration 0.5 s (got 0.5)
+  PASS: AC-2 archive: flash #4 colour (0.2, 0.6, 1.0, 0.4) (got (0.2, 0.6, 1.0, 0.4))
+  PASS: AC-2 archive: flash #4 duration 0.8 s (got 0.8)
+  PASS: AC-2 archive: flash #5 colour (0.3, 0.7, 1.0, 0.5) (got (0.3, 0.7, 1.0, 0.5))
+  PASS: AC-2 archive: flash #5 duration 1.0 s (got 1.0)
+  PASS: AC-6 driver archive: exactly 6 choices answered (got 6: ["What is the correct execution order?", "How do you respond to Kaelthas?", "An early Sanctuary consent clause is sealed in the", "Which combination FITS in 16 units while preservin", "Which line contains the critical error?", "How many total function calls occur?"])
+  PASS: AC-6 driver archive: kaelthas_allied == true at the hand-off (option 0 is the ally branch)
+  PASS: AC-6 driver archive: story flag ch3_kaelthas_allied set at the hand-off
+  PASS: AC-5 archive: SceneTransitions/FlashOverlay read after the first flash
+  PASS: AC-5 archive: overlay colour (0.3, 0.5, 0.8, 0.3) ~ emitted (0.3, 0.5, 0.8, 0.3)
+  PASS: AC-5 archive: overlay modulate.a == 0.8 (+/- 0.001) when flash_started fires (got 0.80000001192093)
+  PASS: AC-5 archive: overlay global rect [P: (0.0, 0.0), S: (1280.0, 720.0)] covers the viewport [P: (0.0, 0.0), S: (1280.0, 720.0)]
+[CH3-BETRAYAL] Initializing Kaelthas Betrayal
+  PASS: isolation: the scene's hand-off transition finished within 10 s before the reset
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  case wastes: loading res://scenes/chapter3/fractured_wastes.tscn
+  PASS: wastes: change_scene_to_file(res://scenes/chapter3/fractured_wastes.tscn) returned OK (got 0)
+[CH3-WASTES] Initializing Fractured Wastes
+  case wastes: hand-off after 5124 ms, 1 flash(es), 0 choice(s)
+  PASS: AC-3 wastes (ch3_server_room_unlocked set): scene reached its own hand-off (transition_started) within 20 s (emissions seen: 1)
+  PASS: AC-3 wastes (ch3_server_room_unlocked set): exactly 1 flash_started emission(s) (got 1)
+  PASS: AC-3 wastes (ch3_server_room_unlocked set): flash #1 colour (0.2, 0.6, 1.0, 0.5) (got (0.2, 0.6, 1.0, 0.5))
+  PASS: AC-3 wastes (ch3_server_room_unlocked set): flash #1 duration 0.8 s (got 0.8)
+  PASS: AC-6 driver wastes: 0 choices (got 0)
+  PASS: AC-5 wastes: SceneTransitions/FlashOverlay read after the first flash
+  PASS: AC-5 wastes: overlay colour (0.2, 0.6, 1.0, 0.5) ~ emitted (0.2, 0.6, 1.0, 0.5)
+  PASS: AC-5 wastes: overlay modulate.a == 0.8 (+/- 0.001) when flash_started fires (got 0.80000001192093)
+  PASS: AC-5 wastes: overlay global rect [P: (0.0, 0.0), S: (1280.0, 720.0)] covers the viewport [P: (0.0, 0.0), S: (1280.0, 720.0)]
+[CH3-STREAM] Initializing Data Stream
+  PASS: isolation: the scene's hand-off transition finished within 10 s before the reset
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  case wastes control: loading res://scenes/chapter3/fractured_wastes.tscn
+  PASS: wastes control: change_scene_to_file(res://scenes/chapter3/fractured_wastes.tscn) returned OK (got 0)
+[CH3-WASTES] Initializing Fractured Wastes
+  case wastes control: hand-off after 2526 ms, 0 flash(es), 0 choice(s)
+  PASS: AC-3 wastes control (no flags): scene reached its own hand-off (transition_started) within 20 s (emissions seen: 0)
+  PASS: AC-3 wastes control (no flags): exactly 0 flash_started emission(s) (got 0)
+  PASS: AC-6 driver wastes control: 0 choices (got 0)
+WARNING: [AssetManager] Production art slot missing for Fractured Wastes production tileset at res://assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png; using generated fallback res://assets/generated_v2/tilesets/fractured_wastes_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _try_load_fractured_wastes_production_tileset (res://scripts/asset_manager.gd:1328)
+       [3] get_fractured_wastes_tileset_slot (res://scripts/asset_manager.gd:1309)
+       [4] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1556)
+       [5] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [6] _build_environment (res://scripts/regions/fractured_wastes_region.gd:119)
+       [7] _ready (res://scripts/regions/fractured_wastes_region.gd:76)
+WARNING: [AssetManager] Fractured Wastes production tileset fallback: production tileset missing or invalid; generated=res://assets/generated_v2/tilesets/fractured_wastes_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _fractured_wastes_generated_fallback_slot (res://scripts/asset_manager.gd:1337)
+       [2] get_fractured_wastes_tileset_slot (res://scripts/asset_manager.gd:1320)
+       [3] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1556)
+       [4] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [5] _build_environment (res://scripts/regions/fractured_wastes_region.gd:119)
+       [6] _ready (res://scripts/regions/fractured_wastes_region.gd:76)
+WARNING: [AssetManager] Production art slot missing for environment decal atlas at res://assets/production_art/backgrounds/environment_decal_atlas.png; using generated fallback res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1497)
+       [4] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [5] _add_v3_wastes_polish (res://scripts/regions/fractured_wastes_region.gd:299)
+       [6] _build_environment (res://scripts/regions/fractured_wastes_region.gd:218)
+       [7] _ready (res://scripts/regions/fractured_wastes_region.gd:76)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1498)
+       [3] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [4] _add_v3_wastes_polish (res://scripts/regions/fractured_wastes_region.gd:299)
+       [5] _build_environment (res://scripts/regions/fractured_wastes_region.gd:218)
+       [6] _ready (res://scripts/regions/fractured_wastes_region.gd:76)
+WARNING: [AssetManager] Production art slot missing for Kaelen top-down sheet at res://assets/production_art/characters/player/kaelen_topdown_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:1000)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [6] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [7] _spawn_player (res://scripts/regions/fractured_wastes_region.gd:400)
+       [8] _ready (res://scripts/regions/fractured_wastes_region.gd:77)
+WARNING: [AssetManager] V2 top-down player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:1009)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [4] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [5] _spawn_player (res://scripts/regions/fractured_wastes_region.gd:400)
+       [6] _ready (res://scripts/regions/fractured_wastes_region.gd:77)
+WARNING: [AssetManager] Production art slot missing for Lyra NPC sheet at res://assets/production_art/characters/npcs/lyra_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/npcs/lyra_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_npc (res://scripts/asset_manager.gd:1066)
+       [4] create_topdown_npc_visual (res://scripts/asset_manager.gd:1087)
+       [5] _create_interactable_npc (res://scripts/regions/fractured_wastes_region.gd:428)
+       [6] _place_npcs (res://scripts/regions/fractured_wastes_region.gd:420)
+       [7] _ready (res://scripts/regions/fractured_wastes_region.gd:78)
+WARNING: [AssetManager] NPC sheet failed to load for Lyra; using existing NPC fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_npc (res://scripts/asset_manager.gd:1074)
+       [2] create_topdown_npc_visual (res://scripts/asset_manager.gd:1087)
+       [3] _create_interactable_npc (res://scripts/regions/fractured_wastes_region.gd:428)
+       [4] _place_npcs (res://scripts/regions/fractured_wastes_region.gd:420)
+       [5] _ready (res://scripts/regions/fractured_wastes_region.gd:78)
+[ENCOUNTER] Zone changed: Survivor's Shelter
+  PASS: isolation: the scene's hand-off transition finished within 10 s before the reset
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  case ironhold: loading res://scenes/chapter3/ironhold_departure.tscn
+  PASS: ironhold: change_scene_to_file(res://scenes/chapter3/ironhold_departure.tscn) returned OK (got 0)
+[CH3-DEPARTURE] Initializing Ironhold Departure
+  case ironhold: hand-off after 5777 ms, 1 flash(es), 0 choice(s)
+  PASS: AC-4 ironhold: scene reached its own hand-off (transition_started) within 20 s (emissions seen: 1)
+  PASS: AC-4 ironhold: exactly 1 flash_started emission(s) (got 1)
+  PASS: AC-4 ironhold: flash #1 colour (0.2, 0.8, 0.2, 0.4) (got (0.2, 0.8, 0.2, 0.4))
+  PASS: AC-4 ironhold: flash #1 duration 0.5 s (got 0.5)
+  PASS: AC-6 driver ironhold: 0 choices (got 0)
+  PASS: AC-5 ironhold: SceneTransitions/FlashOverlay read after the first flash
+  PASS: AC-5 ironhold: overlay colour (0.2, 0.8, 0.2, 0.4) ~ emitted (0.2, 0.8, 0.2, 0.4)
+  PASS: AC-5 ironhold: overlay modulate.a == 0.8 (+/- 0.001) when flash_started fires (got 0.80000001192093)
+  PASS: AC-5 ironhold: overlay global rect [P: (0.0, 0.0), S: (1280.0, 720.0)] covers the viewport [P: (0.0, 0.0), S: (1280.0, 720.0)]
+[ENCOUNTER] Zone changed: Survivor's Shelter
+  PASS: isolation: the scene's hand-off transition finished within 10 s before the reset
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: isolation: the scene's hand-off transition finished within 10 s before the reset
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+
+CH3 FLASH RESULT: 53 passed, 0 failed
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)

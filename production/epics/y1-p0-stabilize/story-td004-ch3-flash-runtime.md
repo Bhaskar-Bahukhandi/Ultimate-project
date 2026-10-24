@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-TD-004 (`docs/tech-debt-register.md#TD-004`; added to Sprint 001 on 2026-10-24, `production/sprints/sprint-001.md`)
-> **Status**: Ready
+> **Status**: In Progress
 > **Layer**: Feature
 > **Type**: Integration
 > **Estimate**: 1 day
@@ -78,6 +78,9 @@ The only game-code change is the test seam in `SceneTransitions.flash()`. Files:
    stays as it is.
 3. QL-STORY-READY gaps G1-G5 (2026-10-24) adopted: stop each case on the scene's own hand-off, deferred overlay read,
    tighter driver terms with choice counts, four more mutations, named isolation costs.
+4. *(during /dev-story, 2026-10-24)* The deferred read saw alpha 0.71-0.75, not 0.8 (each scene calls `flash()` from a
+   resumed timer await, so the tween's first step runs before a deferred read). The emit moves to just after the overlay
+   is set, so the handler reads 0.8 synchronously; AC-1 and AC-5 amended.
 
 ---
 
@@ -85,8 +88,9 @@ The only game-code change is the test seam in `SceneTransitions.flash()`. Files:
 
 - [ ] AC-1 **Test seam.** `scripts/effects/scene_transition_manager.gd` declares
       `signal flash_started(color: Color, duration: float)` (with a `##` doc comment saying it is a test seam) and emits it
-      as the first statement of `flash()`. `git diff` of the file shows only those lines; `combat_flash()` therefore emits
-      too; nothing else changes.
+      in `flash()` right after the overlay's colour and alpha are set, before the fade tween is created (amended
+      2026-10-24, user decision 4). `git diff` of the file shows only those lines; `combat_flash()` therefore emits too;
+      nothing else changes.
 - [ ] AC-2 **Archive.** From `GameManager.reset_game()`, loading the real `res://scenes/chapter3/archive_depths.tscn` with
       the dialogue driver (below) records exactly these five `flash_started` emissions, in this order, before the scene
       leaves: `(0.3, 0.5, 0.8, 0.3) 0.5`, `(0.5, 0.3, 0.1, 0.3) 0.5`, `(0.8, 0.2, 0.2, 0.3) 0.5`, `(0.2, 0.6, 1.0, 0.4) 0.8`,
@@ -97,9 +101,9 @@ The only game-code change is the test seam in `SceneTransitions.flash()`. Files:
       gate, so the flag is what makes the flash reachable).
 - [ ] AC-4 **Ironhold.** From `reset_game()`, the real `res://scenes/chapter3/ironhold_departure.tscn` records exactly one
       emission `(0.2, 0.8, 0.2, 0.4) 0.5`.
-- [ ] AC-5 **Visible path.** For the first flash of each scene, the `flash_started` handler uses `call_deferred` to read
-      the overlay after `flash()` has set it and before the tween's first step: `SceneTransitions/FlashOverlay`'s `color`
-      is approximately the emitted colour, `modulate.a` is 0.8 (± 0.001), and its global rect covers the viewport.
+- [ ] AC-5 **Visible path.** For the first flash of each scene, the `flash_started` handler reads the overlay
+      synchronously (the signal fires after `flash()` has set it and before the fade exists): `SceneTransitions/FlashOverlay`'s
+      `color` is approximately the emitted colour, `modulate.a` is 0.8 (± 0.001), and its global rect covers the viewport.
 - [ ] AC-6 **Driver and isolation.**
       - **Driver:** skip is re-requested when `dm.is_active and not dm.is_skip_requested()`; a choice is answered with
         option 0 (`dm._on_choice_pressed(0)`, private — say so in the suite's header) only once `dm._choice_container` is
@@ -123,7 +127,9 @@ The only game-code change is the test seam in `SceneTransitions.flash()`. Files:
       pass; run with the AC-5 handler attached so its failure is not mistaken for this one); (d) the Ironhold flash call
       removed → AC-4 fails; (e) `_flash_overlay.color = color` removed from `flash()` → only AC-5 fails; (f) the archive
       `:603` duration changed from 1.0 to 0.1 → AC-2 fails on duration; (g) the wastes gate forced open (`if true:` at
-      `_ready`) → the AC-3 control fails; (h) two archive flash colours swapped → AC-2 fails on order.
+      `_ready`) → the AC-3 control fails; (h) two archive flash colours swapped → AC-2 fails on order. *(code review, 2026-10-24)* A control run of the
+      unmutated worktree is green, each mutation's diff is logged, and (i) `modulate.a` set to 0.5 → only the AC-5 alpha
+      checks fail; (j) the overlay shrunk before the emit → only the AC-5 covers-the-viewport checks fail.
 - [ ] AC-8 **Registration, suites and records.** `.uid` beside the suite; `tests/suite_limits.txt` line with its check
       count and a 120 s timeout (3× the measured Windows time, rounded up, at least 120); `run_all_tests.ps1` entry and
       header "all 19 suites"; a `ci.yml` step (double-quoted `name:` if it contains `: `); `test_layout_test` and
@@ -169,7 +175,7 @@ The only game-code change is the test seam in `SceneTransitions.flash()`. Files:
 - **C4 Ironhold (AC-4)** — one emission.
 - **C5 visible path (AC-5)** — overlay colour, alpha in (0, 0.8], covers the viewport, per scene.
 - **C6 driver (AC-6)** — choice counts (archive 6, `kaelthas_allied`; others 0); stop on `transition_started`; reset between cases; cap; isolation guard; result line.
-- **C7 mutations (AC-7)** — eight mutations (a-h), each failing its case; log kept.
+- **C7 mutations (AC-7)** — a green control run and ten mutations (a-j), each failing its case, diffs logged.
 - **C8 registration and suites (AC-8)** — 19/19, counts unchanged elsewhere.
 
 ---

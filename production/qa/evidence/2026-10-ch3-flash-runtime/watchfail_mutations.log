@@ -1,0 +1,146 @@
+watchfail_mutations.log - Y1-P0-TD-004 AC-7 mutation watch-fail
+Scratch worktree at HEAD (4f28fb1) + the current uncommitted TD-004 change (after the code-review fixes, 53 checks); a control run, then one mutation per run, reverted after.
+Files copied: AethelgardPrototype/scripts/effects/scene_transition_manager.gd, AethelgardPrototype/tests/run_all_tests.ps1, AethelgardPrototype/tests/suite_limits.txt, AethelgardPrototype/tests/integration/vfx/ch3_flash_runtime_test.gd, AethelgardPrototype/tests/integration/vfx/ch3_flash_runtime_test.gd.uid
+
+== control (no mutation)
+   exit 0; CH3 FLASH RESULT: 53 passed, 0 failed -> GREEN
+
+== (a) archive floor-3 flash line commented out
+   exit 1; CH3 FLASH RESULT: 46 passed, 6 failed
+   expected: an AC-2 archive check fails -> FAILED as expected
+   diff applied:
+     --- a/scripts/chapter3/ch3_archive_depths.gd
+     +++ b/scripts/chapter3/ch3_archive_depths.gd
+     @@ -505 +505 @@
+     -		await SceneTransitions.flash(Color(0.8, 0.2, 0.2, 0.3), 0.5)
+     +		pass  # mutation (a)
+   FAIL: AC-2 archive: exactly 5 flash_started emission(s) (got 4)
+   FAIL: AC-2 archive: flash #3 colour (0.8, 0.2, 0.2, 0.3) (got (0.2, 0.6, 1.0, 0.4))
+   FAIL: AC-2 archive: flash #3 duration 0.5 s (got 0.8)
+   FAIL: AC-2 archive: flash #4 colour (0.2, 0.6, 1.0, 0.4) (got (0.3, 0.7, 1.0, 0.5))
+   FAIL: AC-2 archive: flash #4 duration 0.8 s (got 1.0)
+   FAIL: AC-2 archive: flash #5 missing
+
+== (b) wastes colour literal changed
+   exit 1; CH3 FLASH RESULT: 51 passed, 2 failed
+   expected: an AC-3 wastes check fails -> FAILED as expected
+   diff applied:
+     --- a/scripts/chapter3/ch3_fractured_wastes.gd
+     +++ b/scripts/chapter3/ch3_fractured_wastes.gd
+     @@ -564 +564 @@
+     -		await SceneTransitions.flash(Color(0.2, 0.6, 1.0, 0.5), 0.8)
+     +		await SceneTransitions.flash(Color(0.2, 0.6, 1.0, 0.6), 0.8)
+   FAIL: AC-3 wastes (ch3_server_room_unlocked set): flash #1 colour (0.2, 0.6, 1.0, 0.5) (got (0.2, 0.6, 1.0, 0.6))
+   FAIL: AC-5 wastes: overlay colour (0.2, 0.6, 1.0, 0.6) ~ emitted (0.2, 0.6, 1.0, 0.5)
+
+== (c) flash_started.emit removed (AC-5 handler attached)
+   exit 1; CH3 FLASH RESULT: 24 passed, 13 failed
+   expected: AC-2, AC-3 (flag case) and AC-4 all fail -> FAILED as expected
+   diff applied:
+     --- a/scripts/effects/scene_transition_manager.gd
+     +++ b/scripts/effects/scene_transition_manager.gd
+     @@ -177 +176,0 @@
+     -	flash_started.emit(color, duration)
+   FAIL: AC-2 archive: exactly 5 flash_started emission(s) (got 0)
+   FAIL: AC-2 archive: flash #1 missing
+   FAIL: AC-2 archive: flash #2 missing
+   FAIL: AC-2 archive: flash #3 missing
+   FAIL: AC-2 archive: flash #4 missing
+   FAIL: AC-2 archive: flash #5 missing
+   FAIL: AC-5 archive: SceneTransitions/FlashOverlay read after the first flash
+   FAIL: AC-3 wastes (ch3_server_room_unlocked set): exactly 1 flash_started emission(s) (got 0)
+   FAIL: AC-3 wastes (ch3_server_room_unlocked set): flash #1 missing
+   FAIL: AC-5 wastes: SceneTransitions/FlashOverlay read after the first flash
+   FAIL: AC-4 ironhold: exactly 1 flash_started emission(s) (got 0)
+   FAIL: AC-4 ironhold: flash #1 missing
+   FAIL: AC-5 ironhold: SceneTransitions/FlashOverlay read after the first flash
+
+== (d) Ironhold flash call removed
+   exit 1; CH3 FLASH RESULT: 46 passed, 3 failed
+   expected: an AC-4 check fails -> FAILED as expected
+   diff applied:
+     --- a/scripts/chapter3/ch3_ironhold_departure.gd
+     +++ b/scripts/chapter3/ch3_ironhold_departure.gd
+     @@ -95 +95 @@
+     -		await SceneTransitions.flash(Color(0.2, 0.8, 0.2, 0.4), 0.5)
+     +		pass  # mutation (d)
+   FAIL: AC-4 ironhold: exactly 1 flash_started emission(s) (got 0)
+   FAIL: AC-4 ironhold: flash #1 missing
+   FAIL: AC-5 ironhold: SceneTransitions/FlashOverlay read after the first flash
+
+== (e) _flash_overlay.color = color removed from flash()
+   exit 1; CH3 FLASH RESULT: 50 passed, 3 failed
+   expected: only AC-5 checks fail -> FAILED as expected
+   diff applied:
+     --- a/scripts/effects/scene_transition_manager.gd
+     +++ b/scripts/effects/scene_transition_manager.gd
+     @@ -175 +174,0 @@
+     -	_flash_overlay.color = color
+   FAIL: AC-5 archive: overlay colour (1.0, 1.0, 1.0, 1.0) ~ emitted (0.3, 0.5, 0.8, 0.3)
+   FAIL: AC-5 wastes: overlay colour (1.0, 1.0, 1.0, 1.0) ~ emitted (0.2, 0.6, 1.0, 0.5)
+   FAIL: AC-5 ironhold: overlay colour (1.0, 1.0, 1.0, 1.0) ~ emitted (0.2, 0.8, 0.2, 0.4)
+
+== (f) archive :603 duration 1.0 -> 0.1
+   exit 1; CH3 FLASH RESULT: 52 passed, 1 failed
+   expected: the AC-2 flash #5 duration check fails -> FAILED as expected
+   diff applied:
+     --- a/scripts/chapter3/ch3_archive_depths.gd
+     +++ b/scripts/chapter3/ch3_archive_depths.gd
+     @@ -603 +603 @@
+     -		await SceneTransitions.flash(Color(0.3, 0.7, 1.0, 0.5), 1.0)
+     +		await SceneTransitions.flash(Color(0.3, 0.7, 1.0, 0.5), 0.1)
+   FAIL: AC-2 archive: flash #5 duration 1.0 s (got 0.1)
+
+== (g) wastes gate forced open
+   exit 1; CH3 FLASH RESULT: 52 passed, 1 failed
+   expected: the AC-3 control fails -> FAILED as expected
+   diff applied:
+     --- a/scripts/chapter3/ch3_fractured_wastes.gd
+     +++ b/scripts/chapter3/ch3_fractured_wastes.gd
+     @@ -59 +59 @@
+     -	if GameManager.has_flag("ch3_server_room_unlocked") and not GameManager.has_flag("ch3_fragment_3_collected"):
+     +	if true:  # mutation (g)
+   FAIL: AC-3 wastes control (no flags): exactly 0 flash_started emission(s) (got 1)
+
+== (h) archive floor-1 and floor-2 colours swapped
+   exit 1; CH3 FLASH RESULT: 50 passed, 3 failed
+   expected: the AC-2 flash #1 and #2 colour checks fail -> FAILED as expected
+   diff applied:
+     --- a/scripts/chapter3/ch3_archive_depths.gd
+     +++ b/scripts/chapter3/ch3_archive_depths.gd
+     @@ -338 +338 @@
+     -		await SceneTransitions.flash(Color(0.3, 0.5, 0.8, 0.3), 0.5)
+     +		await SceneTransitions.flash(Color(0.5, 0.3, 0.1, 0.3), 0.5)
+     @@ -436 +436 @@
+     -		await SceneTransitions.flash(Color(0.5, 0.3, 0.1, 0.3), 0.5)
+     +		await SceneTransitions.flash(Color(0.3, 0.5, 0.8, 0.3), 0.5)
+   FAIL: AC-2 archive: flash #1 colour (0.3, 0.5, 0.8, 0.3) (got (0.5, 0.3, 0.1, 0.3))
+   FAIL: AC-2 archive: flash #2 colour (0.5, 0.3, 0.1, 0.3) (got (0.3, 0.5, 0.8, 0.3))
+   FAIL: AC-5 archive: overlay colour (0.5, 0.3, 0.1, 0.3) ~ emitted (0.3, 0.5, 0.8, 0.3)
+
+== (i) flash() sets modulate.a to 0.5 instead of 0.8 (code review)
+   exit 1; CH3 FLASH RESULT: 50 passed, 3 failed
+   expected: only the AC-5 alpha checks fail -> FAILED as expected
+   diff applied:
+     --- a/scripts/effects/scene_transition_manager.gd
+     +++ b/scripts/effects/scene_transition_manager.gd
+     @@ -176 +176 @@
+     -	_flash_overlay.modulate.a = 0.8
+     +	_flash_overlay.modulate.a = 0.5
+   FAIL: AC-5 archive: overlay modulate.a == 0.8 (+/- 0.001) when flash_started fires (got 0.5)
+   FAIL: AC-5 wastes: overlay modulate.a == 0.8 (+/- 0.001) when flash_started fires (got 0.5)
+   FAIL: AC-5 ironhold: overlay modulate.a == 0.8 (+/- 0.001) when flash_started fires (got 0.5)
+
+== (j) flash() shrinks the overlay before the emit (code review)
+   exit 1; CH3 FLASH RESULT: 50 passed, 3 failed
+   expected: only the AC-5 covers-the-viewport checks fail -> FAILED as expected
+   diff applied:
+     --- a/scripts/effects/scene_transition_manager.gd
+     +++ b/scripts/effects/scene_transition_manager.gd
+     @@ -176,0 +177 @@
+     +	_flash_overlay.size = Vector2(10, 10)
+   FAIL: AC-5 archive: overlay global rect [P: (0.0, 0.0), S: (10.0, 10.0)] covers the viewport [P: (0.0, 0.0), S: (1280.0, 720.0)]
+   FAIL: AC-5 wastes: overlay global rect [P: (0.0, 0.0), S: (10.0, 10.0)] covers the viewport [P: (0.0, 0.0), S: (1280.0, 720.0)]
+   FAIL: AC-5 ironhold: overlay global rect [P: (0.0, 0.0), S: (10.0, 10.0)] covers the viewport [P: (0.0, 0.0), S: (1280.0, 720.0)]
+
+ALL MUTATIONS CAUGHT: yes

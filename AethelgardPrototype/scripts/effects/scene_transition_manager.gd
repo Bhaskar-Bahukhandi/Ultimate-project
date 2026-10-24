@@ -16,6 +16,10 @@ extends CanvasLayer
 signal transition_started
 signal transition_midpoint  ## Fires when screen is fully covered (scene swap point)
 signal transition_completed
+## Test seam: emitted by flash() once the overlay's colour and alpha are set, before the fade starts,
+## with the colour and duration it was called with. Handlers run inside flash(): keep them synchronous and
+## read-only (do not call flash() or free the overlay from one).
+signal flash_started(color: Color, duration: float)
 
 enum TransitionStyle {
 	FADE,           ## Simple fade to black and back
@@ -170,6 +174,7 @@ func flash(color: Color = Color.WHITE, duration: float = 0.3) -> void:
 	## Quick screen flash for impacts, level ups, phase changes.
 	_flash_overlay.color = color
 	_flash_overlay.modulate.a = 0.8
+	flash_started.emit(color, duration)
 	var tween = create_tween()
 	tween.tween_property(_flash_overlay, "modulate:a", 0.0, duration).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	await tween.finished

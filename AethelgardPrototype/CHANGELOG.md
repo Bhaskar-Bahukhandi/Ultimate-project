@@ -3,6 +3,13 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-24 — Chapter 3 flashes checked in the real scenes (Y1-P0-TD-004)
+
+- **test:** a new suite, `tests/integration/vfx/ch3_flash_runtime_test.gd`, plays the Chapter 3 archive, Fractured
+  Wastes and Ironhold departure scenes headless (dialogue skipped, choices answered) and checks that all seven of their
+  screen flashes actually fire, with the right colours, durations and order (19 suites now). `SceneTransitions` gains a
+  `flash_started` signal for it; nothing players see changes.
+
 ## 2026-10-24 — Combat feel: dash window, one hit sound, STRIKE label, last-kill slowdown (Y1-P0-T11)
 
 - **fix(combat):** a dash now keeps you invulnerable for 0.23 s (the 0.18 s dash plus a 0.05 s tail), down from about 0.4 s,

@@ -142,6 +142,11 @@ jobs:
         working-directory: ${{ env.PROJECT_DIR }}
         run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/integration/vfx/screen_flash_test.gd
 
+      - name: "Chapter 3 flashes (Y1-P0-TD-004: the scenes' own flash lines run, headless)"
+        working-directory: ${{ env.PROJECT_DIR }}
+        timeout-minutes: 10
+        run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/integration/vfx/ch3_flash_runtime_test.gd
+
       - name: Chapter 1 route (rewritten dialogue, end to end)
         working-directory: ${{ env.PROJECT_DIR }}
         timeout-minutes: 30
