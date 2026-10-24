@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-T09 (`production/plan/_source/Y1-P0.json#Y1-P0-T09`)
-> **Status**: Ready
+> **Status**: In Progress
 > **Layer**: Foundation
 > **Type**: Integration
 > **Estimate**: 1 day
@@ -35,7 +35,8 @@ away); not measured, and not claimed as a gain.
 **AGENTS.md protected areas**: none touched. Neither script is used by combat, collision, saves, story, Source Key,
 NG+ or the world map (no callers; `ObjectPool`'s unused `enemy_projectile` factory is never called). No gameplay
 script, scene or save format changes. Files: `AethelgardPrototype/project.godot` (two lines), the two scripts and
-their `.uid` files (deleted), `tests/suite_limits.txt`, a comment in `tests/run_tests.sh`, the CI boot step in
+their `.uid` files (deleted), `tests/suite_limits.txt`, a comment in `tests/run_tests.sh` and one in
+`tests/run_phase0_tests.ps1` (both quote the load_all count; the second added in /code-review), the CI boot step in
 `.github/workflows/ci.yml`, `AethelgardPrototype/CHANGELOG.md`, evidence, this story.
 
 ### Audit facts (2026-10-24, read-only, re-checked in the main session and by QL-STORY-READY)

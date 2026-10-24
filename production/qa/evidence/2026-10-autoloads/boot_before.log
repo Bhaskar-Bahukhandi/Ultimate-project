@@ -1,0 +1,61 @@
+----- BEFORE (HEAD 6f84335, 32 autoloads) | Godot_v4.6.3-stable_win64_console.exe | args: --headless --verbose --fixed-fps 60 --quit-after 300 --path C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype | exit=0 | 2 s | lines=60 | 2026-10-24T09:37:36
+WorkerThreadPool: 16 threads, 4 max low-priority.
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+TextServer: Added interface "Dummy"
+TextServer: Added interface "ICU / HarfBuzz / Graphite (Built-in)"
+Unrecognized output string "misc2" in mapping:
+030000008a2e0000dd10000000000000,Hand Held Legend GC Ultimate,a:b0,b:b2,back:b17,dpdown:b5,dpleft:b6,dpright:b7,dpup:b4,guide:b18,leftshoulder:b10,leftstick:b8,lefttrigger:a3,leftx:a0,lefty:a1,misc1:b19,misc2:b24,paddle1:b13,paddle2:b12,rightshoulder:b11,rightstick:b9,righttrigger:a4,rightx:a2,righty:a5,start:b16,x:b1,y:b3,platform:Windows,
+Unrecognized output string "misc2" in mapping:
+030000000d0f00000202000000000000,Horipad O Nintendo Switch 2 Controller,a:b1,b:b0,back:b8,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b12,leftshoulder:b4,leftstick:b10,lefttrigger:b6,leftx:a0,lefty:a1,misc1:b13,misc2:b14,rightshoulder:b5,rightstick:b11,righttrigger:b7,rightx:a2,righty:a3,start:b9,x:b3,y:b2,platform:Windows,
+Unrecognized output string "misc2" in mapping:
+030000000d0f00009601000000000000,Horipad Steam,a:b0,b:b1,back:b10,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b12,leftshoulder:b6,leftstick:b13,lefttrigger:b8,leftx:a0,lefty:a1,misc2:b2,paddle1:b5,paddle2:b15,paddle3:b18,paddle4:b19,rightshoulder:b7,rightstick:b14,righttrigger:b9,rightx:a3,righty:a4,start:b11,x:b3,y:b4,platform:Windows,
+Unrecognized output string "misc2" in mapping:
+030000007e0500006920000000000000,Nintendo Switch 2 Pro Controller,a:b0,b:b1,back:b14,dpdown:b8,dpleft:b10,dpright:b9,dpup:b11,guide:b16,leftshoulder:b12,leftstick:b15,lefttrigger:b13,leftx:a0,lefty:a1~,misc1:b17,misc2:b20,paddle1:b18,paddle2:b19,rightshoulder:b4,rightstick:b7,righttrigger:b5,rightx:a2,righty:a3~,start:b6,x:b2,y:b3,platform:Windows,
+Using "default" pen tablet driver...
+
+TextServer: Primary interface set to: "ICU / HarfBuzz / Graphite (Built-in)".
+CORE API HASH: 2475187701
+EDITOR API HASH: 3867286884
+SceneTreeFTI: traversal method DEFAULT
+Loading resource: res://scripts/core/input_service.gd
+Loading resource: res://scripts/ui/status_window.gd
+Loading resource: res://scripts/ui/interaction_prompt.gd
+Loading resource: res://scripts/shop_system.gd
+Loading resource: res://scripts/background_manager.gd
+Loading resource: res://scripts/object_pool.gd
+Loading resource: res://scripts/drop_manager.gd
+Loading resource: res://scripts/ui/world_map_ui.gd
+Loading resource: res://scripts/ui/progression_breadcrumb.gd
+Loading resource: res://scripts/ui/credits_screen.gd
+Loading resource: res://scripts/core/debug_test_mode.gd
+Loaded system CA certificates
+Loading resource: res://scenes/splash_screen.tscn
+Loading resource: res://scripts/ui/splash_screen.gd
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+Loading resource: res://shaders/glitch_effect.gdshader
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+Loading resource: res://scenes/main_menu.tscn
+Loading resource: res://scripts/main_menu.gd
+XR: Clearing primary interface
+XR: Removed interface "Native mobile"
+XR: Removed interface "OpenXR"
+Leaked instance: AudioStreamPlaybackWAV:9223372169059239481 - Reference count: 1
+Leaked instance: AudioStreamWAV:9223372168958576189 - Reference count: 1
+Leaked instance: AudioStreamPlaybackWAV:9223372169008908944 - Reference count: 1
+Leaked instance: AudioStreamWAV:9223372168690141892 - Reference count: 1
+Leaked instance: AudioStreamPlaybackWAV:9223372168740473545 - Reference count: 1
+Leaked instance: AudioStreamWAV:9223372168757250762 - Reference count: 2
+Leaked instance: AudioStreamPlaybackWAV:9223372168807582413 - Reference count: 1
+Leaked instance: AudioStreamWAV:9223372168824359630 - Reference count: 1
+Leaked instance: AudioStreamPlaybackWAV:9223372168874691281 - Reference count: 1
+Leaked instance: AudioStreamWAV:9223372168891468498 - Reference count: 1
+Leaked instance: AudioStreamPlaybackWAV:9223372168941800149 - Reference count: 1
+Hint: Leaked instances typically happen when nodes are removed from the scene tree (with `remove_child()`) but not freed (with `free()` or `queue_free()`).
+Orphan StringName: Master (static: 0, total: 8)
+StringName: 1 unclaimed string names at exit.
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)

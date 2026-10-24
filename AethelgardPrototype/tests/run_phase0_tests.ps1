@@ -144,7 +144,7 @@ if ($hits.Count -gt 0) {
 # A suite that timed out, or never started, has no result line; that is the reason, not the count.
 if ($MinChecks -gt 0 -and -not $watch.TimedOut -and $null -ne $code) {
     # A result line starts at column 0 with an uppercase name ("LAYOUT RESULT: 6 passed, 0 failed",
-    # "LOADALL ok=206 bad=0"), so a check description that quotes one is never counted; the last
+    # "LOADALL ok=204 bad=0"), so a check description that quotes one is never counted; the last
     # such line wins, and a lowercase "result:" is not one. The end is not anchored (a trailing CR).
     $result = @($lines | Select-String -CaseSensitive -Pattern '^[A-Z0-9][A-Z0-9 ]* (?:RESULT: (\d+) passed, (\d+) failed|ok=(\d+) bad=(\d+))') |
         Select-Object -Last 1

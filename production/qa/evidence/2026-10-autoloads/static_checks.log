@@ -1,0 +1,66 @@
+static_checks.log - 2026-10-24T09:42:47+05:30
+
+== git diff --check (exit shown)
+exit=0
+
+== AC-2 grep 1 (working tree; expect nothing)
+grep exit=1 (1 = nothing found)
+
+== AC-2 grep 2 uids (tracked + untracked, working tree, excluding production/ and git-ignored; expect nothing)
+grep exit=1 (1 = nothing found)
+
+== git diff --name-status
+M	.github/workflows/ci.yml
+M	AethelgardPrototype/CHANGELOG.md
+M	AethelgardPrototype/project.godot
+D	AethelgardPrototype/scripts/object_pool.gd
+D	AethelgardPrototype/scripts/object_pool.gd.uid
+D	AethelgardPrototype/scripts/ui/interaction_prompt.gd
+D	AethelgardPrototype/scripts/ui/interaction_prompt.gd.uid
+M	AethelgardPrototype/tests/run_tests.sh
+M	AethelgardPrototype/tests/suite_limits.txt
+M	production/epics/y1-p0-stabilize/story-t09-unused-autoloads.md
+M	production/sprint-status.yaml
+
+== git diff --numstat
+2	2	.github/workflows/ci.yml
+11	0	AethelgardPrototype/CHANGELOG.md
+0	2	AethelgardPrototype/project.godot
+0	232	AethelgardPrototype/scripts/object_pool.gd
+0	1	AethelgardPrototype/scripts/object_pool.gd.uid
+0	232	AethelgardPrototype/scripts/ui/interaction_prompt.gd
+0	1	AethelgardPrototype/scripts/ui/interaction_prompt.gd.uid
+1	1	AethelgardPrototype/tests/run_tests.sh
+1	1	AethelgardPrototype/tests/suite_limits.txt
+1	1	production/epics/y1-p0-stabilize/story-t09-unused-autoloads.md
+1	1	production/sprint-status.yaml
+
+== protected gameplay scripts diff (expect empty)
+ AethelgardPrototype/scripts/object_pool.gd         | 232 ---------------------
+ AethelgardPrototype/scripts/object_pool.gd.uid     |   1 -
+ .../scripts/ui/interaction_prompt.gd               | 232 ---------------------
+ .../scripts/ui/interaction_prompt.gd.uid           |   1 -
+ 4 files changed, 466 deletions(-)
+
+== project.godot: whole-file cmp vs HEAD minus the two lines
+IDENTICAL
+numstat: 0	2	AethelgardPrototype/project.godot
+[autoload] entries: 30
+HEAD [autoload] entries: 32
+
+== project.godot diff
+diff --git a/AethelgardPrototype/project.godot b/AethelgardPrototype/project.godot
+index 0e72e6f..0ed6f51 100644
+--- a/AethelgardPrototype/project.godot
++++ b/AethelgardPrototype/project.godot
+@@ -36 +35,0 @@ StatusWindow="*res://scripts/ui/status_window.gd"
+-InteractionPrompt="*res://scripts/ui/interaction_prompt.gd"
+@@ -41 +39,0 @@ BackgroundManager="*res://scripts/background_manager.gd"
+-ObjectPool="*res://scripts/object_pool.gd"
+
+== NOTE (code review): the section above labelled 'protected gameplay scripts diff (expect empty)' was scoped
+   to all of scripts/, so it lists the four intended deletions. The scoped check is below.
+== git diff --stat -- scripts/exploration/player_topdown.gd scripts/chapter1/ch1_opening_crash_site_hook.gd scenes (expect empty)
+(empty)
+== git status --short -- scenes scripts/exploration scripts/chapter1 (expect empty, covers untracked)
+(empty)

@@ -1,0 +1,26 @@
+ci_grep_check.log - the CI step's grep -E pattern, run over the recorded logs (2026-10-24T09:42:31+05:30)
+pattern (new): SCRIPT ERROR|Parse Error|Failed to instantiate an autoload|Failed loading resource
+pattern (old): SCRIPT ERROR|Parse Error
+
+== NEW pattern over boot_negative_control.log
+Failed loading resource: res://scripts/object_pool.gd
+ERROR: Failed loading resource: res://scripts/object_pool.gd.
+ERROR: Failed to instantiate an autoload, can't load from path: res://scripts/object_pool.gd.
+   -> exit 0 (0 = match = CI step would fail the build; 1 = no match = step passes)
+
+== NEW pattern over boot_negative_control_ci_style.log
+ERROR: Failed loading resource: res://scripts/object_pool.gd.
+ERROR: Failed to instantiate an autoload, can't load from path: res://scripts/object_pool.gd.
+   -> exit 0 (0 = match = CI step would fail the build; 1 = no match = step passes)
+
+== NEW pattern over boot_after.log
+   -> exit 1 (0 = match = CI step would fail the build; 1 = no match = step passes)
+
+== NEW pattern over boot_after_ci_style.log
+   -> exit 1 (0 = match = CI step would fail the build; 1 = no match = step passes)
+
+== OLD pattern over boot_negative_control.log (shows why the extension was needed)
+   -> exit 1
+
+== OLD pattern over boot_negative_control_ci_style.log (shows why the extension was needed)
+   -> exit 1

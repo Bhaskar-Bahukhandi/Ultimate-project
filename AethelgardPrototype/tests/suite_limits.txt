@@ -21,7 +21,7 @@
 # Counts below are from production/qa/evidence/2026-10-runner/run_all.log.
 
 res://tests/integration/meta/test_layout_test.gd            6   120
-res://tests/integration/project/load_all_test.gd          206   120
+res://tests/integration/project/load_all_test.gd          204   120
 res://tests/integration/dialogue/dialogue_test.gd          47   120
 res://tests/integration/core/context_stack_test.gd         33   120
 res://tests/integration/input/input_test.gd                52   120

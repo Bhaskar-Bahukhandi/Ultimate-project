@@ -109,7 +109,7 @@ fi
 # A suite that timed out has no result line; the timeout is the reason, not the count.
 if [ "$min_checks" -gt 0 ] && [ "$timed_out" -eq 0 ]; then
     # A result line starts at column 0 with an uppercase name ("LAYOUT RESULT: 6 passed, 0 failed",
-    # "LOADALL ok=206 bad=0"), so a check description that quotes one is never counted; the last
+    # "LOADALL ok=204 bad=0"), so a check description that quotes one is never counted; the last
     # such line wins, and a lowercase "result:" is not one. The end is not anchored (a trailing CR).
     # Only the "RESULT: N passed, M failed" / "ok=N bad=M" part is kept, so digits in the name
     # (TD007) are not summed.

@@ -3,6 +3,17 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-24 — Two unused autoloads removed (Y1-P0-T09)
+
+- **chore(engine):** the `InteractionPrompt` and `ObjectPool` autoloads are removed. No code
+  called either one, but at boot they built 39 hidden pooled nodes and a prompt layer that ran
+  every frame. The game now starts 30 autoloads instead of 32. The player's own interaction
+  prompt label is a different node and is unchanged. The two scripts (`scripts/object_pool.gd`,
+  `scripts/ui/interaction_prompt.gd`) can be restored from git history if pooling is wanted later.
+- **ci:** the boot check now runs 5 s of game time (`--fixed-fps 60 --quit-after 300`) so it
+  gets past the splash screen to the main menu, and it also fails when an autoload script is
+  missing (that error was not caught before).
+
 ## 2026-10-20 — Flashes show, fragment_4 at four, Null Potion matches its text (Y1-P0-T08)
 
 - **fix(vfx):** the story-beat screen flashes in the Chapter 3 archive, wastes and Ironhold

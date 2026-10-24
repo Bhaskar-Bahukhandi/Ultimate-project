@@ -85,8 +85,8 @@ jobs:
 
       - name: Boot check (fails on any script error)
         run: |
-          ~/godot/godot --headless --path "$PROJECT_DIR" --quit-after 120 2>&1 | tee boot.log
-          if grep -E "SCRIPT ERROR|Parse Error" boot.log; then
+          ~/godot/godot --headless --fixed-fps 60 --quit-after 300 --path "$PROJECT_DIR" 2>&1 | tee boot.log
+          if grep -E "SCRIPT ERROR|Parse Error|Failed to instantiate an autoload|Failed loading resource" boot.log; then
             echo "::error::Script errors during boot"
             exit 1
           fi

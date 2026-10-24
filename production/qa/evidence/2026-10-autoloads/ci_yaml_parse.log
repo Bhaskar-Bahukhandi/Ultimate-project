@@ -1,0 +1,9 @@
+ci_yaml_parse.log - python yaml.safe_load('.github/workflows/ci.yml')
+parses: yes; jobs: ['test']; steps in 'test': 26
+boot step name: 'Boot check (fails on any script error)'
+boot step run:
+~/godot/godot --headless --fixed-fps 60 --quit-after 300 --path "$PROJECT_DIR" 2>&1 | tee boot.log
+if grep -E "SCRIPT ERROR|Parse Error|Failed to instantiate an autoload|Failed loading resource" boot.log; then
+  echo "::error::Script errors during boot"
+  exit 1
+fi

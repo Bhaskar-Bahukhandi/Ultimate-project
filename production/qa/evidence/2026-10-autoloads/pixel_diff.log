@@ -1,0 +1,5 @@
+pixel_diff.log - main_menu_before.png vs main_menu_after.png (PIL ImageChops.difference, RGB)
+sizes: (1280, 720) vs (1280, 720)
+bounding box of differing pixels: None  (None = pixel-identical)
+Note: both captures load main_menu.tscn directly and neither removed autoload drew anything, so identical
+is the expected result; the splash -> menu path is proven by the boot scans (AC-4).

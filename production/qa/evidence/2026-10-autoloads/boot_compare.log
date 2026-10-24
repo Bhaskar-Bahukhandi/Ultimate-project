@@ -1,0 +1,60 @@
+boot_compare.log - BEFORE (boot_before.log) vs AFTER (boot_after.log), generated 2026-10-24T09:40:42+05:30
+
+== headers
+----- BEFORE (HEAD 6f84335, 32 autoloads) | Godot_v4.6.3-stable_win64_console.exe | args: --headless --verbose --fixed-f
+﻿----- AFTER (30 autoloads) | Godot_v4.6.3-stable_win64_console.exe | args: --headless --verbose --fixed-fps 60 --quit
+
+== main_menu.tscn / main_menu.gd load lines
+before:
+41:Loading resource: res://scenes/main_menu.tscn
+42:Loading resource: res://scripts/main_menu.gd
+after:
+39:Loading resource: res://scenes/main_menu.tscn
+40:Loading resource: res://scripts/main_menu.gd
+
+== removed scripts' Loading lines (before: expect 2, after: expect 0)
+before: 2
+after:  0
+
+== forbidden pattern: SCRIPT ERROR|Parse Error|not declared in the current scope|Failed to (load|instantiate)|Cannot open file|Resource file not found|ObjectPool|InteractionPrompt
+before matches: 0
+after matches:  0
+
+== ERROR-ish lines (grep -E 'ERROR|Parse Error')
+before: 0 unique, after: 0 unique
+after minus before (must be empty):
+
+== full line diff (header line excluded)
+21d20
+< Loading resource: res://scripts/ui/interaction_prompt.gd
+24d22
+< Loading resource: res://scripts/object_pool.gd
+39c37
+< [BackgroundManager] Initialized — procedural backgrounds active
+---
+> [BackgroundManager] Initialized ΓÇö procedural backgrounds active
+45,60d42
+< Leaked instance: AudioStreamPlaybackWAV:9223372169059239481 - Reference count: 1
+< Leaked instance: AudioStreamWAV:9223372168958576189 - Reference count: 1
+< Leaked instance: AudioStreamPlaybackWAV:9223372169008908944 - Reference count: 1
+< Leaked instance: AudioStreamWAV:9223372168690141892 - Reference count: 1
+< Leaked instance: AudioStreamPlaybackWAV:9223372168740473545 - Reference count: 1
+< Leaked instance: AudioStreamWAV:9223372168757250762 - Reference count: 2
+< Leaked instance: AudioStreamPlaybackWAV:9223372168807582413 - Reference count: 1
+< Leaked instance: AudioStreamWAV:9223372168824359630 - Reference count: 1
+< Leaked instance: AudioStreamPlaybackWAV:9223372168874691281 - Reference count: 1
+< Leaked instance: AudioStreamWAV:9223372168891468498 - Reference count: 1
+< Leaked instance: AudioStreamPlaybackWAV:9223372168941800149 - Reference count: 1
+< Hint: Leaked instances typically happen when nodes are removed from the scene tree (with `remove_child()`) but not freed (with `free()` or `queue_free()`).
+< Orphan StringName: Master (static: 0, total: 8)
+< StringName: 1 unclaimed string names at exit.
+< WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+<    at: cleanup (core/object/object.cpp:2663)
+
+== Code review addition: AC-4's forbidden pattern over the negative-control logs (shows the scan can fail)
+pattern: SCRIPT ERROR|Parse Error|not declared in the current scope|Failed to (load|instantiate)|Cannot open file|Resource file not found|ObjectPool|InteractionPrompt
+-- boot_negative_control.log: 1 matching line(s)
+   ERROR: Failed to instantiate an autoload, can't load from path: res://scripts/object_pool.gd.
+-- boot_negative_control_ci_style.log: 1 matching line(s)
+   ERROR: Failed to instantiate an autoload, can't load from path: res://scripts/object_pool.gd.
+-- boot_after.log: 0 matching line(s)
