@@ -2,7 +2,8 @@
 
 - **Story:** `production/epics/y1-p0-stabilize/story-t10-log-spam-bound-texts-exit-leak.md`
 - **Code:** `fix/phase0-playthrough-blockers` committed as `ce13542` (on top of `c01d80e`); the runs below were made on
-  the uncommitted change, whose game code is what `ce13542` contains. Windows 11, Godot 4.6.3.stable console
+  the uncommitted change, whose game code is what `ce13542` contains. CI run
+  [40074285189](https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/40074285189) on `7b6e30d` is green: all 18 test steps passed, the new "Bound texts prune" step in 2 s. Windows 11, Godot 4.6.3.stable console
   (`Godot_v4.6.3-stable_win64_console.exe`), Windows PowerShell 5.1. The plan named `2026-11-exit-leak/`; the work
   was done in October.
 - **Art caveat:** the production art behind most fallback slots was removed from this checkout in `abcf40c`

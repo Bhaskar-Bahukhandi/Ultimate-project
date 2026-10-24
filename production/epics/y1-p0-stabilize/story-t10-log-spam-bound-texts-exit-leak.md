@@ -265,8 +265,12 @@ exit scan fails before on the three leak lines and passes after (`exit_before.lo
 all three (`tour_before_1shot.log`, a partial control); full suite 18/18 (`run_all.log`).
 **Code Review**: Complete — /code-review (godot-specialist, godot-gdscript-specialist, qa-tester) APPROVED WITH
 SUGGESTIONS, suggestions 1-4 applied in `ce13542`; LP-CODE-REVIEW APPROVE (condition: CI green on the branch before
-merge to main — the new suite has run only locally on Windows); QL-TEST-COVERAGE ADEQUATE.
+merge to main — met: CI run [40074285189](https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/40074285189) on `7b6e30d`, below); QL-TEST-COVERAGE ADEQUATE.
 **Commit**: `ce13542` (fix(performance): warn once per fallback, prune bound texts, release the cursor texture).
+**CI**: run [40074285189](https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/40074285189) on `7b6e30d` (ubuntu-latest) is green — the boot check and all 18 test steps
+passed (test layout among them), including the new "Bound texts prune" step (2 s, its first run on Linux) and load_all with its 204
+minimum (chapter 1 route 534 s, chapter 2 route 146 s, phase0 306 s). Step logs need a GitHub sign-in and were not read;
+the verdict rests on step conclusions.
 **Follow-ups** (advisory, QL-TEST-COVERAGE, not logged as tech debt):
 - No CI guard stops a new bare `push_warning` returning to `asset_manager.gd`; a grep check in an existing static
   suite would cover it.
