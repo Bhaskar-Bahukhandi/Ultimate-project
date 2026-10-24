@@ -14,7 +14,8 @@ reports under `docs/` and in git history.
   the hit counter, and it clears after the third strike and when you are hit (it used to stay on screen).
 - **fix(combat):** the short slow-motion when the last enemy of a fight dies now actually plays; it was always cancelled
   by the kill's own hit-pause. It now follows the hit-pause directly, and a slow-down cut short by a scene change
-  or death no longer comes back afterwards. Bosses keep their own death slow-motion only.
+  or death no longer comes back afterwards; a second last kill while it is playing does not restart it. Bosses keep
+  their own death slow-motion only (the tutorial knight's normal kill now plays just the boss death sound).
 - **test:** `combat_fixes_test.gd` grows from 10 to 45 checks, including a guard that only ContextStack sets the game
   speed; a new screenshot-tour stop `t11_combat_hud` shows the combat HUD.
 

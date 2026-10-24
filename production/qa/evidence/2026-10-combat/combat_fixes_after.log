@@ -16,7 +16,7 @@ AssetManager initialized - Scanning for asset availability...
   PASS: x0.4 zone gives about 40% speed (132 vs 132), not 17%
   PASS: no zone: normal run speed (330 vs 330)
 [placeholder sprites flip around their centre]
-  PASS: facing left, the placeholder is drawn centred on the body (1144.6 vs 1144.6; size (31.46349, 32.71534))
+  PASS: facing left, the placeholder is drawn centred on the body (1144.6 vs 1144.6; size (31.44394, 32.74142))
 [combat feel: overlap hits, jump-cancel, dash buffer, hit-pause]
 [INVENTORY] Added 3 x Health Potion
 [INVENTORY] Added 2 x Glitch Stabilizer
@@ -168,7 +168,7 @@ ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
    at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
 ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
    at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
-  PASS: T11 AC-5c: the last_kill request is released within 2.0 s real (held about 389 ms more after 0.12 was seen)
+  PASS: T11 AC-5c: the last_kill request is released within 2.0 s real (held about 380 ms more after 0.12 was seen)
 WARNING: [COMBAT FX] Force-ending hitstop (safety fallback)
    at: push_warning (core/variant/variant_utility.cpp:1034)
    GDScript backtrace (most recent call first):

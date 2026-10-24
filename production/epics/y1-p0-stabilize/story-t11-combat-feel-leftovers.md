@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-T11 (`production/plan/_source/Y1-P0.json#Y1-P0-T11`)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Feature
 > **Type**: Integration
 > **Estimate**: 4 days
@@ -121,7 +121,7 @@ use up the 0.18 s at once (inferred, not run).
 
 ## Acceptance Criteria
 
-- [ ] AC-1 **Dash i-frames.** `player_combat.gd` has `const DASH_IFRAME_TAIL = 0.05` beside `DASH_DURATION`. Frame-stepped in
+- [x] AC-1 **Dash i-frames.** `player_combat.gd` has `const DASH_IFRAME_TAIL = 0.05` beside `DASH_DURATION`. Frame-stepped in
       the suite (`_frames()`, 60 fps):
       - a dash from rest leaves `invulnerable` true for **13–15** physics frames in total (old code: 25);
       - a hit on the first frame after `is_dashing` turns false is absorbed, with `_perfect_dodge_awarded` false and soul
@@ -130,7 +130,7 @@ use up the 0.18 s at once (inferred, not run).
       - a hit while `is_dashing` is still a PERFECT DODGE;
       - a dash started with `invuln_timer` 0.8 (hurt i-frames) leaves it still 0.8 when the dash ends, and `invulnerable`
         still true 0.7 s (42 frames) after that.
-- [ ] AC-2 **One sound per hit, one per kill.** `SFXManager` emits `sfx_requested(sfx_name)` at the top of every `play()`
+- [x] AC-2 **One sound per hit, one per kill.** `SFXManager` emits `sfx_requested(sfx_name)` at the top of every `play()`
       call (before its player cap). In the suite, using real enemies (`EnemyBase` slime and `corrupted_rat`, not the sound-less
       `_dummy_enemy`):
       - one landed light combo hit → exactly one `sword_hit`;
@@ -139,18 +139,18 @@ use up the 0.18 s at once (inferred, not run).
       - a direct `die()` with no kill effects (the kill-zone / Root Access path) → exactly one `enemy_death`.
       `player_combat.gd:982` and the five subclass `_sfx("enemy_death")` calls are gone; `enemy_base.gd:947` plays only when
       kill effects did not (a flag set in `take_damage` before `apply_kill_effects`); no other `_sfx` / `play` call changes.
-- [ ] AC-3 **STRIKE label.** The chain label reads "STRIKE 1", "STRIKE 2", "STRIKE 3" (same colours and size as today).
+- [x] AC-3 **STRIKE label.** The chain label reads "STRIKE 1", "STRIKE 2", "STRIKE 3" (same colours and size as today).
       After step 3, "STRIKE 3" shows until `attack_cooldown` reaches 0, then the label is empty; right after `take_damage` it
       is empty; right after a charged attack (which also ends the chain) it is empty (added 2026-10-24 at the user's request); after a
       death-retry reset (`force_restore_after_death_retry`) it is empty (code review, 2026-10-24). Steps 1 and 2 keep clearing when `combo_timer` lapses. Checked in the suite by reading the label's text (the
       step-3 and hurt checks fail on the old code; the step-1/2 checks pass on both). GameJuice's counter is unchanged.
-- [ ] AC-4 **Label evidence.** A new stop `t11_combat_hud` in `scripts/debug/screenshot_tour_runner.gd` (`_wanted()`-gated
+- [x] AC-4 **Label evidence.** A new stop `t11_combat_hud` in `scripts/debug/screenshot_tour_runner.gd` (`_wanted()`-gated
       like the others) sets up a high-HP slime, lands two strikes and checks its preconditions — `combo_step == 2`, the label
       reads "STRIKE 2", GameJuice's counter reads "2 HIT" — reporting a PROBLEM on any mismatch; a second shot after
       `take_damage` shows the label empty. Live-renderer captures (`tests/run_screenshots.ps1 -Only t11_combat_hud -Evidence combat`)
       retained in `production/qa/evidence/2026-10-combat/`; the report shows 0 problems. (The plan named `2026-11-combat/`;
       the work is in October.)
-- [ ] AC-5 **Last-kill slowdown runs.** `CombatFX` keeps a pending flag and a test seam `last_kill_started_count`. In the
+- [x] AC-5 **Last-kill slowdown runs.** `CombatFX` keeps a pending flag and a test seam `last_kill_started_count`. In the
       suite:
       - (a) after `apply_kill_effects` + `apply_last_kill_slowdown`, no `last_kill` request exists while the hitstop is active;
       - (b) when that hitstop is released — by `_end_hitstop` and, separately, by `_force_end_hitstop` —
@@ -171,15 +171,15 @@ use up the 0.18 s at once (inferred, not run).
         carries an id; the restore and its ramp do nothing for a stale id or a dropped request);
       - each drop rule (paused, cleared, scene changed) and the boss flag is shown failing by mutation, and (g) has a positive
         control (the same setup without the boss group starts one slowdown).
-- [ ] AC-6 **One time-scale writer.** A suite check reads every `.gd` under `res://scripts`, strips `#` comments, and fails
+- [x] AC-6 **One time-scale writer.** A suite check reads every `.gd` under `res://scripts`, strips `#` comments, and fails
       if any line outside `scripts/core/context_stack.gd` matches `Engine\.time_scale\s*[+\-*/]?=[^=]`; passes today.
-- [ ] AC-7 **Watch-fail.** In a scratch worktree at the pre-change commit, the new checks for AC-1 (frame count), AC-2 (one
+- [x] AC-7 **Watch-fail.** In a scratch worktree at the pre-change commit, the new checks for AC-1 (frame count), AC-2 (one
       `sword_hit`, one `enemy_death`), AC-3 (step-3 / hurt clear) and AC-5 (end-to-end) fail; the log is kept.
-- [ ] AC-8 **Suites and records.** `combat_fixes_test.gd` passes with its new checks (`suite_limits.txt` minimum set to the
+- [x] AC-8 **Suites and records.** `combat_fixes_test.gd` passes with its new checks (`suite_limits.txt` minimum set to the
       new count); `context_stack_test.gd`, both route suites and the full suite (`run_all_tests.ps1`, 18 suites, no
       `-Quick`) pass with every other suite's count equal to `production/qa/evidence/2026-10-exit-leak/run_all.log`;
       `git diff --check` clean; a dated CHANGELOG entry.
-- [ ] AC-9 **Play note.** The user plays the Aldric fight and the arena bronze bracket once on the changed build and records
+- [x] AC-9 **Play note.** The user plays the Aldric fight and the arena bronze bracket once on the changed build and records
       `production/qa/evidence/2026-10-combat/play_note.md`: the commit hash, then one line each for the dash window, the hit
       sound, the STRIKE label and the last-kill slowdown, each tagged **better / same / worse**. A "worse" opens a follow-up
       story; it does not block this one. DEFERRED to the user's play session; the story cannot close until it is recorded.
@@ -252,7 +252,7 @@ use up the 0.18 s at once (inferred, not run).
 README mapping each AC to its file.
 **Run result**: required: the combat HUD with the STRIKE label (AC-4).
 
-**Status**: [ ] Not yet created
+**Status**: [x] Created — production/qa/evidence/2026-10-combat/ (README.md maps every AC to its log)
 
 ---
 
@@ -260,3 +260,34 @@ README mapping each AC to its file.
 
 - Depends on: Y1-P0-T02 (done: test layout). TD-007 (done: `suite_limits.txt`).
 - Unlocks: Y1-P0-T13a (real side-scroll fights depend on T11 per the sprint plan).
+
+---
+
+## Completion Notes
+**Completed**: 2026-10-24
+**Criteria**: 9/9 passing. AC-9: the user played the Aldric fight and the arena bronze bracket on `1b2c013` and rated the
+dash window, the hit and death sounds, the STRIKE label and the last-kill slowdown all **better**
+(`production/qa/evidence/2026-10-combat/play_note.md`).
+**Commit**: `1b2c013` (fix(combat): dash i-frames, one hit sound, STRIKE label, last-kill slowdown); CI run
+[40095578489](https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/40095578489) on it is green (all 18 test steps; Combat fixes 45 checks in 25 s on Linux). Step logs need a GitHub
+sign-in and were not read; the verdict rests on step conclusions.
+**Deviations** (advisory):
+- NOT ASSESSED: GDD / ADR / TR-registry traceability (none exist for this system).
+- AC-3 grew at the user's request (a charged attack clears the label) and at code review (a death-retry reset clears it);
+  AC-5 grew at code review (no burst of speed, no stale restore after `clear_time_scale()`, mutation proof of each drop
+  rule and the boss flag, a boss positive control, a same-frame dedupe check).
+- Feel changes beyond the story text: the tutorial knight's normal kill now plays only `enemy_death_boss` (its phase-4 kill
+  is unchanged); a last kill while a slowdown is running or pending does not restart the 0.4 s hold.
+- After the gates: the base `_kill_effects()` wrapper now sets `_kill_fx_played` (LP-CODE-REVIEW concern; one line in
+  `enemy_base.gd`, combat_fixes re-run 45/45; route suites not re-run — the only caller, the knight, never reaches the
+  base `die()` that reads the flag).
+**Test Evidence**: Integration — `tests/integration/combat/combat_fixes_test.gd` (10 → 45 checks), seen failing on the
+old code (16 failures through a hook-only shim) and by 8 mutations each failing exactly its own check;
+`production/qa/evidence/2026-10-combat/` (live tour stop `t11_combat_hud`, 2 shots, 0 problems; full suite 18/18).
+**Code Review**: Complete — /code-review (godot-specialist, godot-gdscript-specialist, qa-tester): CHANGES REQUIRED (a
+ramp "pop" before the 0.12 slowdown; a stale restore timer after `clear_time_scale()`; test and evidence gaps) → fixed →
+re-review APPROVED WITH SUGGESTIONS, all applied. LP-CODE-REVIEW CONCERNS (none blocking; the wrapper flag fixed, feel
+notes added, records updated). QL-TEST-COVERAGE GAPS (advisory; logged as TD-015).
+**Follow-up**: TD-013 (`enemy_base.gd:920` "no meta 'flash_tween'" error), TD-014 (hitstop countdown `delta / time_scale`
+hitch), TD-015 (T11 coverage follow-ups: the knight's boss call site and `boss_death` request, four subclass death-sound
+removals, a real kill while paused).
