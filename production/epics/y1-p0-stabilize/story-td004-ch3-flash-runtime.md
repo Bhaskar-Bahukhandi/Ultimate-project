@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-TD-004 (`docs/tech-debt-register.md#TD-004`; added to Sprint 001 on 2026-10-24, `production/sprints/sprint-001.md`)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Feature
 > **Type**: Integration
 > **Estimate**: 1 day
@@ -86,25 +86,25 @@ The only game-code change is the test seam in `SceneTransitions.flash()`. Files:
 
 ## Acceptance Criteria
 
-- [ ] AC-1 **Test seam.** `scripts/effects/scene_transition_manager.gd` declares
+- [x] AC-1 **Test seam.** `scripts/effects/scene_transition_manager.gd` declares
       `signal flash_started(color: Color, duration: float)` (with a `##` doc comment saying it is a test seam) and emits it
       in `flash()` right after the overlay's colour and alpha are set, before the fade tween is created (amended
       2026-10-24, user decision 4). `git diff` of the file shows only those lines; `combat_flash()` therefore emits too;
       nothing else changes.
-- [ ] AC-2 **Archive.** From `GameManager.reset_game()`, loading the real `res://scenes/chapter3/archive_depths.tscn` with
+- [x] AC-2 **Archive.** From `GameManager.reset_game()`, loading the real `res://scenes/chapter3/archive_depths.tscn` with
       the dialogue driver (below) records exactly these five `flash_started` emissions, in this order, before the scene
       leaves: `(0.3, 0.5, 0.8, 0.3) 0.5`, `(0.5, 0.3, 0.1, 0.3) 0.5`, `(0.8, 0.2, 0.2, 0.3) 0.5`, `(0.2, 0.6, 1.0, 0.4) 0.8`,
       `(0.3, 0.7, 1.0, 0.5) 1.0` (colours compared with `is_equal_approx`, durations to 0.001).
-- [ ] AC-3 **Wastes.** With `ch3_server_room_unlocked` set and `ch3_fragment_3_collected` unset, the real
+- [x] AC-3 **Wastes.** With `ch3_server_room_unlocked` set and `ch3_fragment_3_collected` unset, the real
       `res://scenes/chapter3/fractured_wastes.tscn` records exactly one emission `(0.2, 0.6, 1.0, 0.5) 0.8`. Control: from
       `reset_game()` with no flags, the same scene records **zero** emissions before it leaves for the region (shows the
       gate, so the flag is what makes the flash reachable).
-- [ ] AC-4 **Ironhold.** From `reset_game()`, the real `res://scenes/chapter3/ironhold_departure.tscn` records exactly one
+- [x] AC-4 **Ironhold.** From `reset_game()`, the real `res://scenes/chapter3/ironhold_departure.tscn` records exactly one
       emission `(0.2, 0.8, 0.2, 0.4) 0.5`.
-- [ ] AC-5 **Visible path.** For the first flash of each scene, the `flash_started` handler reads the overlay
+- [x] AC-5 **Visible path.** For the first flash of each scene, the `flash_started` handler reads the overlay
       synchronously (the signal fires after `flash()` has set it and before the fade exists): `SceneTransitions/FlashOverlay`'s
       `color` is approximately the emitted colour, `modulate.a` is 0.8 (± 0.001), and its global rect covers the viewport.
-- [ ] AC-6 **Driver and isolation.**
+- [x] AC-6 **Driver and isolation.**
       - **Driver:** skip is re-requested when `dm.is_active and not dm.is_skip_requested()`; a choice is answered with
         option 0 (`dm._on_choice_pressed(0)`, private — say so in the suite's header) only once `dm._choice_container` is
         valid. The driver records each choice prompt and asserts: archive exactly 6 choices and `kaelthas_allied == true`
@@ -121,7 +121,7 @@ The only game-code change is the test seam in `SceneTransitions.flash()`. Files:
         it); auto-saves go to the isolated `aeth_phase0_test` `user://`; `reset_game()` clears flags, Source Keys and
         deferred save slots.
       - The suite checks the isolation guard first; the result line is `CH3 FLASH RESULT: N passed, F failed`.
-- [ ] AC-7 **Watch-fail by mutation** (scratch worktree with the new code, one mutation per run, log kept): (a) the archive
+- [x] AC-7 **Watch-fail by mutation** (scratch worktree with the new code, one mutation per run, log kept): (a) the archive
       floor-3 flash line commented out → AC-2 fails; (b) the wastes colour literal changed → AC-3 fails; (c) the
       `flash_started.emit(...)` line removed → every scene case fails (proves the seam is what the test sees, not a vacuous
       pass; run with the AC-5 handler attached so its failure is not mistaken for this one); (d) the Ironhold flash call
@@ -130,7 +130,7 @@ The only game-code change is the test seam in `SceneTransitions.flash()`. Files:
       `_ready`) → the AC-3 control fails; (h) two archive flash colours swapped → AC-2 fails on order. *(code review, 2026-10-24)* A control run of the
       unmutated worktree is green, each mutation's diff is logged, and (i) `modulate.a` set to 0.5 → only the AC-5 alpha
       checks fail; (j) the overlay shrunk before the emit → only the AC-5 covers-the-viewport checks fail.
-- [ ] AC-8 **Registration, suites and records.** `.uid` beside the suite; `tests/suite_limits.txt` line with its check
+- [x] AC-8 **Registration, suites and records.** `.uid` beside the suite; `tests/suite_limits.txt` line with its check
       count and a 120 s timeout (3× the measured Windows time, rounded up, at least 120); `run_all_tests.ps1` entry and
       header "all 19 suites"; a `ci.yml` step (double-quoted `name:` if it contains `: `); `test_layout_test` and
       `load_all` (204, the suite is under `tests/`) pass; `screen_flash_test.gd` unchanged at 107; full suite 19/19 with
@@ -188,7 +188,7 @@ the suite log, the mutation log, the full-suite log and a README mapping each AC
 **Run result**: N/A for a screenshot — nothing new is drawn; the flashes are the T08 visuals already captured in
 `production/qa/evidence/2026-10-flash/`, and AC-5 checks the overlay in the real scenes.
 
-**Status**: [ ] Not yet created
+**Status**: [x] Created — production/qa/evidence/2026-10-ch3-flash-runtime/ (README.md maps every AC to its log)
 
 ---
 
@@ -197,3 +197,26 @@ the suite log, the mutation log, the full-suite log and a README mapping each AC
 - Depends on: Y1-P0-T08 (done: the flashes route through `SceneTransitions.flash()`), Y1-P0-T02 (done), TD-007 (done:
   `suite_limits.txt`).
 - Unlocks: closes TD-004 before Y1-P0-T15, as the register requires.
+
+---
+
+## Completion Notes
+**Completed**: 2026-10-24
+**Criteria**: 8/8 passing. CI run [40109275299](https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/40109275299) on `5dcd64b` (ubuntu-latest) is green: all 19 test steps,
+"Chapter 3 flashes (…)" in 25 s (suite limit 120 s; local Windows run ~28 s). Step logs need a GitHub sign-in and were
+not read, so the per-scene hand-off times on Linux are not known; the verdict rests on step conclusions.
+**Commit**: `5dcd64b` (test(vfx): run the Chapter 3 scenes' own flash lines headless).
+**Deviations** (advisory):
+- NOT ASSESSED: GDD / ADR / TR-registry traceability (none exist for this test debt).
+- AC-1 and AC-5 amended during /dev-story (decision 4): the emit moved to just after the overlay is set, so the handler
+  reads alpha 0.8 exactly (a deferred read saw 0.71–0.75).
+- Code review added 6 isolation (settle) checks (47 → 53) and mutations (i) alpha and (j) overlay rect; the local
+  19-suite run used the 47-check version (the additions touched only this suite and a doc comment); CI ran the final 53.
+**Test Evidence**: Integration — `tests/integration/vfx/ch3_flash_runtime_test.gd` (53 checks); a green control run and
+10 mutations each failing exactly its checks (`watchfail_mutations.log`, diffs logged);
+`production/qa/evidence/2026-10-ch3-flash-runtime/`.
+**Code Review**: Complete — /code-review (godot-gdscript-specialist, godot-specialist, qa-tester) APPROVED WITH
+SUGGESTIONS, all applied in `5dcd64b`; LP-CODE-REVIEW APPROVE (condition: CI green before merge — met, run 40109275299);
+QL-TEST-COVERAGE GAPS (minor: CI not yet run at the time — now green; one-machine timing; records — updated here).
+**Follow-up**: TD-016 — assert each case's hand-off destination (above all the wastes control), and add a public
+DialogueManager "answer the open choice" API so the suite stops reaching private members.
