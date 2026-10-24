@@ -10,7 +10,8 @@
 #   blocked        ↔  Blocked
 #
 # Sprint 001 plans Y1-P0 tasks directly (no story files yet, user decision 2026-10-18).
-# `file:` points at the task's entry in the plan source until a story file exists.
+# `file:` points at the task's entry in the plan source until a story file exists (TD tasks: their row in
+# docs/tech-debt-register.md).
 
 sprint: 1
 goal: "A human and the bot can play New Game to the credits with no softlock, the repo is clean and off OneDrive, every open audit decision is closed, and the storyline, time and difficulty designs are drafted."
@@ -45,6 +46,8 @@ stories:
   - {id: "Y1-P0-T13b", name: "Guardian as a real side-scroll fight", file: "production/plan/_source/Y1-P0.json#Y1-P0-T13", priority: must-have, status: ready-for-dev, owner: "you + Claude", estimate_days: 2, blocker: "", completed: ""}
   - {id: "Y1-P0-T13c", name: "Boar as a real side-scroll fight", file: "production/plan/_source/Y1-P0.json#Y1-P0-T13", priority: must-have, status: ready-for-dev, owner: "you + Claude", estimate_days: 2, blocker: "", completed: ""}
   - {id: "Y1-P0-T14b", name: "Playthrough bot: Ch1 fight legs + CI step", file: "production/plan/_source/Y1-P0.json#Y1-P0-T14", priority: must-have, status: ready-for-dev, owner: "you + Claude", estimate_days: 1, blocker: "", completed: ""}
+  - {id: "Y1-P0-TD-004", name: "Runtime check for the Chapter 3 flash call sites", file: "docs/tech-debt-register.md#TD-004", priority: must-have, status: ready-for-dev, owner: "you + Claude", estimate_days: 1, blocker: "", completed: ""}
+  - {id: "Y1-P0-TD-010", name: "Permanent self-test for the test runners", file: "docs/tech-debt-register.md#TD-010", priority: must-have, status: ready-for-dev, owner: "you + Claude", estimate_days: 2, blocker: "", completed: ""}
   - {id: "Y1-P0-T15", name: "Phase 0 exit: a human plays New Game to the credits (exported build)", file: "production/plan/_source/Y1-P0.json#Y1-P0-T15", priority: must-have, status: ready-for-dev, owner: "you (play) + Claude", estimate_days: 3, blocker: "", completed: ""}
   - {id: "Y1-P0-S16", name: "Review Phase 0 and plan the spine", file: "production/plan/_source/Y1-P0.json#Y1-P0-S16", priority: must-have, status: ready-for-dev, owner: "you + Claude", estimate_days: 1, blocker: "", completed: ""}
   # --- Should Have ---

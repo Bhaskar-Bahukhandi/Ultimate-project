@@ -10,6 +10,8 @@
 > **PR-SPRINT (producer, 2026-10-18): CONCERNS** — user chose **[B] Adjust scope**: T14 and T13 split,
 > T14a moved before T13, a named softlock-fix reserve, a human Ch4–10 pass on Day 0035, T15/S16
 > dependency fixed, exported build added to T15. Capacity confirmed by the user as real (no coursework cut).
+> **PR-SPRINT (producer, 2026-10-24, `/sprint-plan update`): REALISTIC** — TD-004 and TD-010 added as Must Haves;
+> TD-010 closes before T14b, has a cut line, and both are done by ~Day 0021; ~20 block-days spare looking forward.
 > **QA Plan:** `production/qa/qa-plan-sprint-001-2026-10-18.md` (written 2026-10-18, before implementation).
 
 ## Sprint Goal
@@ -22,12 +24,13 @@ Two work streams per day: Block A (primary, 4 h) Mon–Sat; Block B (secondary, 
 Sundays: Block A is the weekly integration playthrough, not task work.
 
 - Total: 43 days (Mon 19 Oct – Mon 30 Nov 2026) = **80 block-days** (37 Block A + 43 Block B)
-- Buffer (20%): **16 block-days** of uncommitted capacity:
+- Buffer: **11 block-days** (14%) of uncommitted capacity (16 at planning; -2 for the S02 growth, -3 for
+  TD-004 and TD-010 added 2026-10-24):
   - **5 days: softlock-fix reserve** — late Block B slots (formerly S13/S14), only for fixing
     softlocks the bot or the human pass finds; separate from the gate-check day
-  - **11 days: Nice to Have candidates**, taken in listed order only when no slip is pending
+  - **6 days: Nice to Have candidates**, taken in listed order only when no slip is pending
 - A slipped primary day uses the next free Block B slot (a 3 h slot ≈ 75% of a 4 h day); the plan records the move.
-- Committed (Must + Should): **64 block-days**
+- Committed (Must + Should): **69 block-days** (64 at planning; +2 S02 decision 3; +3 TD-004 and TD-010)
 - Daily load: ~10.5 h scheduled (A 4, B 3, C 1.5, D 1, study 0.5, start/end/hygiene 0.75),
   7 days a week. The buffer does not reduce this — see Risks.
 - Energy rule (ROADMAP §1.1): rating 1–5 as the first line of `active.md` each morning; if the
@@ -61,11 +64,14 @@ Sundays: Block A is the weekly integration playthrough, not task work.
 | Y1-P0-T13a | Slime as a real side-scroll fight | you + Claude (gameplay-programmer, ai-programmer) | 2 | T11, T04 | Route test covers fight + non-fight branch; `production/qa/evidence/2026-11-ch1-fights/slime.png` |
 | Y1-P0-T13b | Guardian as a real side-scroll fight | you + Claude (gameplay-programmer, ai-programmer) | 2 | T13a | As T13a; `…/guardian.png` |
 | Y1-P0-T13c | Boar as a real side-scroll fight | you + Claude (gameplay-programmer, ai-programmer) | 2 | T13a | As T13a; `…/boar.png` |
-| Y1-P0-T14b | Playthrough bot: Ch1 fight legs + CI step | you + Claude (qa-tester, devops-engineer) | 1 | T13a–c, T14a | `tests/integration/playthrough/full_playthrough_test.gd` passes New Game → credits headless in CI |
+| Y1-P0-T14b | Playthrough bot: Ch1 fight legs + CI step | you + Claude (qa-tester, devops-engineer) | 1 | T13a–c, T14a, TD-010 | `tests/integration/playthrough/full_playthrough_test.gd` passes New Game → credits headless in CI |
+| Y1-P0-TD-004 | Runtime check for the Chapter 3 flash call sites (register TD-004) | you + Claude (qa-tester, ui-programmer) | 1 | T08 (done) | The Chapter 3 scenes' own flash lines (archive x5, wastes, Ironhold departure) run in a headless scene check (`screen_flash_test.gd` or a sibling suite); watched failing with one flash call removed; `suite_limits.txt` updated. Re-estimate if the scenes do not load headless without story-state setup (check in the first hour) |
+| Y1-P0-TD-010 | Permanent self-test for the test runners (register TD-010) | you + Claude (devops-engineer, qa-tester) | 2 | T02, TD-007, TD-009 (done); **closes before T14b** (both edit `ci.yml`) | A stub-`GODOT` self-test (no engine) runs locally and in CI on Linux and covers 124 over 137, the elapsed rule, last result line wins, no result line, an unregistered suite and the TD-009 cases (missing exe -> exit 1, `$null` init, NUL-byte stub on Linux); `suite_limits.txt` header documents the result-line format; probe sources kept in `production/qa/evidence/`; watched failing. Cut line if 2 days run out: the stale-`min_checks` flag and the `suite_limits.txt` header documentation go to the backlog |
 | Y1-P0-T15 | Phase 0 exit: a human plays New Game to the credits | **you play** + Claude (qa-lead) | 3 | T14b, S08, every other Must Have except S16 | Playthrough on an **exported Windows build** (`tools/export_windows.ps1`); `production/qa/playtest-2026-11-phase0.md` with 0 open softlocks; smoke-check + gate-check reports |
 | Y1-P0-S16 | Review Phase 0 and plan the spine | you + Claude (producer) | 1 | T15 | `production/milestones/y1-p0-review.md`; retro; P1 goal drafted |
 
-Must Have total: 58 block-days (T01 + S01 done/in progress today). T14 grew 3 → 4 days (T14a 3 + T14b 1),
+Must Have total: 63 block-days (58 at planning; +2 S02 decision 3; +3 TD-004 and TD-010; T01 + S01 done/in progress
+today). T14 grew 3 → 4 days (T14a 3 + T14b 1),
 per the producer's finding that Ch4–10 cannot be scripted in the original blocks.
 
 ### Should Have
@@ -76,7 +82,7 @@ per the producer's finding that Ch4–10 cannot be scripted in the original bloc
 
 Should Have total: 6 block-days.
 
-### Nice to Have (candidates for the 11 free buffer days, in this order — start only if no slip is pending)
+### Nice to Have (candidates for the 6 free buffer days, in this order — start only if no slip is pending)
 | ID | Task | Agent/Owner | Est. Days | Dependencies | Acceptance Criteria |
 |----|------|-------------|-----------|-------------|-------------------|
 | Y1-P0-S09 | Write side arc 04, Iron Owes (quests 19–24) | you + Claude (writer, narrative-director) | 5 | S06 | `story/outlines/side_arc_04_iron_owes.md`; `dialogue/side/iron_owes.dlg` passes dialogue_test; user-approved |
@@ -84,7 +90,7 @@ Should Have total: 6 block-days.
 | Y1-P0-S12 | Lay the groundwork for the art bible | you + Claude (art-director) | 2 | — | `design/art/art-bible.md` draft sections |
 | Y1-P0-S15 | Inventory the audio Act 1 uses today | you + Claude (audio-director) | 1 | — | `design/audio/act1_audio_inventory.md` with source/licence column |
 
-Candidates total 12 block-days for 11 free days, so at least one will not fit. Unstarted items move to
+Candidates total 12 block-days for 6 free days, so at least two will not fit. Unstarted items move to
 Phase 1 by name at S16.
 
 **Deferred to Phase 1 (out of this sprint):** Y1-P0-S13 First PAE test sprites: Kaelen (3 d);
@@ -94,6 +100,8 @@ Y1-P0-S14 Animation clip list (2 d) — their slots became the softlock-fix rese
 The daily files `production/plan/2026/2026-10.md` and `2026-11.md` predate this sprint. Where they
 disagree, this sprint plan wins until the plan is re-generated:
 - **Day 0007 (Sun 25 Oct):** add a 15-minute velocity check: actual time vs estimate for T01, T02, S02, S03; re-plan if T02 or S02 overran.
+  Also restate the primary-stream load as remaining Block A task-days against the 31 Block A slots left from Mon 26 Oct
+  (the "38 on 37" figure in Risks predates the sprint's progress; added 2026-10-24).
 - **T14a** runs straight after T12, **before** T13; **T13a–c** follow; **T14b** after T13c.
 - **Day 0035 (Sun 22 Nov):** the weekly integration becomes a **human pass through Chapters 4–10** (any difficulty).
 - **Former S13/S14 slots (late-November Block B):** softlock-fix reserve.
@@ -104,6 +112,14 @@ disagree, this sprint plan wins until the plan is re-generated:
 - **T03 decided 2026-10-18** (`production/decisions/2026-10-audit-decisions.md`): all seven items took the
   recommended option. Decision 3 (rewrite the whole shatter scene) adds ~2 d to S02, taken from the buffer:
   the 11 free buffer days become 9 (the 5-day softlock-fix reserve is untouched).
+- **TD-004 and TD-010 added 2026-10-24** (`/scope-check` found them: due "before T15" in
+  `docs/tech-debt-register.md`, absent from this plan). Both are Must Haves, run in Block B (secondary stream) so the
+  primary-stream risk below is unchanged, and T15 waits for them (it already waits for every other Must Have).
+  They take 3 block-days from the free buffer, 9 → 6 free days; the 5-day softlock reserve is untouched. Target:
+  both done by ~Day 0021 (Sun 8 Nov) without pushing out S05's publishing days (27–29 Oct) or S06. Looking
+  forward, 41 Must + 6 Should block-days remain against 67 (31 A + 36 B from Mon 26 Oct), ~20 spare. The
+  Capacity header (64 / 16 / 11) had not been updated for the S02 growth and is restated from the task tables.
+  The QA plan (2026-10-18) does not cover them; their acceptance criteria are in the table and the register.
 
 ## User-decision days (must not be skipped)
 | Day | Date | Task | Decision |
