@@ -2,7 +2,7 @@
 
 - **Story:** `production/epics/y1-p0-stabilize/story-t09-unused-autoloads.md`
 - **Code:** `fix/phase0-playthrough-blockers` at `6f84335` plus the uncommitted T09 change (the commit hash is added
-  to the CHANGELOG entry and the story's Completion Notes at commit / close time). Windows 11, Godot
+  to the story's Completion Notes at close time). Committed as `3738ab7`; CI run 40066007868 on it is green. Windows 11, Godot
   4.6.3.stable console (`Godot_v4.6.3-stable_win64_console.exe`), Windows PowerShell 5.1.
 
 | Acceptance item | Result | Evidence |
@@ -11,7 +11,7 @@
 | AC-2 four files deleted, no reference left, gameplay scripts unchanged | Pass: `--name-status` shows the 4 deletions and no `.tscn`; path and uid greps empty; scoped diff of `player_topdown.gd`, the opening hook and `scenes/` empty (added in /code-review at the end of the log) | `static_checks.log` |
 | AC-3 load_all 206 → 204 | Pass: 206 before; 204 after, which the old minimum rejects (`RUNNER FAIL ... 204 check(s) ran, expected at least 206`); exit 0 with min 204 | `load_all_before.log`, `load_all_after_old_min.log`, `load_all_after.log` |
 | AC-4 boot scan reaches the menu, no new errors, negative control | Pass: before and after both load `res://scenes/main_menu.tscn` (with `--verbose --fixed-fps 60 --quit-after 300`); the two removed scripts load before, not after; 0 error lines either side; the forbidden pattern matches the negative control (`Failed to instantiate an autoload, can't load from path: res://scripts/object_pool.gd.`) and not the after-boot | `boot_before.log`, `boot_after.log`, `boot_compare.log`, `boot_negative_control*.log` |
-| AC-5 CI boot guard | Pass locally: the new grep matches both negative-control logs and neither after-boot log; the old grep (`SCRIPT ERROR\|Parse Error`) matched neither negative control; `ci.yml` parses. The first CI run after the push is still to be recorded | `ci_grep_check.log`, `ci_yaml_parse.log` |
+| AC-5 CI boot guard | Pass locally: the new grep matches both negative-control logs and neither after-boot log; the old grep (`SCRIPT ERROR\|Parse Error`) matched neither negative control; `ci.yml` parses. First CI run after the push: [40066007868](https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/40066007868) on `3738ab7` green — boot check and all 17 test steps passed | `ci_grep_check.log`, `ci_yaml_parse.log` |
 | AC-6 main menu, live renderer, before and after | Pass: both captures live (forward_plus); pixel-identical, as expected (the tour loads the menu directly and neither autoload drew anything) | `main_menu_before.png`, `main_menu_after.png`, `report_*.md`, `capture_*.md`, `pixel_diff.log` |
 | AC-7 full suite | Pass: 17/17, `All suites passed.`, 1133 s; counts equal `2026-10-ngplus/td002_run_all.log` except `LOADALL ok=204` (chapter1 `CH1 RESULT: 391 passed, 0 failed`, chapter2 `CH2 RESULT: 49 passed, 0 failed`) | `run_all.log` |
 

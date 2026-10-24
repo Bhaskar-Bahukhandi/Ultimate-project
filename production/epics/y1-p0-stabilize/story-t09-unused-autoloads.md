@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-T09 (`production/plan/_source/Y1-P0.json#Y1-P0-T09`)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Foundation
 > **Type**: Integration
 > **Estimate**: 1 day
@@ -88,20 +88,20 @@ their `.uid` files (deleted), `tests/suite_limits.txt`, a comment in `tests/run_
 
 ## Acceptance Criteria
 
-- [ ] AC-1 **Autoload list.** `AethelgardPrototype/project.godot` `[autoload]` has **30** entries. Whole-file proof:
+- [x] AC-1 **Autoload list.** `AethelgardPrototype/project.godot` `[autoload]` has **30** entries. Whole-file proof:
       `git show HEAD:AethelgardPrototype/project.godot | grep -v -E '^(InteractionPrompt|ObjectPool)='` equals the new
       file byte for byte, and `git diff --numstat -- AethelgardPrototype/project.godot` reads `0 2` (no
       re-serialization, no line-ending or trailing-newline change).
-- [ ] AC-2 **Files gone, no reference left.** `git diff --name-status` for the change lists exactly four deletions
+- [x] AC-2 **Files gone, no reference left.** `git diff --name-status` for the change lists exactly four deletions
       (`scripts/object_pool.gd`, `scripts/object_pool.gd.uid`, `scripts/ui/interaction_prompt.gd`,
       `scripts/ui/interaction_prompt.gd.uid`) and no `.tscn`. Afterwards `git grep -n -i
       "object_pool\|ObjectPool\.\|/root/ObjectPool\|/root/InteractionPrompt\|interaction_prompt\.gd"` over
       `AethelgardPrototype/scripts`, `scenes`, `tests` and `project.godot` finds nothing, and
       `git grep -n -E 'b7a3nmdsg1ha0|cdjingjpdm244' -- ':!production/'` finds nothing. The player's own
       `"InteractionPrompt"` Label code (`player_topdown.gd`, `ch1_opening_crash_site_hook.gd`) is unchanged.
-- [ ] AC-3 **load_all.** `load_all_test` prints exactly `LOADALL ok=204 bad=0` (read from the log after the deletion);
+- [x] AC-3 **load_all.** `load_all_test` prints exactly `LOADALL ok=204 bad=0` (read from the log after the deletion);
       `tests/suite_limits.txt` sets its `min_checks` to 204 and the `run_tests.sh` comment says 204.
-- [ ] AC-4 **Boot scan.** `Godot --version` reports 4.6.3. Before the change and after it, the project's main scene
+- [x] AC-4 **Boot scan.** `Godot --version` reports 4.6.3. Before the change and after it, the project's main scene
       is booted headless with the console executable, `--fixed-fps 60 --quit-after 300` (5 s of game time, past the
       3 s splash), `--verbose`, and `APPDATA` pointed at a fresh `aeth_phase0_test_*` dir; both logs are kept.
       - **Menu reached**: the after-log shows `res://scenes/main_menu.tscn` being loaded (a `--verbose` resource-load
@@ -114,17 +114,17 @@ their `.uid` files (deleted), `tests/suite_limits.txt`, a comment in `tests/run_
         but delete `object_pool.gd`; the same scan must print an error naming the missing autoload script, and that
         observed string is recorded in the evidence.
       - Shutdown warnings (`ObjectDB instances leaked`, `resources still in use at exit`) are not failures here.
-- [ ] AC-5 **CI boot guard.** The CI step "Boot check (fails on any script error)" runs
+- [x] AC-5 **CI boot guard.** The CI step "Boot check (fails on any script error)" runs
       `--headless --fixed-fps 60 --quit-after 300` and fails on `SCRIPT ERROR|Parse Error` **or** the AC-4
       negative-control string; its step name stays double-quoted if it contains `: `; `ci.yml` still parses. Running
       the step's grep over the AC-4 negative-control log matches (it would fail the build), and over the after-log it
       does not. The first CI run after the push is recorded when it happens.
-- [ ] AC-6 **Main menu.** A live-renderer capture of the main menu after the 30 autoloads boot
+- [x] AC-6 **Main menu.** A live-renderer capture of the main menu after the 30 autoloads boot
       (`tests/run_screenshots.ps1 -Only main_menu -Evidence autoloads`), retained in
       `production/qa/evidence/2026-10-autoloads/`, with a capture taken the same way **before** the change for
       comparison; the evidence note says both are live-renderer captures that load `main_menu.tscn` directly (the
       splash → menu path is AC-4).
-- [ ] AC-7 **Suites.** Both route suites pass (`chapter1_route_test.gd`, which checks the player's own prompt Label,
+- [x] AC-7 **Suites.** Both route suites pass (`chapter1_route_test.gd`, which checks the player's own prompt Label,
       and `chapter2_route_test.gd`), and the full suite passes (`run_all_tests.ps1`, all 17, no `-Quick`) with every
       other suite's count equal to the last full run (`production/qa/evidence/2026-10-ngplus/td002_run_all.log`);
       `git diff --check` is clean; a new dated CHANGELOG entry records the removal (the 2026-10-06 line stays as
@@ -189,7 +189,7 @@ and after boot-scan logs, the negative-control log with its error string, the CI
 main-menu captures, the full-suite log and the `project.godot` diff. No new test file (see Implementation Notes).
 **Run result**: required: the main menu after boot (AC-6).
 
-**Status**: [ ] Not yet created
+**Status**: [x] Created — production/qa/evidence/2026-10-autoloads/ (README.md maps every AC to its log)
 
 ---
 
@@ -198,3 +198,29 @@ main-menu captures, the full-suite log and the `project.godot` diff. No new test
 - Depends on: Y1-P0-T02 (done: the tests and `load_all` layout). TD-007 (done: the `suite_limits.txt` minimum that
   must change with the file count).
 - Unlocks: nothing directly; fewer autoloads before Y1-P0-T15, and a CI boot check that reaches the menu.
+
+---
+
+## Completion Notes
+**Completed**: 2026-10-24
+**Criteria**: 7/7 passing. AC-5's CI half: the first CI run with the widened boot step, [40066007868](https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/40066007868) on
+`3738ab7` (ubuntu-latest), is green — "Boot check (fails on any script error)" passed (no false red from the broader
+`Failed loading resource` pattern on Linux) and all 17 test steps passed, including load_all with its 204 minimum and
+both route suites (chapter 1 534 s, chapter 2 147 s). Step logs need a GitHub sign-in and were not read; the verdict
+rests on step conclusions.
+**Deviations** (advisory):
+- NOT ASSESSED: GDD / ADR / TR-registry traceability (none exist for this cleanup).
+- The file list gained the `tests/run_phase0_tests.ps1` comment (it also quoted the load_all count; added in /code-review).
+**Test Evidence**: Integration — no new test file by design; `production/qa/evidence/2026-10-autoloads/`: load_all
+206 → 204 with the old minimum shown rejecting 204; verbose boot scans before/after reaching `main_menu.tscn` with no
+errors; negative control (`ERROR: Failed to instantiate an autoload, can't load from path: res://scripts/object_pool.gd.`)
+caught by the new CI grep and AC-4's pattern, missed by the old CI grep; live main-menu captures pixel-identical;
+full suite 17/17 (`run_all.log`).
+**Code Review**: Complete — /code-review (godot-specialist + qa-tester) APPROVED WITH SUGGESTIONS, all five applied;
+LP-CODE-REVIEW APPROVE (condition: CI green before merge to main — met); QL-TEST-COVERAGE GAPS (its blocking item,
+the CI run, now recorded green).
+**Notes**: AC-6 is identical by construction (the tour loads the menu directly); the CI boot log is not verbose, so
+reaching the menu in CI is inferred from 300 frames at a fixed 1/60 s; plan months that mention `object_pool.gd`
+(2026-12, 2027-03, 2028+) point at a removed file — restore it from `6f84335` (its last commit) if pooling is wanted.
+**Follow-up**: TD-011 — the CI boot step's grep runs after `| tee` without `pipefail`, so a crash that prints none of
+the patterns still passes (pre-existing).
