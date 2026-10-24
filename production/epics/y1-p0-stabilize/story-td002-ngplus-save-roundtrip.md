@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: TD-002 (`docs/tech-debt-register.md#TD-002`; follow-up of Y1-P0-T07, due before Y1-P0-T15)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Feature
 > **Type**: Integration
 > **Estimate**: 0.5 day (register effort: S)
@@ -80,13 +80,13 @@ buffed `player_stats` both surviving a save and a load. Nothing tests that today
 
 ## Acceptance Criteria
 
-- [ ] AC-1 **The save is a current v1.2 save on the load_save_data path.** For each route, `save_game(1)` returns
+- [x] AC-1 **The save is a current v1.2 save on the load_save_data path.** For each route, `save_game(1)` returns
       true; the written JSON has `version == "1.2.0"`, `current_scene ==` the dummy path, and a non-empty
       `choice_consequences.active_buffs` whose buff ids, in order, equal `ChoiceConsequences.active_buffs` before
       the save (6 buffs for kill and for spare). Before the save the test adds a marker key
       (`"td002_marker": true`) to the first buff dictionary; after the load that buff still carries it, which only
       `load_save_data()` can produce (`rebuild_from_flags()` builds fresh copies).
-- [ ] AC-2 **Load restores both halves.** Before the save, `get_total_stat_mods()` equals literal totals for the
+- [x] AC-2 **Load restores both halves.** Before the save, `get_total_stat_mods()` equals literal totals for the
       route (same key set; values `is_equal_approx`), written as constants from the `CHOICE_BUFFS` table, never
       computed by the code under test. After the save the test resets the run (`_reset_all()`) and asserts the
       reset took (`active_buffs` empty; base_attack/base_defense/max_hp == baseline 15/0/100, compared field by
@@ -95,28 +95,28 @@ buffed `player_stats` both surviving a save and a load. Nothing tests that today
       the save; `base_attack`, `base_defense`, `max_hp`, `attack`, `defense`, `hp`, `mp`, `max_mp` and `level` equal
       their pre-save values by scalar `==`, field by field. One route saves with `ng_plus_cycle = 2`: it is 0 after
       the reset and 2 after the load.
-- [ ] AC-3 **NG+ after the load does not stack.** `start_new_game_plus()` called straight after the load gives
+- [x] AC-3 **NG+ after the load does not stack.** `start_new_game_plus()` called straight after the load gives
       base_attack/base_defense/max_hp == 15/0/100 on the kill and the spare route; `active_buffs` is empty;
       `ng_plus_cycle` is 1 (3 on the route that saved with 2); `hp == max_hp`, `mp == max_mp`; and base_attack,
       base_defense, max_hp, attack, defense, hp, max_mp and level are `TYPE_INT`. (That they were floats after the
       load is printed as a note, not asserted.) A second `start_new_game_plus()` right after changes nothing but the
       cycle.
-- [ ] AC-4 **Same result as without a save, anchored by literals.** For kill, spare and a levelled kill run, the NG+
+- [x] AC-4 **Same result as without a save, anchored by literals.** For kill, spare and a levelled kill run, the NG+
       stats after save → load equal the NG+ stats of the same run done in memory with no save (base_attack,
       base_defense, max_hp, attack, defense, hp, max_mp, level), **and** the in-memory P trio is the literal
       15/0/100 for kill and spare (the anchor that fails on pre-fix code; the comparison alone only catches a
       load-specific divergence such as dropped buffs). The levelled kill run also equals a no-buff control that
       earned the same XP and went through the same save → load.
-- [ ] AC-5a **No scene change.** Preconditions: `not ResourceLoader.exists(DUMMY)`,
+- [x] AC-5a **No scene change.** Preconditions: `not ResourceLoader.exists(DUMMY)`,
       `get_free_travel_region_id_for_scene(DUMMY)` is empty, `SceneTransitions.is_transitioning == false` before
       each load. After each load `current_scene` is null and the saved JSON's `current_scene` is DUMMY.
-- [ ] AC-5b **No leftovers.** After each case the test removes `save_slot_1.save` and its `.bak`, `.bak.tmp`, `.tmp`
+- [x] AC-5b **No leftovers.** After each case the test removes `save_slot_1.save` and its `.bak`, `.bak.tmp`, `.tmp`
       and `.corrupted` siblings. After the suite, the `user://` listing minus the pre-suite listing is empty or
       exactly `{achievements.save}` (written by `Achievements.load_save_data()`; the test removes it if it did not
       exist before the suite), and no `save_slot_1.save*` file remains.
-- [ ] AC-5c **No production change.** `git diff --stat -- AethelgardPrototype/scripts AethelgardPrototype/scenes` is
+- [x] AC-5c **No production change.** `git diff --stat -- AethelgardPrototype/scripts AethelgardPrototype/scenes` is
       empty for the story's changes.
-- [ ] AC-6 `tests/unit/ngplus/ngplus_save_roundtrip_test.gd` exists with its `.uid`, passes, prints a final
+- [x] AC-6 `tests/unit/ngplus/ngplus_save_roundtrip_test.gd` exists with its `.uid`, passes, prints a final
       `NGPLUS ROUNDTRIP RESULT: N passed, F failed` line (uppercase, no underscore), and has a fixed number of
       checks (no `_check` inside a data-dependent branch). It is registered in all three places:
       `AethelgardPrototype/tests/suite_limits.txt` (`min_checks` = its final check count, `timeout_seconds` ≥ 120),
@@ -223,7 +223,7 @@ case asserts a precondition that differs from its expected result.*
 log in `production/qa/evidence/2026-10-ngplus/`.
 **Run result**: N/A — test-only story with nothing player-observable; Y1-P0-T15 observes NG+ on a real build.
 
-**Status**: [ ] Not yet created
+**Status**: [x] Created — tests/unit/ngplus/ngplus_save_roundtrip_test.gd (129 checks); production/qa/evidence/2026-10-ngplus/td002_*.log
 
 ---
 
@@ -231,3 +231,32 @@ log in `production/qa/evidence/2026-10-ngplus/`.
 
 - Depends on: Y1-P0-T07 (done, `fc5a282`); TD-007 (done, `249cba4`: the `suite_limits.txt` registration rule).
 - Unlocks: Y1-P0-T15 (QA-lead: TD-002 before the Phase 0 exit playthrough).
+
+---
+
+## Completion Notes
+**Completed**: 2026-10-24
+**Criteria**: 8/8 passing (AC-1, AC-2, AC-3, AC-4, AC-5a, AC-5b, AC-5c, AC-6).
+**Deviations** (advisory):
+- NOT ASSESSED: GDD / ADR / TR-registry traceability (none exist for NG+ or saves); judged against decision 6A and the
+  T07 story.
+**Test Evidence**: Integration — `AethelgardPrototype/tests/unit/ngplus/ngplus_save_roundtrip_test.gd`, 129 checks,
+fixed count, registered in `tests/suite_limits.txt` (129 / 120 s), `tests/run_all_tests.ps1` and `ci.yml`. Logs in
+`production/qa/evidence/2026-10-ngplus/`:
+- `td002_roundtrip_unfixed.log`: pre-fix tree `fc5a282~1` through that tree's own runner, 121 passed / 8 failed (the NG+
+  trios of R1, R2, R7, R8, R9, R3 against the control, both R4 literal anchors); every round-trip check passes.
+- `td002_mutant_m1.log`: HEAD with `load_game()` forced onto `rebuild_from_flags()` (scratch worktree), 121 / 8 —
+  exactly the eight marker checks fail, so the load-path half is watched failing too.
+- `td002_roundtrip_fixed.log` 129/0; `td002_run_all.log` 17/17, 1128 s, 0 SCRIPT ERROR / RUNNER FAIL;
+  `td002_static_checks.log` (AC-5c: empty diff and status for `scripts/` and `scenes/`, `git diff --check` clean).
+**Code Review**: Complete — /code-review (godot-gdscript-specialist + qa-tester) APPROVED WITH SUGGESTIONS, all five
+applied (temp-leftover check before cleanup, dummy-path precondition at startup, SceneTransitions must exist, check
+count comment, static-checks log; pre-fix re-run through the old tree's runner); LP-CODE-REVIEW APPROVE;
+QL-TEST-COVERAGE ADEQUATE (its marker gap closed by mutant M1).
+**Notes** (advisory, no new tech-debt item): `hp == max_hp` and the all-int checks after NG+ cannot fail while
+`start_new_game_plus()` uses typed locals (tripwires, not evidence); LoreJournal is not reset between round trips, so
+after the first NG+ later saves carry lore and take the lore-restore branch (no asserted value depends on it);
+floats after a load are printed as a NOTE by design; `min_checks` 129 is the exact count (a later added check needs the
+line bumped); helpers are copied from the T07 test (extract a shared helper if a third NG+ suite appears). The empty /
+partial `choice_consequences` path stays TD-001; a runner self-test stays TD-010.
+**Sprint status**: not updated — TD-002 has no entry in `production/sprint-status.yaml` (tech-debt item).

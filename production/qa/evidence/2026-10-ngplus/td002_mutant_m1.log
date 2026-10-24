@@ -1,0 +1,414 @@
+--- TD-002 mutant M1: scratch worktree at HEAD 1d43b1d, game_manager.gd ~1684 'ChoiceConsequences.load_save_data(saved_cc)' replaced by 'ChoiceConsequences.rebuild_from_flags()' (load always takes the rebuild path); run through that tree's tests/run_phase0_tests.ps1
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CHOICE-FX] Applied buff: elara_bond_wary — Cautious Alliance: +3 ATK. Elara reveals enemy HP bars and weaknesses.
+[CHOICE-FX] Applied buff: hardened_heart — Hardened Heart: +6 ATK, +15% Soul gain. Spells deal 20% more damage.
+[CHOICE-FX] Applied buff: wraith_power — Wraith Absorption: +10 ATK, -15 Max HP. Dash phases through enemies dealing damage.
+[CHOICE-FX] Applied buff: ranger_ally — Lyra's Bow: +3 ATK. Lyra fires ranged support shots in combat (15 dmg every 5s).
+[CHOICE-FX] Applied buff: battle_tested — Battle-Tested: +6 ATK, +10 Max HP. Root Access attacks deal 25% more damage to bosses.
+[SAVE] Slot 1 saved successfully (v1.2.0)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Rebuilt 6 buffs and 2 party members from flags
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  NOTE: after the load base_attack is typeof 3 (TYPE_INT=2, TYPE_FLOAT=3), level typeof 3
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[ACHIEVEMENT] Unlocked: Lore Seeker — Discover your first optional lore entry.
+[NG+] Started cycle 1 — Level 1, 0 gold, 0 charms, 1 items
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 2 — Level 1, 0 gold, 0 charms, 1 items
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CHOICE-FX] Applied buff: ironhold_defender — Ironhold Defender: +8 DEF. Seraphina sends supply drops (+2 potions per chapter).
+[CHOICE-FX] Applied buff: wraith_gratitude — Wraith's Gratitude: +5 DEF, +10 Max HP. Spectral ally occasionally blocks attacks.
+[CHOICE-FX] Applied buff: storm_navigator — Storm Navigator: +5 DEF. 30% reduced environmental damage. Storm map reveals hidden paths.
+[CHOICE-FX] Applied buff: independent_mind — Independent Mind: +5 DEF, +3 ATK. Immune to confusion/charm effects.
+[SAVE] Slot 1 saved successfully (v1.2.0)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Rebuilt 6 buffs and 1 party members from flags
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  NOTE: after the load base_attack is typeof 3 (TYPE_INT=2, TYPE_FLOAT=3), level typeof 3
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 3 — Level 1, 0 gold, 0 charms, 1 items
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 4 — Level 1, 0 gold, 0 charms, 1 items
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 3 popup: +23 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 4 popup: +23 HP, +11 MP, +3 ATK
+[SAVE] Slot 1 saved successfully (v1.2.0)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Rebuilt 0 buffs and 0 party members from flags
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  NOTE: after the load base_attack is typeof 3 (TYPE_INT=2, TYPE_FLOAT=3), level typeof 3
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 4, 0 gold, 0 charms, 1 items
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 2 — Level 4, 0 gold, 0 charms, 1 items
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 3 popup: +23 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 4 popup: +23 HP, +11 MP, +3 ATK
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CHOICE-FX] Applied buff: elara_bond_wary — Cautious Alliance: +3 ATK. Elara reveals enemy HP bars and weaknesses.
+[CHOICE-FX] Applied buff: hardened_heart — Hardened Heart: +6 ATK, +15% Soul gain. Spells deal 20% more damage.
+[CHOICE-FX] Applied buff: wraith_power — Wraith Absorption: +10 ATK, -15 Max HP. Dash phases through enemies dealing damage.
+[CHOICE-FX] Applied buff: ranger_ally — Lyra's Bow: +3 ATK. Lyra fires ranged support shots in combat (15 dmg every 5s).
+[CHOICE-FX] Applied buff: battle_tested — Battle-Tested: +6 ATK, +10 Max HP. Root Access attacks deal 25% more damage to bosses.
+[SAVE] Slot 1 saved successfully (v1.2.0)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Rebuilt 6 buffs and 2 party members from flags
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  NOTE: after the load base_attack is typeof 3 (TYPE_INT=2, TYPE_FLOAT=3), level typeof 3
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 4, 0 gold, 0 charms, 1 items
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 2 — Level 4, 0 gold, 0 charms, 1 items
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: root_mastery — Root Mastery: -10 Max HP (corruption cost), but Root Access hacks cost 30% less corruption.
+[SAVE] Slot 1 saved successfully (v1.2.0)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Rebuilt 1 buffs and 0 party members from flags
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  NOTE: after the load base_attack is typeof 3 (TYPE_INT=2, TYPE_FLOAT=3), level typeof 3
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 1, 0 gold, 0 charms, 1 items
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 2 — Level 1, 0 gold, 0 charms, 1 items
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+WARNING: [STORY] Clearing mutually exclusive flag 'ch1_knight_killed' (new: 'ch1_knight_spared')
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] set_story_flag (res://scripts/game_manager.gd:715)
+       [1] _set_flags (res://tests/unit/ngplus/ngplus_save_roundtrip_test.gd:151)
+       [2] _roundtrip (res://tests/unit/ngplus/ngplus_save_roundtrip_test.gd:291)
+       [3] _run (res://tests/unit/ngplus/ngplus_save_roundtrip_test.gd:100)
+[CHOICE-FX] Removed buff: executioner_edge (flag ch1_knight_killed cleared)
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[SAVE] Slot 1 saved successfully (v1.2.0)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Rebuilt 1 buffs and 0 party members from flags
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  NOTE: after the load base_attack is typeof 3 (TYPE_INT=2, TYPE_FLOAT=3), level typeof 3
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 1, 0 gold, 0 charms, 1 items
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 2 — Level 1, 0 gold, 0 charms, 1 items
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CHOICE-FX] Applied buff: elara_bond_wary — Cautious Alliance: +3 ATK. Elara reveals enemy HP bars and weaknesses.
+[CHOICE-FX] Applied buff: hardened_heart — Hardened Heart: +6 ATK, +15% Soul gain. Spells deal 20% more damage.
+[CHOICE-FX] Applied buff: wraith_power — Wraith Absorption: +10 ATK, -15 Max HP. Dash phases through enemies dealing damage.
+[CHOICE-FX] Applied buff: ranger_ally — Lyra's Bow: +3 ATK. Lyra fires ranged support shots in combat (15 dmg every 5s).
+[CHOICE-FX] Applied buff: battle_tested — Battle-Tested: +6 ATK, +10 Max HP. Root Access attacks deal 25% more damage to bosses.
+[SAVE] Slot 1 saved successfully (v1.2.0)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Rebuilt 6 buffs and 2 party members from flags
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+[SAVE] Slot 1 saved successfully (v1.2.0)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Rebuilt 6 buffs and 2 party members from flags
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  NOTE: after the load base_attack is typeof 3 (TYPE_INT=2, TYPE_FLOAT=3), level typeof 3
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 1, 0 gold, 0 charms, 1 items
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 2 — Level 1, 0 gold, 0 charms, 1 items
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+-- R1 kill route, hurt before the save, two NG+
+  PASS: R1: E base_attack/base_defense/max_hp is the literal [51, 0, 95], not B (got [51, 0, 95])
+  PASS: R1: totals before the save equal the CHOICE_BUFFS literals { "attack": 36.0, "max_hp": -5.0, "soul_gain_bonus": 0.35 } (got { "attack": 36.0, "soul_gain_bonus": 0.35, "max_hp": -5.0 })
+  PASS: R1: buff ids before the save are ["executioner_edge", "elara_bond_wary", "hardened_heart", "wraith_power", "ranger_ally", "battle_tested"] (got ["executioner_edge", "elara_bond_wary", "hardened_heart", "wraith_power", "ranger_ally", "battle_tested"])
+  PASS: R1: save_game(1) returned true
+  PASS: R1: saved JSON is version 1.2.0 with current_scene the dummy (got 1.2.0, res://tests/unit/ngplus/__td002_no_such_scene.tscn)
+  PASS: R1: saved choice_consequences is non-empty and its buff ids equal the pre-save ids (got ["executioner_edge", "elara_bond_wary", "hardened_heart", "wraith_power", "ranger_ally", "battle_tested"])
+  PASS: R1: the marker is on buff 0 in the saved JSON
+  PASS: R1: after the reset base trio is 15/0/100, no buffs, cycle 0 (got [15, 0, 100], cycle 0)
+  PASS: R1: await load_game(1) returned true
+  PASS: R1: the nine stats after the load equal the pre-save values []
+  PASS: R1: buff ids after the load equal the pre-save ids (got ["executioner_edge", "elara_bond_wary", "hardened_heart", "wraith_power", "ranger_ally", "battle_tested"])
+  PASS: R1: totals after the load have the same keys and values as before the save (got { "attack": 36.0, "soul_gain_bonus": 0.35, "max_hp": -5.0 })
+  FAIL: R1: the marker survived the load on buff 0 (load_save_data path, not rebuild_from_flags)
+  PASS: R1: ng_plus_cycle is 0 after the load (got 0)
+  PASS: R1: NG+ after the load gives base_attack/base_defense/max_hp 15/0/100 (got [15, 0, 100])
+  PASS: R1: NG+ empties active_buffs and sets ng_plus_cycle 1 (got 1)
+  PASS: R1: NG+ hp == max_hp and mp == max_mp (got 100/100, 50/50)
+  PASS: R1: the eight NG+ stats are TYPE_INT
+  PASS: R1: a second NG+ changes only the cycle (to 2) []
+  PASS: R1 precondition: hp 40 and mp 20 (below max) before the save, and the reset puts hp elsewhere
+  PASS: R1: hp 40 and mp 20 survive the load (got 40.0, 20.0)
+-- R2 spare route, ng_plus_cycle 2
+  PASS: R2: E base_attack/base_defense/max_hp is the literal [18, 31, 135], not B (got [18, 31, 135])
+  PASS: R2: totals before the save equal the CHOICE_BUFFS literals { "attack": 3.0, "defense": 31.0, "max_hp": 35.0 } (got { "defense": 31.0, "max_hp": 35.0, "attack": 3.0 })
+  PASS: R2: buff ids before the save are ["guardian_blessing", "elara_bond_strong", "ironhold_defender", "wraith_gratitude", "storm_navigator", "independent_mind"] (got ["guardian_blessing", "elara_bond_strong", "ironhold_defender", "wraith_gratitude", "storm_navigator", "independent_mind"])
+  PASS: R2: save_game(1) returned true
+  PASS: R2: saved JSON is version 1.2.0 with current_scene the dummy (got 1.2.0, res://tests/unit/ngplus/__td002_no_such_scene.tscn)
+  PASS: R2: saved choice_consequences is non-empty and its buff ids equal the pre-save ids (got ["guardian_blessing", "elara_bond_strong", "ironhold_defender", "wraith_gratitude", "storm_navigator", "independent_mind"])
+  PASS: R2: the marker is on buff 0 in the saved JSON
+  PASS: R2: after the reset base trio is 15/0/100, no buffs, cycle 0 (got [15, 0, 100], cycle 0)
+  PASS: R2: await load_game(1) returned true
+  PASS: R2: the nine stats after the load equal the pre-save values []
+  PASS: R2: buff ids after the load equal the pre-save ids (got ["guardian_blessing", "elara_bond_strong", "ironhold_defender", "wraith_gratitude", "storm_navigator", "independent_mind"])
+  PASS: R2: totals after the load have the same keys and values as before the save (got { "defense": 31.0, "max_hp": 35.0, "attack": 3.0 })
+  FAIL: R2: the marker survived the load on buff 0 (load_save_data path, not rebuild_from_flags)
+  PASS: R2: ng_plus_cycle is 2 after the load (got 2)
+  PASS: R2: NG+ after the load gives base_attack/base_defense/max_hp 15/0/100 (got [15, 0, 100])
+  PASS: R2: NG+ empties active_buffs and sets ng_plus_cycle 3 (got 3)
+  PASS: R2: NG+ hp == max_hp and mp == max_mp (got 100/100, 50/50)
+  PASS: R2: the eight NG+ stats are TYPE_INT
+  PASS: R2: a second NG+ changes only the cycle (to 4) []
+  PASS: R2: ng_plus_cycle is 0 after the reset, 2 after the load, 3 after NG+ (got 0, 2, 3)
+-- R3 levelled kill run vs a no-buff control, both saved and loaded
+  PASS: R3 precondition: the control levelled up (level >= 3, got 4)
+  PASS: R3 precondition: the control has no buffs and the kill run's E trio differs from it (buffs applied)
+  PASS: R3: both the control and the kill run saved and loaded
+  PASS: R3: kill run level equals the control's before and after NG+ (4, 4)
+  PASS: R3: kill run P level/base_attack/base_defense/max_hp/max_mp equal the control's []
+  PASS: R3: the nine stats survive the load for both runs
+-- R4 save -> load -> NG+ vs NG+ with no save
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CHOICE-FX] Applied buff: elara_bond_wary — Cautious Alliance: +3 ATK. Elara reveals enemy HP bars and weaknesses.
+[CHOICE-FX] Applied buff: hardened_heart — Hardened Heart: +6 ATK, +15% Soul gain. Spells deal 20% more damage.
+[CHOICE-FX] Applied buff: wraith_power — Wraith Absorption: +10 ATK, -15 Max HP. Dash phases through enemies dealing damage.
+[CHOICE-FX] Applied buff: ranger_ally — Lyra's Bow: +3 ATK. Lyra fires ranged support shots in combat (15 dmg every 5s).
+[CHOICE-FX] Applied buff: battle_tested — Battle-Tested: +6 ATK, +10 Max HP. Root Access attacks deal 25% more damage to bosses.
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 1, 0 gold, 0 charms, 1 items
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CHOICE-FX] Applied buff: ironhold_defender — Ironhold Defender: +8 DEF. Seraphina sends supply drops (+2 potions per chapter).
+[CHOICE-FX] Applied buff: wraith_gratitude — Wraith's Gratitude: +5 DEF, +10 Max HP. Spectral ally occasionally blocks attacks.
+[CHOICE-FX] Applied buff: storm_navigator — Storm Navigator: +5 DEF. 30% reduced environmental damage. Storm map reveals hidden paths.
+[CHOICE-FX] Applied buff: independent_mind — Independent Mind: +5 DEF, +3 ATK. Immune to confusion/charm effects.
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 1, 0 gold, 0 charms, 1 items
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 3 popup: +23 HP, +11 MP, +3 ATK
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 4 popup: +23 HP, +11 MP, +3 ATK
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CHOICE-FX] Applied buff: elara_bond_wary — Cautious Alliance: +3 ATK. Elara reveals enemy HP bars and weaknesses.
+[CHOICE-FX] Applied buff: hardened_heart — Hardened Heart: +6 ATK, +15% Soul gain. Spells deal 20% more damage.
+[CHOICE-FX] Applied buff: wraith_power — Wraith Absorption: +10 ATK, -15 Max HP. Dash phases through enemies dealing damage.
+[CHOICE-FX] Applied buff: ranger_ally — Lyra's Bow: +3 ATK. Lyra fires ranged support shots in combat (15 dmg every 5s).
+[CHOICE-FX] Applied buff: battle_tested — Battle-Tested: +6 ATK, +10 Max HP. Root Access attacks deal 25% more damage to bosses.
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[NG+] Started cycle 1 — Level 4, 0 gold, 0 charms, 1 items
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: R4 precondition: the in-memory runs are buffed (kill 51/0/95, spare 18/31/135, levelled level >= 3)
+  PASS: R4 anchor: in-memory kill NG+ trio is the literal 15/0/100 (got [15, 0, 100])
+  PASS: R4 anchor: in-memory spare NG+ trio is the literal 15/0/100 (got [15, 0, 100])
+  PASS: R4 kill: save->load->NG+ equals NG+ with no save on the eight fields []
+  PASS: R4 spare: save->load->NG+ equals NG+ with no save on the eight fields []
+  PASS: R4 levelled kill: save->load->NG+ equals NG+ with no save on the eight fields []
+-- R5 the load_save_data path (not rebuild_from_flags)
+  PASS: R5 kill: saved choice_consequences is non-empty with the pre-save buff ids ["executioner_edge", "elara_bond_wary", "hardened_heart", "wraith_power", "ranger_ally", "battle_tested"]
+  FAIL: R5 kill: the marker on buff 0 is in the save and survives the load
+  PASS: R5 spare: saved choice_consequences is non-empty with the pre-save buff ids ["guardian_blessing", "elara_bond_strong", "ironhold_defender", "wraith_gratitude", "storm_navigator", "independent_mind"]
+  FAIL: R5 spare: the marker on buff 0 is in the save and survives the load
+-- R7 purge only (totals hold only max_hp)
+  PASS: R7: E base_attack/base_defense/max_hp is the literal [15, 0, 90], not B (got [15, 0, 90])
+  PASS: R7: totals before the save equal the CHOICE_BUFFS literals { "max_hp": -10.0 } (got { "max_hp": -10.0 })
+  PASS: R7: buff ids before the save are ["root_mastery"] (got ["root_mastery"])
+  PASS: R7: save_game(1) returned true
+  PASS: R7: saved JSON is version 1.2.0 with current_scene the dummy (got 1.2.0, res://tests/unit/ngplus/__td002_no_such_scene.tscn)
+  PASS: R7: saved choice_consequences is non-empty and its buff ids equal the pre-save ids (got ["root_mastery"])
+  PASS: R7: the marker is on buff 0 in the saved JSON
+  PASS: R7: after the reset base trio is 15/0/100, no buffs, cycle 0 (got [15, 0, 100], cycle 0)
+  PASS: R7: await load_game(1) returned true
+  PASS: R7: the nine stats after the load equal the pre-save values []
+  PASS: R7: buff ids after the load equal the pre-save ids (got ["root_mastery"])
+  PASS: R7: totals after the load have the same keys and values as before the save (got { "max_hp": -10.0 })
+  FAIL: R7: the marker survived the load on buff 0 (load_save_data path, not rebuild_from_flags)
+  PASS: R7: ng_plus_cycle is 0 after the load (got 0)
+  PASS: R7: NG+ after the load gives base_attack/base_defense/max_hp 15/0/100 (got [15, 0, 100])
+  PASS: R7: NG+ empties active_buffs and sets ng_plus_cycle 1 (got 1)
+  PASS: R7: NG+ hp == max_hp and mp == max_mp (got 100/100, 50/50)
+  PASS: R7: the eight NG+ stats are TYPE_INT
+  PASS: R7: a second NG+ changes only the cycle (to 2) []
+  PASS: R7: the totals key set is exactly {max_hp} before and after the load (got { "max_hp": -10.0 }, { "max_hp": -10.0 })
+  PASS: R7: max_hp total is -10.0 before and after the load
+-- R8 knight killed then spared before the save
+  PASS: R8: E base_attack/base_defense/max_hp is the literal [15, 5, 115], not B (got [15, 5, 115])
+  PASS: R8: totals before the save equal the CHOICE_BUFFS literals { "defense": 5.0, "max_hp": 15.0 } (got { "defense": 5.0, "max_hp": 15.0 })
+  PASS: R8: buff ids before the save are ["guardian_blessing"] (got ["guardian_blessing"])
+  PASS: R8: save_game(1) returned true
+  PASS: R8: saved JSON is version 1.2.0 with current_scene the dummy (got 1.2.0, res://tests/unit/ngplus/__td002_no_such_scene.tscn)
+  PASS: R8: saved choice_consequences is non-empty and its buff ids equal the pre-save ids (got ["guardian_blessing"])
+  PASS: R8: the marker is on buff 0 in the saved JSON
+  PASS: R8: after the reset base trio is 15/0/100, no buffs, cycle 0 (got [15, 0, 100], cycle 0)
+  PASS: R8: await load_game(1) returned true
+  PASS: R8: the nine stats after the load equal the pre-save values []
+  PASS: R8: buff ids after the load equal the pre-save ids (got ["guardian_blessing"])
+  PASS: R8: totals after the load have the same keys and values as before the save (got { "defense": 5.0, "max_hp": 15.0 })
+  FAIL: R8: the marker survived the load on buff 0 (load_save_data path, not rebuild_from_flags)
+  PASS: R8: ng_plus_cycle is 0 after the load (got 0)
+  PASS: R8: NG+ after the load gives base_attack/base_defense/max_hp 15/0/100 (got [15, 0, 100])
+  PASS: R8: NG+ empties active_buffs and sets ng_plus_cycle 1 (got 1)
+  PASS: R8: NG+ hp == max_hp and mp == max_mp (got 100/100, 50/50)
+  PASS: R8: the eight NG+ stats are TYPE_INT
+  PASS: R8: a second NG+ changes only the cycle (to 2) []
+  PASS: R8: the save and the loaded run hold only guardian_blessing (got ["guardian_blessing"], ["guardian_blessing"])
+-- R9 second generation: save, reset, load, save again, reset, load, NG+
+  PASS: R9: E base_attack/base_defense/max_hp is the literal [51, 0, 95], not B (got [51, 0, 95])
+  PASS: R9: totals before the save equal the CHOICE_BUFFS literals { "attack": 36.0, "max_hp": -5.0, "soul_gain_bonus": 0.35 } (got { "attack": 36.0, "soul_gain_bonus": 0.35, "max_hp": -5.0 })
+  PASS: R9: buff ids before the save are ["executioner_edge", "elara_bond_wary", "hardened_heart", "wraith_power", "ranger_ally", "battle_tested"] (got ["executioner_edge", "elara_bond_wary", "hardened_heart", "wraith_power", "ranger_ally", "battle_tested"])
+  PASS: R9: save_game(1) returned true
+  PASS: R9: saved JSON is version 1.2.0 with current_scene the dummy (got 1.2.0, res://tests/unit/ngplus/__td002_no_such_scene.tscn)
+  PASS: R9: saved choice_consequences is non-empty and its buff ids equal the pre-save ids (got ["executioner_edge", "elara_bond_wary", "hardened_heart", "wraith_power", "ranger_ally", "battle_tested"])
+  FAIL: R9: the marker is on buff 0 in the saved JSON
+  PASS: R9: after the reset base trio is 15/0/100, no buffs, cycle 0 (got [15, 0, 100], cycle 0)
+  PASS: R9: await load_game(1) returned true
+  PASS: R9: the nine stats after the load equal the pre-save values []
+  PASS: R9: buff ids after the load equal the pre-save ids (got ["executioner_edge", "elara_bond_wary", "hardened_heart", "wraith_power", "ranger_ally", "battle_tested"])
+  PASS: R9: totals after the load have the same keys and values as before the save (got { "attack": 36.0, "soul_gain_bonus": 0.35, "max_hp": -5.0 })
+  FAIL: R9: the marker survived the load on buff 0 (load_save_data path, not rebuild_from_flags)
+  PASS: R9: ng_plus_cycle is 0 after the load (got 0)
+  PASS: R9: NG+ after the load gives base_attack/base_defense/max_hp 15/0/100 (got [15, 0, 100])
+  PASS: R9: NG+ empties active_buffs and sets ng_plus_cycle 1 (got 1)
+  PASS: R9: NG+ hp == max_hp and mp == max_mp (got 100/100, 50/50)
+  PASS: R9: the eight NG+ stats are TYPE_INT
+  PASS: R9: a second NG+ changes only the cycle (to 2) []
+  PASS: R9: the second save backed up the first (a .bak exists after it)
+-- R6 hygiene (AC-5a, AC-5b)
+  PASS: R6 control: the user:// listing detects a new file
+  PASS: R6 control: the listing is stable once the probe file is removed
+  PASS: R6: eight load_game() calls were logged (7 round trips, one with two generations) (got 8)
+  PASS: R6 AC-5a: the dummy scene path does not exist before any load
+  PASS: R6 AC-5a: the dummy path is not a free-travel region path before any load
+  PASS: R6 AC-5a: SceneTransitions exists and is_transitioning was false before every load
+  PASS: R6 AC-5a: every load returned true, left current_scene null, and its saved current_scene was the dummy
+  PASS: R6 AC-5b: no .corrupted, .tmp or .bak.tmp file right after any save or load, before cleanup (got [])
+  PASS: R6 AC-5b: the user:// listing grew by nothing or exactly achievements.save (got ["f:achievements.save"])
+  PASS: R6 AC-5b: after cleanup the user:// listing equals the pre-suite listing (got [])
+  PASS: R6 AC-5b: no save_slot_1.save* file remains (got [])
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+
+NGPLUS ROUNDTRIP RESULT: 121 passed, 8 failed
+  FAIL: R1: the marker survived the load on buff 0 (load_save_data path, not rebuild_from_flags)
+  FAIL: R2: the marker survived the load on buff 0 (load_save_data path, not rebuild_from_flags)
+  FAIL: R5 kill: the marker on buff 0 is in the save and survives the load
+  FAIL: R5 spare: the marker on buff 0 is in the save and survives the load
+  FAIL: R7: the marker survived the load on buff 0 (load_save_data path, not rebuild_from_flags)
+  FAIL: R8: the marker survived the load on buff 0 (load_save_data path, not rebuild_from_flags)
+  FAIL: R9: the marker is on buff 0 in the saved JSON
+  FAIL: R9: the marker survived the load on buff 0 (load_save_data path, not rebuild_from_flags)
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)
+--- runner exit=1
