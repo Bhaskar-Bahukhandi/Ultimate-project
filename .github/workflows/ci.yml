@@ -122,6 +122,10 @@ jobs:
         working-directory: ${{ env.PROJECT_DIR }}
         run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/unit/ngplus/ngplus_buff_stacking_test.gd
 
+      - name: "NG+ save round trip (TD-002: save, load, NG+ without stacking)"
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/unit/ngplus/ngplus_save_roundtrip_test.gd
+
       - name: "fragment_4 achievement (Y1-P0-T08: unlocks at four, earlier unlocks kept)"
         working-directory: ${{ env.PROJECT_DIR }}
         run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/unit/achievements/fragment_achievement_test.gd

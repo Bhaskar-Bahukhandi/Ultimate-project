@@ -1,0 +1,16 @@
+# TD-002 AC-5c / AC-6 static checks, 2026-10-24T08:37:50+05:30, HEAD a0fa03a + uncommitted TD-002 changes
+## git diff --stat -- AethelgardPrototype/scripts AethelgardPrototype/scenes (expected empty)
+## git status --short -- AethelgardPrototype/scripts AethelgardPrototype/scenes (expected empty, covers untracked)
+## git status --short (all TD-002 changes)
+ M .github/workflows/ci.yml
+ M AethelgardPrototype/tests/run_all_tests.ps1
+ M AethelgardPrototype/tests/suite_limits.txt
+ M production/epics/y1-p0-stabilize/story-td002-ngplus-save-roundtrip.md
+?? AethelgardPrototype/tests/unit/ngplus/ngplus_save_roundtrip_test.gd
+?? AethelgardPrototype/tests/unit/ngplus/ngplus_save_roundtrip_test.gd.uid
+?? production/qa/evidence/2026-10-ngplus/td002_roundtrip_fixed.log
+?? production/qa/evidence/2026-10-ngplus/td002_roundtrip_unfixed.log
+?? production/qa/evidence/2026-10-ngplus/td002_run_all.log
+?? production/qa/evidence/2026-10-ngplus/td002_static_checks.log
+## git diff --check (expected empty)
+## end

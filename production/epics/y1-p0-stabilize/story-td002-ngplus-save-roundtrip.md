@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: TD-002 (`docs/tech-debt-register.md#TD-002`; follow-up of Y1-P0-T07, due before Y1-P0-T15)
-> **Status**: Ready
+> **Status**: In Progress
 > **Layer**: Feature
 > **Type**: Integration
 > **Estimate**: 0.5 day (register effort: S)
