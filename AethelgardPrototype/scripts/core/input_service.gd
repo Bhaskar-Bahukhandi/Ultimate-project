@@ -265,16 +265,28 @@ func fmt(text: String) -> String:
 
 
 ## Set `node.property` to fmt(template) now and whenever the device or the
-## bindings change. Freed nodes are dropped automatically.
+## bindings change. Entries for freed nodes are pruned here, in the same pass
+## that looks for a duplicate, and on every refresh. A node that is only
+## queue_free()d stays bound until the end of the frame.
+## Binding the same node and property again only replaces the template.
+## Example: InputService.bind_text(label, "[{interact}] Talk")
 func bind_text(node: Object, template: String, property: StringName = &"text") -> void:
 	if node == null:
 		return
+	var alive: Array = []
+	var existing: Dictionary = {}
 	for entry in _bound_texts:
-		if entry["ref"].get_ref() == node and entry["property"] == property:
-			entry["template"] = template
-			node.set(property, fmt(template))
-			return
-	_bound_texts.append({"ref": weakref(node), "template": template, "property": property})
+		var bound: Object = entry["ref"].get_ref()
+		if bound == null:
+			continue
+		alive.append(entry)
+		if bound == node and entry["property"] == property:
+			existing = entry
+	if existing.is_empty():
+		alive.append({"ref": weakref(node), "template": template, "property": property})
+	else:
+		existing["template"] = template
+	_bound_texts = alive
 	node.set(property, fmt(template))
 
 

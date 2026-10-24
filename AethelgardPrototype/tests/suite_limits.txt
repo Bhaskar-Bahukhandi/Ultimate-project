@@ -25,6 +25,7 @@ res://tests/integration/project/load_all_test.gd          204   120
 res://tests/integration/dialogue/dialogue_test.gd          47   120
 res://tests/integration/core/context_stack_test.gd         33   120
 res://tests/integration/input/input_test.gd                52   120
+res://tests/unit/input/input_bound_texts_prune_test.gd     16   120
 res://tests/unit/quests/side_quest_rewards_test.gd        134   120
 res://tests/unit/ngplus/ngplus_buff_stacking_test.gd      192   120
 res://tests/unit/ngplus/ngplus_save_roundtrip_test.gd     129   120

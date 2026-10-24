@@ -989,9 +989,9 @@ func try_build_animated_player(context: String) -> AnimatedSprite2D:
 			if v2_tex:
 				print("✓ Found combat animation sheet: %s" % combat_sheet_path)
 				return build_animated_sprite_from_sheet(v2_tex, PLAYER_COMBAT_V2_ANIMS, 64, 64)
-			push_warning("[AssetManager] V2 combat player sheet failed to load; using existing player fallback.")
+			_warn_once("[AssetManager] V2 combat player sheet failed to load; using existing player fallback.")
 		else:
-			push_warning("[AssetManager] V2 combat player sheet missing; using existing player fallback.")
+			_warn_once("[AssetManager] V2 combat player sheet missing; using existing player fallback.")
 		sheet_path = "res://assets/sprites/player/player_combat_sheet.png"
 		anim_defs = PLAYER_COMBAT_ANIMS
 		frame_w = 32
@@ -1004,9 +1004,9 @@ func try_build_animated_player(context: String) -> AnimatedSprite2D:
 			if v2_tex:
 				print("✓ Found top-down animation sheet: %s" % topdown_sheet_path)
 				return build_animated_sprite_from_sheet(v2_tex, PLAYER_TOPDOWN_V2_ANIMS, 32, 32)
-			push_warning("[AssetManager] V2 top-down player sheet failed to load; using existing player fallback.")
+			_warn_once("[AssetManager] V2 top-down player sheet failed to load; using existing player fallback.")
 		else:
-			push_warning("[AssetManager] V2 top-down player sheet missing; using existing player fallback.")
+			_warn_once("[AssetManager] V2 top-down player sheet missing; using existing player fallback.")
 		sheet_path = "res://assets/sprites/player/player_topdown_sheet.png"
 		anim_defs = PLAYER_TOPDOWN_ANIMS
 		frame_w = 16
@@ -1029,7 +1029,7 @@ func try_build_animated_tutorial_knight() -> AnimatedSprite2D:
 	var sheet_path: String = sheet_slot.get("path", TUTORIAL_KNIGHT_V2_SHEET)
 	var texture = sheet_slot.get("texture") as Texture2D
 	if not texture:
-		push_warning("[AssetManager] Tutorial Knight sheet failed to load; using existing boss fallback.")
+		_warn_once("[AssetManager] Tutorial Knight sheet failed to load; using existing boss fallback.")
 		return null
 	print("Found Tutorial Knight animation sheet: %s" % sheet_path)
 	var anim_sprite = build_animated_sprite_from_sheet(texture, TUTORIAL_KNIGHT_V2_ANIMS, 96, 96)
@@ -1048,7 +1048,7 @@ func try_build_v2_enemy(class_name_str: String, target_size: float = 72.0) -> An
 	var sheet_path: String = sheet_slot.get("path", ENEMY_V2_SHEETS[class_name_str])
 	var texture = sheet_slot.get("texture") as Texture2D
 	if not texture:
-		push_warning("[AssetManager] Enemy sheet failed to load for %s; using existing enemy fallback." % class_name_str)
+		_warn_once("[AssetManager] Enemy sheet failed to load for %s; using existing enemy fallback." % class_name_str)
 		return null
 	var anim_sprite = build_animated_sprite_from_sheet(texture, ENEMY_V2_ANIMS, 48, 48)
 	if not anim_sprite:
@@ -1071,7 +1071,7 @@ func try_build_v2_npc(npc_name: String, target_size: float = 32.0) -> AnimatedSp
 	var sheet_path: String = sheet_slot.get("path", NPC_V2_SHEETS[npc_name])
 	var texture = sheet_slot.get("texture") as Texture2D
 	if not texture:
-		push_warning("[AssetManager] NPC sheet failed to load for %s; using existing NPC fallback." % npc_name)
+		_warn_once("[AssetManager] NPC sheet failed to load for %s; using existing NPC fallback." % npc_name)
 		return null
 	var anim_sprite = build_animated_sprite_from_sheet(texture, NPC_V2_ANIMS, 32, 32)
 	if not anim_sprite:
@@ -1109,7 +1109,7 @@ func _resolve_visual_texture_slot(production_path: String, fallback_path: String
 		var production_texture = _load_visual_texture_path(production_path)
 		if production_texture:
 			return {"texture": production_texture, "path": production_path, "production": true}
-		push_warning("[AssetManager] Production art failed to load for %s at %s; using generated fallback %s." % [slot_label, production_path, fallback_path])
+		_warn_once("[AssetManager] Production art failed to load for %s at %s; using generated fallback %s." % [slot_label, production_path, fallback_path])
 	else:
 		_warn_missing_production_art(production_path, fallback_path, slot_label)
 	return {"texture": _load_visual_texture_path(fallback_path), "path": fallback_path, "production": false}
@@ -1131,10 +1131,18 @@ func _load_visual_texture_path(path: String) -> Texture2D:
 	return null
 
 func _warn_missing_production_art(production_path: String, fallback_path: String, slot_label: String) -> void:
-	if _missing_production_art_warned.has(production_path):
-		return
-	_missing_production_art_warned[production_path] = true
-	push_warning("[AssetManager] Production art slot missing for %s at %s; using generated fallback %s." % [slot_label, production_path, fallback_path])
+	_warn_once("[AssetManager] Production art slot missing for %s at %s; using generated fallback %s." % [slot_label, production_path, fallback_path])
+
+## Prints `push_warning(message)` the first time `message` is seen in this run and
+## returns true; returns false without printing on every later call with the same text.
+## Keys are the full message text, stored in `_missing_production_art_warned`.
+## Usage: `_warn_once("[AssetManager] Unknown thing: %s" % id)`
+func _warn_once(message: String) -> bool:
+	if _missing_production_art_warned.has(message):
+		return false
+	_missing_production_art_warned[message] = true
+	push_warning(message)
+	return true
 
 func get_oakhaven_tileset(time_state: String = OAKHAVEN_DEFAULT_TIME_STATE) -> Texture2D:
 	var slot = get_oakhaven_tileset_slot(time_state)
@@ -1204,11 +1212,11 @@ func _try_load_oakhaven_production_variant(production_path: String, requested_ti
 	var texture = _load_visual_texture_path(production_path)
 	if texture:
 		return texture
-	push_warning("[AssetManager] Oakhaven %s production tileset failed to load at %s; requested=%s." % [resolved_time_state, production_path, requested_time_state])
+	_warn_once("[AssetManager] Oakhaven %s production tileset failed to load at %s; requested=%s." % [resolved_time_state, production_path, requested_time_state])
 	return null
 
 func _oakhaven_generated_fallback_slot(fallback_path: String, requested_time_state: String, resolved_time_state: String, reason: String) -> Dictionary:
-	push_warning("[AssetManager] Oakhaven production tileset fallback: %s; requested=%s resolved=%s generated=%s." % [reason, requested_time_state, resolved_time_state, fallback_path])
+	_warn_once("[AssetManager] Oakhaven production tileset fallback: %s; requested=%s resolved=%s generated=%s." % [reason, requested_time_state, resolved_time_state, fallback_path])
 	return {
 		"texture": _load_visual_texture_path(fallback_path),
 		"path": fallback_path,
@@ -1220,25 +1228,13 @@ func _oakhaven_generated_fallback_slot(fallback_path: String, requested_time_sta
 	}
 
 func _warn_missing_oakhaven_variant(production_path: String, requested_time_state: String, resolved_time_state: String) -> void:
-	var warning_key := "oakhaven:%s:%s" % [resolved_time_state, production_path]
-	if _missing_production_art_warned.has(warning_key):
-		return
-	_missing_production_art_warned[warning_key] = true
-	push_warning("[AssetManager] Oakhaven %s production tileset missing at %s; requested=%s." % [resolved_time_state, production_path, requested_time_state])
+	_warn_once("[AssetManager] Oakhaven %s production tileset missing at %s; requested=%s." % [resolved_time_state, production_path, requested_time_state])
 
 func _warn_oakhaven_variant_fallback(missing_path: String, fallback_path: String, requested_time_state: String, fallback_time_state: String) -> void:
-	var warning_key := "oakhaven_variant_fallback:%s:%s" % [requested_time_state, missing_path]
-	if _missing_production_art_warned.has(warning_key):
-		return
-	_missing_production_art_warned[warning_key] = true
-	push_warning("[AssetManager] Oakhaven requested production variant %s unavailable at %s; using %s production tileset %s." % [requested_time_state, missing_path, fallback_time_state, fallback_path])
+	_warn_once("[AssetManager] Oakhaven requested production variant %s unavailable at %s; using %s production tileset %s." % [requested_time_state, missing_path, fallback_time_state, fallback_path])
 
 func _warn_invalid_oakhaven_time_state(requested_time_state: String, fallback_time_state: String) -> void:
-	var warning_key := "oakhaven_invalid_time_state:%s" % requested_time_state
-	if _missing_production_art_warned.has(warning_key):
-		return
-	_missing_production_art_warned[warning_key] = true
-	push_warning("[AssetManager] Invalid Oakhaven time state %s; using %s production tileset." % [requested_time_state, fallback_time_state])
+	_warn_once("[AssetManager] Invalid Oakhaven time state %s; using %s production tileset." % [requested_time_state, fallback_time_state])
 
 func get_ironhold_tileset() -> Texture2D:
 	var slot = get_ironhold_tileset_slot()
@@ -1280,11 +1276,11 @@ func _try_load_ironhold_production_tileset(production_path: String) -> Texture2D
 	var texture = _load_visual_texture_path(production_path)
 	if texture:
 		return texture
-	push_warning("[AssetManager] Ironhold production tileset failed to load at %s; using generated fallback %s." % [production_path, fallback_path])
+	_warn_once("[AssetManager] Ironhold production tileset failed to load at %s; using generated fallback %s." % [production_path, fallback_path])
 	return null
 
 func _ironhold_generated_fallback_slot(fallback_path: String, reason: String) -> Dictionary:
-	push_warning("[AssetManager] Ironhold production tileset fallback: %s; generated=%s." % [reason, fallback_path])
+	_warn_once("[AssetManager] Ironhold production tileset fallback: %s; generated=%s." % [reason, fallback_path])
 	return {
 		"texture": _load_visual_texture_path(fallback_path),
 		"path": fallback_path,
@@ -1334,11 +1330,11 @@ func _try_load_fractured_wastes_production_tileset(production_path: String) -> T
 	var texture = _load_visual_texture_path(production_path)
 	if texture:
 		return texture
-	push_warning("[AssetManager] Fractured Wastes production tileset failed to load at %s; using generated fallback %s." % [production_path, fallback_path])
+	_warn_once("[AssetManager] Fractured Wastes production tileset failed to load at %s; using generated fallback %s." % [production_path, fallback_path])
 	return null
 
 func _fractured_wastes_generated_fallback_slot(fallback_path: String, reason: String) -> Dictionary:
-	push_warning("[AssetManager] Fractured Wastes production tileset fallback: %s; generated=%s." % [reason, fallback_path])
+	_warn_once("[AssetManager] Fractured Wastes production tileset fallback: %s; generated=%s." % [reason, fallback_path])
 	return {
 		"texture": _load_visual_texture_path(fallback_path),
 		"path": fallback_path,
@@ -1381,7 +1377,7 @@ func get_mirror_city_tileset_slot(production_path_override: String = "") -> Dict
 	return _mirror_city_generated_fallback_slot(fallback_path, "production tileset missing or invalid")
 
 func _mirror_city_generated_fallback_slot(fallback_path: String, reason: String) -> Dictionary:
-	push_warning("[AssetManager] Mirror City production tileset fallback: %s; generated=%s." % [reason, fallback_path])
+	_warn_once("[AssetManager] Mirror City production tileset fallback: %s; generated=%s." % [reason, fallback_path])
 	return {
 		"texture": _load_visual_texture_path(fallback_path),
 		"path": fallback_path,
@@ -1406,7 +1402,7 @@ func try_create_v2_visual_tile_layer(tileset_id: String, area_size: Vector2, lay
 		int(texture.get_height() / V2_PROTOTYPE_TILE_SIZE.y)
 	)
 	if atlas_size.x <= 0 or atlas_size.y <= 0:
-		push_warning("[AssetManager] V2 tileset geometry is invalid for %s; using existing environment fallback." % tileset_id)
+		_warn_once("[AssetManager] V2 tileset geometry is invalid for %s; using existing environment fallback." % tileset_id)
 		return null
 	for atlas_y in range(atlas_size.y):
 		for atlas_x in range(atlas_size.x):
@@ -1515,7 +1511,7 @@ func _try_create_v3_atlas_visual(atlas_path: String, regions: Dictionary, visual
 	# Not FileAccess.file_exists alone: an exported build has only the imported
 	# texture, not the source .png, so that check is always false there.
 	if not _visual_path_exists(atlas_path):
-		push_warning("[AssetManager] V3 environment atlas missing: %s" % atlas_path)
+		_warn_once("[AssetManager] V3 environment atlas missing: %s" % atlas_path)
 		return null
 	var atlas_cache_key = "phase10mm_atlas:%s" % atlas_path
 	var atlas_texture = loaded_assets.get(atlas_cache_key) as Texture2D
@@ -1529,7 +1525,7 @@ func _try_create_v3_atlas_visual(atlas_path: String, regions: Dictionary, visual
 		if atlas_texture:
 			loaded_assets[atlas_cache_key] = atlas_texture
 	if not atlas_texture:
-		push_warning("[AssetManager] V3 environment atlas failed to load: %s" % atlas_path)
+		_warn_once("[AssetManager] V3 environment atlas failed to load: %s" % atlas_path)
 		return null
 
 	var region: Rect2i = regions[visual_id]
@@ -1550,7 +1546,7 @@ func _try_create_v3_atlas_visual(atlas_path: String, regions: Dictionary, visual
 
 func _try_resolve_v2_prototype_tileset_slot(tileset_id: String, time_state: String = OAKHAVEN_DEFAULT_TIME_STATE) -> Dictionary:
 	if not V2_PROTOTYPE_TILESETS.has(tileset_id) and not PRODUCTION_VISUAL_TILESETS.has(tileset_id):
-		push_warning("[AssetManager] Unknown V2 tileset %s; using existing environment fallback." % tileset_id)
+		_warn_once("[AssetManager] Unknown V2 tileset %s; using existing environment fallback." % tileset_id)
 		return {}
 	if tileset_id == "oakhaven":
 		return get_oakhaven_tileset_slot(time_state)
@@ -1566,7 +1562,7 @@ func _try_resolve_v2_prototype_tileset_slot(tileset_id: String, time_state: Stri
 	var tileset_path: String = tileset_slot.get("path", generated_path)
 	var texture = tileset_slot.get("texture") as Texture2D
 	if not texture:
-		push_warning("[AssetManager] Visual tileset failed to load for %s at %s; using existing environment fallback." % [tileset_id, tileset_path])
+		_warn_once("[AssetManager] Visual tileset failed to load for %s at %s; using existing environment fallback." % [tileset_id, tileset_path])
 	return tileset_slot
 
 func _try_load_v2_prototype_tileset(tileset_id: String, time_state: String = OAKHAVEN_DEFAULT_TIME_STATE) -> Texture2D:

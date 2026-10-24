@@ -644,6 +644,10 @@ func _ready() -> void:
 	_setup_custom_cursor()
 	_build_autosave_indicator()
 
+func _exit_tree() -> void:
+	# Release the custom cursor texture before RenderingServer teardown.
+	Input.set_custom_mouse_cursor(null, Input.CURSOR_ARROW)
+
 func _process(delta: float) -> void:
 	if current_state != GameState.MENU and not get_tree().paused:
 		playtime_seconds += delta

@@ -1,0 +1,31 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+[refresh drops freed nodes]
+  PASS: after refresh the list is back to base_live (5 of 5)
+  PASS: no entry has a null ref after refresh
+[bind prunes without refresh]
+  PASS: 1,000 freed labels then one bind leaves base_live + 1 (6, base_live 5)
+  PASS: no dead entry survives the bind
+[rebind same node + property]
+  PASS: one entry for L after two binds (1)
+  PASS: L's entry holds the second template
+  PASS: L.text is fmt(second)
+  PASS: size is base_live + 1 (6, base_live 5)
+[queue_free then next bind]
+  PASS: same frame: L's ref is still non-null and its entry still listed
+  PASS: next frame: L's ref is null
+  PASS: binding M dropped L's entry
+  PASS: size is base_live + 1 (6, base_live 5)
+[prune keeps live entries after a duplicate]
+  PASS: D's entry was pruned
+  PASS: B (listed after A) is still present and live
+  PASS: A's template is updated, still one entry
+  PASS: size is base_live + 2 (7, base_live 5)
+
+BOUNDTEXTS RESULT: 16 passed, 0 failed

@@ -5,7 +5,7 @@
 # Each suite's time limit and minimum check count come from tests/suite_limits.txt (TD-007): a new
 # suite needs a line there, or the runner refuses it.
 # Usage (from AethelgardPrototype/ or the repo root):
-#   powershell -File tests/run_all_tests.ps1          # all 17 suites
+#   powershell -File tests/run_all_tests.ps1          # all 18 suites
 #   powershell -File tests/run_all_tests.ps1 -Quick   # skip the long route and phase0 suites
 param(
     [switch]$Quick
@@ -17,6 +17,7 @@ $suites = @(
     @{ Script = "res://tests/integration/dialogue/dialogue_test.gd";          Long = $false }
     @{ Script = "res://tests/integration/core/context_stack_test.gd";         Long = $false }
     @{ Script = "res://tests/integration/input/input_test.gd";                Long = $false }
+    @{ Script = "res://tests/unit/input/input_bound_texts_prune_test.gd";     Long = $false }
     @{ Script = "res://tests/unit/quests/side_quest_rewards_test.gd";         Long = $false }
     @{ Script = "res://tests/unit/ngplus/ngplus_buff_stacking_test.gd";       Long = $false }
     @{ Script = "res://tests/unit/ngplus/ngplus_save_roundtrip_test.gd";      Long = $false }

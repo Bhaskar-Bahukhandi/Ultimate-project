@@ -114,6 +114,10 @@ jobs:
         working-directory: ${{ env.PROJECT_DIR }}
         run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/integration/input/input_test.gd
 
+      - name: "Bound texts prune (Y1-P0-T10: bind_text drops freed nodes without a refresh)"
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/unit/input/input_bound_texts_prune_test.gd
+
       - name: "Side quest rewards (Y1-P0-T06: reward resolution, grant_rewards, prices, saves)"
         working-directory: ${{ env.PROJECT_DIR }}
         run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/unit/quests/side_quest_rewards_test.gd

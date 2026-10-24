@@ -1,0 +1,105 @@
+static_checks.log - Y1-P0-T10 AC-1, AC-3, AC-5, AC-7 static checks (uncommitted change on top of c01d80e)
+
+== git diff --stat (code and registration)
+ .github/workflows/ci.yml                          |  4 ++
+ AethelgardPrototype/scripts/asset_manager.gd      | 74 +++++++++++------------
+ AethelgardPrototype/scripts/core/input_service.gd | 24 ++++++--
+ AethelgardPrototype/scripts/game_manager.gd       |  4 ++
+ AethelgardPrototype/tests/run_all_tests.ps1       |  3 +-
+ AethelgardPrototype/tests/suite_limits.txt        |  1 +
+ 6 files changed, 64 insertions(+), 46 deletions(-)
+
+== AC-1: bare push_warning left in asset_manager.gd (expect :930, :1509 unknown V3 visual, and the helper's own call)
+930: 		push_warning("[AssetManager] Cannot get Image from texture for sheet slicing")
+1136: ## Prints `push_warning(message)` the first time `message` is seen in this run and
+1144: 	push_warning(message)
+1509: 		push_warning("[AssetManager] Unknown V3 environment visual: %s" % visual_id)
+
+== AC-1: _warn_once( occurrences in asset_manager.gd (20 sites + 4 helpers + definition + doc example = 26)
+26
+
+== AC-1: changed lines in asset_manager.gd that are not warning/helper lines (expect only the helper body and the four helpers' removed guards)
+-		return
++
++## returns true; returns false without printing on every later call with the same text.
++		return false
++	return true
+-	var warning_key := "oakhaven:%s:%s" % [resolved_time_state, production_path]
+-		return
+-	var warning_key := "oakhaven_variant_fallback:%s:%s" % [requested_time_state, missing_path]
+-		return
+-	var warning_key := "oakhaven_invalid_time_state:%s" % requested_time_state
+-		return
+
+== AC-5/AC-7: full diff of game_manager.gd (expect only the new _exit_tree)
+diff --git a/AethelgardPrototype/scripts/game_manager.gd b/AethelgardPrototype/scripts/game_manager.gd
+index a0b8234..c9caa8b 100644
+--- a/AethelgardPrototype/scripts/game_manager.gd
++++ b/AethelgardPrototype/scripts/game_manager.gd
+@@ -644,6 +644,10 @@ func _ready() -> void:
+ 	_setup_custom_cursor()
+ 	_build_autosave_indicator()
+ 
++func _exit_tree() -> void:
++	# Release the custom cursor texture before RenderingServer teardown.
++	Input.set_custom_mouse_cursor(null, Input.CURSOR_ARROW)
++
+ func _process(delta: float) -> void:
+ 	if current_state != GameState.MENU and not get_tree().paused:
+ 		playtime_seconds += delta
+
+== AC-7: _setup_custom_cursor diff lines (expect none)
+(none)
+
+== AC-3: diff of input_service.gd (bind_text only; _refresh_bound_texts unchanged)
+diff --git a/AethelgardPrototype/scripts/core/input_service.gd b/AethelgardPrototype/scripts/core/input_service.gd
+index 605f56b..a436987 100644
+--- a/AethelgardPrototype/scripts/core/input_service.gd
++++ b/AethelgardPrototype/scripts/core/input_service.gd
+@@ -265,16 +265,28 @@ func fmt(text: String) -> String:
+ 
+ 
+ ## Set `node.property` to fmt(template) now and whenever the device or the
+-## bindings change. Freed nodes are dropped automatically.
++## bindings change. Entries for freed nodes are pruned here, in the same pass
++## that looks for a duplicate, and on every refresh. A node that is only
++## queue_free()d stays bound until the end of the frame.
++## Binding the same node and property again only replaces the template.
++## Example: InputService.bind_text(label, "[{interact}] Talk")
+ func bind_text(node: Object, template: String, property: StringName = &"text") -> void:
+ 	if node == null:
+ 		return
++	var alive: Array = []
++	var existing: Dictionary = {}
+ 	for entry in _bound_texts:
+-		if entry["ref"].get_ref() == node and entry["property"] == property:
+-			entry["template"] = template
+-			node.set(property, fmt(template))
+-			return
+-	_bound_texts.append({"ref": weakref(node), "template": template, "property": property})
++		var bound: Object = entry["ref"].get_ref()
++		if bound == null:
++			continue
++		alive.append(entry)
++		if bound == node and entry["property"] == property:
++			existing = entry
++	if existing.is_empty():
++		alive.append({"ref": weakref(node), "template": template, "property": property})
++	else:
++		existing["template"] = template
++	_bound_texts = alive
+ 	node.set(property, fmt(template))
+ 
+ 
+
+== git diff --check
+exit=0 (clean)
+
+== parse check (main session, 2026-10-24): Godot 4.6.3 console --headless -s .claude/scripts/godot-parse-check.gd --
+   res://scripts/asset_manager.gd res://scripts/game_manager.gd res://scripts/core/input_service.gd
+   res://tests/unit/input/input_bound_texts_prune_test.gd
+ok: res://scripts/asset_manager.gd
+ok: res://scripts/game_manager.gd
+ok: res://scripts/core/input_service.gd
+ok: res://tests/unit/input/input_bound_texts_prune_test.gd
+parse exit=0

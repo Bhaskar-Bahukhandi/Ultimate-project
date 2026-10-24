@@ -3,6 +3,21 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-24 — Quieter fallback warnings, no growing prompt list, clean exit (Y1-P0-T10)
+
+- **fix(performance):** a missing or unloadable art slot now logs its fallback warning once per
+  run instead of every time the slot is asked for (the full test run printed 463 of these lines for
+  26 distinct messages). The fallback art itself is unchanged. Two warnings that point at real code
+  bugs (an unknown environment visual id, a texture with no image) still print every time.
+- **fix(input):** on-screen key prompts no longer pile up. Every `InputService.bind_text()` now
+  drops prompts whose label was freed; before, only switching between keyboard and gamepad
+  cleared them, so a keyboard-only session kept one dead entry per prompt per scene.
+- **fix(engine):** quitting no longer leaks the custom mouse cursor's texture ("1 RID allocations
+  … leaked at exit"); the cursor is released when the game shuts down. The cursor looks the same.
+- **test:** new suite `tests/unit/input/input_bound_texts_prune_test.gd` (18 suites now), and a
+  local-only `tests/run_exit_scan.ps1` that boots with the real renderer and fails on a leaked
+  texture at exit (CI runs headless and cannot see renderer leaks).
+
 ## 2026-10-24 — Two unused autoloads removed (Y1-P0-T09)
 
 - **chore(engine):** the `InteractionPrompt` and `ObjectPool` autoloads are removed. No code

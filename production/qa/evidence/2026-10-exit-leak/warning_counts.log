@@ -1,0 +1,25 @@
+warning_counts.log - Y1-P0-T10 AC-2: AssetManager warnings per suite, before vs after
+before: production/qa/evidence/2026-10-autoloads/run_all.log
+after:  production/qa/evidence/2026-10-exit-leak/run_all.log
+Per suite: lines = 'WARNING: [AssetManager]' lines; distinct = distinct message texts.
+Pass rule: after lines == before distinct, no message twice after, distinct sets equal.
+
+suite                                                              b.lines b.dist a.lines a.dist  verdict
+res://tests/integration/combat/combat_fixes_test.gd                      5      4       4      4  PASS
+res://tests/integration/core/context_stack_test.gd                      25      8       8      8  PASS
+res://tests/integration/dialogue/dialogue_test.gd                        2      2       2      2  PASS
+res://tests/integration/input/input_test.gd                             11      8       8      8  PASS
+res://tests/integration/level/reachability_test.gd                      81     12      12     12  PASS
+res://tests/integration/playthrough/phase0_blockers_test.gd             97     22      22     22  PASS
+res://tests/integration/quests/act1_quests_completable_test.gd          74     14      14     14  PASS
+res://tests/integration/story/chapter1_route_test.gd                    73     14      14     14  PASS
+res://tests/integration/story/chapter2_route_test.gd                    87     14      14     14  PASS
+res://tests/integration/vfx/screen_flash_test.gd                         8      4       4      4  PASS
+
+full-suite 'WARNING: [AssetManager]' lines: before 463, after 102
+full-suite 'WARNING' lines (all):          before 494, after 131
+full-suite distinct AssetManager messages:  before 26, after 26
+(suite, message) sets equal before/after: yes (102 pairs before, 102 after)
+non-AssetManager 'WARNING' lines: before 31, after 29; of these 'ObjectDB instances leaked': before 14, after 12 (varies run to run; TD-012). The total drop 494 -> 131 is the AssetManager drop 463 -> 102 plus that ObjectDB difference.
+
+AC-2: PASS
