@@ -165,5 +165,4 @@ func die() -> void:
 		return
 	_vfx("vfx_glitch_sparkle", global_position)
 	_vfx("vfx_enemy_death", global_position)
-	_sfx("enemy_death")
 	super.die()

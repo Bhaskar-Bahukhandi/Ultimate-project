@@ -213,7 +213,6 @@ func _animate_fallback_bolt(bolt: Node, dir: Vector2) -> void:
 func die() -> void:
 	if current_state == State.DEAD:
 		return
-	_sfx("enemy_death")
 	_vfx("vfx_enemy_death", global_position)
 	super.die()
 

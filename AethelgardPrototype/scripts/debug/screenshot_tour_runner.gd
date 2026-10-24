@@ -104,6 +104,16 @@ const FLASH_STOPS := [
 const ARCHIVE_FLASH_COLOR := Color(0.2, 0.6, 1.0, 0.4)   # ch3_archive_depths.gd floor-4 call
 const ARCHIVE_FLASH_SECONDS := 0.8
 const FLASH_MIN_SHIFT := 0.01      # mean-colour shift toward the flash colour a flash frame must show
+## The combat HUD chain label (story Y1-P0-T11, AC-4). Loads the REAL combat arena, makes its tutorial
+## slime a high-HP, non-hostile target, lands two light strikes through the player's own
+## _perform_combo_attack and checks the preconditions the capture is evidence of: combo_step 2, the
+## player's chain label "STRIKE 2" and GameJuice's counter "2 HIT". A second shot, one frame after
+## player.take_damage, must show the chain label empty. A mismatch is a PROBLEM, never patched up.
+const COMBAT_HUD_ID := "t11_combat_hud"
+const COMBAT_HUD_SCENE := "res://scenes/combat/combat_arena.tscn"
+const COMBAT_HUD_ENEMY_HP := 100000.0
+const COMBAT_HUD_HIT_DAMAGE := 5.0
+const COMBAT_HUD_STEP_TIMEOUT := 2.5   # real seconds to wait for each strike to be ready / to land
 const DLG_DIRS := ["res://dialogue/prologue", "res://dialogue/ch1", "res://dialogue/ch2"]
 const BACKDROP := "res://scenes/regions/oakhaven_region.tscn"
 const THUMB := Vector2i(320, 180)
@@ -156,6 +166,8 @@ func run() -> int:
 	for f in FLASH_STOPS:
 		if _wanted(f[0]):
 			await _flash_shot(f[0], f[1], f[2])
+	if _wanted(COMBAT_HUD_ID):
+		await _combat_hud_shots(COMBAT_HUD_ID)
 	if _wanted("dlg"):
 		await _dialogue_shots()
 	await _contact_sheet("contact_scenes.png", _shots.filter(func(x): return x["group"] != "dialogue"))
@@ -521,6 +533,93 @@ func _shop_buy_button(shop: Node, item: String) -> Button:
 		if not buttons.is_empty():
 			return buttons[0]
 	return null
+
+
+## Two shots in the real combat arena: `<id>_strike2` after two landed light strikes and
+## `<id>_after_hit` one frame after the player takes a hit. Preconditions are read from the live
+## nodes (player.combo_step, the player's `_combo_indicator` label, GameJuice's `_combo_label`);
+## the enemy is made non-hostile so nothing but the stop hurts the player.
+func _combat_hud_shots(id: String) -> void:
+	var gj := tree.root.get_node("GameJuice")
+	_gm().reset_game()
+	gj.reset_combo()
+	await _load_scene(COMBAT_HUD_SCENE, 1.5)
+	_dm().force_reset()   # the arena's controls hint waits for a key press
+	await _wait(0.4)
+	var notes: Array[String] = ["real combat_arena scene; tutorial slime, %d HP, not hostile; strikes through player._perform_combo_attack()" % int(COMBAT_HUD_ENEMY_HP)]
+	var scene := tree.current_scene
+	var player: Node = scene.get_node_or_null("Player") if scene else null
+	var slime: Node = scene.get_node_or_null("Enemies/TutorialSlime") if scene else null
+	if scene == null or scene.scene_file_path != COMBAT_HUD_SCENE or player == null or slime == null:
+		_hud_problem(id, notes, "the combat arena, its Player or its TutorialSlime is missing")
+		await _capture(id + "_strike2", "scene", COMBAT_HUD_SCENE, notes)
+		return
+	slime.is_hostile = false
+	slime.max_health = COMBAT_HUD_ENEMY_HP
+	slime.current_health = COMBAT_HUD_ENEMY_HP
+	for step in 2:
+		# The slime is put back in reach each time: a hit knocks it away.
+		var can_strike := await _poll_until(func(): return not player.is_attacking and player.attack_cooldown <= 0.0, COMBAT_HUD_STEP_TIMEOUT)
+		if not can_strike:
+			_hud_problem(id, notes, "strike %d was never ready (is_attacking %s, attack_cooldown %.2f)" % [step + 1, player.is_attacking, player.attack_cooldown])
+			break
+		slime.velocity = Vector2.ZERO
+		slime.global_position.x = player.global_position.x + player.facing_direction * 45.0
+		player._perform_combo_attack()   # a coroutine: not awaited, it runs the swing in the background
+		var landed := await _poll_until(func(): return gj.get_combo_count() >= step + 1, COMBAT_HUD_STEP_TIMEOUT)
+		if not landed:
+			_hud_problem(id, notes, "strike %d did not land (GameJuice combo %d)" % [step + 1, gj.get_combo_count()])
+			break
+	await tree.process_frame
+	var chain: Variant = player.get("_combo_indicator")
+	var counter: Variant = gj.get("_combo_label")
+	var chain_text: String = chain.text if chain is Label else "(no chain label)"
+	var counter_text: String = counter.text if counter is Label else "(no counter label)"
+	notes.append("combo_step %d; chain label `%s`; GameJuice counter `%s`" % [player.combo_step, chain_text, counter_text])
+	if player.combo_step != 2:
+		_hud_problem(id, notes, "combo_step is %d, expected 2" % player.combo_step)
+	if chain_text != "STRIKE 2":
+		_hud_problem(id, notes, "chain label reads `%s`, expected `STRIKE 2`" % chain_text)
+	if counter_text != "2 HIT":
+		_hud_problem(id, notes, "GameJuice counter reads `%s`, expected `2 HIT`" % counter_text)
+	await _capture(id + "_strike2", "scene", COMBAT_HUD_SCENE, notes)
+	if chain is Label and chain.text != chain_text:
+		# The step-2 label clears when combo_timer lapses (0.46 s); the frame must still have shown it.
+		_hud_problem(id, notes, "the chain label changed to `%s` while the frame was captured" % chain.text)
+
+	# Second shot: the hit must clear the chain label. The player may still hold i-frames.
+	var hit_notes: Array[String] = ["player.take_damage(%.0f) from the slime's position, then one frame" % COMBAT_HUD_HIT_DAMAGE]
+	var vulnerable := await _poll_until(func(): return not player.invulnerable and not player.is_dashing, 1.5)
+	if not vulnerable:
+		_hud_problem(id + "_after_hit", hit_notes, "the player stayed invulnerable for 1.5 s")
+	var hp_before: float = player.current_health
+	player.take_damage(COMBAT_HUD_HIT_DAMAGE, slime.global_position, "t11 tour")
+	await tree.process_frame
+	var after_text: String = chain.text if chain is Label else "(no chain label)"
+	hit_notes.append("HP %.0f -> %.0f; chain label `%s`" % [hp_before, player.current_health, after_text])
+	if player.current_health >= hp_before:
+		_hud_problem(id + "_after_hit", hit_notes, "the hit did not land (HP %.0f -> %.0f)" % [hp_before, player.current_health])
+	if after_text != "":
+		_hud_problem(id + "_after_hit", hit_notes, "chain label reads `%s` after the hit, expected empty" % after_text)
+	await _capture(id + "_after_hit", "scene", COMBAT_HUD_SCENE, hit_notes)
+	gj.reset_combo()
+	await _wait(0.3)   # let the hit's hitstop / i-frames settle before the next stop
+
+
+## Waits (real time, one process frame at a time) until `cond` is true; false on timeout.
+func _poll_until(cond: Callable, seconds: float) -> bool:
+	var until := Time.get_ticks_msec() + int(seconds * 1000.0)
+	while Time.get_ticks_msec() < until:
+		if cond.call():
+			return true
+		await tree.process_frame
+	return bool(cond.call())
+
+
+## Records a failed precondition for a combat-HUD shot: in the shot's notes and in the tour's problem list.
+func _hud_problem(id: String, notes: Array[String], why: String) -> void:
+	notes.append("PROBLEM: " + why)
+	_problems.append("%s: %s" % [id, why])
 
 
 # ── Dialogue stress ─────────────────────────────────────────────────────────

@@ -1201,7 +1201,6 @@ func die() -> void:
 	velocity = Vector2.ZERO
 	set_physics_process(false)
 
-	_sfx("enemy_death")
 	died.emit()
 	boss_defeated.emit()
 
@@ -1213,7 +1212,7 @@ func die() -> void:
 	if has_node("/root/GameManager"):
 		GameManager.record_dda_kill()
 	if has_node("/root/CombatFX"):
-		CombatFX.apply_last_kill_slowdown()
+		CombatFX.apply_last_kill_slowdown(true)  # boss: boss_death slow-motion is the finish
 		CombatFX.apply_kill_zoom()
 
 	_award_death_rewards()

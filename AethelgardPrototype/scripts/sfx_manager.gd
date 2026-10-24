@@ -19,6 +19,10 @@ extends Node
 ##   SFXManager.play_positional("enemy_hurt", enemy_pos, player_pos)
 ## ==========================================================================
 
+## Test seam: emitted for every play() request, before the unknown-name check and the
+## concurrent-player cap, so a request that is dropped still shows up here.
+signal sfx_requested(sfx_name: String)
+
 # ─── CONSTANTS ───────────────────────────────────────────────────────────
 
 const SAMPLE_RATE = 22050
@@ -879,6 +883,7 @@ func _exit_tree() -> void:
 ## Play a named procedural sound effect.
 ## [param pitch_variation]: random pitch offset range (e.g. 0.1 = +/-10%).
 func play(sfx_name: String, pitch_variation: float = 0.0) -> void:
+	sfx_requested.emit(sfx_name)
 	if not SFX_DEFS.has(sfx_name):
 		push_warning("SFXManager: Unknown SFX '%s'" % sfx_name)
 		return

@@ -1,0 +1,288 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+[time zones scale speed once]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+    mult=1.00 now=1.00 top=330 pos=(317.1667, 519.9849) floor=true dashing=false locked=<null> dlg=false
+    mult=2.00 now=2.00 top=660 pos=(970.9888, 519.9849) floor=true dashing=false locked=<null> dlg=false
+    mult=0.40 now=0.40 top=132 pos=(1136.831, 519.9849) floor=true dashing=false locked=<null> dlg=false
+  PASS: x2 zone tops out near 2x run speed (660 vs 660), not runaway
+  PASS: x0.4 zone gives about 40% speed (132 vs 132), not 17%
+  PASS: no zone: normal run speed (330 vs 330)
+[placeholder sprites flip around their centre]
+  PASS: facing left, the placeholder is drawn centred on the body (1144.6 vs 1144.6; size (31.45618, 32.7251))
+[combat feel: overlap hits, jump-cancel, dash buffer, hit-pause]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: a swing that touches a big enemy's body hits it (its centre is outside the box)
+  PASS: an enemy only 'touched' through its detection area is not hit
+  PASS: jumping during attack recovery cancels into the jump (vy -560, attacking false)
+  PASS: an attack pressed mid-dash is buffered and comes out after the dash (dashing true, buffered 1, started 1)
+  PASS: two hit-pause requests keep the longest (0.130 s, not 0.105 or 0.17)
+[top-down player doesn't snag on corners]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [AssetManager] Production art slot missing for Kaelen top-down sheet at res://assets/production_art/characters/player/kaelen_topdown_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:1000)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [6] _ready (res://scripts/exploration/player_topdown.gd:51)
+WARNING: [AssetManager] V2 top-down player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:1009)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [4] _ready (res://scripts/exploration/player_topdown.gd:51)
+WARNING: [AssetManager] Production art slot missing for Elara NPC sheet at res://assets/production_art/characters/npcs/elara_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/npcs/elara_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_npc (res://scripts/asset_manager.gd:1066)
+       [4] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:486)
+       [5] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:58)
+WARNING: [AssetManager] NPC sheet failed to load for Elara; using existing NPC fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_npc (res://scripts/asset_manager.gd:1074)
+       [2] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:486)
+       [3] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:58)
+  PASS: top-down player uses floating motion mode
+[T11 AC-1: dash i-frames are 0.18 s + a 0.05 s tail]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+DDA: 20.0 (mult=0.75) K:0 D:0.3
+  PASS: T11 AC-1: a dash from rest is invulnerable for 13-15 physics frames (got 14; old code 25)
+  PASS: T11 AC-1: a hit on the first frame after the dash ends is absorbed without a perfect dodge (seen true, HP kept true, no dodge true)
+  PASS: T11 AC-1: a hit on the first frame where invulnerable is false lands (seen true, HP dropped true)
+  PASS: T11 AC-1: a hit while dashing is a PERFECT DODGE and does no damage (dashing true, dodge true)
+  PASS: T11 AC-1: a dash during 0.8 s hurt i-frames keeps 0.8 at dash end (0.800) and is still invulnerable 42 frames later (true)
+[T11 AC-3: STRIKE label]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+  PASS: T11 AC-3: strikes 1, 2, 3 read STRIKE 1/2/3 (got ["STRIKE 1", "STRIKE 2", "STRIKE 3"])
+  PASS: T11 AC-3: after step 3 the label holds STRIKE 3 while attack_cooldown > 0 (true, 29 frames) and is empty once it reaches 0 ('')
+  PASS: T11 AC-3: after step 1 the label clears when combo_timer lapses ('STRIKE 1' then '')
+DDA: 20.0 (mult=0.75) K:0 D:0.3
+  PASS: T11 AC-3: take_damage empties the label at once ('STRIKE 1' then '')
+  FAIL: T11 AC-3: a charged attack ends the chain and empties the label at once ('STRIKE 1' then 'STRIKE 1')
+[T11 AC-2: one sound per hit, one per kill]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+WARNING: [AssetManager] Production art slot missing for Slime enemy sheet at res://assets/production_art/characters/enemies/fracture_slime_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/enemies/fracture_slime_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_enemy (res://scripts/asset_manager.gd:1043)
+       [4] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [5] _ready (res://scripts/combat/enemy_base.gd:221)
+       [6] _ready (res://scripts/combat/enemies/slime.gd:36)
+       [7] _real_enemy (res://tests/integration/combat/combat_fixes_test.gd:322)
+       [8] _test_t11_one_sound (res://tests/integration/combat/combat_fixes_test.gd:485)
+       [9] _settle_fx (res://tests/integration/combat/combat_fixes_test.gd:296)
+WARNING: [AssetManager] Enemy sheet failed to load for Slime; using existing enemy fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_enemy (res://scripts/asset_manager.gd:1051)
+       [2] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [3] _ready (res://scripts/combat/enemy_base.gd:221)
+       [4] _ready (res://scripts/combat/enemies/slime.gd:36)
+       [5] _real_enemy (res://tests/integration/combat/combat_fixes_test.gd:322)
+       [6] _test_t11_one_sound (res://tests/integration/combat/combat_fixes_test.gd:485)
+       [7] _settle_fx (res://tests/integration/combat/combat_fixes_test.gd:296)
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] _perform_combo_attack (res://scripts/combat/player_combat.gd:988)
+  PASS: T11 AC-2: one landed light combo hit plays exactly one sword_hit (hit true, sword_hit 1)
+  PASS: T11 AC-2: a parry-counter hit plays one heavy_hit, no critical_hit, no sword_hit (heavy 1, critical 0, sword 0)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] _test_t11_one_sound (res://tests/integration/combat/combat_fixes_test.gd:523)
+       [4] _frames (res://tests/integration/combat/combat_fixes_test.gd:58)
+DDA: 53.0 (mult=1.00) K:1 D:0.0
+  PASS: T11 AC-2: a kill through take_damage on slime plays exactly one enemy_death (got 1)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] _test_t11_one_sound (res://tests/integration/combat/combat_fixes_test.gd:523)
+       [4] _frames (res://tests/integration/combat/combat_fixes_test.gd:58)
+DDA: 56.0 (mult=1.03) K:2 D:0.0
+[ACHIEVEMENT] Unlocked: First Blood — Defeat your first enemy.
+  PASS: T11 AC-2: a kill through take_damage on corrupted_rat plays exactly one enemy_death (got 1)
+[ACHIEVEMENT] Unlocked: Combo Starter — Reach a 5-hit combo.
+DDA: 59.0 (mult=1.05) K:3 D:0.0
+  PASS: T11 AC-2: a direct die() with no kill effects plays exactly one enemy_death (got 1)
+[T11 AC-5: last-kill slowdown runs after the kill's hitstop]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+  PASS: T11 AC-5a: during the kill's hitstop the last-kill is pending, with no last_kill request (hitstop true, pending true)
+  PASS: T11 AC-5b: _end_hitstop starts the pending last-kill (request true, count +1, time_scale reached 0.12 within 30 frames true)
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+  PASS: T11 AC-5c: the last_kill request is released within 2.0 s real (held about 559 ms more after 0.12 was seen)
+WARNING: [COMBAT FX] Force-ending hitstop (safety fallback)
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _force_end_hitstop (res://scripts/combat_effects.gd:158)
+       [1] _test_t11_last_kill (res://tests/integration/combat/combat_fixes_test.gd:582)
+       [2] _settle_fx (res://tests/integration/combat/combat_fixes_test.gd:296)
+  PASS: T11 AC-5b: _force_end_hitstop starts the pending last-kill at once (count +1, time_scale 0.120)
+  PASS: T11 AC-5d: a pending last-kill is dropped if the tree is paused when the hitstop ends
+  PASS: T11 AC-5d: a pending last-kill is dropped if clear_time_scale() ran before the hitstop ended
+  PASS: T11 AC-5d: a pending last-kill is dropped if current_scene changed before the hitstop ended
+  PASS: T11 AC-5f: apply_last_kill_slowdown while paused leaves nothing pending and starts nothing
+  PASS: T11 AC-5f: apply_hitstop while paused makes no hitstop request
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] _test_t11_last_kill (res://tests/integration/combat/combat_fixes_test.gd:642)
+       [4] _frames (res://tests/integration/combat/combat_fixes_test.gd:58)
+DDA: 53.0 (mult=1.00) K:1 D:0.0
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] _test_t11_last_kill (res://tests/integration/combat/combat_fixes_test.gd:643)
+       [4] _frames (res://tests/integration/combat/combat_fixes_test.gd:58)
+DDA: 56.0 (mult=1.03) K:2 D:0.0
+  PASS: T11 AC-5e: two real slimes killed on the same frame give one last-kill slowdown (count +1)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] _test_t11_last_kill (res://tests/integration/combat/combat_fixes_test.gd:653)
+       [4] _frames (res://tests/integration/combat/combat_fixes_test.gd:58)
+DDA: 59.0 (mult=1.05) K:3 D:0.0
+  PASS: T11 AC-5g: a boss killed as the last enemy starts no last-kill (pending false, count +0)
+  PASS: T11 AC-5g: apply_last_kill_slowdown(true) starts nothing and leaves nothing pending
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [AssetManager] Production art slot missing for environment decal atlas at res://assets/production_art/backgrounds/environment_decal_atlas.png; using generated fallback res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1497)
+       [4] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [5] _build_phase10mm_arena_polish (res://scripts/combat/combat_arena.gd:201)
+       [6] _ready (res://scripts/combat/combat_arena.gd:135)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1498)
+       [3] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [4] _build_phase10mm_arena_polish (res://scripts/combat/combat_arena.gd:201)
+       [5] _ready (res://scripts/combat/combat_arena.gd:135)
+WARNING: [AssetManager] Production art slot missing for environment prop atlas at res://assets/production_art/props/environment_prop_atlas.png; using generated fallback res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1486)
+       [4] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [5] _build_phase10mm_arena_polish (res://scripts/combat/combat_arena.gd:203)
+       [6] _ready (res://scripts/combat/combat_arena.gd:135)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1487)
+       [3] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [4] _build_phase10mm_arena_polish (res://scripts/combat/combat_arena.gd:203)
+       [5] _ready (res://scripts/combat/combat_arena.gd:135)
+WARNING: [AssetManager] Production art slot missing for Kaelen combat sheet at res://assets/production_art/characters/player/kaelen_combat_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:985)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _setup_sprites (res://scripts/combat/combat_arena.gd:627)
+       [6] _ready (res://scripts/combat/combat_arena.gd:151)
+WARNING: [AssetManager] V2 combat player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:994)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _setup_sprites (res://scripts/combat/combat_arena.gd:627)
+       [4] _ready (res://scripts/combat/combat_arena.gd:151)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] _test_t11_last_kill (res://tests/integration/combat/combat_fixes_test.gd:676)
+       [4] _settle_fx (res://tests/integration/combat/combat_fixes_test.gd:296)
+DDA: 53.0 (mult=1.00) K:1 D:0.0
+  PASS: T11 AC-5 end-to-end: killing the combat-arena slime with take_damage(99999) reaches time_scale 0.12 within 1.0 s real (other live enemies 0)
+[T11 AC-6: ContextStack is the only Engine.time_scale writer]
+  PASS: T11 AC-6: no script outside core/context_stack.gd assigns Engine.time_scale (130 files scanned; offenders [])
+
+COMBAT FIXES RESULT: 38 passed, 1 failed
+  FAIL: T11 AC-3: a charged attack ends the chain and empties the label at once ('STRIKE 1' then 'STRIKE 1')
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)

@@ -3,6 +3,21 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-24 — Combat feel: dash window, one hit sound, STRIKE label, last-kill slowdown (Y1-P0-T11)
+
+- **fix(combat):** a dash now keeps you invulnerable for 0.23 s (the 0.18 s dash plus a 0.05 s tail), down from about 0.4 s,
+  and dashing no longer cuts short the longer invulnerability after being hit.
+- **fix(audio):** a sword hit plays its hit sound once (it played twice), a parry counter plays one heavy hit instead of
+  two stacked sounds, and an enemy death plays once (twice, three times for some enemies). Kills that skip the usual
+  effects (Root Access, the arena kill zone) still play their death sound.
+- **fix(ui):** the combo-step text reads "STRIKE 1 / 2 / 3" instead of "COMBO I / II / III", so it can't be mistaken for
+  the hit counter, and it clears after the third strike and when you are hit (it used to stay on screen).
+- **fix(combat):** the short slow-motion when the last enemy of a fight dies now actually plays; it was always cancelled
+  by the kill's own hit-pause. It now follows the hit-pause directly, and a slow-down cut short by a scene change
+  or death no longer comes back afterwards. Bosses keep their own death slow-motion only.
+- **test:** `combat_fixes_test.gd` grows from 10 to 45 checks, including a guard that only ContextStack sets the game
+  speed; a new screenshot-tour stop `t11_combat_hud` shows the combat HUD.
+
 ## 2026-10-24 — Quieter fallback warnings, no growing prompt list, clean exit (Y1-P0-T10)
 
 - **fix(performance):** a missing or unloadable art slot now logs its fallback warning once per

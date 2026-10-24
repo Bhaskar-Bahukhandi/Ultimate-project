@@ -35,6 +35,14 @@ var is_hitstop_active: bool = false
 var hitstop_timer: float = 0.0
 var _hitstop_safety_timer: SceneTreeTimer = null
 
+# ── Last-Kill Slowdown State ───────────────────────────────────────────
+## Test seam: number of last-kill slowdowns started (direct or deferred).
+var last_kill_started_count: int = 0
+var _pending_last_kill: bool = false    # asked for during a hitstop, starts when it ends
+var _pending_last_kill_scene_id: int = 0  # instance id of current_scene at the request (0 = none)
+var _last_kill_id: int = 0              # bumped per slowdown; a stale restore timer checks it
+var _last_kill_tween: Tween = null      # the current slowdown's 0.12 -> 1.0 ramp
+
 # ── Kill Tracking ──────────────────────────────────────────────────────
 var _recent_kills: int = 0
 var _kill_timer: float = 0.0
@@ -126,10 +134,19 @@ func apply_hitstop(duration: float = 0.1) -> void:
 	_hitstop_safety_timer.timeout.connect(_force_end_hitstop)
 
 func _end_hitstop() -> void:
+	# Decide on a deferred last-kill now, while the "hitstop" request is still held
+	# (the recovery ramp below releases it a moment later).
+	var start_last_kill := _take_pending_last_kill()
 	is_hitstop_active = false
 	if _hitstop_safety_timer and _hitstop_safety_timer.timeout.is_connected(_force_end_hitstop):
 		_hitstop_safety_timer.timeout.disconnect(_force_end_hitstop)
 	_hitstop_safety_timer = null
+	if start_last_kill:
+		# Hand straight over to the last-kill slowdown: ramping the hitstop back to 1.0
+		# first would show a burst of full speed before the 0.12 (T11 code review).
+		_start_last_kill()
+		ContextStack.release_time_scale(&"hitstop")
+		return
 	# Smooth time scale recovery (Dead Cells does this), then hand time back.
 	_hitstop_recover_tween = create_tween()
 	_hitstop_recover_tween.tween_method(_set_time_scale, Engine.time_scale, 1.0, 0.04)
@@ -146,7 +163,10 @@ func _force_end_hitstop() -> void:
 	if is_hitstop_active:
 		push_warning("[COMBAT FX] Force-ending hitstop (safety fallback)")
 		is_hitstop_active = false
+		var start_last_kill := _take_pending_last_kill()  # before the release below
 		ContextStack.release_time_scale(&"hitstop")
+		if start_last_kill:
+			_start_last_kill()
 
 # ==========================================================================
 # SCREEN SHAKE — Omnidirectional & Directional with Perlin-like noise
@@ -490,19 +510,60 @@ func _check_multi_kill(position: Vector2) -> void:
 	_play_sfx("multi_kill")
 	apply_screen_shake(15.0, 0.3)
 
-func apply_last_kill_slowdown() -> void:
+func apply_last_kill_slowdown(is_boss: bool = false) -> void:
 	## Dramatic slowdown when the last enemy in a wave dies — bullet-time finish.
-	if get_tree().paused or is_hitstop_active:
+	## During the kill's own hitstop it is remembered and starts when that hitstop
+	## ends (dropped if the game is paused, the hitstop request was cleared or the
+	## scene changed by then). Paused: dropped. Bosses (`is_boss`): never — their
+	## `boss_death` slow-motion is the finish.
+	## Usage: `CombatFX.apply_last_kill_slowdown(is_in_group("boss"))`
+	if is_boss or get_tree().paused:
 		return
+	if _pending_last_kill or ContextStack.has_time_request(&"last_kill"):
+		return  # two kills in one frame: one slowdown
+	if is_hitstop_active:
+		_pending_last_kill = true
+		var scene := get_tree().current_scene
+		_pending_last_kill_scene_id = scene.get_instance_id() if scene else 0
+		return
+	_start_last_kill()
+
+func _take_pending_last_kill() -> bool:
+	## Clear the pending flag; true if the deferred slowdown should start now.
+	## Call BEFORE releasing the "hitstop" request: clear_time_scale() drops that
+	## request without resetting is_hitstop_active, which is how a cleared
+	## hitstop is told apart from a normal end.
+	if not _pending_last_kill:
+		return false
+	_pending_last_kill = false
+	if get_tree().paused or not ContextStack.has_time_request(&"hitstop"):
+		return false
+	var scene := get_tree().current_scene
+	return (scene.get_instance_id() if scene else 0) == _pending_last_kill_scene_id
+
+func _start_last_kill() -> void:
+	last_kill_started_count += 1
+	_last_kill_id += 1
+	if _last_kill_tween and _last_kill_tween.is_valid():
+		_last_kill_tween.kill()  # an older slowdown's ramp must not touch this one
 	_set_last_kill_scale(0.12)
 	var timer = get_tree().create_timer(0.4, true, false, true)  # Uses real time
-	timer.timeout.connect(_restore_time_scale)
+	timer.timeout.connect(_restore_time_scale.bind(_last_kill_id))
 
-func _restore_time_scale() -> void:
-	## Smoothly restore time scale after last-kill slowdown.
-	var tw = create_tween()
-	tw.tween_method(_set_last_kill_scale, 0.12, 1.0, 0.12)
-	tw.tween_callback(func(): ContextStack.release_time_scale(&"last_kill"))
+func _restore_time_scale(slowdown_id: int) -> void:
+	## Smoothly restore time scale after last-kill slowdown. Does nothing if a newer
+	## slowdown started since, or if clear_time_scale() (scene change, death, retry)
+	## already dropped the request: the ramp would otherwise slow the next scene.
+	if slowdown_id != _last_kill_id or not ContextStack.has_time_request(&"last_kill"):
+		return
+	_last_kill_tween = create_tween()
+	_last_kill_tween.tween_method(_ramp_last_kill.bind(slowdown_id), 0.12, 1.0, 0.12)
+	_last_kill_tween.tween_callback(func(): ContextStack.release_time_scale(&"last_kill"))
+
+func _ramp_last_kill(value: float, slowdown_id: int) -> void:
+	# Stop re-requesting if the request was cleared mid-ramp or a newer slowdown took over.
+	if slowdown_id == _last_kill_id and ContextStack.has_time_request(&"last_kill"):
+		_set_last_kill_scale(value)
 
 func _set_last_kill_scale(value: float) -> void:
 	ContextStack.request_time_scale(&"last_kill", value, ContextStack.PRIORITY_DRAMATIC)

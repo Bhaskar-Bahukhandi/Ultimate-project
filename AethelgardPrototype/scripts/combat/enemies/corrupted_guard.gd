@@ -143,6 +143,5 @@ func die() -> void:
 	_is_blocking = false
 	if has_node("Sprite"):
 		get_node("Sprite").modulate = Color.WHITE
-	_sfx("enemy_death")
 	_vfx("vfx_enemy_death", global_position)
 	super.die()

@@ -41,6 +41,7 @@ const MAX_AIR_JUMPS = 1
 # ── Dash ──────────────────────────────────────────────────────────────────
 const DASH_SPEED = 720.0
 const DASH_DURATION = 0.18
+const DASH_IFRAME_TAIL = 0.05  # i-frames kept after the dash ends (the countdown is frozen while dashing)
 const DASH_COOLDOWN = 0.34
 const DASH_GHOST_COUNT = 4
 const AIR_DASH_ENABLED = true
@@ -182,6 +183,8 @@ var is_attacking: bool = false
 var attack_cooldown: float = 0.0
 var combo_step: int = 0
 var combo_timer: float = 0.0
+## True while "STRIKE 3" is showing after the chain's last step; cleared when attack_cooldown reaches 0 (Y1-P0-T11 AC-3).
+var _strike_label_pending_clear: bool = false
 var is_charging: bool = false
 var charge_timer: float = 0.0
 var charged_attack_ready: bool = false
@@ -444,6 +447,10 @@ func _physics_process(delta: float) -> void:
 	# ── Cooldown timers ──
 	if attack_cooldown > 0.0:
 		attack_cooldown -= delta
+		if attack_cooldown <= 0.0 and _strike_label_pending_clear:
+			# Step 3 zeroes combo_step, so the combo_timer lapse never clears its label; clear it here.
+			_strike_label_pending_clear = false
+			_update_combo_indicator()
 		if attack_cooldown <= 0.0 and attack_buffer_timer > 0.0 and not is_attacking and not is_dashing and not is_healing and not is_casting:
 			attack_buffer_timer = 0.0
 			_perform_combo_attack()
@@ -941,6 +948,7 @@ func _perform_combo_attack() -> void:
 	attack_cooldown = total_commitment
 	_update_combo_indicator()
 	# Reset combo step AFTER updating indicator so step 3 text shows
+	_strike_label_pending_clear = combo_step == 3
 	if combo_step == 3:
 		combo_step = 0
 		combo_timer = 0.0
@@ -979,7 +987,6 @@ func _perform_combo_attack() -> void:
 		if enemy.has_method("take_damage"):
 			enemy.take_damage(final_damage, global_position)
 			hit_count += 1
-			_sfx("critical_hit" if parry_counter_active else "sword_hit")
 			if has_node("/root/GameJuice"):
 				GameJuice.on_hit_connect(self, enemy, final_damage, parry_counter_active)
 			total_combo_hits += 1
@@ -1045,6 +1052,8 @@ func _perform_charged_attack() -> void:
 	attack_cooldown = CHARGED_ATTACK_STARTUP + CHARGED_ATTACK_ACTIVE + CHARGED_ATTACK_RECOVERY
 	combo_step = 0
 	combo_timer = 0.0
+	_strike_label_pending_clear = false
+	_update_combo_indicator()  # the charged attack ends the chain, so clear the STRIKE label
 
 	var damage = attack_damage * CHARGED_ATTACK_MULT * _get_combo_multiplier()
 	var facing = facing_direction
@@ -1154,7 +1163,8 @@ func _start_dash() -> void:
 	_perfect_dodge_awarded = false
 
 	invulnerable = true
-	invuln_timer = DASH_DURATION + 0.05
+	# Frozen while is_dashing, so total = DASH_DURATION + DASH_IFRAME_TAIL; maxf never shortens longer i-frames (hurt, parry, flee).
+	invuln_timer = maxf(invuln_timer, DASH_IFRAME_TAIL)
 	dash_cooldown_timer = maxf(dash_cooldown_timer, DASH_DURATION + 0.06)
 
 	velocity.x = dash_direction * DASH_SPEED
@@ -1904,6 +1914,8 @@ func take_damage(amount: float, source_position: Vector2 = Vector2.ZERO, source_
 	combo_step = 0
 	combo_timer = 0.0
 	attack_cooldown = 0.0
+	_strike_label_pending_clear = false
+	_update_combo_indicator()  # combo_step is 0, so this clears the STRIKE label
 	_cancel_charge()  # also hides the charge bar, which used to stay on screen
 	is_casting = false
 	cast_lock_timer = 0.0
@@ -2200,6 +2212,8 @@ func force_restore_after_death_retry(spawn_position: Vector2) -> Dictionary:
 	combo_timer = 0.0
 	charge_timer = 0.0
 	combo_step = 0
+	_strike_label_pending_clear = false
+	_update_combo_indicator()  # a death retry ends the chain, so clear the STRIKE label
 	dash_available = true
 	air_jumps_remaining = 1
 
@@ -2697,13 +2711,13 @@ func _update_combo_indicator() -> void:
 			_combo_indicator.text = ""
 			return
 		1:
-			combo_text = "COMBO I"
+			combo_text = "STRIKE 1"
 			combo_color = Color(0.7, 0.9, 1.0)
 		2:
-			combo_text = "COMBO II"
+			combo_text = "STRIKE 2"
 			combo_color = Color(1.0, 0.85, 0.3)
 		3:
-			combo_text = "COMBO III !"
+			combo_text = "STRIKE 3"
 			combo_color = Color(1.0, 0.4, 0.3)
 
 	var old_text = _combo_indicator.text

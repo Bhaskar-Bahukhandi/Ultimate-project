@@ -137,7 +137,6 @@ func die() -> void:
 	if current_state == State.DEAD:
 		return
 	_is_burrowed = false
-	_sfx("enemy_death")
 	_vfx("vfx_enemy_death", global_position)
 	super.die()
 

@@ -96,6 +96,8 @@ const DODGE_COOLDOWN_TIME: float = 2.0
 var _stun_active: bool = false
 ## Hitstun freeze flag (keeps gravity active unlike set_physics_process(false))
 var _hitstun_frozen: bool = false
+## Set by take_damage just before CombatFX.apply_kill_effects (which plays enemy_death), so die() skips its own death sound (Y1-P0-T11)
+var _kill_fx_played: bool = false
 ## Deferred charge damage check
 var _charge_damage_pending: bool = false
 ## Charge travel timer — prevents damage on the very first frame before enemy moves
@@ -849,6 +851,7 @@ func take_damage(amount: float, knockback_source: Vector2 = Vector2.ZERO) -> voi
 				p.on_enemy_killed()
 				break
 		if has_node("/root/CombatFX"):
+			_kill_fx_played = true
 			CombatFX.apply_kill_effects(global_position, amount)
 		die()
 	else:
@@ -944,7 +947,9 @@ func die() -> void:
 		if is_instance_valid(proj) and proj.get_meta("owner_id", 0) == get_instance_id():
 			proj.queue_free()
 
-	_sfx("enemy_death", 0.1)
+	# Kill effects already played enemy_death on a normal kill; the Root Access, kill-zone and other direct die() paths still need it.
+	if not _kill_fx_played:
+		_sfx("enemy_death", 0.1)
 	died.emit()
 	if has_node("/root/GameJuice"):
 		GameJuice.on_enemy_die(self)
@@ -961,7 +966,7 @@ func die() -> void:
 		if is_instance_valid(e) and e != self and e.get("current_state") != null and e.current_state != State.DEAD:
 			alive_count += 1
 	if alive_count == 0 and has_node("/root/CombatFX"):
-		CombatFX.apply_last_kill_slowdown()
+		CombatFX.apply_last_kill_slowdown(is_in_group("boss"))  # bosses keep their own boss_death slow-motion
 
 	if has_node("/root/CombatFX"):
 		CombatFX.apply_kill_zoom()

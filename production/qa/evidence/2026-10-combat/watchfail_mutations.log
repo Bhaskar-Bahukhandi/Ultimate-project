@@ -1,0 +1,45 @@
+watchfail_mutations.log - Y1-P0-T11 code-review mutation watch-fail
+Scratch worktree at HEAD (c2a7451) + the current uncommitted T11 change; one mutation per run, reverted after.
+Files copied: 12
+
+== M1 hitstop ramps to 1.0 before the slowdown (pre-review _end_hitstop order)
+   file: scripts/combat_effects.gd; exit 1; COMBAT FIXES RESULT: 44 passed, 1 failed
+   expected failing check contains: 'no burst of speed' -> FAILED as expected
+   FAIL: T11 AC-5b: no burst of speed: Engine.time_scale stays at or below 0.13 for 200 ms real after the hitstop ends (at handover 0.018, peak 0.838)
+
+== M2 restore timer and ramp unguarded (pre-review _restore_time_scale)
+   file: scripts/combat_effects.gd; exit 1; COMBAT FIXES RESULT: 44 passed, 1 failed
+   expected failing check contains: 'does not bring last_kill back' -> FAILED as expected
+   FAIL: T11 AC-5d: after clear_time_scale() the old slowdown's timer does not bring last_kill back (started true, stale request or slow time seen true)
+
+== M3 pause not checked at consume time
+   file: scripts/combat_effects.gd; exit 1; COMBAT FIXES RESULT: 44 passed, 1 failed
+   expected failing check contains: 'dropped if the tree is paused' -> FAILED as expected
+   FAIL: T11 AC-5d: a pending last-kill is dropped if the tree is paused when the hitstop ends
+
+== M4 cleared hitstop request not checked at consume time
+   file: scripts/combat_effects.gd; exit 1; COMBAT FIXES RESULT: 44 passed, 1 failed
+   expected failing check contains: 'dropped if clear_time_scale() ran' -> FAILED as expected
+   FAIL: T11 AC-5d: a pending last-kill is dropped if clear_time_scale() ran before the hitstop ended
+
+== M5 scene change not checked at consume time
+   file: scripts/combat_effects.gd; exit 1; COMBAT FIXES RESULT: 44 passed, 1 failed
+   expected failing check contains: 'dropped if current_scene changed' -> FAILED as expected
+   FAIL: T11 AC-5d: a pending last-kill is dropped if current_scene changed before the hitstop ended
+
+== M6 boss flag not passed from enemy_base.die
+   file: scripts/combat/enemy_base.gd; exit 1; COMBAT FIXES RESULT: 44 passed, 1 failed
+   expected failing check contains: 'a boss killed as the last enemy starts no last-kill' -> FAILED as expected
+   FAIL: T11 AC-5g: a boss killed as the last enemy starts no last-kill (pending true, count +1)
+
+== M8 no same-frame dedupe in apply_last_kill_slowdown
+   file: scripts/combat_effects.gd; exit 1; COMBAT FIXES RESULT: 44 passed, 1 failed
+   expected failing check contains: 'two requests in one frame during a hitstop' -> FAILED as expected
+   FAIL: T11 AC-5e: two requests in one frame during a hitstop, and a third while it runs, give one slowdown (count +2)
+
+== M7 death retry does not clear the label
+   file: scripts/combat/player_combat.gd; exit 1; COMBAT FIXES RESULT: 44 passed, 1 failed
+   expected failing check contains: 'death retry reset empties the label' -> FAILED as expected
+   FAIL: T11 AC-3: a death retry reset empties the label ('STRIKE 1' then 'STRIKE 1')
+
+ALL MUTATIONS CAUGHT: yes

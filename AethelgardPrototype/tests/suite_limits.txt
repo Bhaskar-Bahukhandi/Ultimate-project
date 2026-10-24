@@ -34,7 +34,7 @@ res://tests/unit/items/null_potion_test.gd                 83   120
 res://tests/integration/vfx/screen_flash_test.gd          107   120
 res://tests/integration/story/chapter1_route_test.gd      391  1620
 res://tests/integration/story/chapter2_route_test.gd       49   480
-res://tests/integration/combat/combat_fixes_test.gd        10   120
+res://tests/integration/combat/combat_fixes_test.gd        45   120
 res://tests/integration/level/reachability_test.gd         21   120
 res://tests/integration/quests/act1_quests_completable_test.gd 114 180
 res://tests/integration/playthrough/phase0_blockers_test.gd 81  960

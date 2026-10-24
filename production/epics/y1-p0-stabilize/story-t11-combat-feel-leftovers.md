@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-T11 (`production/plan/_source/Y1-P0.json#Y1-P0-T11`)
-> **Status**: Ready
+> **Status**: In Progress
 > **Layer**: Feature
 > **Type**: Integration
 > **Estimate**: 4 days
@@ -141,7 +141,8 @@ use up the 0.18 s at once (inferred, not run).
       kill effects did not (a flag set in `take_damage` before `apply_kill_effects`); no other `_sfx` / `play` call changes.
 - [ ] AC-3 **STRIKE label.** The chain label reads "STRIKE 1", "STRIKE 2", "STRIKE 3" (same colours and size as today).
       After step 3, "STRIKE 3" shows until `attack_cooldown` reaches 0, then the label is empty; right after `take_damage` it
-      is empty. Steps 1 and 2 keep clearing when `combo_timer` lapses. Checked in the suite by reading the label's text (the
+      is empty; right after a charged attack (which also ends the chain) it is empty (added 2026-10-24 at the user's request); after a
+      death-retry reset (`force_restore_after_death_retry`) it is empty (code review, 2026-10-24). Steps 1 and 2 keep clearing when `combo_timer` lapses. Checked in the suite by reading the label's text (the
       step-3 and hurt checks fail on the old code; the step-1/2 checks pass on both). GameJuice's counter is unchanged.
 - [ ] AC-4 **Label evidence.** A new stop `t11_combat_hud` in `scripts/debug/screenshot_tour_runner.gd` (`_wanted()`-gated
       like the others) sets up a high-HP slime, lands two strikes and checks its preconditions — `combo_step == 2`, the label
@@ -162,8 +163,14 @@ use up the 0.18 s at once (inferred, not run).
       - (f) a kill while the tree is paused (Root Access) leaves nothing pending, and `apply_hitstop` while paused makes no
         request;
       - (g) a boss kill does not start a deferred last-kill (count unchanged; its `boss_death` request still appears);
-      - end-to-end: killing the combat-arena slime with `take_damage(99999)` makes `Engine.time_scale` reach 0.12 on at least
-        one frame within 1.0 s real (watched failing on the pre-change code).
+      - end-to-end: killing the combat-arena slime with `take_damage(99999)` starts a last-kill slowdown (count +1) and makes
+        `Engine.time_scale` reach 0.12 on at least one frame within 1.0 s real (watched failing on the pre-change code);
+      - *(code review, 2026-10-24)* (h) no burst of speed: when a pending slowdown starts at the hitstop's end, the hitstop
+        hands over directly (no ramp back to 1.0), so `Engine.time_scale` stays at or below 0.13 for 10 frames; (i) a slowdown
+        whose request `clear_time_scale()` dropped does not come back when its 0.4 s real-time timer fires (each slowdown
+        carries an id; the restore and its ramp do nothing for a stale id or a dropped request);
+      - each drop rule (paused, cleared, scene changed) and the boss flag is shown failing by mutation, and (g) has a positive
+        control (the same setup without the boss group starts one slowdown).
 - [ ] AC-6 **One time-scale writer.** A suite check reads every `.gd` under `res://scripts`, strips `#` comments, and fails
       if any line outside `scripts/core/context_stack.gd` matches `Engine\.time_scale\s*[+\-*/]?=[^=]`; passes today.
 - [ ] AC-7 **Watch-fail.** In a scratch worktree at the pre-change commit, the new checks for AC-1 (frame count), AC-2 (one
