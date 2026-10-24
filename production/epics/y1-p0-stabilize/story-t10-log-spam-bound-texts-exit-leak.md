@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-T10 (`production/plan/_source/Y1-P0.json#Y1-P0-T10`)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Foundation
 > **Type**: Integration
 > **Estimate**: 2 days
@@ -109,7 +109,7 @@ code is edited. Files: `AethelgardPrototype/scripts/asset_manager.gd`, `scripts/
 
 ## Acceptance Criteria
 
-- [ ] AC-1 **Warn once per message.** `asset_manager.gd` has a helper (e.g. `_warn_once(message: String) -> bool`)
+- [x] AC-1 **Warn once per message.** `asset_manager.gd` has a helper (e.g. `_warn_once(message: String) -> bool`)
       that prints `push_warning(message)` the first time a message is seen in a run and returns `true`, and returns
       `false` without printing afterwards; it stores its keys in `_missing_production_art_warned`. Every
       `push_warning` site listed in audit fact 1 goes through it except :930 and :1513, which are unchanged. The four
@@ -118,17 +118,17 @@ code is edited. Files: `AethelgardPrototype/scripts/asset_manager.gd`, `scripts/
       has/set guard lines inside the four existing helpers: no return value, slot dictionary key, load call or
       condition changes. The Oakhaven helpers' keys widen from (resolved state, path) to the full message, which also
       includes `requested`; once-per-message still holds.
-- [ ] AC-2 **Spam gone from the logs.** For each of the 10 suites with AssetManager lines (audit fact 1), the number
+- [x] AC-2 **Spam gone from the logs.** For each of the 10 suites with AssetManager lines (audit fact 1), the number
       of `WARNING: [AssetManager]` lines after the change equals that suite's distinct-message count before, no message
       text appears twice in a suite, and each suite's distinct set is unchanged. Counts come from the before log
       (`production/qa/evidence/2026-10-autoloads/run_all.log`) and the after full-suite log with
       `awk '/^=== res:\/\//{s=$2} /WARNING: \[AssetManager\]/{c[s]++}'` (lines) and the same keyed on the message text
       (distinct), saved as `warning_counts.log`. The full-suite totals are recorded: `WARNING: [AssetManager]` 463 before,
       all `WARNING` 494 before, and both after. Any message present after but not before is named and explained.
-- [ ] AC-3 **`bind_text` prunes.** `bind_text()` drops entries whose `WeakRef` is dead in the same pass that looks
+- [x] AC-3 **`bind_text` prunes.** `bind_text()` drops entries whose `WeakRef` is dead in the same pass that looks
       for a duplicate, before appending. The de-duplicate behaviour (same node + property → update the template, no
       new entry) and `_refresh_bound_texts()` are unchanged.
-- [ ] AC-4 **Prune test.** New suite `tests/unit/input/input_bound_texts_prune_test.gd` (result line
+- [x] AC-4 **Prune test.** New suite `tests/unit/input/input_bound_texts_prune_test.gd` (result line
       `BOUNDTEXTS RESULT: N passed, F failed`) checks the `aeth_phase0_test` isolation guard first, uses the
       `_initialize() -> _run.call_deferred()` shape of `context_stack_test.gd` so it can `await`, and runs against the
       live `InputService`. `base_live` = the number of entries whose `ref.get_ref()` is non-null at the start of each
@@ -149,10 +149,10 @@ code is edited. Files: `AethelgardPrototype/scripts/asset_manager.gd`, `scripts/
       `.uid` beside it, `suite_limits.txt` line with its count, `run_all_tests.ps1` (header "all 18 suites"),
       `ci.yml` step with a double-quoted name if it contains `: `. `load_all` stays `LOADALL ok=204 bad=0` (it walks
       `scripts/` and `scenes/` only).
-- [ ] AC-5 **Cursor released at exit.** `GameManager` gains `_exit_tree()` that calls
+- [x] AC-5 **Cursor released at exit.** `GameManager` gains `_exit_tree()` that calls
       `Input.set_custom_mouse_cursor(null, Input.CURSOR_ARROW)`, with a one-line comment saying why; nothing else in
       `game_manager.gd` changes (`git diff` shows only the new function).
-- [ ] AC-6 **Clean exit log (real renderer).** New `tests/run_exit_scan.ps1` boots the project with the console
+- [x] AC-6 **Clean exit log (real renderer).** New `tests/run_exit_scan.ps1` boots the project with the console
       executable and the default (non-headless) renderer, an isolated `APPDATA` (`aeth_phase0_test_*`), `--verbose`,
       `--fixed-fps 60 --quit-after 300` (past the 3 s splash into the main menu), saves the log, and exits 1 if it
       contains `RID allocations of type`, `RIDs of type "Texture" were leaked` or `RenderingServer::get_singleton()" is
@@ -163,13 +163,13 @@ code is edited. Files: `AethelgardPrototype/scripts/asset_manager.gd`, `scripts/
       stderr into the log (`2>&1`) and also exits 1 if Godot's exit code is non-zero, the log is empty, or the log has
       no line showing `res://scenes/main_menu.tscn` loaded, so a crashed boot cannot pass. The before-scan at the
       pre-change commit (scratch worktree) must exit 1 on the leak lines: that is the positive control.
-- [ ] AC-7 **Cursor still shows.** `git diff` shows `_setup_custom_cursor()` unchanged and `_exit_tree()` as the only
+- [x] AC-7 **Cursor still shows.** `git diff` shows `_setup_custom_cursor()` unchanged and `_exit_tree()` as the only
       new code in `game_manager.gd`. The user runs a windowed build (`godot --path AethelgardPrototype`), reaches the
       main menu, and confirms the green crosshair cursor shows; recorded as "[user], manual, build [commit]" in the
       evidence README. Screenshots cannot show the OS cursor (the tour captures `root.get_texture().get_image()`,
       `screenshot_tour_runner.gd:623`) and Godot has no getter for the custom cursor, so none is claimed. DEFERRED to
       the user's check; the story cannot close until it is recorded.
-- [ ] AC-8 **Suites and records.** Full suite passes (`run_all_tests.ps1`, 18 suites, no `-Quick`) with every existing
+- [x] AC-8 **Suites and records.** Full suite passes (`run_all_tests.ps1`, 18 suites, no `-Quick`) with every existing
       suite's count equal to `production/qa/evidence/2026-10-autoloads/run_all.log`; `git diff --check` is clean;
       a dated CHANGELOG entry; TD-012 (AudioStream/ObjectDB leak at exit) added to `docs/tech-debt-register.md`.
 
@@ -236,7 +236,7 @@ cursor check, and a README mapping each AC to its file. (The plan named `2026-11
 **Run result**: required: the main menu after boot with the real renderer (AC-6 scan log; AC-7 the user's windowed
 check — no screenshot can show the OS cursor).
 
-**Status**: [ ] Not yet created
+**Status**: [x] Created — production/qa/evidence/2026-10-exit-leak/ (README.md maps every AC to its log)
 
 ---
 
@@ -245,3 +245,31 @@ check — no screenshot can show the OS cursor).
 - Depends on: Y1-P0-T02 (done: the test layout and `test_layout_test` registration rules). TD-007 (done:
   `suite_limits.txt`).
 - Unlocks: quieter logs for every later story's evidence; a clean exit before Y1-P0-T15.
+
+---
+
+## Completion Notes
+**Completed**: 2026-10-24
+**Criteria**: 8/8 passing. AC-7 is the user's manual windowed check (green crosshair at the main menu), made on
+`c01d80e` plus the T10 change; the committed game code in `ce13542` is the same (the later edits were to the prune
+suite's case 4 and the exit scan's log header only).
+**Deviations** (advisory):
+- NOT ASSESSED: GDD / ADR / TR-registry traceability (none exist for this cleanup).
+- Untested by user decision: `_warn_once` itself (AC-2's per-suite log counts are the evidence) and one node bound on
+  two properties (code review suggestion 5, declined).
+**Test Evidence**: Integration — `tests/unit/input/input_bound_texts_prune_test.gd` (16 checks, 5 cases), watched
+failing on the pre-change code (`9 passed, 7 failed`, 1006 entries vs 6); `production/qa/evidence/2026-10-exit-leak/`:
+AssetManager warning lines 463 → 102 with the same 26 messages in all 10 suites (`warning_counts.log`); real-renderer
+exit scan fails before on the three leak lines and passes after (`exit_before.log`, `exit.log`, Vulkan, RTX 2050);
+59-shot tour after with no leak line (`tour_after.log`), and a 1-shot tour from the audit on the pre-change code with
+all three (`tour_before_1shot.log`, a partial control); full suite 18/18 (`run_all.log`).
+**Code Review**: Complete — /code-review (godot-specialist, godot-gdscript-specialist, qa-tester) APPROVED WITH
+SUGGESTIONS, suggestions 1-4 applied in `ce13542`; LP-CODE-REVIEW APPROVE (condition: CI green on the branch before
+merge to main — the new suite has run only locally on Windows); QL-TEST-COVERAGE ADEQUATE.
+**Commit**: `ce13542` (fix(performance): warn once per fallback, prune bound texts, release the cursor texture).
+**Follow-ups** (advisory, QL-TEST-COVERAGE, not logged as tech debt):
+- No CI guard stops a new bare `push_warning` returning to `asset_manager.gd`; a grep check in an existing static
+  suite would cover it.
+- `run_exit_scan.ps1`'s `EmptyLog`, `NoMainMenuLoad` and non-zero-exit branches have never been seen failing; one run
+  with `--quit-after 1` or a bad `-Project` would show they can.
+- Exit leaks on other quit paths (quit from gameplay) are not scanned. TD-012 (audio ObjectDB leak at exit) remains.
