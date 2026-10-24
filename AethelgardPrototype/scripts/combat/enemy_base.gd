@@ -1750,6 +1750,7 @@ func _hitstop(duration: float) -> void:
 func _kill_effects(pos: Vector2, damage: float) -> void:
 	## Safe wrapper for CombatFX.apply_kill_effects.
 	if has_node("/root/CombatFX"):
+		_kill_fx_played = true  # apply_kill_effects plays enemy_death, so a later die() must not
 		CombatFX.apply_kill_effects(pos, damage)
 
 
