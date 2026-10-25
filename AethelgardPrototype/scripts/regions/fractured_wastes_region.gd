@@ -749,7 +749,9 @@ func _interact_secret(secret: Area2D) -> void:
 			msg += "\n[+%d XP]" % xp_bonus
 		if gold_bonus > 0:
 			msg += "\n[+%d Gold]" % gold_bonus
-		await DialogueManager.say(data.get("title", "SECRET"), msg)
+		# The title is the first line of the text, not the speaker (Y1-P0-T12 AC-3, decision D2).
+		# DialogueManager's text label has bbcode_enabled = true, so the title is bold ([ is escaped as [lb]).
+		await DialogueManager.say("Journal", "[b]%s[/b]\n%s" % [str(data.get("title", "SECRET")).replace("[", "[lb]"), msg])
 		GameManager.change_state(GameManager.GameState.EXPLORATION)
 
 	if has_node("/root/LoreJournal"):
@@ -859,8 +861,13 @@ func _interact_lore(lore: Area2D) -> void:
 	var lore_id: String = lore.get_meta("lore_id", "")
 	if has_node("/root/DialogueManager"):
 		GameManager.change_state(GameManager.GameState.DIALOGUE)
-		await DialogueManager.say(title, text)
+		# The title is the first line of the text, not the speaker (Y1-P0-T12 AC-3, decision D2).
+		# DialogueManager's text label has bbcode_enabled = true, so the title is bold ([ is escaped as [lb]).
+		await DialogueManager.say("Journal", "[b]%s[/b]\n%s" % [title.replace("[", "[lb]"), text])
 		GameManager.change_state(GameManager.GameState.EXPLORATION)
+	# Record discovery, as Oakhaven and Ironhold do (Y1-P0-T12 AC-3).
+	if has_node("/root/LoreJournal"):
+		LoreJournal.discover_lore(lore_id, title, text, "world", "fractured_wastes")
 	if lore_id.begins_with("dev_signature"):
 		GameManager.set_story_flag(lore_id + "_found", true)
 

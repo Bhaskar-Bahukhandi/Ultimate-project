@@ -586,9 +586,8 @@ func _place_story_gates() -> void:
 		"Underground Network\n[{interact}] Descend",
 		"ch2_underground_unlocked", "ch2_underground_complete", Color(0.35, 0.55, 0.8))
 	# Clock Tower — the authored multi-floor version of the Clockwork Automaton
-	# fight. Clearing it sets ch2_clockwork_automaton_defeated, which suppresses
-	# the generic arena boss gate in _place_boss_gates() so the fight can't be
-	# taken twice.
+	# fight (its own scene; _place_boss_gates() places no gate for it). The gate
+	# hides once ch2_clock_tower_complete is set, so the fight can't be taken twice.
 	_create_story_gate("ClockTowerGate", Vector2(2950, 620),
 		"res://scenes/chapter2/clock_tower.tscn",
 		"Clock Tower\n[{interact}] Ascend",
@@ -799,7 +798,9 @@ func _interact_secret(secret: Area2D) -> void:
 			msg += "\n[+%d XP]" % xp_bonus
 		if gold_bonus > 0:
 			msg += "\n[+%d Gold]" % gold_bonus
-		await DialogueManager.say(data.get("title", "SECRET"), msg)
+		# The title is the first line of the text, not the speaker (Y1-P0-T12 AC-3, decision D2).
+		# DialogueManager's text label has bbcode_enabled = true, so the title is bold ([ is escaped as [lb]).
+		await DialogueManager.say("Journal", "[b]%s[/b]\n%s" % [str(data.get("title", "SECRET")).replace("[", "[lb]"), msg])
 		GameManager.change_state(GameManager.GameState.EXPLORATION)
 
 	if has_node("/root/LoreJournal"):
@@ -966,7 +967,9 @@ func _interact_lore(lore: Area2D) -> void:
 	var lore_id: String = lore.get_meta("lore_id", "")
 	if has_node("/root/DialogueManager"):
 		GameManager.change_state(GameManager.GameState.DIALOGUE)
-		await DialogueManager.say(title, text)
+		# The title is the first line of the text, not the speaker (Y1-P0-T12 AC-3, decision D2).
+		# DialogueManager's text label has bbcode_enabled = true, so the title is bold ([ is escaped as [lb]).
+		await DialogueManager.say("Journal", "[b]%s[/b]\n%s" % [title.replace("[", "[lb]"), text])
 		GameManager.change_state(GameManager.GameState.EXPLORATION)
 	if has_node("/root/LoreJournal"):
 		LoreJournal.discover_lore(lore_id, title, text, "world", "ironhold")
@@ -1135,6 +1138,12 @@ func _interact_arena() -> void:
 		SceneTransitions.change_scene("res://scenes/chapter2/arena_district.tscn", SceneTransitions.TransitionStyle.COMBAT_ENTRY)
 
 func _interact_boss(gate: Area2D) -> void:
+	# A gate without a scene is a placement bug: stop loudly before anything is set
+	# (Y1-P0-T12 AC-5, decision D5). The old combat_arena.tscn fallback is gone.
+	var scene_path: String = gate.get_meta("scene_path", "")
+	if scene_path.is_empty():
+		push_error("[Ironhold] Boss gate '%s' has no scene_path; not entering." % gate.name)
+		return
 	var boss_id: String = gate.get_meta("boss_id", "")
 	var rec_level: int = gate.get_meta("rec_level", 1)
 	var player_level = GameManager.player_stats.get("level", 1)
@@ -1154,9 +1163,6 @@ func _interact_boss(gate: Area2D) -> void:
 	GameManager.set_meta("boss_return_scene", "res://scenes/regions/ironhold_region.tscn")
 	GameManager.set_meta("boss_fight_id", boss_id)
 
-	var scene_path: String = gate.get_meta("scene_path", "")
-	if scene_path.is_empty():
-		scene_path = "res://scenes/combat/combat_arena.tscn"
 	if has_node("/root/SceneTransitions"):
 		SceneTransitions.change_scene(scene_path, SceneTransitions.TransitionStyle.COMBAT_ENTRY)
 

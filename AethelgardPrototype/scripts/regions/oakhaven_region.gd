@@ -750,7 +750,9 @@ func _collect_secret(secret: Area2D) -> void:
 			msg += "\n[+%d XP]" % xp_bonus
 		if gold_bonus > 0:
 			msg += "\n[+%d Gold]" % gold_bonus
-		await DialogueManager.say(data.get("title", "SECRET"), msg)
+		# The title is the first line of the text, not the speaker (Y1-P0-T12 AC-3, decision D2).
+		# DialogueManager's text label has bbcode_enabled = true, so the title is bold ([ is escaped as [lb]).
+		await DialogueManager.say("Journal", "[b]%s[/b]\n%s" % [str(data.get("title", "SECRET")).replace("[", "[lb]"), msg])
 		GameManager.change_state(GameManager.GameState.EXPLORATION)
 
 	# Record in lore journal
@@ -964,7 +966,9 @@ func _interact_with_lore(lore: Area2D) -> void:
 
 	if has_node("/root/DialogueManager"):
 		GameManager.change_state(GameManager.GameState.DIALOGUE)
-		await DialogueManager.say(title, text)
+		# The title is the first line of the text, not the speaker (Y1-P0-T12 AC-3, decision D2).
+		# DialogueManager's text label has bbcode_enabled = true, so the title is bold ([ is escaped as [lb]).
+		await DialogueManager.say("Journal", "[b]%s[/b]\n%s" % [title.replace("[", "[lb]"), text])
 		GameManager.change_state(GameManager.GameState.EXPLORATION)
 
 	# Record discovery

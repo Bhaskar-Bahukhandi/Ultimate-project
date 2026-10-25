@@ -106,6 +106,7 @@ const SPEAKER_COLORS: Dictionary = {
 	"SOVEREIGN": Color(0.8, 0.0, 0.0),
 	"Narrator": Color(0.6, 0.65, 0.7),  # Muted silver for narration
 	"NARRATOR": Color(0.6, 0.65, 0.7),  # Legacy alias
+	"Journal": Color(0.75, 0.7, 0.5),  # Lore and secret pickups: the title is the first line of the text, not the speaker
 	"Kaelthas": Color(0.9, 0.2, 0.1),  # Antagonist red
 	"The Archivist": Color(0.5, 0.8, 0.9),  # Archive blue
 	"Lyra": Color(0.3, 0.9, 0.4),  # Wastes green
