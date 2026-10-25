@@ -84,6 +84,8 @@ const OBJECTIVES: Array = [
 		"blockers": ["ch1_stew_done"],
 		"text": "Go to Elara's house. She's making stew.",
 		"hint": "",
+		"scene": "res://scenes/chapter1/oakhaven_village.tscn",
+		"target_node": "Doors/ElaraHouseDoor",
 	},
 	{  # step 6
 		"chapter1": true,

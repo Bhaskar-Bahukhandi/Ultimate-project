@@ -670,9 +670,13 @@ func change_state(new_state: GameState) -> void:
 # Return points are tagged with the scene they belong to. They used to be a bare
 # position that the next region to load would consume, so e.g. the Oakhaven
 # boss-gate position was applied to the first Ironhold arrival.
+## Y1-P0-S08: set by the Tutorial Knight arena right before it changes to the
+## shrine, read and cleared by the shrine (a walk-in, not a load). One name for both.
+const SHRINE_FRESH_ARRIVAL_META := "shrine_fresh_arrival"
 const TRANSIENT_METAS: Array[String] = [
 	"return_position", "return_position_scene", "boss_return_scene",
 	"boss_fight_id", "pending_encounter", "return_to_overworld_from",
+	SHRINE_FRESH_ARRIVAL_META,
 ]
 
 func set_return_point(scene_path: String, pos: Vector2) -> void:

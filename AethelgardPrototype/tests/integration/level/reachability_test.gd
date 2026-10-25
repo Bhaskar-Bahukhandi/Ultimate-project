@@ -13,6 +13,11 @@ const MAPS := [
 	{"path": "res://scenes/regions/oakhaven_region.tscn", "size": Vector2(3200, 2400), "loads": 3},
 	{"path": "res://scenes/regions/ironhold_region.tscn", "size": Vector2(3600, 2800), "loads": 3},
 	{"path": "res://scenes/overworld/overworld.tscn", "size": Vector2(3000, 2200), "loads": 3},
+	# Y1-P0-S08 rooms (AC-13). Geometry only: a door that is inactive still counts.
+	# ch1_stew_done is preset so the house's stew does not start while the grid is
+	# probed; the shrine is loaded without the arena's fresh-arrival meta, so no card.
+	{"path": "res://scenes/chapter1/elara_house.tscn", "size": Vector2(640, 384), "loads": 1, "preset": ["ch1_stew_done"]},
+	{"path": "res://scenes/chapter1/shrine.tscn", "size": Vector2(512, 640), "loads": 1},
 	# Control: wall Jessa in on purpose; the test must catch it.
 	{"path": "res://scenes/chapter1/oakhaven_village.tscn", "size": Vector2(2500, 2000), "loads": 1, "seal": "NPCs/Jessa"},
 ]
@@ -34,7 +39,7 @@ func _run() -> void:
 		return
 	for m in MAPS:
 		for i in m["loads"]:
-			await _check_map(m["path"], m["size"], i + 1, m.get("seal", ""))
+			await _check_map(m["path"], m["size"], i + 1, m.get("seal", ""), m.get("preset", []))
 	print("")
 	print("REACH RESULT: %d passed, %d failed" % [_passes, _failures.size()])
 	for f in _failures:
@@ -51,8 +56,10 @@ func _check(cond: bool, name: String) -> void:
 		print("  FAIL: " + name)
 
 
-func _check_map(path: String, size: Vector2, load_no: int, seal: String = "") -> void:
+func _check_map(path: String, size: Vector2, load_no: int, seal: String = "", preset: Array = []) -> void:
 	get_root().get_node("GameManager").reset_game()
+	for f in preset:
+		get_root().get_node("GameManager").set_story_flag(f, true)
 	get_root().get_node("DialogueManager").force_reset()
 	change_scene_to_file(path)
 	for i in 6:

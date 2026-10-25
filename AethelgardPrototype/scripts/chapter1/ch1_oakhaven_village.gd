@@ -1,7 +1,8 @@
 extends Node2D
 
 ## Chapter 1, C1-S01 to C1-S07 — Oakhaven. Top-down. Words are in dialogue/ch1/:
-##   oakhaven_gate.dlg (Bran, the road ledger) → elara_house.dlg (stew)
+##   oakhaven_gate.dlg (Bran, the road ledger) → elara_house.dlg (the invite;
+##   the stew itself plays in her house, elara_house.tscn, Y1-P0-S08)
 ##   → oakhaven_village.dlg (a normal afternoon: Mara, Old Fen, Jessa, the
 ##   farmers, the child and the chicken, the Whispering Stone)
 ##   → north_field.dlg (the alarm, the uphill water, the boar, the bridge).
@@ -13,6 +14,8 @@ extends Node2D
 const DLG_DIR := "res://dialogue/ch1/"
 const ALARM_AFTER_BEATS := 3          # afternoon conversations before the alarm
 const NORTH_FIELD_POS := Vector2(1440, 1380)
+const ELARA_HOUSE_SCENE := "res://scenes/chapter1/elara_house.tscn"
+const ELARA_AT_DOOR_POS := Vector2(728, 1196)   # where Elara waits after the invite, beside Doors/ElaraHouseDoor
 
 @onready var shop_panel = get_node_or_null("UI/ShopPanel")
 @onready var auction_panel = get_node_or_null("UI/AuctionPanel")
@@ -26,6 +29,7 @@ var in_shop: bool = false
 var _is_transitioning: bool = false
 var _dlg_depth := 0
 var _entrance_done := false
+var _invited := false                 # Elara's invite has played (or the stew already happened)
 var _alarm_done := false
 var _field_resolved := false
 var _field_running := false
@@ -64,6 +68,14 @@ func _ready() -> void:
 	_create_map_boundaries()
 	_add_building_collision()
 	_set_up_villagers()
+	_bind_door(get_node_or_null("Doors/ElaraHouseDoor") as Area2D, _on_elara_house_door_interaction)
+
+	_arrive_from_return_point(player)
+	# Y1-P0-S08: once the stew has played in Elara's house, the arrival (gate,
+	# ledger, invite) does not replay and the afternoon starts at once.
+	if GameManager.has_flag("ch1_stew_done"):
+		_invited = true
+		_entrance_done = true
 
 	if shop_panel:
 		shop_panel.visible = false
@@ -78,10 +90,23 @@ func _ready() -> void:
 	_update_gold_display()
 	_update_glitch_display()
 
+	if _entrance_done:
+		return
 	await get_tree().create_timer(1.2, false).timeout
 	if not is_inside_tree(): return
 	await _play_entrance()
 
+
+## Y1-P0-S08: back from Elara's house, the return point puts the player at her
+## door. Always called, so a stale return point is discarded too.
+func _arrive_from_return_point(player: Node2D) -> void:
+	var return_point: Variant = GameManager.arrive_in_exploration_scene(scene_file_path)
+	if return_point == null or not player:
+		return
+	player.global_position = return_point
+	var camera := player.get_node_or_null("Camera2D") as Camera2D
+	if camera:
+		camera.reset_smoothing()
 
 func _exit_tree() -> void:
 	if has_node("/root/GameManager") and GameManager.glitch_meter_changed.is_connected(_on_glitch_meter_changed):
@@ -114,7 +139,7 @@ func _run_once(file: String, node: String) -> bool:
 func _on_dlg_event(event: String) -> void:
 	var parts := event.split(" ", false, 1)
 	match parts[0]:
-		"bran_opens_ledger", "ledger_entry_highlight", "elara_serves_stew", "elara_stands", "elara_sees_him_look", "dig_channel", "boar_nest_anchor":
+		"bran_opens_ledger", "ledger_entry_highlight", "elara_stands", "dig_channel", "boar_nest_anchor":
 			await get_tree().create_timer(0.35, false).timeout
 		"gate_opens", "start_boar_fight", "quest_start", "objective", "journal":
 			pass
@@ -157,6 +182,10 @@ func _shake(strength: float) -> void:
 
 # ── C1-S01 / S01B / S02: arriving ─────────────────────────────────────────
 
+## Gate, ledger, then Elara's invite. The player then walks to her door; the
+## stew (C1-S02) and ch1_stew_done are in her house (ch1_elara_house.gd,
+## Y1-P0-S08). Until then the villagers, the north field and the bridge stay
+## quiet (_entrance_done is set only once the stew has happened).
 func _play_entrance() -> void:
 	await _run("oakhaven_gate", "start")
 	if not is_inside_tree(): return
@@ -164,14 +193,57 @@ func _play_entrance() -> void:
 	if not is_inside_tree(): return
 	await _run("elara_house", "invite")
 	if not is_inside_tree(): return
-	await _fade(1.0, 0.6)
-	if not is_inside_tree(): return
-	await _run("elara_house", "start")
-	if not is_inside_tree(): return
-	# Y1-P0-T05: read by the breadcrumb to move from step 5 to step 6.
-	GameManager.set_story_flag("ch1_stew_done", true)
-	await _fade(0.0, 0.8)
-	_entrance_done = true
+	_invited = true
+	_send_elara_to_door()
+
+## After the invite Elara waits at her door; talking to her there repeats it.
+func _send_elara_to_door() -> void:
+	var elara := get_node_or_null("NPCs/Elara") as Area2D
+	if not elara:
+		return
+	elara.position = ELARA_AT_DOOR_POS
+	_bind_talk(elara, _on_elara_at_door_interaction)
+
+func _on_elara_at_door_interaction(body: Node) -> void:
+	if body.name == "Player" and _invited and not _busy():
+		await _run("elara_house", "invite")
+
+## Elara's door. Open only between her invite and the stew, and not while
+## anything else is playing. It stays shut after the stew: the afternoon's
+## progress (alarm, field, bridge, lines seen) lives in this scene, so going
+## back in and out would restart the afternoon and pay its rewards again.
+func _elara_door_open() -> bool:
+	return _invited and not GameManager.has_flag("ch1_stew_done") and not _busy()
+
+func _on_elara_house_door_interaction(body: Node) -> void:
+	if body.name != "Player" or not _elara_door_open():
+		return
+	_enter_elara_house()
+
+func _enter_elara_house() -> void:
+	if _is_transitioning or SceneTransitions.is_transitioning:
+		return
+	_is_transitioning = true
+	SceneTransitions.change_scene(ELARA_HOUSE_SCENE)
+
+## A door answers interact (the player calls the "interact_handler" meta), not
+## walking into it.
+func _bind_door(door: Area2D, handler: Callable) -> void:
+	if not door:
+		print("[OAKHAVEN] door node not found")
+		return
+	door.add_to_group("interactable")
+	door.set_meta("interact_handler", handler)
+
+## The player's targeting (player_topdown.gd) asks this before showing a
+## prompt. Before the stew only Elara (after her invite) and her door answer;
+## the rest of the village is still quiet.
+func _can_interact_with(node: Node) -> bool:
+	if node.name == "ElaraHouseDoor":
+		return _elara_door_open()
+	if _entrance_done:
+		return true
+	return _invited and node.name == "Elara"
 
 # ── C1-S03: a normal afternoon ────────────────────────────────────────────
 
@@ -460,7 +532,7 @@ func _create_map_boundaries() -> void:
 ## sync with it. tests/reachability_test.gd checks every villager, the shop
 ## counter, the Whispering Stone and the story triggers stay reachable.
 func _add_building_collision() -> void:
-	for building_name in ["ApothecaryBuilding", "AuctionHouseBuilding"]:
+	for building_name in ["ApothecaryBuilding", "AuctionHouseBuilding", "ElaraHouseBuilding"]:
 		var b := get_node_or_null(building_name) as Control
 		if b:
 			_add_boundary(b.position + Vector2(0, b.size.y * 0.4), Vector2(b.size.x, b.size.y * 0.6))

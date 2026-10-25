@@ -1,0 +1,465 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+[AC-6 scan]
+  PASS: arena source has no FRAGMENT_DLG
+  PASS: arena source has no fragment_one
+  PASS: arena source has no bridge_fell
+  PASS: arena source has no fragment_acquired
+  PASS: arena source has no _location_card
+  PASS: arena source has no shatter_transition
+  PASS: arena source has no _transition_timer
+[AC-5 dressing]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+WARNING: [AssetManager] Production art slot missing for Kaelen top-down sheet at res://assets/production_art/characters/player/kaelen_topdown_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:1000)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [6] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [7] _test_dressing_table (res://tests/s08_probe_shrine.gd:212)
+       [8] _run (res://tests/s08_probe_shrine.gd:54)
+WARNING: [AssetManager] V2 top-down player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:1009)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [4] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [5] _test_dressing_table (res://tests/s08_probe_shrine.gd:212)
+       [6] _run (res://tests/s08_probe_shrine.gd:54)
+  PASS: dressing ["ch1_root_purge", "ch1_knight_spared"] -> DressingPurged (visible ["DressingPurged"])
+  PASS: stair door gated without fragment (["ch1_root_purge", "ch1_knight_spared"])
+  PASS: camera limits = room rect
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: dressing ["ch1_knight_killed", "ch1_root_purge"] -> DressingPurged (visible ["DressingPurged"])
+  PASS: stair door gated without fragment (["ch1_knight_killed", "ch1_root_purge"])
+  PASS: camera limits = room rect
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: dressing ["ch1_knight_killed"] -> DressingKilled (visible ["DressingKilled"])
+  PASS: stair door gated without fragment (["ch1_knight_killed"])
+  PASS: camera limits = room rect
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+  PASS: dressing ["ch1_knight_spared"] -> DressingSpared (visible ["DressingSpared"])
+  PASS: stair door gated without fragment (["ch1_knight_spared"])
+  PASS: camera limits = room rect
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: dressing [] ->  (visible [])
+  PASS: stair door gated without fragment ([])
+  PASS: camera limits = room rect
+[Route kill]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+WARNING: [AssetManager] Production art slot missing for environment decal atlas at res://assets/production_art/backgrounds/environment_decal_atlas.png; using generated fallback res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1497)
+       [4] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [5] _build_background (res://scripts/chapter1/ch1_tutorial_knight.gd:203)
+       [6] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:113)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1498)
+       [3] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [4] _build_background (res://scripts/chapter1/ch1_tutorial_knight.gd:203)
+       [5] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:113)
+WARNING: [AssetManager] Production art slot missing for Kaelen combat sheet at res://assets/production_art/characters/player/kaelen_combat_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:985)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _spawn_player (res://scripts/chapter1/ch1_tutorial_knight.gd:469)
+       [6] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:121)
+WARNING: [AssetManager] V2 combat player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:994)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _spawn_player (res://scripts/chapter1/ch1_tutorial_knight.gd:469)
+       [4] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:121)
+WARNING: [AssetManager] Production art slot missing for Tutorial Knight sheet at res://assets/production_art/characters/bosses/tutorial_knight_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/bosses/tutorial_knight_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_tutorial_knight (res://scripts/asset_manager.gd:1028)
+       [4] _try_install_v2_visual (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:1284)
+       [5] _ready (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:101)
+       [6] _spawn_boss (res://scripts/chapter1/ch1_tutorial_knight.gd:531)
+       [7] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:122)
+WARNING: [AssetManager] Tutorial Knight sheet failed to load; using existing boss fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_tutorial_knight (res://scripts/asset_manager.gd:1032)
+       [2] _try_install_v2_visual (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:1284)
+       [3] _ready (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:101)
+       [4] _spawn_boss (res://scripts/chapter1/ch1_tutorial_knight.gd:531)
+       [5] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:122)
+  PASS: kill: arena fight started
+[ACHIEVEMENT] Unlocked: Flawless Victory — Defeat a boss without taking damage.
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: kill: arena handed off to the shrine (AC-6)
+  PASS: kill: first transition requested from the arena (["res://scenes/chapter1/tutorial_knight_boss.tscn"])
+  PASS: kill: defeated flag + loot before shrine
+  PASS: kill: fresh-arrival autosave written (AC-8)
+  PASS: kill: autosave current_scene is the shrine
+  PASS: kill: arrival card shown
+  PASS: kill: fresh-arrival meta cleared
+  PASS: kill: DressingPurged visible=false
+  PASS: kill: DressingKilled visible=true
+  PASS: kill: DressingSpared visible=false
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+  PASS: kill: stair door inert before the fragment
+  PASS: kill: altar runs in DIALOGUE
+  PASS: kill: fragment first line seen once (1)
+  PASS: kill: one source_key_fragment_1 emit (1)
+  PASS: kill: key counted, back to EXPLORATION
+  PASS: kill: altar inert once collected
+  PASS: kill: stair door active after fragment
+  PASS: kill: chain runs in CUTSCENE
+WARNING: [SAVE] Cannot manual save during CUTSCENE
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] save_game (res://scripts/game_manager.gd:1440)
+       [1] _test_route (res://tests/s08_probe_shrine.gd:282)
+       [2] _wait (res://tests/s08_probe_shrine.gd:182)
+  PASS: kill: save_game(0) refused in chain
+WARNING: [SAVE] Cannot quick save during CUTSCENE
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] quick_save (res://scripts/game_manager.gd:1814)
+       [1] _test_route (res://tests/s08_probe_shrine.gd:283)
+       [2] _wait (res://tests/s08_probe_shrine.gd:182)
+  PASS: kill: quick_save() refused in chain
+[ACHIEVEMENT] Unlocked: First Fragment — Collect your first Source Key Fragment.
+  PASS: kill: ending transition_started captured in the shrine with ch1_elara_joined
+  PASS: kill: meeting first line once (1)
+  PASS: kill: joins first line once (1)
+  PASS: kill: ch1_bridge_fell is false
+  PASS: kill: bridge_fell played = false
+  PASS: kill: source_key_count 1 at the end
+[CH1-SHATTER] Initializing The Shatter transition
+  PASS: kill: ending scene is shatter_transition (res://scenes/chapter1/shatter_transition.tscn)
+  PASS: kill: capture equals the golden
+[Route spare]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: spare: arena fight started
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: spare: arena handed off to the shrine (AC-6)
+  PASS: spare: first transition requested from the arena (["res://scenes/chapter1/tutorial_knight_boss.tscn"])
+  PASS: spare: defeated flag + loot before shrine
+  PASS: spare: fresh-arrival autosave written (AC-8)
+  PASS: spare: autosave current_scene is the shrine
+  PASS: spare: arrival card shown
+  PASS: spare: fresh-arrival meta cleared
+  PASS: spare: DressingPurged visible=false
+  PASS: spare: DressingKilled visible=false
+  PASS: spare: DressingSpared visible=true
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+  PASS: spare: stair door inert before the fragment
+  PASS: spare: altar runs in DIALOGUE
+  PASS: spare: fragment first line seen once (1)
+  PASS: spare: one source_key_fragment_1 emit (1)
+  PASS: spare: key counted, back to EXPLORATION
+  PASS: spare: altar inert once collected
+  PASS: spare: stair door active after fragment
+  PASS: spare: chain runs in CUTSCENE
+WARNING: [SAVE] Cannot manual save during CUTSCENE
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] save_game (res://scripts/game_manager.gd:1440)
+       [1] _test_route (res://tests/s08_probe_shrine.gd:282)
+       [2] _wait (res://tests/s08_probe_shrine.gd:182)
+  PASS: spare: save_game(0) refused in chain
+WARNING: [SAVE] Cannot quick save during CUTSCENE
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] quick_save (res://scripts/game_manager.gd:1814)
+       [1] _test_route (res://tests/s08_probe_shrine.gd:283)
+       [2] _wait (res://tests/s08_probe_shrine.gd:182)
+  PASS: spare: quick_save() refused in chain
+  PASS: spare: ending transition_started captured in the shrine with ch1_elara_joined
+  PASS: spare: meeting first line once (1)
+  PASS: spare: joins first line once (1)
+  PASS: spare: ch1_bridge_fell is false
+  PASS: spare: bridge_fell played = false
+  PASS: spare: source_key_count 1 at the end
+[CH1-SHATTER] Initializing The Shatter transition
+  PASS: spare: ending scene is shatter_transition (res://scenes/chapter1/shatter_transition.tscn)
+  PASS: spare: capture equals the golden
+[Route purge]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: purge: arena fight started
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: root_mastery — Root Mastery: -10 Max HP (corruption cost), but Root Access hacks cost 30% less corruption.
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: purge: arena handed off to the shrine (AC-6)
+  PASS: purge: first transition requested from the arena (["res://scenes/chapter1/tutorial_knight_boss.tscn"])
+  PASS: purge: defeated flag + loot before shrine
+  PASS: purge: fresh-arrival autosave written (AC-8)
+  PASS: purge: autosave current_scene is the shrine
+  PASS: purge: arrival card shown
+  PASS: purge: fresh-arrival meta cleared
+  PASS: purge: DressingPurged visible=true
+  PASS: purge: DressingKilled visible=false
+  PASS: purge: DressingSpared visible=false
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+  PASS: purge: stair door inert before the fragment
+  PASS: purge: altar runs in DIALOGUE
+  PASS: purge: fragment first line seen once (1)
+  PASS: purge: one source_key_fragment_1 emit (1)
+  PASS: purge: key counted, back to EXPLORATION
+  PASS: purge: altar inert once collected
+  PASS: purge: stair door active after fragment
+  PASS: purge: chain runs in CUTSCENE
+WARNING: [SAVE] Cannot manual save during CUTSCENE
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] save_game (res://scripts/game_manager.gd:1440)
+       [1] _test_route (res://tests/s08_probe_shrine.gd:282)
+       [2] _wait (res://tests/s08_probe_shrine.gd:182)
+  PASS: purge: save_game(0) refused in chain
+WARNING: [SAVE] Cannot quick save during CUTSCENE
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] quick_save (res://scripts/game_manager.gd:1814)
+       [1] _test_route (res://tests/s08_probe_shrine.gd:283)
+       [2] _wait (res://tests/s08_probe_shrine.gd:182)
+  PASS: purge: quick_save() refused in chain
+  PASS: purge: ending transition_started captured in the shrine with ch1_elara_joined
+  PASS: purge: meeting first line once (1)
+  PASS: purge: joins first line once (1)
+  PASS: purge: ch1_bridge_fell is true
+  PASS: purge: bridge_fell played = true
+  PASS: purge: source_key_count 1 at the end
+[CH1-SHATTER] Initializing The Shatter transition
+  PASS: purge: ending scene is shatter_transition (res://scenes/chapter1/shatter_transition.tscn)
+  PASS: purge: capture equals the golden
+[Route kill_bridge_fell]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: kill_bridge_fell: arena fight started
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: kill_bridge_fell: arena handed off to the shrine (AC-6)
+  PASS: kill_bridge_fell: first transition requested from the arena (["res://scenes/chapter1/tutorial_knight_boss.tscn"])
+  PASS: kill_bridge_fell: defeated flag + loot before shrine
+  PASS: kill_bridge_fell: fresh-arrival autosave written (AC-8)
+  PASS: kill_bridge_fell: autosave current_scene is the shrine
+  PASS: kill_bridge_fell: arrival card shown
+  PASS: kill_bridge_fell: fresh-arrival meta cleared
+  PASS: kill_bridge_fell: DressingPurged visible=false
+  PASS: kill_bridge_fell: DressingKilled visible=true
+  PASS: kill_bridge_fell: DressingSpared visible=false
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+  PASS: kill_bridge_fell: stair door inert before the fragment
+  PASS: kill_bridge_fell: altar runs in DIALOGUE
+  PASS: kill_bridge_fell: fragment first line seen once (1)
+  PASS: kill_bridge_fell: one source_key_fragment_1 emit (1)
+  PASS: kill_bridge_fell: key counted, back to EXPLORATION
+  PASS: kill_bridge_fell: altar inert once collected
+  PASS: kill_bridge_fell: stair door active after fragment
+  PASS: kill_bridge_fell: chain runs in CUTSCENE
+WARNING: [SAVE] Cannot manual save during CUTSCENE
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] save_game (res://scripts/game_manager.gd:1440)
+       [1] _test_route (res://tests/s08_probe_shrine.gd:282)
+       [2] _wait (res://tests/s08_probe_shrine.gd:182)
+  PASS: kill_bridge_fell: save_game(0) refused in chain
+WARNING: [SAVE] Cannot quick save during CUTSCENE
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] quick_save (res://scripts/game_manager.gd:1814)
+       [1] _test_route (res://tests/s08_probe_shrine.gd:283)
+       [2] _wait (res://tests/s08_probe_shrine.gd:182)
+  PASS: kill_bridge_fell: quick_save() refused in chain
+  PASS: kill_bridge_fell: ending transition_started captured in the shrine with ch1_elara_joined
+  PASS: kill_bridge_fell: meeting first line once (1)
+  PASS: kill_bridge_fell: joins first line once (1)
+  PASS: kill_bridge_fell: ch1_bridge_fell is true
+  PASS: kill_bridge_fell: bridge_fell played = true
+  PASS: kill_bridge_fell: source_key_count 1 at the end
+[CH1-SHATTER] Initializing The Shatter transition
+  PASS: kill_bridge_fell: ending scene is shatter_transition (res://scenes/chapter1/shatter_transition.tscn)
+  PASS: kill_bridge_fell: capture equals the golden
+[Route kill_no_bridge_choice]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: kill_no_bridge_choice: arena fight started
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: kill_no_bridge_choice: arena handed off to the shrine (AC-6)
+  PASS: kill_no_bridge_choice: first transition requested from the arena (["res://scenes/chapter1/tutorial_knight_boss.tscn"])
+  PASS: kill_no_bridge_choice: defeated flag + loot before shrine
+  PASS: kill_no_bridge_choice: fresh-arrival autosave written (AC-8)
+  PASS: kill_no_bridge_choice: autosave current_scene is the shrine
+  PASS: kill_no_bridge_choice: arrival card shown
+  PASS: kill_no_bridge_choice: fresh-arrival meta cleared
+  PASS: kill_no_bridge_choice: DressingPurged visible=false
+  PASS: kill_no_bridge_choice: DressingKilled visible=true
+  PASS: kill_no_bridge_choice: DressingSpared visible=false
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+  PASS: kill_no_bridge_choice: stair door inert before the fragment
+  PASS: kill_no_bridge_choice: altar runs in DIALOGUE
+  PASS: kill_no_bridge_choice: fragment first line seen once (1)
+  PASS: kill_no_bridge_choice: one source_key_fragment_1 emit (1)
+  PASS: kill_no_bridge_choice: key counted, back to EXPLORATION
+  PASS: kill_no_bridge_choice: altar inert once collected
+  PASS: kill_no_bridge_choice: stair door active after fragment
+  PASS: kill_no_bridge_choice: chain runs in CUTSCENE
+WARNING: [SAVE] Cannot manual save during CUTSCENE
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] save_game (res://scripts/game_manager.gd:1440)
+       [1] _test_route (res://tests/s08_probe_shrine.gd:282)
+       [2] _wait (res://tests/s08_probe_shrine.gd:182)
+  PASS: kill_no_bridge_choice: save_game(0) refused in chain
+WARNING: [SAVE] Cannot quick save during CUTSCENE
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] quick_save (res://scripts/game_manager.gd:1814)
+       [1] _test_route (res://tests/s08_probe_shrine.gd:283)
+       [2] _wait (res://tests/s08_probe_shrine.gd:182)
+  PASS: kill_no_bridge_choice: quick_save() refused in chain
+  PASS: kill_no_bridge_choice: ending transition_started captured in the shrine with ch1_elara_joined
+  PASS: kill_no_bridge_choice: meeting first line once (1)
+  PASS: kill_no_bridge_choice: joins first line once (1)
+  PASS: kill_no_bridge_choice: ch1_bridge_fell is false
+  PASS: kill_no_bridge_choice: bridge_fell played = false
+  PASS: kill_no_bridge_choice: source_key_count 1 at the end
+[CH1-SHATTER] Initializing The Shatter transition
+  PASS: kill_no_bridge_choice: ending scene is shatter_transition (res://scenes/chapter1/shatter_transition.tscn)
+  PASS: kill_no_bridge_choice: capture equals the golden
+[AC-7 fixture pre_fragment]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  PASS: pre_fragment: load_game(1) true
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: pre_fragment: forwarded to the shrine
+  PASS: pre_fragment: arena started no fight ({ 14246: false })
+  PASS: pre_fragment: autosave exists = true
+  PASS: pre_fragment: card shown = true
+  PASS: pre_fragment: altar active = true
+  PASS: pre_fragment: stair door active = false
+  PASS: pre_fragment: source_key_count
+[SAVE] Slot 1 saved successfully (v1.2.0)
+  PASS: pre_fragment: save_game(1) in the shrine
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  PASS: pre_fragment: reload shrine save
+  PASS: load into shrine: no autosave
+  PASS: load into shrine: new shrine instance
+  PASS: load into shrine: no card
+  PASS: load into shrine: altar active, door inactive
+[AC-7 fixture mid_meeting]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  PASS: mid_meeting: load_game(1) true
+  PASS: mid_meeting: forwarded to the shrine
+  PASS: mid_meeting: arena started no fight ({ 14885: false })
+  PASS: mid_meeting: autosave exists = false
+  PASS: mid_meeting: card shown = false
+  PASS: mid_meeting: altar active = false
+  PASS: mid_meeting: stair door active = true
+  PASS: mid_meeting: source_key_count
+[AC-10e mid-fragment]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: mid-fragment free: state EXPLORATION (EXPLORATION)
+  PASS: mid-fragment free: no award
+  PASS: mid-fragment free: no ending request
+[AC-10e mid-chain]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: mid-chain free: state EXPLORATION (EXPLORATION)
+  PASS: mid-chain free: no transition requested ([])
+  PASS: mid-chain free: no second award
+
+GOLDEN DIFFS: 0
+S08PROBE RESULT: 195 passed, 0 failed
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)
+RUNNER WARN res://tests/s08_probe_shrine.gd: 195 checks ran, suite_limits.txt minimum is 1

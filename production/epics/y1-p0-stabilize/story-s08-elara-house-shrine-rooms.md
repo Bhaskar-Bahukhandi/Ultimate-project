@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-S08 (`production/plan/_source/Y1-P0.json#Y1-P0-S08`)
-> **Status**: Ready for Dev
+> **Status**: In Progress
 > **Layer**: Feature
 > **Type**: Integration
 > **Estimate**: 5 days (plan: 4; +1 for the test churn found at /story-readiness, audit item 7)
@@ -161,8 +161,11 @@ Arena: fight → Aldric decision (`aldric.dlg`, unchanged; `open_shrine_gate` fl
       does nothing. Villagers, the north field and the bridge stay inactive until `ch1_stew_done` (as today while the
       arrival runs). After `ch1_stew_done`, Elara is at her afternoon spot with only her afternoon handler
       (`elara_repeat`); `invite` is never replayed. Breadcrumb step 5 names `oakhaven_village.tscn` and the door's node
-      path: `resolve_objective` for S5 has a target, the arrow is visible and aims at the door in the village, and is
-      hidden in the house. Step 5's text is unchanged; steps 0–4 and 6–10 still have no target.
+      path: the S5 entry has `scene` = `oakhaven_village.tscn` and `target_node` = `Doors/ElaraHouseDoor`, the arrow is
+      visible and aims at the door in the village, and is hidden in the house. Step 5's text is unchanged, and
+      `resolve_objective`'s `has_target` (a fixed Vector2 target, Chapter 2+ only) stays false for every Chapter 1 step.
+      *(Corrected during /dev-story, user-approved 2026-10-25: the original said "S5 has a target; steps 0–4 and 6–10
+      have no target", which does not match the code — steps 0, 1, 7 and 8 already had a `target_node`.)*
 - [ ] AC-4 **Coming back.** Leaving the house sets a return point and changes to the village; the village calls
       `arrive_in_exploration_scene`, places the player at the house door, skips gate/ledger/invite/stew because
       `ch1_stew_done` is set (no arrival line seen), and starts the afternoon: villagers talk, three first-time talks
@@ -238,8 +241,8 @@ Arena: fight → Aldric decision (`aldric.dlg`, unchanged; `open_shrine_gate` fl
 - [ ] AC-11 **No drift (golden).** Before any S08 edit, a capture script run from HEAD writes
       `tests/integration/story/ch1_s08_golden.json` (frozen like `breadcrumb_golden.json`; it records the HEAD commit
       hash and the scripted choice indices). Two segments, each recording the sorted true story flags,
-      `source_key_count`, `glitch_meter`, `player_stats.gold`, `GameManager.relationships` and the sorted `flag` values
-      of `ChoiceConsequences.active_buffs`. Data Vision is asserted off during capture (it adds corruption after 10 s,
+      `source_key_count`, `glitch_meter`, `player_stats.gold`, `GameManager.relationships` and the sorted `source_flag`
+      values of `ChoiceConsequences.active_buffs` (the field is `source_flag`; corrected during /dev-story). Data Vision is asserted off during capture (it adds corruption after 10 s,
       `player_topdown.gd:295-300`):
       - **Stew**: from a reset game with the explicit preset flag list in the fixture, which includes
         `ch1_oakhaven_entered`, `ch1_northfall_registry_seen` (set at HEAD by gate/ledger, `oakhaven_gate.dlg:23,42`;
@@ -344,8 +347,8 @@ adopted by the user; cases rewritten).*
   stew paths (topics → eat, eat at once, skip-all on line 2) each one emit; free mid-run → no emit; door inactive
   during the stew; re-entry with the flag plays nothing.
 - **C2 getting there (AC-3)** — door inert before invite; Elara at the door replays `invite`; villagers/field/bridge
-  inert until the flag; after the flag only `elara_repeat`; S5 target + arrow aimed at the door, hidden in the house;
-  other steps no target.
+  inert until the flag; after the flag only `elara_repeat`; S5 `scene` + `target_node` name the door, arrow aimed at
+  the door, hidden in the house; `has_target` false for all Chapter 1 steps.
 - **C3 coming back (AC-4)** — player at the door; no arrival line; three talks fire the alarm; field and bridge work.
 - **C4 shrine dressing (AC-5)** — the five-row table; no-string check.
 - **C5 hand-off (AC-6, AC-7)** — `change_scene` target is the shrine; source scan (seven terms); both HEAD fixture

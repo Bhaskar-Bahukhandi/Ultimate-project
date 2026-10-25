@@ -1,0 +1,336 @@
+{
+  "_note": "Frozen S08 golden, captured from HEAD before any S08 edit by tests/integration/story/ch1_s08_golden_capture.gd (story AC-11). Do not regenerate: ch1_rooms_test replays each segment through the S08 placement (house, shrine) and compares. Fields per capture: story_flags_true (sorted), source_key_count, glitch_meter, gold (= GameManager.player_stats.gold), relationships, active_buff_flags (sorted `source_flag` of ChoiceConsequences.active_buffs; that field is named source_flag in the autoload, not flag).",
+  "code_tree_clean_at_capture": true,
+  "engine_time_scale": 4.0,
+  "godot_version": "4.6.3-stable (official)",
+  "head_commit": "38219e3a8e0f28148124ae3957e5dd3e87ad0c61",
+  "post_aldric": {
+    "base_flags": [
+      "ch1_oakhaven_entered",
+      "ch1_northfall_registry_seen",
+      "ch1_stew_done",
+      "ch1_elara_trusted"
+    ],
+    "capture_trigger": "first SceneTransitions.transition_started while current_scene is the arena and ch1_elara_joined is set",
+    "routes": {
+      "kill": {
+        "capture": {
+          "active_buff_flags": [
+            "ch1_elara_trusted",
+            "ch1_knight_killed"
+          ],
+          "glitch_meter": 5.0,
+          "gold": 500,
+          "relationships": {
+            "aria": 0,
+            "elara": 0,
+            "kaelthas": 0,
+            "lyra": 0,
+            "seraphina": 0
+          },
+          "source_key_count": 1,
+          "story_flag_count": 12,
+          "story_flags_true": [
+            "ch1_aldric_kill_owned",
+            "ch1_bridge_repair_accepted",
+            "ch1_bridge_saved",
+            "ch1_elara_joined",
+            "ch1_elara_trusted",
+            "ch1_knight_killed",
+            "ch1_northfall_registry_seen",
+            "ch1_oakhaven_entered",
+            "ch1_oakhaven_warned_villagers",
+            "ch1_stew_done",
+            "ch1_tutorial_knight_defeated",
+            "source_key_fragment_1"
+          ]
+        },
+        "meeting_choice": 0,
+        "note": "kill, own it, public warning, bridge fixed",
+        "picks": [
+          0,
+          0,
+          0
+        ],
+        "preset_flags": [
+          "ch1_oakhaven_entered",
+          "ch1_northfall_registry_seen",
+          "ch1_stew_done",
+          "ch1_elara_trusted",
+          "ch1_bridge_repair_accepted",
+          "ch1_bridge_saved"
+        ]
+      },
+      "kill_bridge_fell": {
+        "capture": {
+          "active_buff_flags": [
+            "ch1_elara_trusted",
+            "ch1_knight_killed"
+          ],
+          "glitch_meter": 5.0,
+          "gold": 500,
+          "relationships": {
+            "aria": 0,
+            "elara": 0,
+            "kaelthas": 0,
+            "lyra": 0,
+            "seraphina": 0
+          },
+          "source_key_count": 1,
+          "story_flag_count": 12,
+          "story_flags_true": [
+            "ch1_aldric_kill_owned",
+            "ch1_bridge_fell",
+            "ch1_bridge_repair_accepted",
+            "ch1_elara_joined",
+            "ch1_elara_trusted",
+            "ch1_knight_killed",
+            "ch1_northfall_registry_seen",
+            "ch1_oakhaven_entered",
+            "ch1_oakhaven_warned_villagers",
+            "ch1_stew_done",
+            "ch1_tutorial_knight_defeated",
+            "source_key_fragment_1"
+          ]
+        },
+        "meeting_choice": 0,
+        "note": "kill, own it, public warning, repair accepted but not saved: bridge falls",
+        "picks": [
+          0,
+          0,
+          0
+        ],
+        "preset_flags": [
+          "ch1_oakhaven_entered",
+          "ch1_northfall_registry_seen",
+          "ch1_stew_done",
+          "ch1_elara_trusted",
+          "ch1_bridge_repair_accepted"
+        ]
+      },
+      "kill_no_bridge_choice": {
+        "capture": {
+          "active_buff_flags": [
+            "ch1_elara_trusted",
+            "ch1_knight_killed"
+          ],
+          "glitch_meter": 5.0,
+          "gold": 500,
+          "relationships": {
+            "aria": 0,
+            "elara": 0,
+            "kaelthas": 0,
+            "lyra": 0,
+            "seraphina": 0
+          },
+          "source_key_count": 1,
+          "story_flag_count": 10,
+          "story_flags_true": [
+            "ch1_aldric_kill_owned",
+            "ch1_elara_joined",
+            "ch1_elara_trusted",
+            "ch1_knight_killed",
+            "ch1_northfall_registry_seen",
+            "ch1_oakhaven_entered",
+            "ch1_oakhaven_warned_villagers",
+            "ch1_stew_done",
+            "ch1_tutorial_knight_defeated",
+            "source_key_fragment_1"
+          ]
+        },
+        "meeting_choice": 0,
+        "note": "kill, own it, public warning, no bridge choice made",
+        "picks": [
+          0,
+          0,
+          0
+        ],
+        "preset_flags": [
+          "ch1_oakhaven_entered",
+          "ch1_northfall_registry_seen",
+          "ch1_stew_done",
+          "ch1_elara_trusted"
+        ]
+      },
+      "purge": {
+        "capture": {
+          "active_buff_flags": [
+            "ch1_elara_trusted",
+            "ch1_knight_spared",
+            "ch1_root_purge_used"
+          ],
+          "glitch_meter": 8.0,
+          "gold": 500,
+          "relationships": {
+            "aria": 0,
+            "elara": -10,
+            "kaelthas": 0,
+            "lyra": 0,
+            "seraphina": 0
+          },
+          "source_key_count": 1,
+          "story_flag_count": 14,
+          "story_flags_true": [
+            "ch1_bridge_evacuated",
+            "ch1_bridge_fell",
+            "ch1_elara_joined",
+            "ch1_elara_trusted",
+            "ch1_knight_spared",
+            "ch1_northfall_registry_seen",
+            "ch1_oakhaven_entered",
+            "ch1_oakhaven_left_quietly",
+            "ch1_root_purge",
+            "ch1_root_purge_used",
+            "ch1_stew_done",
+            "ch1_tutorial_knight_defeated",
+            "elara_trust_low",
+            "source_key_fragment_1"
+          ]
+        },
+        "meeting_choice": 2,
+        "note": "purge confirmed, silent meeting, bridge evacuated and falls",
+        "picks": [
+          2,
+          0,
+          2
+        ],
+        "preset_flags": [
+          "ch1_oakhaven_entered",
+          "ch1_northfall_registry_seen",
+          "ch1_stew_done",
+          "ch1_elara_trusted",
+          "ch1_bridge_evacuated"
+        ]
+      },
+      "spare": {
+        "capture": {
+          "active_buff_flags": [
+            "ch1_elara_trusted",
+            "ch1_knight_spared"
+          ],
+          "glitch_meter": 0.0,
+          "gold": 500,
+          "relationships": {
+            "aria": 0,
+            "elara": 0,
+            "kaelthas": 0,
+            "lyra": 0,
+            "seraphina": 0
+          },
+          "source_key_count": 1,
+          "story_flag_count": 11,
+          "story_flags_true": [
+            "ch1_bridge_repair_accepted",
+            "ch1_bridge_saved",
+            "ch1_elara_joined",
+            "ch1_elara_trusted",
+            "ch1_knight_spared",
+            "ch1_northfall_registry_seen",
+            "ch1_oakhaven_entered",
+            "ch1_oakhaven_warned_villagers",
+            "ch1_stew_done",
+            "ch1_tutorial_knight_defeated",
+            "source_key_fragment_1"
+          ]
+        },
+        "meeting_choice": 0,
+        "note": "spare, public warning, bridge fixed",
+        "picks": [
+          1,
+          0
+        ],
+        "preset_flags": [
+          "ch1_oakhaven_entered",
+          "ch1_northfall_registry_seen",
+          "ch1_stew_done",
+          "ch1_elara_trusted",
+          "ch1_bridge_repair_accepted",
+          "ch1_bridge_saved"
+        ]
+      }
+    }
+  },
+  "saves": {
+    "how": "save_game(1) (manual slot) in the DIALOGUE state during one kill-route run at HEAD; user://save_slot_1.save copied out. Written by the capture script; see its header.",
+    "mid_meeting": {
+      "cut_when": "the first line of fragment_one.dlg `meeting` is on screen",
+      "expect": {
+        "ch1_tutorial_knight_defeated": true,
+        "current_scene": "res://scenes/chapter1/tutorial_knight_boss.tscn",
+        "current_state": "DIALOGUE",
+        "source_key_count": 1,
+        "source_key_fragment_1": true
+      },
+      "file": "tests/fixtures/ch1_s08_save_mid_meeting.save"
+    },
+    "picks": [
+      0,
+      0,
+      0
+    ],
+    "pre_fragment": {
+      "cut_when": "the first line of fragment_one.dlg `fragment` is on screen",
+      "expect": {
+        "ch1_tutorial_knight_defeated": true,
+        "current_scene": "res://scenes/chapter1/tutorial_knight_boss.tscn",
+        "current_state": "DIALOGUE",
+        "source_key_count": 0,
+        "source_key_fragment_1": false
+      },
+      "file": "tests/fixtures/ch1_s08_save_pre_fragment.save"
+    },
+    "preset_flags": [
+      "ch1_oakhaven_entered",
+      "ch1_northfall_registry_seen",
+      "ch1_stew_done",
+      "ch1_elara_trusted",
+      "ch1_bridge_repair_accepted",
+      "ch1_bridge_saved"
+    ],
+    "route": "kill"
+  },
+  "stew": {
+    "capture": {
+      "active_buff_flags": [
+        "ch1_elara_trusted"
+      ],
+      "glitch_meter": 0.0,
+      "gold": 100,
+      "relationships": {
+        "aria": 0,
+        "elara": 10,
+        "kaelthas": 0,
+        "lyra": 0,
+        "seraphina": 0
+      },
+      "source_key_count": 0,
+      "story_flag_count": 9,
+      "story_flags_true": [
+        "ch1_elara_arm_talked",
+        "ch1_elara_trusted",
+        "ch1_northfall_registry_seen",
+        "ch1_oakhaven_entered",
+        "ch1_stew_asked_fracture",
+        "ch1_stew_asked_magic",
+        "ch1_stew_asked_where",
+        "ch1_stew_done",
+        "elara_arm_respected_silence"
+      ]
+    },
+    "capture_trigger": "GameManager.story_flag_updated(\"ch1_stew_done\", true)",
+    "picks": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "preset_flags": [
+      "ch1_oakhaven_entered",
+      "ch1_northfall_registry_seen",
+      "elara_arm_respected_silence",
+      "ch1_elara_trusted"
+    ],
+    "scene_at_head": "res://scenes/chapter1/oakhaven_village.tscn"
+  }
+}

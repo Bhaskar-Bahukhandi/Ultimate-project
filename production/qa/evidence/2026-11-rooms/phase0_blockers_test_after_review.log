@@ -1,0 +1,527 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+[C1] dialogue sequence closes
+  PASS: box stays open between consecutive lines
+  PASS: C1: is_active clears after the sequence ends
+  PASS: exactly one dialogue_finished per sequence
+[C1] choice closes
+  PASS: show_choices returns the picked option
+  PASS: dialogue closes after a choice
+[C1] explicit hide_dialogue() still works
+  PASS: manual hide + auto-hide emit dialogue_finished once
+[C13] skipping dialogue never answers a choice
+  PASS: C13: choice is shown and waits after a skip
+  PASS: C13: a skip during an open choice does not pick for the player
+  PASS: the player's own pick is returned
+  PASS: dialogue closes after the choice
+[C12] pause menu stays closed while a cutscene plays
+  PASS: C12: ESC does not open pause while the scene's cutscene is playing
+[PAUSE] Game paused — IDE interface open
+  PASS: pause opens once the cutscene has finished (stale block cleared)
+[PAUSE] Game resumed
+[C1] region NPC conversation (the real softlock)
+WARNING: [AssetManager] Production art slot missing for Fractured Wastes production tileset at res://assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png; using generated fallback res://assets/generated_v2/tilesets/fractured_wastes_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _try_load_fractured_wastes_production_tileset (res://scripts/asset_manager.gd:1328)
+       [3] get_fractured_wastes_tileset_slot (res://scripts/asset_manager.gd:1309)
+       [4] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1556)
+       [5] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [6] _build_environment (res://scripts/regions/fractured_wastes_region.gd:119)
+       [7] _ready (res://scripts/regions/fractured_wastes_region.gd:76)
+WARNING: [AssetManager] Fractured Wastes production tileset fallback: production tileset missing or invalid; generated=res://assets/generated_v2/tilesets/fractured_wastes_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _fractured_wastes_generated_fallback_slot (res://scripts/asset_manager.gd:1337)
+       [2] get_fractured_wastes_tileset_slot (res://scripts/asset_manager.gd:1320)
+       [3] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1556)
+       [4] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [5] _build_environment (res://scripts/regions/fractured_wastes_region.gd:119)
+       [6] _ready (res://scripts/regions/fractured_wastes_region.gd:76)
+WARNING: [AssetManager] Production art slot missing for environment decal atlas at res://assets/production_art/backgrounds/environment_decal_atlas.png; using generated fallback res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1497)
+       [4] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [5] _add_v3_wastes_polish (res://scripts/regions/fractured_wastes_region.gd:299)
+       [6] _build_environment (res://scripts/regions/fractured_wastes_region.gd:218)
+       [7] _ready (res://scripts/regions/fractured_wastes_region.gd:76)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1498)
+       [3] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [4] _add_v3_wastes_polish (res://scripts/regions/fractured_wastes_region.gd:299)
+       [5] _build_environment (res://scripts/regions/fractured_wastes_region.gd:218)
+       [6] _ready (res://scripts/regions/fractured_wastes_region.gd:76)
+WARNING: [AssetManager] Production art slot missing for Kaelen top-down sheet at res://assets/production_art/characters/player/kaelen_topdown_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:1000)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [6] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [7] _spawn_player (res://scripts/regions/fractured_wastes_region.gd:400)
+       [8] _ready (res://scripts/regions/fractured_wastes_region.gd:77)
+WARNING: [AssetManager] V2 top-down player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:1009)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [4] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [5] _spawn_player (res://scripts/regions/fractured_wastes_region.gd:400)
+       [6] _ready (res://scripts/regions/fractured_wastes_region.gd:77)
+WARNING: [AssetManager] Production art slot missing for Lyra NPC sheet at res://assets/production_art/characters/npcs/lyra_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/npcs/lyra_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_npc (res://scripts/asset_manager.gd:1066)
+       [4] create_topdown_npc_visual (res://scripts/asset_manager.gd:1087)
+       [5] _create_interactable_npc (res://scripts/regions/fractured_wastes_region.gd:428)
+       [6] _place_npcs (res://scripts/regions/fractured_wastes_region.gd:420)
+       [7] _ready (res://scripts/regions/fractured_wastes_region.gd:78)
+WARNING: [AssetManager] NPC sheet failed to load for Lyra; using existing NPC fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_npc (res://scripts/asset_manager.gd:1074)
+       [2] create_topdown_npc_visual (res://scripts/asset_manager.gd:1087)
+       [3] _create_interactable_npc (res://scripts/regions/fractured_wastes_region.gd:428)
+       [4] _place_npcs (res://scripts/regions/fractured_wastes_region.gd:420)
+       [5] _ready (res://scripts/regions/fractured_wastes_region.gd:78)
+[ENCOUNTER] Zone changed: Survivor's Shelter
+  PASS: Fractured Wastes NPC exists
+WARNING: [DialogueManager] Unknown speaker 'Survivor Kael' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _interact_npc (res://scripts/regions/fractured_wastes_region.gd:846)
+       [3] _test_region_npc_does_not_freeze_player (res://tests/integration/playthrough/phase0_blockers_test.gd:246)
+       [4] _change_scene (res://tests/integration/playthrough/phase0_blockers_test.gd:96)
+  PASS: C1: talking to a region NPC no longer freezes the player
+  PASS: state returns to EXPLORATION
+[C10/C12] save state rules
+WARNING: [SAVE] Refused: no game in progress (MENU)
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] save_game (res://scripts/game_manager.gd:1434)
+       [1] _test_save_state_rules (res://tests/integration/playthrough/phase0_blockers_test.gd:261)
+       [2] _change_scene (res://tests/integration/playthrough/phase0_blockers_test.gd:96)
+  PASS: C12: refuses to save when no game is running (MENU)
+  PASS: C12: nothing written in MENU
+WARNING: [SAVE] Refused: no game in progress (GAME_OVER)
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] save_game (res://scripts/game_manager.gd:1434)
+       [1] _test_save_state_rules (res://tests/integration/playthrough/phase0_blockers_test.gd:264)
+       [2] _change_scene (res://tests/integration/playthrough/phase0_blockers_test.gd:96)
+  PASS: refuses to save in GAME_OVER
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: C10: autosave checkpoint works mid-dialogue
+  PASS: C10: checkpoint file written
+WARNING: [SAVE] Cannot quick save during COMBAT
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] quick_save (res://scripts/game_manager.gd:1814)
+       [1] _test_save_state_rules (res://tests/integration/playthrough/phase0_blockers_test.gd:269)
+       [2] _change_scene (res://tests/integration/playthrough/phase0_blockers_test.gd:96)
+  PASS: player quick-save still refused mid-combat
+[C11] corrupt saves are reported and recovered, never spread to the backup
+[SAVE] Slot 1 saved successfully (v1.2.0)
+  PASS: save to slot 1
+  PASS: a fresh save validates (checksum round-trip)
+[SAVE] Slot 1 saved successfully (v1.2.0)
+  PASS: backup is a valid save
+  PASS: C11: damaged save is reported as corrupt (backup available), not as Empty
+WARNING: [SAVE] user://save_slot_1.save is not a valid save; keeping the previous backup
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _backup_save_file (res://scripts/game_manager.gd:1987)
+       [1] save_game (res://scripts/game_manager.gd:1505)
+       [2] _test_corrupt_save_recovery (res://tests/integration/playthrough/phase0_blockers_test.gd:296)
+       [3] _change_scene (res://tests/integration/playthrough/phase0_blockers_test.gd:96)
+[SAVE] Slot 1 saved successfully (v1.2.0)
+  PASS: C11: saving over a damaged file does not overwrite the good backup
+WARNING: [LOAD] Restored save from backup: user://save_slot_1.save.bak (corrupt file saved as user://save_slot_1.save.corrupted)
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_backup (res://scripts/game_manager.gd:2026)
+       [1] load_game (res://scripts/game_manager.gd:1577)
+       [2] _test_corrupt_save_recovery (res://tests/integration/playthrough/phase0_blockers_test.gd:301)
+       [3] _change_scene (res://tests/integration/playthrough/phase0_blockers_test.gd:96)
+WARNING: [LOAD] Slot 1 was missing or corrupt — restored from backup
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] load_game (res://scripts/game_manager.gd:1578)
+       [1] _test_corrupt_save_recovery (res://tests/integration/playthrough/phase0_blockers_test.gd:301)
+       [2] _change_scene (res://tests/integration/playthrough/phase0_blockers_test.gd:96)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+WARNING: [LOAD] Locked free-travel region 'fractured_wastes' in save. Falling back to overworld.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _sanitize_free_travel_loaded_scene (res://scripts/game_manager.gd:1414)
+       [1] load_game (res://scripts/game_manager.gd:1710)
+       [2] load_game (res://scripts/game_manager.gd:1580)
+       [3] _test_corrupt_save_recovery (res://tests/integration/playthrough/phase0_blockers_test.gd:301)
+       [4] _change_scene (res://tests/integration/playthrough/phase0_blockers_test.gd:96)
+[ENCOUNTER] Zone changed: Road to the Wastes
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  PASS: C11: load recovers from the backup when the main file is damaged
+  PASS: restored file is valid; damaged copy kept as .corrupted
+  PASS: checksum mismatch marks the save invalid
+  PASS: corrupt save without backup is reported as such
+ERROR: [LOAD] Slot 1 has no usable save (and no usable backup)
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] load_game (res://scripts/game_manager.gd:1581)
+       [1] _test_corrupt_save_recovery (res://tests/integration/playthrough/phase0_blockers_test.gd:315)
+       [2] load_game (res://scripts/game_manager.gd:1580)
+       [3] load_game (res://scripts/game_manager.gd:1747)
+  PASS: load of an unrecoverable save fails (no silent fresh start)
+[C9] save requested during a transition is queued, not dropped
+[SAVE] Slot 99 queued until the scene transition completes
+  PASS: save is not written mid-transition
+  PASS: no file yet
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: C9: queued save written when the transition completes
+[C9] New Game drops saves queued by the previous run
+[SAVE] Slot 99 queued until the scene transition completes
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: reset_game() clears the save queue
+[C9] the true ending is written to disk (real scene transition)
+[ENCOUNTER] Zone changed: Overworld Wilderness
+[CH10-END] Initializing true ending
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: ending scene loaded
+  PASS: C9: ending autosave exists
+  PASS: C9: ch10_complete persisted
+  PASS: C9: NG+ unlock persisted
+  PASS: save points at the ending scene
+[C3] New Game: opening hook → Elara → path → village → Oakhaven (bot picks 'trust')
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[10N-A2] Opening crash-site hook loaded
+  PASS: opening hook loads
+[ACHIEVEMENT] Unlocked: Crash Landing — Survive Flight 707.
+[CH1-SEQ2] Initializing Elara the Glitch-Witch meeting
+  PASS: C3: opening hook continues into the Elara meeting
+[CUTSCENE] Starting: Chapter 1 - The Wrong Weapon
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Wrong Weapon
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Wrong Weapon
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CH1-SEQ2] Transitioning to Path to Oakhaven
+[CH1-SEQ3] Initializing Path to Oakhaven — Combat Tutorial
+  PASS: Elara meeting continues to the path to Oakhaven
+  PASS: C3: Elara choice recorded (ch1_elara_trusted)
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+[ACHIEVEMENT] Unlocked: Sudo Mode — Unlock Root Access.
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+[CH1-SEQ3] Transitioning to Oakhaven Village
+WARNING: [AssetManager] Production art slot missing for Elara NPC sheet at res://assets/production_art/characters/npcs/elara_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/npcs/elara_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_npc (res://scripts/asset_manager.gd:1066)
+       [4] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:553)
+       [5] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:62)
+WARNING: [AssetManager] NPC sheet failed to load for Elara; using existing NPC fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_npc (res://scripts/asset_manager.gd:1074)
+       [2] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:553)
+       [3] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:62)
+  PASS: path continues to Oakhaven village
+  PASS: C3: Data Vision unlocked on the New Game route
+  PASS: C3: Root Access unlocked on the New Game route
+[CH1-SEQ4] Transitioning to Oakhaven Region (open-world)
+WARNING: [AssetManager] Oakhaven afternoon production tileset missing at res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png; requested=afternoon.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_oakhaven_variant (res://scripts/asset_manager.gd:1231)
+       [2] _try_load_oakhaven_production_variant (res://scripts/asset_manager.gd:1210)
+       [3] get_oakhaven_tileset_slot (res://scripts/asset_manager.gd:1170)
+       [4] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1552)
+       [5] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [6] _build_region_environment (res://scripts/regions/oakhaven_region.gd:114)
+       [7] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] Oakhaven production tileset fallback: production variant missing or invalid; requested=afternoon resolved=afternoon generated=res://assets/generated_v2/tilesets/oakhaven_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _oakhaven_generated_fallback_slot (res://scripts/asset_manager.gd:1219)
+       [2] get_oakhaven_tileset_slot (res://scripts/asset_manager.gd:1199)
+       [3] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1552)
+       [4] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [5] _build_region_environment (res://scripts/regions/oakhaven_region.gd:114)
+       [6] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] Production art slot missing for environment prop atlas at res://assets/production_art/props/environment_prop_atlas.png; using generated fallback res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1486)
+       [4] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [5] _create_building (res://scripts/regions/oakhaven_region.gd:285)
+       [6] _build_region_environment (res://scripts/regions/oakhaven_region.gd:173)
+       [7] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1487)
+       [3] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [4] _create_building (res://scripts/regions/oakhaven_region.gd:285)
+       [5] _build_region_environment (res://scripts/regions/oakhaven_region.gd:173)
+       [6] _ready (res://scripts/regions/oakhaven_region.gd:74)
+[ENCOUNTER] Zone changed: Oakhaven Village
+  PASS: village continues to the Oakhaven region (stopped at res://scenes/regions/oakhaven_region.tscn)
+  PASS: C3: ch1_oakhaven_entered set (objective tracker can advance)
+[META] stale return points and boss context don't leak into other scenes
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [AssetManager] Production art slot missing for ironhold production tileset at res://assets/production_art/tilesets/ironhold/ironhold_tileset.png; using generated fallback res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _try_load_ironhold_production_tileset (res://scripts/asset_manager.gd:1274)
+       [3] get_ironhold_tileset_slot (res://scripts/asset_manager.gd:1255)
+       [4] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1554)
+       [5] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [6] _build_environment (res://scripts/regions/ironhold_region.gd:104)
+       [7] _ready (res://scripts/regions/ironhold_region.gd:61)
+WARNING: [AssetManager] Ironhold production tileset fallback: production tileset missing or invalid; generated=res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _ironhold_generated_fallback_slot (res://scripts/asset_manager.gd:1283)
+       [2] get_ironhold_tileset_slot (res://scripts/asset_manager.gd:1266)
+       [3] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1554)
+       [4] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [5] _build_environment (res://scripts/regions/ironhold_region.gd:104)
+       [6] _ready (res://scripts/regions/ironhold_region.gd:61)
+[ENCOUNTER] Zone changed: Ironhold City
+  PASS: first Ironhold arrival ignores Oakhaven's return point
+  PASS: stale return point and boss_fight_id are cleared on arrival (fleeing works again)
+  PASS: a return point meant for this scene is still applied
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: New Game clears hand-off metas
+[C5] Clock Tower: jump from the floor-1 step up through floor 2
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH2-CLOCKTOWER] Initializing Clock Tower dungeon
+WARNING: [AssetManager] Production art slot missing for Kaelen combat sheet at res://assets/production_art/characters/player/kaelen_combat_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:985)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _ready (res://scripts/chapter2/ch2_clock_tower.gd:59)
+WARNING: [AssetManager] V2 combat player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:994)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _ready (res://scripts/chapter2/ch2_clock_tower.gd:59)
+DDA: 20.0 (mult=0.75) K:0 D:0.3
+DDA: 20.0 (mult=0.75) K:0 D:0.6
+DDA: 20.0 (mult=0.75) K:0 D:0.9
+  PASS: C5: player passes up through floor 2 and stands on it (y=650, floor top 650)
+  PASS: camera follows the player in the Clock Tower
+[C6] Underground: walk from the final corridor into the boss chamber
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH2-UNDERGROUND] Initializing Underground Network dungeon
+WARNING: [AssetManager] Production art slot missing for DataSprite enemy sheet at res://assets/production_art/characters/enemies/memory_wisp_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/enemies/memory_wisp_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_enemy (res://scripts/asset_manager.gd:1043)
+       [4] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [5] _ready (res://scripts/combat/enemy_base.gd:221)
+       [6] _ready (res://scripts/combat/enemies/data_sprite.gd:40)
+       [7] _spawn_enemy_at (res://scripts/chapter2/ch2_underground_network.gd:299)
+       [8] _spawn_dungeon_enemies (res://scripts/chapter2/ch2_underground_network.gd:227)
+       [9] _ready (res://scripts/chapter2/ch2_underground_network.gd:42)
+WARNING: [AssetManager] Enemy sheet failed to load for DataSprite; using existing enemy fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_enemy (res://scripts/asset_manager.gd:1051)
+       [2] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [3] _ready (res://scripts/combat/enemy_base.gd:221)
+       [4] _ready (res://scripts/combat/enemies/data_sprite.gd:40)
+       [5] _spawn_enemy_at (res://scripts/chapter2/ch2_underground_network.gd:299)
+       [6] _spawn_dungeon_enemies (res://scripts/chapter2/ch2_underground_network.gd:227)
+       [7] _ready (res://scripts/chapter2/ch2_underground_network.gd:42)
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHECKPOINT] Underground Network — entry auto-save
+[SIDE QUEST] Discovered: The Data Hoard
+[SIDE QUEST] Started: The Data Hoard
+[SIDE QUEST] The Data Hoard — Step 1/3: Fix the routing junction
+  PASS: C6: corridor leads into the boss chamber (x=2938)
+DDA: 20.0 (mult=0.75) K:0 D:0.3
+  PASS: entry corridor leads into the first chamber (x=964)
+  PASS: camera follows the player in the Underground
+[C18] player can still move with the ColorRect fallback (no art)
+  PASS: C18: moving left works when the Sprite is a ColorRect (dx=-137)
+[P1-1] DEF reduces incoming damage
+  PASS: P1-1: formula — 0 DEF full damage, 100 DEF half
+DDA: 20.0 (mult=0.75) K:0 D:0.6
+  PASS: P1-1: a hit at 100 DEF deals half damage (took 20.00, expected 20.00)
+[ECON] MP for spells/heal, Soul from parries / perfect dodges / kills
+  PASS: Soul is no longer gained per hit
+  PASS: MP regenerates ~2/s (got 1.93 after 1 s)
+  PASS: a spell costs 15 MP (MP now 35.0)
+  PASS: a kill earns Soul
+  PASS: a hit during dash i-frames is a perfect dodge: Soul once per dash
+  PASS: perfect dodge takes no damage
+[C4] Server Room gate visibility
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[ENCOUNTER] Zone changed: Survivor's Shelter
+  PASS: gate hidden before the Data Wraith is defeated
+  PASS: gate hidden once fragment #3 is taken
+  PASS: gate shown after the Data Wraith, before fragment #3
+[C4] Chapter 3 exit → Chapter 4 (bot drives dialogue, picks option 0)
+  PASS: entering the gate records ch3_server_room_unlocked
+[CH3-WASTES] Initializing Fractured Wastes
+[ACHIEVEMENT] Unlocked: First Fragment — Collect your first Source Key Fragment.
+[CH3-STREAM] Initializing Data Stream
+  PASS: fragment #3 / Source Key 3 granted
+  PASS: chapter continues into the Data Stream
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[CH3-ARCHIVE] Initializing Archive Depths
+[SAVE] Slot 99 queued until the scene transition completes
+[CHECKPOINT] Archive Depths — entry auto-save
+[SIDE QUEST] Discovered: Echo Hunter
+[SIDE QUEST] Discovered: Survivor's Cache
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: forbidden_knowledge — Forbidden Knowledge: -3 ATK (trust exploited). But enemy HP reduced by 15% (Kaelthas's intel).
+[INVENTORY] Added 1 x Memory Shard
+[ACHIEVEMENT] Unlocked: Lore Seeker — Discover your first optional lore entry.
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[INVENTORY] Added 1 x Memory Shard
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CH3-BETRAYAL] Initializing Kaelthas Betrayal
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 3 popup: +23 HP, +11 MP, +3 ATK
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CH3-ENDING] Initializing Chapter 3 Ending
+DDA: 50.0 (mult=0.98) K:0 D:0.0
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[ACHIEVEMENT] Unlocked: The Source Code — Complete Chapter 3.
+[CH4-INTRO] Initializing Forgotten Sectors intro
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: C4: chain reaches Chapter 4 (stopped at res://scenes/chapter4/ch4_forgotten_sectors_intro.tscn)
+  PASS: C4: ch4_unlocked set and current_chapter == 4
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [AssetManager] Production art slot missing for Slime enemy sheet at res://assets/production_art/characters/enemies/fracture_slime_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/enemies/fracture_slime_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_enemy (res://scripts/asset_manager.gd:1043)
+       [4] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [5] _ready (res://scripts/combat/enemy_base.gd:221)
+       [6] _ready (res://scripts/combat/enemies/slime.gd:36)
+WARNING: [AssetManager] Enemy sheet failed to load for Slime; using existing enemy fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_enemy (res://scripts/asset_manager.gd:1051)
+       [2] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [3] _ready (res://scripts/combat/enemy_base.gd:221)
+       [4] _ready (res://scripts/combat/enemies/slime.gd:36)
+[C17] Root Access limits
+  PASS: C17: gravity hack can't go to 0 (got 0.20)
+WARNING: Root Access: boss HP is not hackable
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+  PASS: C17: bosses don't expose HP to Root Access
+   GDScript backtrace (most recent call first):
+       [0] apply_hack (res://scripts/combat/enemy_base.gd:1116)
+       [1] _test_combat_softlocks (res://tests/integration/playthrough/phase0_blockers_test.gd:611)
+       [2] _physics_frames (res://tests/integration/playthrough/phase0_blockers_test.gd:472)
+  PASS: C17: boss HP can't be set by a hack
+[C15] phase spider comes down from the ceiling
+  PASS: C15: a spider on the ceiling starts its drop attack
+[C16] arena walls and enemy kill zone
+  PASS: C16: arena has walls and an enemy kill zone
+DDA: 53.0 (mult=1.00) K:1 D:0.0
+  PASS: C16: an enemy that falls out of the arena dies (the fight can end)
+
+PHASE0 RESULT: 81 passed, 0 failed
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)

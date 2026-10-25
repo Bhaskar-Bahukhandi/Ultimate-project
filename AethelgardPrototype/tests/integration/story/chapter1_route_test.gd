@@ -1,7 +1,8 @@
 extends SceneTree
 ## Plays Chapter 1 end to end on the rewritten dialogue (dialogue/prologue,
-## dialogue/ch1): crash site → Elara → Broken Mile → Oakhaven → Aldric →
-## Fragment One → village meeting → Elara joins → the Chapter 1 ending.
+## dialogue/ch1): crash site → Elara → Broken Mile → Oakhaven → Elara's house
+## (the stew) → Oakhaven's afternoon → Aldric → the shrine (Fragment One →
+## village meeting → Elara joins) → the Chapter 1 ending.
 ## A fake player answers every choice from a pick list (default: first option).
 ## Run: tests/run_phase0_tests.ps1 -Script res://tests/integration/story/chapter1_route_test.gd
 
@@ -11,6 +12,12 @@ const PATH := "res://scenes/chapter1/path_to_oakhaven.tscn"
 const VILLAGE := "res://scenes/chapter1/oakhaven_village.tscn"
 const REGION := "res://scenes/regions/oakhaven_region.tscn"
 const KNIGHT := "res://scenes/chapter1/tutorial_knight_boss.tscn"
+## Y1-P0-S08: the stew plays in Elara's house; the rest of Chapter 1 after Aldric in the shrine.
+const HOUSE := "res://scenes/chapter1/elara_house.tscn"
+const SHRINE := "res://scenes/chapter1/shrine.tscn"
+const HOUSE_WRITER := "res://scripts/chapter1/ch1_elara_house.gd"
+const HOUSE_DOOR_NODE := "Doors/ElaraHouseDoor"
+const STEW_FIRST := "This smells amazing. What is it?"   # elara_house.dlg `start`, first line
 const SHATTER := "res://scenes/chapter1/shatter_transition.tscn"
 const GATE := "res://scenes/chapter2/ironhold_gate.tscn"
 const SHATTER_DLG := "res://dialogue/ch1/shatter.dlg"
@@ -32,6 +39,7 @@ var _drive_gen := 0               # only the newest _drive() loop keeps running
 ## `do desaturate` target colour (ch1_shatter_transition.gd DESATURATE_COLOR).
 const DESAT := Color(0.6, 0.6, 0.7, 1.0)
 var _hold_at := ""                # the driver stops advancing while this line is on screen
+var _scenes_seen := {}            # scene paths _wait_for saw current (cleared per route)
 
 
 func _initialize() -> void:
@@ -136,20 +144,50 @@ func _saw(fragment: String) -> bool:
 func _wait_for(path: String, timeout_sec: float) -> bool:
 	var deadline := Time.get_ticks_msec() + int(timeout_sec * 1000.0)
 	var next_poke := 0
+	var st := get_root().get_node("SceneTransitions")
 	while Time.get_ticks_msec() < deadline:
 		var s := current_scene
-		if s and s.scene_file_path == path and not get_root().get_node("SceneTransitions").is_transitioning:
+		if s:
+			_scenes_seen[s.scene_file_path] = true
+		if s and s.scene_file_path == path and not st.is_transitioning:
 			return true
 		if s and s.scene_file_path == PATH and s.get("root_access_tutorial_active") and not s.get("guardian_resolved"):
 			s._target_filter.select(1)     # TARGET FILTER: ALL → FRACTURE_ENTITIES
 			s._on_root_access_apply()
-		elif s and s.scene_file_path == VILLAGE and s.get("_entrance_done") and not s.get("in_dialogue") \
-				and Time.get_ticks_msec() >= next_poke:
+		elif s and not st.is_transitioning and Time.get_ticks_msec() >= next_poke and _poke_room(s):
 			next_poke = Time.get_ticks_msec() + 1000
-			var player := s.get_node_or_null("Player")
-			if player:
-				s._on_bridge_trigger(player)   # walk to the bridge
 		await process_frame
+	return false
+
+
+## One "walk up and press interact" for the scenes that wait on the player
+## (Y1-P0-S08 placement). Returns true when it poked something.
+##   village: after the invite, Elara's door; after the stew, the bridge.
+##   house:   once the stew is done, the door back out.
+##   shrine:  once the arrival card is over, the altar, then the stair door.
+func _poke_room(s: Node) -> bool:
+	var player := s.get_node_or_null("Player")
+	if player == null:
+		return false
+	match s.scene_file_path:
+		VILLAGE:
+			if s.get("_entrance_done") and not s.get("in_dialogue"):
+				s._on_bridge_trigger(player)   # walk to the bridge
+				return true
+			if s.get("_invited") and not s.get("_entrance_done") and not s._busy():
+				s._on_elara_house_door_interaction(player)   # walk to Elara's door
+				return true
+		HOUSE:
+			if _gm().has_flag("ch1_stew_done") and not s._busy():
+				s._on_door_interaction(player)   # back out to the village
+				return true
+		SHRINE:
+			if not s._busy():
+				if not _gm().has_flag("source_key_fragment_1"):
+					s._on_altar_interaction(player)
+				else:
+					s._on_stair_door_interaction(player)
+				return true
 	return false
 
 
@@ -158,6 +196,7 @@ func _test_new_game_to_region() -> void:
 	var gm := _gm()
 	gm.reset_game()
 	_seen_text.clear()
+	_scenes_seen.clear()
 	change_scene_to_file(HOOK)
 	for i in 4:
 		await process_frame
@@ -183,7 +222,8 @@ func _test_new_game_to_region() -> void:
 	_check(_saw("Changed what it thinks it's defending against") and _saw("metadata"), "Broken Mile plays broken_mile.dlg (filter branch)")
 	_check(await _wait_for(REGION, 420.0), "Oakhaven → the region (stopped at %s)" % (current_scene.scene_file_path if current_scene else "?"))
 	_check(gm.has_flag("ch1_oakhaven_entered") and gm.has_flag("ch1_northfall_registry_seen"), "gate and road ledger played (Northfall entry seen)")
-	_check(gm.has_flag("ch1_stew_asked_where") and gm.has_flag("ch1_elara_arm_talked"), "stew topics played")
+	_check(gm.has_flag("ch1_stew_asked_where") and gm.has_flag("ch1_elara_arm_talked") and _scenes_seen.has(HOUSE) and gm.has_flag("ch1_stew_done"),
+		"stew topics played (in Elara's house, through her door and back: house seen %s)" % _scenes_seen.has(HOUSE))
 	var field_flags := ["ch1_north_field_helped", "ch1_sluice_edited", "ch1_boar_fought", "ch1_corrupted_boar_defeated"]
 	_check(field_flags.all(func(f): return gm.has_flag(f)), "north field: helped, sluice edited, boar fought %s" % [field_flags.map(func(f): return "%s=%s" % [f, gm.has_flag(f)])])
 	_check(gm.has_flag("ch1_bridge_saved"), "the bridge was fixed before dark")
@@ -209,8 +249,10 @@ func _test_aldric_kill_route() -> void:
 	var knight = await _knight_scene()
 	_check(knight.combat_started and _saw("Someone who should be dead"), "Aldric Returns plays before the fight")
 	var fragments_before: int = gm.source_key_count
+	_scenes_seen.clear()
 	knight._on_boss_defeated()
-	_check(await _wait_for(SHATTER, 240.0), "decision → fragment → meeting → Elara joins → Chapter 1 ending")
+	_check(await _wait_for(SHATTER, 240.0) and _scenes_seen.has(SHRINE),
+		"decision → shrine: altar (fragment) → stair door (meeting → Elara joins) → Chapter 1 ending (shrine seen %s)" % _scenes_seen.has(SHRINE))
 	_shatter_mark = _seen_text.size()
 	_cam_xs.clear()
 	_samples.clear()
@@ -233,8 +275,9 @@ func _test_aldric_purge_route() -> void:
 	var corruption_before: float = gm.glitch_meter
 	_start([2, 0, 2])   # purge; confirm; "It's handled."
 	var knight = await _knight_scene()
+	_scenes_seen.clear()
 	knight._on_boss_defeated()
-	_check(await _wait_for(SHATTER, 240.0), "purge route reaches the Chapter 1 ending")
+	_check(await _wait_for(SHATTER, 240.0) and _scenes_seen.has(SHRINE), "purge route reaches the Chapter 1 ending through the shrine")
 	_shatter_mark = _seen_text.size()
 	_cam_xs.clear()
 	_samples.clear()
@@ -267,12 +310,19 @@ func _test_village_afternoon() -> void:
 	change_scene_to_file(VILLAGE)
 	for i in 4:
 		await process_frame
-	var s := current_scene
+	# Y1-P0-S08: gate and ledger (and the invite) play on arrival; the stew plays in
+	# Elara's house, and the afternoon starts back in the village.
+	var r := await _through_house(current_scene)
+	_check(r["invited"] and r["ledger_at_invite"] and not r["entrance_at_invite"] and not r["stew_before_house"],
+		"gate and ledger play on arrival, then the invite; no stew in the village (%s)" % [r])
+	_check(r["house"] and r["stew_done"] and _saw("Today it's both."), "the stew plays in Elara's house")
+	var s: Node = r["village"]
+	_check(s != null and s._entrance_done, "back through her door, the village afternoon has started")
+	if s == null:
+		_driving = false
+		return
 	var deadline := Time.get_ticks_msec() + 60000
-	while not s._entrance_done and Time.get_ticks_msec() < deadline:
-		await process_frame
 	var player := s.get_node("Player")
-	_check(s._entrance_done and _saw("Mara knows everything by lunch") and _saw("Today it's both."), "gate, ledger and stew play on arrival")
 	s._on_old_fen_interaction(player)
 	await _idle(s)
 	s._on_jessa_interaction(player)
@@ -359,6 +409,9 @@ func _test_village_interactions() -> void:
 	_gm().reset_game()
 	_seen_text.clear()
 	gm_flag_trusted()
+	# Y1-P0-S08: the stew happens in Elara's house; with ch1_stew_done set the village
+	# skips its arrival and the afternoon (Jessa included) is open at once.
+	_gm().set_story_flag("ch1_stew_done", true)
 	_start([])
 	change_scene_to_file(VILLAGE)
 	for i in 4:
@@ -512,8 +565,9 @@ func _route_to_shatter(picks: Array) -> bool:
 	_hold_at = ""
 	_start(picks)
 	var knight = await _knight_scene()
+	_scenes_seen.clear()
 	knight._on_boss_defeated()
-	var ok := await _wait_for(SHATTER, 240.0)
+	var ok: bool = await _wait_for(SHATTER, 240.0) and _scenes_seen.has(SHRINE)
 	_shatter_mark = _seen_text.size()
 	return ok
 
@@ -965,6 +1019,11 @@ func _test_bc_table_text() -> void:
 		var res := _res(_sset(n))
 		_check(res["text"] == BC_STEPS[n] and res["hint"] == "" and not res["has_target"],
 			"S%d resolves to step %d exactly: '%s' (got '%s', hint '%s')" % [n, n, BC_STEPS[n], res["text"], res["hint"]])
+	# Y1-P0-S08: has_target means a fixed Vector2 (Chapter 2+ only), so it stays false
+	# above for S5 too; S5's arrow comes from a scene + node path instead.
+	var s5 := _res(_sset(5))
+	_check(s5["scene"] == VILLAGE and s5["target_node"] == HOUSE_DOOR_NODE,
+		"S5 names the village scene and %s for its arrow (got '%s', '%s')" % [HOUSE_DOOR_NODE, s5["scene"], s5["target_node"]])
 	_check(objs.size() > 0, "the OBJECTIVES scan found entries")
 	for stale in BC_STALE_TEXTS:
 		var hits := objs.filter(func(e): return e.get("text", "") == stale)
@@ -1237,11 +1296,16 @@ func _test_bc_new_flags_registered() -> void:
 	var script_hits := {"ch1_stew_done": 0, "ch1_broken_mile_entered": 0}
 	var files := _gd_files("res://scripts")
 	_check(files.size() > 0, "scripts/ scan found files")
+	var stew_writers: Array = []
 	for p in files:
 		var text := _read_text(p)
 		for flag in script_hits:
-			script_hits[flag] += text.count("set_story_flag(\"%s\"" % flag)
-	_check(script_hits["ch1_stew_done"] == 1, "ch1_stew_done: exactly one set_story_flag in scripts/ (%d)" % script_hits["ch1_stew_done"])
+			var n := text.count("set_story_flag(\"%s\"" % flag)
+			script_hits[flag] += n
+			if flag == "ch1_stew_done" and n > 0:
+				stew_writers.append(p)
+	_check(script_hits["ch1_stew_done"] == 1 and stew_writers == [HOUSE_WRITER],
+		"ch1_stew_done: exactly one set_story_flag in scripts/, in ch1_elara_house.gd (%d: %s)" % [script_hits["ch1_stew_done"], stew_writers])
 	_check(script_hits["ch1_broken_mile_entered"] == 0, "ch1_broken_mile_entered is not set from scripts/ (%d)" % script_hits["ch1_broken_mile_entered"])
 	var bible := _read_text(BC_BIBLE)
 	var s5 := bible.find("## 5. ")
@@ -1287,12 +1351,15 @@ func _test_bc_arrows_hook() -> void:
 	var gm := _gm()
 	var bc := _bc()
 	var arrow_entries := _objectives().filter(func(e): return e.get("chapter1", false) and e.get("scene", "") != "")
-	_check(arrow_entries.size() == 4, "4 Chapter 1 entries have an arrow (got %d)" % arrow_entries.size())
+	_check(arrow_entries.size() == 5, "5 Chapter 1 entries have an arrow (got %d)" % arrow_entries.size())
 	_check(arrow_entries.all(func(e): return String(e["scene"]).begins_with("res://") and ResourceLoader.exists(e["scene"]) and String(e.get("target_node", "")) != ""),
 		"each arrow entry names an existing res:// scene and a target node")
+	var s5_arrow := arrow_entries.filter(func(e): return e.get("text", "") == BC_STEPS[5])
+	_check(s5_arrow.size() == 1 and s5_arrow[0]["scene"] == VILLAGE and s5_arrow[0]["target_node"] == HOUSE_DOOR_NODE and not s5_arrow[0].has("target"),
+		"step 5's arrow entry is the village scene + %s, no fixed target (%s)" % [HOUSE_DOOR_NODE, s5_arrow])
 	var no_arrow := _objectives().filter(func(e): return e.get("chapter1", false) and e.get("scene", "") == "")
-	_check(no_arrow.size() == 7 and no_arrow.all(func(e): return not e.has("target") and not e.has("target_node")),
-		"the other 7 Chapter 1 entries have no scene, node or fixed target")
+	_check(no_arrow.size() == 6 and no_arrow.all(func(e): return not e.has("target") and not e.has("target_node")),
+		"the other 6 Chapter 1 entries have no scene, node or fixed target")
 	await _end_scene()
 	gm.reset_game()
 	_seen_text.clear()
@@ -1387,17 +1454,23 @@ func _test_bc_arrows_village() -> void:
 
 
 # AC-6b ───────────────────────────────────────────────────────────────────────
-## Loads the village and watches the stew. `picks` answer the stew topics; `skip_all`
-## calls DialogueManager.skip_all() on the stew's second line; `abort` frees the
-## scene after the first topic, while the stew run is still open.
+## Loads Elara's house (Y1-P0-S08: the stew plays there) and watches the stew. `picks`
+## answer the stew topics; `skip_all` calls DialogueManager.skip_all() on the stew's
+## second line; `abort` frees the scene after the first topic, while the stew run is
+## still open.
 func _stew_run(label: String, picks: Array, skip_all: bool, abort: bool) -> void:
 	var gm := _gm()
 	var dm := _dm()
 	var flag := "ch1_stew_done"
 	gm.reset_game()
 	_seen_text.clear()
+	var emits := [0]
+	var rec := func(f: String, v: bool) -> void:
+		if f == flag and v:
+			emits[0] += 1
+	gm.story_flag_updated.connect(rec)
 	_start(picks)
-	change_scene_to_file(VILLAGE)
+	change_scene_to_file(HOUSE)
 	for i in 4:
 		await process_frame
 	var s := current_scene
@@ -1407,9 +1480,9 @@ func _stew_run(label: String, picks: Array, skip_all: bool, abort: bool) -> void
 	var stew_frames := 0
 	var skipped := false
 	var aborted := false
-	var entrance_done_at_abort := true
+	var running_at_abort := false
 	var deadline := Time.get_ticks_msec() + 90000
-	while Time.get_ticks_msec() < deadline and not s._entrance_done:
+	while Time.get_ticks_msec() < deadline and is_instance_valid(s) and s._stew_running:
 		# Marker: the stew's second line. (skip-all fast-forwards the later lines, so the
 		# last stew line may never be on screen for a frame.)
 		var in_stew := _saw("That's a category, not a recipe.")
@@ -1423,7 +1496,7 @@ func _stew_run(label: String, picks: Array, skip_all: bool, abort: bool) -> void
 			skipped = true
 			dm.skip_all()
 		if abort and gm.has_flag("ch1_stew_asked_where"):
-			entrance_done_at_abort = s._entrance_done
+			running_at_abort = s._stew_running
 			aborted = true
 			s.queue_free()
 			break
@@ -1431,13 +1504,18 @@ func _stew_run(label: String, picks: Array, skip_all: bool, abort: bool) -> void
 	if abort:
 		for i in 15:
 			await process_frame
-		_check(aborted and not entrance_done_at_abort, "%s: the scene was left mid-run (after the first topic)" % label)
-		_check(not gm.has_flag(flag), "%s: ch1_stew_done is not set when the scene is left mid-run" % label)
+		gm.story_flag_updated.disconnect(rec)
+		_check(aborted and running_at_abort, "%s: the scene was left mid-run (after the first topic)" % label)
+		_check(not gm.has_flag(flag) and emits[0] == 0, "%s: ch1_stew_done is not set when the scene is left mid-run (%d emits)" % [label, emits[0]])
 		await _end_scene()
 		return
+	for i in 3:
+		await process_frame
+	gm.story_flag_updated.disconnect(rec)
 	_check(saw_choice and not early, "%s: the stew choices were seen and ch1_stew_done was not set while they were open" % label)
 	_check(at_stew_line and stew_frames > 0, "%s: ch1_stew_done not set while the stew lines play (%d frames watched)" % [label, stew_frames])
-	_check(s._entrance_done and gm.has_flag(flag), "%s: ch1_stew_done is set once the stew run has returned" % label)
+	_check(is_instance_valid(s) and not s._stew_running and gm.has_flag(flag) and emits[0] == 1,
+		"%s: ch1_stew_done is set once the stew run has returned, exactly once (%d emits)" % [label, emits[0]])
 	if skip_all:
 		_check(skipped, "%s: skip_all was requested during the stew" % label)
 	await _end_scene()
@@ -1456,8 +1534,59 @@ func _test_bc_stew_flag() -> void:
 
 
 # AC-3b integration, AC-8b / hesitate-then-help live ───────────────────────────
-## Village entrance done (stew topics answered by the default first option), no
-## afternoon beats. Returns the scene.
+## Waits until the current scene is `path` and no transition is running; the scene, or
+## null at the deadline.
+func _scene_ready(path: String, timeout_sec: float) -> Node:
+	var st := get_root().get_node("SceneTransitions")
+	var deadline := Time.get_ticks_msec() + int(timeout_sec * 1000.0)
+	while Time.get_ticks_msec() < deadline:
+		if current_scene and current_scene.scene_file_path == path and not st.is_transitioning:
+			return current_scene
+		await process_frame
+	return null
+
+
+## Y1-P0-S08: from a freshly loaded village `v` (driver running), waits for the arrival
+## (gate, ledger, invite), walks through Doors/ElaraHouseDoor, lets the stew play in the
+## house, leaves by the house door and returns the village as it comes back.
+## {"invited", "ledger_at_invite", "entrance_at_invite", "stew_before_house", "house",
+##  "stew_done", "village" (Node or null)}.
+func _through_house(v: Node, timeout_sec: float = 120.0) -> Dictionary:
+	var gm := _gm()
+	var out := {"invited": false, "ledger_at_invite": false, "entrance_at_invite": true, "stew_before_house": true,
+		"house": false, "stew_done": false, "village": null}
+	var deadline := Time.get_ticks_msec() + int(timeout_sec * 1000.0)
+	while is_instance_valid(v) and not v._invited and Time.get_ticks_msec() < deadline:
+		await process_frame
+	if not is_instance_valid(v) or not v._invited:
+		return out
+	out["invited"] = true
+	out["ledger_at_invite"] = _saw("Mara knows everything by lunch")
+	out["entrance_at_invite"] = v._entrance_done
+	out["stew_before_house"] = gm.has_flag("ch1_stew_done") or _saw(STEW_FIRST)
+	while is_instance_valid(v) and not v._elara_door_open() and Time.get_ticks_msec() < deadline:
+		await process_frame
+	v._on_elara_house_door_interaction(v.get_node("Player"))
+	var h := await _scene_ready(HOUSE, timeout_sec)
+	if h == null:
+		return out
+	out["house"] = true
+	while is_instance_valid(h) and (h._busy() or not gm.has_flag("ch1_stew_done")) and Time.get_ticks_msec() < deadline:
+		await process_frame
+	out["stew_done"] = gm.has_flag("ch1_stew_done") and _saw(STEW_FIRST)
+	if not is_instance_valid(h):
+		return out
+	h._on_door_interaction(h.get_node("Player"))
+	var v2 := await _scene_ready(VILLAGE, timeout_sec)
+	if v2 != null:
+		await process_frame
+	out["village"] = v2
+	return out
+
+
+## Village afternoon open: arrival played, the stew played in Elara's house (topics
+## answered by the default first option), back in the village, no afternoon beats.
+## Returns the village scene (null if the walk through the house did not finish).
 func _village_after_entrance() -> Node:
 	_gm().reset_game()
 	_seen_text.clear()
@@ -1465,12 +1594,8 @@ func _village_after_entrance() -> Node:
 	change_scene_to_file(VILLAGE)
 	for i in 4:
 		await process_frame
-	var s := current_scene
-	var deadline := Time.get_ticks_msec() + 90000
-	while not s._entrance_done and Time.get_ticks_msec() < deadline:
-		await process_frame
-	await process_frame
-	return s
+	var r := await _through_house(current_scene)
+	return r["village"]
 
 
 ## Runs s._run_north_field() under a deadline, so a stalled run (e.g. a pick that does

@@ -600,11 +600,11 @@ func _spawn_particles(config: Dictionary, pos: Vector2, parent: Node) -> CPUPart
 	if particles.one_shot:
 		# Own tree: the parent may not be in the tree yet (deferred add above).
 		# Pausable, like the particles, so a pause doesn't cut the effect short.
+		# Bound to the particles, not a lambda capturing them: if the parent scene
+		# is freed first, the engine drops this connection instead of calling a
+		# lambda whose capture is gone ("Lambda capture ... was freed").
 		var timer = get_tree().create_timer(config.get("lifetime", 0.5) + 0.3, false)
-		timer.timeout.connect(func():
-			if is_instance_valid(particles):
-				particles.queue_free()
-		)
+		timer.timeout.connect(particles.queue_free)
 
 	return particles
 
@@ -798,11 +798,9 @@ func _spawn_shatter(config: Dictionary, pos: Vector2, parent: Node) -> Node2D:
 		tw.tween_property(frag, "modulate:a", 0.0, duration * 0.8).set_delay(duration * 0.2)
 		tw.tween_property(frag, "scale", Vector2(0.3, 0.3), duration * 0.7).set_delay(duration * 0.3)
 
+	# Bound, not a capturing lambda (see _spawn_particles).
 	var cleanup_timer = get_tree().create_timer(duration + 0.1, false)
-	cleanup_timer.timeout.connect(func():
-		if is_instance_valid(container):
-			container.queue_free()
-	)
+	cleanup_timer.timeout.connect(container.queue_free)
 
 	return container
 

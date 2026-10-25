@@ -59,12 +59,15 @@ const SHATTER_ROUTES := [
 ## Chapter 1 breadcrumb in the HUD (story Y1-P0-T05, AC-9). The breadcrumb only shows in
 ## EXPLORATION, and the plain scene stops capture mid-dialogue (the crash site hides it for
 ## its whole run; the Broken Mile never leaves PROLOGUE). This stop presets the flags the
-## scenes before Oakhaven leave, plays the REAL village (entrance, then Elara's stew; every
-## choice gets the first option, as in chapter1_route_test) and captures the step-6 afternoon
-## objective once the player is exploring. ch1_oakhaven_entered and ch1_stew_done are NOT
-## preset: the real entrance and stew must set them.
+## scenes before Oakhaven leave, plays the REAL village arrival (gate, ledger, Elara's invite),
+## then, since Y1-P0-S08, goes through Elara's door with the village's own door handler, plays
+## the stew in her REAL house, leaves by the house door with the house's own handler and, back
+## in the village, captures the step-6 afternoon objective once the player is exploring. Every
+## choice gets the first option, as in chapter1_route_test. ch1_oakhaven_entered and
+## ch1_stew_done are NOT preset: the real entrance and the real stew must set them.
 const BREADCRUMB_ID := "ch1_breadcrumb_oakhaven"
 const BREADCRUMB_SCENE := "res://scenes/chapter1/oakhaven_village.tscn"
+const BREADCRUMB_HOUSE := "res://scenes/chapter1/elara_house.tscn"
 const BREADCRUMB_OBJECTIVE := "Spend the afternoon in Oakhaven. Meet the people here."
 const BREADCRUMB_FLAGS := {
 	"ch1_opening_hook_started": true, "ch1_crash_trace_seen": true,
@@ -127,6 +130,29 @@ const T12_ENDING := "res://scenes/chapter2/ch2_ending.tscn"
 const T12_TOWER := "res://scenes/chapter2/clock_tower.tscn"
 const T12_TOWER_VIEW_POS := Vector2(600, -41)   # standing on the floor 4→5 step (top y -40)
 const T12_CARD_TIMEOUT := 90.0                  # real seconds to reach the end card
+## Story Y1-P0-S08 evidence (AC-17/AC-18): the two placeholder rooms.
+## s08_elara_house: the REAL house loaded with ch1_stew_done preset, so the stew does not play
+## and no dialogue box covers the room; Elara's placeholder at the table and the five inspect
+## spots must be visible and on screen.
+## s08_shrine: a fresh arrival from the REAL arena on the kill route (the golden kill route's
+## preset flags from tests/integration/story/ch1_s08_golden.json, the fight started, the arena's
+## own _on_boss_defeated, the Aldric decision answered with option 0 = kill); captured after the
+## "Under the old gate" card has faded, before the altar. DressingKilled must be the only dressing
+## shown. s08_shrine_altar: the same arrival with the player moved up the runner to the altar
+## (the zoom-2.5 camera shows 512x288 of the 512x640 room, so one frame cannot hold both ends).
+const S08_HOUSE_ID := "s08_elara_house"
+const S08_SHRINE_ID := "s08_shrine"
+const S08_HOUSE := "res://scenes/chapter1/elara_house.tscn"
+const S08_KNIGHT := "res://scenes/chapter1/tutorial_knight_boss.tscn"
+const S08_SHRINE := "res://scenes/chapter1/shrine.tscn"
+const S08_HOUSE_SPOTS := ["Bandages", "Herbs", "Focuses", "Cloak", "Map"]
+const S08_HOUSE_FLAGS := ["ch1_stew_done"]       # stew already eaten: the room shows bare
+const S08_DRESSINGS := ["DressingPurged", "DressingKilled", "DressingSpared"]
+## Golden kill route preset flags (ch1_s08_golden.json post_aldric.routes.kill.preset_flags).
+const S08_KILL_FLAGS := ["ch1_oakhaven_entered", "ch1_northfall_registry_seen", "ch1_stew_done",
+	"ch1_elara_trusted", "ch1_bridge_repair_accepted", "ch1_bridge_saved"]
+const S08_ARENA_TIMEOUT := 120.0                # real seconds for each arena leg
+const S08_ALTAR_VIEW_POS := Vector2(256, 150)   # on the runner below the altar stone (bottom y 128)
 const DLG_DIRS := ["res://dialogue/prologue", "res://dialogue/ch1", "res://dialogue/ch2"]
 const BACKDROP := "res://scenes/regions/oakhaven_region.tscn"
 const THUMB := Vector2i(320, 180)
@@ -136,6 +162,7 @@ var _only: PackedStringArray = []
 var _shots: Array[Dictionary] = []      # {id, file, group, scene, now, notes}
 var _thumbs: Dictionary = {}            # id -> Image (thumbnail)
 var _problems: Array[String] = []
+var _choices_answered := 0              # _drive_dialogue_until: choices answered with option 0
 
 
 var tree: SceneTree
@@ -189,6 +216,10 @@ func run() -> int:
 		await _t12_card_shot(T12_CARD_ID)
 	if _wanted(T12_TOWER_ID):
 		await _t12_tower_shot(T12_TOWER_ID)
+	if _wanted(S08_HOUSE_ID):
+		await _s08_house_shot(S08_HOUSE_ID)
+	if _wanted(S08_SHRINE_ID):
+		await _s08_shrine_shots(S08_SHRINE_ID)
 	if _wanted("dlg"):
 		await _dialogue_shots()
 	await _contact_sheet("contact_scenes.png", _shots.filter(func(x): return x["group"] != "dialogue"))
@@ -398,33 +429,39 @@ func _breadcrumb_shot(id: String) -> void:
 		gm.set_story_flag(f, BREADCRUMB_FLAGS[f])
 	await _load_scene(BREADCRUMB_SCENE, 0.0)
 	var notes: Array[String] = ["real scene run; Chapter 1 step-6 breadcrumb"]
-	var started := Time.get_ticks_msec()
+	_choices_answered = 0
 	var reached := false
-	var why := ""
-	var choices_answered := 0
-	while (Time.get_ticks_msec() - started) < int(BREADCRUMB_TIMEOUT * 1000.0):
-		var scene_now: String = tree.current_scene.scene_file_path if tree.current_scene else ""
-		if scene_now != BREADCRUMB_SCENE:
-			why = "the scene moved on to %s before the breadcrumb showed" % scene_now.get_file()
-			break
-		bc.force_refresh()   # it refreshes itself only every 2 s
-		if gm.current_state == exploration and not dm._is_visible \
-				and bc.get_current_objective() == BREADCRUMB_OBJECTIVE \
-				and _breadcrumb_panel_shown(bc):
-			reached = true
-			break
-		if dm._awaiting_choice:
-			# First option, the way chapter1_route_test's fake player answers.
-			if dm._choice_result == -1 and dm._choice_container != null:
-				dm._on_choice_pressed(0)
-				choices_answered += 1
-		elif dm._is_visible:
-			if dm._is_typing:
-				dm._skip_typing = true
-			else:
-				dm._advance_requested = true
-		await _wait(0.12)
-	notes.append("%d choice(s) answered with option 1" % choices_answered)
+	var both: Array[String] = [BREADCRUMB_SCENE, BREADCRUMB_HOUSE]
+	# 1. The real arrival: gate, ledger, Elara's invite. Then her door opens.
+	var invited := func() -> bool:
+		return _scene_ready(BREADCRUMB_SCENE) and tree.current_scene.get("_invited") == true \
+			and gm.current_state == exploration and not dm._is_visible
+	var why: String = await _drive_dialogue_until(invited, BREADCRUMB_TIMEOUT, [BREADCRUMB_SCENE], "Elara's invite in the village")
+	# 2. The village's own door handler, then the real stew in the house.
+	if why == "":
+		var v: Node = tree.current_scene
+		v._on_elara_house_door_interaction(v.get_node("Player"))
+		var stew_done := func() -> bool:
+			return _scene_ready(BREADCRUMB_HOUSE) and gm.get_story_flag("ch1_stew_done") == true \
+				and not tree.current_scene._busy() and not dm._is_visible
+		why = await _drive_dialogue_until(stew_done, BREADCRUMB_TIMEOUT, both, "the stew in Elara's house")
+	# 3. The house's own door handler, back to the village.
+	if why == "":
+		notes.append("path: village arrival → ElaraHouseDoor handler → stew in elara_house.tscn → house Door handler → village")
+		var h: Node = tree.current_scene
+		h._on_door_interaction(h.get_node("Player"))
+		var back := func() -> bool:
+			return _scene_ready(BREADCRUMB_SCENE) and tree.current_scene.get("_entrance_done") == true
+		why = await _drive_dialogue_until(back, BREADCRUMB_TIMEOUT, both, "the return to the village")
+	# 4. The step-6 breadcrumb in the village, as before.
+	if why == "":
+		var step6 := func() -> bool:
+			bc.force_refresh()   # it refreshes itself only every 2 s
+			return gm.current_state == exploration and not dm._is_visible \
+				and bc.get_current_objective() == BREADCRUMB_OBJECTIVE and _breadcrumb_panel_shown(bc)
+		why = await _drive_dialogue_until(step6, BREADCRUMB_TIMEOUT, [BREADCRUMB_SCENE], "the step-6 breadcrumb")
+		reached = why == ""
+	notes.append("%d choice(s) answered with option 1" % _choices_answered)
 	if reached:
 		await _wait(0.5)   # nothing taps advance now; let the arrow update and the pulse settle
 		bc.force_refresh()
@@ -432,13 +469,12 @@ func _breadcrumb_shot(id: String) -> void:
 				or not _breadcrumb_panel_shown(bc):
 			reached = false
 			why = "the breadcrumb left the screen during the 0.5 s settle"
-	elif why == "":
-		why = "no EXPLORATION + `%s` breadcrumb within %d s (state %d, objective `%s`)" % [
-			BREADCRUMB_OBJECTIVE, int(BREADCRUMB_TIMEOUT), int(gm.current_state), bc.get_current_objective()]
+	elif why.begins_with("timeout"):
+		why = "%s (state %d, objective `%s`)" % [why, int(gm.current_state), bc.get_current_objective()]
 	if reached:
 		var arrow: String = bc.get_arrow_text()
 		notes.append("objective `%s`" % bc.get_current_objective())
-		notes.append("ch1_stew_done set by the real stew: %s; ch1_oakhaven_entered: %s" % [
+		notes.append("ch1_stew_done set by the real stew (in the house): %s; ch1_oakhaven_entered: %s" % [
 			gm.get_story_flag("ch1_stew_done"), gm.get_story_flag("ch1_oakhaven_entered")])
 		notes.append("arrow target cached: %s; arrow text %s" % [bc.has_arrow_target(),
 			"`%s`" % arrow.strip_edges() if arrow.strip_edges() != "" else "EMPTY"])
@@ -626,6 +662,174 @@ func _combat_hud_shots(id: String) -> void:
 	gj.reset_combo()
 	await _wait(0.3)   # let the hit's hitstop / i-frames settle before the next stop
 
+
+
+## Drives DialogueManager the way the breadcrumb stop always has (choices: option 0, counted in
+## _choices_answered; other lines: finish typing, then advance) until `cond` is true. Returns ""
+## on success, otherwise why not: the current scene is not in `allowed`, or a timeout.
+func _drive_dialogue_until(cond: Callable, seconds: float, allowed: Array[String], what: String) -> String:
+	var dm := _dm()
+	var deadline := Time.get_ticks_msec() + int(seconds * 1000.0)
+	while Time.get_ticks_msec() < deadline:
+		var scene_now: String = tree.current_scene.scene_file_path if tree.current_scene else ""
+		if scene_now != "" and not allowed.has(scene_now):
+			return "the scene moved on to %s before %s" % [scene_now.get_file(), what]
+		if cond.call():
+			return ""
+		if dm._awaiting_choice:
+			# First option, the way chapter1_route_test's fake player answers.
+			if dm._choice_result == -1 and dm._choice_container != null:
+				dm._on_choice_pressed(0)
+				_choices_answered += 1
+		elif dm._is_visible:
+			if dm._is_typing:
+				dm._skip_typing = true
+			else:
+				dm._advance_requested = true
+		await _wait(0.12)
+	return "timeout: no %s within %d s" % [what, int(seconds)]
+
+
+## True when `path` is the current scene and no SceneTransitions change is running.
+func _scene_ready(path: String) -> bool:
+	var transitions := tree.root.get_node_or_null("SceneTransitions")
+	return tree.current_scene != null and tree.current_scene.scene_file_path == path \
+		and not (transitions != null and transitions.get("is_transitioning"))
+
+
+## World-space Control `c` (under the scene, seen through its Camera2D) must be visible and
+## inside the viewport; otherwise a PROBLEM on the shot. Screen rect from its canvas transform.
+func _check_on_screen(id: String, what: String, c: Control, notes: Array[String]) -> bool:
+	if c == null:
+		_hud_problem(id, notes, "%s is missing" % what)
+		return false
+	if not c.is_visible_in_tree():
+		_hud_problem(id, notes, "%s is not visible" % what)
+		return false
+	var r: Rect2 = c.get_global_transform_with_canvas() * Rect2(Vector2.ZERO, c.size)
+	var screen: Rect2 = tree.root.get_visible_rect()
+	if not screen.grow(1.0).encloses(r):
+		_hud_problem(id, notes, "%s goes off screen (%d,%d %dx%d on a %dx%d screen)" % [what,
+			int(r.position.x), int(r.position.y), int(r.size.x), int(r.size.y), int(screen.size.x), int(screen.size.y)])
+		return false
+	return true
+
+
+## First Control child of `n` (the placeholder shape of an Area2D spot), or null.
+func _shape_of(n: Node) -> Control:
+	if n == null:
+		return null
+	for c in n.get_children():
+		if c is Control:
+			return c
+	return null
+
+
+## Elara's house after the stew (ch1_stew_done preset): nothing plays, so the room shows bare.
+func _s08_house_shot(id: String) -> void:
+	var gm := _gm()
+	var dm := _dm()
+	gm.reset_game()
+	# Preset from a list like the other stops: the route test's T05 scan counts
+	# every literal stew-flag write in scripts/ as a game writer.
+	for f in S08_HOUSE_FLAGS:
+		gm.set_story_flag(f, true)
+	await _load_scene(S08_HOUSE, 1.5)
+	var notes: Array[String] = ["preset ch1_stew_done (stew already eaten, so no stew dialogue); real elara_house.tscn, player at the scene's start spot"]
+	var s: Node = tree.current_scene
+	if s == null or s.scene_file_path != S08_HOUSE:
+		_hud_problem(id, notes, "the current scene is not elara_house.tscn")
+		await _capture(id, "scene", S08_HOUSE, notes)
+		return
+	if s._busy() or dm._is_visible:
+		_hud_problem(id, notes, "something is playing (busy %s, dialogue box %s)" % [s._busy(), dm._is_visible])
+	var shown: Array[String] = []
+	var named := [["Elara", s.get_node_or_null("Elara")], ["Table", s.get_node_or_null("Table")],
+		["Player", s.get_node_or_null("Player/Sprite")], ["Door", _shape_of(s.get_node_or_null("Door"))]]
+	for pair in named:
+		if _check_on_screen(id, pair[0], pair[1] as Control, notes):
+			shown.append(pair[0])
+	for spot in S08_HOUSE_SPOTS:
+		if _check_on_screen(id, "inspect spot " + spot, _shape_of(s.get_node_or_null(spot)), notes):
+			shown.append(spot)
+	notes.append("on screen: " + ", ".join(shown))
+	notes.append("door open: %s; state %s" % [s._can_interact_with(s.get_node("Door")),
+		gm.GameState.keys()[gm.current_state]])
+	await _capture(id, "scene", S08_HOUSE, notes)
+
+
+## The shrine after a fresh arrival from the real arena on the kill route, before the altar:
+## `<id>` as the arrival camera frames it (gate end: dressing, stair door), then `<id>_altar`
+## with the player moved up the runner (altar, words panel). Nothing is faked: a missing card,
+## a card still up, a wrong dressing or a scene that never arrives is a PROBLEM.
+func _s08_shrine_shots(id: String) -> void:
+	var gm := _gm()
+	var dm := _dm()
+	gm.reset_game()
+	for f in S08_KILL_FLAGS:
+		gm.set_story_flag(f, true)
+	_choices_answered = 0
+	await _load_scene(S08_KNIGHT, 0.0)
+	var notes: Array[String] = ["preset: golden kill-route flags; real arena: fight started, its own _on_boss_defeated, choices answered with option 0"]
+	var fight := func() -> bool:
+		return _scene_ready(S08_KNIGHT) and tree.current_scene.get("combat_started") == true
+	var why: String = await _drive_dialogue_until(fight, S08_ARENA_TIMEOUT, [S08_KNIGHT], "the arena fight start")
+	if why == "":
+		tree.current_scene._on_boss_defeated()
+		var arrived := func() -> bool:
+			return _scene_ready(S08_SHRINE) and tree.current_scene.get("_arrival_running") == false \
+				and not dm._is_visible
+		why = await _drive_dialogue_until(arrived, S08_ARENA_TIMEOUT, [S08_KNIGHT, S08_SHRINE], "the settled shrine arrival")
+	notes.append("%d choice(s) answered with option 1" % _choices_answered)
+	if why != "":
+		_hud_problem(id, notes, why)
+		await _capture(id, "scene", S08_SHRINE, notes)
+		return
+	await _wait(0.5)
+	var s: Node = tree.current_scene
+	notes.append("ch1_knight_killed %s; arrived from the arena via the shrine_fresh_arrival hand-off" % gm.get_story_flag("ch1_knight_killed"))
+	if gm.get_story_flag("ch1_knight_killed") != true:
+		_hud_problem(id, notes, "the Aldric decision did not set ch1_knight_killed")
+	var layer = s.get("_card_layer")
+	if not layer is CanvasLayer:
+		_hud_problem(id, notes, "no arrival card was shown (not a fresh arrival?)")
+	else:
+		var black := (layer as CanvasLayer).get_node("Black") as ColorRect
+		var place := (layer as CanvasLayer).get_node("Place") as Label
+		notes.append("arrival card `%s` shown, then faded (black alpha %.2f, text alpha %.2f)" % [place.text, black.modulate.a, place.modulate.a])
+		if place.text != "Under the old gate" or black.modulate.a > 0.01 or place.modulate.a > 0.01:
+			_hud_problem(id, notes, "the arrival card is wrong or still on screen")
+	var dressing: Array[String] = []
+	for n in S08_DRESSINGS:
+		var d := s.get_node_or_null(n) as CanvasItem
+		if d and d.visible:
+			dressing.append(n)
+	notes.append("dressing shown: %s" % (", ".join(dressing) if not dressing.is_empty() else "none"))
+	if dressing != ["DressingKilled"]:
+		_hud_problem(id, notes, "expected only DressingKilled")
+	var altar: Node = s.get_node("Altar")
+	notes.append("fragment taken: %s; altar active: %s; dialogue box %s" % [gm.has_flag("source_key_fragment_1"),
+		s._can_interact_with(altar), dm._is_visible])
+	if gm.has_flag("source_key_fragment_1") or dm._is_visible:
+		_hud_problem(id, notes, "not the before-altar room (fragment taken or a dialogue box up)")
+	_check_on_screen(id, "DressingKilled blade", s.get_node_or_null("DressingKilled/Blade") as Control, notes)
+	_check_on_screen(id, "StairDoor", _shape_of(s.get_node_or_null("StairDoor")), notes)
+	_check_on_screen(id, "Player", s.get_node_or_null("Player/Sprite") as Control, notes)
+	await _capture(id, "scene", S08_SHRINE, notes)
+	# The altar end of the same room: the player moved up the runner (no interaction).
+	var player := s.get_node_or_null("Player") as CharacterBody2D
+	var notes2: Array[String] = ["same arrival; player moved to %s on the runner (nothing interacted)" % [S08_ALTAR_VIEW_POS]]
+	if player:
+		player.global_position = S08_ALTAR_VIEW_POS
+		player.velocity = Vector2.ZERO
+		var camera := player.get_node_or_null("Camera2D") as Camera2D
+		if camera:
+			camera.reset_smoothing()
+		await _wait(0.8)
+	_check_on_screen(id + "_altar", "Altar stone", s.get_node_or_null("Altar/Stone") as Control, notes2)
+	_check_on_screen(id + "_altar", "WordsPanel", s.get_node_or_null("WordsPanel") as Control, notes2)
+	notes2.append("fragment taken: %s; dialogue box %s" % [gm.has_flag("source_key_fragment_1"), dm._is_visible])
+	await _capture(id + "_altar", "scene", S08_SHRINE, notes2)
 
 ## GameVersion's text, loaded at runtime like controls_menu.gd (see _ui_shots).
 func _t12_version() -> Script:

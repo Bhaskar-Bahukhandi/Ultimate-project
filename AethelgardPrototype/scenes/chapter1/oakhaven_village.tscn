@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/chapter1/ch1_oakhaven_village.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/exploration/player_topdown.gd" id="2"]
@@ -17,6 +17,9 @@ size = Vector2(150, 150)
 
 [sub_resource type="RectangleShape2D" id="bridge_trigger_col"]
 size = Vector2(180, 100)
+
+[sub_resource type="RectangleShape2D" id="door_col"]
+size = Vector2(56, 40)
 
 [node name="OakhavenVillage" type="Node2D"]
 script = ExtResource("1")
@@ -106,6 +109,27 @@ offset_top = 1600.0
 offset_right = 1530.0
 offset_bottom = 1800.0
 color = Color(0.45, 0.35, 0.2, 1)
+
+[node name="ElaraHouseBuilding" type="ColorRect" parent="."]
+offset_left = 560.0
+offset_top = 1000.0
+offset_right = 780.0
+offset_bottom = 1160.0
+color = Color(0.55, 0.42, 0.3, 1)
+
+[node name="ElaraHouseRoof" type="ColorRect" parent="."]
+offset_left = 545.0
+offset_top = 975.0
+offset_right = 795.0
+offset_bottom = 1010.0
+color = Color(0.45, 0.3, 0.55, 1)
+
+[node name="ElaraHouseDoorway" type="ColorRect" parent="."]
+offset_left = 652.0
+offset_top = 1116.0
+offset_right = 688.0
+offset_bottom = 1160.0
+color = Color(0.25, 0.17, 0.1, 1)
 
 [node name="Player" type="CharacterBody2D" parent="."]
 position = Vector2(640, 900)
@@ -296,6 +320,14 @@ position = Vector2(1440, 1700)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/BridgeTrigger"]
 shape = SubResource("bridge_trigger_col")
+
+[node name="Doors" type="Node2D" parent="."]
+
+[node name="ElaraHouseDoor" type="Area2D" parent="Doors"]
+position = Vector2(670, 1172)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/ElaraHouseDoor"]
+shape = SubResource("door_col")
 
 [node name="UI" type="CanvasLayer" parent="."]
 

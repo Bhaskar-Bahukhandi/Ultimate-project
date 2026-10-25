@@ -1,0 +1,1183 @@
+# Y1-P0-S08 AC-11 golden capture log (HEAD 38219e3a8e0f28148124ae3957e5dd3e87ad0c61, 2026-10-25)
+# Command (from AethelgardPrototype/): powershell -File tests/run_phase0_tests.ps1 -Script res://tests/integration/story/ch1_s08_golden_capture.gd
+# Godot 4.6.3 console, headless, isolated user dir. Run 1 wrote the golden and the two saves; run 2 re-derived
+# them and compared (GOLDEN SAME / SAVE SAME CONTENT). An earlier aborted attempt (shatter transition from one
+# route swapping the next route's scene) was discarded and its outputs deleted before run 1; see the story notes.
+
+================ RUN 1 (writes the frozen outputs) ================
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+[Stew segment]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+WARNING: [AssetManager] Production art slot missing for Kaelen top-down sheet at res://assets/production_art/characters/player/kaelen_topdown_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:1000)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [6] _ready (res://scripts/exploration/player_topdown.gd:51)
+WARNING: [AssetManager] V2 top-down player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:1009)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [4] _ready (res://scripts/exploration/player_topdown.gd:51)
+WARNING: [AssetManager] Production art slot missing for Elara NPC sheet at res://assets/production_art/characters/npcs/elara_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/npcs/elara_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_npc (res://scripts/asset_manager.gd:1066)
+       [4] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:486)
+       [5] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:58)
+WARNING: [AssetManager] NPC sheet failed to load for Elara; using existing NPC fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_npc (res://scripts/asset_manager.gd:1074)
+       [2] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:486)
+       [3] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:58)
+  PASS: stew: ch1_stew_done emitted and captured
+  PASS: stew: Data Vision off at capture
+  PASS: stew: captured in the village (at res://scenes/chapter1/oakhaven_village.tscn)
+  PASS: stew: line seen: Today it's both.
+  PASS: stew: line seen: Aethelgard. You asked me that on the road.
+  CAPTURE stew: flags=9 source_key_count=0 glitch_meter=0.0 gold=100 player_stats_vs_inventory_gold=100/100 buffs=["ch1_elara_trusted"]
+[Post-Aldric: kill]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+WARNING: [AssetManager] Production art slot missing for environment decal atlas at res://assets/production_art/backgrounds/environment_decal_atlas.png; using generated fallback res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1497)
+       [4] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [5] _build_background (res://scripts/chapter1/ch1_tutorial_knight.gd:197)
+       [6] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:99)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1498)
+       [3] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [4] _build_background (res://scripts/chapter1/ch1_tutorial_knight.gd:197)
+       [5] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:99)
+WARNING: [AssetManager] Production art slot missing for Kaelen combat sheet at res://assets/production_art/characters/player/kaelen_combat_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:985)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _spawn_player (res://scripts/chapter1/ch1_tutorial_knight.gd:463)
+       [6] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:107)
+WARNING: [AssetManager] V2 combat player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:994)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _spawn_player (res://scripts/chapter1/ch1_tutorial_knight.gd:463)
+       [4] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:107)
+WARNING: [AssetManager] Production art slot missing for Tutorial Knight sheet at res://assets/production_art/characters/bosses/tutorial_knight_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/bosses/tutorial_knight_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_tutorial_knight (res://scripts/asset_manager.gd:1028)
+       [4] _try_install_v2_visual (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:1284)
+       [5] _ready (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:101)
+       [6] _spawn_boss (res://scripts/chapter1/ch1_tutorial_knight.gd:525)
+       [7] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:108)
+WARNING: [AssetManager] Tutorial Knight sheet failed to load; using existing boss fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_tutorial_knight (res://scripts/asset_manager.gd:1032)
+       [2] _try_install_v2_visual (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:1284)
+       [3] _ready (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:101)
+       [4] _spawn_boss (res://scripts/chapter1/ch1_tutorial_knight.gd:525)
+       [5] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:108)
+  PASS: kill: arena fight started
+[ACHIEVEMENT] Unlocked: Flawless Victory — Defeat a boss without taking damage.
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[SAVE] Slot 1 saved successfully (v1.2.0)
+  SAVE pre_fragment: save_game(1)=true state_before_forcing=EXPLORATION fragment_flag=false source_key_count=0
+  PASS: save pre_fragment: save_game(1) returned true
+[ACHIEVEMENT] Unlocked: First Fragment — Collect your first Source Key Fragment.
+[SAVE] Slot 1 saved successfully (v1.2.0)
+  SAVE mid_meeting: save_game(1)=true state_before_forcing=DIALOGUE fragment_flag=true source_key_count=1
+  PASS: save mid_meeting: save_game(1) returned true
+  PASS: kill: transition_started captured with ch1_elara_joined set
+  PASS: kill: Data Vision off at capture
+  PASS: kill: captured in the arena (at res://scenes/chapter1/tutorial_knight_boss.tscn)
+  PASS: kill: source_key_count is 1
+  PASS: kill: both saves were written
+  CAPTURE kill: flags=12 source_key_count=1 glitch_meter=5.0 gold=500 player_stats_vs_inventory_gold=500/500 buffs=["ch1_elara_trusted", "ch1_knight_killed"]
+[CH1-SHATTER] Initializing The Shatter transition
+[Post-Aldric: spare]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: spare: arena fight started
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+  PASS: spare: transition_started captured with ch1_elara_joined set
+  PASS: spare: Data Vision off at capture
+  PASS: spare: captured in the arena (at res://scenes/chapter1/tutorial_knight_boss.tscn)
+  PASS: spare: source_key_count is 1
+  CAPTURE spare: flags=11 source_key_count=1 glitch_meter=0.0 gold=500 player_stats_vs_inventory_gold=500/500 buffs=["ch1_elara_trusted", "ch1_knight_spared"]
+[CH1-SHATTER] Initializing The Shatter transition
+[Post-Aldric: purge]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: purge: arena fight started
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: root_mastery — Root Mastery: -10 Max HP (corruption cost), but Root Access hacks cost 30% less corruption.
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+  PASS: purge: transition_started captured with ch1_elara_joined set
+  PASS: purge: Data Vision off at capture
+  PASS: purge: captured in the arena (at res://scenes/chapter1/tutorial_knight_boss.tscn)
+  PASS: purge: source_key_count is 1
+  CAPTURE purge: flags=14 source_key_count=1 glitch_meter=8.0 gold=500 player_stats_vs_inventory_gold=500/500 buffs=["ch1_elara_trusted", "ch1_knight_spared", "ch1_root_purge_used"]
+[CH1-SHATTER] Initializing The Shatter transition
+[Post-Aldric: kill_bridge_fell]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: kill_bridge_fell: arena fight started
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+  PASS: kill_bridge_fell: transition_started captured with ch1_elara_joined set
+  PASS: kill_bridge_fell: Data Vision off at capture
+  PASS: kill_bridge_fell: captured in the arena (at res://scenes/chapter1/tutorial_knight_boss.tscn)
+  PASS: kill_bridge_fell: source_key_count is 1
+  CAPTURE kill_bridge_fell: flags=12 source_key_count=1 glitch_meter=5.0 gold=500 player_stats_vs_inventory_gold=500/500 buffs=["ch1_elara_trusted", "ch1_knight_killed"]
+[CH1-SHATTER] Initializing The Shatter transition
+[Post-Aldric: kill_no_bridge_choice]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: kill_no_bridge_choice: arena fight started
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+  PASS: kill_no_bridge_choice: transition_started captured with ch1_elara_joined set
+  PASS: kill_no_bridge_choice: Data Vision off at capture
+  PASS: kill_no_bridge_choice: captured in the arena (at res://scenes/chapter1/tutorial_knight_boss.tscn)
+  PASS: kill_no_bridge_choice: source_key_count is 1
+  CAPTURE kill_no_bridge_choice: flags=10 source_key_count=1 glitch_meter=5.0 gold=500 player_stats_vs_inventory_gold=500/500 buffs=["ch1_elara_trusted", "ch1_knight_killed"]
+[CH1-SHATTER] Initializing The Shatter transition
+
+[Outputs]
+GOLDEN JSON BEGIN
+{
+  "_note": "Frozen S08 golden, captured from HEAD before any S08 edit by tests/integration/story/ch1_s08_golden_capture.gd (story AC-11). Do not regenerate: ch1_rooms_test replays each segment through the S08 placement (house, shrine) and compares. Fields per capture: story_flags_true (sorted), source_key_count, glitch_meter, gold (= GameManager.player_stats.gold), relationships, active_buff_flags (sorted `source_flag` of ChoiceConsequences.active_buffs; that field is named source_flag in the autoload, not flag).",
+  "code_tree_clean_at_capture": true,
+  "engine_time_scale": 4.0,
+  "godot_version": "4.6.3-stable (official)",
+  "head_commit": "38219e3a8e0f28148124ae3957e5dd3e87ad0c61",
+  "post_aldric": {
+    "base_flags": [
+      "ch1_oakhaven_entered",
+      "ch1_northfall_registry_seen",
+      "ch1_stew_done",
+      "ch1_elara_trusted"
+    ],
+    "capture_trigger": "first SceneTransitions.transition_started while current_scene is the arena and ch1_elara_joined is set",
+    "routes": {
+      "kill": {
+        "capture": {
+          "active_buff_flags": [
+            "ch1_elara_trusted",
+            "ch1_knight_killed"
+          ],
+          "glitch_meter": 5.0,
+          "gold": 500,
+          "relationships": {
+            "aria": 0,
+            "elara": 0,
+            "kaelthas": 0,
+            "lyra": 0,
+            "seraphina": 0
+          },
+          "source_key_count": 1,
+          "story_flag_count": 12,
+          "story_flags_true": [
+            "ch1_aldric_kill_owned",
+            "ch1_bridge_repair_accepted",
+            "ch1_bridge_saved",
+            "ch1_elara_joined",
+            "ch1_elara_trusted",
+            "ch1_knight_killed",
+            "ch1_northfall_registry_seen",
+            "ch1_oakhaven_entered",
+            "ch1_oakhaven_warned_villagers",
+            "ch1_stew_done",
+            "ch1_tutorial_knight_defeated",
+            "source_key_fragment_1"
+          ]
+        },
+        "meeting_choice": 0,
+        "note": "kill, own it, public warning, bridge fixed",
+        "picks": [
+          0,
+          0,
+          0
+        ],
+        "preset_flags": [
+          "ch1_oakhaven_entered",
+          "ch1_northfall_registry_seen",
+          "ch1_stew_done",
+          "ch1_elara_trusted",
+          "ch1_bridge_repair_accepted",
+          "ch1_bridge_saved"
+        ]
+      },
+      "kill_bridge_fell": {
+        "capture": {
+          "active_buff_flags": [
+            "ch1_elara_trusted",
+            "ch1_knight_killed"
+          ],
+          "glitch_meter": 5.0,
+          "gold": 500,
+          "relationships": {
+            "aria": 0,
+            "elara": 0,
+            "kaelthas": 0,
+            "lyra": 0,
+            "seraphina": 0
+          },
+          "source_key_count": 1,
+          "story_flag_count": 12,
+          "story_flags_true": [
+            "ch1_aldric_kill_owned",
+            "ch1_bridge_fell",
+            "ch1_bridge_repair_accepted",
+            "ch1_elara_joined",
+            "ch1_elara_trusted",
+            "ch1_knight_killed",
+            "ch1_northfall_registry_seen",
+            "ch1_oakhaven_entered",
+            "ch1_oakhaven_warned_villagers",
+            "ch1_stew_done",
+            "ch1_tutorial_knight_defeated",
+            "source_key_fragment_1"
+          ]
+        },
+        "meeting_choice": 0,
+        "note": "kill, own it, public warning, repair accepted but not saved: bridge falls",
+        "picks": [
+          0,
+          0,
+          0
+        ],
+        "preset_flags": [
+          "ch1_oakhaven_entered",
+          "ch1_northfall_registry_seen",
+          "ch1_stew_done",
+          "ch1_elara_trusted",
+          "ch1_bridge_repair_accepted"
+        ]
+      },
+      "kill_no_bridge_choice": {
+        "capture": {
+          "active_buff_flags": [
+            "ch1_elara_trusted",
+            "ch1_knight_killed"
+          ],
+          "glitch_meter": 5.0,
+          "gold": 500,
+          "relationships": {
+            "aria": 0,
+            "elara": 0,
+            "kaelthas": 0,
+            "lyra": 0,
+            "seraphina": 0
+          },
+          "source_key_count": 1,
+          "story_flag_count": 10,
+          "story_flags_true": [
+            "ch1_aldric_kill_owned",
+            "ch1_elara_joined",
+            "ch1_elara_trusted",
+            "ch1_knight_killed",
+            "ch1_northfall_registry_seen",
+            "ch1_oakhaven_entered",
+            "ch1_oakhaven_warned_villagers",
+            "ch1_stew_done",
+            "ch1_tutorial_knight_defeated",
+            "source_key_fragment_1"
+          ]
+        },
+        "meeting_choice": 0,
+        "note": "kill, own it, public warning, no bridge choice made",
+        "picks": [
+          0,
+          0,
+          0
+        ],
+        "preset_flags": [
+          "ch1_oakhaven_entered",
+          "ch1_northfall_registry_seen",
+          "ch1_stew_done",
+          "ch1_elara_trusted"
+        ]
+      },
+      "purge": {
+        "capture": {
+          "active_buff_flags": [
+            "ch1_elara_trusted",
+            "ch1_knight_spared",
+            "ch1_root_purge_used"
+          ],
+          "glitch_meter": 8.0,
+          "gold": 500,
+          "relationships": {
+            "aria": 0,
+            "elara": -10,
+            "kaelthas": 0,
+            "lyra": 0,
+            "seraphina": 0
+          },
+          "source_key_count": 1,
+          "story_flag_count": 14,
+          "story_flags_true": [
+            "ch1_bridge_evacuated",
+            "ch1_bridge_fell",
+            "ch1_elara_joined",
+            "ch1_elara_trusted",
+            "ch1_knight_spared",
+            "ch1_northfall_registry_seen",
+            "ch1_oakhaven_entered",
+            "ch1_oakhaven_left_quietly",
+            "ch1_root_purge",
+            "ch1_root_purge_used",
+            "ch1_stew_done",
+            "ch1_tutorial_knight_defeated",
+            "elara_trust_low",
+            "source_key_fragment_1"
+          ]
+        },
+        "meeting_choice": 2,
+        "note": "purge confirmed, silent meeting, bridge evacuated and falls",
+        "picks": [
+          2,
+          0,
+          2
+        ],
+        "preset_flags": [
+          "ch1_oakhaven_entered",
+          "ch1_northfall_registry_seen",
+          "ch1_stew_done",
+          "ch1_elara_trusted",
+          "ch1_bridge_evacuated"
+        ]
+      },
+      "spare": {
+        "capture": {
+          "active_buff_flags": [
+            "ch1_elara_trusted",
+            "ch1_knight_spared"
+          ],
+          "glitch_meter": 0.0,
+          "gold": 500,
+          "relationships": {
+            "aria": 0,
+            "elara": 0,
+            "kaelthas": 0,
+            "lyra": 0,
+            "seraphina": 0
+          },
+          "source_key_count": 1,
+          "story_flag_count": 11,
+          "story_flags_true": [
+            "ch1_bridge_repair_accepted",
+            "ch1_bridge_saved",
+            "ch1_elara_joined",
+            "ch1_elara_trusted",
+            "ch1_knight_spared",
+            "ch1_northfall_registry_seen",
+            "ch1_oakhaven_entered",
+            "ch1_oakhaven_warned_villagers",
+            "ch1_stew_done",
+            "ch1_tutorial_knight_defeated",
+            "source_key_fragment_1"
+          ]
+        },
+        "meeting_choice": 0,
+        "note": "spare, public warning, bridge fixed",
+        "picks": [
+          1,
+          0
+        ],
+        "preset_flags": [
+          "ch1_oakhaven_entered",
+          "ch1_northfall_registry_seen",
+          "ch1_stew_done",
+          "ch1_elara_trusted",
+          "ch1_bridge_repair_accepted",
+          "ch1_bridge_saved"
+        ]
+      }
+    }
+  },
+  "saves": {
+    "how": "save_game(1) (manual slot) in the DIALOGUE state during one kill-route run at HEAD; user://save_slot_1.save copied out. Written by the capture script; see its header.",
+    "mid_meeting": {
+      "cut_when": "the first line of fragment_one.dlg `meeting` is on screen",
+      "expect": {
+        "ch1_tutorial_knight_defeated": true,
+        "current_scene": "res://scenes/chapter1/tutorial_knight_boss.tscn",
+        "current_state": "DIALOGUE",
+        "source_key_count": 1,
+        "source_key_fragment_1": true
+      },
+      "file": "tests/fixtures/ch1_s08_save_mid_meeting.save"
+    },
+    "picks": [
+      0,
+      0,
+      0
+    ],
+    "pre_fragment": {
+      "cut_when": "the first line of fragment_one.dlg `fragment` is on screen",
+      "expect": {
+        "ch1_tutorial_knight_defeated": true,
+        "current_scene": "res://scenes/chapter1/tutorial_knight_boss.tscn",
+        "current_state": "DIALOGUE",
+        "source_key_count": 0,
+        "source_key_fragment_1": false
+      },
+      "file": "tests/fixtures/ch1_s08_save_pre_fragment.save"
+    },
+    "preset_flags": [
+      "ch1_oakhaven_entered",
+      "ch1_northfall_registry_seen",
+      "ch1_stew_done",
+      "ch1_elara_trusted",
+      "ch1_bridge_repair_accepted",
+      "ch1_bridge_saved"
+    ],
+    "route": "kill"
+  },
+  "stew": {
+    "capture": {
+      "active_buff_flags": [
+        "ch1_elara_trusted"
+      ],
+      "glitch_meter": 0.0,
+      "gold": 100,
+      "relationships": {
+        "aria": 0,
+        "elara": 10,
+        "kaelthas": 0,
+        "lyra": 0,
+        "seraphina": 0
+      },
+      "source_key_count": 0,
+      "story_flag_count": 9,
+      "story_flags_true": [
+        "ch1_elara_arm_talked",
+        "ch1_elara_trusted",
+        "ch1_northfall_registry_seen",
+        "ch1_oakhaven_entered",
+        "ch1_stew_asked_fracture",
+        "ch1_stew_asked_magic",
+        "ch1_stew_asked_where",
+        "ch1_stew_done",
+        "elara_arm_respected_silence"
+      ]
+    },
+    "capture_trigger": "GameManager.story_flag_updated(\"ch1_stew_done\", true)",
+    "picks": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "preset_flags": [
+      "ch1_oakhaven_entered",
+      "ch1_northfall_registry_seen",
+      "elara_arm_respected_silence",
+      "ch1_elara_trusted"
+    ],
+    "scene_at_head": "res://scenes/chapter1/oakhaven_village.tscn"
+  }
+}
+
+GOLDEN JSON END
+  PASS: no uncommitted change under scripts/, scenes/, dialogue/ at capture
+  PASS: HEAD commit hash recorded (38219e3a8e0f28148124ae3957e5dd3e87ad0c61)
+  PASS: save pre_fragment parses as JSON
+  PASS: save pre_fragment carries a valid _checksum
+  PASS: save pre_fragment: current_scene is the arena
+  PASS: save pre_fragment: current_state is DIALOGUE
+  PASS: save pre_fragment: ch1_tutorial_knight_defeated set
+  PASS: save pre_fragment: source_key_fragment_1 is false
+  PASS: save pre_fragment: source_key_count is 0
+  PASS: save mid_meeting parses as JSON
+  PASS: save mid_meeting carries a valid _checksum
+  PASS: save mid_meeting: current_scene is the arena
+  PASS: save mid_meeting: current_state is DIALOGUE
+  PASS: save mid_meeting: ch1_tutorial_knight_defeated set
+  PASS: save mid_meeting: source_key_fragment_1 is true
+  PASS: save mid_meeting: source_key_count is 1
+  PASS: golden written to res://tests/integration/story/ch1_s08_golden.json
+GOLDEN WRITTEN: res://tests/integration/story/ch1_s08_golden.json
+  PASS: save fixture written: res://tests/fixtures/ch1_s08_save_pre_fragment.save
+SAVE WRITTEN: res://tests/fixtures/ch1_s08_save_pre_fragment.save
+  PASS: save fixture written: res://tests/fixtures/ch1_s08_save_mid_meeting.save
+SAVE WRITTEN: res://tests/fixtures/ch1_s08_save_mid_meeting.save
+
+S08CAPTURE RESULT: 52 passed, 0 failed
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)
+
+================ RUN 2 (re-derive and compare) ================
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+[Stew segment]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+WARNING: [AssetManager] Production art slot missing for Kaelen top-down sheet at res://assets/production_art/characters/player/kaelen_topdown_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:1000)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [6] _ready (res://scripts/exploration/player_topdown.gd:51)
+WARNING: [AssetManager] V2 top-down player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:1009)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [4] _ready (res://scripts/exploration/player_topdown.gd:51)
+WARNING: [AssetManager] Production art slot missing for Elara NPC sheet at res://assets/production_art/characters/npcs/elara_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/npcs/elara_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_npc (res://scripts/asset_manager.gd:1066)
+       [4] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:486)
+       [5] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:58)
+WARNING: [AssetManager] NPC sheet failed to load for Elara; using existing NPC fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_npc (res://scripts/asset_manager.gd:1074)
+       [2] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:486)
+       [3] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:58)
+  PASS: stew: ch1_stew_done emitted and captured
+  PASS: stew: Data Vision off at capture
+  PASS: stew: captured in the village (at res://scenes/chapter1/oakhaven_village.tscn)
+  PASS: stew: line seen: Today it's both.
+  PASS: stew: line seen: Aethelgard. You asked me that on the road.
+  CAPTURE stew: flags=9 source_key_count=0 glitch_meter=0.0 gold=100 player_stats_vs_inventory_gold=100/100 buffs=["ch1_elara_trusted"]
+[Post-Aldric: kill]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+WARNING: [AssetManager] Production art slot missing for environment decal atlas at res://assets/production_art/backgrounds/environment_decal_atlas.png; using generated fallback res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1497)
+       [4] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [5] _build_background (res://scripts/chapter1/ch1_tutorial_knight.gd:197)
+       [6] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:99)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1498)
+       [3] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [4] _build_background (res://scripts/chapter1/ch1_tutorial_knight.gd:197)
+       [5] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:99)
+WARNING: [AssetManager] Production art slot missing for Kaelen combat sheet at res://assets/production_art/characters/player/kaelen_combat_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:985)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _spawn_player (res://scripts/chapter1/ch1_tutorial_knight.gd:463)
+       [6] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:107)
+WARNING: [AssetManager] V2 combat player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:994)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _spawn_player (res://scripts/chapter1/ch1_tutorial_knight.gd:463)
+       [4] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:107)
+WARNING: [AssetManager] Production art slot missing for Tutorial Knight sheet at res://assets/production_art/characters/bosses/tutorial_knight_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/bosses/tutorial_knight_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_tutorial_knight (res://scripts/asset_manager.gd:1028)
+       [4] _try_install_v2_visual (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:1284)
+       [5] _ready (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:101)
+       [6] _spawn_boss (res://scripts/chapter1/ch1_tutorial_knight.gd:525)
+       [7] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:108)
+WARNING: [AssetManager] Tutorial Knight sheet failed to load; using existing boss fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_tutorial_knight (res://scripts/asset_manager.gd:1032)
+       [2] _try_install_v2_visual (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:1284)
+       [3] _ready (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:101)
+       [4] _spawn_boss (res://scripts/chapter1/ch1_tutorial_knight.gd:525)
+       [5] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:108)
+  PASS: kill: arena fight started
+[ACHIEVEMENT] Unlocked: Flawless Victory — Defeat a boss without taking damage.
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[SAVE] Slot 1 saved successfully (v1.2.0)
+  SAVE pre_fragment: save_game(1)=true state_before_forcing=EXPLORATION fragment_flag=false source_key_count=0
+  PASS: save pre_fragment: save_game(1) returned true
+[ACHIEVEMENT] Unlocked: First Fragment — Collect your first Source Key Fragment.
+[SAVE] Slot 1 saved successfully (v1.2.0)
+  SAVE mid_meeting: save_game(1)=true state_before_forcing=DIALOGUE fragment_flag=true source_key_count=1
+  PASS: save mid_meeting: save_game(1) returned true
+  PASS: kill: transition_started captured with ch1_elara_joined set
+  PASS: kill: Data Vision off at capture
+  PASS: kill: captured in the arena (at res://scenes/chapter1/tutorial_knight_boss.tscn)
+  PASS: kill: source_key_count is 1
+  PASS: kill: both saves were written
+  CAPTURE kill: flags=12 source_key_count=1 glitch_meter=5.0 gold=500 player_stats_vs_inventory_gold=500/500 buffs=["ch1_elara_trusted", "ch1_knight_killed"]
+[CH1-SHATTER] Initializing The Shatter transition
+[Post-Aldric: spare]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: spare: arena fight started
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+  PASS: spare: transition_started captured with ch1_elara_joined set
+  PASS: spare: Data Vision off at capture
+  PASS: spare: captured in the arena (at res://scenes/chapter1/tutorial_knight_boss.tscn)
+  PASS: spare: source_key_count is 1
+  CAPTURE spare: flags=11 source_key_count=1 glitch_meter=0.0 gold=500 player_stats_vs_inventory_gold=500/500 buffs=["ch1_elara_trusted", "ch1_knight_spared"]
+[CH1-SHATTER] Initializing The Shatter transition
+[Post-Aldric: purge]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: purge: arena fight started
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: root_mastery — Root Mastery: -10 Max HP (corruption cost), but Root Access hacks cost 30% less corruption.
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+  PASS: purge: transition_started captured with ch1_elara_joined set
+  PASS: purge: Data Vision off at capture
+  PASS: purge: captured in the arena (at res://scenes/chapter1/tutorial_knight_boss.tscn)
+  PASS: purge: source_key_count is 1
+  CAPTURE purge: flags=14 source_key_count=1 glitch_meter=8.0 gold=500 player_stats_vs_inventory_gold=500/500 buffs=["ch1_elara_trusted", "ch1_knight_spared", "ch1_root_purge_used"]
+[CH1-SHATTER] Initializing The Shatter transition
+[Post-Aldric: kill_bridge_fell]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: kill_bridge_fell: arena fight started
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+  PASS: kill_bridge_fell: transition_started captured with ch1_elara_joined set
+  PASS: kill_bridge_fell: Data Vision off at capture
+  PASS: kill_bridge_fell: captured in the arena (at res://scenes/chapter1/tutorial_knight_boss.tscn)
+  PASS: kill_bridge_fell: source_key_count is 1
+  CAPTURE kill_bridge_fell: flags=12 source_key_count=1 glitch_meter=5.0 gold=500 player_stats_vs_inventory_gold=500/500 buffs=["ch1_elara_trusted", "ch1_knight_killed"]
+[CH1-SHATTER] Initializing The Shatter transition
+[Post-Aldric: kill_no_bridge_choice]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: kill_no_bridge_choice: arena fight started
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+  PASS: kill_no_bridge_choice: transition_started captured with ch1_elara_joined set
+  PASS: kill_no_bridge_choice: Data Vision off at capture
+  PASS: kill_no_bridge_choice: captured in the arena (at res://scenes/chapter1/tutorial_knight_boss.tscn)
+  PASS: kill_no_bridge_choice: source_key_count is 1
+  CAPTURE kill_no_bridge_choice: flags=10 source_key_count=1 glitch_meter=5.0 gold=500 player_stats_vs_inventory_gold=500/500 buffs=["ch1_elara_trusted", "ch1_knight_killed"]
+[CH1-SHATTER] Initializing The Shatter transition
+
+[Outputs]
+GOLDEN JSON BEGIN
+{
+  "_note": "Frozen S08 golden, captured from HEAD before any S08 edit by tests/integration/story/ch1_s08_golden_capture.gd (story AC-11). Do not regenerate: ch1_rooms_test replays each segment through the S08 placement (house, shrine) and compares. Fields per capture: story_flags_true (sorted), source_key_count, glitch_meter, gold (= GameManager.player_stats.gold), relationships, active_buff_flags (sorted `source_flag` of ChoiceConsequences.active_buffs; that field is named source_flag in the autoload, not flag).",
+  "code_tree_clean_at_capture": true,
+  "engine_time_scale": 4.0,
+  "godot_version": "4.6.3-stable (official)",
+  "head_commit": "38219e3a8e0f28148124ae3957e5dd3e87ad0c61",
+  "post_aldric": {
+    "base_flags": [
+      "ch1_oakhaven_entered",
+      "ch1_northfall_registry_seen",
+      "ch1_stew_done",
+      "ch1_elara_trusted"
+    ],
+    "capture_trigger": "first SceneTransitions.transition_started while current_scene is the arena and ch1_elara_joined is set",
+    "routes": {
+      "kill": {
+        "capture": {
+          "active_buff_flags": [
+            "ch1_elara_trusted",
+            "ch1_knight_killed"
+          ],
+          "glitch_meter": 5.0,
+          "gold": 500,
+          "relationships": {
+            "aria": 0,
+            "elara": 0,
+            "kaelthas": 0,
+            "lyra": 0,
+            "seraphina": 0
+          },
+          "source_key_count": 1,
+          "story_flag_count": 12,
+          "story_flags_true": [
+            "ch1_aldric_kill_owned",
+            "ch1_bridge_repair_accepted",
+            "ch1_bridge_saved",
+            "ch1_elara_joined",
+            "ch1_elara_trusted",
+            "ch1_knight_killed",
+            "ch1_northfall_registry_seen",
+            "ch1_oakhaven_entered",
+            "ch1_oakhaven_warned_villagers",
+            "ch1_stew_done",
+            "ch1_tutorial_knight_defeated",
+            "source_key_fragment_1"
+          ]
+        },
+        "meeting_choice": 0,
+        "note": "kill, own it, public warning, bridge fixed",
+        "picks": [
+          0,
+          0,
+          0
+        ],
+        "preset_flags": [
+          "ch1_oakhaven_entered",
+          "ch1_northfall_registry_seen",
+          "ch1_stew_done",
+          "ch1_elara_trusted",
+          "ch1_bridge_repair_accepted",
+          "ch1_bridge_saved"
+        ]
+      },
+      "kill_bridge_fell": {
+        "capture": {
+          "active_buff_flags": [
+            "ch1_elara_trusted",
+            "ch1_knight_killed"
+          ],
+          "glitch_meter": 5.0,
+          "gold": 500,
+          "relationships": {
+            "aria": 0,
+            "elara": 0,
+            "kaelthas": 0,
+            "lyra": 0,
+            "seraphina": 0
+          },
+          "source_key_count": 1,
+          "story_flag_count": 12,
+          "story_flags_true": [
+            "ch1_aldric_kill_owned",
+            "ch1_bridge_fell",
+            "ch1_bridge_repair_accepted",
+            "ch1_elara_joined",
+            "ch1_elara_trusted",
+            "ch1_knight_killed",
+            "ch1_northfall_registry_seen",
+            "ch1_oakhaven_entered",
+            "ch1_oakhaven_warned_villagers",
+            "ch1_stew_done",
+            "ch1_tutorial_knight_defeated",
+            "source_key_fragment_1"
+          ]
+        },
+        "meeting_choice": 0,
+        "note": "kill, own it, public warning, repair accepted but not saved: bridge falls",
+        "picks": [
+          0,
+          0,
+          0
+        ],
+        "preset_flags": [
+          "ch1_oakhaven_entered",
+          "ch1_northfall_registry_seen",
+          "ch1_stew_done",
+          "ch1_elara_trusted",
+          "ch1_bridge_repair_accepted"
+        ]
+      },
+      "kill_no_bridge_choice": {
+        "capture": {
+          "active_buff_flags": [
+            "ch1_elara_trusted",
+            "ch1_knight_killed"
+          ],
+          "glitch_meter": 5.0,
+          "gold": 500,
+          "relationships": {
+            "aria": 0,
+            "elara": 0,
+            "kaelthas": 0,
+            "lyra": 0,
+            "seraphina": 0
+          },
+          "source_key_count": 1,
+          "story_flag_count": 10,
+          "story_flags_true": [
+            "ch1_aldric_kill_owned",
+            "ch1_elara_joined",
+            "ch1_elara_trusted",
+            "ch1_knight_killed",
+            "ch1_northfall_registry_seen",
+            "ch1_oakhaven_entered",
+            "ch1_oakhaven_warned_villagers",
+            "ch1_stew_done",
+            "ch1_tutorial_knight_defeated",
+            "source_key_fragment_1"
+          ]
+        },
+        "meeting_choice": 0,
+        "note": "kill, own it, public warning, no bridge choice made",
+        "picks": [
+          0,
+          0,
+          0
+        ],
+        "preset_flags": [
+          "ch1_oakhaven_entered",
+          "ch1_northfall_registry_seen",
+          "ch1_stew_done",
+          "ch1_elara_trusted"
+        ]
+      },
+      "purge": {
+        "capture": {
+          "active_buff_flags": [
+            "ch1_elara_trusted",
+            "ch1_knight_spared",
+            "ch1_root_purge_used"
+          ],
+          "glitch_meter": 8.0,
+          "gold": 500,
+          "relationships": {
+            "aria": 0,
+            "elara": -10,
+            "kaelthas": 0,
+            "lyra": 0,
+            "seraphina": 0
+          },
+          "source_key_count": 1,
+          "story_flag_count": 14,
+          "story_flags_true": [
+            "ch1_bridge_evacuated",
+            "ch1_bridge_fell",
+            "ch1_elara_joined",
+            "ch1_elara_trusted",
+            "ch1_knight_spared",
+            "ch1_northfall_registry_seen",
+            "ch1_oakhaven_entered",
+            "ch1_oakhaven_left_quietly",
+            "ch1_root_purge",
+            "ch1_root_purge_used",
+            "ch1_stew_done",
+            "ch1_tutorial_knight_defeated",
+            "elara_trust_low",
+            "source_key_fragment_1"
+          ]
+        },
+        "meeting_choice": 2,
+        "note": "purge confirmed, silent meeting, bridge evacuated and falls",
+        "picks": [
+          2,
+          0,
+          2
+        ],
+        "preset_flags": [
+          "ch1_oakhaven_entered",
+          "ch1_northfall_registry_seen",
+          "ch1_stew_done",
+          "ch1_elara_trusted",
+          "ch1_bridge_evacuated"
+        ]
+      },
+      "spare": {
+        "capture": {
+          "active_buff_flags": [
+            "ch1_elara_trusted",
+            "ch1_knight_spared"
+          ],
+          "glitch_meter": 0.0,
+          "gold": 500,
+          "relationships": {
+            "aria": 0,
+            "elara": 0,
+            "kaelthas": 0,
+            "lyra": 0,
+            "seraphina": 0
+          },
+          "source_key_count": 1,
+          "story_flag_count": 11,
+          "story_flags_true": [
+            "ch1_bridge_repair_accepted",
+            "ch1_bridge_saved",
+            "ch1_elara_joined",
+            "ch1_elara_trusted",
+            "ch1_knight_spared",
+            "ch1_northfall_registry_seen",
+            "ch1_oakhaven_entered",
+            "ch1_oakhaven_warned_villagers",
+            "ch1_stew_done",
+            "ch1_tutorial_knight_defeated",
+            "source_key_fragment_1"
+          ]
+        },
+        "meeting_choice": 0,
+        "note": "spare, public warning, bridge fixed",
+        "picks": [
+          1,
+          0
+        ],
+        "preset_flags": [
+          "ch1_oakhaven_entered",
+          "ch1_northfall_registry_seen",
+          "ch1_stew_done",
+          "ch1_elara_trusted",
+          "ch1_bridge_repair_accepted",
+          "ch1_bridge_saved"
+        ]
+      }
+    }
+  },
+  "saves": {
+    "how": "save_game(1) (manual slot) in the DIALOGUE state during one kill-route run at HEAD; user://save_slot_1.save copied out. Written by the capture script; see its header.",
+    "mid_meeting": {
+      "cut_when": "the first line of fragment_one.dlg `meeting` is on screen",
+      "expect": {
+        "ch1_tutorial_knight_defeated": true,
+        "current_scene": "res://scenes/chapter1/tutorial_knight_boss.tscn",
+        "current_state": "DIALOGUE",
+        "source_key_count": 1,
+        "source_key_fragment_1": true
+      },
+      "file": "tests/fixtures/ch1_s08_save_mid_meeting.save"
+    },
+    "picks": [
+      0,
+      0,
+      0
+    ],
+    "pre_fragment": {
+      "cut_when": "the first line of fragment_one.dlg `fragment` is on screen",
+      "expect": {
+        "ch1_tutorial_knight_defeated": true,
+        "current_scene": "res://scenes/chapter1/tutorial_knight_boss.tscn",
+        "current_state": "DIALOGUE",
+        "source_key_count": 0,
+        "source_key_fragment_1": false
+      },
+      "file": "tests/fixtures/ch1_s08_save_pre_fragment.save"
+    },
+    "preset_flags": [
+      "ch1_oakhaven_entered",
+      "ch1_northfall_registry_seen",
+      "ch1_stew_done",
+      "ch1_elara_trusted",
+      "ch1_bridge_repair_accepted",
+      "ch1_bridge_saved"
+    ],
+    "route": "kill"
+  },
+  "stew": {
+    "capture": {
+      "active_buff_flags": [
+        "ch1_elara_trusted"
+      ],
+      "glitch_meter": 0.0,
+      "gold": 100,
+      "relationships": {
+        "aria": 0,
+        "elara": 10,
+        "kaelthas": 0,
+        "lyra": 0,
+        "seraphina": 0
+      },
+      "source_key_count": 0,
+      "story_flag_count": 9,
+      "story_flags_true": [
+        "ch1_elara_arm_talked",
+        "ch1_elara_trusted",
+        "ch1_northfall_registry_seen",
+        "ch1_oakhaven_entered",
+        "ch1_stew_asked_fracture",
+        "ch1_stew_asked_magic",
+        "ch1_stew_asked_where",
+        "ch1_stew_done",
+        "elara_arm_respected_silence"
+      ]
+    },
+    "capture_trigger": "GameManager.story_flag_updated(\"ch1_stew_done\", true)",
+    "picks": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "preset_flags": [
+      "ch1_oakhaven_entered",
+      "ch1_northfall_registry_seen",
+      "elara_arm_respected_silence",
+      "ch1_elara_trusted"
+    ],
+    "scene_at_head": "res://scenes/chapter1/oakhaven_village.tscn"
+  }
+}
+
+GOLDEN JSON END
+  PASS: no uncommitted change under scripts/, scenes/, dialogue/ at capture
+  PASS: HEAD commit hash recorded (38219e3a8e0f28148124ae3957e5dd3e87ad0c61)
+  PASS: save pre_fragment parses as JSON
+  PASS: save pre_fragment carries a valid _checksum
+  PASS: save pre_fragment: current_scene is the arena
+  PASS: save pre_fragment: current_state is DIALOGUE
+  PASS: save pre_fragment: ch1_tutorial_knight_defeated set
+  PASS: save pre_fragment: source_key_fragment_1 is false
+  PASS: save pre_fragment: source_key_count is 0
+  PASS: save mid_meeting parses as JSON
+  PASS: save mid_meeting carries a valid _checksum
+  PASS: save mid_meeting: current_scene is the arena
+  PASS: save mid_meeting: current_state is DIALOGUE
+  PASS: save mid_meeting: ch1_tutorial_knight_defeated set
+  PASS: save mid_meeting: source_key_fragment_1 is true
+  PASS: save mid_meeting: source_key_count is 1
+GOLDEN SAME: true (byte comparison with the frozen res://tests/integration/story/ch1_s08_golden.json)
+  PASS: re-derived golden is byte-identical to the frozen file
+SAVE SAME CONTENT pre_fragment: true
+  PASS: re-derived save pre_fragment has the same game content as the frozen fixture
+  PASS: save pre_fragment (frozen file) parses as JSON
+  PASS: save pre_fragment (frozen file) carries a valid _checksum
+  PASS: save pre_fragment (frozen file): current_scene is the arena
+  PASS: save pre_fragment (frozen file): current_state is DIALOGUE
+  PASS: save pre_fragment (frozen file): ch1_tutorial_knight_defeated set
+  PASS: save pre_fragment (frozen file): source_key_fragment_1 is false
+  PASS: save pre_fragment (frozen file): source_key_count is 0
+SAVE SAME CONTENT mid_meeting: true
+  PASS: re-derived save mid_meeting has the same game content as the frozen fixture
+  PASS: save mid_meeting (frozen file) parses as JSON
+  PASS: save mid_meeting (frozen file) carries a valid _checksum
+  PASS: save mid_meeting (frozen file): current_scene is the arena
+  PASS: save mid_meeting (frozen file): current_state is DIALOGUE
+  PASS: save mid_meeting (frozen file): ch1_tutorial_knight_defeated set
+  PASS: save mid_meeting (frozen file): source_key_fragment_1 is true
+  PASS: save mid_meeting (frozen file): source_key_count is 1
+
+S08CAPTURE RESULT: 66 passed, 0 failed
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)
+
+================ DETERMINISM DIFF ================
+cmp of the GOLDEN JSON block in run 1 vs run 2 output:
+IDENTICAL (byte-for-byte, 339 lines)
+
+================ LOAD CHECK (scratch script, not kept in the repo) ================
+Each fixture copied to user://save_slot_1.save (no .bak present), then GameManager.load_game(1):
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  PASS: pre_fragment: load_game(1) returned true
+  PASS: pre_fragment: not flagged corrupt
+  PASS: pre_fragment: landed in the arena
+  PASS: pre_fragment: flags/count restored (knight_defeated, fragment=false, count=0)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  PASS: mid_meeting: load_game(1) returned true
+  PASS: mid_meeting: not flagged corrupt
+  PASS: mid_meeting: landed in the arena
+  PASS: mid_meeting: flags/count restored (knight_defeated, fragment=true, count=1)
+LOADSCRATCH RESULT: 8 passed, 0 failed

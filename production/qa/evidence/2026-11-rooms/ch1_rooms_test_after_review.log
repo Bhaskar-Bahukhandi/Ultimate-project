@@ -1,0 +1,762 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+  PASS: golden res://tests/integration/story/ch1_s08_golden.json loads with both segments
+  PASS: the interact action has a joypad button in the input map (0)
+[C1 house: walls, table, camera, labels, inspect spots (AC-1, AC-13)]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [AssetManager] Production art slot missing for Kaelen top-down sheet at res://assets/production_art/characters/player/kaelen_topdown_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:1000)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [6] _ready (res://scripts/exploration/player_topdown.gd:51)
+WARNING: [AssetManager] V2 top-down player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:1009)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [4] _ready (res://scripts/exploration/player_topdown.gd:51)
+  PASS: house scene runs ch1_elara_house.gd
+  PASS: house: a body at the top wall (320.0, 16.0)
+  PASS: house: a body at the bottom wall (320.0, 368.0)
+  PASS: house: a body at the left wall (16.0, 192.0)
+  PASS: house: a body at the right wall (624.0, 192.0)
+  PASS: house: a body at the table (320.0, 192.0)
+  PASS: house: no body at the floor (480.0, 280.0)
+  PASS: house: no body at the Elara placeholder (320.0, 133.0)
+  PASS: house: no body at the Bandages (80.0, 56.0)
+  PASS: house: no body at the Herbs (560.0, 56.0)
+  PASS: house: no body at the Focuses (56.0, 192.0)
+  PASS: house: no body at the Map (584.0, 192.0)
+  PASS: house: no body at the Cloak (216.0, 336.0)
+  PASS: house: exactly 5 static bodies (walls + table/altar), found 5
+  PASS: house: camera limits equal the room rect [P: (0.0, 0.0), S: (640.0, 384.0)] (got 0,0,640,384)
+  PASS: house: every Label/RichTextLabel/Button text in the scene is empty or allowlisted (["Kaelen"]; bad: [])
+  PASS: house door is bound to a handler
+  PASS: entry with ch1_stew_done: no stew line, door active
+  PASS: inspect Bandages is bound to a handler
+  PASS: inspect Bandages plays its elara_house.dlg node (first line seen once)
+  PASS: inspect Herbs is bound to a handler
+  PASS: inspect Herbs plays its elara_house.dlg node (first line seen once)
+  PASS: inspect Focuses is bound to a handler
+  PASS: inspect Focuses plays its elara_house.dlg node (first line seen once)
+  PASS: inspect Cloak is bound to a handler
+  PASS: inspect Cloak plays its elara_house.dlg node (first line seen once)
+  PASS: inspect Map is bound to a handler
+  PASS: inspect Map plays its elara_house.dlg node (first line seen once)
+[C1/C4 literal scan of the room scripts (AC-1, AC-5)]
+  PASS: ch1_elara_house.gd: no new player-visible string literal (bad: [])
+  PASS: ch1_shrine.gd: no new player-visible string literal (bad: [])
+  PASS: shrine script passes the moved literal "Under the old gate" to the UI
+  PASS: shrine script passes the moved literal "Oakhaven, after dark" to the UI
+  PASS: shrine script passes the moved literal "SOURCE KEY 1/7" to the UI
+[C1 stew in the house: (Just eat.) straight away (AC-2)]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: (Just eat.) straight away: door inactive while the stew runs
+  PASS: (Just eat.) straight away: door offers no prompt while the stew runs
+  PASS: (Just eat.) straight away: exactly one ch1_stew_done emit (1)
+  PASS: (Just eat.) straight away: elara_house start played once (first line seen once)
+  PASS: (Just eat.) straight away: after the stew's last choice the GUI focus owner is null or visible (AC-12)
+  PASS: (Just eat.) straight away: EXPLORATION and the door active after the stew
+  PASS: (Just eat.) straight away: re-entry with the flag plays no stew line, door active, no second emit
+[C1 stew in the house: skip_all on line 2 (AC-2)]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: skip_all on line 2: door inactive while the stew runs
+  PASS: skip_all on line 2: door offers no prompt while the stew runs
+  PASS: skip_all on line 2: exactly one ch1_stew_done emit (1)
+  PASS: skip_all on line 2: elara_house start played once (first line seen once)
+  PASS: skip_all on line 2: skip_all() was called on the stew's second line
+  PASS: skip_all on line 2: EXPLORATION and the door active after the stew
+  PASS: skip_all on line 2: re-entry with the flag plays no stew line, door active, no second emit
+[C1 stew in the house: freed mid-run (AC-2)]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: freed mid-run: door inactive while the stew runs
+  PASS: freed mid-run: door offers no prompt while the stew runs
+  PASS: freed mid-run: freeing the house mid-run emits nothing
+[C2/C3/C8 village invite -> door -> house stew (golden) -> door -> afternoon]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+WARNING: [AssetManager] Production art slot missing for Elara NPC sheet at res://assets/production_art/characters/npcs/elara_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/npcs/elara_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_npc (res://scripts/asset_manager.gd:1066)
+       [4] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:553)
+       [5] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:62)
+WARNING: [AssetManager] NPC sheet failed to load for Elara; using existing NPC fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_npc (res://scripts/asset_manager.gd:1074)
+       [2] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:553)
+       [3] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:62)
+  PASS: village has Doors/ElaraHouseDoor bound to a handler
+  PASS: door does nothing before the invite
+  PASS: after the invite: player in EXPLORATION, entrance not done
+  PASS: Elara stands at the house door (728.0, 1196.0)
+  PASS: gate and invite seen once on arrival
+  PASS: no stew in the village
+  PASS: villagers, north field and bridge inert before ch1_stew_done
+  PASS: prompts before the stew: door and Elara yes, Bran no
+  PASS: Elara at the door replays elara_house invite
+  PASS: step 5 resolves to its unchanged text with the village and the door's node path (res://scenes/chapter1/oakhaven_village.tscn, Doors/ElaraHouseDoor)
+  PASS: step 5 arrow aims at the door in the village
+  PASS: step 5 arrow is visible in the village ('  ↘ 126m away')
+  PASS: door changes to the house
+  PASS: step 5 arrow hidden in the house
+  PASS: stew captured on the ch1_stew_done emit in the house
+  PASS: stew: Data Vision off at capture
+  PASS: stew: story_flags_true equals the golden (golden=["ch1_elara_arm_talked","ch1_elara_trusted","ch1_northfall_registry_seen","ch1_oakhaven_entered","ch1_stew_asked_fracture","ch1_stew_asked_magic","ch1_stew_asked_where","ch1_stew_done","elara_arm_respected_silence"] now=["ch1_elara_arm_talked","ch1_elara_trusted","ch1_northfall_registry_seen","ch1_oakhaven_entered","ch1_stew_asked_fracture","ch1_stew_asked_magic","ch1_stew_asked_where","ch1_stew_done","elara_arm_respected_silence"])
+  PASS: stew: story_flag_count equals the golden (golden=9.0 now=9.0)
+  PASS: stew: source_key_count equals the golden (golden=0.0 now=0.0)
+  PASS: stew: glitch_meter equals the golden (golden=0.0 now=0.0)
+  PASS: stew: gold equals the golden (golden=100.0 now=100.0)
+  PASS: stew: relationships equals the golden (golden={"aria":0.0,"elara":10.0,"kaelthas":0.0,"lyra":0.0,"seraphina":0.0} now={"aria":0.0,"elara":10.0,"kaelthas":0.0,"lyra":0.0,"seraphina":0.0})
+  PASS: stew: active_buff_flags equals the golden (golden=["ch1_elara_trusted"] now=["ch1_elara_trusted"])
+  PASS: topics then (Just eat.): stew once, exactly one ch1_stew_done emit
+  PASS: picks of all 0 asked every topic once (ch1_stew_asked_where): asked topics left the list
+  PASS: picks of all 0 asked every topic once (ch1_stew_asked_fracture): asked topics left the list
+  PASS: picks of all 0 asked every topic once (ch1_stew_asked_magic): asked topics left the list
+  PASS: picks of all 0 asked every topic once (ch1_elara_arm_talked): asked topics left the list
+  PASS: house door changes to the village
+  PASS: player placed at the house door (670.0, 1200.0)
+  PASS: arrival skipped (ch1_stew_done set)
+  PASS: no arrival line on the return
+  PASS: Elara at her afternoon spot with only the elara_repeat handler
+  PASS: after the stew the invite is never replayed
+  PASS: villagers talk after the return
+  PASS: no alarm after two first-time talks
+  PASS: the third first-time talk fires the alarm
+  PASS: the north field runs to its end after the return
+  PASS: the bridge trigger plays north_field bridge
+  PASS: still exactly one ch1_stew_done emit
+[CH1-SEQ4] Transitioning to Oakhaven Region (open-world)
+WARNING: [AssetManager] Oakhaven afternoon production tileset missing at res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png; requested=afternoon.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_oakhaven_variant (res://scripts/asset_manager.gd:1231)
+       [2] _try_load_oakhaven_production_variant (res://scripts/asset_manager.gd:1210)
+       [3] get_oakhaven_tileset_slot (res://scripts/asset_manager.gd:1170)
+       [4] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1552)
+       [5] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [6] _build_region_environment (res://scripts/regions/oakhaven_region.gd:114)
+       [7] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] Oakhaven production tileset fallback: production variant missing or invalid; requested=afternoon resolved=afternoon generated=res://assets/generated_v2/tilesets/oakhaven_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _oakhaven_generated_fallback_slot (res://scripts/asset_manager.gd:1219)
+       [2] get_oakhaven_tileset_slot (res://scripts/asset_manager.gd:1199)
+       [3] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1552)
+       [4] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [5] _build_region_environment (res://scripts/regions/oakhaven_region.gd:114)
+       [6] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] Production art slot missing for environment prop atlas at res://assets/production_art/props/environment_prop_atlas.png; using generated fallback res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1486)
+       [4] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [5] _create_building (res://scripts/regions/oakhaven_region.gd:285)
+       [6] _build_region_environment (res://scripts/regions/oakhaven_region.gd:173)
+       [7] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1487)
+       [3] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [4] _create_building (res://scripts/regions/oakhaven_region.gd:285)
+       [5] _build_region_environment (res://scripts/regions/oakhaven_region.gd:173)
+       [6] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] Production art slot missing for environment decal atlas at res://assets/production_art/backgrounds/environment_decal_atlas.png; using generated fallback res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1497)
+       [4] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [5] _add_v3_oakhaven_polish (res://scripts/regions/oakhaven_region.gd:368)
+       [6] _build_region_environment (res://scripts/regions/oakhaven_region.gd:238)
+       [7] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1498)
+       [3] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [4] _add_v3_oakhaven_polish (res://scripts/regions/oakhaven_region.gd:368)
+       [5] _build_region_environment (res://scripts/regions/oakhaven_region.gd:238)
+       [6] _ready (res://scripts/regions/oakhaven_region.gd:74)
+[ENCOUNTER] Zone changed: Oakhaven Village
+[C3b no re-entry: Elara's door stays shut once the stew has played]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: after the stew the house door is shut
+  PASS: after the stew the house door offers no prompt
+  PASS: interacting with the door after the stew stays in the same village (the afternoon can't restart)
+[C3c the house's return spot sits just outside the village door]
+  PASS: the village door node and the house's VILLAGE_DOOR_OUTSIDE both exist
+  PASS: return spot (670.0, 1200.0) is directly below the village door (670.0, 1172.0), within 64 px
+  PASS: this suite's VILLAGE_DOOR_OUTSIDE equals the house's
+[C4 shrine: walls, altar, camera, labels, dressing table (AC-5, AC-13)]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+  PASS: dressing ["ch1_root_purge", "ch1_knight_spared"] -> DressingPurged (visible ["DressingPurged"])
+  PASS: stair door gated by the fragment flag (["ch1_root_purge", "ch1_knight_spared"])
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: dressing ["ch1_knight_killed", "ch1_root_purge"] -> DressingPurged (visible ["DressingPurged"])
+  PASS: stair door gated by the fragment flag (["ch1_knight_killed", "ch1_root_purge"])
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: dressing ["ch1_knight_killed"] -> DressingKilled (visible ["DressingKilled"])
+  PASS: stair door gated by the fragment flag (["ch1_knight_killed"])
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+  PASS: dressing ["ch1_knight_spared"] -> DressingSpared (visible ["DressingSpared"])
+  PASS: stair door gated by the fragment flag (["ch1_knight_spared"])
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: dressing [] -> none (visible [])
+  PASS: stair door gated by the fragment flag ([])
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: shrine scene runs ch1_shrine.gd
+  PASS: shrine: a body at the top wall (256.0, 16.0)
+  PASS: shrine: a body at the bottom wall (256.0, 624.0)
+  PASS: shrine: a body at the left wall (16.0, 320.0)
+  PASS: shrine: a body at the right wall (496.0, 320.0)
+  PASS: shrine: a body at the altar stone (256.0, 96.0)
+  PASS: shrine: no body at the floor runner (256.0, 300.0)
+  PASS: shrine: no body at the DressingPurged (176.0, 530.0)
+  PASS: shrine: no body at the DressingKilled (176.0, 548.0)
+  PASS: shrine: no body at the DressingSpared (176.0, 542.0)
+  PASS: shrine: exactly 5 static bodies (walls + table/altar), found 5
+  PASS: shrine: camera limits equal the room rect [P: (0.0, 0.0), S: (512.0, 640.0)] (got 0,0,512,640)
+  PASS: shrine: every Label/RichTextLabel/Button text in the scene is empty or allowlisted (["Kaelen"]; bad: [])
+  PASS: DressingPurged has no collision (AC-13)
+  PASS: DressingKilled has no collision (AC-13)
+  PASS: DressingSpared has no collision (AC-13)
+[C5 arena source scan (AC-6)]
+  PASS: ch1_tutorial_knight.gd has no FRAGMENT_DLG (0)
+  PASS: ch1_tutorial_knight.gd has no fragment_one (0)
+  PASS: ch1_tutorial_knight.gd has no bridge_fell (0)
+  PASS: ch1_tutorial_knight.gd has no fragment_acquired (0)
+  PASS: ch1_tutorial_knight.gd has no _location_card (0)
+  PASS: ch1_tutorial_knight.gd has no shatter_transition (0)
+  PASS: ch1_tutorial_knight.gd has no _transition_timer (0)
+[C6 route kill: arena -> shrine -> altar -> stair door -> ending]
+  PASS: kill: golden picks end with the meeting choice 0.0
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+WARNING: [AssetManager] Production art slot missing for Kaelen combat sheet at res://assets/production_art/characters/player/kaelen_combat_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:985)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _spawn_player (res://scripts/chapter1/ch1_tutorial_knight.gd:469)
+       [6] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:121)
+WARNING: [AssetManager] V2 combat player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:994)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _spawn_player (res://scripts/chapter1/ch1_tutorial_knight.gd:469)
+       [4] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:121)
+WARNING: [AssetManager] Production art slot missing for Tutorial Knight sheet at res://assets/production_art/characters/bosses/tutorial_knight_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/bosses/tutorial_knight_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_tutorial_knight (res://scripts/asset_manager.gd:1028)
+       [4] _try_install_v2_visual (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:1284)
+       [5] _ready (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:101)
+       [6] _spawn_boss (res://scripts/chapter1/ch1_tutorial_knight.gd:531)
+       [7] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:122)
+WARNING: [AssetManager] Tutorial Knight sheet failed to load; using existing boss fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_tutorial_knight (res://scripts/asset_manager.gd:1032)
+       [2] _try_install_v2_visual (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:1284)
+       [3] _ready (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:101)
+       [4] _spawn_boss (res://scripts/chapter1/ch1_tutorial_knight.gd:531)
+       [5] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:122)
+  PASS: kill: arena fight started
+[ACHIEVEMENT] Unlocked: Flawless Victory — Defeat a boss without taking damage.
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: kill: the arena changes to shrine.tscn (AC-6)
+  PASS: kill: one transition requested from the arena (["res://scenes/chapter1/tutorial_knight_boss.tscn"])
+  PASS: kill: defeated flag and loot before the shrine
+  PASS: kill: fresh arrival writes the autosave (AC-8)
+  PASS: kill: the autosave's current_scene is the shrine
+  PASS: kill: "Under the old gate" shown on arrival
+  PASS: kill: fresh-arrival meta read and cleared
+  PASS: kill: DressingPurged visible = false
+  PASS: kill: DressingKilled visible = true
+  PASS: kill: DressingSpared visible = false
+  PASS: kill: stair door does nothing before the fragment
+  PASS: kill: the altar runs in DIALOGUE
+  PASS: kill: altar guarded and offers no prompt while the fragment plays
+  PASS: kill: fragment_acquired shows the SOURCE KEY 1/7 indicator
+  PASS: kill: fragment first line seen once (1)
+  PASS: kill: one source_key_fragment_1 emit (1)
+  PASS: kill: collect_source_key(1) counted it, back to EXPLORATION
+  PASS: kill: altar inactive once the fragment is taken
+  PASS: kill: stair door active after the fragment
+  PASS: kill: the chain runs in CUTSCENE
+WARNING: [SAVE] Cannot manual save during CUTSCENE
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] save_game (res://scripts/game_manager.gd:1440)
+       [1] _c6_route (res://tests/integration/level/ch1_rooms_test.gd:756)
+       [2] _frames (res://tests/integration/level/ch1_rooms_test.gd:224)
+  PASS: kill: save_game(0) refused in the chain
+WARNING: [SAVE] Cannot quick save during CUTSCENE
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] quick_save (res://scripts/game_manager.gd:1814)
+       [1] _c6_route (res://tests/integration/level/ch1_rooms_test.gd:757)
+       [2] _frames (res://tests/integration/level/ch1_rooms_test.gd:224)
+  PASS: kill: quick_save() refused in the chain
+[ACHIEVEMENT] Unlocked: First Fragment — Collect your first Source Key Fragment.
+  PASS: kill: after the meeting choice the GUI focus owner is null or visible (AC-12)
+  PASS: kill: ending transition_started captured in the shrine with ch1_elara_joined
+  PASS: kill: "Oakhaven, after dark" shown by the stair door
+  PASS: kill: meeting first line seen once (1)
+  PASS: kill: joins first line seen once (1)
+  PASS: kill: ch1_bridge_fell is false
+  PASS: kill: north_field bridge_fell played = false
+  PASS: kill: source_key_count is 1 at the end
+[CH1-SHATTER] Initializing The Shatter transition
+  PASS: kill: the ending scene is shatter_transition (res://scenes/chapter1/shatter_transition.tscn)
+  PASS: kill: Data Vision off at capture
+  PASS: kill: story_flags_true equals the golden (golden=["ch1_aldric_kill_owned","ch1_bridge_repair_accepted","ch1_bridge_saved","ch1_elara_joined","ch1_elara_trusted","ch1_knight_killed","ch1_northfall_registry_seen","ch1_oakhaven_entered","ch1_oakhaven_warned_villagers","ch1_stew_done","ch1_tutorial_knight_defeated","source_key_fragment_1"] now=["ch1_aldric_kill_owned","ch1_bridge_repair_accepted","ch1_bridge_saved","ch1_elara_joined","ch1_elara_trusted","ch1_knight_killed","ch1_northfall_registry_seen","ch1_oakhaven_entered","ch1_oakhaven_warned_villagers","ch1_stew_done","ch1_tutorial_knight_defeated","source_key_fragment_1"])
+  PASS: kill: story_flag_count equals the golden (golden=12.0 now=12.0)
+  PASS: kill: source_key_count equals the golden (golden=1.0 now=1.0)
+  PASS: kill: glitch_meter equals the golden (golden=5.0 now=5.0)
+  PASS: kill: gold equals the golden (golden=500.0 now=500.0)
+  PASS: kill: relationships equals the golden (golden={"aria":0.0,"elara":0.0,"kaelthas":0.0,"lyra":0.0,"seraphina":0.0} now={"aria":0.0,"elara":0.0,"kaelthas":0.0,"lyra":0.0,"seraphina":0.0})
+  PASS: kill: active_buff_flags equals the golden (golden=["ch1_elara_trusted","ch1_knight_killed"] now=["ch1_elara_trusted","ch1_knight_killed"])
+[C6 route spare: arena -> shrine -> altar -> stair door -> ending]
+  PASS: spare: golden picks end with the meeting choice 0.0
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: spare: arena fight started
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: spare: the arena changes to shrine.tscn (AC-6)
+  PASS: spare: one transition requested from the arena (["res://scenes/chapter1/tutorial_knight_boss.tscn"])
+  PASS: spare: defeated flag and loot before the shrine
+  PASS: spare: fresh arrival writes the autosave (AC-8)
+  PASS: spare: the autosave's current_scene is the shrine
+  PASS: spare: "Under the old gate" shown on arrival
+  PASS: spare: fresh-arrival meta read and cleared
+  PASS: spare: DressingPurged visible = false
+  PASS: spare: DressingKilled visible = false
+  PASS: spare: DressingSpared visible = true
+  PASS: spare: stair door does nothing before the fragment
+  PASS: spare: the altar runs in DIALOGUE
+  PASS: spare: altar guarded and offers no prompt while the fragment plays
+  PASS: spare: fragment_acquired shows the SOURCE KEY 1/7 indicator
+  PASS: spare: fragment first line seen once (1)
+  PASS: spare: one source_key_fragment_1 emit (1)
+  PASS: spare: collect_source_key(1) counted it, back to EXPLORATION
+  PASS: spare: altar inactive once the fragment is taken
+  PASS: spare: stair door active after the fragment
+  PASS: spare: the chain runs in CUTSCENE
+WARNING: [SAVE] Cannot manual save during CUTSCENE
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] save_game (res://scripts/game_manager.gd:1440)
+       [1] _c6_route (res://tests/integration/level/ch1_rooms_test.gd:756)
+       [2] _frames (res://tests/integration/level/ch1_rooms_test.gd:224)
+  PASS: spare: save_game(0) refused in the chain
+WARNING: [SAVE] Cannot quick save during CUTSCENE
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] quick_save (res://scripts/game_manager.gd:1814)
+       [1] _c6_route (res://tests/integration/level/ch1_rooms_test.gd:757)
+       [2] _frames (res://tests/integration/level/ch1_rooms_test.gd:224)
+  PASS: spare: quick_save() refused in the chain
+  PASS: spare: after the meeting choice the GUI focus owner is null or visible (AC-12)
+  PASS: spare: ending transition_started captured in the shrine with ch1_elara_joined
+  PASS: spare: "Oakhaven, after dark" shown by the stair door
+  PASS: spare: meeting first line seen once (1)
+  PASS: spare: joins first line seen once (1)
+  PASS: spare: ch1_bridge_fell is false
+  PASS: spare: north_field bridge_fell played = false
+  PASS: spare: source_key_count is 1 at the end
+[CH1-SHATTER] Initializing The Shatter transition
+  PASS: spare: the ending scene is shatter_transition (res://scenes/chapter1/shatter_transition.tscn)
+  PASS: spare: Data Vision off at capture
+  PASS: spare: story_flags_true equals the golden (golden=["ch1_bridge_repair_accepted","ch1_bridge_saved","ch1_elara_joined","ch1_elara_trusted","ch1_knight_spared","ch1_northfall_registry_seen","ch1_oakhaven_entered","ch1_oakhaven_warned_villagers","ch1_stew_done","ch1_tutorial_knight_defeated","source_key_fragment_1"] now=["ch1_bridge_repair_accepted","ch1_bridge_saved","ch1_elara_joined","ch1_elara_trusted","ch1_knight_spared","ch1_northfall_registry_seen","ch1_oakhaven_entered","ch1_oakhaven_warned_villagers","ch1_stew_done","ch1_tutorial_knight_defeated","source_key_fragment_1"])
+  PASS: spare: story_flag_count equals the golden (golden=11.0 now=11.0)
+  PASS: spare: source_key_count equals the golden (golden=1.0 now=1.0)
+  PASS: spare: glitch_meter equals the golden (golden=0.0 now=0.0)
+  PASS: spare: gold equals the golden (golden=500.0 now=500.0)
+  PASS: spare: relationships equals the golden (golden={"aria":0.0,"elara":0.0,"kaelthas":0.0,"lyra":0.0,"seraphina":0.0} now={"aria":0.0,"elara":0.0,"kaelthas":0.0,"lyra":0.0,"seraphina":0.0})
+  PASS: spare: active_buff_flags equals the golden (golden=["ch1_elara_trusted","ch1_knight_spared"] now=["ch1_elara_trusted","ch1_knight_spared"])
+[C6 route purge: arena -> shrine -> altar -> stair door -> ending]
+  PASS: purge: golden picks end with the meeting choice 2.0
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: purge: arena fight started
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: root_mastery — Root Mastery: -10 Max HP (corruption cost), but Root Access hacks cost 30% less corruption.
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: purge: the arena changes to shrine.tscn (AC-6)
+  PASS: purge: one transition requested from the arena (["res://scenes/chapter1/tutorial_knight_boss.tscn"])
+  PASS: purge: defeated flag and loot before the shrine
+  PASS: purge: fresh arrival writes the autosave (AC-8)
+  PASS: purge: the autosave's current_scene is the shrine
+  PASS: purge: "Under the old gate" shown on arrival
+  PASS: purge: fresh-arrival meta read and cleared
+  PASS: purge: DressingPurged visible = true
+  PASS: purge: DressingKilled visible = false
+  PASS: purge: DressingSpared visible = false
+  PASS: purge: stair door does nothing before the fragment
+  PASS: purge: the altar runs in DIALOGUE
+  PASS: purge: altar guarded and offers no prompt while the fragment plays
+  PASS: purge: fragment_acquired shows the SOURCE KEY 1/7 indicator
+  PASS: purge: fragment first line seen once (1)
+  PASS: purge: one source_key_fragment_1 emit (1)
+  PASS: purge: collect_source_key(1) counted it, back to EXPLORATION
+  PASS: purge: altar inactive once the fragment is taken
+  PASS: purge: stair door active after the fragment
+  PASS: purge: the chain runs in CUTSCENE
+WARNING: [SAVE] Cannot manual save during CUTSCENE
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] save_game (res://scripts/game_manager.gd:1440)
+       [1] _c6_route (res://tests/integration/level/ch1_rooms_test.gd:756)
+       [2] _frames (res://tests/integration/level/ch1_rooms_test.gd:224)
+  PASS: purge: save_game(0) refused in the chain
+WARNING: [SAVE] Cannot quick save during CUTSCENE
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] quick_save (res://scripts/game_manager.gd:1814)
+       [1] _c6_route (res://tests/integration/level/ch1_rooms_test.gd:757)
+       [2] _frames (res://tests/integration/level/ch1_rooms_test.gd:224)
+  PASS: purge: quick_save() refused in the chain
+  PASS: purge: after the meeting choice the GUI focus owner is null or visible (AC-12)
+  PASS: purge: ending transition_started captured in the shrine with ch1_elara_joined
+  PASS: purge: "Oakhaven, after dark" shown by the stair door
+  PASS: purge: meeting first line seen once (1)
+  PASS: purge: joins first line seen once (1)
+  PASS: purge: ch1_bridge_fell is true
+  PASS: purge: north_field bridge_fell played = true
+  PASS: purge: source_key_count is 1 at the end
+[CH1-SHATTER] Initializing The Shatter transition
+  PASS: purge: the ending scene is shatter_transition (res://scenes/chapter1/shatter_transition.tscn)
+  PASS: purge: Data Vision off at capture
+  PASS: purge: story_flags_true equals the golden (golden=["ch1_bridge_evacuated","ch1_bridge_fell","ch1_elara_joined","ch1_elara_trusted","ch1_knight_spared","ch1_northfall_registry_seen","ch1_oakhaven_entered","ch1_oakhaven_left_quietly","ch1_root_purge","ch1_root_purge_used","ch1_stew_done","ch1_tutorial_knight_defeated","elara_trust_low","source_key_fragment_1"] now=["ch1_bridge_evacuated","ch1_bridge_fell","ch1_elara_joined","ch1_elara_trusted","ch1_knight_spared","ch1_northfall_registry_seen","ch1_oakhaven_entered","ch1_oakhaven_left_quietly","ch1_root_purge","ch1_root_purge_used","ch1_stew_done","ch1_tutorial_knight_defeated","elara_trust_low","source_key_fragment_1"])
+  PASS: purge: story_flag_count equals the golden (golden=14.0 now=14.0)
+  PASS: purge: source_key_count equals the golden (golden=1.0 now=1.0)
+  PASS: purge: glitch_meter equals the golden (golden=8.0 now=8.0)
+  PASS: purge: gold equals the golden (golden=500.0 now=500.0)
+  PASS: purge: relationships equals the golden (golden={"aria":0.0,"elara":-10.0,"kaelthas":0.0,"lyra":0.0,"seraphina":0.0} now={"aria":0.0,"elara":-10.0,"kaelthas":0.0,"lyra":0.0,"seraphina":0.0})
+  PASS: purge: active_buff_flags equals the golden (golden=["ch1_elara_trusted","ch1_knight_spared","ch1_root_purge_used"] now=["ch1_elara_trusted","ch1_knight_spared","ch1_root_purge_used"])
+[C6 route kill_bridge_fell: arena -> shrine -> altar -> stair door -> ending]
+  PASS: kill_bridge_fell: golden picks end with the meeting choice 0.0
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: kill_bridge_fell: arena fight started
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: kill_bridge_fell: the arena changes to shrine.tscn (AC-6)
+  PASS: kill_bridge_fell: one transition requested from the arena (["res://scenes/chapter1/tutorial_knight_boss.tscn"])
+  PASS: kill_bridge_fell: defeated flag and loot before the shrine
+  PASS: kill_bridge_fell: fresh arrival writes the autosave (AC-8)
+  PASS: kill_bridge_fell: the autosave's current_scene is the shrine
+  PASS: kill_bridge_fell: "Under the old gate" shown on arrival
+  PASS: kill_bridge_fell: fresh-arrival meta read and cleared
+  PASS: kill_bridge_fell: DressingPurged visible = false
+  PASS: kill_bridge_fell: DressingKilled visible = true
+  PASS: kill_bridge_fell: DressingSpared visible = false
+  PASS: kill_bridge_fell: stair door does nothing before the fragment
+  PASS: kill_bridge_fell: the altar runs in DIALOGUE
+  PASS: kill_bridge_fell: altar guarded and offers no prompt while the fragment plays
+  PASS: kill_bridge_fell: fragment_acquired shows the SOURCE KEY 1/7 indicator
+  PASS: kill_bridge_fell: fragment first line seen once (1)
+  PASS: kill_bridge_fell: one source_key_fragment_1 emit (1)
+  PASS: kill_bridge_fell: collect_source_key(1) counted it, back to EXPLORATION
+  PASS: kill_bridge_fell: altar inactive once the fragment is taken
+  PASS: kill_bridge_fell: stair door active after the fragment
+  PASS: kill_bridge_fell: the chain runs in CUTSCENE
+WARNING: [SAVE] Cannot manual save during CUTSCENE
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] save_game (res://scripts/game_manager.gd:1440)
+       [1] _c6_route (res://tests/integration/level/ch1_rooms_test.gd:756)
+       [2] _frames (res://tests/integration/level/ch1_rooms_test.gd:224)
+  PASS: kill_bridge_fell: save_game(0) refused in the chain
+WARNING: [SAVE] Cannot quick save during CUTSCENE
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] quick_save (res://scripts/game_manager.gd:1814)
+       [1] _c6_route (res://tests/integration/level/ch1_rooms_test.gd:757)
+       [2] _frames (res://tests/integration/level/ch1_rooms_test.gd:224)
+  PASS: kill_bridge_fell: quick_save() refused in the chain
+  PASS: kill_bridge_fell: after the meeting choice the GUI focus owner is null or visible (AC-12)
+  PASS: kill_bridge_fell: ending transition_started captured in the shrine with ch1_elara_joined
+  PASS: kill_bridge_fell: "Oakhaven, after dark" shown by the stair door
+  PASS: kill_bridge_fell: meeting first line seen once (1)
+  PASS: kill_bridge_fell: joins first line seen once (1)
+  PASS: kill_bridge_fell: ch1_bridge_fell is true
+  PASS: kill_bridge_fell: north_field bridge_fell played = true
+  PASS: kill_bridge_fell: source_key_count is 1 at the end
+[CH1-SHATTER] Initializing The Shatter transition
+  PASS: kill_bridge_fell: the ending scene is shatter_transition (res://scenes/chapter1/shatter_transition.tscn)
+  PASS: kill_bridge_fell: Data Vision off at capture
+  PASS: kill_bridge_fell: story_flags_true equals the golden (golden=["ch1_aldric_kill_owned","ch1_bridge_fell","ch1_bridge_repair_accepted","ch1_elara_joined","ch1_elara_trusted","ch1_knight_killed","ch1_northfall_registry_seen","ch1_oakhaven_entered","ch1_oakhaven_warned_villagers","ch1_stew_done","ch1_tutorial_knight_defeated","source_key_fragment_1"] now=["ch1_aldric_kill_owned","ch1_bridge_fell","ch1_bridge_repair_accepted","ch1_elara_joined","ch1_elara_trusted","ch1_knight_killed","ch1_northfall_registry_seen","ch1_oakhaven_entered","ch1_oakhaven_warned_villagers","ch1_stew_done","ch1_tutorial_knight_defeated","source_key_fragment_1"])
+  PASS: kill_bridge_fell: story_flag_count equals the golden (golden=12.0 now=12.0)
+  PASS: kill_bridge_fell: source_key_count equals the golden (golden=1.0 now=1.0)
+  PASS: kill_bridge_fell: glitch_meter equals the golden (golden=5.0 now=5.0)
+  PASS: kill_bridge_fell: gold equals the golden (golden=500.0 now=500.0)
+  PASS: kill_bridge_fell: relationships equals the golden (golden={"aria":0.0,"elara":0.0,"kaelthas":0.0,"lyra":0.0,"seraphina":0.0} now={"aria":0.0,"elara":0.0,"kaelthas":0.0,"lyra":0.0,"seraphina":0.0})
+  PASS: kill_bridge_fell: active_buff_flags equals the golden (golden=["ch1_elara_trusted","ch1_knight_killed"] now=["ch1_elara_trusted","ch1_knight_killed"])
+[C6 route kill_no_bridge_choice: arena -> shrine -> altar -> stair door -> ending]
+  PASS: kill_no_bridge_choice: golden picks end with the meeting choice 0.0
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: kill_no_bridge_choice: arena fight started
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: kill_no_bridge_choice: the arena changes to shrine.tscn (AC-6)
+  PASS: kill_no_bridge_choice: one transition requested from the arena (["res://scenes/chapter1/tutorial_knight_boss.tscn"])
+  PASS: kill_no_bridge_choice: defeated flag and loot before the shrine
+  PASS: kill_no_bridge_choice: fresh arrival writes the autosave (AC-8)
+  PASS: kill_no_bridge_choice: the autosave's current_scene is the shrine
+  PASS: kill_no_bridge_choice: "Under the old gate" shown on arrival
+  PASS: kill_no_bridge_choice: fresh-arrival meta read and cleared
+  PASS: kill_no_bridge_choice: DressingPurged visible = false
+  PASS: kill_no_bridge_choice: DressingKilled visible = true
+  PASS: kill_no_bridge_choice: DressingSpared visible = false
+  PASS: kill_no_bridge_choice: stair door does nothing before the fragment
+  PASS: kill_no_bridge_choice: the altar runs in DIALOGUE
+  PASS: kill_no_bridge_choice: altar guarded and offers no prompt while the fragment plays
+  PASS: kill_no_bridge_choice: fragment_acquired shows the SOURCE KEY 1/7 indicator
+  PASS: kill_no_bridge_choice: fragment first line seen once (1)
+  PASS: kill_no_bridge_choice: one source_key_fragment_1 emit (1)
+  PASS: kill_no_bridge_choice: collect_source_key(1) counted it, back to EXPLORATION
+  PASS: kill_no_bridge_choice: altar inactive once the fragment is taken
+  PASS: kill_no_bridge_choice: stair door active after the fragment
+  PASS: kill_no_bridge_choice: the chain runs in CUTSCENE
+WARNING: [SAVE] Cannot manual save during CUTSCENE
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] save_game (res://scripts/game_manager.gd:1440)
+       [1] _c6_route (res://tests/integration/level/ch1_rooms_test.gd:756)
+       [2] _frames (res://tests/integration/level/ch1_rooms_test.gd:224)
+  PASS: kill_no_bridge_choice: save_game(0) refused in the chain
+WARNING: [SAVE] Cannot quick save during CUTSCENE
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] quick_save (res://scripts/game_manager.gd:1814)
+       [1] _c6_route (res://tests/integration/level/ch1_rooms_test.gd:757)
+       [2] _frames (res://tests/integration/level/ch1_rooms_test.gd:224)
+  PASS: kill_no_bridge_choice: quick_save() refused in the chain
+  PASS: kill_no_bridge_choice: after the meeting choice the GUI focus owner is null or visible (AC-12)
+  PASS: kill_no_bridge_choice: ending transition_started captured in the shrine with ch1_elara_joined
+  PASS: kill_no_bridge_choice: "Oakhaven, after dark" shown by the stair door
+  PASS: kill_no_bridge_choice: meeting first line seen once (1)
+  PASS: kill_no_bridge_choice: joins first line seen once (1)
+  PASS: kill_no_bridge_choice: ch1_bridge_fell is false
+  PASS: kill_no_bridge_choice: north_field bridge_fell played = false
+  PASS: kill_no_bridge_choice: source_key_count is 1 at the end
+[CH1-SHATTER] Initializing The Shatter transition
+  PASS: kill_no_bridge_choice: the ending scene is shatter_transition (res://scenes/chapter1/shatter_transition.tscn)
+  PASS: kill_no_bridge_choice: Data Vision off at capture
+  PASS: kill_no_bridge_choice: story_flags_true equals the golden (golden=["ch1_aldric_kill_owned","ch1_elara_joined","ch1_elara_trusted","ch1_knight_killed","ch1_northfall_registry_seen","ch1_oakhaven_entered","ch1_oakhaven_warned_villagers","ch1_stew_done","ch1_tutorial_knight_defeated","source_key_fragment_1"] now=["ch1_aldric_kill_owned","ch1_elara_joined","ch1_elara_trusted","ch1_knight_killed","ch1_northfall_registry_seen","ch1_oakhaven_entered","ch1_oakhaven_warned_villagers","ch1_stew_done","ch1_tutorial_knight_defeated","source_key_fragment_1"])
+  PASS: kill_no_bridge_choice: story_flag_count equals the golden (golden=10.0 now=10.0)
+  PASS: kill_no_bridge_choice: source_key_count equals the golden (golden=1.0 now=1.0)
+  PASS: kill_no_bridge_choice: glitch_meter equals the golden (golden=5.0 now=5.0)
+  PASS: kill_no_bridge_choice: gold equals the golden (golden=500.0 now=500.0)
+  PASS: kill_no_bridge_choice: relationships equals the golden (golden={"aria":0.0,"elara":0.0,"kaelthas":0.0,"lyra":0.0,"seraphina":0.0} now={"aria":0.0,"elara":0.0,"kaelthas":0.0,"lyra":0.0,"seraphina":0.0})
+  PASS: kill_no_bridge_choice: active_buff_flags equals the golden (golden=["ch1_elara_trusted","ch1_knight_killed"] now=["ch1_elara_trusted","ch1_knight_killed"])
+[C5 HEAD save pre_fragment through load_game (AC-7, AC-8, AC-10)]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  PASS: pre_fragment: load_game(1) returns true
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: pre_fragment: forwarded from the arena to the shrine
+  PASS: pre_fragment: the arena started no fight ([false])
+  PASS: pre_fragment: arrival autosave written = true
+  PASS: pre_fragment: arrival card shown = true
+  PASS: pre_fragment: altar active = true
+  PASS: pre_fragment: stair door active = false
+  PASS: pre_fragment: source_key_count is 0
+[SAVE] Slot 1 saved successfully (v1.2.0)
+  PASS: (c) save_game(1) in the shrine before the altar
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  PASS: (c) load_game(1) of the shrine save
+  PASS: (c) load into the shrine makes no autosave
+  PASS: (c) a new shrine instance
+  PASS: (c) no card on a load
+  PASS: (c) altar active, stair door inactive
+  PASS: (d) the altar counted the fragment
+[SAVE] Slot 1 saved successfully (v1.2.0)
+  PASS: (d) save_game(1) after fragment_acquired
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  PASS: (d) load_game(1) of the post-fragment save
+  PASS: (d) altar inactive, stair door active
+  PASS: (d) source_key_count rose by exactly 1 over the whole route
+[C5 HEAD save mid_meeting through load_game (AC-7, AC-8, AC-10)]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  PASS: mid_meeting: load_game(1) returns true
+  PASS: mid_meeting: forwarded from the arena to the shrine
+  PASS: mid_meeting: the arena started no fight ([false])
+  PASS: mid_meeting: arrival autosave written = false
+  PASS: mid_meeting: arrival card shown = false
+  PASS: mid_meeting: altar active = false
+  PASS: mid_meeting: stair door active = true
+  PASS: mid_meeting: source_key_count is 1
+[C7 (a) save in the house after the stew, load]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[SAVE] Slot 1 saved successfully (v1.2.0)
+  PASS: (a) save_game(1) in the house after the stew
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  PASS: (a) load_game(1)
+  PASS: (a) after the load: no stew, door active
+  PASS: (a) leaving changes to the village
+  PASS: (a) back at the house door, arrival skipped
+  PASS: (a) no arrival line
+[C7 (b) save mid-stew (DIALOGUE), load]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: (b) the stew runs in DIALOGUE
+[SAVE] Slot 1 saved successfully (v1.2.0)
+  PASS: (b) save_game(1) mid-stew
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  PASS: (b) load_game(1) of the mid-stew save
+  PASS: (b) a new house instance after the load
+  PASS: (b) the stew replays from start after the load (first line seen again)
+  PASS: (b) ch1_stew_done set once (1)
+[C7 (e) free the shrine mid-fragment]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: (e) mid-fragment: state back to EXPLORATION (EXPLORATION)
+  PASS: (e) mid-fragment: no award
+  PASS: (e) mid-fragment: no shatter_transition request
+[C7 (e) free the shrine mid-chain]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: (e) mid-chain: state back to EXPLORATION (EXPLORATION)
+  PASS: (e) mid-chain: no transition requested ([])
+  PASS: (e) mid-chain: no second award
+  PASS: (e) the moved code keeps its is_inside_tree() guards (11)
+[C8 STORY_BIBLE names the stew's writer (AC-11)]
+  PASS: STORY_BIBLE's ch1_stew_done row names ch1_elara_house.gd as the writer
+[C9 joypad interact in the house (AC-12)]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: house: the player targets Bandages from beside the shelf
+[INTERACTION] Interacting with: Bandages
+  PASS: house: a joypad interact press plays inspect_bandages
+[C9 joypad interact in the shrine (AC-12)]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: shrine: the player targets the altar
+[INTERACTION] Interacting with: Altar
+  PASS: shrine: a joypad press starts the altar
+  PASS: shrine: joypad altar plays fragment once
+  PASS: shrine: the player targets the stair door after the fragment
+[INTERACTION] Interacting with: StairDoor
+  PASS: shrine: a joypad press starts the chain (CUTSCENE)
+  PASS: shrine: joypad presses during the chain are inert (meeting and joins once, no target)
+  PASS: shrine: state back to EXPLORATION after leaving mid-chain
+
+ROOMS RESULT: 392 passed, 0 failed
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)

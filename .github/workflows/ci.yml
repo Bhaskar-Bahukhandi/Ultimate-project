@@ -187,6 +187,11 @@ jobs:
         working-directory: ${{ env.PROJECT_DIR }}
         run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/integration/level/reachability_test.gd
 
+      - name: "Elara's house and the shrine (Y1-P0-S08: rooms, stew, Fragment One, save/load, golden)"
+        working-directory: ${{ env.PROJECT_DIR }}
+        timeout-minutes: 15
+        run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/integration/level/ch1_rooms_test.gd
+
       - name: "Act 1 side quests completable (Y1-P0-T06: arena, Underground, Iris, Garro, shop)"
         working-directory: ${{ env.PROJECT_DIR }}
         timeout-minutes: 15

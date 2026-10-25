@@ -46,7 +46,6 @@ var combat_ended: bool = false
 var _dialogue_queue: Array[Dictionary] = []
 var _dialogue_active: bool = false
 var _current_dialogue_timer: float = 0.0
-var _transition_timer: float = -1.0
 var _arena_hazard_visuals: Array[ColorRect] = []
 var _arena_hazard_players: Array[Node] = []
 var _arena_hazard_damage: float = ARENA_HAZARD_BASE_DAMAGE
@@ -87,14 +86,25 @@ var _tutorial_skip_requested: bool = false
 
 # ─── DIALOGUE (dialogue/ch1/) ───────────────────────────────────────────
 const ALDRIC_DLG := "res://dialogue/ch1/aldric.dlg"
-const FRAGMENT_DLG := "res://dialogue/ch1/fragment_one.dlg"
-const NORTH_FIELD_DLG := "res://dialogue/ch1/north_field.dlg"
-var _card_layer: CanvasLayer = null
+
+# ─── AFTER THE DECISION (Y1-P0-S08) ─────────────────────────────────────
+## The rest of Chapter 1 plays in the shrine (scripts/chapter1/ch1_shrine.gd).
+const SHRINE_SCENE := "res://scenes/chapter1/shrine.tscn"
 
 # ======================================================================
 #  READY — Build the entire arena
 # ======================================================================
 func _ready() -> void:
+	# D5 (Y1-P0-S08): a save made after the decision (the arena used to host
+	# the rest of Chapter 1) loads here with the knight already defeated. No
+	# fight: forward to the shrine instead.
+	if GameManager.has_flag("ch1_tutorial_knight_defeated"):
+		set_process(false)
+		set_physics_process(false)
+		set_process_input(false)
+		_build_background()
+		await _go_to_shrine()
+		return
 	# Background
 	_build_background()
 	# Physics arena
@@ -123,14 +133,6 @@ func _process(delta) -> void:
 	_update_boss_hp_bar()
 	_update_combat_tutorial(delta)
 	_update_arena_pressure(delta)
-
-	# Scene transition countdown (one-shot — disable timer before calling change_scene)
-	# BUG-21-17: Guard timer so it won't fire mid-dialogue
-	if _transition_timer >= 0.0 and not _dialogue_active:
-		_transition_timer -= delta
-		if _transition_timer <= 0.0:
-			_transition_timer = -1.0  # prevent re-entry on subsequent frames
-			SceneTransitions.change_scene("res://scenes/chapter1/shatter_transition.tscn", SceneTransitions.TransitionStyle.SHATTER)
 
 func _input(event) -> void:
 	# Skip the tutorial (Tab / pad View)
@@ -1131,7 +1133,7 @@ func _on_boss_defeated() -> void:
 	if has_node("/root/VFXLibrary") and player:
 		VFXLibrary.spawn_status_indicator("VICTORY", player.global_position + Vector2(0, -84), self, true)
 
-	# C1-S09 onward: the decision, Fragment One, the meeting, Elara joins.
+	# C1-S09: the decision; then on to the shrine for the rest of Chapter 1.
 	await _play_aldric_decision()
 
 func _on_boss_health_changed(new_health: float, max_hp: float) -> void:
@@ -1255,11 +1257,11 @@ func _reset_boss_for_retry() -> void:
 		boss.set_physics_process(true)
 
 # ======================================================================
-#  ALDRIC: THE DECISION, FRAGMENT ONE, THE VILLAGE MEETING (C1-S09 to S12)
+#  ALDRIC: THE DECISION (C1-S09), THEN THE SHRINE
 # ======================================================================
-## After the fight: kill / spare / purge (aldric.dlg), then the shrine and
-## Fragment One, the bridge news if it fell, Oakhaven's meeting, and Elara
-## packing (fragment_one.dlg). Then the Chapter 1 ending (shatter_transition).
+## After the fight: kill / spare / purge (aldric.dlg), its consequences and
+## the loot. Then the shrine scene (Y1-P0-S08) plays the rest of Chapter 1:
+## the altar, the bridge news, the meeting, Elara joining, the ending.
 func _play_aldric_decision() -> void:
 	_dialogue_queue.clear()
 	if dialogue_box:
@@ -1270,32 +1272,20 @@ func _play_aldric_decision() -> void:
 	_apply_aldric_consequences()
 	_give_loot()
 	GameManager.set_story_flag("ch1_tutorial_knight_defeated", true)
+	await _go_to_shrine()
 
-	await _location_card("Under the old gate")
-	if not is_inside_tree(): return
-	await DialogueManager.run(FRAGMENT_DLG, "fragment", _on_dlg_event)
-	if not is_inside_tree(): return
-
-	# The bridge deadline was "until dark". If it wasn't fixed, it's gone now.
-	var bridge_seen := GameManager.has_flag("ch1_bridge_repair_accepted") or GameManager.has_flag("ch1_bridge_evacuated") \
-		or GameManager.has_flag("ch1_bridge_ignored")
-	if bridge_seen and not GameManager.has_flag("ch1_bridge_saved"):
-		GameManager.set_story_flag("ch1_bridge_fell", true)
-		await _location_card("Oakhaven, after dark")
+## Changes to the shrine as a fresh arrival (the shrine autosaves and shows
+## its place card; GameManager.SHRINE_FRESH_ARRIVAL_META tells it so).
+## change_scene drops a request made while another transition runs (a load
+## landing here, D5), so wait that one out first. Polled, not awaited on
+## transition_completed: an aborted transition clears is_transitioning
+## without emitting it.
+func _go_to_shrine() -> void:
+	while SceneTransitions.is_transitioning:
+		await get_tree().process_frame
 		if not is_inside_tree(): return
-		await DialogueManager.run(NORTH_FIELD_DLG, "bridge_fell", _on_dlg_event)
-		if not is_inside_tree(): return
-	else:
-		await _location_card("Oakhaven, after dark")
-		if not is_inside_tree(): return
-
-	await DialogueManager.run(FRAGMENT_DLG, "meeting", _on_dlg_event)
-	if not is_inside_tree(): return
-	await DialogueManager.run(FRAGMENT_DLG, "joins", _on_dlg_event)
-	if not is_inside_tree(): return
-	await get_tree().create_timer(1.0, false).timeout
-	if not is_inside_tree(): return
-	SceneTransitions.change_scene("res://scenes/chapter1/shatter_transition.tscn", SceneTransitions.TransitionStyle.SHATTER)
+	GameManager.set_meta(GameManager.SHRINE_FRESH_ARRIVAL_META, true)
+	SceneTransitions.change_scene(SHRINE_SCENE)
 
 ## Mechanical consequences of the choice (story consequences are flags the
 ## .dlg already set).
@@ -1315,18 +1305,18 @@ func _apply_aldric_consequences() -> void:
 func _on_dlg_event(event: String) -> void:
 	var parts := event.split(" ", false, 1)
 	match parts[0]:
-		"elara_goes_still", "child_runs_inside", "kaelen_freezes", "kaelen_raises_weapon", "elara_packs", "village_gathers", "elara_watches", "kaelen_recoils", "flash_ends":
+		"elara_goes_still", "child_runs_inside", "kaelen_freezes", "kaelen_raises_weapon":
 			await get_tree().create_timer(0.4, false).timeout
 		"aldric_approaches":
 			if boss:
 				var t := create_tween()
 				t.tween_property(boss, "global_position:x", BOSS_SPAWN.x - 120.0, 1.2)
 				await t.finished
-		"aldric_visor_glitch", "aldric_eye_clears", "memory_flash", "touch_fragment":
+		"aldric_visor_glitch", "aldric_eye_clears":
 			if has_node("/root/SceneTransitions"):
 				SceneTransitions.flash(Color(1, 1, 1, 0.6), 0.25)
 			await get_tree().create_timer(0.3, false).timeout
-		"directive_surge", "directive_returns", "villagers_panic":
+		"directive_surge", "directive_returns":
 			if has_node("/root/CombatFX"):
 				CombatFX.apply_screen_shake(9.0, 0.35)
 			await get_tree().create_timer(0.35, false).timeout
@@ -1356,48 +1346,8 @@ func _on_dlg_event(event: String) -> void:
 		"open_shrine_gate":
 			if has_node("/root/SceneTransitions"):
 				SceneTransitions.flash(Color(0.9, 0.85, 0.5, 0.5), 0.4)
-		"fragment_acquired":
-			GameManager.collect_source_key(int(parts[1]) if parts.size() > 1 else 1)
-			if has_node("/root/VFXLibrary") and player:
-				VFXLibrary.spawn_status_indicator("SOURCE KEY 1/7", player.global_position + Vector2(0, -90), self, true)
-		"elara_joins_party":
-			pass   # Elara is already travelling with Kaelen; ch1_elara_joined marks it
 		_:
 			print("[TUTORIAL KNIGHT] unhandled dialogue event: %s" % event)
-
-## A black card with a place name, for scenes there's no set for yet. Sits
-## under the dialogue box (layer 100), over the arena.
-func _location_card(text: String) -> void:
-	if _card_layer == null:
-		_card_layer = CanvasLayer.new()
-		_card_layer.layer = 95
-		add_child(_card_layer)
-		var black := ColorRect.new()
-		black.name = "Black"
-		black.color = Color.BLACK
-		black.set_anchors_preset(Control.PRESET_FULL_RECT)
-		black.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		black.modulate.a = 0.0
-		_card_layer.add_child(black)
-		var label := Label.new()
-		label.name = "Place"
-		label.set_anchors_preset(Control.PRESET_CENTER_TOP)
-		label.position = Vector2(0, 200)
-		label.size = Vector2(ARENA_WIDTH, 40)
-		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		label.add_theme_font_size_override("font_size", 22)
-		label.add_theme_color_override("font_color", Color(0.85, 0.85, 0.9))
-		_card_layer.add_child(label)
-	var black_rect := _card_layer.get_node("Black") as ColorRect
-	var place := _card_layer.get_node("Place") as Label
-	place.text = text
-	place.modulate.a = 0.0
-	var t := create_tween()
-	t.tween_property(black_rect, "modulate:a", 1.0, 0.6)
-	t.tween_property(place, "modulate:a", 1.0, 0.4)
-	t.tween_interval(1.0)
-	t.tween_property(place, "modulate:a", 0.0, 0.4)
-	await t.finished
 
 # ======================================================================
 #  LOOT

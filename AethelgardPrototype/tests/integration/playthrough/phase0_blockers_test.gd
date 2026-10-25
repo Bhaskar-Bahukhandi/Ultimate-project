@@ -370,6 +370,7 @@ const HOOK_SCENE := "res://scenes/chapter1/opening_crash_site_hook.tscn"
 const ELARA_SCENE := "res://scenes/chapter1/elara_meeting.tscn"
 const PATH_SCENE := "res://scenes/chapter1/path_to_oakhaven.tscn"
 const VILLAGE_SCENE := "res://scenes/chapter1/oakhaven_village.tscn"
+const HOUSE_SCENE := "res://scenes/chapter1/elara_house.tscn"
 const OAKHAVEN_REGION_SCENE := "res://scenes/regions/oakhaven_region.tscn"
 
 var _next_bridge_poke_ms: int = 0
@@ -388,8 +389,15 @@ func _ch1_poke() -> void:
 	elif p == VILLAGE_SCENE and not s.get("in_dialogue") and Time.get_ticks_msec() >= _next_bridge_poke_ms:
 		_next_bridge_poke_ms = Time.get_ticks_msec() + 1000
 		var player := s.get_node_or_null("Player")
-		if player:
+		if player and s.get("_invited") and not s.get("_entrance_done") and not s._busy():
+			s._on_elara_house_door_interaction(player)  # Y1-P0-S08: the stew is in Elara's house
+		elif player:
 			s._on_bridge_trigger(player)  # walk onto the bridge
+	elif p == HOUSE_SCENE and _gm().has_flag("ch1_stew_done") and not s._busy() and Time.get_ticks_msec() >= _next_bridge_poke_ms:
+		_next_bridge_poke_ms = Time.get_ticks_msec() + 1000
+		var house_player := s.get_node_or_null("Player")
+		if house_player:
+			s._on_door_interaction(house_player)  # back out to the village for the afternoon
 
 
 func _wait_for_scene_poking(path: String, timeout_sec: float) -> bool:
