@@ -22,7 +22,7 @@
 | AC-4 probes old vs new | Pass. R2b is the case the change exists for: Godot prints `SCRIPT ERROR: Parse Error`, `load()` still returns non-null and the process exits 0, so the OLD runner passes it and the NEW runner fails it | the three logs above |
 | AC-5 full suite, all 16, no `-Quick` | Pass on the final code: `All suites passed.`, exit 0, 18 min 48 s; 0 `SCRIPT ERROR` / `Parse Error` / `RUNNER FAIL` lines. Every per-suite count equals the last green run (`2026-10-flash/run_all.log`); `load_all` ok=206 bad=0 | `run_all.log` |
 | AC-6 `git diff --check` clean; TD-003 Resolved | Pass | `docs/tech-debt-register.md` (TD-003) |
-| AC-7 first CI run green on all 16 test steps | **DEFERRED**: the branch has not been pushed (pushing needs the user's OK). Linux `XDG_DATA_HOME` isolation is exercised there only | add the run URL here |
+| AC-7 first CI run green on all 16 test steps | Pass (2026-10-24): run #29 on `336f7fb`, `ubuntu-latest`, 18 min 33 s, all 16 test steps, the boot check and the whitespace and commit-message steps green; this is the only check of Linux `XDG_DATA_HOME` isolation. The first push after the change (`eaa330e`, run 40045950890) had no jobs because ci.yml did not parse; `336f7fb` quoted six step names and changed no step | https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/40049178997 |
 
 ## Code-review follow-ups
 
