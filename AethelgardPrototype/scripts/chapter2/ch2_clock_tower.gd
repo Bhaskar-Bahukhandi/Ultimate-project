@@ -29,6 +29,8 @@ func _has_flag(flag_name: String) -> bool:
 	return GameManager.has_flag(flag_name)
 const FLOOR_HEIGHT = 250
 const TOWER_WIDTH = 800
+const WALL_THICKNESS = 20          # must match the 20 px left/right walls _build_tower_environment() builds (literals there)
+const PLAYER_BODY_HEIGHT = 32.0    # clock_tower.tscn Player RectangleShape2D (20x32); sizes the BossTrigger band
 
 func _attach_camera_to_player() -> void:
 	if not is_instance_valid(camera) or not is_instance_valid(player_node):
@@ -389,13 +391,21 @@ func _create_floor_triggers() -> void:
 	mid_trigger.body_entered.connect(_on_mid_trigger)
 	add_child(mid_trigger)
 
-	# Pre-boss trigger just below floor 5
+	# Pre-boss trigger: a band across floor 5, one player-body high, resting on the
+	# floor's top surface (Y1-P0-T12 AC-6). It was a circle r=50 at (400, FLOOR_Y[5] + 60),
+	# below floor 5, so nobody standing on floor 5 could touch it and pre_boss was skipped.
+	var band_left := float(WALL_THICKNESS)
+	var band_right := float(TOWER_WIDTH - WALL_THICKNESS)
+	var band_size := Vector2(band_right - band_left, PLAYER_BODY_HEIGHT)
 	var boss_trigger = Area2D.new()
 	boss_trigger.name = "BossTrigger"
-	boss_trigger.position = Vector2(400, FLOOR_Y[5] + 60)
+	boss_trigger.position = Vector2(band_left + band_size.x * 0.5, FLOOR_Y[5] - band_size.y * 0.5)
+	# The player body is on physics layer 2 (player_combat.gd _ready); the Area2D default
+	# mask (1) never saw it, so body_entered could not fire whatever the shape.
+	boss_trigger.collision_mask = 2
 	var bt_col = CollisionShape2D.new()
-	var bt_shape = CircleShape2D.new()
-	bt_shape.radius = 50.0
+	var bt_shape = RectangleShape2D.new()
+	bt_shape.size = band_size
 	bt_col.shape = bt_shape
 	boss_trigger.add_child(bt_col)
 	boss_trigger.body_entered.connect(_on_boss_trigger)
