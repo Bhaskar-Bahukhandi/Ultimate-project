@@ -194,7 +194,7 @@ func _refresh_header() -> void:
 	## Update the header bar with current corruption and location
 	if header_label:
 		var chapter = GameManager.current_chapter if GameManager.current_chapter else 1
-		header_label.text = "AETHELGARD IDE v0.1.%d — Chapter %d" % [chapter, chapter]
+		header_label.text = GameVersion.ide_header(chapter)
 	if corruption_bar:
 		corruption_bar.value = GameManager.glitch_meter
 	if corruption_label:
@@ -883,7 +883,7 @@ func _build_pause_ui() -> void:
 	
 	header_label = Label.new()
 	header_label.name = "TitleLabel"
-	header_label.text = "AETHELGARD IDE v0.1.1 — PAUSED"
+	header_label.text = GameVersion.ide_header()
 	header_label.add_theme_font_size_override("font_size", 20)
 	header_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header_bar.add_child(header_label)

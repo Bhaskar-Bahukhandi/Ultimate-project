@@ -12,11 +12,18 @@ func _ready() -> void:
 	_chapter_launching = false  # Reset so chapter select works if player returns to menu
 	GameManager.change_state(GameManager.GameState.MENU)
 	_check_ng_plus_availability()
+	_show_version()
 	_configure_public_menu_surface()
 	_animate_intro()
 	# Play main menu music
 	if has_node("/root/MusicManager"):
 		MusicManager.play_track("main_menu")
+
+func _show_version() -> void:
+	## The label's text is owned here, not by the scene: one format, read from project settings (GameVersion).
+	var version_label := get_node_or_null("VersionLabel") as Label
+	if version_label:
+		version_label.text = GameVersion.label()
 
 func _animate_intro() -> void:
 	# Fade the whole menu in

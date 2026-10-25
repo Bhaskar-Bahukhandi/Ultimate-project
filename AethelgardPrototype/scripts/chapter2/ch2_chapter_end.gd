@@ -55,6 +55,12 @@ func _has_elara() -> bool:
 
 const END_DLG := "res://dialogue/ch2/act1_end.dlg"
 
+## Stats card layout (UI spec: story Y1-P0-T12 AC-2): font tries 20, then 18, then the 16 floor.
+const CARD_FONT_SIZES: Array[int] = [20, 18, 16]
+const CARD_MARGIN_X := 28
+const CARD_MARGIN_Y := 16
+const CARD_VIEWPORT_MARGIN := 24
+
 func _start_ending_sequence() -> void:
 	## The Act 1 midpoint report, the road out, and the Act 1 end scene on
 	## Ironhold's outer bridge (dialogue/ch2/act1_end.dlg). No SOVEREIGN reveal
@@ -96,19 +102,39 @@ func _show_chapter_end_card() -> void:
 	card_bg.name = "ChapterEndCard"
 	add_child(card_bg)
 
-	# Build the stats text
-	var stats_text = _build_chapter_stats_text()
+	# The stats card: a centred panel (header, two columns, footer) so all of it fits the 1280x720 viewport.
+	var parts: Dictionary = _chapter_stats_parts()
+	var center := CenterContainer.new()
+	center.name = "CardCenter"
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	# No z_index of its own: z is relative, so the card's 80 is inherited and the fade_rect (100) still covers
+	# the whole card when it fades out (an own 81 made it 161 and left the stats drawn over the black).
+	card_bg.add_child(center)
 
-	# Centered label with chapter stats
-	var label = Label.new()
-	label.text = stats_text
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	label.add_theme_font_size_override("font_size", 20)
-	label.add_theme_color_override("font_color", Color(0.85, 0.9, 1.0))
-	label.z_index = 81
-	card_bg.add_child(label)
+	var panel := PanelContainer.new()
+	panel.name = "CardPanel"
+	center.add_child(panel)
+	var margin := MarginContainer.new()
+	for side in ["left", "right"]:
+		margin.add_theme_constant_override("margin_" + side, CARD_MARGIN_X)
+	for side in ["top", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, CARD_MARGIN_Y)
+	panel.add_child(margin)
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 10)
+	margin.add_child(vbox)
+
+	var header := _card_label("HeaderLabel", parts["header"], HORIZONTAL_ALIGNMENT_CENTER)
+	vbox.add_child(header)
+	var columns := HBoxContainer.new()
+	columns.name = "Columns"
+	columns.add_theme_constant_override("separation", 48)
+	vbox.add_child(columns)
+	columns.add_child(_card_label("LeftColumn", parts["left"], HORIZONTAL_ALIGNMENT_LEFT))
+	columns.add_child(_card_label("RightColumn", parts["right"], HORIZONTAL_ALIGNMENT_LEFT))
+	var footer := _card_label("FooterLabel", parts["footer"], HORIZONTAL_ALIGNMENT_CENTER)
+	vbox.add_child(footer)
+	_fit_card_font(panel, [header, columns.get_child(0), columns.get_child(1), footer])
 
 	# Fade the card in over 2 seconds
 	card_bg.modulate = Color(1, 1, 1, 0)
@@ -122,7 +148,7 @@ func _show_chapter_end_card() -> void:
 	GameManager.set_story_flag("ch2_complete", true)
 	print("[CH2-ENDING] Chapter 2 complete")
 
-	# Wait 12 seconds or until the player presses Space
+	# Wait 12 seconds or until the player presses ui_accept (Enter / KP Enter / gamepad A)
 	skip_timer = false
 	var wait_elapsed: float = 0.0
 	while wait_elapsed < 12.0 and not skip_timer:
@@ -162,7 +188,9 @@ func _show_chapter_end_card() -> void:
 		GameManager.reset_game()
 		SceneTransitions.change_scene("res://scenes/main_menu.tscn")
 
-func _build_chapter_stats_text() -> String:
+func _chapter_stats_parts() -> Dictionary:
+	## The card text in four parts (header, left column, right column, footer), each a plain string with its
+	## internal blank lines. The panel shows one label per part; _build_chapter_stats_text() joins them.
 	# Gather data from GameManager
 	var corruption_level: int = int(GameManager.glitch_meter) if GameManager.get("glitch_meter") != null else 0
 	var player_level: int = GameManager.player_stats.get("level", 1) if GameManager.get("player_stats") != null else 1
@@ -241,17 +269,16 @@ func _build_chapter_stats_text() -> String:
 	else:
 		seraphina_approach = "—"
 
-	var text: String = ""
-	text += "═══════════════════════════════════\n"
-	text += "CHAPTER 2 COMPLETE\n"
-	text += "═══════════════════════════════════\n"
-	text += "\n"
-	text += "ACT 1: ARRIVAL AND BELONGING\n"
-	text += "IRONHOLD CROWN\n"
-	text += "\n"
-	text += "Source Key Fragments: %d/7\n" % source_keys
-	text += "Corruption Level: %d%%\n" % corruption_level
-	text += "Player Level: %d\n" % player_level
+	var header := "═══════════════════════════════════\n"
+	header += "CHAPTER 2 COMPLETE\n"
+	header += "═══════════════════════════════════\n"
+	header += "\n"
+	header += "ACT 1: ARRIVAL AND BELONGING\n"
+	header += "IRONHOLD CROWN"
+
+	var left := "Source Key Fragments: %d/7\n" % source_keys
+	left += "Corruption Level: %d%%\n" % corruption_level
+	left += "Player Level: %d\n" % player_level
 	var playtime = GameManager.playtime_seconds if GameManager.get("playtime_seconds") != null else 0.0
 	@warning_ignore("integer_division")
 	var minutes = int(playtime) / 60
@@ -260,41 +287,70 @@ func _build_chapter_stats_text() -> String:
 	var mins_rem = minutes % 60
 	var secs = int(playtime) % 60
 	if hours > 0:
-		text += "Playtime: %dh %02dm %02ds\n" % [hours, mins_rem, secs]
+		left += "Playtime: %dh %02dm %02ds\n" % [hours, mins_rem, secs]
 	else:
-		text += "Playtime: %dm %02ds\n" % [mins_rem, secs]
+		left += "Playtime: %dm %02ds\n" % [mins_rem, secs]
 	var gold = GameManager.player_stats.get("gold", 0)
-	text += "Gold: %d\n" % gold
+	left += "Gold: %d\n" % gold
 	var arena_wins = GameManager.arena_stats.get("total_wins", 0)
 	var arena_losses = GameManager.arena_stats.get("total_losses", 0)
 	var best_streak = GameManager.arena_stats.get("best_streak", 0)
 	if arena_wins > 0 or arena_losses > 0:
-		text += "Arena: %dW / %dL (Best Streak: %d)\n" % [arena_wins, arena_losses, best_streak]
-	text += "\n"
-	text += "Relationships:\n"
-	text += "  Elara: +%d [%s]\n" % [elara_rel, elara_status]
-	text += "  Seraphina: %s\n" % seraphina_display
-	text += "\n"
-	text += "Chapter 1 Choices:\n"
-	text += "  - Knight Aldric: [%s]\n" % knight_status
-	text += "  - Oakhaven: [%s]\n" % village_status
-	text += "\n"
-	text += "Chapter 2 Choices:\n"
-	text += "  - Seraphina Encounter: [%s]\n" % seraphina_approach
-	text += "  - Data Wraith: [%s]\n" % wraith_choice
-	text += "  - Seraphina: [%s]\n" % seraphina_choice
-	text += "\n"
-	text += "Act 1 report sent to: %s\n" % _report_destination()
-	text += "\n"
-	text += "═══════════════════════════════════\n"
-	text += "ACT 2: MEMORY AND LEGITIMACY\n"
-	text += "THE JOURNEY CONTINUES...\n"
-	text += "═══════════════════════════════════\n"
-	text += "\n"
-	text += "Thank you for playing the Aethelgard Prototype!\n"
-	text += "Press {ui_accept} to continue."
+		left += "Arena: %dW / %dL (Best Streak: %d)\n" % [arena_wins, arena_losses, best_streak]
+	left += "\n"
+	left += "Relationships:\n"
+	left += "  Elara: +%d [%s]\n" % [elara_rel, elara_status]
+	left += "  Seraphina: %s" % seraphina_display
 
-	return InputService.fmt(text)
+	var right := "Chapter 1 Choices:\n"
+	right += "  - Knight Aldric: [%s]\n" % knight_status
+	right += "  - Oakhaven: [%s]\n" % village_status
+	right += "\n"
+	right += "Chapter 2 Choices:\n"
+	right += "  - Seraphina Encounter: [%s]\n" % seraphina_approach
+	right += "  - Data Wraith: [%s]\n" % wraith_choice
+	right += "  - Seraphina: [%s]\n" % seraphina_choice
+	right += "\n"
+	right += "Act 1 report sent to: %s" % _report_destination()
+
+	var footer := "═══════════════════════════════════\n"
+	footer += "ACT 2: MEMORY AND LEGITIMACY\n"
+	footer += "THE JOURNEY CONTINUES...\n"
+	footer += "═══════════════════════════════════\n"
+	footer += "\n"
+	footer += "Thank you for playing the Aethelgard Prototype!\n"
+	footer += "Press {ui_accept} to continue."
+
+	return {"header": header, "left": left, "right": right, "footer": InputService.fmt(footer)}
+
+func _build_chapter_stats_text() -> String:
+	## The whole card as one string (the pre-panel layout's text, kept so a test can compare it to its golden).
+	var parts: Dictionary = _chapter_stats_parts()
+	return "%s\n\n%s\n\n%s\n\n%s" % [parts["header"], parts["left"], parts["right"], parts["footer"]]
+
+## One text block of the card: no wrapping (a clipped or wrapped line would hide text), tinted like the old label.
+func _card_label(node_name: String, text: String, align: HorizontalAlignment) -> Label:
+	var label := Label.new()
+	label.name = node_name
+	label.text = text
+	label.horizontal_alignment = align
+	label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	label.add_theme_font_size_override("font_size", CARD_FONT_SIZES[0])
+	label.add_theme_color_override("font_color", Color(0.85, 0.9, 1.0))
+	return label
+
+## Starts at the first CARD_FONT_SIZES entry and steps down only while the panel is taller or wider than the
+## viewport minus CARD_VIEWPORT_MARGIN on every side; the last entry (16) is the floor.
+func _fit_card_font(panel: Control, labels: Array) -> void:
+	var avail: Vector2 = get_viewport_rect().size - Vector2.ONE * (2.0 * CARD_VIEWPORT_MARGIN)
+	for font_size in CARD_FONT_SIZES:
+		for label: Label in labels:
+			label.add_theme_font_size_override("font_size", font_size)
+		var need: Vector2 = panel.get_combined_minimum_size()
+		if need.x <= avail.x and need.y <= avail.y:
+			return
+	push_warning("[CH2-ENDING] Stats card is %s at the %d px font floor; it does not fit %s with %d px margins." % [
+		panel.get_combined_minimum_size(), CARD_FONT_SIZES[-1], get_viewport_rect().size, CARD_VIEWPORT_MARGIN])
 
 # ---------------------------------------------------------------------------
 # Helper: conditional checks
@@ -319,7 +375,7 @@ func _simulate_screen_shake() -> void:
 	shake_tween.tween_property(self, "position", original_pos, 0.05)
 
 # ---------------------------------------------------------------------------
-# Input: allow Space to skip the end-card wait timer
+# Input: ui_accept (Enter / KP Enter / gamepad A) skips the end-card wait timer
 # ---------------------------------------------------------------------------
 
 func _input(event: InputEvent) -> void:

@@ -50,6 +50,10 @@ New-Item -ItemType Directory -Force $outDir | Out-Null
 $exe = Join-Path $outDir "Aethelgard.exe"
 if (Test-Path $exe) { Remove-Item -LiteralPath $exe -Force }
 $exportLog = Join-Path $outDir "export.log"
+# The game version (application/config/version), the same setting the menu and pause screen show.
+$gameVersion = (Select-String -Path (Join-Path $project "project.godot") -Pattern '^config/version="([^"]+)"' | Select-Object -First 1)
+if (-not $gameVersion) { throw "application/config/version is not set in project.godot" }
+Write-Host "Aethelgard $($gameVersion.Matches[0].Groups[1].Value)"
 Write-Host "Exporting '$preset' ($mode) with Godot $version ..."
 $ErrorActionPreference = "Continue"   # Godot writes warnings to stderr
 & $godot.FullName --headless --path $project $mode $preset $exe 2>&1 |

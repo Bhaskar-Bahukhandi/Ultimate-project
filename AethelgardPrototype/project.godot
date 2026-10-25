@@ -16,6 +16,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 config/name="Aethelgard: The Glitch Sovereign"
 config/description="A hybrid action-RPG prototype"
+config/version="0.1.0"
 run/main_scene="res://scenes/splash_screen.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
