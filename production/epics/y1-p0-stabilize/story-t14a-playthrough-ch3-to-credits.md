@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-T14a (`production/plan/_source/Y1-P0.json#Y1-P0-T14`, days 1–3; sprint plan row Y1-P0-T14a)
-> **Status**: Ready
+> **Status**: In Progress
 > **Layer**: Feature
 > **Type**: Integration
 > **Estimate**: 3 days (map and Chapter 3; Chapters 4–6; Chapters 7–10, ending and records)
@@ -126,8 +126,9 @@ world-map / free-travel code: read, never edited. Game-side bugs the bot finds a
       `Engine.time_scale = 4` every frame (trials and hitstops reset it); a single exit function, used by every pass and
       fail path, sets it back to 1 and calls `ContextStack.clear_time_scale()`.
 - [ ] AC-4 **Per-leg checks.** For each leg: the next scene is the one the leg table names (order asserted); at each
-      hand-off — sampled once `SceneTransitions.is_transitioning` is false plus one frame — `DialogueManager.is_active` is
-      false and `ContextStack.top()` is empty (the plan's R5 check); the leg's flags are set, exactly this table (option-0
+      hand-off — sampled at the scene's own `SceneTransitions.transition_started` (*amended at code review*: the start of
+      the fade-out is the hand-off; one frame after the transition the next scene may already have opened its own
+      dialogue) — `DialogueManager.is_active` is false and `ContextStack.top()` is empty (the plan's R5 check); the leg's flags are set, exactly this table (option-0
       path; verified in the scripts):
       ironhold_departure `ch3_ironhold_departed` · Wastes region gate `ch3_server_room_unlocked` · fractured_wastes
       `ch3_fragment_3_collected` · data_stream `ch3_data_stream_complete` · archive_depths `ch3_fragment_4_collected`,

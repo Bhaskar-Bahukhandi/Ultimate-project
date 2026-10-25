@@ -1,0 +1,78 @@
+t14a_watchfail_mutations.log - Y1-P0-T14a AC-7 mutation watch-fail
+Scratch worktree at HEAD (38219e3) + the uncommitted T14a suite, its .uid and suite_limits.txt; a control (3 runs in a row),
+then one mutation per run, reverted after. GODOT unset; the suite through tests/run_phase0_tests.ps1.
+
+== control (no mutation), 3 runs
+   run 1: exit 0; PLAYTHROUGH RESULT: 169 passed, 0 failed; 67 s -> GREEN
+   run 2: exit 0; PLAYTHROUGH RESULT: 169 passed, 0 failed; 64 s -> GREEN
+   run 3: exit 0; PLAYTHROUGH RESULT: 169 passed, 0 failed; 62 s -> GREEN
+
+== (a) ch5_reflection_trial.gd hands off to ch5_ending.tscn instead of ch5_mirror_kaelen_confrontation.tscn
+   exit 1; PLAYTHROUGH RESULT: 56 passed, 1 failed; 32 s
+   expected a failure containing 'after leg 12 (ch5_reflection_trial.tscn)' -> FAILED as expected
+   diff applied:
+     --- a/scripts/chapter5/ch5_reflection_trial.gd
+     +++ b/scripts/chapter5/ch5_reflection_trial.gd
+     @@ -6 +6 @@
+     -const END_SCENE := "res://scenes/chapter5/ch5_mirror_kaelen_confrontation.tscn"
+     +const END_SCENE := "res://scenes/chapter5/ch5_ending.tscn"
+   FAIL: AC-1 after leg 12 (ch5_reflection_trial.tscn) the game goes to ch5_mirror_kaelen_confrontation.tscn (got ch5_ending.tscn)
+   FAIL: SOFTLOCK REPORT: wrong next scene: expected ch5_mirror_kaelen_confrontation.tscn, got ch5_ending.tscn
+   FAIL: RUNNER FAIL res://tests/integration/playthrough/full_playthrough_test.gd: 57 check(s) ran, expected at least 169
+
+== (b) ch9_creator_trial.gd no longer sets ch9_truth_confessed on the option-0 path
+   exit 1; PLAYTHROUGH RESULT: 168 passed, 1 failed; 64 s
+   expected a failure containing 'leg 31 ch9_creator_trial.tscn: flags set' -> FAILED as expected
+   diff applied:
+     --- a/scripts/chapter9/ch9_creator_trial.gd
+     +++ b/scripts/chapter9/ch9_creator_trial.gd
+     @@ -113 +113 @@
+     -			GameManager.set_story_flag("ch9_truth_confessed", true)
+     +			pass
+   FAIL: AC-4 leg 31 ch9_creator_trial.tscn: flags set at the hand-off ["ch9_truth_confessed"] (missing ["ch9_truth_confessed"])
+
+== (c) the _transition_to_next_scene() call removed from late_game_hazard_trial.gd _complete_trial()
+   exit 1; PLAYTHROUGH RESULT: 77 passed, 1 failed; 67 s
+   expected a failure containing 'leg 18 ch6_choir_combat_trial.tscn hands off' -> FAILED as expected
+   diff applied:
+     --- a/scripts/combat/late_game_hazard_trial.gd
+     +++ b/scripts/combat/late_game_hazard_trial.gd
+     @@ -563 +562,0 @@
+     -	_transition_to_next_scene()
+   FAIL: AC-3 leg 18 ch6_choir_combat_trial.tscn hands off within the 30 s cap
+   FAIL: SOFTLOCK REPORT: cap hit in ch6_choir_combat_trial.tscn (trial)
+   FAIL: RUNNER FAIL res://tests/integration/playthrough/full_playthrough_test.gd: 78 check(s) ran, expected at least 169
+
+== (d) ch10_ending.gd no longer sets ng_plus_unlocked
+   exit 1; PLAYTHROUGH RESULT: 167 passed, 2 failed; 64 s
+   expected a failure containing 'AC-5' -> FAILED as expected
+   diff applied:
+     --- a/scripts/chapter10/ch10_ending.gd
+     +++ b/scripts/chapter10/ch10_ending.gd
+     @@ -16 +15,0 @@
+     -	GameManager.set_story_flag("ng_plus_unlocked", true)
+   FAIL: AC-5 ch10_ending sets ch10_complete, true_ending_seen, ng_plus_unlocked and ng_plus_available
+   FAIL: AC-4 leg 38 ch10_ending.tscn: flags set at the hand-off ["ch10_complete", "true_ending_seen", "ng_plus_unlocked"] (missing ["ng_plus_unlocked"])
+
+== (e) ch8_revolt_intro.gd pushes a ContextStack entry in _ready and never pops it
+   exit 1; PLAYTHROUGH RESULT: 168 passed, 1 failed; 65 s
+   expected a failure containing 'leg 25 ch8_revolt_intro.tscn: no dialogue active and no ContextStack' -> FAILED as expected
+   diff applied:
+     --- a/scripts/chapter8/ch8_revolt_intro.gd
+     +++ b/scripts/chapter8/ch8_revolt_intro.gd
+     @@ -10,0 +11 @@
+     +	ContextStack.push(&"t14a_mutation_leak", self, false, false)
+   FAIL: AC-4 leg 25 ch8_revolt_intro.tscn: no dialogue active and no ContextStack entry at the hand-off (dialogue false, stack top 't14a_mutation_leak')
+
+== (f) driver: the bot answers option 1 instead of option 0 at every choice in leg 8 (ch4_null_court)
+   exit 1; PLAYTHROUGH RESULT: 168 passed, 1 failed; 63 s
+   expected a failure containing 'leg 08 ch4_null_court.tscn: flags set' -> FAILED as expected
+   diff applied:
+     --- a/tests/integration/playthrough/full_playthrough_test.gd
+     +++ b/tests/integration/playthrough/full_playthrough_test.gd
+     @@ -229 +229 @@
+     -				dm._on_choice_pressed(0)
+     +				dm._on_choice_pressed(1 if _leg == 8 else 0)
+   FAIL: AC-4 leg 08 ch4_null_court.tscn: flags set at the hand-off ["ch4_choice_preserve_deleted"] (missing ["ch4_choice_preserve_deleted"])
+
+ALL MUTATIONS CAUGHT: yes

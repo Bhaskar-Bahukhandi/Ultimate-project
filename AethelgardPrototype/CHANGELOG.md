@@ -3,6 +3,15 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-25 — A bot plays Chapter 3 to the credits (Y1-P0-T14a)
+
+- **test:** a new suite, `tests/integration/playthrough/full_playthrough_test.gd`, plays the game headless from Chapter
+  3's first scene through the Fractured Wastes, Chapters 4–10 and the three hazard trials to the true ending, the main
+  menu's NEW GAME+ button and the credits screen (option 0 at every choice; 39 scenes in about a minute). It checks the
+  scene order, that dialogue and menus are closed at every hand-off, the story flags each scene sets, and Source Keys 3–7
+  (23 suites now). Nothing players see changes; what it found is listed in
+  `production/qa/evidence/2026-10-playthrough/findings.md`.
+
 ## 2026-10-25 — One version number, a stats card that fits, the Clock Tower's pre-boss scene (Y1-P0-T12)
 
 - **fix(ui):** the game has one version, 0.1.0: the main menu shows `v0.1.0` (it said v1.0), the pause screen header

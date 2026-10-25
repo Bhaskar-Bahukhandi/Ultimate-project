@@ -197,6 +197,11 @@ jobs:
         timeout-minutes: 30
         run: GODOT=~/godot/godot bash tests/run_tests.sh 2>&1 | tee phase0.log; exit "${PIPESTATUS[0]}"
 
+      - name: "Playthrough bot (Y1-P0-T14a: Chapter 3 to the credits, every scene driven headless)"
+        working-directory: ${{ env.PROJECT_DIR }}
+        timeout-minutes: 10
+        run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/integration/playthrough/full_playthrough_test.gd
+
       - name: Upload test logs
         if: always()
         uses: actions/upload-artifact@v4

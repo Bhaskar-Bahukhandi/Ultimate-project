@@ -1,0 +1,264 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+[Ironhold, carefully: the truth, the convoy first, rescue now, restore]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CH2-GATE] Initializing Ironhold Gate sequence
+[ACHIEVEMENT] Unlocked: Double Digits — Reach level 10.
+[ACHIEVEMENT] Unlocked: The Awakening — Complete Chapter 1.
+[ACHIEVEMENT] Unlocked: Sudo Mode — Unlock Root Access.
+[ACHIEVEMENT] Unlocked: First Fragment — Collect your first Source Key Fragment.
+[CUTSCENE] Starting: Ironhold Arrival
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Ironhold Arrival
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Ironhold Arrival
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CH2-GATE] Transitioning to Ironhold Region (open-world)
+WARNING: [AssetManager] Production art slot missing for ironhold production tileset at res://assets/production_art/tilesets/ironhold/ironhold_tileset.png; using generated fallback res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _try_load_ironhold_production_tileset (res://scripts/asset_manager.gd:1274)
+       [3] get_ironhold_tileset_slot (res://scripts/asset_manager.gd:1255)
+       [4] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1554)
+       [5] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [6] _build_environment (res://scripts/regions/ironhold_region.gd:104)
+       [7] _ready (res://scripts/regions/ironhold_region.gd:61)
+WARNING: [AssetManager] Ironhold production tileset fallback: production tileset missing or invalid; generated=res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _ironhold_generated_fallback_slot (res://scripts/asset_manager.gd:1283)
+       [2] get_ironhold_tileset_slot (res://scripts/asset_manager.gd:1266)
+       [3] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1554)
+       [4] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [5] _build_environment (res://scripts/regions/ironhold_region.gd:104)
+       [6] _ready (res://scripts/regions/ironhold_region.gd:61)
+WARNING: [AssetManager] Production art slot missing for environment decal atlas at res://assets/production_art/backgrounds/environment_decal_atlas.png; using generated fallback res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1497)
+       [4] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [5] _add_v3_ironhold_polish (res://scripts/regions/ironhold_region.gd:343)
+       [6] _build_environment (res://scripts/regions/ironhold_region.gd:241)
+       [7] _ready (res://scripts/regions/ironhold_region.gd:61)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1498)
+       [3] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [4] _add_v3_ironhold_polish (res://scripts/regions/ironhold_region.gd:343)
+       [5] _build_environment (res://scripts/regions/ironhold_region.gd:241)
+       [6] _ready (res://scripts/regions/ironhold_region.gd:61)
+WARNING: [AssetManager] Production art slot missing for environment prop atlas at res://assets/production_art/props/environment_prop_atlas.png; using generated fallback res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1486)
+       [4] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [5] _add_v3_ironhold_polish (res://scripts/regions/ironhold_region.gd:345)
+       [6] _build_environment (res://scripts/regions/ironhold_region.gd:241)
+       [7] _ready (res://scripts/regions/ironhold_region.gd:61)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1487)
+       [3] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [4] _add_v3_ironhold_polish (res://scripts/regions/ironhold_region.gd:345)
+       [5] _build_environment (res://scripts/regions/ironhold_region.gd:241)
+       [6] _ready (res://scripts/regions/ironhold_region.gd:61)
+WARNING: [AssetManager] Production art slot missing for Kaelen top-down sheet at res://assets/production_art/characters/player/kaelen_topdown_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:1000)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [6] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [7] _spawn_player (res://scripts/regions/ironhold_region.gd:379)
+       [8] _ready (res://scripts/regions/ironhold_region.gd:62)
+WARNING: [AssetManager] V2 top-down player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:1009)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [4] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [5] _spawn_player (res://scripts/regions/ironhold_region.gd:379)
+       [6] _ready (res://scripts/regions/ironhold_region.gd:62)
+WARNING: [AssetManager] Production art slot missing for Seraphina NPC sheet at res://assets/production_art/characters/npcs/seraphina_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/npcs/seraphina_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_npc (res://scripts/asset_manager.gd:1066)
+       [4] create_topdown_npc_visual (res://scripts/asset_manager.gd:1087)
+       [5] _create_interactable_npc (res://scripts/regions/ironhold_region.gd:410)
+       [6] _place_npcs (res://scripts/regions/ironhold_region.gd:401)
+       [7] _ready (res://scripts/regions/ironhold_region.gd:63)
+WARNING: [AssetManager] NPC sheet failed to load for Seraphina; using existing NPC fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_npc (res://scripts/asset_manager.gd:1074)
+       [2] create_topdown_npc_visual (res://scripts/asset_manager.gd:1087)
+       [3] _create_interactable_npc (res://scripts/regions/ironhold_region.gd:410)
+       [4] _place_npcs (res://scripts/regions/ironhold_region.gd:401)
+       [5] _ready (res://scripts/regions/ironhold_region.gd:63)
+[ENCOUNTER] Zone changed: Ironhold City
+  PASS: the gate scene leads into the Ironhold region
+  PASS: Seraphina recognises Kaelen at the convoy (ironhold_arrival.dlg)
+  PASS: the old forged-token gate and 72-hour countdown are gone
+  PASS: Rook is in Ironhold
+  PASS: Rook's market lesson
+  PASS: the Command Hall gate is open after meeting Seraphina
+[CH2-SERAPHINA] Initializing Seraphina Encounter
+  PASS: Command Hall scene
+[CUTSCENE] Starting: Command Hall
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+  PASS: back to the region after the Command Hall
+  PASS: the truth is told in the Command Hall; the arena trial is offered
+  PASS: Rem is in Ironhold
+  PASS: Rem's convoy job opens the west road right away
+  PASS: the convoy, delivered early; told the truth, Seraphina says 186
+  PASS: the Clock Tower opens after the arena's bronze bracket
+[ACHIEVEMENT] Unlocked: Pit Fighter — Complete the Bronze arena tier.
+[CH2-CLOCKTOWER] Initializing Clock Tower dungeon
+WARNING: [AssetManager] Production art slot missing for Kaelen combat sheet at res://assets/production_art/characters/player/kaelen_combat_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:985)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _ready (res://scripts/chapter2/ch2_clock_tower.gd:59)
+WARNING: [AssetManager] V2 combat player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:994)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _ready (res://scripts/chapter2/ch2_clock_tower.gd:59)
+  PASS: the bell rings thirteen times; up the tower
+  PASS: the bell, with the medicine already in
+[SAVE] Slot 99 saved successfully (v1.2.0)
+DDA: 20.0 (mult=0.75) K:0 D:0.3
+DDA: 20.0 (mult=0.75) K:0 D:0.6
+  PASS: the Minute Hand falls; back to the region
+  PASS: the missing shift: rescue now; the tunnels open
+[CH2-UNDERGROUND] Initializing Underground Network dungeon
+WARNING: [AssetManager] Production art slot missing for DataSprite enemy sheet at res://assets/production_art/characters/enemies/memory_wisp_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/enemies/memory_wisp_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_enemy (res://scripts/asset_manager.gd:1043)
+       [4] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [5] _ready (res://scripts/combat/enemy_base.gd:221)
+       [6] _ready (res://scripts/combat/enemies/data_sprite.gd:40)
+       [7] _spawn_enemy_at (res://scripts/chapter2/ch2_underground_network.gd:299)
+       [8] _spawn_dungeon_enemies (res://scripts/chapter2/ch2_underground_network.gd:227)
+       [9] _ready (res://scripts/chapter2/ch2_underground_network.gd:42)
+WARNING: [AssetManager] Enemy sheet failed to load for DataSprite; using existing enemy fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_enemy (res://scripts/asset_manager.gd:1051)
+       [2] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [3] _ready (res://scripts/combat/enemy_base.gd:221)
+       [4] _ready (res://scripts/combat/enemies/data_sprite.gd:40)
+       [5] _spawn_enemy_at (res://scripts/chapter2/ch2_underground_network.gd:299)
+       [6] _spawn_dungeon_enemies (res://scripts/chapter2/ch2_underground_network.gd:227)
+       [7] _ready (res://scripts/chapter2/ch2_underground_network.gd:42)
+  PASS: down into the Underground
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHECKPOINT] Underground Network — entry auto-save
+[SIDE QUEST] Discovered: The Data Hoard
+[SIDE QUEST] Started: The Data Hoard
+[SIDE QUEST] The Data Hoard — Step 1/3: Fix the routing junction
+  PASS: the Wraith speaks through the lights, with a worker's name, not Mara's
+[SIDE QUEST] The Data Hoard — Step 3/3: 
+[ACHIEVEMENT] Unlocked: Lore Seeker — Discover your first optional lore entry.
+[SIDE QUEST] Completed: The Data Hoard!
+[ACHIEVEMENT] Unlocked: Side Tracked — Complete your first side quest.
+[ACHIEVEMENT] Unlocked: Helpful Variables — Complete an optional objective.
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[INVENTORY] Added 1 x Phantom Cloak
+[INVENTORY] +600 gold (Total: 800)
+[CHOICE-FX] Applied buff: wraith_gratitude — Wraith's Gratitude: +5 DEF, +10 Max HP. Spectral ally occasionally blocks attacks.
+  PASS: the Wraith choice, then back up
+  PASS: restore: Iven wakes, and the legacy flags are set
+  PASS: Fragment Two isn't handed out by the Wraith any more
+  PASS: the Administrator Proxy is reachable once the tunnels are clear
+[CH2-ADMIN-BOSS] Initializing Administrator Proxy encounter
+  PASS: the Proxy's chamber
+  PASS: C2-S14 plays before the fight
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CH2-SERAPHINA-CHOICE] Initializing Seraphina's Choice
+  PASS: Proxy down → the source chamber
+[CHOICE-FX] Applied buff: seraphina_fighter — Arena Champion: +5 ATK, +3 DEF. Seraphina assists in combat with combo attacks.
+[CH2-ENDING] Initializing Chapter 2 Conclusion
+  PASS: Fragment Two, the wall, Seraphina decides → Act 1 end
+  PASS: Fragment Two is awarded once (count = 2)
+  PASS: the Flight 707 wall scene plays
+  PASS: a stable city and a trusted Kaelen: Seraphina comes along (legacy marker set)
+[CH2-ENDING] Chapter 2 complete
+[ACHIEVEMENT] Unlocked: The Administrator's Game — Complete Chapter 2.
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CH2-ENDING] Auto-saved completed chapter state
+[CH2-ENDING] Continuing to Chapter 3
+[CH3-DEPARTURE] Initializing Ironhold Departure
+  PASS: Act 1 end → Chapter 3
+  PASS: the report and the road are recorded; Chapter 2 complete
+  PASS: Act 1 ends on the sky seam, with no early SOVEREIGN reveal
+SEED scene=res://scenes/chapter3/ironhold_departure.tscn
+SEED flags_true=["act1_pace_early", "act1_report_local", "ch1_bridge_saved", "ch1_complete", "ch1_elara_trusted", "ch1_tutorial_knight_defeated", "ch2_administrator_proxy_defeated", "ch2_arena_bronze_complete", "ch2_arena_unlocked", "ch2_city_stable", "ch2_clock_tower_complete", "ch2_clockwork_automaton_defeated", "ch2_command_hall_done", "ch2_complete", "ch2_data_wraith_defeated", "ch2_data_wraith_restored", "ch2_ironhold_entered", "ch2_market_visited", "ch2_medicine_done", "ch2_medicine_early", "ch2_medicine_quest_active", "ch2_rook_met", "ch2_seraphina_186_told", "ch2_seraphina_bond_marker", "ch2_seraphina_met", "ch2_seraphina_recruited", "ch2_seraphina_tell_me", "ch2_seraphina_truth", "ch2_shift_rescue_now", "ch2_tower_bell_stopped", "ch2_underground_complete", "ch2_underground_unlocked", "ch3_ironhold_departed", "elara_trust_high", "lore_ironhold_lore_3", "root_access_unlocked", "seraphina_trust_high", "side_quest_ironhold_underground_data_complete", "source_key_fragment_1", "source_key_fragment_2"]
+SEED flags_false=268
+SEED source_key_count=2 current_chapter=3 current_region=ironhold
+SEED player_stats={ "name": "Kaelen", "class_fake": "Systems Architect", "class_true": "ROOT_ACCESS", "level": 12, "hp": 41, "max_hp": 120, "mp": 50, "max_mp": 50, "gold": 800, "xp": 375, "base_attack": 20, "attack": 20, "base_defense": 11, "defense": 11, "ram_gb": 12, "ram_max_gb": 16, "corruption_pct": 0.05, "integrity_pct": 84.0, "soul": 0 }
+SEED relationships={ "elara": 0, "seraphina": 30, "lyra": 0, "kaelthas": 0, "aria": 0 }
+SEED corruption=0 glitch=11.0 ng_plus_available=false
+SEED metas=[&"return_position", &"return_position_scene", &"boss_return_scene", &"boss_fight_id"]
+SEED has_elara=true unlocked_charms={  } equipped=[]
+
+CH2 RESULT: 33 passed, 0 failed
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)

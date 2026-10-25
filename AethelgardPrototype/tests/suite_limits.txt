@@ -51,3 +51,4 @@ res://tests/integration/combat/combat_fixes_test.gd        45   120
 res://tests/integration/level/reachability_test.gd         21   120
 res://tests/integration/quests/act1_quests_completable_test.gd 114 180
 res://tests/integration/playthrough/phase0_blockers_test.gd 81  960
+res://tests/integration/playthrough/full_playthrough_test.gd 170 240
