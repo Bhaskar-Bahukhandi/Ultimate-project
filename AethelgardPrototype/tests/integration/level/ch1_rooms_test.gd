@@ -49,6 +49,7 @@ const MEET_FIRST := "What was it down there?"
 const JOINS_FIRST := "You're packing"
 const BRIDGE_FELL_LINE := "Heard it go about an hour ago"
 const BRIDGE_FIRST := "North bridge is cracked right through"
+const ALARM_FIRST := "The north field! It's split"
 ## House door outside spot in the village (ch1_elara_house.gd VILLAGE_DOOR_OUTSIDE)
 ## and Elara's two village spots (ch1_oakhaven_village.gd).
 const VILLAGE_DOOR_OUTSIDE := Vector2(670, 1200)
@@ -120,7 +121,9 @@ func _run() -> void:
 	_c1_source_strings()
 	await _c1_stew_paths()
 	await _c2_c3_village_loop()
-	await _c3_no_reentry()
+	await _c3_reentry_sword()
+	await _c3_reentry_timing()
+	await _c3_stash_cleared()
 	_c3_door_position()
 	await _c4_shrine_room()
 	_c5_arena_scan()
@@ -256,28 +259,154 @@ func _load_scene(path: String) -> Node:
 	return current_scene
 
 
-## Review finding 1 (regression): the village is rebuilt on every arrival and its
-## afternoon state (alarm, field, bridge, lines seen) is scene-local, so going back
-## into the house would restart the afternoon and pay the field's gold and XP again.
-## The door therefore only opens between the invite and the stew.
-func _c3_no_reentry() -> void:
-	print("[C3b no re-entry: Elara's door stays shut once the stew has played]")
+## Re-entry (user decision, 2026-10-25, after the first code review's blocker): the
+## village is rebuilt every time the player comes back from the house and its
+## afternoon progress is scene-local, so going back in used to restart the afternoon
+## and pay the north field's gold and XP again. The door now stays open, and the
+## progress is stashed across the trip (GameManager.VILLAGE_AFTERNOON_META). The main
+## re-entry check is inside _c2_c3_village_loop (after the real alarm and field);
+## this one covers the child's wooden sword, a node the village only spawns once.
+func _c3_reentry_sword() -> void:
+	print("[C3b re-entry keeps the child's wooden sword across the house trip]")
 	var gm := _gm()
-	gm.reset_game()
-	_dm().force_reset()
-	for f in ["ch1_oakhaven_entered", "ch1_northfall_registry_seen", "ch1_stew_done",
-			"ch1_north_field_helped", "ch1_corrupted_boar_defeated"]:
-		gm.set_story_flag(f, true)
+	_preset(["ch1_oakhaven_entered", "ch1_northfall_registry_seen", "ch1_stew_done"])
+	_start([])
 	var v := await _load_scene(VILLAGE)
-	await _wait(func(): return current_scene != null and current_scene.get("_entrance_done") == true, 30000)
-	var door := v.get_node("Doors/ElaraHouseDoor")
-	_check(not v._elara_door_open(), "after the stew the house door is shut")
-	_check(not v._can_interact_with(door), "after the stew the house door offers no prompt")
-	var vid := v.get_instance_id()
-	v._on_elara_house_door_interaction(v.get_node("Player"))
-	await _frames(30)
-	_check(not _st().is_transitioning and current_scene != null and current_scene.get_instance_id() == vid,
-		"interacting with the door after the stew stays in the same village (the afternoon can't restart)")
+	var player := v.get_node("Player")
+	if not player.is_in_group("player"):
+		player.add_to_group("player")
+	await _wait(func(): return v._entrance_done, 30000)
+	v._on_child_interaction(player)   # chicken (first time)
+	await _idle(v)
+	v._on_child_interaction(player)   # lost_sword: the pickup appears
+	await _idle(v)
+	_check(v._seen.has("lost_sword") and v._sword_pickup != null, "the child asked for her sword and the pickup is in the village")
+	var seen_before: Array = v._seen.keys()
+	var v_id := v.get_instance_id()
+	v.get_node("Doors/ElaraHouseDoor").get_meta("interact_handler").call(player)
+	_check(await _wait_new_scene(v_id, HOUSE, 30000), "the door opens into the house with the sword still unfound")
+	var h := current_scene
+	await _frames(3)
+	var h_id := h.get_instance_id()
+	h.get_node("Door").get_meta("interact_handler").call(h.get_node("Player"))
+	_check(await _wait_new_scene(h_id, VILLAGE, 30000), "the house door leads back to the village")
+	var v2 := current_scene
+	await _frames(10)
+	_check(v2._seen.keys() == seen_before and v2._sword_pickup != null and v2.has_node("WoodenSword"),
+		"back from the house the conversations are remembered and the sword is still there to pick up (%s)" % [v2._seen.keys()])
+	v2._on_sword_picked(v2.get_node("Player"))
+	await _idle(v2)
+	_check(gm.has_flag("ch1_child_sword_found") and v2._sword_pickup == null, "the sword is picked up")
+	var v2_id := v2.get_instance_id()
+	v2.get_node("Doors/ElaraHouseDoor").get_meta("interact_handler").call(v2.get_node("Player"))
+	_check(await _wait_new_scene(v2_id, HOUSE, 30000), "a second trip into the house")
+	var h2 := current_scene
+	await _frames(3)
+	var h2_id := h2.get_instance_id()
+	h2.get_node("Door").get_meta("interact_handler").call(h2.get_node("Player"))
+	_check(await _wait_new_scene(h2_id, VILLAGE, 30000), "and back out")
+	var v3 := current_scene
+	await _frames(10)
+	_check(v3._sword_pickup == null and not v3.has_node("WoodenSword") and v3._seen.has("lost_sword"), "once found, the sword does not come back")
+	await _end_scene()
+
+
+## Re-entry timing (QL-TEST-COVERAGE re-run, 2026-10-25): going into the house BEFORE the
+## alarm keeps the beat count, so the third first-time talk still fires it; the door is shut
+## during the short wait between that third talk and the alarm (entering then used to free the
+## scene and drop the alarm), and while the north field or the bridge runs.
+func _c3_reentry_timing() -> void:
+	print("[C3d re-entry before the alarm; door shut while the alarm is pending, the field or the bridge runs]")
+	var gm := _gm()
+	_preset(["ch1_oakhaven_entered", "ch1_northfall_registry_seen", "ch1_stew_done"])
+	_start([])
+	var v := await _load_scene(VILLAGE)
+	var player := v.get_node("Player")
+	await _wait(func(): return v._entrance_done, 30000)
+	v._on_old_fen_interaction(player)
+	await _idle(v)
+	v._on_jessa_interaction(player)
+	await _idle(v)
+	_check(v._afternoon_beats == 2 and not v._alarm_done, "two first-time talks: beats 2, no alarm yet")
+	var v_id := v.get_instance_id()
+	v.get_node("Doors/ElaraHouseDoor").get_meta("interact_handler").call(player)
+	_check(await _wait_new_scene(v_id, HOUSE, 30000), "before the alarm the door opens into the house")
+	var h := current_scene
+	await _frames(3)
+	var h_id := h.get_instance_id()
+	h.get_node("Door").get_meta("interact_handler").call(h.get_node("Player"))
+	_check(await _wait_new_scene(h_id, VILLAGE, 30000), "and back out to the village")
+	var v2 := current_scene
+	var p2 := v2.get_node("Player")
+	await _frames(10)
+	_check(v2._afternoon_beats == 2 and not v2._alarm_done and _count(ALARM_FIRST) == 0, "back before the alarm: beats still 2, no alarm line")
+	var door := v2.get_node("Doors/ElaraHouseDoor")
+	v2._on_farmer_interaction(p2)   # the third first-time talk
+	await _idle(v2)
+	_check(v2._alarm_pending and not v2._elara_door_open() and not v2._can_interact_with(door), "right after the third talk the alarm is pending and the door is shut")
+	var v2_id := v2.get_instance_id()
+	door.get_meta("interact_handler").call(p2)
+	await _frames(3)
+	_check(current_scene != null and current_scene.get_instance_id() == v2_id and not _st().is_transitioning, "pressing the door while the alarm is pending does not leave the village")
+	_check(await _wait(func(): return v2._alarm_done, 30000), "the alarm still fires on the third talk")
+	await _wait(func(): return v2._field_running, 10000)
+	door.get_meta("interact_handler").call(p2)
+	await _frames(3)
+	_check(v2._field_running and current_scene.get_instance_id() == v2_id and not _st().is_transitioning, "the door is shut while the north field runs")
+	await _end_scene()
+	# The bridge: its dialogue makes the village busy anyway; _bridge_running is what shuts the
+	# door in the gaps (the "time passes" fade, the transition out). Set it alone to check that term.
+	_preset(["ch1_oakhaven_entered", "ch1_northfall_registry_seen", "ch1_stew_done"])
+	_start([])
+	var v3 := await _load_scene(VILLAGE)
+	var p3 := v3.get_node("Player")
+	await _wait(func(): return v3._entrance_done, 30000)
+	var v3_id := v3.get_instance_id()
+	v3._bridge_running = true
+	_check(not v3._busy() and not v3._elara_door_open(), "with the bridge sequence between lines (not busy), the door is shut")
+	v3.get_node("Doors/ElaraHouseDoor").get_meta("interact_handler").call(p3)
+	await _frames(3)
+	_check(current_scene.get_instance_id() == v3_id and _scene_path() == VILLAGE and not _st().is_transitioning, "pressing the door during the bridge sequence does not leave the village")
+	v3._bridge_running = false
+	await _end_scene()
+
+
+## The stash is in memory only: a load, or a new game, clears it (D10).
+func _c3_stash_cleared() -> void:
+	print("[C3e the afternoon stash is cleared by a load and by a new game]")
+	var gm := _gm()
+	var key: String = gm.VILLAGE_AFTERNOON_META
+	_preset(["ch1_oakhaven_entered", "ch1_northfall_registry_seen", "ch1_stew_done"])
+	_start([])
+	var v := await _load_scene(VILLAGE)
+	await _wait(func(): return v._entrance_done, 30000)
+	v._on_old_fen_interaction(v.get_node("Player"))
+	await _idle(v)
+	var v_id := v.get_instance_id()
+	v.get_node("Doors/ElaraHouseDoor").get_meta("interact_handler").call(v.get_node("Player"))
+	_check(await _wait_new_scene(v_id, HOUSE, 30000), "into the house")
+	var h := current_scene
+	await _frames(3)
+	_check(gm.has_meta(key) and int((gm.get_meta(key) as Dictionary).get("beats", -1)) == 1, "inside the house the afternoon is stashed (beats 1)")
+	_check(gm.save_game(1), "save_game(1) inside the house")
+	var h_id := h.get_instance_id()
+	var ok: bool = await gm.load_game(1)
+	_check(ok, "load_game(1) of the house save")
+	await _wait_new_scene(h_id, HOUSE, 30000)
+	_check(not gm.has_meta(key), "a load clears the afternoon stash")
+	var h2 := current_scene
+	await _frames(3)
+	var h2_id := h2.get_instance_id()
+	h2.get_node("Door").get_meta("interact_handler").call(h2.get_node("Player"))
+	_check(await _wait_new_scene(h2_id, VILLAGE, 30000), "out of the loaded house")
+	var v2 := current_scene
+	await _frames(10)
+	_check(v2._afternoon_beats == 0 and v2._seen.is_empty(), "after a load the afternoon restarts (the documented limitation): beats 0, nothing seen")
+	var v2_id := v2.get_instance_id()
+	v2.get_node("Doors/ElaraHouseDoor").get_meta("interact_handler").call(v2.get_node("Player"))
+	_check(await _wait_new_scene(v2_id, HOUSE, 30000) and gm.has_meta(key), "back into the house: stashed again")
+	gm.reset_game()
+	_check(not gm.has_meta(key), "a new game clears the afternoon stash")
 	await _end_scene()
 
 
@@ -653,9 +782,9 @@ func _c2_c3_village_loop() -> void:
 	_check(v2._entrance_done and v2._invited, "arrival skipped (ch1_stew_done set)")
 	await _frames(60)
 	_check(_count(GATE_LINE, mark) == 0 and _count(INVITE_LINE, mark) == 0 and _count(STEW_FIRST, mark) == 0, "no arrival line on the return")
-	# Code review: the step-E screenshot showed "[F] Interact" here, from before the
-	# door was shut after the stew. Standing at the door, nothing may be targeted.
-	_check(vp.get("nearby_interactable") == null, "back at the shut door, the player targets nothing (%s)" % vp.get("nearby_interactable"))
+	# The door stays open after the stew (re-entry), so back outside it the player's
+	# target is the door: the "[F] Interact" prompt in the retained village screenshot.
+	_check(vp.get("nearby_interactable") == v2.get_node("Doors/ElaraHouseDoor"), "back outside, the player's target is the open house door (%s)" % vp.get("nearby_interactable"))
 	var ve := v2.get_node("NPCs/Elara") as Area2D
 	_check(ve.position == ELARA_AFTERNOON and ve.get_meta("interact_handler") == Callable(v2, "_on_elara_interaction"), "Elara at her afternoon spot with only the elara_repeat handler")
 	ve.get_meta("interact_handler").call(vp)
@@ -672,6 +801,43 @@ func _c2_c3_village_loop() -> void:
 	_check(await _wait(func(): return v2._alarm_done, 60000), "the third first-time talk fires the alarm")
 	_check(await _wait(func(): return v2._field_resolved, 120000), "the north field runs to its end after the return")
 	await _idle(v2)
+	# Re-entry: after the real alarm and field the house is still open, and the afternoon's
+	# progress survives the trip. Going back in must neither restart the afternoon (a second
+	# alarm) nor pay the north field's gold and XP again.
+	var gold_after_field := int(gm.player_stats.get("gold", 0))
+	var xp_after_field := int(gm.player_stats.get("xp", 0))
+	var beats_after_field: int = v2._afternoon_beats
+	var seen_after_field: Array = v2._seen.keys()
+	var alarm_lines := _count(ALARM_FIRST, mark)
+	var door2 := v2.get_node("Doors/ElaraHouseDoor") as Area2D
+	_check(v2._elara_door_open() and v2._can_interact_with(door2), "after the stew, the alarm and the field the house door is still open")
+	var v2_id0 := v2.get_instance_id()
+	door2.get_meta("interact_handler").call(vp)
+	_check(await _wait_new_scene(v2_id0, HOUSE, 30000), "the door takes the player back into the house")
+	var h2 := current_scene
+	await _frames(3)
+	_check(_count(STEW_FIRST) == 1 and not h2._stew_running and not h2._busy(), "no second stew on re-entry (stew seen %d time)" % _count(STEW_FIRST))
+	var mark2 := _seen_text.size()
+	h2._on_inspect(h2.get_node("Player"), "inspect_map")
+	await _idle(h2)
+	_check(_count(INSPECT_LINES["Map"], mark2) == 1, "an object in the house can be looked at on a later visit")
+	var h2_id := h2.get_instance_id()
+	h2.get_node("Door").get_meta("interact_handler").call(h2.get_node("Player"))
+	_check(await _wait_new_scene(h2_id, VILLAGE, 30000), "the house door leads back to the village")
+	var v3 := current_scene
+	var vp3 := v3.get_node("Player") as Node2D
+	await _frames(30)
+	_check(v3._alarm_done and v3._field_resolved and not v3._bridge_done and v3._afternoon_beats == beats_after_field,
+		"the afternoon's progress survived the trip (alarm %s, field %s, bridge %s, beats %d)" % [v3._alarm_done, v3._field_resolved, v3._bridge_done, v3._afternoon_beats])
+	_check(v3._seen.keys() == seen_after_field, "the conversations already had are remembered (%d)" % v3._seen.size())
+	_check(int(gm.player_stats.get("gold", 0)) == gold_after_field and int(gm.player_stats.get("xp", 0)) == xp_after_field,
+		"coming back paid no gold or XP")
+	v3._on_boar_trigger(vp3)
+	await _frames(60)
+	_check(not v3._field_running and int(gm.player_stats.get("gold", 0)) == gold_after_field and int(gm.player_stats.get("xp", 0)) == xp_after_field and _count(ALARM_FIRST, mark) == alarm_lines,
+		"walking to the north field after the trip does not run it again (no second alarm, no second payment)")
+	v2 = v3
+	vp = vp3
 	v2._on_bridge_trigger(vp)
 	_check(await _wait(func(): return _count(BRIDGE_FIRST, mark) >= 1, 60000), "the bridge trigger plays north_field bridge")
 	_check(_emit_count("ch1_stew_done") == 1, "still exactly one ch1_stew_done emit")

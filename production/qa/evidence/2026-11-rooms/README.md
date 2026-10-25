@@ -7,24 +7,26 @@ ComfyUI used: **No** (no art was generated for this story; AGENTS.md art truth g
 
 ## Acceptance criteria → evidence
 
+The logs named here are the current ones (after D10 and the alarm-window fix, the last code changes).
+
 | AC | What | Evidence |
 |---|---|---|
-| AC-1 | House scene: walls/table solid, 5 inspect spots, camera limits, no new strings | `ch1_rooms_test.log` (C1, C1 literal scan) |
-| AC-2 | Stew in the room: one `ch1_stew_done` emit on each path, none on abort | `ch1_rooms_test.log` (C1 stew paths); `chapter1_route_test.log` (`_stew_run`) |
-| AC-3 | Invite → door → house; step 5 names the village door | `ch1_rooms_test.log` (C2/C3); `chapter1_route_test.log` (arrow table, S5 check) |
-| AC-4 | Back in the village at the door, afternoon starts | `ch1_rooms_test.log` (C2/C3) |
-| AC-5 | Shrine scene, dressing table (5 rows) | `ch1_rooms_test.log` (C4) |
-| AC-6 | Arena hands off to the shrine; 7-term scan | `ch1_rooms_test.log` (C5 scan, C6 routes) |
-| AC-7 | Old post-decision saves forward to the shrine | `ch1_rooms_test.log` (C5 fixtures, through `load_game`) |
-| AC-8 | Fresh-arrival autosave + card; altar single-fire | `ch1_rooms_test.log` (C6) |
-| AC-9 | Chain in CUTSCENE; 3 bridge rows; saves refused | `ch1_rooms_test.log` (C6) |
-| AC-10 | Save/load (a)–(e), aborts leave EXPLORATION | `ch1_rooms_test.log` (C5, C7) |
-| AC-11 | No drift: golden captured at HEAD `38219e3`, replayed | `golden_capture.log`; `../../../AethelgardPrototype/tests/integration/story/ch1_s08_golden.json`; `ch1_rooms_test.log` (C6, C2/C3 golden fields) |
-| AC-12 | Gamepad focus and joypad interact | `ch1_rooms_test.log` (C9, C6 focus) |
-| AC-13 | Reachability for both rooms; village still passes; sealed control fails | `reachability_test.log`; `ch1_rooms_test.log` (dressing has no collision) |
-| AC-14 | Room suite registered (suite_limits, run_all_tests.ps1, ci.yml); layout guard | `run_all.log` (LAYOUT 6/0, ROOMS) |
-| AC-15 | Updated suites: route test, reachability; breadcrumb golden unchanged | `chapter1_route_test.log`, `reachability_test.log` |
-| AC-16 | Full run, dialogue, reachability, `git diff --check` | `run_all.log` + the post-review re-runs below |
+| AC-1 | House scene: walls/table solid, 5 inspect spots, camera limits, no new strings | `ch1_rooms_test_reentry_v3.log` (C1, C1 literal scan) |
+| AC-2 | Stew in the room: one `ch1_stew_done` emit on each path, none on abort | `ch1_rooms_test_reentry_v3.log` (C1 stew paths); `run_all_final.log` (CH1 section) (`_stew_run`) |
+| AC-3 | Invite → door → house; step 5 names the village door | `ch1_rooms_test_reentry_v3.log` (C2/C3); `run_all_final.log` (CH1 section) (arrow table, S5 check) |
+| AC-4 | Back in the village at the door, afternoon starts; re-entry keeps the afternoon (D10) | `ch1_rooms_test_reentry_v3.log` (C2/C3) |
+| AC-5 | Shrine scene, dressing table (5 rows) | `ch1_rooms_test_reentry_v3.log` (C4) |
+| AC-6 | Arena hands off to the shrine; 7-term scan | `ch1_rooms_test_reentry_v3.log` (C5 scan, C6 routes) |
+| AC-7 | Old post-decision saves forward to the shrine | `ch1_rooms_test_reentry_v3.log` (C5 fixtures, through `load_game`) |
+| AC-8 | Fresh-arrival autosave + card; altar single-fire | `ch1_rooms_test_reentry_v3.log` (C6) |
+| AC-9 | Chain in CUTSCENE; 3 bridge rows; saves refused | `ch1_rooms_test_reentry_v3.log` (C6) |
+| AC-10 | Save/load (a)–(e), aborts leave EXPLORATION | `ch1_rooms_test_reentry_v3.log` (C5, C7) |
+| AC-11 | No drift: golden captured at HEAD `38219e3`, replayed | `golden_capture.log`; `../../../AethelgardPrototype/tests/integration/story/ch1_s08_golden.json`; `ch1_rooms_test_reentry_v3.log` (C6, C2/C3 golden fields) |
+| AC-12 | Gamepad focus and joypad interact | `ch1_rooms_test_reentry_v3.log` (C9, C6 focus) |
+| AC-13 | Reachability for both rooms; village still passes; sealed control fails | `run_all_final.log` (REACH section); `ch1_rooms_test_reentry_v3.log` (dressing has no collision) |
+| AC-14 | Room suite registered (suite_limits, run_all_tests.ps1, ci.yml); layout guard | `run_all_final.log` (LAYOUT 6/0, ROOMS) |
+| AC-15 | Updated suites: route test, reachability; breadcrumb golden unchanged | `run_all_final.log` (CH1 section), `run_all_final.log` (REACH section) |
+| AC-16 | Full run, dialogue, reachability, `git diff --check` | `run_all_final.log` (24/24) |
 | AC-17 | Tour stops `s08_elara_house`, `s08_shrine`; `ch1_breadcrumb_oakhaven` reaches step 6 through the house | `report.md`, `capture.md`, `ch1_breadcrumb_oakhaven.png` |
 | AC-18 | Live-renderer screenshots | `elara_house.png`, `shrine.png` (+ `s08_shrine_altar.png`, see below) |
 | AC-19 | This README | — |
@@ -43,8 +45,8 @@ door fix.
   ends**: `s08_shrine_altar.png` (same arrival, player moved up the runner, nothing interacted with) shows the altar
   end (words panel, altar stone). The two together cover AC-18's shrine shot. A zoomed-out single frame was rejected
   because it would not be what the player sees.
-- `ch1_breadcrumb_oakhaven.png` — the village after the house round trip, step-6 objective shown, the player at
-  the shut door with no prompt.
+- `ch1_breadcrumb_oakhaven.png` — the village after the house round trip, step-6 objective shown, the player
+  outside the open house door with its "[F] Interact" prompt (re-entry is allowed, D10; re-captured 22:01).
 - Cosmetic, not caused by this story: the objective panel overlaps the house's Herbs shape and the village's
   location/glitch text; the player's prompt and name cover part of the altar stone in the altar shot.
 - `run_screenshots.ps1 -Evidence` was not used: it names the folder `<current yyyy-MM>-<topic>`, which would have
@@ -69,22 +71,19 @@ door fix.
 | Quick suites after the fixes | layout 6/0, load_all ok=209 bad=0, dialogue 54/0 | (console) |
 | Door-position check (C3c) watched failing: house spot moved to (700, 1200) | 388/4 (C3c ×2 plus the two placement checks); file restored byte-identical | `ch1_rooms_test_door_watchfail.log` |
 | Parse check, 13 added/changed scripts (`.claude/scripts/godot-parse-check.gd`) | all `ok`, exit 0 | (console) |
-
 | Rooms suite after the `/code-review` fixes | **411/0**, 182 s, 0× lambda error | `ch1_rooms_test_after_code_review.log` |
 | Mutation 1: altar guard (`_busy()`) removed from `_on_altar_interaction` | 406/5: "the double altar call ran fragment once (most runs active at once: 2)" ×5 routes; nothing else failed | `mutation_1_altar_guard_removed.log` |
 | Mutation 2: stair-door guard removed from `_on_stair_door_interaction` | 400/11: run count ×5, joins first line twice ×5, purge golden flags | `mutation_2_stair_door_guard_removed.log` |
 | Mutation 3: `ch1_stew_done` set before the stew run returns | 406/5: freed mid-run emits, stew golden ×3, (b) replay | `mutation_3_stew_flag_early.log` |
 | Mutation 4: dressing precedence swapped (killed before purge) | 410/1: the killed+purge row | `mutation_4_dressing_order_swapped.log` |
 | Mutation 5: shrine autosaves on every arrival (outside the fresh gate) | 409/2: (c) load makes no autosave; mid_meeting autosave | `mutation_5_autosave_on_every_arrival.log` |
-| Screenshots re-captured after the fixes (live renderer) | 4 shots, 0 problems; village shot now has no prompt at the shut door | `capture.md`, `report.md` |
+| Screenshots re-captured after the fixes (live renderer) | 4 shots, 0 problems; village shot then had no prompt at the shut door (superseded by D10: re-captured 22:01, the door prompt is correct again) | `capture.md`, `report.md` |
 | Full suite after the `/code-review` fixes (AC-16) | **24/24 suites green**, 1431 s, 0× lambda error (ROOMS 411/0, CH1 395/0, PHASE0 81/0, REACH 25/0, LOADALL ok=209 bad=0, LAYOUT 6/0, PLAYTHROUGH 172/0) | `run_all_after_code_review.log` |
-
 | Rooms suite after the second `/code-review` (mid-meeting check now scripts "It's handled" twice and asserts trust −10 exactly; header comment updated) | **411/0**, 0× lambda error | `ch1_rooms_test_round2.log` |
 | Mutation 6: village door left open after the stew (`ch1_stew_done` dropped from `_elara_door_open`) | 407/4: "back at the shut door, the player targets nothing (ElaraHouseDoor…)" plus the three C3b checks | `mutation_6_door_open_after_stew.log` |
 | Mutation 7: `ELARA_AT_DOOR_POS` moved into the house block (700, 1100) | 409/2: the spot guard and "Elara stands at the house door" | `mutation_7_elara_spot_in_house_block.log` |
 | Mutation 8: the shrine plays `meeting` twice | 403/8, including "mid_meeting: the meeting's trust change applied exactly once (elara -20, expected -10)" | `mutation_8_meeting_played_twice.log` |
 | Mutation 9: `data_vision_active` defaults to true | 405/6: "Data Vision off at capture" on all six golden segments | `mutation_9_data_vision_forced_on.log` |
-
 | Rooms suite after the third `/code-review` (guard count exact at 11; mid-meeting asserts one choice asked) | **412/0**, 0× lambda error | `ch1_rooms_test_round3.log` |
 | Mutation 10: one `is_inside_tree()` guard removed from the shrine chain (after `joins`) | 411/1: "(e) the moved code keeps its 11 is_inside_tree() guards (10)" — and nothing else | `mutation_10_shrine_guard_removed.log` |
 | Mutation 11: the shrine plays `meeting` twice (for the new pick-count check) | 402/10, including "mid_meeting: the chain asked exactly one choice (0 scripted pick(s) left)" | `mutation_11_meeting_twice_pick_count.log` |
@@ -109,13 +108,11 @@ twice, and the kept log is the re-run where the trust check itself fails. The no
 was overwritten by the green re-run, so it is not kept. Mutations 1, 3 and 4 replace the step-D1 claims of the same name, which had no retained logs (code review
 finding); 2 and 5 are new, for the checks the review found weak.
 
-**Current logs:** for the rooms suite, `ch1_rooms_test_round3.log` is current (412/0, after the third review's
-test-only change). For everything else the `*_after_code_review.log` files (and `run_all_after_code_review.log`,
-24/24) are current; they supersede the `*_after_review.log` ones, which supersede `ch1_rooms_test.log` and
-`chapter1_route_test.log` above. No game code changed after `run_all_after_code_review.log`. Not re-run after the fixes: the other 13 suites
-of the full run, which do not load the village, house, shrine or arena (they were green in `run_all.log`).
-The tour runner changed after the screenshots only in how one stop presets `ch1_stew_done` (a list instead of a
-literal call; same flag, same scene); the screenshots were not re-captured.
+**Current logs (after D10 and the alarm-window fix, the last code changes):** `run_all_final.log` (all 24 suites)
+and `ch1_rooms_test_reentry_v3.log` (rooms suite, 445/0). Every other run in this table is history: it shows what was
+true at that step. There is no separate route-test log after the reviews; the route test's current result is its
+line in `run_all_final.log`. The screenshots were re-captured after D10 (`capture.md`, 22:01); the alarm-window fix
+changes nothing on screen.
 
 The two full-run failures, and what fixed them:
 1. `chapter1_route_test` — the T05 scan "exactly one `set_story_flag("ch1_stew_done")` in scripts/" found a second
@@ -136,14 +133,15 @@ The two full-run failures, and what fixed them:
   (`docs/engine-reference/godot/` does not cover it); the evidence is the observed error count.
 - `tests/integration/playthrough/phase0_blockers_test.gd` (village helper, see above).
 - `.github/workflows/ci.yml`, `tests/run_all_tests.ps1`, `tests/suite_limits.txt` (AC-14 registration; minimums
-  load_all 205→209, chapter1_route 391→395, reachability 21→25, ch1_rooms new at 392 / 600 s). The T14a session
+  load_all 205→209, chapter1_route 391→395, reachability 21→25, ch1_rooms new, now at 426 / 600 s after D10). The T14a session
   edited the same three files in parallel and committed its lines first (`b195732`); S08's lines are separate.
 
 ## Review (godot-gdscript-specialist): CHANGES REQUIRED → fixed
 
 - BLOCKING: the village door stayed open all afternoon; going in and out rebuilt the village and restarted the
-  afternoon (alarm, field +100 gold / +50 XP, bridge) every time. Fixed: the door opens only between the invite and
-  the stew. Regression test C3b in `ch1_rooms_test` (watched failing first, see Runs).
+  afternoon (alarm, field +100 gold / +50 XP, bridge) every time. First fix: shut the door after the stew.
+  **Superseded by D10 (see "Re-entry")**: the door is open again and the afternoon's progress is carried across
+  the trip instead.
 - SHOULD FIX: the shrine's ending call could be dropped mid-transition after its guard was set (player frozen in
   CUTSCENE). Fixed: it waits out a running transition first.
 - NIT: the house's return spot duplicates the village door position → test C3c ties them together.
@@ -166,7 +164,8 @@ Required, all fixed:
    failing (mutation 5).
 3. Three step-D1 mutation claims had no logs: re-run with logs kept (mutations 1, 3, 4).
 4. `ch1_breadcrumb_oakhaven.png` (17:49) predated the door fix (watched failing 18:22) and showed the old prompt:
-   re-captured, plus a check that nothing is targeted at the shut door.
+   re-captured, plus a check that nothing is targeted at the shut door. (Superseded by D10: the door is open
+   again, the prompt is correct again, and the check now expects the door as the target.)
 5. AC-16 had no green full run: see `run_all_after_code_review.log`.
 
 Suggestions, all taken:
@@ -209,6 +208,45 @@ taken: a physics test for a player loaded inside the house block; gating Data Vi
 `player_topdown.gd`). The "ObjectDB instances leaked at exit" lines in the full runs are not new (17 in the pre-S08
 T12 run, `2026-10-ui/run_all.log`).
 
+## Re-entry (D10, user decision during `/story-done`, 2026-10-25)
+
+Playing the route, the user left Elara's house after the stew and could not go back in (the first review's fix),
+losing the house's five objects. Re-entry is now allowed. The village scene is rebuilt on every return and its
+afternoon progress is scene-local, so the village stashes `_seen`, `_afternoon_beats`, `_alarm_done`,
+`_field_resolved` and `_bridge_done` in `GameManager.VILLAGE_AFTERNOON_META` when the player enters the house and takes
+them back on the way out; the child's wooden sword (a node the village spawns once) is put back if she asked for it
+and it was not found. In memory only.
+
+| Run | Result | Log |
+|---|---|---|
+| Rooms suite with re-entry (old shut-door test replaced; re-entry checks added inside the real alarm/field loop plus a sword test) | **426/0**, 0× lambda error | `ch1_rooms_test_reentry_v2.log` |
+| Mutation 12: the old shut door put back (`ch1_stew_done` in `_elara_door_open`) | 407/4: door still open after the alarm and field, target is the open door, sword trip, door back into the house | `mutation_12_door_shut_after_stew.log` |
+| Mutation 13: door open, `_restore_afternoon()` removed (the original bug) | 419/7: progress lost (alarm/field false, beats 0), conversations forgotten, sword gone, north field runs again | `mutation_13_afternoon_not_restored.log` |
+| Live tour re-captured (the village shot shows the door prompt again) | 4 shots, 0 problems | `capture.md`, `report.md` |
+| Full suite after the change (before the alarm-window fix) | **24/24 suites green**, "All suites passed", 0× lambda error (ROOMS 426/0, CH1 395/0, PHASE0 81/0, REACH 25/0, LOADALL ok=209 bad=0, LAYOUT 6/0, PLAYTHROUGH 172/0) | `run_all_after_reentry.log` |
+| **Alarm-window fix** (QL-TEST-COVERAGE re-run, gap 1): after the third first-time talk the village waits 1.5 s before the alarm; nothing was busy then, so the door opened and leaving dropped the pending alarm. `_alarm_pending` now shuts the door for that beat only. New tests: re-entry before the alarm (beats survive, the third talk still fires it), the alarm window, the door during the north field and the bridge, a load and a new game clearing the stash | rooms suite **445/0** | `ch1_rooms_test_reentry_v3.log` |
+| Mutation 14: `_invited` dropped from `_elara_door_open` | 396/1 "door does nothing before the invite" (the village then really leaves mid-arrival, so the run errors out: 8620 script-error lines, 397 checks) | `mutation_14_invited_guard_removed.log` |
+| Mutation 15: `_alarm_pending` dropped from the door (the defect) | 439/3: "door shut right after the third talk", "pressing the door … does not leave the village", **"the alarm still fires on the third talk"** | `mutation_15_alarm_window_door_open.log` |
+| Mutation 16: `_bridge_running` dropped from the door | 434/2: the two bridge-sequence door checks | `mutation_16_bridge_door_open.log` |
+| Mutation 17: the stash taken out of `TRANSIENT_METAS` | 442/3: "a load clears the afternoon stash", "a new game clears …", the restart-after-load check | `mutation_17_stash_not_transient.log` |
+| Full suite after the alarm-window fix (current AC-16 evidence) | **24/24 suites green**, "All suites passed", 0× lambda error (ROOMS 445/0, CH1 395/0, PHASE0 81/0, REACH 25/0, LOADALL ok=209 bad=0, LAYOUT 6/0, PLAYTHROUGH 172/0) | `run_all_final.log` |
+
+**Trimmed logs.** `mutation_14_invited_guard_removed.log` and `mutation_15_alarm_window_door_open.log` were
+6.7 MB and 4.5 MB (95,553 and 63,994 lines): with the guard removed the village really leaves mid-test, and the
+suite's polling loops then hit the freed scene thousands of times. Before committing they were cut to 785 and 900
+lines: every line except error blocks is kept, the first 3 blocks of each distinct error are kept, and each run of
+later repeats is replaced by one `[trimmed: N repeated error blocks — …]` marker naming each error and its count
+(25,859 and 17,226 error-block starts in the originals). The PASS / FAIL / RESULT / RUNNER lines were checked to be
+identical before and after, so the named failures and the runner's own counts (8620 and 5743 script-error lines) are
+as recorded. The untrimmed files are not kept.
+
+**Superseded evidence** (kept as history, describing a behaviour that no longer exists): the C3b "door stays shut"
+checks and `ch1_rooms_test_reentry_watchfail.log` (389/3); mutation 6 ("door left open after the stew"; that is now
+the intended behaviour, and mutation 12 is its mirror); the "player targets nothing at the shut door" check
+(`ch1_rooms_test_after_code_review.log` and earlier); `ch1_rooms_test_round2.log`, `ch1_rooms_test_round3.log`
+and `run_all_after_code_review.log` (24/24, before D10). `ch1_rooms_test_reentry_v2.log` and `run_all_after_reentry.log` are
+superseded by `ch1_rooms_test_reentry_v3.log` and `run_all_final.log` (after the alarm-window fix), which are current.
+
 ## Protected paths (AGENTS.md)
 
 - **Changed, authorised by the story** (protected-areas block and decision D4): `scenes/chapter1/oakhaven_village.tscn`
@@ -219,8 +257,9 @@ T12 run, `2026-10-ui/run_all.log`).
 - **Story progression** (allowed by the prompt): the stew and the post-Aldric chain moved; no story flag added,
   removed or renamed; no `.dlg` text changed (golden comparison, AC-11).
 - **Source Key logic:** only the `collect_source_key(1)` call site moved (arena → shrine); the function is untouched.
-- **Save/load:** no schema change. `GameManager.SHRINE_FRESH_ARRIVAL_META` is a transient meta (in
-  `TRANSIENT_METAS`, cleared on every load), not a save field.
+- **Save/load:** no schema change. `GameManager.SHRINE_FRESH_ARRIVAL_META` and
+  `GameManager.VILLAGE_AFTERNOON_META` (D10) are transient metas (in `TRANSIENT_METAS`, cleared on every load and
+  new game), in-memory hand-offs and not save fields.
 - **Collision:** only the two rooms' walls, the house table, the shrine altar stone, and the village house block.
 - **Untouched:** combat, hitboxes, the boss fight, true ending, NG+, world map / free travel, accepted region
   baselines, production art. ComfyUI used: No.
@@ -242,12 +281,14 @@ requires. "A load makes no autosave" above means a load straight into the shrine
 - Elara's house has no `_exit_tree` state reset (the shrine has one): leaving it mid-stew by a load or a quit leaves
   the state DIALOGUE until the next scene sets its own, which every destination scene does.
 
-- The village's afternoon state is still scene-local: a **load** mid-afternoon restarts the afternoon (now without
-  the stew). Normal play can no longer trigger it (the door is shut after the stew).
+- The village's afternoon state survives a trip into Elara's house (D10, in memory) but not a **load**: a
+  mid-afternoon load still restarts the afternoon (now without the stew), as at HEAD.
 - Villagers stay silent before the stew (no new lines) — for S07's pacing playtest.
 - The boss-defeat autosave (written before the Aldric decision) still reloads the fight; only loads with
   `ch1_tutorial_knight_defeated` set are forwarded to the shrine (D5).
 - The shrine's `_exit_tree` state reset bumps `GameManager._state_change_count`, so a load started from inside the
   shrine skips `load_game`'s saved-state fallback (`game_manager.gd:1710`, `:1737`). Deliberate trade: every
   destination scene sets its own state in `_ready`; one that did not would be left in EXPLORATION.
-- The house's inspect spots can only be looked at right after the stew, before leaving (the door then stays shut).
+- Elara's house can be re-entered at any time after the invite, including mid-afternoon; the village door is shut
+  only while the bridge sequence or another scene (dialogue, shop, north field) is running. (An earlier version shut
+  it after the stew; the user found that cost the house's objects, hence D10.)

@@ -37,6 +37,7 @@ var _bridge_done := false
 var _bridge_running := false
 var _seen: Dictionary = {}            # dialogue node -> true once played
 var _afternoon_beats := 0
+var _alarm_pending := false           # the short beat between the third first-time talk and the alarm
 var _sword_pickup: Area2D = null
 
 # Shop items for the fallback shop (ShopSystem normally handles it).
@@ -71,6 +72,7 @@ func _ready() -> void:
 	_bind_door(get_node_or_null("Doors/ElaraHouseDoor") as Area2D, _on_elara_house_door_interaction)
 
 	_arrive_from_return_point(player)
+	_restore_afternoon()
 	# Y1-P0-S08: once the stew has played in Elara's house, the arrival (gate,
 	# ledger, invite) does not replay and the afternoon starts at once.
 	if GameManager.has_flag("ch1_stew_done"):
@@ -208,12 +210,11 @@ func _on_elara_at_door_interaction(body: Node) -> void:
 	if body.name == "Player" and _invited and not _busy():
 		await _run("elara_house", "invite")
 
-## Elara's door. Open only between her invite and the stew, and not while
-## anything else is playing. It stays shut after the stew: the afternoon's
-## progress (alarm, field, bridge, lines seen) lives in this scene, so going
-## back in and out would restart the afternoon and pay its rewards again.
+## Elara's door. Open from her invite on (the stew plays on the first visit; later
+## visits are for the things in the room), but not while anything else is playing,
+## during the bridge sequence, or while the alarm is about to sound.
 func _elara_door_open() -> bool:
-	return _invited and not GameManager.has_flag("ch1_stew_done") and not _busy()
+	return _invited and not _busy() and not _bridge_running and not _alarm_pending
 
 func _on_elara_house_door_interaction(body: Node) -> void:
 	if body.name != "Player" or not _elara_door_open():
@@ -224,7 +225,37 @@ func _enter_elara_house() -> void:
 	if _is_transitioning or SceneTransitions.is_transitioning:
 		return
 	_is_transitioning = true
+	_stash_afternoon()
 	SceneTransitions.change_scene(ELARA_HOUSE_SCENE)
+
+## This scene is rebuilt on the way back from the house, and the afternoon's
+## progress lives here. Kept in memory (GameManager.VILLAGE_AFTERNOON_META: never
+## saved, cleared by a load or a new game) so going in and out neither restarts
+## the afternoon (a second alarm) nor pays the north field's gold and XP again.
+func _stash_afternoon() -> void:
+	GameManager.set_meta(GameManager.VILLAGE_AFTERNOON_META, {
+		"seen": _seen.duplicate(),
+		"beats": _afternoon_beats,
+		"alarm_done": _alarm_done,
+		"field_resolved": _field_resolved,
+		"bridge_done": _bridge_done,
+	})
+
+## Takes back what _stash_afternoon left (once), and puts the child's wooden
+## sword back if she asked for it and it has not been found.
+func _restore_afternoon() -> void:
+	var key := GameManager.VILLAGE_AFTERNOON_META
+	if not GameManager.has_meta(key):
+		return
+	var state: Dictionary = GameManager.get_meta(key)
+	GameManager.remove_meta(key)
+	_seen = (state.get("seen", {}) as Dictionary).duplicate()
+	_afternoon_beats = int(state.get("beats", 0))
+	_alarm_done = bool(state.get("alarm_done", false))
+	_field_resolved = bool(state.get("field_resolved", false))
+	_bridge_done = bool(state.get("bridge_done", false))
+	if _seen.has("lost_sword") and not GameManager.has_flag("ch1_child_sword_found"):
+		_spawn_sword_pickup()
 
 ## A door answers interact (the player calls the "interact_handler" meta), not
 ## walking into it.
@@ -346,8 +377,13 @@ func _can_talk(body: Node) -> bool:
 func _afternoon_beat_done() -> void:
 	_afternoon_beats += 1
 	if _afternoon_beats >= ALARM_AFTER_BEATS and not _alarm_done and is_inside_tree():
+		# Elara's door stays shut for this beat: leaving for the house now would free
+		# this scene and drop the alarm (Y1-P0-S08, D10).
+		_alarm_pending = true
 		await get_tree().create_timer(1.5, false).timeout
-		if is_inside_tree() and not _busy():
+		if not is_inside_tree(): return
+		_alarm_pending = false
+		if not _busy():
 			await _run_north_field()
 
 ## First conversation: the scene (and a step toward the alarm). After that,

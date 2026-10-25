@@ -673,10 +673,14 @@ func change_state(new_state: GameState) -> void:
 ## Y1-P0-S08: set by the Tutorial Knight arena right before it changes to the
 ## shrine, read and cleared by the shrine (a walk-in, not a load). One name for both.
 const SHRINE_FRESH_ARRIVAL_META := "shrine_fresh_arrival"
+## Y1-P0-S08: Oakhaven's afternoon progress (alarm, field, bridge, who has spoken),
+## held here while the player is inside Elara's house, because the village scene is
+## rebuilt on the way back. In memory only: a load or a new game clears it.
+const VILLAGE_AFTERNOON_META := "oakhaven_afternoon_state"
 const TRANSIENT_METAS: Array[String] = [
 	"return_position", "return_position_scene", "boss_return_scene",
 	"boss_fight_id", "pending_encounter", "return_to_overworld_from",
-	SHRINE_FRESH_ARRIVAL_META,
+	SHRINE_FRESH_ARRIVAL_META, VILLAGE_AFTERNOON_META,
 ]
 
 func set_return_point(scene_path: String, pos: Vector2) -> void:
