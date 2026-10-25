@@ -1,0 +1,79 @@
+extends SceneTree
+## THROWAWAY probe for Y1-P0-T12 AC-6 (deleted after the measurement; its output is kept as evidence).
+## Measures whether a player-sized body overlaps the Clock Tower's BossTrigger at the places the player can stand,
+## and whether the real player placed there makes _pre_boss_done true. Run: tests/run_phase0_tests.ps1 -Script res://tests/t12_probe_clock_tower.gd
+
+const SCENE := "res://scenes/chapter2/clock_tower.tscn"
+const BODY := Vector2(20, 32)
+
+var _tower: Node2D
+var _trigger: Area2D
+
+func _initialize() -> void:
+	_run.call_deferred()
+
+func _frames(n: int) -> void:
+	for i in n:
+		await physics_frame
+
+func _overlap_px(center: Vector2) -> String:
+	## Does a player-sized rectangle centred at `center` touch the trigger? Returns "yes"/"no".
+	var space := _tower.get_world_2d().direct_space_state
+	var shape := RectangleShape2D.new()
+	shape.size = BODY
+	var q := PhysicsShapeQueryParameters2D.new()
+	q.shape = shape
+	q.transform = Transform2D(0.0, center)
+	q.collide_with_areas = true
+	q.collide_with_bodies = false
+	for r in space.intersect_shape(q, 32):
+		if r.collider == _trigger:
+			return "yes"
+	return "no"
+
+func _fresh_tower() -> void:
+	if _tower:
+		_tower.queue_free()
+		await process_frame
+	root.get_node("GameManager").reset_game()
+	_tower = (load(SCENE) as PackedScene).instantiate()
+	root.add_child(_tower)
+	await _frames(3)
+	_trigger = _tower.get_node("BossTrigger")
+
+func _run() -> void:
+	if str(OS.get_user_data_dir()).find("aeth_phase0_test") == -1:
+		print("PROBE ABORT: not isolated")
+		quit(2)
+		return
+	await _fresh_tower()
+	var shp := (_trigger.get_child(0) as CollisionShape2D).shape
+	print("PROBE trigger at ", _trigger.position, " shape ", shp.get_class(), " ", ("radius %s" % shp.radius) if shp is CircleShape2D else ("size %s" % shp.size))
+	print("PROBE SAMPLES (body 20x32, centre = feet - 16): overlap with the trigger?")
+	var hits_f5 := 0
+	var xs: Array = []
+	for x in range(30, 771, 50):
+		xs.append(x)
+	for x in xs:
+		var r := _overlap_px(Vector2(x, -150.0 - 16.0))
+		if r == "yes":
+			hits_f5 += 1
+		print("PROBE floor5 standing x=%d feet=-150: %s" % [x, r])
+	print("PROBE floor5 samples overlapping: %d of %d" % [hits_f5, xs.size()])
+	print("PROBE floor4 standing x=400 feet=150: ", _overlap_px(Vector2(400, 150.0 - 16.0)))
+	print("PROBE step(-40) left end x=460 feet=-40: ", _overlap_px(Vector2(460, -40.0 - 16.0)))
+	print("PROBE step(-40) x=500 feet=-40: ", _overlap_px(Vector2(500, -40.0 - 16.0)))
+	print("PROBE step(40) left end x=560 feet=40: ", _overlap_px(Vector2(560, 40.0 - 16.0)))
+	print("PROBE lift top x=500 feet=-127.5: ", _overlap_px(Vector2(500, -127.5 - 16.0)))
+	print("PROBE lift top x=460 (edge) feet=-127.5: ", _overlap_px(Vector2(460, -127.5 - 16.0)))
+	print("PROBE jump path x=455 feet=-90: ", _overlap_px(Vector2(455, -90.0 - 16.0)))
+	print("PROBE jump path x=440 feet=-90: ", _overlap_px(Vector2(440, -90.0 - 16.0)))
+	# Real player placed on floor 5 at several x, 90 physics frames each.
+	for x in [60.0, 400.0, 500.0, 740.0]:
+		await _fresh_tower()
+		var p: CharacterBody2D = _tower.get_node("Player")
+		p.global_position = Vector2(x, -150.0 - 1.0)
+		p.velocity = Vector2.ZERO
+		await _frames(90)
+		print("PROBE real player dropped at x=%d on floor 5: ended at %s, _pre_boss_done=%s" % [x, p.global_position, str(_tower._pre_boss_done)])
+	quit(0)

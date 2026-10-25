@@ -1,0 +1,209 @@
+t12_watchfail_mutations.log - Y1-P0-T12 AC-7 mutation watch-fail
+Scratch worktree at HEAD (e77727a) + the current uncommitted T12 change (after the code-review fixes); a control run of the four T12 suites,
+then one mutation per run, reverted after. GODOT unset; suites through tests/run_phase0_tests.ps1.
+Files copied: AethelgardPrototype/CHANGELOG.md, AethelgardPrototype/export_presets.cfg, AethelgardPrototype/project.godot, AethelgardPrototype/scenes/main_menu.tscn, AethelgardPrototype/scripts/chapter2/ch2_chapter_end.gd, AethelgardPrototype/scripts/chapter2/ch2_clock_tower.gd, AethelgardPrototype/scripts/debug/screenshot_tour_runner.gd, AethelgardPrototype/scripts/dialogue_manager.gd, AethelgardPrototype/scripts/main_menu.gd, AethelgardPrototype/scripts/regions/fractured_wastes_region.gd, AethelgardPrototype/scripts/regions/ironhold_region.gd, AethelgardPrototype/scripts/regions/oakhaven_region.gd, AethelgardPrototype/scripts/ui/pause_screen.gd, AethelgardPrototype/tests/integration/dialogue/dialogue_test.gd, AethelgardPrototype/tests/run_all_tests.ps1, AethelgardPrototype/tests/suite_limits.txt, AethelgardPrototype/tools/export_windows.ps1, AethelgardPrototype/scripts/ui/game_version.gd, AethelgardPrototype/scripts/ui/game_version.gd.uid, AethelgardPrototype/tests/integration/dialogue/runtime_speaker_baseline.txt, AethelgardPrototype/tests/integration/level/clock_tower_trigger_test.gd, AethelgardPrototype/tests/integration/level/clock_tower_trigger_test.gd.uid, AethelgardPrototype/tests/integration/story/region_lore_ironhold_test.gd, AethelgardPrototype/tests/integration/story/region_lore_ironhold_test.gd.uid, AethelgardPrototype/tests/integration/ui/ui_version_card_test.gd, AethelgardPrototype/tests/integration/ui/ui_version_card_test.gd.uid
+
+== control (no mutation)
+   ui_version_card_test.gd: exit 0; UI VERSION CARD RESULT: 46 passed, 0 failed -> GREEN
+   region_lore_ironhold_test.gd: exit 0; REGION LORE IRONHOLD RESULT: 127 passed, 0 failed -> GREEN
+   clock_tower_trigger_test.gd: exit 0; CLOCK TOWER TRIGGER RESULT: 63 passed, 0 failed -> GREEN
+   dialogue_test.gd: exit 0; DIALOGUE RESULT: 54 passed, 0 failed -> GREEN
+
+== (a) main menu label back to "v1.0"
+   ui_version_card_test.gd: exit 1; UI VERSION CARD RESULT: 45 passed, 1 failed -> FAILED as expected
+     FAIL: AC-1 main menu VersionLabel == 'v0.1.0' (got 'v1.0')
+   diff applied:
+     --- a/scripts/main_menu.gd
+     +++ b/scripts/main_menu.gd
+     @@ -26 +26 @@
+     -		version_label.text = GameVersion.label()
+     +		version_label.text = "v1.0"
+
+== (b) _refresh_header back to v0.1.%d
+   ui_version_card_test.gd: exit 1; UI VERSION CARD RESULT: 42 passed, 4 failed -> FAILED as expected
+     FAIL: AC-1 pause header for current_chapter 1 == 'AETHELGARD IDE v0.1.0 — Chapter 1' (got 'AETHELGARD IDE v0.1.1 — Chapter 1')
+     FAIL: AC-1 pause header for current_chapter 3 == 'AETHELGARD IDE v0.1.0 — Chapter 3' (got 'AETHELGARD IDE v0.1.3 — Chapter 3')
+     FAIL: AC-1 pause header for current_chapter 0 == 'AETHELGARD IDE v0.1.0 — Chapter 1' (got 'AETHELGARD IDE v0.1.1 — Chapter 1')
+     FAIL: AC-1 no 'IDE v0.1.' literal left in pause_screen.gd (covers v0.1.%d and v0.1.1)
+   diff applied:
+     --- a/scripts/ui/pause_screen.gd
+     +++ b/scripts/ui/pause_screen.gd
+     @@ -197 +197 @@
+     -		header_label.text = GameVersion.ide_header(chapter)
+     +		header_label.text = "AETHELGARD IDE v0.1.%d — Chapter %d" % [chapter, chapter]
+
+== (c) stats card back to one full-rect label (ch2_chapter_end.gd as at e77727a)
+   ui_version_card_test.gd: exit 1; UI VERSION CARD RESULT: 20 passed, 5 failed -> FAILED as expected
+     FAIL: AC-2 card has the HeaderLabel label
+     FAIL: AC-2 card has the LeftColumn label
+     FAIL: AC-2 card has the RightColumn label
+     FAIL: AC-2 card has the FooterLabel label
+     FAIL: AC-2 card has a centred panel (CardPanel)
+     FAIL: RUNNER FAIL res://tests/integration/ui/ui_version_card_test.gd: 25 check(s) ran, expected at least 46
+   diff applied:
+     --- a/scripts/chapter2/ch2_chapter_end.gd
+     +++ b/scripts/chapter2/ch2_chapter_end.gd
+     @@ -57,6 +56,0 @@
+     -
+     -## Stats card layout (UI spec: story Y1-P0-T12 AC-2): font tries 20, then 18, then the 16 floor.
+     -const CARD_FONT_SIZES: Array[int] = [20, 18, 16]
+     -const CARD_MARGIN_X := 28
+     -const CARD_MARGIN_Y := 16
+     -const CARD_VIEWPORT_MARGIN := 24
+     @@ -105,33 +99,13 @@
+     -	# The stats card: a centred panel (header, two columns, footer) so all of it fits the 1280x720 viewport.
+     -	var parts: Dictionary = _chapter_stats_parts()
+     -	var center := CenterContainer.new()
+     -	center.name = "CardCenter"
+     -	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+     -	# No z_index of its own: z is relative, so the card's 80 is inherited and the fade_rect (100) still covers
+     -	# the whole card when it fades out (an own 81 made it 161 and left the stats drawn over the black).
+     -	card_bg.add_child(center)
+     -
+     -	var panel := PanelContainer.new()
+     -	panel.name = "CardPanel"
+     -	center.add_child(panel)
+     -	var margin := MarginContainer.new()
+     -	for side in ["left", "right"]:
+     -		margin.add_theme_constant_override("margin_" + side, CARD_MARGIN_X)
+     -	for side in ["top", "bottom"]:
+     -		margin.add_theme_constant_override("margin_" + side, CARD_MARGIN_Y)
+     -	panel.add_child(margin)
+     -	var vbox := VBoxContainer.new()
+     -	vbox.add_theme_constant_override("separation", 10)
+     -	margin.add_child(vbox)
+     -
+     -	var header := _card_label("HeaderLabel", parts["header"], HORIZONTAL_ALIGNMENT_CENTER)
+     -	vbox.add_child(header)
+     -	var columns := HBoxContainer.new()
+     -	columns.name = "Columns"
+     -	columns.add_theme_constant_override("separation", 48)
+     -	vbox.add_child(columns)
+     -	columns.add_child(_card_label("LeftColumn", parts["left"], HORIZONTAL_ALIGNMENT_LEFT))
+     -	columns.add_child(_card_label("RightColumn", parts["right"], HORIZONTAL_ALIGNMENT_LEFT))
+     ... (141 more diff lines)
+
+== (d) Ironhold lore call back to say(title, text)
+   region_lore_ironhold_test.gd: exit 1; REGION LORE IRONHOLD RESULT: 121 passed, 6 failed -> FAILED as expected
+     FAIL: ironhold lore ironhold_lore_1: name plate reads "Journal" (got "Market Notice")
+     FAIL: ironhold lore ironhold_lore_1: raw text starts with the bold title line (got "NOTICE: All clockwork units must report for maintenance. Fai")
+     FAIL: ironhold lore ironhold_lore_1: parsed text starts with the title, a newline, then the body (got "NOTICE: All clockwork units must report for maintenance. Fai")
+     FAIL: ironhold lore dev_signature_2: name plate reads "Journal" (got "Developer Signature #2")
+     FAIL: ironhold lore dev_signature_2: raw text starts with the bold title line (got "// The underground was supposed to have a stealth mechanic. ")
+     FAIL: ironhold lore dev_signature_2: parsed text starts with the title, a newline, then the body (got "// The underground was supposed to have a stealth mechanic. ")
+   dialogue_test.gd: exit 1; DIALOGUE RESULT: 53 passed, 1 failed -> FAILED as expected
+     FAIL: no call takes a title as its speaker (1) ["scripts/regions/ironhold_region.gd:972"]
+   diff applied:
+     --- a/scripts/regions/ironhold_region.gd
+     +++ b/scripts/regions/ironhold_region.gd
+     @@ -972 +972 @@
+     -		await DialogueManager.say("Journal", "[b]%s[/b]\n%s" % [title.replace("[", "[lb]"), text])
+     +		await DialogueManager.say(title, text)
+
+== (e) Fractured Wastes discover_lore removed
+   region_lore_ironhold_test.gd: exit 1; REGION LORE IRONHOLD RESULT: 122 passed, 5 failed -> FAILED as expected
+     FAIL: fractured_wastes lore wastes_lore_1: LoreJournal holds the entry afterwards
+     FAIL: fractured_wastes lore dev_signature_3: LoreJournal holds the entry afterwards
+     FAIL: save: wastes_lore_1 discovered through the Wastes pickup before the save
+     FAIL: save: lore_journal.discovered_lore in the JSON lists wastes_lore_1
+     FAIL: save: wastes_lore_1 is in the journal after the load
+   diff applied:
+     --- a/scripts/regions/fractured_wastes_region.gd
+     +++ b/scripts/regions/fractured_wastes_region.gd
+     @@ -870 +870 @@
+     -		LoreJournal.discover_lore(lore_id, title, text, "world", "fractured_wastes")
+     +		pass
+
+== (f) a new unregistered literal speaker added
+   dialogue_test.gd: exit 1; DIALOGUE RESULT: 53 passed, 1 failed -> FAILED as expected
+     FAIL: every literal runtime speaker is in SPEAKER_COLORS or the baseline (1 not) ["scripts/regions/ironhold_region.gd:1141 \'T12 Probe Speaker\'"]
+   diff applied:
+     --- a/scripts/regions/ironhold_region.gd
+     +++ b/scripts/regions/ironhold_region.gd
+     @@ -1139,0 +1140,3 @@
+     +func _t12_mutation_probe() -> void:
+     +	DialogueManager.say("T12 Probe Speaker", "x")
+     +
+
+== (g) BossTrigger back to the circle (r=50 at (400, FLOOR_Y[5] + 60); mask 2 kept)
+   clock_tower_trigger_test.gd: exit 1; CLOCK TOWER TRIGGER RESULT: 38 passed, 22 failed -> FAILED as expected
+     FAIL: AC-6a: standing on floor 5 at x=30 overlaps the trigger by >= 8 px (measured 0.0 px)
+     FAIL: AC-6a: standing on floor 5 at x=80 overlaps the trigger by >= 8 px (measured 0.0 px)
+     FAIL: AC-6a: standing on floor 5 at x=130 overlaps the trigger by >= 8 px (measured 0.0 px)
+     FAIL: AC-6a: standing on floor 5 at x=180 overlaps the trigger by >= 8 px (measured 0.0 px)
+     FAIL: AC-6a: standing on floor 5 at x=230 overlaps the trigger by >= 8 px (measured 0.0 px)
+     FAIL: AC-6a: standing on floor 5 at x=280 overlaps the trigger by >= 8 px (measured 0.0 px)
+     FAIL: AC-6a: standing on floor 5 at x=330 overlaps the trigger by >= 8 px (measured 0.0 px)
+     FAIL: AC-6a: standing on floor 5 at x=380 overlaps the trigger by >= 8 px (measured 0.0 px)
+     FAIL: AC-6a: standing on floor 5 at x=430 overlaps the trigger by >= 8 px (measured 0.0 px)
+     FAIL: AC-6a: standing on floor 5 at x=480 overlaps the trigger by >= 8 px (measured 0.0 px)
+     FAIL: AC-6a: standing on floor 5 at x=530 overlaps the trigger by >= 8 px (measured 0.0 px)
+     FAIL: AC-6a: standing on floor 5 at x=580 overlaps the trigger by >= 8 px (measured 0.0 px)
+     ... 11 more
+   diff applied:
+     --- a/scripts/chapter2/ch2_clock_tower.gd
+     +++ b/scripts/chapter2/ch2_clock_tower.gd
+     @@ -402 +402 @@
+     -	boss_trigger.position = Vector2(band_left + band_size.x * 0.5, FLOOR_Y[5] - band_size.y * 0.5)
+     +	boss_trigger.position = Vector2(400, FLOOR_Y[5] + 60)
+     @@ -407,2 +407,2 @@
+     -	var bt_shape = RectangleShape2D.new()
+     -	bt_shape.size = band_size
+     +	var bt_shape = CircleShape2D.new()
+     +	bt_shape.radius = 50.0
+
+== (h) Ironhold empty-scene_path check removed
+   region_lore_ironhold_test.gd: exit 1; REGION LORE IRONHOLD RESULT: 123 passed, 4 failed -> FAILED as expected
+     FAIL: AC-5 empty scene_path, rec_level 1: GameManager meta boss_fight_id not set
+     FAIL: AC-5 empty scene_path, rec_level 1: boss_return_scene and return_position metas not set
+     FAIL: AC-5 empty scene_path, rec_level 99: the call returned at once (no await before the check)
+     FAIL: AC-5 empty scene_path, rec_level 99: no soft-level warning dialogue opened
+   diff applied:
+     --- a/scripts/regions/ironhold_region.gd
+     +++ b/scripts/regions/ironhold_region.gd
+     @@ -1144,3 +1143,0 @@
+     -	if scene_path.is_empty():
+     -		push_error("[Ironhold] Boss gate '%s' has no scene_path; not entering." % gate.name)
+     -		return
+
+== (i) BossTrigger band narrowed to half the floor width
+   clock_tower_trigger_test.gd: exit 1; CLOCK TOWER TRIGGER RESULT: 45 passed, 18 failed -> FAILED as expected
+     FAIL: AC-6a: standing on floor 5 at x=430 overlaps the trigger by >= 8 px (measured 0.0 px)
+     FAIL: AC-6a: standing on floor 5 at x=480 overlaps the trigger by >= 8 px (measured 0.0 px)
+     FAIL: AC-6a: standing on floor 5 at x=530 overlaps the trigger by >= 8 px (measured 0.0 px)
+     FAIL: AC-6a: standing on floor 5 at x=580 overlaps the trigger by >= 8 px (measured 0.0 px)
+     FAIL: AC-6a: standing on floor 5 at x=630 overlaps the trigger by >= 8 px (measured 0.0 px)
+     FAIL: AC-6a: standing on floor 5 at x=680 overlaps the trigger by >= 8 px (measured 0.0 px)
+     FAIL: AC-6a: standing on floor 5 at x=730 overlaps the trigger by >= 8 px (measured 0.0 px)
+     FAIL: AC-6a: standing on floor 5 at x=770 overlaps the trigger by >= 8 px (measured 0.0 px)
+     FAIL: AC-6a: lift top overlaps the trigger by 8..11 px, the floor 5 arrival point (measured 0.0 px)
+     FAIL: AC-6b step: _pre_boss_done is true after arriving on floor 5
+     FAIL: AC-6b step: the pre_boss dialogue is running (never triggered)
+     FAIL: AC-6b step: the pre_boss section's own lines were spoken (never triggered)
+     ... 6 more
+   diff applied:
+     --- a/scripts/chapter2/ch2_clock_tower.gd
+     +++ b/scripts/chapter2/ch2_clock_tower.gd
+     @@ -399 +399 @@
+     -	var band_size := Vector2(band_right - band_left, PLAYER_BODY_HEIGHT)
+     +	var band_size := Vector2((band_right - band_left) * 0.5, PLAYER_BODY_HEIGHT)
+
+== (k) the card's CenterContainer given its own z_index 81 again (code review R4: drawn over the fade)
+   ui_version_card_test.gd: exit 1; UI VERSION CARD RESULT: 45 passed, 1 failed -> FAILED as expected
+     FAIL: AC-2 every card node draws below the fade-out (highest effective z 161 < 100)
+   diff applied:
+     --- a/scripts/chapter2/ch2_chapter_end.gd
+     +++ b/scripts/chapter2/ch2_chapter_end.gd
+     @@ -111,0 +112 @@
+     +	center.z_index = 81
+
+== (j) a registered speaker (System) left on the baseline
+   dialogue_test.gd: exit 1; DIALOGUE RESULT: 53 passed, 1 failed -> FAILED as expected
+     FAIL: the baseline (83 names) only holds unregistered names still in use (1 stale) ["runtime_speaker_baseline.txt:92 \'System\' is registered in SPEAKER_COLORS (used at scripts
+   diff applied:
+     --- a/tests/integration/dialogue/runtime_speaker_baseline.txt
+     +++ b/tests/integration/dialogue/runtime_speaker_baseline.txt
+     @@ -91,0 +92 @@
+     +System
+
+ALL MUTATIONS CAUGHT: yes

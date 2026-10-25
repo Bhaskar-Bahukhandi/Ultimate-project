@@ -154,6 +154,21 @@ jobs:
         timeout-minutes: 10
         run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/integration/vfx/ch3_flash_runtime_test.gd
 
+      - name: "Version label and Chapter 2 stats card (Y1-P0-T12: one version string, card fits 1280x720)"
+        working-directory: ${{ env.PROJECT_DIR }}
+        timeout-minutes: 5
+        run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/integration/ui/ui_version_card_test.gd
+
+      - name: "Region lore and Ironhold boss gate (Y1-P0-T12: Journal speaker, Wastes journal, no dead fallback)"
+        working-directory: ${{ env.PROJECT_DIR }}
+        timeout-minutes: 5
+        run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/integration/story/region_lore_ironhold_test.gd
+
+      - name: "Clock Tower pre-boss trigger (Y1-P0-T12: band across floor 5, fires for the player)"
+        working-directory: ${{ env.PROJECT_DIR }}
+        timeout-minutes: 5
+        run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/integration/level/clock_tower_trigger_test.gd
+
       - name: Chapter 1 route (rewritten dialogue, end to end)
         working-directory: ${{ env.PROJECT_DIR }}
         timeout-minutes: 30

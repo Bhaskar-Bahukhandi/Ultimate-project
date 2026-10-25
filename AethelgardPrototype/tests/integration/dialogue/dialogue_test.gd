@@ -28,6 +28,7 @@ func _run() -> void:
 	await _test_builtin_events()
 	_test_all_dialogue_files_parse()
 	_test_voice_lint()
+	_test_runtime_speaker_lint()
 	await _test_opening_scene_wiring()
 	print("")
 	print("DIALOGUE RESULT: %d passed, %d failed" % [_passes, _failures.size()])
@@ -306,6 +307,112 @@ func _test_voice_lint() -> void:
 	_check(flat_files.is_empty(), "no long file without a single contraction %s" % [flat_files])
 	_check(choppy_files.is_empty(), "no file is more than %d%% lines of %d words or fewer %s" % [roundi(RHYTHM_MAX_SHORT_SHARE * 100), RHYTHM_SHORT_WORDS, choppy_files])
 	_check(choppy_runs.is_empty(), "no more than %d short lines in a row outside '# rhythm: clipped' nodes %s" % [RHYTHM_MAX_SHORT_RUN, choppy_runs.slice(0, 8)])
+
+
+## Runtime speaker lint (story Y1-P0-T12 AC-4, decision D3): the speakers that
+## scripts pass to DialogueManager.say() / _show_dialogue() in code, not in .dlg files.
+## Only LITERAL speakers are scanned: a speaker held in a variable (read from .dlg data,
+## an NPC's name, side_data.get("speaker", …)) is out of scope and is not checked.
+## It fails when (a) a call takes a title as its speaker (titles go on the first line of
+## the text, under the "Journal" speaker); (b) a literal speaker is neither registered in
+## SPEAKER_COLORS nor on the frozen baseline; (c) a baseline name is now registered or no
+## longer used (the baseline only shrinks). `\s` matches line breaks (PCRE2), so a call
+## split after the bracket is read.
+const RUNTIME_SPEAKER_LITERAL := '(DialogueManager\\.say|_show_dialogue)\\(\\s*"([^"]*)"'
+const RUNTIME_SPEAKER_TITLE := '(DialogueManager\\.say|_show_dialogue)\\(\\s*(title|data\\.get\\("title")'
+const RUNTIME_SPEAKER_BASELINE := "res://tests/integration/dialogue/runtime_speaker_baseline.txt"
+## A broken regex must not pass by reading nothing: 1287 literal calls on 2026-10-25.
+const RUNTIME_SPEAKER_MIN_CALLS := 800
+
+func _test_runtime_speaker_lint() -> void:
+	print("[voice lint — runtime speakers in scripts/**/*.gd]")
+	var literal_re := RegEx.create_from_string(RUNTIME_SPEAKER_LITERAL)
+	var title_re := RegEx.create_from_string(RUNTIME_SPEAKER_TITLE)
+	# The title ban proves itself on fixtures, so it needs no edit to scripts/ to watch it fail.
+	var flagged := _title_speaker_calls(title_re, "fixture", "\tawait DialogueManager.say(title, text)\n").size() == 1 \
+		and _title_speaker_calls(title_re, "fixture", "DialogueManager.say(\n\tdata.get(\"title\", \"SECRET\"), msg)").size() == 1 \
+		and _title_speaker_calls(title_re, "fixture", "_show_dialogue(title, body)").size() == 1
+	var passed := _title_speaker_calls(title_re, "fixture", "DialogueManager.say(\"Journal\", t)").is_empty()
+	_check(flagged and passed, "title ban flags say(title, …), say(data.get(\"title\" …) and _show_dialogue(title, …), not say(\"Journal\", …) (fixtures)")
+	var split := literal_re.search("await DialogueManager.say(\n\t\t\"Tide Gauge\",\n\t\ttext)")
+	_check(split != null and split.get_string(2) == "Tide Gauge", "the literal regex reads a call split after the bracket (fixture)")
+
+	var registered: Dictionary = get_root().get_node("DialogueManager").SPEAKER_COLORS
+	_check(FileAccess.file_exists(RUNTIME_SPEAKER_BASELINE), "baseline file exists: %s" % RUNTIME_SPEAKER_BASELINE)
+	var baseline := {}   # name -> line in the baseline file
+	var duplicates: Array[String] = []
+	var rows := FileAccess.get_file_as_string(RUNTIME_SPEAKER_BASELINE).split("\n")
+	for i in rows.size():
+		var row := rows[i].strip_edges()   # strip_edges: a CRLF copy keeps no "\r"
+		if row.is_empty() or row.begins_with("#"):
+			continue
+		if baseline.has(row):
+			duplicates.append("%s:%d '%s' is listed twice" % [RUNTIME_SPEAKER_BASELINE.get_file(), i + 1, row])
+		else:
+			baseline[row] = i + 1
+	var files := _gd_files("res://scripts")
+	var calls := 0
+	var multiline := 0
+	var used := {}   # speaker -> first file:line
+	var unlisted: Array[String] = []
+	var titles: Array[String] = []
+	for path in files:
+		var text := FileAccess.get_file_as_string(path)
+		var starts := _line_starts(text)
+		for m in literal_re.search_all(text):
+			calls += 1
+			if m.get_string(0).contains("\n"):
+				multiline += 1
+			var speaker := m.get_string(2)
+			var at := "%s:%d" % [path.trim_prefix("res://"), starts.bsearch(m.get_start(), false)]
+			if not used.has(speaker):
+				used[speaker] = at
+			if not registered.has(speaker) and not baseline.has(speaker):
+				unlisted.append("%s '%s'" % [at, speaker])
+		titles.append_array(_title_speaker_calls(title_re, path, text))
+	var stale: Array[String] = duplicates.duplicate()
+	for name in baseline:
+		var at := "%s:%d '%s'" % [RUNTIME_SPEAKER_BASELINE.get_file(), baseline[name], name]
+		if registered.has(name):
+			stale.append("%s is registered in SPEAKER_COLORS (used at %s) — delete it from the baseline" % [at, used.get(name, "nowhere")])
+		elif not used.has(name):
+			stale.append("%s is no longer used by any literal call — delete it from the baseline" % at)
+	_check(calls >= RUNTIME_SPEAKER_MIN_CALLS,
+		"the scan read %d literal say()/_show_dialogue() calls in %d scripts (%d split after the bracket), at least %d" % [calls, files.size(), multiline, RUNTIME_SPEAKER_MIN_CALLS])
+	_check(titles.is_empty(), "no call takes a title as its speaker (%d) %s" % [titles.size(), titles.slice(0, 8)])
+	_check(unlisted.is_empty(), "every literal runtime speaker is in SPEAKER_COLORS or the baseline (%d not) %s" % [unlisted.size(), unlisted.slice(0, 8)])
+	_check(stale.is_empty(), "the baseline (%d names) only holds unregistered names still in use (%d stale) %s" % [baseline.size(), stale.size(), stale.slice(0, 8)])
+	for bad in titles + unlisted + stale:
+		print("    " + bad)
+
+
+## "<path>:<line>" for each call in `text` whose speaker is a title.
+func _title_speaker_calls(title_re: RegEx, path: String, text: String) -> Array[String]:
+	var out: Array[String] = []
+	var starts := _line_starts(text)
+	for m in title_re.search_all(text):
+		out.append("%s:%d" % [path.trim_prefix("res://"), starts.bsearch(m.get_start(), false)])
+	return out
+
+
+## Offsets where each line of `text` starts; bsearch(offset, false) is the 1-based line.
+func _line_starts(text: String) -> PackedInt32Array:
+	var out := PackedInt32Array([0])
+	var i := text.find("\n")
+	while i != -1:
+		out.append(i + 1)
+		i = text.find("\n", i + 1)
+	return out
+
+
+func _gd_files(dir_path: String) -> Array[String]:
+	var out: Array[String] = []
+	for sub in DirAccess.get_directories_at(dir_path):
+		out.append_array(_gd_files(dir_path.path_join(sub)))
+	for file in DirAccess.get_files_at(dir_path):
+		if file.ends_with(".gd"):
+			out.append(dir_path.path_join(file))
+	return out
 
 
 func _authored_dlg_files(dir_path: String) -> Array[String]:

@@ -1,0 +1,91 @@
+# Runtime speakers not registered in DialogueManager.SPEAKER_COLORS — frozen baseline.
+# Generated once on 2026-10-25 for story Y1-P0-T12 (AC-4, decision D3) from every
+# res://scripts/**/*.gd with the regex (PCRE2, \s matches line breaks):
+#   (DialogueManager\.say|_show_dialogue)\(\s*"([^"]*)"
+# Literal speakers only; a speaker held in a variable is not scanned.
+# This list may only shrink: register a name in SPEAKER_COLORS (or stop using it) and
+# delete it here. dialogue_test.gd fails on a name that is registered or no longer used,
+# and on a new unregistered literal speaker that is not listed. One name per line, sorted;
+# lines starting with # and blank lines are skipped.
+AetherCorp Record
+Aldric Echo
+Aldric Mirror
+Assembly Ledger
+Backup Historian
+Backup Leviathan
+Backup Static
+Backup: Ironhold Without Freedom
+Backup: Mirror City Without Witnesses
+Backup: Oakhaven Saved Too Late
+Cathedral Echo
+Cathedral Remnant
+Cathedral Static
+Cathedral Voice
+Cathedral Witness
+Choir
+Choir Core
+Choir Echo
+Contracted Citizen
+Council Echo
+Council Signal
+Coward Kaelen
+Data Vision Record
+Data Wraith Echo
+Data Wraith Memory
+Deleted Case File
+Deleted Child
+Deleted Guard
+Deleted Mother
+ENVIRONMENT
+Echo Mirror
+Elara Echo
+Elara Memory
+Elara Reflection
+Empty Mirror
+Firewall Console
+God of Efficiency
+God of Mercy Without Consent
+God of Obedience
+Ironhold Clerk
+Ironhold Delegate
+Kaelthas Echo
+Kaelthas Memory
+Lab Console
+Lyra Echo
+Memory Tide
+Memory Villager
+Memory of Kaelen
+Merged Citizen
+Mirror Citizen
+Mirror Echo
+Mirror Kaelen
+Mirror Witness
+Null Bailiff
+Null Court Citizen
+Null Court Echo
+Null Court Mirror
+Oakhaven Mirror
+Oakhaven Survivor
+Obedient Kaelen
+Preserved Citizen
+Released Citizen
+Revolt Echo
+Revolt Signal
+Rewritten Administrator
+Root Gate
+SOVEREIGN Echo
+Saved Echo
+Saved Signal
+Savior Kaelen
+Seraphina Relay
+Speaker
+Tide Gauge
+Truth Record 01
+Truth Record 02
+Truth Record 03
+Truth Record 04
+Vanished Backup Echo
+Witness Echo
+Witness Network
+Witness Quartermaster
+Witness Signal

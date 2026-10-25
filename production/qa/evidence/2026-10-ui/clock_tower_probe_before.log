@@ -1,0 +1,75 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH2-CLOCKTOWER] Initializing Clock Tower dungeon
+WARNING: [AssetManager] Production art slot missing for Kaelen combat sheet at res://assets/production_art/characters/player/kaelen_combat_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:985)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _ready (res://scripts/chapter2/ch2_clock_tower.gd:57)
+       [6] _fresh_tower (res://tests/t12_probe_clock_tower.gd:40)
+       [7] _run (res://tests/t12_probe_clock_tower.gd:49)
+WARNING: [AssetManager] V2 combat player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:994)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _ready (res://scripts/chapter2/ch2_clock_tower.gd:57)
+       [4] _fresh_tower (res://tests/t12_probe_clock_tower.gd:40)
+       [5] _run (res://tests/t12_probe_clock_tower.gd:49)
+PROBE trigger at (400.0, -90.0) shape CircleShape2D radius 50.0
+PROBE SAMPLES (body 20x32, centre = feet - 16): overlap with the trigger?
+PROBE floor5 standing x=30 feet=-150: no
+PROBE floor5 standing x=80 feet=-150: no
+PROBE floor5 standing x=130 feet=-150: no
+PROBE floor5 standing x=180 feet=-150: no
+PROBE floor5 standing x=230 feet=-150: no
+PROBE floor5 standing x=280 feet=-150: no
+PROBE floor5 standing x=330 feet=-150: no
+PROBE floor5 standing x=380 feet=-150: no
+PROBE floor5 standing x=430 feet=-150: no
+PROBE floor5 standing x=480 feet=-150: no
+PROBE floor5 standing x=530 feet=-150: no
+PROBE floor5 standing x=580 feet=-150: no
+PROBE floor5 standing x=630 feet=-150: no
+PROBE floor5 standing x=680 feet=-150: no
+PROBE floor5 standing x=730 feet=-150: no
+PROBE floor5 samples overlapping: 0 of 15
+PROBE floor4 standing x=400 feet=150: no
+PROBE step(-40) left end x=460 feet=-40: no
+PROBE step(-40) x=500 feet=-40: no
+PROBE step(40) left end x=560 feet=40: no
+PROBE lift top x=500 feet=-127.5: no
+PROBE lift top x=460 (edge) feet=-127.5: no
+PROBE jump path x=455 feet=-90: yes
+PROBE jump path x=440 feet=-90: yes
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH2-CLOCKTOWER] Initializing Clock Tower dungeon
+PROBE real player dropped at x=60 on floor 5: ended at (60.0, -150.0014), _pre_boss_done=false
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH2-CLOCKTOWER] Initializing Clock Tower dungeon
+PROBE real player dropped at x=400 on floor 5: ended at (400.0, -150.0003), _pre_boss_done=false
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH2-CLOCKTOWER] Initializing Clock Tower dungeon
+PROBE real player dropped at x=500 on floor 5: ended at (500.0, -150.0003), _pre_boss_done=false
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH2-CLOCKTOWER] Initializing Clock Tower dungeon
+PROBE real player dropped at x=740 on floor 5: ended at (740.0, -150.0003), _pre_boss_done=false
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)

@@ -1,0 +1,25 @@
+Aethelgard 0.1.0
+Exporting 'Windows Desktop' (--export-release) with Godot 4.6.3.stable.official.7d41c59c4 ...
+Built C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows\Aethelgard.exe (101.8 MB); export errors: 0; scripts/debug files packed: 0
+Smoke log: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows\smoke.log
+Boot frames: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows\smoke_boot.png
+FAILED:
+  - exit code 
+EXIT 1
+--- exe VersionInfo (PowerShell Get-Item ... .VersionInfo): FileVersion=0.1.0.0 ProductVersion=0.1.0.0 ProductName=Aethelgard: The Glitch Sovereign
+--- smoke.log:
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Vulkan 1.4.329 - Forward+ - Using Device #0: NVIDIA - NVIDIA GeForce RTX 2050
+
+Movie Maker mode enabled, recording movie in 1280×720 @ 10 FPS...
+AssetManager initialized - Scanning for asset availability...
+[BackgroundManager] Initialized — procedural backgrounds active
+--------------------------------------------------------------------------------
+Done recording movie at path: C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\aeth_movie_3f7f86d8f4334922a3a821cd685f02d3\f.png
+120 frames at 10 FPS (movie length: 00:00:12:00), recorded in 00:00:07 (171% of real-time speed).
+CPU render time: 0.05 seconds (average: 0.38 ms/frame)
+GPU render time: 0.02 seconds (average: 0.16 ms/frame)
+Encoding time: 3.10 seconds (average: 25.85 ms/frame)
+--------------------------------------------------------------------------------
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)

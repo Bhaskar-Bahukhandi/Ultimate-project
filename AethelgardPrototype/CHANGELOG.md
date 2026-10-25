@@ -3,6 +3,21 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-25 — One version number, a stats card that fits, the Clock Tower's pre-boss scene (Y1-P0-T12)
+
+- **fix(ui):** the game has one version, 0.1.0: the main menu shows `v0.1.0` (it said v1.0), the pause screen header
+  shows the same number for every chapter (it said v0.1.<chapter>), and Windows builds carry it in the file properties.
+- **fix(ui):** the Chapter 2 end-of-chapter card fits the screen: the stats sit in two columns in a centred panel
+  instead of one long column cut off at the top and bottom.
+- **fix(dialogue):** reading a lore note or a secret now shows "Journal" in the name plate with the note's title as the
+  first line, instead of the title as if it were a person speaking. Lore read in the Fractured Wastes is now kept in the
+  journal, as it already was in Oakhaven and Ironhold.
+- **fix(level):** the Clock Tower's scene before the Minute Hand fight now plays when you reach the top floor. Its
+  trigger sat under the floor and could not detect the player at all, so the scene never played.
+- **chore:** an unused fallback that could send the player into a generic arena from Ironhold is gone.
+- **test:** three new suites (version and card, region lore and the Ironhold gate, the Clock Tower trigger; 22 suites
+  now) and a dialogue check that no title is used as a speaker and that no new unregistered speaker name appears.
+
 ## 2026-10-25 — The test runners test themselves (Y1-P0-TD-010)
 
 - **test:** `tests/runner_selftest/` runs the two test runners against a stand-in Godot, so their own rules (script-error

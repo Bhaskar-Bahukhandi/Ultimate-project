@@ -1,0 +1,397 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+  PASS: isolation: user:// is the aeth_phase0_test directory
+  PASS: isolation: DialogueManager, GameManager, LoreJournal and SceneTransitions autoloads present
+  PASS: AC-3: SPEAKER_COLORS has "Journal"
+-- oakhaven
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [AssetManager] Oakhaven afternoon production tileset missing at res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png; requested=afternoon.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_oakhaven_variant (res://scripts/asset_manager.gd:1231)
+       [2] _try_load_oakhaven_production_variant (res://scripts/asset_manager.gd:1210)
+       [3] get_oakhaven_tileset_slot (res://scripts/asset_manager.gd:1170)
+       [4] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1552)
+       [5] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [6] _build_region_environment (res://scripts/regions/oakhaven_region.gd:114)
+       [7] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] Oakhaven production tileset fallback: production variant missing or invalid; requested=afternoon resolved=afternoon generated=res://assets/generated_v2/tilesets/oakhaven_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _oakhaven_generated_fallback_slot (res://scripts/asset_manager.gd:1219)
+       [2] get_oakhaven_tileset_slot (res://scripts/asset_manager.gd:1199)
+       [3] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1552)
+       [4] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [5] _build_region_environment (res://scripts/regions/oakhaven_region.gd:114)
+       [6] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] Production art slot missing for environment prop atlas at res://assets/production_art/props/environment_prop_atlas.png; using generated fallback res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1486)
+       [4] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [5] _create_building (res://scripts/regions/oakhaven_region.gd:285)
+       [6] _build_region_environment (res://scripts/regions/oakhaven_region.gd:173)
+       [7] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1487)
+       [3] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [4] _create_building (res://scripts/regions/oakhaven_region.gd:285)
+       [5] _build_region_environment (res://scripts/regions/oakhaven_region.gd:173)
+       [6] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] Production art slot missing for environment decal atlas at res://assets/production_art/backgrounds/environment_decal_atlas.png; using generated fallback res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1497)
+       [4] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [5] _add_v3_oakhaven_polish (res://scripts/regions/oakhaven_region.gd:368)
+       [6] _build_region_environment (res://scripts/regions/oakhaven_region.gd:238)
+       [7] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1498)
+       [3] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [4] _add_v3_oakhaven_polish (res://scripts/regions/oakhaven_region.gd:368)
+       [5] _build_region_environment (res://scripts/regions/oakhaven_region.gd:238)
+       [6] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] Production art slot missing for Kaelen top-down sheet at res://assets/production_art/characters/player/kaelen_topdown_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:1000)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [6] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [7] _spawn_player (res://scripts/regions/oakhaven_region.gd:411)
+       [8] _ready (res://scripts/regions/oakhaven_region.gd:75)
+WARNING: [AssetManager] V2 top-down player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:1009)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [4] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [5] _spawn_player (res://scripts/regions/oakhaven_region.gd:411)
+       [6] _ready (res://scripts/regions/oakhaven_region.gd:75)
+[ENCOUNTER] Zone changed: Oakhaven Village
+  PASS: oakhaven: region scene res://scenes/regions/oakhaven_region.tscn loaded (err 0)
+  PASS: oakhaven: no dialogue is open after the region loads
+  PASS: oakhaven lore crater_memory_1: pickup Area2D found with lore_title "Memory Fragment: The Crash"
+  PASS: oakhaven lore crater_memory_1: precondition, not in the journal
+[ACHIEVEMENT] Unlocked: Lore Seeker — Discover your first optional lore entry.
+  PASS: oakhaven lore crater_memory_1: a dialogue line was typing right after the interact call
+  PASS: oakhaven lore crater_memory_1: name plate reads "Journal" (got "Journal")
+  PASS: oakhaven lore crater_memory_1: raw text starts with the bold title line (got "[b]Memory Fragment: The Crash[/b]
+The last thing Kaelen reme")
+  PASS: oakhaven lore crater_memory_1: parsed text starts with the title, a newline, then the body (got "Memory Fragment: The Crash
+The last thing Kaelen remembers: ")
+  PASS: oakhaven lore crater_memory_1: typing finished with the whole text shown (visible_characters -1, visible_ratio 1.0)
+  PASS: oakhaven lore crater_memory_1: the interact call returned after the advance within 5 s
+  PASS: oakhaven lore crater_memory_1: LoreJournal holds the entry afterwards
+  PASS: oakhaven lore crater_memory_1: no dev_signature_*_found flag set by a plain lore pickup
+  PASS: oakhaven lore dev_signature_1: pickup Area2D found with lore_title "Developer Signature #1"
+  PASS: oakhaven lore dev_signature_1: precondition, not in the journal
+  PASS: oakhaven lore dev_signature_1: a dialogue line was typing right after the interact call
+  PASS: oakhaven lore dev_signature_1: name plate reads "Journal" (got "Journal")
+  PASS: oakhaven lore dev_signature_1: raw text starts with the bold title line (got "[b]Developer Signature #1[/b]
+// TODO: Fix pathfinding for s")
+  PASS: oakhaven lore dev_signature_1: parsed text starts with the title, a newline, then the body (got "Developer Signature #1
+// TODO: Fix pathfinding for southern")
+  PASS: oakhaven lore dev_signature_1: typing finished with the whole text shown (visible_characters -1, visible_ratio 1.0)
+  PASS: oakhaven lore dev_signature_1: the interact call returned after the advance within 5 s
+  PASS: oakhaven lore dev_signature_1: LoreJournal holds the entry afterwards
+  PASS: oakhaven lore dev_signature_1: story flag dev_signature_1_found set (as today)
+  PASS: oakhaven secret secret_oak_well_lore: pickup Area2D found with title "FORGOTTEN JOURNAL"
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+WARNING: VFXLibrary: Unknown effect 'vfx_pickup_burst'
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] spawn (res://scripts/effects/vfx_library.gd:501)
+       [1] _collect_secret (res://scripts/regions/oakhaven_region.gd:734)
+       [2] <anonymous lambda> (res://tests/integration/story/region_lore_ironhold_test.gd:226)
+       [3] _drive (res://tests/integration/story/region_lore_ironhold_test.gd:228)
+  PASS: oakhaven secret secret_oak_well_lore: a dialogue line was typing right after the interact call
+  PASS: oakhaven secret secret_oak_well_lore: name plate reads "Journal" (got "Journal")
+  PASS: oakhaven secret secret_oak_well_lore: raw text starts with the bold title line (got "[b]FORGOTTEN JOURNAL[/b]
+A developer's debug log wedged behi")
+  PASS: oakhaven secret secret_oak_well_lore: parsed text starts with the title, a newline, then the body (got "FORGOTTEN JOURNAL
+A developer's debug log wedged behind the ")
+  PASS: oakhaven secret secret_oak_well_lore: typing finished with the whole text shown (visible_characters -1, visible_ratio 1.0)
+  PASS: oakhaven secret secret_oak_well_lore: the interact call returned after the advance within 5 s
+WARNING: VFXLibrary: Unknown effect 'vfx_pickup_burst'
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] spawn (res://scripts/effects/vfx_library.gd:501)
+       [1] _collect_secret (res://scripts/regions/oakhaven_region.gd:734)
+       [2] <anonymous lambda> (res://tests/integration/story/region_lore_ironhold_test.gd:226)
+       [3] _drive (res://tests/integration/story/region_lore_ironhold_test.gd:228)
+  PASS: oakhaven untitled secret: a dialogue line was typing right after the interact call
+  PASS: oakhaven untitled secret: name plate reads "Journal" (got "Journal")
+  PASS: oakhaven untitled secret: raw text starts with the bold title line (got "[b]SECRET[/b]
+T12 untitled secret probe.")
+  PASS: oakhaven untitled secret: parsed text starts with the title, a newline, then the body (got "SECRET
+T12 untitled secret probe.")
+  PASS: oakhaven untitled secret: typing finished with the whole text shown (visible_characters -1, visible_ratio 1.0)
+  PASS: oakhaven untitled secret: the interact call returned after the advance within 5 s
+-- ironhold
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [AssetManager] Production art slot missing for ironhold production tileset at res://assets/production_art/tilesets/ironhold/ironhold_tileset.png; using generated fallback res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _try_load_ironhold_production_tileset (res://scripts/asset_manager.gd:1274)
+       [3] get_ironhold_tileset_slot (res://scripts/asset_manager.gd:1255)
+       [4] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1554)
+       [5] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [6] _build_environment (res://scripts/regions/ironhold_region.gd:104)
+       [7] _ready (res://scripts/regions/ironhold_region.gd:61)
+WARNING: [AssetManager] Ironhold production tileset fallback: production tileset missing or invalid; generated=res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _ironhold_generated_fallback_slot (res://scripts/asset_manager.gd:1283)
+       [2] get_ironhold_tileset_slot (res://scripts/asset_manager.gd:1266)
+       [3] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1554)
+       [4] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [5] _build_environment (res://scripts/regions/ironhold_region.gd:104)
+       [6] _ready (res://scripts/regions/ironhold_region.gd:61)
+[ENCOUNTER] Zone changed: Ironhold City
+  PASS: ironhold: region scene res://scenes/regions/ironhold_region.tscn loaded (err 0)
+  PASS: ironhold: no dialogue is open after the region loads
+  PASS: ironhold lore ironhold_lore_1: pickup Area2D found with lore_title "Market Notice"
+  PASS: ironhold lore ironhold_lore_1: precondition, not in the journal
+  PASS: ironhold lore ironhold_lore_1: a dialogue line was typing right after the interact call
+  PASS: ironhold lore ironhold_lore_1: name plate reads "Journal" (got "Journal")
+  PASS: ironhold lore ironhold_lore_1: raw text starts with the bold title line (got "[b]Market Notice[/b]
+NOTICE: All clockwork units must report")
+  PASS: ironhold lore ironhold_lore_1: parsed text starts with the title, a newline, then the body (got "Market Notice
+NOTICE: All clockwork units must report for ma")
+  PASS: ironhold lore ironhold_lore_1: typing finished with the whole text shown (visible_characters -1, visible_ratio 1.0)
+  PASS: ironhold lore ironhold_lore_1: the interact call returned after the advance within 5 s
+  PASS: ironhold lore ironhold_lore_1: LoreJournal holds the entry afterwards
+  PASS: ironhold lore ironhold_lore_1: no dev_signature_*_found flag set by a plain lore pickup
+  PASS: ironhold lore dev_signature_2: pickup Area2D found with lore_title "Developer Signature #2"
+  PASS: ironhold lore dev_signature_2: precondition, not in the journal
+  PASS: ironhold lore dev_signature_2: a dialogue line was typing right after the interact call
+  PASS: ironhold lore dev_signature_2: name plate reads "Journal" (got "Journal")
+  PASS: ironhold lore dev_signature_2: raw text starts with the bold title line (got "[b]Developer Signature #2[/b]
+// The underground was suppose")
+  PASS: ironhold lore dev_signature_2: parsed text starts with the title, a newline, then the body (got "Developer Signature #2
+// The underground was supposed to ha")
+  PASS: ironhold lore dev_signature_2: typing finished with the whole text shown (visible_characters -1, visible_ratio 1.0)
+  PASS: ironhold lore dev_signature_2: the interact call returned after the advance within 5 s
+  PASS: ironhold lore dev_signature_2: LoreJournal holds the entry afterwards
+  PASS: ironhold lore dev_signature_2: story flag dev_signature_2_found set (as today)
+  PASS: ironhold secret secret_iron_market_gold: pickup Area2D found with title "MERCHANT'S HIDDEN VAULT"
+WARNING: VFXLibrary: Unknown effect 'vfx_pickup_burst'
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] spawn (res://scripts/effects/vfx_library.gd:501)
+       [1] _interact_secret (res://scripts/regions/ironhold_region.gd:785)
+       [2] <anonymous lambda> (res://tests/integration/story/region_lore_ironhold_test.gd:226)
+       [3] _drive (res://tests/integration/story/region_lore_ironhold_test.gd:228)
+  PASS: ironhold secret secret_iron_market_gold: a dialogue line was typing right after the interact call
+  PASS: ironhold secret secret_iron_market_gold: name plate reads "Journal" (got "Journal")
+  PASS: ironhold secret secret_iron_market_gold: raw text starts with the bold title line (got "[b]MERCHANT'S HIDDEN VAULT[/b]
+The loose cobblestone hides a")
+  PASS: ironhold secret secret_iron_market_gold: parsed text starts with the title, a newline, then the body (got "MERCHANT'S HIDDEN VAULT
+The loose cobblestone hides a mercha")
+  PASS: ironhold secret secret_iron_market_gold: typing finished with the whole text shown (visible_characters -1, visible_ratio 1.0)
+  PASS: ironhold secret secret_iron_market_gold: the interact call returned after the advance within 5 s
+WARNING: VFXLibrary: Unknown effect 'vfx_pickup_burst'
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] spawn (res://scripts/effects/vfx_library.gd:501)
+       [1] _interact_secret (res://scripts/regions/ironhold_region.gd:785)
+       [2] <anonymous lambda> (res://tests/integration/story/region_lore_ironhold_test.gd:226)
+       [3] _drive (res://tests/integration/story/region_lore_ironhold_test.gd:228)
+  PASS: ironhold untitled secret: a dialogue line was typing right after the interact call
+  PASS: ironhold untitled secret: name plate reads "Journal" (got "Journal")
+  PASS: ironhold untitled secret: raw text starts with the bold title line (got "[b]SECRET[/b]
+T12 untitled secret probe.")
+  PASS: ironhold untitled secret: parsed text starts with the title, a newline, then the body (got "SECRET
+T12 untitled secret probe.")
+  PASS: ironhold untitled secret: typing finished with the whole text shown (visible_characters -1, visible_ratio 1.0)
+  PASS: ironhold untitled secret: the interact call returned after the advance within 5 s
+-- fractured_wastes
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [AssetManager] Production art slot missing for Fractured Wastes production tileset at res://assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png; using generated fallback res://assets/generated_v2/tilesets/fractured_wastes_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _try_load_fractured_wastes_production_tileset (res://scripts/asset_manager.gd:1328)
+       [3] get_fractured_wastes_tileset_slot (res://scripts/asset_manager.gd:1309)
+       [4] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1556)
+       [5] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [6] _build_environment (res://scripts/regions/fractured_wastes_region.gd:119)
+       [7] _ready (res://scripts/regions/fractured_wastes_region.gd:76)
+WARNING: [AssetManager] Fractured Wastes production tileset fallback: production tileset missing or invalid; generated=res://assets/generated_v2/tilesets/fractured_wastes_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _fractured_wastes_generated_fallback_slot (res://scripts/asset_manager.gd:1337)
+       [2] get_fractured_wastes_tileset_slot (res://scripts/asset_manager.gd:1320)
+       [3] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1556)
+       [4] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [5] _build_environment (res://scripts/regions/fractured_wastes_region.gd:119)
+       [6] _ready (res://scripts/regions/fractured_wastes_region.gd:76)
+WARNING: [AssetManager] Production art slot missing for Lyra NPC sheet at res://assets/production_art/characters/npcs/lyra_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/npcs/lyra_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_npc (res://scripts/asset_manager.gd:1066)
+       [4] create_topdown_npc_visual (res://scripts/asset_manager.gd:1087)
+       [5] _create_interactable_npc (res://scripts/regions/fractured_wastes_region.gd:428)
+       [6] _place_npcs (res://scripts/regions/fractured_wastes_region.gd:420)
+       [7] _ready (res://scripts/regions/fractured_wastes_region.gd:78)
+WARNING: [AssetManager] NPC sheet failed to load for Lyra; using existing NPC fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_npc (res://scripts/asset_manager.gd:1074)
+       [2] create_topdown_npc_visual (res://scripts/asset_manager.gd:1087)
+       [3] _create_interactable_npc (res://scripts/regions/fractured_wastes_region.gd:428)
+       [4] _place_npcs (res://scripts/regions/fractured_wastes_region.gd:420)
+       [5] _ready (res://scripts/regions/fractured_wastes_region.gd:78)
+[ENCOUNTER] Zone changed: Survivor's Shelter
+  PASS: fractured_wastes: region scene res://scenes/regions/fractured_wastes_region.tscn loaded (err 0)
+  PASS: fractured_wastes: no dialogue is open after the region loads
+  PASS: fractured_wastes lore wastes_lore_1: pickup Area2D found with lore_title "Fractured Monument"
+  PASS: fractured_wastes lore wastes_lore_1: precondition, not in the journal
+  PASS: fractured_wastes lore wastes_lore_1: a dialogue line was typing right after the interact call
+  PASS: fractured_wastes lore wastes_lore_1: name plate reads "Journal" (got "Journal")
+  PASS: fractured_wastes lore wastes_lore_1: raw text starts with the bold title line (got "[b]Fractured Monument[/b]
+HERE STOOD THE GREAT LIBRARY OF AE")
+  PASS: fractured_wastes lore wastes_lore_1: parsed text starts with the title, a newline, then the body (got "Fractured Monument
+HERE STOOD THE GREAT LIBRARY OF AETHELGAR")
+  PASS: fractured_wastes lore wastes_lore_1: typing finished with the whole text shown (visible_characters -1, visible_ratio 1.0)
+  PASS: fractured_wastes lore wastes_lore_1: the interact call returned after the advance within 5 s
+  PASS: fractured_wastes lore wastes_lore_1: LoreJournal holds the entry afterwards
+  PASS: fractured_wastes lore wastes_lore_1: no dev_signature_*_found flag set by a plain lore pickup
+  PASS: fractured_wastes lore dev_signature_3: pickup Area2D found with lore_title "Developer Signature #3"
+  PASS: fractured_wastes lore dev_signature_3: precondition, not in the journal
+  PASS: fractured_wastes lore dev_signature_3: a dialogue line was typing right after the interact call
+  PASS: fractured_wastes lore dev_signature_3: name plate reads "Journal" (got "Journal")
+  PASS: fractured_wastes lore dev_signature_3: raw text starts with the bold title line (got "[b]Developer Signature #3[/b]
+// This zone was going to have")
+  PASS: fractured_wastes lore dev_signature_3: parsed text starts with the title, a newline, then the body (got "Developer Signature #3
+// This zone was going to have a weat")
+  PASS: fractured_wastes lore dev_signature_3: typing finished with the whole text shown (visible_characters -1, visible_ratio 1.0)
+  PASS: fractured_wastes lore dev_signature_3: the interact call returned after the advance within 5 s
+  PASS: fractured_wastes lore dev_signature_3: LoreJournal holds the entry afterwards
+  PASS: fractured_wastes lore dev_signature_3: story flag dev_signature_3_found set (as today)
+  PASS: fractured_wastes secret secret_wastes_null_edge: pickup Area2D found with title "VOID CACHE"
+[INVENTORY] Added 1 x Null Edge
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+WARNING: VFXLibrary: Unknown effect 'vfx_pickup_burst'
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] spawn (res://scripts/effects/vfx_library.gd:501)
+       [1] _interact_secret (res://scripts/regions/fractured_wastes_region.gd:736)
+       [2] <anonymous lambda> (res://tests/integration/story/region_lore_ironhold_test.gd:226)
+       [3] _drive (res://tests/integration/story/region_lore_ironhold_test.gd:228)
+  PASS: fractured_wastes secret secret_wastes_null_edge: a dialogue line was typing right after the interact call
+  PASS: fractured_wastes secret secret_wastes_null_edge: name plate reads "Journal" (got "Journal")
+  PASS: fractured_wastes secret secret_wastes_null_edge: raw text starts with the bold title line (got "[b]VOID CACHE[/b]
+A blade that severs data streams, abandone")
+  PASS: fractured_wastes secret secret_wastes_null_edge: parsed text starts with the title, a newline, then the body (got "VOID CACHE
+A blade that severs data streams, abandoned where")
+  PASS: fractured_wastes secret secret_wastes_null_edge: typing finished with the whole text shown (visible_characters -1, visible_ratio 1.0)
+  PASS: fractured_wastes secret secret_wastes_null_edge: the interact call returned after the advance within 5 s
+WARNING: VFXLibrary: Unknown effect 'vfx_pickup_burst'
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] spawn (res://scripts/effects/vfx_library.gd:501)
+       [1] _interact_secret (res://scripts/regions/fractured_wastes_region.gd:736)
+       [2] <anonymous lambda> (res://tests/integration/story/region_lore_ironhold_test.gd:226)
+       [3] _drive (res://tests/integration/story/region_lore_ironhold_test.gd:228)
+  PASS: fractured_wastes untitled secret: a dialogue line was typing right after the interact call
+  PASS: fractured_wastes untitled secret: name plate reads "Journal" (got "Journal")
+  PASS: fractured_wastes untitled secret: raw text starts with the bold title line (got "[b]SECRET[/b]
+T12 untitled secret probe.")
+  PASS: fractured_wastes untitled secret: parsed text starts with the title, a newline, then the body (got "SECRET
+T12 untitled secret probe.")
+  PASS: fractured_wastes untitled secret: typing finished with the whole text shown (visible_characters -1, visible_ratio 1.0)
+  PASS: fractured_wastes untitled secret: the interact call returned after the advance within 5 s
+-- fractured_wastes save round trip
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[ENCOUNTER] Zone changed: Survivor's Shelter
+  PASS: save: wastes_lore_1 discovered through the Wastes pickup before the save
+[SAVE] Slot 1 saved successfully (v1.2.0)
+  PASS: save: save_game(1) returned true
+  PASS: save: the saved JSON's version is still 1.2.0 (got 1.2.0)
+  PASS: save: lore_journal.discovered_lore in the JSON lists wastes_lore_1
+  PASS: save control: the cleared journal no longer holds wastes_lore_1
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  PASS: save: load_game(1) returned true
+  PASS: save: wastes_lore_1 is in the journal after the load
+-- ironhold _interact_boss with an empty scene_path
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[ENCOUNTER] Zone changed: Ironhold City
+  PASS: ironhold (AC-5): region scene res://scenes/regions/ironhold_region.tscn loaded (err 0)
+  PASS: ironhold (AC-5): no dialogue is open after the region loads
+  (expected next: one ERROR line from _interact_boss — the behaviour under test)
+ERROR: [Ironhold] Boss gate 'T12EmptyGate' has no scene_path; not entering.
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] _interact_boss (res://scripts/regions/ironhold_region.gd:1145)
+       [1] <anonymous lambda> (res://tests/integration/story/region_lore_ironhold_test.gd:355)
+       [2] _empty_gate_case (res://tests/integration/story/region_lore_ironhold_test.gd:358)
+  PASS: AC-5 empty scene_path, rec_level 1: the call returned at once (no await before the check)
+  PASS: AC-5 empty scene_path, rec_level 1: no soft-level warning dialogue opened
+  PASS: AC-5 empty scene_path, rec_level 1: no SceneTransitions.transition_started (got 0)
+  PASS: AC-5 empty scene_path, rec_level 1: GameManager meta boss_fight_id not set
+  PASS: AC-5 empty scene_path, rec_level 1: boss_return_scene and return_position metas not set
+  (expected next: one ERROR line from _interact_boss — the behaviour under test)
+ERROR: [Ironhold] Boss gate 'T12EmptyGate' has no scene_path; not entering.
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] _interact_boss (res://scripts/regions/ironhold_region.gd:1145)
+       [1] <anonymous lambda> (res://tests/integration/story/region_lore_ironhold_test.gd:355)
+       [2] _empty_gate_case (res://tests/integration/story/region_lore_ironhold_test.gd:358)
+  PASS: AC-5 empty scene_path, rec_level 99: the call returned at once (no await before the check)
+  PASS: AC-5 empty scene_path, rec_level 99: no soft-level warning dialogue opened
+  PASS: AC-5 empty scene_path, rec_level 99: no SceneTransitions.transition_started (got 0)
+  PASS: AC-5 empty scene_path, rec_level 99: GameManager meta boss_fight_id not set
+  PASS: AC-5 empty scene_path, rec_level 99: boss_return_scene and return_position metas not set
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+
+REGION LORE IRONHOLD RESULT: 127 passed, 0 failed
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)

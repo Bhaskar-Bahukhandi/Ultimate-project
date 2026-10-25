@@ -1,0 +1,64 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+  PASS: isolation: user:// is the aeth_phase0_test directory (C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/aeth_phase0_test_c135fadf2ed4447b8ac93f0d733a656c/Godot/app_userdata/Aethelgard- The Glitch Sovereign)
+  PASS: isolation: GameManager autoload present
+  PASS: AC-1 application/config/version is set and matches ^\d+\.\d+\.\d+$ ('0.1.0')
+  PASS: AC-1 export_presets.cfg loads
+  PASS: AC-1 [preset.0.options] application/file_version == '0.1.0.0' (got '0.1.0.0')
+  PASS: AC-1 [preset.0.options] application/product_version == '0.1.0.0' (got '0.1.0.0')
+  PASS: AC-1 [preset.2.options] application/file_version == '0.1.0.0' (got '0.1.0.0')
+  PASS: AC-1 [preset.2.options] application/product_version == '0.1.0.0' (got '0.1.0.0')
+  PASS: AC-1 both Windows presets carry file/product versions (found 2)
+  PASS: AC-1 main menu VersionLabel == 'v0.1.0' (got 'v0.1.0')
+[PAUSE] Pause screen system initialized
+  PASS: AC-1 pause header when built == 'AETHELGARD IDE v0.1.0 — PAUSED' (got 'AETHELGARD IDE v0.1.0 — PAUSED')
+  PASS: AC-1 pause header for current_chapter 1 == 'AETHELGARD IDE v0.1.0 — Chapter 1' (got 'AETHELGARD IDE v0.1.0 — Chapter 1')
+  PASS: AC-1 pause header for current_chapter 3 == 'AETHELGARD IDE v0.1.0 — Chapter 3' (got 'AETHELGARD IDE v0.1.0 — Chapter 3')
+  PASS: AC-1 pause header for current_chapter 0 == 'AETHELGARD IDE v0.1.0 — Chapter 1' (got 'AETHELGARD IDE v0.1.0 — Chapter 1')
+  PASS: AC-1 no 'v1.0' left in main_menu.tscn
+  PASS: AC-1 no 'IDE v0.1.' literal left in pause_screen.gd (covers v0.1.%d and v0.1.1)
+  PASS: AC-1 in-fiction splash text 'KERNEL v0.91' unchanged
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: AC-2 viewport is (1280.0, 720.0) (got (1280.0, 720.0))
+  PASS: AC-2 harness: _ready did not run (no dialogue sequence)
+  PASS: AC-2 _build_chapter_stats_text() equals the pre-refactor golden exactly
+  PASS: AC-2 card has the HeaderLabel label
+  PASS: AC-2 card has the LeftColumn label
+  PASS: AC-2 card has the RightColumn label
+  PASS: AC-2 card has the FooterLabel label
+  PASS: AC-2 card has a centred panel (CardPanel)
+  PASS: AC-2 card labels (header, left, right, footer) equal the golden line for line, rules and blanks aside (24 vs 24 lines; first difference at -1: '' vs '')
+  PASS: AC-2 panel [P: (283.0, 39.0), S: (713.0, 641.0)] lies inside the viewport with >= 24 px on every side (left 283, top 39, right 284, bottom 40)
+  PASS: AC-2 panel is centred (centre (639.5, 359.5))
+  PASS: AC-2 HeaderLabel shows all its lines (6 of 6)
+  PASS: AC-2 HeaderLabel rect [P: (311.0, 55.0), S: (657.0, 153.0)] lies inside its column and the panel
+  PASS: AC-2 HeaderLabel is as wide as its longest line (657 >= 280)
+  PASS: AC-2 HeaderLabel font size 16 >= 16
+  PASS: AC-2 LeftColumn shows all its lines (10 of 10)
+  PASS: AC-2 LeftColumn rect [P: (311.0, 218.0), S: (287.0, 257.0)] lies inside its column and the panel
+  PASS: AC-2 LeftColumn is as wide as its longest line (287 >= 287)
+  PASS: AC-2 LeftColumn font size 16 >= 16
+  PASS: AC-2 RightColumn shows all its lines (10 of 10)
+  PASS: AC-2 RightColumn rect [P: (646.0, 218.0), S: (322.0, 257.0)] lies inside its column and the panel
+  PASS: AC-2 RightColumn is as wide as its longest line (322 >= 322)
+  PASS: AC-2 RightColumn font size 16 >= 16
+  PASS: AC-2 FooterLabel shows all its lines (7 of 7)
+  PASS: AC-2 FooterLabel rect [P: (311.0, 485.0), S: (657.0, 179.0)] lies inside its column and the panel
+  PASS: AC-2 FooterLabel is as wide as its longest line (657 >= 372)
+  PASS: AC-2 FooterLabel font size 16 >= 16
+  PASS: AC-2 left and right columns do not overlap
+  PASS: AC-2 every card node draws below the fade-out (highest effective z 80 < 100)
+  INFO: card font size 16, panel [P: (283.0, 39.0), S: (713.0, 641.0)]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+
+UI VERSION CARD RESULT: 46 passed, 0 failed
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)

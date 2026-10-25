@@ -114,6 +114,19 @@ const COMBAT_HUD_SCENE := "res://scenes/combat/combat_arena.tscn"
 const COMBAT_HUD_ENEMY_HP := 100000.0
 const COMBAT_HUD_HIT_DAMAGE := 5.0
 const COMBAT_HUD_STEP_TIMEOUT := 2.5   # real seconds to wait for each strike to be ready / to land
+## Story Y1-P0-T12 evidence (AC-7). menu_version / pause_version: the version label and the pause
+## header must read GameVersion's text. stats_card: the REAL Chapter 2 ending, driven to its end
+## card (dialogue skipped, choices answered with option 0) with an arena record so the arena line
+## shows; the card panel must sit inside the viewport. clock_tower: the tower with debug collision
+## band drawn as an overlay from its real shape and the player on the floor 4→5 step, so the band is in view.
+const T12_MENU_ID := "t12_menu_version"
+const T12_PAUSE_ID := "t12_pause_version"
+const T12_CARD_ID := "t12_stats_card"
+const T12_TOWER_ID := "t12_clock_tower"
+const T12_ENDING := "res://scenes/chapter2/ch2_ending.tscn"
+const T12_TOWER := "res://scenes/chapter2/clock_tower.tscn"
+const T12_TOWER_VIEW_POS := Vector2(600, -41)   # standing on the floor 4→5 step (top y -40)
+const T12_CARD_TIMEOUT := 90.0                  # real seconds to reach the end card
 const DLG_DIRS := ["res://dialogue/prologue", "res://dialogue/ch1", "res://dialogue/ch2"]
 const BACKDROP := "res://scenes/regions/oakhaven_region.tscn"
 const THUMB := Vector2i(320, 180)
@@ -168,6 +181,14 @@ func run() -> int:
 			await _flash_shot(f[0], f[1], f[2])
 	if _wanted(COMBAT_HUD_ID):
 		await _combat_hud_shots(COMBAT_HUD_ID)
+	if _wanted(T12_MENU_ID):
+		await _t12_menu_shot(T12_MENU_ID)
+	if _wanted(T12_PAUSE_ID):
+		await _t12_pause_shot(T12_PAUSE_ID)
+	if _wanted(T12_CARD_ID):
+		await _t12_card_shot(T12_CARD_ID)
+	if _wanted(T12_TOWER_ID):
+		await _t12_tower_shot(T12_TOWER_ID)
 	if _wanted("dlg"):
 		await _dialogue_shots()
 	await _contact_sheet("contact_scenes.png", _shots.filter(func(x): return x["group"] != "dialogue"))
@@ -604,6 +625,125 @@ func _combat_hud_shots(id: String) -> void:
 	await _capture(id + "_after_hit", "scene", COMBAT_HUD_SCENE, hit_notes)
 	gj.reset_combo()
 	await _wait(0.3)   # let the hit's hitstop / i-frames settle before the next stop
+
+
+## GameVersion's text, loaded at runtime like controls_menu.gd (see _ui_shots).
+func _t12_version() -> Script:
+	return load("res://scripts/ui/game_version.gd")
+
+
+func _t12_menu_shot(id: String) -> void:
+	_gm().reset_game()
+	await _load_scene("res://scenes/main_menu.tscn", 2.5)
+	var notes: Array[String] = []
+	var label := tree.current_scene.get_node_or_null("VersionLabel") as Label if tree.current_scene else null
+	var want: String = _t12_version().label()
+	if label == null or label.text != want:
+		notes.append("PROBLEM: VersionLabel reads '%s', expected '%s'" % [label.text if label else "(missing)", want])
+		_problems.append("%s: version label is not %s" % [id, want])
+	else:
+		notes.append("VersionLabel '%s'" % label.text)
+	await _capture(id, "ui", "res://scenes/main_menu.tscn", notes)
+
+
+func _t12_pause_shot(id: String) -> void:
+	_gm().reset_game()
+	await _load_scene(BACKDROP, 2.5)
+	var pause := tree.root.get_node("PauseScreen")
+	pause.toggle_pause()
+	await _wait(0.8)
+	var notes: Array[String] = []
+	var header = pause.get("header_label")
+	var version: String = _t12_version().label()
+	if header == null or not str(header.text).contains("AETHELGARD IDE " + version):
+		notes.append("PROBLEM: pause header reads '%s'" % (header.text if header else "(missing)"))
+		_problems.append("%s: pause header does not show %s" % [id, version])
+	else:
+		notes.append("header '%s'" % header.text)
+	await _capture(id, "ui", BACKDROP, notes)
+	pause.toggle_pause()
+	await _wait(0.5)
+
+
+## Drives the real ending until its end card is up: answers open choices with option 0 (the
+## private _awaiting_choice / _on_choice_pressed, as ch3_flash_runtime_test.gd does) and skips the
+## rest of each dialogue. Captures once the card has faded in.
+func _t12_card_shot(id: String) -> void:
+	_gm().reset_game()
+	_gm().arena_stats["total_wins"] = 12
+	_gm().arena_stats["total_losses"] = 3
+	_gm().arena_stats["best_streak"] = 7
+	await _load_scene(T12_ENDING, 1.0)
+	var notes: Array[String] = []
+	var dm := _dm()
+	var deadline := Time.get_ticks_msec() + int(T12_CARD_TIMEOUT * 1000.0)
+	var s: Node = tree.current_scene
+	while Time.get_ticks_msec() < deadline and is_instance_valid(s) and not s.get("end_card_visible"):
+		if dm.get("_awaiting_choice"):
+			dm._on_choice_pressed(0)
+		elif dm.is_active and not dm.is_skip_requested():
+			dm.skip_all()
+		await tree.process_frame
+	if not is_instance_valid(s) or not s.get("end_card_visible"):
+		notes.append("PROBLEM: the end card never appeared within %d s" % int(T12_CARD_TIMEOUT))
+		_problems.append("%s: end card not reached" % id)
+		await _capture(id, "ui", T12_ENDING, notes)
+		return
+	await _wait(2.5)   # the card fades in over 2 s
+	var panel := s.find_child("CardPanel", true, false) as Control
+	if panel == null:
+		notes.append("PROBLEM: no CardPanel")
+		_problems.append("%s: no CardPanel" % id)
+	else:
+		_check_inside(id, "card panel", panel, notes)
+		notes.append("panel %s" % [panel.get_global_rect()])
+	await _capture(id, "ui", T12_ENDING, notes)
+
+
+## The tower with the BossTrigger band drawn over it from its real shape, the player on the floor
+## 4→5 step so the camera has the band in view. A non-band trigger is a PROBLEM.
+func _t12_tower_shot(id: String) -> void:
+	_gm().reset_game()
+	await _load_scene(T12_TOWER, 1.0)
+	var notes: Array[String] = []
+	var s: Node = tree.current_scene
+	var player := s.get_node_or_null("Player") as CharacterBody2D if s else null
+	var trigger := s.get_node_or_null("BossTrigger") as Area2D if s else null
+	var shape = (trigger.get_child(0) as CollisionShape2D).shape if trigger and trigger.get_child_count() > 0 else null
+	if player == null or not shape is RectangleShape2D:
+		notes.append("PROBLEM: Player missing or BossTrigger is not a RectangleShape2D")
+		_problems.append("%s: Player missing or BossTrigger is not a band" % id)
+	else:
+		# Draw only the trigger, from its real shape: a translucent fill and an outline over the
+		# band's global rect (debug_collisions_hint draws every area in the tower and buries it).
+		var col := trigger.get_child(0) as CollisionShape2D
+		var rect := Rect2(col.global_position - shape.size * 0.5, shape.size)
+		var fill := ColorRect.new()
+		fill.color = Color(1.0, 0.85, 0.1, 0.35)
+		fill.position = rect.position
+		fill.size = rect.size
+		fill.z_index = 50
+		var outline := ReferenceRect.new()
+		outline.border_color = Color(1.0, 0.85, 0.1, 1.0)
+		outline.border_width = 2.0
+		outline.editor_only = false
+		outline.position = rect.position
+		outline.size = rect.size
+		outline.z_index = 51
+		var tag := Label.new()
+		tag.text = "BossTrigger band %s" % [rect]
+		tag.position = rect.position + Vector2(4, -26)
+		tag.z_index = 51
+		s.add_child(fill)
+		s.add_child(outline)
+		s.add_child(tag)
+		player.global_position = T12_TOWER_VIEW_POS
+		player.velocity = Vector2.ZERO
+		await _wait(4.0)   # long enough for the boss-name banner to fade
+		_dm().force_reset()
+		await _wait(0.3)
+		notes.append("BossTrigger band %s, mask %d (overlay drawn from the shape)" % [rect, trigger.collision_mask])
+	await _capture(id, "scene", T12_TOWER, notes)
 
 
 ## Waits (real time, one process frame at a time) until `cond` is true; false on timeout.

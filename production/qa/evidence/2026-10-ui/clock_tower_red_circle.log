@@ -1,0 +1,145 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+  PASS: isolation: user:// is the aeth_phase0_test directory (C:/Users/BHASKAR BAHUKHANDI/AppData/Local/Temp/aeth_phase0_test_4fbca30bbbe24161834faf58b7341cd9/Godot/app_userdata/Aethelgard- The Glitch Sovereign)
+  PASS: isolation: GameManager and DialogueManager autoloads present
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH2-CLOCKTOWER] Initializing Clock Tower dungeon
+WARNING: [AssetManager] Production art slot missing for Kaelen combat sheet at res://assets/production_art/characters/player/kaelen_combat_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:985)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _ready (res://scripts/chapter2/ch2_clock_tower.gd:57)
+       [6] _fresh_tower (res://tests/integration/level/clock_tower_trigger_test.gd:144)
+       [7] _test_shape_samples (res://tests/integration/level/clock_tower_trigger_test.gd:205)
+       [8] _run (res://tests/integration/level/clock_tower_trigger_test.gd:98)
+WARNING: [AssetManager] V2 combat player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:994)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _ready (res://scripts/chapter2/ch2_clock_tower.gd:57)
+       [4] _fresh_tower (res://tests/integration/level/clock_tower_trigger_test.gd:144)
+       [5] _test_shape_samples (res://tests/integration/level/clock_tower_trigger_test.gd:205)
+       [6] _run (res://tests/integration/level/clock_tower_trigger_test.gd:98)
+  PASS: AC-6a: BossTrigger exists and is an Area2D
+  PASS: AC-6a: BossTrigger.body_entered is connected to _on_boss_trigger
+  PASS: AC-6a: _pre_boss_done starts false in a fresh tower
+  PASS: AC-6a: 15 samples from x=30 to x=730 (got 15, last 730.0)
+  FAIL: AC-6a: standing on floor 5 at x=30 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=80 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=130 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=180 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=230 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=280 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=330 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=380 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=430 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=480 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=530 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=580 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=630 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=680 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=730 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=770 overlaps the trigger by >= 8 px (measured 0.0 px)
+  measured: smallest floor-5 overlap 0.0 px
+  PASS: AC-6a: standing on floor 4 at x=30 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on floor 4 at x=80 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on floor 4 at x=130 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on floor 4 at x=180 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on floor 4 at x=230 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on floor 4 at x=280 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on floor 4 at x=330 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on floor 4 at x=380 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on floor 4 at x=430 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on floor 4 at x=480 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on floor 4 at x=530 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on floor 4 at x=580 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on floor 4 at x=630 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on floor 4 at x=680 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on floor 4 at x=730 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on floor 4 at x=770 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on the step at x=460, feet y=-40 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on the step at x=500, feet y=-40 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on the step at x=600, feet y=-40 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on the step at x=770, feet y=-40 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on the step at x=560, feet y=40 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on the step at x=600, feet y=40 does not touch the trigger (measured 0.0 px)
+  PASS: AC-6a: standing on the step at x=770, feet y=40 does not touch the trigger (measured 0.0 px)
+  measured: lift top (x=500, feet y=-127.5) overlap 0.0 px
+  FAIL: AC-6a: lift top overlaps the trigger by 8..11 px, the floor 5 arrival point (measured 0.0 px)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH2-CLOCKTOWER] Initializing Clock Tower dungeon
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+  PASS: AC-6b step: the player stands at feet y=-40.0 before the jump (at (460.0, -40.0), on_floor=true)
+  observed: step - trigger already fired while standing there: false
+  PASS: AC-6b step: the jump lands on floor 5 (feet y=-150.0, ended at (460.0, -150.0159) after 63 frames)
+  FAIL: AC-6b step: _pre_boss_done is true after arriving on floor 5
+  FAIL: AC-6b step: the pre_boss dialogue is running (never triggered)
+  FAIL: AC-6b step: the pre_boss section's own lines were spoken (never triggered)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH2-CLOCKTOWER] Initializing Clock Tower dungeon
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+  PASS: AC-6b lift: the lift platform was found and pinned at the top of its run
+  PASS: AC-6b lift: the player stands at feet y=-127.5 before the jump (at (500.0, -127.5), on_floor=true)
+  observed: lift - trigger already fired while standing there: false
+  PASS: AC-6b lift: the jump lands on floor 5 (feet y=-150.0, ended at (500.0, -150.0164) after 74 frames)
+  FAIL: AC-6b lift: _pre_boss_done is true after arriving on floor 5
+  FAIL: AC-6b lift: the pre_boss dialogue is running (never triggered)
+  FAIL: AC-6b lift: the pre_boss section's own lines were spoken (never triggered)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH2-CLOCKTOWER] Initializing Clock Tower dungeon
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+  PASS: AC-6c dash: _pre_boss_done is false before the dash
+  PASS: AC-6c dash: the player is dashing right (is_dashing=true, vx=720.0)
+  observed: dash ended at (202.2498, -150.0)
+  FAIL: AC-6c dash: _pre_boss_done is true after 30 physics frames of a dash from x=40 on floor 5
+
+CLOCK TOWER TRIGGER RESULT: 36 passed, 24 failed
+  FAIL: AC-6a: standing on floor 5 at x=30 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=80 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=130 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=180 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=230 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=280 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=330 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=380 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=430 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=480 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=530 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=580 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=630 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=680 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=730 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: standing on floor 5 at x=770 overlaps the trigger by >= 8 px (measured 0.0 px)
+  FAIL: AC-6a: lift top overlaps the trigger by 8..11 px, the floor 5 arrival point (measured 0.0 px)
+  FAIL: AC-6b step: _pre_boss_done is true after arriving on floor 5
+  FAIL: AC-6b step: the pre_boss dialogue is running (never triggered)
+  FAIL: AC-6b step: the pre_boss section's own lines were spoken (never triggered)
+  FAIL: AC-6b lift: _pre_boss_done is true after arriving on floor 5
+  FAIL: AC-6b lift: the pre_boss dialogue is running (never triggered)
+  FAIL: AC-6b lift: the pre_boss section's own lines were spoken (never triggered)
+  FAIL: AC-6c dash: _pre_boss_done is true after 30 physics frames of a dash from x=40 on floor 5
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)
+
+real	0m10.707s
+user	0m0.015s
+sys	0m0.015s

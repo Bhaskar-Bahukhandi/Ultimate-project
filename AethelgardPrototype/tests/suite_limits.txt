@@ -30,8 +30,8 @@
 # Counts below are from production/qa/evidence/2026-10-runner/run_all.log.
 
 res://tests/integration/meta/test_layout_test.gd            6   120
-res://tests/integration/project/load_all_test.gd          204   120
-res://tests/integration/dialogue/dialogue_test.gd          47   120
+res://tests/integration/project/load_all_test.gd          205   120
+res://tests/integration/dialogue/dialogue_test.gd          54   120
 res://tests/integration/core/context_stack_test.gd         33   120
 res://tests/integration/input/input_test.gd                52   120
 res://tests/unit/input/input_bound_texts_prune_test.gd     16   120
@@ -42,6 +42,9 @@ res://tests/unit/achievements/fragment_achievement_test.gd 21   120
 res://tests/unit/items/null_potion_test.gd                 83   120
 res://tests/integration/vfx/screen_flash_test.gd          107   120
 res://tests/integration/vfx/ch3_flash_runtime_test.gd      53   120
+res://tests/integration/ui/ui_version_card_test.gd         46   120
+res://tests/integration/story/region_lore_ironhold_test.gd 127  120
+res://tests/integration/level/clock_tower_trigger_test.gd  63   120
 res://tests/integration/story/chapter1_route_test.gd      391  1620
 res://tests/integration/story/chapter2_route_test.gd       49   480
 res://tests/integration/combat/combat_fixes_test.gd        45   120
