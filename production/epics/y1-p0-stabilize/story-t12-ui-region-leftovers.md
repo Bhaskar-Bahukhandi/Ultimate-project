@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-T12 (`production/plan/_source/Y1-P0.json#Y1-P0-T12`)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Feature
 > **Type**: Integration
 > **Estimate**: 4 days (one per item below)
@@ -111,7 +111,7 @@ Not measured.
 
 ## Acceptance Criteria
 
-- [ ] AC-1 **One version string.** `project.godot` sets `application/config/version="0.1.0"`. The main menu's
+- [x] AC-1 **One version string.** `project.godot` sets `application/config/version="0.1.0"`. The main menu's
       `VersionLabel` and the pause screen header both read it from `ProjectSettings` at runtime (one shared helper, e.g.
       a static function, so the format lives in one place): the menu shows `v0.1.0`; the pause header shows
       `AETHELGARD IDE v0.1.0 — PAUSED` when built and `AETHELGARD IDE v0.1.0 — Chapter N` after `_refresh_header()` for any
@@ -122,7 +122,7 @@ Not measured.
       presets' `file_version` and `product_version` equal `<setting>.0` (so the three cannot drift); the pause header is
       right for chapters 1 and 3 and when `current_chapter` is 0 / unset (today's `if … else 1` fallback). DEFERRED to the
       first exported build (T15 makes one): a capture or log from the exported exe shows `v0.1.0`.
-- [ ] AC-2 **Stats card fits.** The Chapter 2 end card is a centred panel: header (the "CHAPTER 2 COMPLETE" block and
+- [x] AC-2 **Stats card fits.** The Chapter 2 end card is a centred panel: header (the "CHAPTER 2 COMPLETE" block and
       act lines), two columns (left: Source Keys, corruption, level, playtime, gold, arena line, relationships; right:
       Chapter 1 and Chapter 2 choices, report destination), footer (the Act 2 lines, the thank-you line, the continue
       prompt). Every value and line of today's card appears, with the same wording: before the refactor the test's golden is
@@ -138,7 +138,7 @@ Not measured.
       auto-advance, skip input and the `show_choices` hand-off are unchanged (`chapter2_route_test` still passes).
       With `stretch/mode="viewport"` a smaller window scales the same 1280x720 layout, so one capture at 1280x720 is the
       check (recorded in the evidence README).
-- [ ] AC-3 **No titles in the name plate.** `SPEAKER_COLORS` gains `"Journal"`. The three lore pickups and the three
+- [x] AC-3 **No titles in the name plate.** `SPEAKER_COLORS` gains `"Journal"`. The three lore pickups and the three
       secret pickups call `DialogueManager.say("Journal", …)` with the title, in bold, as the first line of the text and
       the body after it; a secret with no title keeps today's fallback, `SECRET`, as that first line. Fractured Wastes' lore pickup calls `LoreJournal.discover_lore(lore_id, title, text, "world",
       "fractured_wastes")`. A test drives one lore pickup per region and one secret pickup per region: the name plate
@@ -147,7 +147,7 @@ Not measured.
       holds the entry for all three regions. The Wastes entry survives a save and load (`GameManager` save to an isolated
       slot, then load), and the saved JSON's `version` is still `1.2.0`. The `dev_signature_*_found` flags are still set as
       today.
-- [ ] AC-4 **Voice lint covers runtime calls.** `dialogue_test.gd` scans `scripts/**/*.gd` for literal speakers with
+- [x] AC-4 **Voice lint covers runtime calls.** `dialogue_test.gd` scans `scripts/**/*.gd` for literal speakers with
       `(DialogueManager\.say|_show_dialogue)\(\s*"([^"]*)"` (`\s` matches line breaks, so a call split after the bracket
       is read) and for title speakers with `(DialogueManager\.say|_show_dialogue)\(\s*(title|data\.get\("title")`. It fails
       when (a) any call takes a title as its speaker, or (b) a literal speaker is neither in `SPEAKER_COLORS` nor in
@@ -157,11 +157,11 @@ Not measured.
       so a broken regex cannot pass by reading nothing. Non-literal speakers (variables from `.dlg` data, NPC names) are
       out of the scan and the header says so. Its new checks raise `dialogue_test`'s `suite_limits.txt` minimum to the
       new count.
-- [ ] AC-5 **Ironhold dead branch gone.** In `_interact_boss`, the `combat_arena.tscn` fallback is deleted and an empty
+- [x] AC-5 **Ironhold dead branch gone.** In `_interact_boss`, the `combat_arena.tscn` fallback is deleted and an empty
       `scene_path` is checked first: `push_error` and return before the level warning, the return point or any meta is
       set. The stale comment at :589-591 is corrected. A test calls `_interact_boss` with an empty-path gate: no
       `transition_started`, no `boss_fight_id` meta set; `chapter2_route_test` (AdminBossGate) still passes.
-- [ ] AC-6 **Clock Tower trigger on the path.** First, a headless measurement against today's circle records, for a
+- [x] AC-6 **Clock Tower trigger on the path.** First, a headless measurement against today's circle records, for a
       player body standing on floor 5 at x = 50, 100, …, 750, at the left end of the floor 4→5 step and on the lift at its
       top, whether it overlaps `BossTrigger` (expected: no or almost no overlap; the result goes in the evidence log either
       way). Then the circle is replaced by a `RectangleShape2D` band: x from the tower's inner left to inner right wall
@@ -173,7 +173,7 @@ Not measured.
       steps physics frames — `_pre_boss_done` becomes true and the `pre_boss` dialogue starts, in both cases; and places
       the player standing on floor 5 at x = 20 with the dash velocity and steps 30 physics frames — `_pre_boss_done` is
       true. The `body_entered` handler, the dialogue and the boss setup are unchanged.
-- [ ] AC-7 **Suite, screenshots and records.** A new suite `tests/integration/ui/ui_region_leftovers_test.gd` (its own
+- [x] AC-7 **Suite, screenshots and records.** A new suite `tests/integration/ui/ui_region_leftovers_test.gd` (its own
       column-0 result line, `.uid`, `tests/suite_limits.txt` entry at its final count and 3x its measured time, listed in
       `run_all_tests.ps1` — 20 suites — and in `ci.yml` with a quoted step name) holds AC-1, AC-2, AC-3, AC-5 and AC-6;
       AC-4 lives in `dialogue_test.gd`. Watch-fail in a scratch worktree after a green control, one mutation per run, each
@@ -261,7 +261,7 @@ Not measured.
 the full-suite log, and a README mapping each AC to its file.
 **Run result**: to be recorded by /dev-story (OBSERVED with the retained screenshots).
 
-**Status**: [ ] Not yet created
+**Status**: [x] Created — production/qa/evidence/2026-10-ui/ (README.md maps every AC to its file; screenshots are named t12_*.png)
 
 ---
 
@@ -269,3 +269,42 @@ the full-suite log, and a README mapping each AC to its file.
 
 - Depends on: Y1-P0-T02 (done).
 - Unlocks: Y1-P0-T14a (Chapter 3 exit → credits playthrough legs; sprint plan order: T14a runs straight after T12).
+
+---
+
+## Completion Notes
+**Completed**: 2026-10-25
+**Criteria**: 7/7 passing. CI run [40167919865](https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/40167919865) on `b84b9f8` (ubuntu-latest) is green: every step, the three new
+T12 steps in 1 s / 3 s / 8 s, no runner `::warning::` annotations. Local full suite 22/22 on the final code (1208 s), every
+count equal to its `suite_limits.txt` minimum. The exported release build reports FileVersion / ProductVersion `0.1.0.0`
+and shows `v0.1.0` on its main menu (AC-1's exported-build check, done now rather than at T15).
+**Commits**: `331c34c` fix(ui) version + stats card; `8e3e38f` fix(dialogue) Journal speaker + Ironhold; `a5c0d98` fix(level)
+Clock Tower trigger; `b84b9f8` test(ui) suites, lint, tour stops, evidence.
+**Deviations** (advisory):
+- NOT ASSESSED: GDD / ADR / TR-registry traceability (none exist for this cleanup).
+- AC-7: three suites (`ui_version_card_test` 46, `region_lore_ironhold_test` 127, `clock_tower_trigger_test` 63) instead of
+  one `ui_region_leftovers_test`, because the work was split across parallel implementers on disjoint files: 22 suites,
+  not 20.
+- AC-6: one collision line beyond the shape — `BossTrigger.collision_mask = 2` (the player is on layer 2; the default mask 1
+  meant body_entered could never fire). User decision, 2026-10-25. The lift top fires the trigger (about 9.5 px inside the
+  band's lower edge); the user chose to keep it.
+- AC-6 dash: reworked at code review (R3) — a dash starting on floor 5 is already inside the band, so the first version
+  could not fail; the suite now checks the band reaches both inner walls and that a real dash from x=300 stays in the band
+  at every frame. The story's start x=20 is inside the left wall.
+- AC-2: the card lands on the 16 px font floor with today's 36-line structure; drawing rules / blanks as separators would
+  allow more. The card screenshot predates the z-order fix (R4); layout unchanged; a check and mutation (k) cover it.
+- Evidence path `production/qa/evidence/2026-10-ui/` (the sprint plan and QA plan say `2026-11-ui/`); screenshots named
+  `t12_*.png`.
+- `reachability_test` was not given `pre_boss` (side-view room); AC-6's physics test replaces it (recorded at readiness).
+**Test Evidence**: Integration — the three suites above and the runtime speaker lint in `dialogue_test.gd` (54 checks,
+82-name baseline); 11 mutations (a)-(k), each failing its own suite after a green control (`watchfail_mutations.log`);
+live-renderer screenshots; `production/qa/evidence/2026-10-ui/`.
+**Run result**: OBSERVED — menu `v0.1.0`, pause header `AETHELGARD IDE v0.1.0 — Chapter 1`, the Chapter 2 card in two
+columns inside 1280x720, the Clock Tower band across floor 5 (`t12_*.png`), and the exported build's menu
+(`export_smoke_boot.png`).
+**Code Review**: Complete — /code-review (godot-gdscript-specialist, godot-specialist, qa-tester) CHANGES REQUIRED (R1 raw
+newlines in the card strings, R2 a displaced doc comment, R3 non-discriminating dash/lift checks, R4 the card drawn over the
+fade-out) → all fixed with S1-S4, re-review APPROVED; LP-CODE-REVIEW APPROVE (advisories in TD-020 / TD-021);
+QL-TEST-COVERAGE ADEQUATE (advisories in TD-021).
+**Follow-up**: TD-019 register the 82 runtime speakers; TD-020 Clock Tower MidTrigger / time-zone default mask; TD-021 T12
+follow-ups; TD-022 `export_windows.ps1` smoke exit code.
