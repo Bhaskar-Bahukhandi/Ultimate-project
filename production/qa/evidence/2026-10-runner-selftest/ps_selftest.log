@@ -1,0 +1,19 @@
+PASS  stub_godot.cmd has CRLF line endings only
+PASS  pass: exit 0, no RUNNER FAIL/WARN, marker, override named
+PASS  script errors: exit 1, 2 lines listed
+PASS  pass with STUB_EXIT=3: exit 3 passes through
+PASS  last result line wins (1 then 5, min 4): exit 0
+PASS  last result line wins (5 then 1, min 4): exit 1
+PASS  no result line, min 1: exit 1
+PASS  ok=7 bad=0, min 7: exit 0
+PASS  ok=7 bad=0, min 8: exit 1
+PASS  unregistered res://tests/*_test.gd: exit 1, stub not run
+PASS  GODOT at a missing absolute path: exit 1, 'did not start' text
+PASS  warning: min 10, ran 13 warns, exit 0, no RUNNER FAIL
+PASS  warning: min 11, ran 13 (slack 2) does not warn
+PASS  warning: min 13, ran 13 does not warn
+PASS  warning: min 0, ran 13 does not warn
+PASS  warning leaves a non-zero Godot exit code unchanged (exit 3)
+PASS  in-process leak: caller's $code=0 / $lines do not hide a launch failure
+
+RUNNER PS SELFTEST RESULT: 17 passed, 0 failed

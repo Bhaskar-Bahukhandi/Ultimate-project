@@ -1,0 +1,36 @@
+grep (GNU grep) 3.11
+timeout (GNU coreutils) 9.4
+GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)
+Runner self-test: /mnt/c/Users/BHASKAR BAHUKHANDI/OneDrive/Desktop/Ultimate project/AethelgardPrototype/tests/run_tests.sh
+  timeout: timeout (GNU coreutils) 9.4
+  PASS: pass, 2 checks, MIN_CHECKS=2: exit 0, no RUNNER FAIL, stub ran
+  PASS: script_errors with Godot exit 0: exit 1, '2 script error line(s)', all four lines listed
+  PASS: pass with STUB_EXIT=3: Godot's own exit code 3 passes through
+  PASS: two_results (1 then 5), MIN_CHECKS=4: last result line wins, exit 0
+  PASS: two_results_reversed (5 then 1), MIN_CHECKS=4: last line wins, exit 1 with '1 check(s) ran'
+  PASS: no_result, MIN_CHECKS=1: exit 1 and 'no result line (expected at least 1 checks to run)'
+  PASS: loadall 'ok=7 bad=0', MIN_CHECKS=7: exit 0
+  PASS: loadall 'ok=7 bad=0', MIN_CHECKS=8: exit 1
+  PASS: unregistered res://tests/selftest/fake_test.gd: exit 1, 'no entry in tests/suite_limits.txt', stub not run
+  PASS: sleep, TEST_TIMEOUT=2, MIN_CHECKS=1: exit 124, 'timed out after 2 s', no 'no result line'
+  PASS: ignore_term (TERM ignored), TEST_TIMEOUT=2: KILL after 10 s (137) mapped to exit 124 within 17 s, 'timed out after 2 s'
+  PASS: selfkill after 1 s, TEST_TIMEOUT=20: exit 137 passes through, no 'timed out' text
+  PASS: non-GNU timeout first on PATH, no GITHUB_ACTIONS: warning, runs without a limit, exit 0
+  PASS: non-GNU timeout first on PATH, GITHUB_ACTIONS=true: RUNNER FAIL 'GNU timeout(1) not found', exit 1
+  PASS: GODOT at a missing file: exit 127, no RUNNER FAIL message (characterises today's silent failure)
+  PASS: MIN_CHECKS=x: exit 1, 'MIN_CHECKS must be a whole number', stub not run
+  PASS: TEST_TIMEOUT=0: exit 1, stub not run
+  PASS: warning: min 10, ran 13: 'RUNNER WARN res://selftest/stub_case.gd: 13 checks ran, suite_limits.txt minimum is 10', exit 0
+  PASS: warning: min 10, ran 12: no warning, exit 0
+  PASS: warning: min 10, ran 10: no warning, exit 0
+  PASS: warning: min 21, ran 24: no warning, exit 0
+  PASS: warning: min 21, ran 25: 'RUNNER WARN res://selftest/stub_case.gd: 25 checks ran, suite_limits.txt minimum is 21', exit 0
+  PASS: warning: min 0, ran 50: no warning, exit 0
+  PASS: warning under GITHUB_ACTIONS=true: '::warning::' prefix, exit 0
+  PASS: warning: a suite that printed 50 checks and then timed out prints no RUNNER WARN, exit 124
+  PASS: warning: MIN_CHECKS=08 is read as 8 (no octal error), ran 13 warns, exit 0
+  PASS: nul_listing: no 'Binary file', listing equals four literal lines (NULs kept), exit 1
+  PASS: ff_result under LC_ALL=C.UTF-8, MIN_CHECKS=2: runner reads the result line, exit 0
+  PASS: the runner's scratch TMPDIR is empty after all cases (temp logs removed)
+  PASS: the self-test finished in 20 s (limit 90 s)
+RUNNER SELFTEST RESULT: 30 passed, 0 failed

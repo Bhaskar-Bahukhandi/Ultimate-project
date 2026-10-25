@@ -1,0 +1,192 @@
+td010_watchfail_mutations.log - Y1-P0-TD-010 AC-8 mutation watch-fail
+Scratch worktree at HEAD (b14c956) + the current uncommitted TD-010 change; a control run of both self-tests,
+then one mutation per run (reverted after). GODOT and GITHUB_ACTIONS unset. Git Bash: grep 3.0, GNU timeout 8.32.
+Files copied: .github/workflows/ci.yml, AethelgardPrototype/tests/run_phase0_tests.ps1, AethelgardPrototype/tests/run_tests.sh, AethelgardPrototype/tests/suite_limits.txt, AethelgardPrototype/tests/runner_selftest/ps_fixtures/checks13.txt, AethelgardPrototype/tests/runner_selftest/ps_fixtures/loadall.txt, AethelgardPrototype/tests/runner_selftest/ps_fixtures/no_result.txt, AethelgardPrototype/tests/runner_selftest/ps_fixtures/pass.txt, AethelgardPrototype/tests/runner_selftest/ps_fixtures/script_errors.txt, AethelgardPrototype/tests/runner_selftest/ps_fixtures/two_results.txt, AethelgardPrototype/tests/runner_selftest/ps_fixtures/two_results_reversed.txt, AethelgardPrototype/tests/runner_selftest/stub_godot.cmd, AethelgardPrototype/tests/runner_selftest/stub_godot.sh, AethelgardPrototype/tests/runner_selftest/test_runner_ps.ps1, AethelgardPrototype/tests/runner_selftest/test_runners.sh
+
+== control (bash self-test, no mutation)
+   exit 0; RUNNER SELFTEST RESULT: 30 passed, 0 failed; 39 s -> GREEN
+
+== control (ps self-test, no mutation)
+   exit 0; RUNNER PS SELFTEST RESULT: 17 passed, 0 failed; 10 s -> GREEN
+
+== (a) run_tests.sh reads the first result line, not the last
+   bash self-test: exit 1; RUNNER SELFTEST RESULT: 28 passed, 2 failed; 38 s
+   expected: the two_results case fails -> FAILED as expected
+   diff applied:
+     --- a/tests/run_tests.sh
+     +++ b/tests/run_tests.sh
+     @@ -123 +123 @@
+     -    result_line="$({ LC_ALL=C grep -a -E '^[A-Z0-9][A-Z0-9 ]* (RESULT: [0-9]+ passed, [0-9]+ failed|ok=[0-9]+ bad=[0-9]+)' "$log" || true; } | tail -n 1)"
+     +    result_line="$({ LC_ALL=C grep -a -E '^[A-Z0-9][A-Z0-9 ]* (RESULT: [0-9]+ passed, [0-9]+ failed|ok=[0-9]+ bad=[0-9]+)' "$log" || true; } | head -n 1)"
+   FAIL: two_results (1 then 5), MIN_CHECKS=4: last result line wins, exit 0 -- exit 1, expected 0; output has 'RUNNER FAIL'
+   FAIL: two_results_reversed (5 then 1), MIN_CHECKS=4: last line wins, exit 1 with '1 check(s) ran' -- exit 0, expected 1; output lacks '1 check(s) ran, expected at least 4'
+
+== (b) the elapsed rule removed from the timeout test
+   bash self-test: exit 1; RUNNER SELFTEST RESULT: 29 passed, 1 failed; 38 s
+   expected: the selfkill case fails (reported as a timeout) -> FAILED as expected
+   diff applied:
+     --- a/tests/run_tests.sh
+     +++ b/tests/run_tests.sh
+     @@ -92,2 +92 @@
+     -if [ ${#watchdog[@]} -gt 0 ] && { [ "$code" -eq 124 ] || [ "$code" -eq 137 ]; } \
+     -    && [ $((SECONDS - start)) -ge "$timeout_sec" ]; then
+     +if [ ${#watchdog[@]} -gt 0 ] && { [ "$code" -eq 124 ] || [ "$code" -eq 137 ]; }; then
+   FAIL: selfkill after 1 s, TEST_TIMEOUT=20: exit 137 passes through, no 'timed out' text -- exit 124, expected 137; output has 'timed out'
+
+== (c) the script-error scan removed
+   bash self-test: exit 1; RUNNER SELFTEST RESULT: 28 passed, 2 failed; 36 s
+   expected: the script_errors case fails -> FAILED as expected
+   diff applied:
+     --- a/tests/run_tests.sh
+     +++ b/tests/run_tests.sh
+     @@ -103 +103 @@
+     -n="$(LC_ALL=C grep -a -cE 'SCRIPT ERROR|Parse Error' "$log" || true)"
+     +n=0
+   FAIL: script_errors with Godot exit 0: exit 1, '2 script error line(s)', all four lines listed -- exit 0, expected 1; output lacks 'RUNNER FAIL res://selftest/stub_case.gd: 2 s
+   FAIL: nul_listing: no 'Binary file', listing equals four literal lines (NULs kept), exit 1 -- exit 0, expected 1; listing differs from the four expected lines (od -c: actual / 
+
+== (d1) -a removed from the -A1 listing grep
+   bash self-test: exit 1; RUNNER SELFTEST RESULT: 29 passed, 1 failed; 39 s
+   expected: the nul_listing case fails -> FAILED as expected
+   diff applied:
+     --- a/tests/run_tests.sh
+     +++ b/tests/run_tests.sh
+     @@ -107 +107 @@
+     -    { LC_ALL=C grep -a -E -A1 'SCRIPT ERROR|Parse Error' "$log" || true; } | LC_ALL=C grep -a -v '^--$' | LC_ALL=C sed 's/^/  /'
+     +    { LC_ALL=C grep -E -A1 'SCRIPT ERROR|Parse Error' "$log" || true; } | LC_ALL=C grep -a -v '^--$' | LC_ALL=C sed 's/^/  /'
+   FAIL: nul_listing: no 'Binary file', listing equals four literal lines (NULs kept), exit 1 -- output has 'Binary file'; listing differs from the four expected lines (od -c: act
+
+== (d2) -a removed from the grep -v '^--$' filter
+   bash self-test: exit 1; RUNNER SELFTEST RESULT: 29 passed, 1 failed; 39 s
+   expected: the nul_listing case fails -> FAILED as expected
+   diff applied:
+     --- a/tests/run_tests.sh
+     +++ b/tests/run_tests.sh
+     @@ -107 +107 @@
+     -    { LC_ALL=C grep -a -E -A1 'SCRIPT ERROR|Parse Error' "$log" || true; } | LC_ALL=C grep -a -v '^--$' | LC_ALL=C sed 's/^/  /'
+     +    { LC_ALL=C grep -a -E -A1 'SCRIPT ERROR|Parse Error' "$log" || true; } | LC_ALL=C grep -v '^--$' | LC_ALL=C sed 's/^/  /'
+   FAIL: nul_listing: no 'Binary file', listing equals four literal lines (NULs kept), exit 1 -- output has 'Binary file'; listing differs from the four expected lines (od -c: act
+
+== (e) -k 10 dropped from the watchdog
+   bash self-test: exit 1; RUNNER SELFTEST RESULT: 29 passed, 1 failed; 46 s
+   expected: the ignore_term case fails -> FAILED as expected
+   diff applied:
+     --- a/tests/run_tests.sh
+     +++ b/tests/run_tests.sh
+     @@ -67 +67 @@
+     -    *coreutils*) watchdog=(timeout -k 10 "$timeout_sec") ;;
+     +    *coreutils*) watchdog=(timeout "$timeout_sec") ;;
+   FAIL: ignore_term (TERM ignored), TEST_TIMEOUT=2: KILL after 10 s (137) mapped to exit 124 within 17 s, 'timed out after 2 s' -- runner took 21 s (the KILL 10 s after the TERM 
+
+== (h) the warning's > changed to >= (bash)
+   bash self-test: exit 1; RUNNER SELFTEST RESULT: 28 passed, 2 failed; 39 s
+   expected: the min 10 / ran 12 case warns and fails -> FAILED as expected
+   diff applied:
+     --- a/tests/run_tests.sh
+     +++ b/tests/run_tests.sh
+     @@ -139 +139 @@
+     -            if [ "$ran" -gt $((min_checks + slack)) ]; then
+     +            if [ "$ran" -ge $((min_checks + slack)) ]; then
+   FAIL: warning: min 10, ran 12: no warning, exit 0 -- output has 'RUNNER WARN'
+   FAIL: warning: min 21, ran 24: no warning, exit 0 -- output has 'RUNNER WARN'
+
+== (i) the unregistered-suite refusal removed (bash)
+   bash self-test: exit 1; RUNNER SELFTEST RESULT: 29 passed, 1 failed; 39 s
+   expected: the unregistered case fails -> FAILED as expected
+   diff applied:
+     --- a/tests/run_tests.sh
+     +++ b/tests/run_tests.sh
+     @@ -45 +44,0 @@
+     -        res://tests/*_test.gd) fail "no entry in tests/suite_limits.txt"; exit 1 ;;
+   FAIL: unregistered res://tests/selftest/fake_test.gd: exit 1, 'no entry in tests/suite_limits.txt', stub not run -- exit 0, expected 1; output lacks 'no entry in tests/suite_li
+
+== (j) the 10# decimal normalisation of MIN_CHECKS removed (code review R2)
+   bash self-test: exit 1; RUNNER SELFTEST RESULT: 29 passed, 1 failed; 39 s
+   expected: the MIN_CHECKS=08 case fails -> FAILED as expected
+   diff applied:
+     --- a/tests/run_tests.sh
+     +++ b/tests/run_tests.sh
+     @@ -56 +55,0 @@
+     -min_checks=$((10#$min_checks))   # a leading zero ("08") must not mean octal in $(( )) below
+   FAIL: warning: MIN_CHECKS=08 is read as 8 (no octal error), ran 13 warns, exit 0 -- output has 'value too great'; output lacks the exact line 'RUNNER WARN res://selftest/stub_c
+
+== (k) the timed-out guard on the result-line block removed (code review S2)
+   bash self-test: exit 1; RUNNER SELFTEST RESULT: 28 passed, 2 failed; 39 s
+   expected: the result_then_sleep case fails -> FAILED as expected
+   diff applied:
+     --- a/tests/run_tests.sh
+     +++ b/tests/run_tests.sh
+     @@ -115 +115 @@
+     -if [ "$min_checks" -gt 0 ] && [ "$timed_out" -eq 0 ]; then
+     +if [ "$min_checks" -gt 0 ]; then
+   FAIL: sleep, TEST_TIMEOUT=2, MIN_CHECKS=1: exit 124, 'timed out after 2 s', no 'no result line' -- output has 'no result line'
+   FAIL: warning: a suite that printed 50 checks and then timed out prints no RUNNER WARN, exit 124 -- output has 'RUNNER WARN'
+
+== (f) run_phase0_tests.ps1 $code = $null removed
+   ps self-test: exit 1; RUNNER PS SELFTEST RESULT: 16 passed, 1 failed; 10 s
+   expected: the PS in-process leak case fails -> FAILED as expected
+   diff applied:
+     --- a/tests/run_phase0_tests.ps1
+     +++ b/tests/run_phase0_tests.ps1
+     @@ -104 +103,0 @@
+     -$code = $null
+   FAIL: in-process leak: caller's $code=0 / $lines do not hide a launch failure
+
+== (g) the $env:GODOT override removed
+   ps self-test: exit 1; RUNNER PS SELFTEST RESULT: 2 passed, 15 failed; 13 s
+   expected: every PS case that needs the stub fails (at least 12) -> FAILED as expected
+   diff applied:
+     --- a/tests/run_phase0_tests.ps1
+     +++ b/tests/run_phase0_tests.ps1
+     @@ -41 +41 @@
+     -if ($env:GODOT) {
+     +if ($false) {
+   FAIL: pass: exit 0, no RUNNER FAIL/WARN, marker, override named
+   FAIL: script errors: exit 1, 2 lines listed
+   FAIL: pass with STUB_EXIT=3: exit 3 passes through
+   FAIL: last result line wins (1 then 5, min 4): exit 0
+   FAIL: last result line wins (5 then 1, min 4): exit 1
+   FAIL: no result line, min 1: exit 1
+   FAIL: ok=7 bad=0, min 7: exit 0
+   FAIL: ok=7 bad=0, min 8: exit 1
+   FAIL: GODOT at a missing absolute path: exit 1, 'did not start' text
+   FAIL: warning: min 10, ran 13 warns, exit 0, no RUNNER FAIL
+   FAIL: warning: min 11, ran 13 (slack 2) does not warn
+   FAIL: warning: min 13, ran 13 does not warn
+   FAIL: warning: min 0, ran 13 does not warn
+   FAIL: warning leaves a non-zero Godot exit code unchanged (exit 3)
+   FAIL: in-process leak: caller's $code=0 / $lines do not hide a launch failure
+
+== (h-ps) the warning's -gt changed to -ge (PS)
+   ps self-test: exit 1; RUNNER PS SELFTEST RESULT: 16 passed, 1 failed; 9 s
+   expected: the PS min 11 / ran 13 case warns and fails -> FAILED as expected
+   diff applied:
+     --- a/tests/run_phase0_tests.ps1
+     +++ b/tests/run_phase0_tests.ps1
+     @@ -181 +181 @@
+     -            if ($ran -gt $MinChecks + $slack) {
+     +            if ($ran -ge $MinChecks + $slack) {
+   FAIL: warning: min 11, ran 13 (slack 2) does not warn
+
+== (l-ps) the 'GODOT override' line removed (code review S1)
+   ps self-test: exit 1; RUNNER PS SELFTEST RESULT: 16 passed, 1 failed; 10 s
+   expected: the PS pass case fails -> FAILED as expected
+   diff applied:
+     --- a/tests/run_phase0_tests.ps1
+     +++ b/tests/run_phase0_tests.ps1
+     @@ -47 +46,0 @@
+     -    Write-Host "GODOT override: $($godot.FullName)"
+   FAIL: pass: exit 0, no RUNNER FAIL/WARN, marker, override named
+
+== (i-ps) the unregistered-suite refusal removed (PS)
+   ps self-test: exit 1; RUNNER PS SELFTEST RESULT: 16 passed, 1 failed; 10 s
+   expected: the PS unregistered case fails -> FAILED as expected
+   diff applied:
+     --- a/tests/run_phase0_tests.ps1
+     +++ b/tests/run_phase0_tests.ps1
+     @@ -59 +59 @@
+     -if (-not $limits -and $Script -clike 'res://tests/*_test.gd') {
+     +if ($false) {
+   FAIL: unregistered res://tests/*_test.gd: exit 1, stub not run
+
+ALL MUTATIONS CAUGHT: yes

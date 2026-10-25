@@ -5,8 +5,12 @@
 # Godot still exits with the code the script chose. The runner then prints
 # "RUNNER FAIL <script>: <N> script error line(s)" with the matching lines, and
 # exits 1 (or keeps Godot's own non-zero code).
-# If Godot never starts (a missing or unrunnable exe, so no exit code), the runner prints
-# "RUNNER FAIL <script>: Godot did not start" and exits 1 (TD-009).
+# If Godot never starts (a missing or unrunnable exe, so no exit code), or the pipeline
+# throws before the exit code is read, the runner prints "RUNNER FAIL <script>: Godot did not
+# start, or the runner failed before reading its exit code" and exits 1 (TD-009).
+# Setting the GODOT environment variable to an absolute exe path replaces the C:\Godot lookup
+# (TD-010: tests/runner_selftest points it at a stub) and prints "GODOT override: <path>";
+# unset, the lookup is unchanged.
 # Two limits per suite come from tests/suite_limits.txt (TD-007):
 # - a time limit: a script error in the function that would call quit() leaves Godot
 #   running forever, so at the deadline the runner stops Godot together with the real
@@ -14,7 +18,9 @@
 #   after <N> s" and exits 124;
 # - a minimum number of checks that ran (passed + failed, read from the last
 #   line that starts with an uppercase name and "RESULT: <N> passed, <M> failed" or "ok=<N> bad=<M>"), which catches a test
-#   function that returns early without any error.
+#   function that returns early without any error. A suite that ran more checks than the
+#   minimum by over max(2, ceil(min/10)) prints "RUNNER WARN <script>: <ran> checks ran,
+#   suite_limits.txt minimum is <min>" (the minimum is stale; exit code unchanged, TD-010).
 # A *_test.gd under res://tests/ without an entry in that file is refused; any other
 # script gets 600 s and no minimum.
 # Usage (from AethelgardPrototype/):
@@ -32,8 +38,17 @@ param(
 )
 $ErrorActionPreference = "Stop"
 $project = Split-Path -Parent $PSScriptRoot
-$godot = Get-ChildItem "C:\Godot" -Filter "Godot_v4*_console.exe" | Sort-Object Name -Descending | Select-Object -First 1
-if (-not $godot) { throw "Godot console executable not found under C:\Godot" }
+if ($env:GODOT) {
+    # Override (TD-010 self-test). Must be an ABSOLUTE path: a relative one resolves against the
+    # process working directory, not this script. A FileInfo for a missing file is still returned,
+    # so a bad path fails at the launch below ("did not start"), not here.
+    $godot = [IO.FileInfo]::new($env:GODOT)
+    # Said out loud: a GODOT left set in the shell (say, to the non-console exe) changes every run.
+    Write-Host "GODOT override: $($godot.FullName)"
+} else {
+    $godot = Get-ChildItem "C:\Godot" -Filter "Godot_v4*_console.exe" | Sort-Object Name -Descending | Select-Object -First 1
+    if (-not $godot) { throw "Godot console executable not found under C:\Godot" }
+}
 
 # Each line of suite_limits.txt: <res:// path> <min_checks> <timeout_seconds>; '#' starts a comment.
 $limits = $null
@@ -67,7 +82,7 @@ $dog = [powershell]::Create()
     for ($i = 0; $i -lt 10; $i++) {
         try {
             $procs = @(Get-CimInstance Win32_Process -Filter "ParentProcessId=$ParentId AND Name='$ExeName'" -ErrorAction Stop)
-        } catch { Start-Sleep -Seconds 1; continue }
+        } catch { Start-Sleep -Seconds 1; continue }   # after 10 failed queries the loop ends and the suite runs on (fail-open)
         if ($procs.Count -eq 0) { break }
         $Watch.Killing = $true
         foreach ($p in $procs) {
@@ -76,7 +91,7 @@ $dog = [powershell]::Create()
                 $kids = @(Get-CimInstance Win32_Process -Filter "ParentProcessId=$($p.ProcessId)" -ErrorAction SilentlyContinue)
                 foreach ($k in $kids) { Stop-Process -Id $k.ProcessId -Force -ErrorAction SilentlyContinue }
                 Stop-Process -Id $p.ProcessId -Force -ErrorAction SilentlyContinue
-                $killed = $?
+                $killed = $?   # success of the Stop-Process just above (the console exe), not of the whole kill
             }
             if ($killed) { $Watch.TimedOut = $true }
         }
@@ -117,7 +132,7 @@ $ErrorActionPreference = "Stop"
 $failed = $false
 if ($null -eq $code -and -not $watch.TimedOut) {
     Write-Host ""
-    Write-Host "RUNNER FAIL $($Script): Godot did not start"
+    Write-Host "RUNNER FAIL $($Script): Godot did not start, or the runner failed before reading its exit code"
     $failed = $true
 }
 if ($watch.TimedOut) {
@@ -160,6 +175,12 @@ if ($MinChecks -gt 0 -and -not $watch.TimedOut -and $null -ne $code) {
             Write-Host ""
             Write-Host "RUNNER FAIL $($Script): $ran check(s) ran, expected at least $MinChecks"
             $failed = $true
+        } else {
+            # Stale minimum (TD-010): warn only, never fail. Integer ceil(min/10) as (min+9)/10 floored.
+            $slack = [Math]::Max(2, [int][Math]::Floor(($MinChecks + 9) / 10))
+            if ($ran -gt $MinChecks + $slack) {
+                Write-Host "RUNNER WARN $($Script): $ran checks ran, suite_limits.txt minimum is $MinChecks"
+            }
         }
     }
 }

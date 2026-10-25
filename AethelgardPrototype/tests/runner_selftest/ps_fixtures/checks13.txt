@@ -1,0 +1,1 @@
+STUB RESULT: 12 passed, 1 failed

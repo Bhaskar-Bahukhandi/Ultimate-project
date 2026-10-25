@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-TD-010 (`docs/tech-debt-register.md#TD-010`; added to Sprint 001 on 2026-10-24, `production/sprints/sprint-001.md`)
-> **Status**: Ready
+> **Status**: In Progress
 > **Layer**: Foundation
 > **Type**: Integration
 > **Estimate**: 2 days (cut line: the stale-min_checks warning, then the suite_limits.txt header doc)
@@ -119,8 +119,9 @@ and a new item for the deferred PowerShell timeout cases, at close), evidence, t
         - `nul_listing` (the NUL sits inside the line after `SCRIPT ERROR`, i.e. in the `-A1` context) → the runner's
           output, saved to a file, contains no `Binary file`, and its listing compared with `cmp` equals four literal
           expected lines written in the self-test (the `od -c` dump is kept as documentation only);
-        - `ff_result` (result line `FF RESULT: 2 passed, 0 failed` with a 0xFF byte inside the name), `LC_ALL=C.UTF-8`,
-          `MIN_CHECKS=2` → exit 0 (see AC-3 for how this case discriminates);
+        - `ff_result` (result line `FF RESULT: 2 passed, 0 failed` with a 0xFF byte at its end — *amended during
+          /dev-story*: a byte inside the name is not a result line at all), `LC_ALL=C.UTF-8`, `MIN_CHECKS=2` → exit 0
+          (see AC-3);
         - `GODOT` at a missing file → exit 127 (a characterisation of today's silent failure: no RUNNER FAIL message);
         - `MIN_CHECKS=x` → exit 1, `MIN_CHECKS must be a whole number`; `TEST_TIMEOUT=0` → exit 1;
         - warning cases per AC-6.
@@ -131,12 +132,13 @@ and a new item for the deferred PowerShell timeout cases, at close), evidence, t
       as a step before the first test suite (no Godot needed), with a double-quoted `name:` if it contains `: ` and a
       `timeout-minutes` of 3; it prints `grep --version | head -1` first; the first CI run after the push is green and is
       recorded (its step duration and the grep version too).
-- [ ] AC-3 **Line 119.** `run_tests.sh:119` reads the result with `LC_ALL=C grep -a -oE …`, like its neighbours. In the
-      `ff_result` case the self-test also runs the pre-fix pattern (the old `grep -oE '…'`, copied literally, without
-      `-a` / `LC_ALL=C`) on the same input under `LC_ALL=C.UTF-8` and asserts it extracts nothing; if it does extract,
-      the case is reported `SKIP (this grep cannot show the old bug)`, and a SKIP fails the self-test when
-      `GITHUB_ACTIONS=true`. So in CI the case proves both that the fixed line reads the result and that the old one
-      would not. Locally on Git Bash (grep 3.0) the case is expected to SKIP; the story records that.
+- [ ] AC-3 **Line 119.** `run_tests.sh:119` reads the result with `LC_ALL=C grep -a -oE …`, like its neighbours, and the
+      `ff_result` case shows the runner reads a result line that ends in 0xFF under `LC_ALL=C.UTF-8`. *Amended at code
+      review (user decision [A]):* the first wording also ran the pre-fix pattern and required it to extract nothing in
+      CI. That cannot hold: with `-o` grep prints only the matched text, which is plain ASCII, so the old pattern
+      extracts the result on GNU grep 3.0 and 3.11 alike (verified on Git Bash and WSL Ubuntu), and a byte inside the
+      match defeats the first grep too. No input the first grep accepts makes the old line 119 misbehave, so the change
+      is a consistency hardening, not a bug fix, and the old-pattern check (which would have failed CI) was removed.
 - [ ] AC-4 **PowerShell runner changes.** `run_phase0_tests.ps1` uses `$env:GODOT` as the executable when it is set
       (`[IO.FileInfo]`, so a missing path still reaches the launch and fails as "did not start"; the path must be
       absolute, said in the comment), else the existing `C:\Godot` lookup — with `GODOT` unset every suite runs exactly as
@@ -172,7 +174,7 @@ and a new item for the deferred PowerShell timeout cases, at close), evidence, t
       dropped → the `ignore_term` case fails by assertion within the 40 s outer cap; (f) `run_phase0_tests.ps1`'s
       `$code = $null` removed → the PS leak case fails; (g) the `$env:GODOT` override removed → every PS case fails;
       (h) the warning's `>` changed to `>=` → the ran-12 case warns and fails; (i) the unregistered-suite refusal (:41)
-      removed → the unregistered case fails (marker present). The `ff_result` discrimination is CI-only (AC-3).
+      removed → the unregistered case fails (marker present). (The CI-only `ff_result` discrimination was dropped at code review, AC-3.)
 - [ ] AC-9 **Suites and records.** The full suite (`run_all_tests.ps1`, 19 suites, no `-Quick`, `GODOT` unset) passes
       with every suite's count equal to its `tests/suite_limits.txt` minimum (ch3 flash 53) and no `RUNNER WARN` line;
       the CI log has no `RUNNER WARN` or `::warning::` line; `git diff --check` clean; `git ls-files -s` shows `100755` for
@@ -221,7 +223,7 @@ and a new item for the deferred PowerShell timeout cases, at close), evidence, t
 *Reviewed by qa-lead (QL-STORY-READY, 2026-10-24: GAPS → G1-G9 adopted by the user).*
 
 - **C1 bash self-test (AC-1)** — every listed case with exit code, text and marker; env isolated; outer cap; scratch `TMPDIR` empty; under 90 s.
-- **C2 CI (AC-2, AC-3)** — the step runs before the suites; first run green; the 0xFF case passes on ubuntu.
+- **C2 CI (AC-2, AC-3)** — the step runs before the suites; first run green; the `ff_result` case passes on ubuntu.
 - **C3 PS runner (AC-4)** — override with `GODOT` set / unset; new text; two comments; nothing else in the diff.
 - **C4 PS self-test (AC-5)** — the listed cases, including the in-process leak.
 - **C5 warning and doc (AC-6, AC-7)** — shown / not shown cases; header text.

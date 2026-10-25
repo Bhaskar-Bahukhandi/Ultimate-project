@@ -3,6 +3,16 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-25 — The test runners test themselves (Y1-P0-TD-010)
+
+- **test:** `tests/runner_selftest/` runs the two test runners against a stand-in Godot, so their own rules (script-error
+  lines fail a suite, the last result line counts, too few checks fail, a hung suite is stopped, unregistered suites are
+  refused) are checked on every CI run without starting the engine; CI runs the bash one before the first suite.
+- **fix(tools):** both runners now print a `RUNNER WARN` (never a failure) when a suite runs well over its
+  `suite_limits.txt` minimum, so stale minimums get noticed. `run_phase0_tests.ps1` accepts a `GODOT` path (and says
+  when one is in use), and its "did not start" message now also covers a runner that failed before reading the exit
+  code. `run_tests.sh` reads every line of a suite's output the same byte-safe way. Nothing players see changes.
+
 ## 2026-10-24 — Chapter 3 flashes checked in the real scenes (Y1-P0-TD-004)
 
 - **test:** a new suite, `tests/integration/vfx/ch3_flash_runtime_test.gd`, plays the Chapter 3 archive, Fractured

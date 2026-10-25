@@ -5,7 +5,16 @@
 # min_checks       fewest checks (passed + failed) the suite must report on its result line
 #                  ("RESULT: <N> passed, <M> failed", or load_all's "ok=<N> bad=<M>"). A suite
 #                  that reports fewer, or no result line, fails: a test function that returns
-#                  early without an error would otherwise pass.
+#                  early without an error would otherwise pass. A minimum far below the real
+#                  count guards nothing, so a suite that ran more than min + max(2, ceil(min/10))
+#                  checks makes the runner print "RUNNER WARN <script>: <ran> checks ran,
+#                  suite_limits.txt minimum is <min>" (it never fails the suite): update the line.
+# Result line      the runners read the LAST line that starts at column 0 with an uppercase name
+#                  (letters, digits and spaces only, no underscores) followed by a space and either
+#                  "RESULT: <N> passed, <M> failed" or "ok=<N> bad=<M>", e.g. "LAYOUT RESULT: 6
+#                  passed, 0 failed" or "LOADALL ok=204 bad=0". A line that is indented, has a
+#                  lowercase or underscored name, or quotes a result line inside other text is not
+#                  one. The count is <N> + <M>.
 # timeout_seconds  the runner stops Godot after this long and fails the suite (exit 124).
 #                  3x the suite's measured Windows time, rounded up to a whole minute, at least
 #                  120 s, and below the suite's timeout-minutes in .github/workflows/ci.yml.

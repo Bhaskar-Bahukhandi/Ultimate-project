@@ -1,0 +1,5 @@
+SCRIPT ERROR: stub failure one
+   at: stub_a (res://stub.gd:1)
+Parse Error: stub failure two
+   at: stub_b (res://stub.gd:2)
+STUB RESULT: 2 passed, 0 failed

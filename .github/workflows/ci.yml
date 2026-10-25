@@ -91,6 +91,13 @@ jobs:
             exit 1
           fi
 
+      # The runner's own self-test: run_tests.sh against a stub Godot (no engine), before any suite (TD-010).
+      - name: "Runner self-test (run_tests.sh against a stub Godot)"
+        timeout-minutes: 3
+        run: |
+          grep --version | head -1
+          bash AethelgardPrototype/tests/runner_selftest/test_runners.sh
+
       # Every test step below runs through tests/run_tests.sh, which also fails the step on any SCRIPT ERROR / Parse Error line in the suite's output (TD-003).
       # run_tests.sh stops a hung suite and fails one that ran fewer checks than expected, using tests/suite_limits.txt (TD-007).
       # Each suite's limit there stays below its step's timeout-minutes, which is only a backstop.

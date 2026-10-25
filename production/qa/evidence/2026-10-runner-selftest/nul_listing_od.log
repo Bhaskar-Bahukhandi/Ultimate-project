@@ -1,0 +1,25 @@
+od -c of run_tests.sh output for STUB_MODE=nul_listing (runner exit 1). Documentation only: the self-test compares the listing with cmp.
+0000000   S   C   R   I   P   T       E   R   R   O   R   :       s   t
+0000020   u   b       n   u   l       o   n   e  \n               a   t
+0000040   :       s   t   u   b  \0   _   a       (   r   e   s   :   /
+0000060   /   s   t   u   b   .   g   d   :   1   )  \n   f   i   l   l
+0000100   e   r       l   i   n   e  \n   P   a   r   s   e       E   r
+0000120   r   o   r   :       s   t   u   b       n   u   l       t   w
+0000140   o  \n               a   t   :       s   t   u   b  \0   _   b
+0000160       (   r   e   s   :   /   /   s   t   u   b   .   g   d   :
+0000200   2   )  \n   S   T   U   B       R   E   S   U   L   T   :    
+0000220   2       p   a   s   s   e   d   ,       0       f   a   i   l
+0000240   e   d  \n  \n   R   U   N   N   E   R       F   A   I   L    
+0000260   r   e   s   :   /   /   s   e   l   f   t   e   s   t   /   s
+0000300   t   u   b   _   c   a   s   e   .   g   d   :       2       s
+0000320   c   r   i   p   t       e   r   r   o   r       l   i   n   e
+0000340   (   s   )  \n           S   C   R   I   P   T       E   R   R
+0000360   O   R   :       s   t   u   b       n   u   l       o   n   e
+0000400  \n                       a   t   :       s   t   u   b  \0   _
+0000420   a       (   r   e   s   :   /   /   s   t   u   b   .   g   d
+0000440   :   1   )  \n           P   a   r   s   e       E   r   r   o
+0000460   r   :       s   t   u   b       n   u   l       t   w   o  \n
+0000500                       a   t   :       s   t   u   b  \0   _   b
+0000520       (   r   e   s   :   /   /   s   t   u   b   .   g   d   :
+0000540   2   )  \n
+0000543

@@ -12,7 +12,11 @@
 # exit 124) and a minimum number of checks that ran (passed + failed, from the last line
 # that starts with an uppercase name and "RESULT: <N> passed, <M> failed" or
 # "ok=<N> bad=<M>"). A *_test.gd under res://tests/ without an entry in that file is
-# refused; any other script gets 600 s and no minimum.
+# refused; any other script gets 600 s and no minimum. A minimum that has gone stale (more
+# checks ran than min + max(2, ceil(min/10))) only prints "RUNNER WARN <script>: <ran> checks
+# ran, suite_limits.txt minimum is <min>" (::warning:: under GitHub Actions); the exit code
+# does not change (TD-010).
+# tests/runner_selftest/test_runners.sh runs this script against a stub Godot (TD-010).
 # Usage (from AethelgardPrototype/):
 #   GODOT=/path/to/godot tests/run_tests.sh                       # Phase 0 suite
 #   GODOT=/path/to/godot tests/run_tests.sh res://tests/integration/project/load_all_test.gd
@@ -49,6 +53,7 @@ timeout_sec="${TEST_TIMEOUT:-$timeout_sec}"
 case "$min_checks" in
     '' | *[!0-9]*) fail "MIN_CHECKS must be a whole number, got '$min_checks'"; exit 1 ;;
 esac
+min_checks=$((10#$min_checks))   # a leading zero ("08") must not mean octal in $(( )) below
 case "$timeout_sec" in
     '' | *[!0-9]* | 0) fail "TEST_TIMEOUT must be a whole number of seconds above 0, got '$timeout_sec'"; exit 1 ;;
 esac
@@ -116,7 +121,7 @@ if [ "$min_checks" -gt 0 ] && [ "$timed_out" -eq 0 ]; then
     # -a and LC_ALL=C: a stray non-UTF-8 byte must not turn the log "binary" (grep would print
     # "Binary file matches" instead of the line) or change what [A-Z] means.
     result_line="$({ LC_ALL=C grep -a -E '^[A-Z0-9][A-Z0-9 ]* (RESULT: [0-9]+ passed, [0-9]+ failed|ok=[0-9]+ bad=[0-9]+)' "$log" || true; } | tail -n 1)"
-    result="$(echo "$result_line" | { grep -oE 'RESULT: [0-9]+ passed, [0-9]+ failed|ok=[0-9]+ bad=[0-9]+' || true; } | tail -n 1)"
+    result="$(echo "$result_line" | { LC_ALL=C grep -a -oE 'RESULT: [0-9]+ passed, [0-9]+ failed|ok=[0-9]+ bad=[0-9]+' || true; } | tail -n 1)"
     if [ -z "$result" ]; then
         fail "no result line (expected at least $min_checks checks to run)"
         if [ "$code" -eq 0 ]; then code=1; fi
@@ -126,6 +131,16 @@ if [ "$min_checks" -gt 0 ] && [ "$timed_out" -eq 0 ]; then
         if [ "$ran" -lt "$min_checks" ]; then
             fail "$ran check(s) ran, expected at least $min_checks"
             if [ "$code" -eq 0 ]; then code=1; fi
+        else
+            # A minimum far below the real count no longer guards anything: warn (never fail)
+            # when ran > min + max(2, ceil(min / 10)), so the entry gets updated (TD-010).
+            slack=$(( (min_checks + 9) / 10 ))
+            if [ "$slack" -lt 2 ]; then slack=2; fi
+            if [ "$ran" -gt $((min_checks + slack)) ]; then
+                warn="RUNNER WARN $script: $ran checks ran, suite_limits.txt minimum is $min_checks"
+                if [ "${GITHUB_ACTIONS:-}" = true ]; then warn="::warning::$warn"; fi
+                echo "$warn"
+            fi
         fi
     fi
 fi

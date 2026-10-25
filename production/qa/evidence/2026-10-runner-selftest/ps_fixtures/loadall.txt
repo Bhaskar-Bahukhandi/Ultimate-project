@@ -1,0 +1,1 @@
+LOADALL ok=7 bad=0

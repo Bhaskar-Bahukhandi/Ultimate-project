@@ -1,0 +1,2 @@
+A RESULT: 1 passed, 0 failed
+B RESULT: 5 passed, 0 failed
