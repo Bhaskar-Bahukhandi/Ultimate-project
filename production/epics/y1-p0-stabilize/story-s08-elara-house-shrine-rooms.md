@@ -2,12 +2,12 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-S08 (`production/plan/_source/Y1-P0.json#Y1-P0-S08`)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Feature
 > **Type**: Integration
 > **Estimate**: 5 days (plan: 4; +1 for the test churn found at /story-readiness, audit item 7)
 > **Manifest Version**: N/A — `docs/architecture/control-manifest.md` does not exist
-> **Last Updated**: 2026-10-25
+> **Last Updated**: 2026-10-26
 
 ## Context
 
@@ -48,7 +48,9 @@ duration)` (`scene_transition_manager.gd:91`) emits `transition_completed` (`:18
   call moves from `ch1_tutorial_knight.gd:_on_dlg_event` (`fragment_acquired`) to the shrine's event handler.
   `collect_source_key` itself is not touched (it already counts a fragment once, `game_manager.gd:1246-1253`).
 - **Save/load**: no schema change. The shrine calls the existing `GameManager.auto_save()` on a fresh arrival; both
-  rooms resume from existing flags.
+  rooms resume from existing flags. `game_manager.gd` gains two transient-meta names in `TRANSIENT_METAS`
+  (`SHRINE_FRESH_ARRIVAL_META`, and `VILLAGE_AFTERNOON_META` from D10): in-memory hand-offs, cleared on every load and
+  new game, never written to a save.
 - Not touched: combat, hitboxes, the boss fight itself, true ending, NG+, world-map / free-travel, accepted region
   baselines, production art (both rooms are placeholder shapes, labelled as such in the evidence README).
 
@@ -110,6 +112,16 @@ duration)` (`scene_transition_manager.gd:91`) emits `transition_completed` (`:18
   door during gate/ledger/invite. Accepted: the player cannot move until the invite ends.
 - **D9 Suite style:** `ch1_rooms_test.gd` follows this project's SceneTree suites (`_check(cond, name)`, `RESULT:`
   line), not the gdUnit4 `test_[scenario]_[expected]` naming in `.claude/rules/test-standards.md`.
+- **D10 Re-entry (user, 2026-10-25, during /story-done):** the house stays open after the stew, so the player can go back
+  in for the five things in the room. The village scene is rebuilt on every return and its afternoon progress is
+  scene-local, so the village stashes that progress in memory when the player enters the house and takes it back on the
+  way out: `GameManager.VILLAGE_AFTERNOON_META` (a transient meta in `TRANSIENT_METAS`: never saved, cleared by a load
+  or a new game; no save-schema change). It carries `_seen`, `_afternoon_beats`, `_alarm_done`, `_field_resolved` and
+  `_bridge_done`, and puts the child's wooden sword back if she asked for it and it was not found. This replaces the
+  first code review's fix (door shut after the stew), which the user found cost the house's objects. The door is shut
+  while the bridge sequence or anything else plays, and for the 1.5 s between the third first-time talk and the alarm
+  (`_alarm_pending`; entering then dropped the pending alarm — found by QL-TEST-COVERAGE at /story-done). A load
+  mid-afternoon still restarts the afternoon and can pay the north field again (TD-027, not new).
 
 ### Room sketches (placeholder shapes, 32 px tiles)
 
@@ -131,6 +143,8 @@ duration)` (`scene_transition_manager.gd:91`) emits `transition_completed` (`:18
 
 Village: gate → ledger → invite → (player walks; Elara at the door) → door → **house**: fade in → stew (`start`, topics
 once each) → `ch1_stew_done` → free to inspect → door → **village** at the house door, arrival skipped, afternoon starts.
+The house door stays open (D10): going back in plays no second stew, the objects can be looked at, and coming out again
+neither restarts the afternoon nor pays the north field's gold and XP a second time.
 
 Arena: fight → Aldric decision (`aldric.dlg`, unchanged; `open_shrine_gate` flash stays) → consequences, loot,
 `ch1_tutorial_knight_defeated` → **shrine**: autosave → "Under the old gate" card → altar → `fragment` →
@@ -169,7 +183,12 @@ Arena: fight → Aldric decision (`aldric.dlg`, unchanged; `open_shrine_gate` fl
 - [ ] AC-4 **Coming back.** Leaving the house sets a return point and changes to the village; the village calls
       `arrive_in_exploration_scene`, places the player at the house door, skips gate/ledger/invite/stew because
       `ch1_stew_done` is set (no arrival line seen), and starts the afternoon: villagers talk, three first-time talks
-      fire the alarm (`ALARM_AFTER_BEATS` from 0), the north field and bridge triggers work.
+      fire the alarm (`ALARM_AFTER_BEATS` from 0), the north field and bridge triggers work. **Re-entry (D10):** after
+      the stew, the real alarm and the north field, the house door is still open and takes the player back in with no
+      second stew; an object in the room can be looked at; coming back out, the afternoon's progress is intact (alarm,
+      field and bridge flags, beats and conversations had), no gold or XP is paid again, and walking to the north
+      field does not run it a second time. The child's wooden sword, if asked for and not found, is still there to
+      pick up; once found, it does not come back.
 
 ### Shrine
 
@@ -327,8 +346,9 @@ Arena: fight → Aldric decision (`aldric.dlg`, unchanged; `open_shrine_gate` fl
 
 ## Out of Scope
 
-- Persisting the afternoon state (`_alarm_done`, `_field_resolved`, `_bridge_done`, `_afternoon_beats`) across a village
-  load: a mid-afternoon load still restarts the afternoon (now without the stew). Tech-debt candidate.
+- Persisting the afternoon state (`_alarm_done`, `_field_resolved`, `_bridge_done`, `_afternoon_beats`, `_seen`) across a
+  save/load: it now survives a trip into Elara's house (in memory, D10), but not a village load: a mid-afternoon
+  load still restarts the afternoon (now without the stew). Tech-debt candidate.
 - New lines for villagers before the stew (they stay silent, as today during the arrival) — note for S07's pacing
   playtest.
 - The boss-defeat autosave (written before the Aldric decision) still reloads the fight; only loads with
@@ -350,6 +370,8 @@ adopted by the user; cases rewritten).*
   inert until the flag; after the flag only `elara_repeat`; S5 `scene` + `target_node` name the door, arrow aimed at
   the door, hidden in the house; `has_target` false for all Chapter 1 steps.
 - **C3 coming back (AC-4)** — player at the door; no arrival line; three talks fire the alarm; field and bridge work.
+  **Re-entry (D10)** — after the real alarm and field: door open, no second stew, an object can be looked at, progress
+  intact on return, no gold/XP repaid, the north field not run again; child's sword kept until found, gone once found.
 - **C4 shrine dressing (AC-5)** — the five-row table; no-string check.
 - **C5 hand-off (AC-6, AC-7)** — `change_scene` target is the shrine; source scan (seven terms); both HEAD fixture
   saves through `load_game` → no fight, forwarded after the transition, the stated arrival for each.
@@ -390,5 +412,26 @@ log, and `README.md` mapping each AC to its file.
 ---
 
 ## Completion Notes
-
-*(filled in by /story-done)*
+**Completed**: 2026-10-26
+**Criteria**: 19/19 passing. AC-12 (controller) and the walk-through (AC-3/4/8/9) confirmed by the user in a build;
+the walk-through found that the house could not be re-entered after the stew, which became decision D10 (re-entry,
+afternoon progress carried over in memory). AC-18 live screenshots retained and viewed.
+**Deviations** (advisory, user-accepted):
+- D10 replaces the first code review's fix (door shut after the stew); the door is shut only while something plays,
+  during the bridge sequence, and for the 1.5 s before the alarm (the last found by QL-TEST-COVERAGE, fixed with
+  mutation 15 showing the dropped alarm).
+- `scripts/effects/vfx_library.gd` (two timer connections, "Lambda capture was freed" 5 → 0) and
+  `tests/integration/playthrough/phase0_blockers_test.gd` (needed the house drive) are outside the story's listed
+  files; both approved.
+- `game_manager.gd` gained two transient-meta names in `TRANSIENT_METAS`; no save-schema change.
+- AC-3, C2 and AC-11 wording corrected during /dev-story (user-approved).
+**Test Evidence**: Integration — `AethelgardPrototype/tests/integration/level/ch1_rooms_test.gd` (445 checks, registered
+in suite_limits / run_all_tests.ps1 / ci.yml); `chapter1_route_test.gd`, `reachability_test.gd`, `phase0_blockers_test.gd`
+updated; golden `tests/integration/story/ch1_s08_golden.json` + two fixture saves. Full run `run_all_final.log` 24/24;
+17 mutations watched failing; evidence and AC map in `production/qa/evidence/2026-11-rooms/README.md`.
+**Code Review**: Complete — three `/code-review` rounds (CHANGES REQUIRED, CHANGES REQUIRED, APPROVED WITH
+SUGGESTIONS, all applied); at /story-done LP-CODE-REVIEW CONCERNS and QL-TEST-COVERAGE GAPS, re-run after D10; their
+remaining advisory items logged as TD-028 and TD-029, the load repay as TD-027. The gates were not re-run after the
+alarm-window fix (which closes QL gaps 1–4 and 8, each watched failing).
+**Run result**: OBSERVED — live renderer, `production/qa/evidence/2026-11-rooms/` (house, shrine both ends, village
+after the house round trip with the door prompt); placeholder shapes, ComfyUI used: No.
