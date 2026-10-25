@@ -22,7 +22,8 @@ extends SceneTree
 ## real-time cap (Time.get_ticks_msec): 60 s for a story scene or region, 30 s for a trial. A cap or a wrong next scene
 ## stops the bot (no later legs run on a broken state) and prints a softlock report: leg, scene, cap, elapsed real
 ## seconds, the last speaker and line, the open choice prompt, the last choice answered. A single exit function
-## (_finish) restores Engine.time_scale = 1 and ContextStack.clear_time_scale() on every pass and fail path and prints it.
+## (_finish) restores Engine.time_scale = 1 and ContextStack.clear_time_scale() on every pass and fail path, asserts
+## the scale and prints it.
 ##
 ## HAZARD TRIALS (decision D2). The trial scene is loaded for real; the bot waits until one attempt has run for 3 s of
 ## scaled time (at the trial's own scale) with the player alive (attempt number unchanged, no retry requested, not dead;
@@ -47,7 +48,8 @@ extends SceneTree
 ## Chapter 3 hand-off, printed by a copy of that suite at commit 74e40e8 (2026-10-25; the copy is kept as
 ## production/qa/evidence/2026-10-playthrough/probe_ch2_state.gd.txt with its output). Drift between the two suites is an
 ## accepted risk until T14b stitches the routes. Not seeded: the leftover metas (return_position, boss_return_scene,
-## boss_fight_id) that the region scenes set and no Chapter 3-10 scene reads.
+## boss_fight_id) that the region scenes set and no Chapter 3-10 scene reads. Also not seeded: ch3_ironhold_departed,
+## which the probe printed only because the departure scene had already run; leg 0 must set it (asserted unset after seeding).
 ## Run: tests/run_phase0_tests.ps1 -Script res://tests/integration/playthrough/full_playthrough_test.gd
 
 const SEED_COMMIT := "74e40e8"
@@ -59,7 +61,7 @@ const SEED_FLAGS: Array[String] = [
 	"ch2_medicine_done", "ch2_medicine_early", "ch2_medicine_quest_active", "ch2_rook_met", "ch2_seraphina_186_told",
 	"ch2_seraphina_bond_marker", "ch2_seraphina_met", "ch2_seraphina_recruited", "ch2_seraphina_tell_me",
 	"ch2_seraphina_truth", "ch2_shift_rescue_now", "ch2_tower_bell_stopped", "ch2_underground_complete",
-	"ch2_underground_unlocked", "ch3_ironhold_departed", "elara_trust_high", "lore_ironhold_lore_3", "root_access_unlocked",
+	"ch2_underground_unlocked", "elara_trust_high", "lore_ironhold_lore_3", "root_access_unlocked",
 	"seraphina_trust_high", "side_quest_ironhold_underground_data_complete", "source_key_fragment_1", "source_key_fragment_2",
 ]
 const SEED_KEYS := 2
@@ -199,6 +201,7 @@ func _finish() -> void:
 	_finished = true
 	Engine.time_scale = 1.0
 	_cs().clear_time_scale()
+	_check(is_equal_approx(Engine.time_scale, 1.0), "exit: Engine.time_scale is 1 after the restore")
 	print("  exit: Engine.time_scale restored to %s, ContextStack time requests cleared" % str(Engine.time_scale))
 	print("")
 	print("PLAYTHROUGH RESULT: %d passed, %d failed" % [_passes, _failures.size()])
@@ -227,6 +230,7 @@ func _seed() -> void:
 	_check(missing.is_empty(), "AC-2 seed: all %d seeded flags are set (missing %s)" % [SEED_FLAGS.size(), str(missing)])
 	_check(gm.source_key_count == SEED_KEYS and gm.has_elara(),
 		"AC-2 seed: source_key_count %d and Elara with the party (state captured at %s)" % [SEED_KEYS, SEED_COMMIT])
+	_check(not gm.has_flag("ch3_ironhold_departed"), "AC-2 seed: ch3_ironhold_departed is not set yet (leg 0 must set it)")
 
 
 # ── driver ────────────────────────────────────────────────────────────────────
@@ -463,7 +467,7 @@ func _drive_trial(dt: float) -> void:
 	if attempts >= 1 and not dead and not bool(s.get("_retry_requested")):
 		_trial_alive += dt * Engine.time_scale
 	var markers: Array = s.get("_active_markers")
-	if _trial_alive >= TRIAL_ALIVE_S and markers.is_empty():
+	if _trial_alive >= TRIAL_ALIVE_S and markers.is_empty() and not dead:
 		_trial_completed = true
 		print("  trial %s: alive %.1f s of scaled time in attempt %d at time_scale %s, no hazard in flight; calling _complete_trial()" % [s.scene_file_path.get_file(), _trial_alive, attempts, str(Engine.time_scale)])
 		# Test-side work-around (findings.md F-2): completing mid-attempt is not something a player can do. Completing
