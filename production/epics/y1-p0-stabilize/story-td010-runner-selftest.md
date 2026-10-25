@@ -2,12 +2,12 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-TD-010 (`docs/tech-debt-register.md#TD-010`; added to Sprint 001 on 2026-10-24, `production/sprints/sprint-001.md`)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Foundation
 > **Type**: Integration
 > **Estimate**: 2 days (cut line: the stale-min_checks warning, then the suite_limits.txt header doc)
 > **Manifest Version**: N/A — `docs/architecture/control-manifest.md` does not exist
-> **Last Updated**: 2026-10-24
+> **Last Updated**: 2026-10-25
 
 ## Context
 
@@ -90,7 +90,7 @@ and a new item for the deferred PowerShell timeout cases, at close), evidence, t
 
 ## Acceptance Criteria
 
-- [ ] AC-1 **Bash self-test.** `tests/runner_selftest/test_runners.sh` runs the real `tests/run_tests.sh` with
+- [x] AC-1 **Bash self-test.** `tests/runner_selftest/test_runners.sh` runs the real `tests/run_tests.sh` with
       `GODOT=<absolute path>/tests/runner_selftest/stub_godot.sh`, no engine. The stub switches on `STUB_MODE`, prints
       canned lines, exits with `STUB_EXIT` (default 0), touches `$STUB_MARKER` when it runs, and for the sleeping modes
       `exec`s `sleep 20` (`ignore_term`: `trap '' TERM; sleep 20`).
@@ -128,24 +128,24 @@ and a new item for the deferred PowerShell timeout cases, at close), evidence, t
       - The self-test prints `RUNNER SELFTEST RESULT: N passed, F failed` at column 0, exits 0 only if every case passes,
         asserts the scratch `TMPDIR` is empty at the end (the runner's temp log is removed), removes its own dirs in an
         `EXIT` trap, and finishes in under 90 s.
-- [ ] AC-2 **CI step.** `.github/workflows/ci.yml` runs `bash AethelgardPrototype/tests/runner_selftest/test_runners.sh`
+- [x] AC-2 **CI step.** `.github/workflows/ci.yml` runs `bash AethelgardPrototype/tests/runner_selftest/test_runners.sh`
       as a step before the first test suite (no Godot needed), with a double-quoted `name:` if it contains `: ` and a
       `timeout-minutes` of 3; it prints `grep --version | head -1` first; the first CI run after the push is green and is
       recorded (its step duration and the grep version too).
-- [ ] AC-3 **Line 119.** `run_tests.sh:119` reads the result with `LC_ALL=C grep -a -oE …`, like its neighbours, and the
+- [x] AC-3 **Line 119.** `run_tests.sh:119` reads the result with `LC_ALL=C grep -a -oE …`, like its neighbours, and the
       `ff_result` case shows the runner reads a result line that ends in 0xFF under `LC_ALL=C.UTF-8`. *Amended at code
       review (user decision [A]):* the first wording also ran the pre-fix pattern and required it to extract nothing in
       CI. That cannot hold: with `-o` grep prints only the matched text, which is plain ASCII, so the old pattern
       extracts the result on GNU grep 3.0 and 3.11 alike (verified on Git Bash and WSL Ubuntu), and a byte inside the
       match defeats the first grep too. No input the first grep accepts makes the old line 119 misbehave, so the change
       is a consistency hardening, not a bug fix, and the old-pattern check (which would have failed CI) was removed.
-- [ ] AC-4 **PowerShell runner changes.** `run_phase0_tests.ps1` uses `$env:GODOT` as the executable when it is set
+- [x] AC-4 **PowerShell runner changes.** `run_phase0_tests.ps1` uses `$env:GODOT` as the executable when it is set
       (`[IO.FileInfo]`, so a missing path still reaches the launch and fails as "did not start"; the path must be
       absolute, said in the comment), else the existing `C:\Godot` lookup — with `GODOT` unset every suite runs exactly as
       before (AC-9). The launch-failure text becomes `Godot did not start, or the runner failed before reading its exit
       code` (header comment updated too). The watchdog's give-up after 10 failed queries and the `$killed = $?` line each
       get a one-line comment saying what they do. No other behaviour changes.
-- [ ] AC-5 **PowerShell self-test (Windows, local).** `tests/runner_selftest/test_runner_ps.ps1` runs the real
+- [x] AC-5 **PowerShell self-test (Windows, local).** `tests/runner_selftest/test_runner_ps.ps1` runs the real
       `run_phase0_tests.ps1` with `GODOT` set to the absolute path of `tests/runner_selftest/stub_godot.cmd` (CRLF;
       `type "%STUB_FIXTURE%"` then `exit /b %STUB_EXIT%`, touching `%STUB_MARKER%`; fixtures are text files reused from the
       AC-1 canned lines), output captured with `*>&1`, every case with `-TimeoutSec 30` (so a removed override cannot
@@ -157,16 +157,16 @@ and a new item for the deferred PowerShell timeout cases, at close), evidence, t
       would let its `exit` end the self-test; not `-File`), `GODOT` missing, and the runner still fails. Result line
       `RUNNER PS SELFTEST RESULT: N passed, F failed`. Its header says it is local-only (CI cannot run the PS runner) and
       that the timeout / kill cases are not covered (backlog item, AC-9).
-- [ ] AC-6 **Stale-min_checks warning.** Both runners print, only when `min_checks > 0`, the suite did not time out and a
+- [x] AC-6 **Stale-min_checks warning.** Both runners print, only when `min_checks > 0`, the suite did not time out and a
       result line exists, and `ran > min + max(2, ceil(min / 10))`, the line
       `RUNNER WARN <script>: <ran> checks ran, suite_limits.txt minimum is <min>` on stdout (prefixed `::warning::` under
       `GITHUB_ACTIONS` in bash); it never contains `RUNNER FAIL` and the exit code is unchanged. The bash self-test covers:
       min 10 with ran 13 → warning; ran 12 and ran 10 → none; min 21 with ran 24 → none, ran 25 → warning (proves the
       `ceil`); min 0 with ran 50 → none.
-- [ ] AC-7 **Result-line doc.** The `tests/suite_limits.txt` header documents the result-line format the runners parse: a
+- [x] AC-7 **Result-line doc.** The `tests/suite_limits.txt` header documents the result-line format the runners parse: a
       line starting at column 0 with an uppercase name of letters, digits and spaces (no underscores), then
       `RESULT: <N> passed, <M> failed` or `ok=<N> bad=<M>`; the last such line wins.
-- [ ] AC-8 **Watch-fail.** In a scratch worktree, after a green control run of both self-tests, each mutation makes its
+- [x] AC-8 **Watch-fail.** In a scratch worktree, after a green control run of both self-tests, each mutation makes its
       case fail (diff and result logged): (a) `run_tests.sh` reads the first result line instead of the last → the
       `two_results` case fails; (b) the elapsed-rule condition removed → the `selfkill` case reports a timeout; (c) the
       script-error scan removed → the `script_errors` case passes Godot's 0; (d1) `-a` removed from the first listing grep
@@ -175,7 +175,7 @@ and a new item for the deferred PowerShell timeout cases, at close), evidence, t
       `$code = $null` removed → the PS leak case fails; (g) the `$env:GODOT` override removed → every PS case fails;
       (h) the warning's `>` changed to `>=` → the ran-12 case warns and fails; (i) the unregistered-suite refusal (:41)
       removed → the unregistered case fails (marker present). (The CI-only `ff_result` discrimination was dropped at code review, AC-3.)
-- [ ] AC-9 **Suites and records.** The full suite (`run_all_tests.ps1`, 19 suites, no `-Quick`, `GODOT` unset) passes
+- [x] AC-9 **Suites and records.** The full suite (`run_all_tests.ps1`, 19 suites, no `-Quick`, `GODOT` unset) passes
       with every suite's count equal to its `tests/suite_limits.txt` minimum (ch3 flash 53) and no `RUNNER WARN` line;
       the CI log has no `RUNNER WARN` or `::warning::` line; `git diff --check` clean; `git ls-files -s` shows `100755` for
       `stub_godot.sh` and `test_runners.sh`, and `git ls-files --eol` shows `w/lf` for both (the `.cmd` stub CRLF); the stub
@@ -240,7 +240,7 @@ and a new item for the deferred PowerShell timeout cases, at close), evidence, t
 sources, `golden_n1_listing.od`, the CI run, and a README mapping each AC to its file.
 **Run result**: N/A — test tooling; nothing in the game changes.
 
-**Status**: [ ] Not yet created
+**Status**: [x] Created — production/qa/evidence/2026-10-runner-selftest/ (README.md maps every AC to its log; the NUL listing dump is `nul_listing_od.log`)
 
 ---
 
@@ -248,3 +248,37 @@ sources, `golden_n1_listing.od`, the CI run, and a README mapping each AC to its
 
 - Depends on: TD-003, TD-007, TD-009 (done: the runner behaviours under test), Y1-P0-T02 (done).
 - Unlocks: Y1-P0-T14b may edit `ci.yml` after this lands (sprint plan ordering); a permanent guard before T15.
+
+---
+
+## Completion Notes
+**Completed**: 2026-10-25
+**Criteria**: 9/9 passing (AC-2 with a gap, below). CI run [40153281837](https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/40153281837) on `6409214` (ubuntu-latest) is green: the new
+"Runner self-test (run_tests.sh against a stub Godot)" step in 17 s, before all 19 suite steps, which also passed. Its
+annotations hold no runner `::warning::` (only GitHub's Node 20 deprecation warning and the ubuntu-latest → Ubuntu 26
+notice). The step log needs a GitHub sign-in and was not read, so the CI grep version is **not recorded** (user decision
+at close); the local proxy is WSL Ubuntu GNU grep 3.11 / coreutils timeout 9.4 / bash 5.2, where the self-test passes
+30/30 with `GITHUB_ACTIONS=true` (`bash_selftest_wsl_ci.log`).
+**Commit**: `6409214` (test(tools): permanent self-test for the test runners).
+**Deviations** (advisory):
+- NOT ASSESSED: GDD / ADR / TR-registry traceability (none exist for this test debt).
+- AC-1 amended during /dev-story: the 0xFF byte ends the result line (a byte inside the name is not a result line).
+- AC-3 amended at /code-review (R1): the old-pattern CI check was dropped — with `-o` the old grep still extracts the
+  ASCII match (grep 3.0 and 3.11), so it could not discriminate and would have failed CI; the line-119 change is a
+  consistency hardening, not a bug fix.
+- AC-2: the CI grep version is not recorded (above).
+- AC-9: the full local 19-suite run (1169 s) predates the /code-review edits; those touched `run_tests.sh` (run by CI on
+  the final code), the PS runner's `GODOT`-override branch (not taken with `GODOT` unset; `test_layout_test` 6/6 after
+  the edits) and the self-tests.
+- Test Evidence named `golden_n1_listing.od`; the dump is kept as `nul_listing_od.log` (the evidence-log whitespace
+  exemption covers it).
+- Beyond the file list, all user-approved: `.gitattributes` `*.cmd text eol=crlf`; code-review cases (result-then-hang,
+  `MIN_CHECKS=08`, the PS "GODOT override" line) and mutations (j), (k), (l).
+**Test Evidence**: Integration — `tests/runner_selftest/test_runners.sh` (30 cases) and `test_runner_ps.ps1` (17 cases);
+green controls and 15 mutations each failing its case (`watchfail_mutations.log`; `watchfail_mutations_run1.log` shows the
+first run missing (e), fixed by the `ignore_term` time assertion); `production/qa/evidence/2026-10-runner-selftest/`.
+**Code Review**: Complete — /code-review (godot-specialist, devops-engineer, qa-tester) CHANGES REQUIRED (R1 the
+CI-failing old-pattern check, R2 octal `MIN_CHECKS`, R3 exec bits) → all applied, re-review APPROVED; LP-CODE-REVIEW
+APPROVE (advisories in TD-018); QL-TEST-COVERAGE GAPS (all advisory, TD-018).
+**Follow-up**: TD-017 — PS runner timeout / kill cases with a compiled `.exe` stub; TD-018 — runner self-test coverage
+follow-ups.
