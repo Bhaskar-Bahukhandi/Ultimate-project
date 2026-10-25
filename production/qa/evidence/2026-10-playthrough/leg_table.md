@@ -1,7 +1,8 @@
 # Y1-P0-T14a leg table: Chapter 3 to the credits
 
 The order and flags below are the suite's `LEGS` list (`AethelgardPrototype/tests/integration/playthrough/full_playthrough_test.gd`);
-the suite asserts the order and the flags at each hand-off, so this table and the suite cannot disagree without a failure.
+the suite asserts that order and those flags at each hand-off. This table is hand-written from that list (nothing parses
+it), and was checked against it entry for entry at close.
 Route: option 0 at every choice (decision D4, the "liberation" ending). "Real s" and "choices" are from the green run
 (`bot_run.log`, the run after the code-review fixes; Engine.time_scale 4 outside the trials, the trials at their own scale 1). 40 rows: 6 Chapter 3 scenes + the Wastes region + 32 Chapter 4–10
 scenes + the main menu.

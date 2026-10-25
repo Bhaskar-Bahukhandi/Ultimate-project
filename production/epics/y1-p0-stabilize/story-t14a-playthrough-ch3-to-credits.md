@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-T14a (`production/plan/_source/Y1-P0.json#Y1-P0-T14`, days 1–3; sprint plan row Y1-P0-T14a)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Feature
 > **Type**: Integration
 > **Estimate**: 3 days (map and Chapter 3; Chapters 4–6; Chapters 7–10, ending and records)
@@ -100,18 +100,18 @@ world-map / free-travel code: read, never edited. Game-side bugs the bot finds a
 
 ## Acceptance Criteria
 
-- [ ] AC-1 **Leg table.** `production/qa/evidence/2026-10-playthrough/leg_table.md` lists, in order, every scene from
+- [x] AC-1 **Leg table.** `production/qa/evidence/2026-10-playthrough/leg_table.md` lists, in order, every scene from
       `scenes/chapter3/ironhold_departure.tscn` to `main_menu.tscn` (Chapter 3 region leg included): how it advances, what
       the bot does there, the key flags it sets, and the next scene. The suite's expected scene order is a literal list
       that matches this table entry for entry.
-- [ ] AC-2 **Start state.** The bot calls `GameManager.reset_game()`, then seeds exactly the state chapter2_route_test
+- [x] AC-2 **Start state.** The bot calls `GameManager.reset_game()`, then seeds exactly the state chapter2_route_test
       leaves at its Chapter 3 hand-off — the story flags, `source_key_count`, `current_chapter` and any meta the Chapter 3
       scenes read — captured once (by printing that state at the end of a chapter2_route_test run) and stored as a
       literal in the suite with a comment naming the commit it was captured at (drift until T14b stitches the two routes
       is an accepted risk); it includes the party / Elara state (`GameManager.has_elara()` is read in Chapter 3) and
       `ch2_data_wraith_defeated` (the Wastes gate needs it); then it loads `ironhold_departure`. The isolation
       guard (`OS.get_user_data_dir()` contains `aeth_phase0_test`) runs first.
-- [ ] AC-3 **Driver.** One driver, every frame: an open choice → option 0 (logged: scene, prompt, chosen text); active
+- [x] AC-3 **Driver.** One driver, every frame: an open choice → option 0 (logged: scene, prompt, chosen text); active
       dialogue → `skip_all()`, re-armed after every choice; `ch3_ending`'s input wait → a real `ui_accept` input event
       (`Input.parse_input_event` with an `InputEventAction`, pressed then released next frame), and if the suite's first
       check shows `is_action_just_pressed` does not see it headlessly, the fallback `_waiting_for_input = false` is used
@@ -125,7 +125,7 @@ world-map / free-travel code: read, never edited. Game-side bugs the bot finds a
       the last choice answered, and stops the bot (no later legs run on a broken state). Outside trials the bot sets
       `Engine.time_scale = 4` every frame (trials and hitstops reset it); a single exit function, used by every pass and
       fail path, sets it back to 1 and calls `ContextStack.clear_time_scale()`.
-- [ ] AC-4 **Per-leg checks.** For each leg: the next scene is the one the leg table names (order asserted); at each
+- [x] AC-4 **Per-leg checks.** For each leg: the next scene is the one the leg table names (order asserted); at each
       hand-off — sampled at the scene's own `SceneTransitions.transition_started` (*amended at code review*: the start of
       the fade-out is the hand-off; one frame after the transition the next scene may already have opened its own
       dialogue) — `DialogueManager.is_active` is false and `ContextStack.top()` is empty (the plan's R5 check); the leg's flags are set, exactly this table (option-0
@@ -153,13 +153,13 @@ world-map / free-travel code: read, never edited. Game-side bugs the bot finds a
       run `user://save_slot_99.save` exists inside the isolated `aeth_phase0_test` directory (the game auto-saves there),
       and the suite never writes outside `user://`. The SCRIPT ERROR / Parse Error scan is the runner's (TD-003), not the
       suite's. The suite's log prints one line per leg (index, scene, real seconds, choices answered).
-- [ ] AC-5 **Ending and credits.** After `ch10_ending`: `ch10_complete`, `true_ending_seen` and `ng_plus_unlocked` are set
+- [x] AC-5 **Ending and credits.** After `ch10_ending`: `ch10_complete`, `true_ending_seen` and `ng_plus_unlocked` are set
       and `GameManager.ng_plus_available` is true; the ending's text contains "TRUE ENDING"; `main_menu.tscn` loads and its
       `_check_ng_plus_availability()` has added the visible "NEW GAME+" button. Then `CreditsScreen.show_credits(false)`
       opens it (visible, `ContextStack.top()` not empty), a `ui_cancel` input event closes it (the screen's skip:
       ui_cancel / pause_menu / skip, credits_screen.gd:251), and afterwards `ContextStack.top()` is empty and
       `get_tree().paused` is false. Watching the full scroll to its automatic end is not tested (accepted residual risk).
-- [ ] AC-6 **Findings, not fixes.** No file under `scripts/`, `scenes/` or `dialogue/` changes
+- [x] AC-6 **Findings, not fixes.** No file under `scripts/`, `scenes/` or `dialogue/` changes
       (`git diff --name-only <story-start commit>..HEAD -- AethelgardPrototype/scripts AethelgardPrototype/scenes
       AethelgardPrototype/dialogue` is empty at close). Every game-side defect the
       bot meets (a softlock, a dead end, a stuck dialogue, a missing hand-off, the ending not rolling CreditsScreen) is
@@ -168,7 +168,7 @@ world-map / free-travel code: read, never edited. Game-side bugs the bot finds a
       failure naming the scene (the plan's "or reports the exact blocking scene"); a test-side work-around is used only
       if it does what a player could do (pressing a key, walking to a gate, answering a prompt), and is named in the
       finding.
-- [ ] AC-7 **Suite, watch-fail and records.** `tests/integration/playthrough/full_playthrough_test.gd` (+ `.uid`), its own
+- [x] AC-7 **Suite, watch-fail and records.** `tests/integration/playthrough/full_playthrough_test.gd` (+ `.uid`), its own
       column-0 result line `PLAYTHROUGH RESULT: <N> passed, <M> failed`, a `tests/suite_limits.txt` entry (minimum = its
       final count; timeout 3x the slower of its local and first CI run times, at least 120 s; adjusted after the CI run if
       CI is slower), listed in `run_all_tests.ps1` as a Long suite (so
@@ -251,7 +251,7 @@ world-map / free-travel code: read, never edited. Game-side bugs the bot finds a
 mutation log, the full-suite log, and a README mapping each AC to its file.
 **Run result**: N/A — test tooling; nothing in the game changes (the bot's per-leg log is the observation).
 
-**Status**: [ ] Not yet created
+**Status**: [x] Created — committed in `b195732` and `2e6aba6`; evidence README maps each AC
 
 ---
 
@@ -260,3 +260,33 @@ mutation log, the full-suite log, and a README mapping each AC to its file.
 - Depends on: Y1-P0-T06 (done), Y1-P0-T12 (done); TD-010 (done: the runners' self-test).
 - Unlocks: Y1-P0-T14b (Chapter 1 fight legs + New Game → credits in CI), and feeds T15 (the human playthrough) with the
   findings list.
+
+---
+
+## Completion Notes
+**Completed**: 2026-10-25
+**Criteria**: 7/7 passing. CI run [40192172143](https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/40192172143) on `b195732` (ubuntu-latest) is green: every step, the new "Playthrough bot" step
+61 s against the 240 s limit (170 checks then), no runner `::warning::` annotation. The story-done fixes (`2e6aba6`, 172
+checks) ran green 3x in a scratch worktree with mutations (a)–(j) each failing its own check; their first CI run is the
+next push. Local runs 62–84 s.
+**Commits**: `b195732` test(playthrough) the bot, registration, evidence; `2e6aba6` test(playthrough) story-done review
+fixes (seed no longer holds `ch3_ironhold_departed` + a check that it is unset; trials complete only with the player
+alive; `_finish` asserts the time scale).
+**AC-6**: `git diff --name-only 74e40e8 2e6aba6 -- AethelgardPrototype/scripts AethelgardPrototype/scenes
+AethelgardPrototype/dialogue` prints nothing (scoped to T14a's commits; S08 is changing game files in the same checkout,
+uncommitted).
+**Deviations** (advisory):
+- NOT ASSESSED: GDD / ADR / TR-registry traceability (none exist for test tooling).
+- AC-4: the suite also checks each `source_key_fragment_N` at the leg that grants it (code review, F-5), a superset of
+  the story's flag table. Hand-off sampled at `transition_started` (amended at code review, recorded in AC-4).
+- AC-7: watch-fail ran mutations (a)–(j), a superset of (a)–(f); (f) answers option 1 at every choice in leg 8, not
+  only the main choice (same check fails). The full-suite log (`run_all.log`, 23/23, 1379 s) predates the code-review
+  fixes (169 checks then); the CI run is the full-suite evidence for the committed bot.
+- AC-1: the leg table is hand-written and matches `LEGS`; nothing parses it (its claim was reworded at close).
+**Test Evidence**: Integration — `AethelgardPrototype/tests/integration/playthrough/full_playthrough_test.gd` (172
+checks); `production/qa/evidence/2026-10-playthrough/`.
+**Code Review**: Complete — /code-review CHANGES REQUIRED → R1–R8 + S1–S2 applied → APPROVED; at close QL-TEST-COVERAGE
+ADEQUATE (Low gaps) and LP-CODE-REVIEW CONCERNS → findings 1 (vacuous leg-0 flag check) and 3 (trial completion with a
+dead player) fixed in `2e6aba6`, the rest logged.
+**Tech debt logged**: TD-023 (F-1 ending never rolls the credits; credits say "Version 1.0"), TD-024 (F-2 hazard trial
+freed-marker robustness), TD-025 (F-3 Data Stream has no fail state — design question), TD-026 (bot follow-ups + F-5).
