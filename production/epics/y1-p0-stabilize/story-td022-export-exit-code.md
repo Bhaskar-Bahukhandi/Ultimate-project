@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: TD-022 (`docs/tech-debt-register.md#TD-022`; raised at the T12 close, target "Sprint 001 (before T15)")
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Foundation (build tooling)
 > **Type**: Integration
 > **Estimate**: 0.5 day (register effort: S)
@@ -83,11 +83,11 @@ Production-art fallback: not affected (no asset change).
 
 ## Acceptance Criteria
 
-- [ ] AC-1 **Exit code read.** In `Invoke-Built`, `$null = $p.Handle` runs on the line after `Start-Process` (before
+- [x] AC-1 **Exit code read.** In `Invoke-Built`, `$null = $p.Handle` runs on the line after `Start-Process` (before
       `WaitForExit`), with a one-line comment naming the Windows PowerShell 5.1 behaviour. A run that finished returns
       `Code = $p.ExitCode`, including a process that exits almost at once (AC-5 b: no throw, the real code). A run that
       timed out returns `Done = $false`, `Code = -1` (not the killed process's own code).
-- [ ] AC-2 **An unreadable code is its own failure, checked first.** In both branches the `$null` check comes first —
+- [x] AC-2 **An unreadable code is its own failure, checked first.** In both branches the `$null` check comes first —
       before any `-ne 0` test and before the "never started" message — and adds
       `exit code unavailable (PowerShell could not read it)`; a `$null` code never reaches an `exit code $($r.Code)` string.
       Release: a real non-zero code adds `exit code <N>`. `-Tour` (*amended at code review*): a run passes only with code 0
@@ -95,7 +95,7 @@ Production-art fallback: not affected (no asset change).
       `<TOUR RESULT line> (see …\report.md)`, followed by `; exit code <N>` when the code is non-zero; a `$null` code adds
       the result line after the unavailable message when there is one; no `TOUR RESULT` line with a readable code keeps
       `the tour never started or never finished (exit code <N>)`.
-- [ ] AC-3 **Timeout stops the whole tree without crashing the script.** On a timeout: `taskkill.exe /F /T /PID $p.Id` runs
+- [x] AC-3 **Timeout stops the whole tree without crashing the script.** On a timeout: `taskkill.exe /F /T /PID $p.Id` runs
       with `$ErrorActionPreference = "Continue"` for that call only and its output discarded, and is judged by
       `$LASTEXITCODE` (reset to -1 first, so a `taskkill` that cannot start does not read an earlier command's 0); if
       non-zero and `$p.HasExited` is false, `$p.Kill()` runs inside `try/catch`. A process that exited on its own in that
@@ -107,14 +107,14 @@ Production-art fallback: not affected (no asset change).
       errors were not checked"; the unmerged stderr is kept in `<log>.err`), never just a warning — the game's errors in
       it would otherwise go unchecked — and neither ends the script with an exception. Proven by AC-5 (c), (d), (g), (h),
       (k), (l), (p), (q), (r), (s), (t) and (u).
-- [ ] AC-4 **Real builds pass under both shells**, run one after another (they share `exports/`), from
+- [x] AC-4 **Real builds pass under both shells**, run one after another (they share `exports/`), from
       `AethelgardPrototype/`: `powershell -File tools/export_windows.ps1` and `pwsh -File tools/export_windows.ps1` each
       end with `RELEASE OK: booted, ignored --debug-tour, exited cleanly` and exit 0; `powershell -File
       tools/export_windows.ps1 -Tour` and the same under `pwsh` each end with `TOUR BUILD OK`, a `TOUR RESULT` line with 0
       problems, and exit 0; `powershell -File tools/export_windows.ps1 -NoSmoke` ends with `BUILD OK` and exit 0. Each
       run's console output is kept as a log. `smoke_boot.png` from one release run shows the main menu (title and menu
       buttons visible in the last frame); the user signs it off in the evidence README.
-- [ ] AC-5 **Watched failing** — a scratch copy of the script, never the committed file; Windows PowerShell 5.1; before
+- [x] AC-5 **Watched failing** — a scratch copy of the script, never the committed file; Windows PowerShell 5.1; before
       each run `Get-Process Aethelgard*` is empty (logged). "Contains" means the printed FAILED list contains the line;
       a mutated run may add others (for example "only 0 of 120 frames"):
       (a) release, the `$p.Handle` line removed → contains `exit code unavailable`;
@@ -166,7 +166,7 @@ Production-art fallback: not affected (no asset change).
       warn-only code → no failure, `TOUR BUILD OK`, exit 0 (the gap the fourth review found, shown).
       Each log starts with every edit in full, the SHA-256 of the script under test and of the mutant, and the process
       and `%TEMP%` folder counts before and after; the harness is kept in the evidence folder.
-- [ ] AC-6 **Records.** The usage comment says the script runs under Windows PowerShell 5.1 and PowerShell 7; TD-022 is
+- [x] AC-6 **Records.** The usage comment says the script runs under Windows PowerShell 5.1 and PowerShell 7; TD-022 is
       `Resolved <close date>` in the register with the evidence path, header counts updated; a CHANGELOG `fix:` entry;
       `production/qa/evidence/2026-10-export/README.md` maps each AC to its log and records the `smoke_boot.png`
       sign-off; no file outside the list above changes; `git diff --check` clean.
@@ -197,7 +197,9 @@ Production-art fallback: not affected (no asset change).
 - Changing the documented command from `powershell` to `pwsh` (D1).
 - A permanent self-test for `Invoke-Built` (D2).
 - The `ObjectDB instances leaked at exit` warning in the smoke log (TD-012).
-- The Web export, export templates, presets, or what the smoke check checks.
+- The Web export, export templates or presets. What the smoke check checks was out of scope as written; the code
+  reviews changed it (the tour pass rule, an empty or unreadable log, a failed stderr merge — AC-2, AC-3, AC-5 (h)–(u)),
+  each amendment chosen by the user at its review round (2026-10-26) and recorded in the Completion Notes.
 
 ---
 
@@ -236,9 +238,11 @@ Production-art fallback: not affected (no asset change).
 (AC-4) and the `-NoSmoke` log, a real `tour.log` with its line-ending record, `smoke_boot.png` with the user's
 sign-off, the twenty-one mutation logs (AC-5 a–u) with the harness, and the PowerShell 5.1 / 7 repro output (audit facts
 1 and 7). No automated suite (D2).
-**Run result**: to be recorded — the release smoke boot and the tour run the exported game with a real renderer.
+**Run result**: OBSERVED — the exported release build boots to the main menu (AETHELGARD / The Glitch Sovereign, NEW
+GAME … QUIT, `v0.1.0`): `production/qa/evidence/2026-10-export/smoke_boot.png`, signed off by the user; the tour inside
+the exported debug build: `TOUR RESULT: 68 screenshots, 0 problems` under PowerShell 5.1 and 7.
 
-**Status**: [ ] Not yet created
+**Status**: [x] Created — committed in `c9f694f`; the README maps each AC to its log
 
 ---
 
@@ -246,3 +250,35 @@ sign-off, the twenty-one mutation logs (AC-5 a–u) with the harness, and the Po
 
 - Depends on: none open (Y1-P0-T12 done: it added the version print and raised TD-022).
 - Unlocks: Y1-P0-T15 (the human playthrough builds the exe with this script); the monthly plans' "build the exe" step.
+
+---
+
+## Completion Notes
+**Completed**: 2026-10-26
+**Criteria**: 6/6 passing. Fix and evidence in `c9f694f` (`fix(tools)`); story `9e91825`. The committed
+`tools/export_windows.ps1` has SHA-256 `a7266698…`, the hash every build and mutation log names. Release and `-Tour` exit 0
+under Windows PowerShell 5.1 and PowerShell 7, `-NoSmoke` under 5.1; 21 mutations (a)–(u) caught; `smoke_boot.png` signed
+off by the user (the final run's capture is byte-identical). The unfixed script's failure is kept
+(`before_release_ps51.log`).
+**Code review**: five `/code-review` rounds (engine specialist + QA each). Each round's fixes were chosen by the user:
+round 1 [A] fix all (cleanup retry, `$LASTEXITCODE` reset, `0 problems` text check, mutations h–l, harness kept);
+round 2 [A+] (the `PROBLEM` match, the result in the null-code message, a warning when cleanup gives up, mutation m,
+`STOPTREE` logging, hashes in every log); round 3 [A] (`; exit code N`, at least one screenshot, the stderr merge retry,
+mutations n–r); round 4 [A] (a failed merge or unreadable log **fails** the build — round 3's warn-only version let a
+finished run pass unchecked, shown by (u) — mutations s–u); round 5 APPROVED WITH SUGGESTIONS. At close QL-TEST-COVERAGE
+GAPS (no blocker) and LP-CODE-REVIEW CONCERNS (no blocker; no path where a bad build prints OK).
+**Found and fixed beyond the plan**: the game log's CR LF kept by the `TOUR RESULT` / `PROBLEM` matches; an empty game log
+crashed the script (predates TD-022); a timed-out run left its isolated `user://` in `%TEMP%`; a tour with a problem or no
+screenshot passed at exit 0. Audit fact 6 (the old `Kill()` leaves the game running) was disproved and corrected.
+**Deviations** (advisory):
+- NOT ASSESSED: GDD / ADR / TR-registry traceability (none exist for build tooling).
+- Scope: what the smoke check checks was listed out of scope and was changed by the review rounds (above); the AC text
+  records each amendment. `production/sprints/sprint-001.md` was changed for decision D4 but is not in the story's file
+  list; it gives the estimate as 1 day, the story and sprint-status 0.5.
+- Evidence limits (QL-TEST-COVERAGE): only (a), (e) and (u) revert production logic; the other mutations are fault
+  scenarios on the unchanged code. Nothing shows `taskkill /T` changing the outcome ((c) and (d) look the same); no
+  non-zero exit code through the real console wrapper; PowerShell 7 ran the passing paths only; the merge's first try
+  meeting the lock in (p) is inferred. Logged as TD-030, with a re-run protocol in the evidence README.
+**Test Evidence**: Integration — no automated suite (D2); `production/qa/evidence/2026-10-export/` (README, 5 build logs,
+21 mutation logs with the harness, the build-log wrapper, repro logs, `smoke_boot.png`).
+**Tech debt logged**: TD-030 (export script follow-ups and evidence limits).

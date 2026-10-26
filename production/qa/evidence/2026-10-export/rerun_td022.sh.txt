@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# TD-022: re-run AC-4 (five real builds) and AC-5 (mutations a-g) on the final script, one after another.
+ROOT="/c/Users/BHASKAR BAHUKHANDI/OneDrive/Desktop/Ultimate project"
+SCR="C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/38742c26-a8d5-4ddd-be96-9bff07452637/scratchpad"
+E="$ROOT/production/qa/evidence/2026-10-export"
+PS7="/c/Program Files/PowerShell/7/pwsh"
+count() { powershell -NoProfile -Command '(Get-Process Aethelgard* -ErrorAction SilentlyContinue | Measure-Object).Count'; }
+run() {  # run <log> <shell> [flags]
+    local log="$1" shell="$2"; shift 2
+    local pre; pre=$(count)
+    (cd "$ROOT/AethelgardPrototype" && "$shell" -NoProfile -File tools/export_windows.ps1 "$@") > "$E/$log" 2>&1
+    local code=$?
+    echo "EXIT $code" >> "$E/$log"
+    echo "pre-run Aethelgard processes: $pre; post-run: $(count)" >> "$E/$log"
+    echo "shell: $shell $("$shell" -NoProfile -Command '$PSVersionTable.PSVersion.ToString()' | tr -d '\r'); script sha256: $(sha256sum "$ROOT/AethelgardPrototype/tools/export_windows.ps1" | cut -d' ' -f1)" >> "$E/$log"
+    echo "$log: exit $code; $(grep -a -E 'RELEASE OK|TOUR BUILD OK|^BUILD OK|TOUR RESULT' "$E/$log" | tr -d '\r' | tr '\n' ' ')"
+}
+run ac4_release_ps51.log powershell
+# Keep the signed-off smoke_boot.png; compare this run's capture with it byte for byte.
+cp "$ROOT/AethelgardPrototype/exports/windows/smoke_boot.png" "$E/smoke_boot_rerun.png"
+{ echo "signed-off smoke_boot.png  sha256 $(sha256sum "$E/smoke_boot.png" | cut -d' ' -f1)"
+  echo "this run's capture         sha256 $(sha256sum "$E/smoke_boot_rerun.png" | cut -d' ' -f1)"
+  if cmp -s "$E/smoke_boot.png" "$E/smoke_boot_rerun.png"; then echo "IDENTICAL bytes"; rm -f "$E/smoke_boot_rerun.png"
+  else echo "DIFFERENT bytes: kept as smoke_boot_rerun.png for the user to look at"; fi
+} | tee "$E/smoke_boot_compare.txt"
+run ac4_release_ps7.log "$PS7"
+run ac4_nosmoke_ps51.log powershell -NoSmoke
+run ac4_tour_ps51.log powershell -Tour
+# The game's own tour log from that real run, kept byte for byte, with its line-ending counts.
+cp "$ROOT/AethelgardPrototype/exports/windows_debug_test/tour.log" "$E/real_tour_ps51.log"
+python "$SCR/td022_line_endings.py" "$(cygpath -w "$E/real_tour_ps51.log")" | tee "$E/real_tour_ps51_line_endings.txt"
+run ac4_tour_ps7.log "$PS7" -Tour
+cp "$SCR/td022_mutations.py" "$E/harness_td022_mutations.py.txt"
+PYTHONIOENCODING=utf-8 python "$SCR/td022_mutations.py"
+# (r)'s own holding process deletes its user:// folder a few seconds after the harness counts: check %TEMP% again.
+sleep 15
+python -c "
+import os, re, tempfile, datetime
+t = tempfile.gettempdir(); g = sorted(n for n in os.listdir(t) if re.fullmatch(r'aeth_phase0_test_[0-9a-f]{32}', n))
+print('Checked %s, 15 s after the last mutation:' % datetime.datetime.now().isoformat(timespec='seconds'))
+print('%d aeth_phase0_test_<guid> folders in %%TEMP%%:' % len(g)); [print('  ' + n) for n in g]
+" | tee "$E/r_temp_after.txt"

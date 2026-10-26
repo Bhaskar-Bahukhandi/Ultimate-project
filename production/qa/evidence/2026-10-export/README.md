@@ -1,9 +1,9 @@
 # TD-022 evidence: the export smoke check reads the game's exit code under Windows PowerShell 5.1
 
 - **Story:** `production/epics/y1-p0-stabilize/story-td022-export-exit-code.md`
-- **Code:** `fix/phase0-playthrough-blockers` at `9e91825` plus the uncommitted `AethelgardPrototype/tools/export_windows.ps1`
-  change, SHA-256 `a7266698eec8e03687616cac2979aa3cd4d80405bf9c8d52ae136ad13e85235c` (stored LF in Git, so the blob's
-  hash is the same once committed; the commit hash is added at close). Windows 11, Godot 4.6.3.stable, Windows PowerShell
+- **Code:** commit `c9f694f` on `fix/phase0-playthrough-blockers`; `AethelgardPrototype/tools/export_windows.ps1` there
+  has SHA-256 `a7266698eec8e03687616cac2979aa3cd4d80405bf9c8d52ae136ad13e85235c` (checked at close against the
+  committed blob). Windows 11, Godot 4.6.3.stable, Windows PowerShell
   5.1.26100.9711, PowerShell 7.6.9, NVIDIA GeForce RTX 2050 (Vulkan, Forward+).
 - **Game code changed:** none. Only the export script, the CHANGELOG, the register row, the story, its sprint-status
   entry and this folder.
@@ -79,3 +79,18 @@
 - `ObjectDB instances leaked at exit` in the smoke logs is TD-012, unchanged.
 - Trailing spaces in these logs are raw output; `.gitattributes` exempts `production/qa/evidence/**/*.log` from the
   whitespace check.
+
+## Re-run protocol (QL-TEST-COVERAGE at close)
+
+There is no automated test for this script (decision D2: it needs Windows, a real renderer and an export). **Any change
+to `AethelgardPrototype/tools/export_windows.ps1` re-runs at least** the AC-4 builds (release and `-Tour` under
+`powershell` and `pwsh`, `-NoSmoke`) and mutations (a), (b), (e), (g), (s) and (u), and checks that each log names the
+new script's SHA-256. How:
+
+- `rerun_td022.sh.txt` — the bash wrapper that ran the five builds (it appends the `EXIT`, process-count and shell /
+  SHA-256 lines to each `ac4_*.log`), copied the game's `tour.log`, compared `smoke_boot.png`, ran the harness and the
+  final `%TEMP%` check.
+- `harness_td022_mutations.py.txt` — the mutation harness (`python harness.py a b e g s u` runs a subset; every edit
+  must match the script exactly once, so a changed script makes it stop at the edit that no longer applies).
+- Both scripts carry this machine's absolute paths; change `ROOT` / `SCR` first. A full run takes about 35 minutes
+  (each mutation exports a build; each tour opens a game window).
