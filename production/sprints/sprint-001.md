@@ -24,13 +24,13 @@ Two work streams per day: Block A (primary, 4 h) Mon–Sat; Block B (secondary, 
 Sundays: Block A is the weekly integration playthrough, not task work.
 
 - Total: 43 days (Mon 19 Oct – Mon 30 Nov 2026) = **80 block-days** (37 Block A + 43 Block B)
-- Buffer: **11 block-days** (14%) of uncommitted capacity (16 at planning; -2 for the S02 growth, -3 for
-  TD-004 and TD-010 added 2026-10-24):
+- Buffer: **10 block-days** (13%) of uncommitted capacity (16 at planning; -2 for the S02 growth, -3 for
+  TD-004 and TD-010 added 2026-10-24, -1 for TD-022 added 2026-10-26):
   - **5 days: softlock-fix reserve** — late Block B slots (formerly S13/S14), only for fixing
     softlocks the bot or the human pass finds; separate from the gate-check day
-  - **6 days: Nice to Have candidates**, taken in listed order only when no slip is pending
+  - **5 days: Nice to Have candidates**, taken in listed order only when no slip is pending
 - A slipped primary day uses the next free Block B slot (a 3 h slot ≈ 75% of a 4 h day); the plan records the move.
-- Committed (Must + Should): **69 block-days** (64 at planning; +2 S02 decision 3; +3 TD-004 and TD-010)
+- Committed (Must + Should): **70 block-days** (64 at planning; +2 S02 decision 3; +3 TD-004 and TD-010; +1 TD-022)
 - Daily load: ~10.5 h scheduled (A 4, B 3, C 1.5, D 1, study 0.5, start/end/hygiene 0.75),
   7 days a week. The buffer does not reduce this — see Risks.
 - Energy rule (ROADMAP §1.1): rating 1–5 as the first line of `active.md` each morning; if the
@@ -67,10 +67,11 @@ Sundays: Block A is the weekly integration playthrough, not task work.
 | Y1-P0-T14b | Playthrough bot: Ch1 fight legs + CI step | you + Claude (qa-tester, devops-engineer) | 1 | T13a–c, T14a, TD-010 | `tests/integration/playthrough/full_playthrough_test.gd` passes New Game → credits headless in CI |
 | Y1-P0-TD-004 | Runtime check for the Chapter 3 flash call sites (register TD-004) | you + Claude (qa-tester, ui-programmer) | 1 | T08 (done) | The Chapter 3 scenes' own flash lines (archive x5, wastes, Ironhold departure) run in a headless scene check (`screen_flash_test.gd` or a sibling suite); watched failing with one flash call removed; `suite_limits.txt` updated. Re-estimate if the scenes do not load headless without story-state setup (check in the first hour) |
 | Y1-P0-TD-010 | Permanent self-test for the test runners (register TD-010) | you + Claude (devops-engineer, qa-tester) | 2 | T02, TD-007, TD-009 (done); **closes before T14b** (both edit `ci.yml`) | A stub-`GODOT` self-test (no engine) runs locally and in CI on Linux and covers 124 over 137, the elapsed rule, last result line wins, no result line, an unregistered suite and the TD-009 cases (missing exe -> exit 1, `$null` init, NUL-byte stub on Linux); `suite_limits.txt` header documents the result-line format; probe sources kept in `production/qa/evidence/`; watched failing. Cut line if 2 days run out: the stale-`min_checks` flag and the `suite_limits.txt` header documentation go to the backlog |
+| Y1-P0-TD-022 | Export smoke check reads the exit code under PowerShell 5.1 (register TD-022) | you + Claude (devops-engineer) | 1 | T12 (done); **closes before T15** (T15 builds the exe with this script) | `powershell -File tools/export_windows.ps1` and `-Tour` (and the same under `pwsh`) end OK with exit 0; an unreadable exit code and a real non-zero code each fail with their own message; a tour timeout leaves no game process (`production/qa/evidence/2026-10-export/`) |
 | Y1-P0-T15 | Phase 0 exit: a human plays New Game to the credits | **you play** + Claude (qa-lead) | 3 | T14b, S08, every other Must Have except S16 | Playthrough on an **exported Windows build** (`tools/export_windows.ps1`); `production/qa/playtest-2026-11-phase0.md` with 0 open softlocks; smoke-check + gate-check reports |
 | Y1-P0-S16 | Review Phase 0 and plan the spine | you + Claude (producer) | 1 | T15 | `production/milestones/y1-p0-review.md`; retro; P1 goal drafted |
 
-Must Have total: 63 block-days (58 at planning; +2 S02 decision 3; +3 TD-004 and TD-010; T01 + S01 done/in progress
+Must Have total: 64 block-days (58 at planning; +2 S02 decision 3; +3 TD-004 and TD-010; +1 TD-022; T01 + S01 done/in progress
 today). T14 grew 3 → 4 days (T14a 3 + T14b 1),
 per the producer's finding that Ch4–10 cannot be scripted in the original blocks.
 
@@ -120,6 +121,12 @@ disagree, this sprint plan wins until the plan is re-generated:
   forward, 41 Must + 6 Should block-days remain against 67 (31 A + 36 B from Mon 26 Oct), ~20 spare. The
   Capacity header (64 / 16 / 11) had not been updated for the S02 growth and is restated from the task tables.
   The QA plan (2026-10-18) does not cover them; their acceptance criteria are in the table and the register.
+- **TD-022 added 2026-10-26** (the register targets it "before T15"; raised at the T12 close: under Windows
+  PowerShell 5.1 `tools/export_windows.ps1` loses the game's exit code, so its smoke check fails on every build).
+  Must Have, Block B, 1 block-day from the free buffer (6 → 5 free days; the 5-day softlock reserve is untouched);
+  T15 waits for it, since T15 builds the exported exe with that script. Not run through PR-SPRINT (a 1 block-day
+  addition, agreed with the user). The QA plan does not cover it; its acceptance criteria are in
+  `production/epics/y1-p0-stabilize/story-td022-export-exit-code.md`.
 
 ## User-decision days (must not be skipped)
 | Day | Date | Task | Decision |
