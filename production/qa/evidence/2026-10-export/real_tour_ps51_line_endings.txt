@@ -1,0 +1,1 @@
+real_tour_ps51.log: 506 lines, 506 end with CR LF; TOUR RESULT line ends b'problems\r\n'

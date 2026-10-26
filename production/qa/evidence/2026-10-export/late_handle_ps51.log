@@ -1,0 +1,18 @@
+TD-022 second review: reading $p.Handle AFTER the process has exited (Windows PowerShell 5.1, ErrorActionPreference Stop).
+cmd.exe /c exit 3 through the script's Start-Process call; 800 ms pause before the Handle read; 5 runs.
+5.1.26100.9711
+run 1 late Handle read: ok; ExitCode=[]
+run 2 late Handle read: ok; ExitCode=[]
+run 3 late Handle read: ok; ExitCode=[]
+run 4 late Handle read: ok; ExitCode=[]
+run 5 late Handle read: ok; ExitCode=[]
+--- td022_late_handle.ps1
+$ErrorActionPreference = "Stop"
+$log = Join-Path $env:TEMP "td022_late.log"
+foreach ($n in 1..5) {
+  $p = Start-Process -FilePath "cmd.exe" -ArgumentList "/c exit 3" -PassThru -NoNewWindow -RedirectStandardOutput $log -RedirectStandardError "$log.err"
+  Start-Sleep -Milliseconds 800
+  try { $null = $p.Handle; $h = "ok" } catch { $h = "THROWS " + $_.Exception.InnerException.GetType().Name + ": " + $_.Exception.InnerException.Message }
+  $null = $p.WaitForExit(5000)
+  "run $n late Handle read: $h; ExitCode=[$($p.ExitCode)]"
+}

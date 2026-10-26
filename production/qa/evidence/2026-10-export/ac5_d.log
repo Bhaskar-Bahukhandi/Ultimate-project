@@ -1,0 +1,33 @@
+mutation (d) flags=-Tour; Aethelgard* processes before 0, after 0, after cleanup 0; aeth_phase0_test_<guid> folders in %TEMP% before 3, after 3; 40 s
+expected the FAILED list to contain: "the tour didn't finish within 15 minutes" -> CAUGHT
+  script under test sha256 (working tree) a7266698eec8e03687616cac2979aa3cd4d80405bf9c8d52ae136ad13e85235c
+  mutant sha256           7745401cde67dd15b7b402e371d44de098469ef4e692f4f4a647351f5394fe89
+  edit 1:
+    OLD: $r = Invoke-Built $gameArgs $tourLog 900
+    NEW: $r = Invoke-Built $gameArgs $tourLog 15
+  edit 2:
+    OLD: function Invoke-Built
+    NEW: function Diag($Tag, $Proc) {
+    $l = @(Get-CimInstance Win32_Process -Filter "Name LIKE 'Aethelgard%'" -ErrorAction SilentlyContinue |
+        ForEach-Object { "$($_.Name) pid=$($_.ProcessId) parent=$($_.ParentProcessId)" })
+    Write-Host ("DIAG {0}: started pid={1}; running: {2}" -f $Tag, $Proc.Id, $(if ($l.Count) { $l -join "; " } else { "none" }))
+}
+
+function Invoke-Built
+  edit 3:
+    OLD:         if (-not $done) { Stop-Tree $p }
+    NEW:         if (-not $done) { Diag "before-stop" $p; $p.Kill(); Diag "t+0" $p; Start-Sleep 5; Diag "t+5" $p; Start-Sleep 5; Diag "t+10" $p }
+--- script output (stdout and stderr) ---
+Aethelgard 0.1.0
+Exporting 'Windows Debug Test' (--export-debug) with Godot 4.6.3.stable.official.7d41c59c4 ...
+Built C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows_debug_test\Aethelgard.exe (98.1 MB); export errors: 0; scripts/debug files packed: 2
+Running the screenshot tour inside the built game (a window opens) ...
+DIAG before-stop: started pid=31992; running: Aethelgard.console.exe pid=31992 parent=3028; Aethelgard.exe pid=11464 parent=31992
+DIAG t+0: started pid=31992; running: Aethelgard.exe pid=11464 parent=31992
+DIAG t+5: started pid=31992; running: none
+DIAG t+10: started pid=31992; running: none
+Tour log: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows_debug_test\tour.log
+Screenshots: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\run_artifacts\screenshots\build-20261026-221515
+FAILED:
+  - the tour didn't finish within 15 minutes
+EXIT 1

@@ -1,0 +1,46 @@
+TD-022 audit facts 1 and 7, re-run 2026-10-26.
+Fact 1: Start-Process -PassThru ExitCode with and without reading $p.Handle (cmd.exe /c ... exit N)
+== Windows PowerShell 5.1
+cacheHandle=False want=0 done=True ExitCode=[] isNull=True
+cacheHandle=False want=3 done=True ExitCode=[] isNull=True
+cacheHandle=True want=0 done=True ExitCode=[0] isNull=False
+cacheHandle=True want=3 done=True ExitCode=[3] isNull=False
+PS 5.1.26100.9711
+== PowerShell 7
+cacheHandle=False want=0 done=True ExitCode=[0] isNull=False
+cacheHandle=False want=3 done=True ExitCode=[3] isNull=False
+cacheHandle=True want=0 done=True ExitCode=[0] isNull=False
+cacheHandle=True want=3 done=True ExitCode=[3] isNull=False
+PS 7.6.9
+
+Fact 7: taskkill / Kill() on a process that has already exited (5.1)
+-- under ErrorActionPreference Stop:
+taskkill.exe : ERROR: The process "25580" not found.
+At C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\claude\C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project\
+-- under ErrorActionPreference Continue:
+taskkill on exited PID: LASTEXITCODE=128 HasExited=True
+Kill() on exited: THROWS MethodInvocationException
+
+Scripts: td022_repro.ps1 and td022_gap3.ps1 (inline below)
+--- td022_repro.ps1
+$log = Join-Path $env:TEMP "td022_repro.log"
+foreach ($cache in $false, $true) {
+    foreach ($code in 0, 3) {
+        $p = Start-Process -FilePath "cmd.exe" -ArgumentList "/c ping -n 2 127.0.0.1 >nul & exit $code" -PassThru -NoNewWindow `
+            -RedirectStandardOutput $log -RedirectStandardError "$log.err"
+        if ($cache) { $null = $p.Handle }
+        $done = $p.WaitForExit(10000)
+        $ec = $p.ExitCode
+        "cacheHandle=$cache want=$code done=$done ExitCode=[$ec] isNull=$($null -eq $ec)"
+    }
+}
+"PS " + $PSVersionTable.PSVersion
+--- td022_gap3.ps1 (EAP shown as Continue; the Stop run differs only in that line)
+$ErrorActionPreference = "Continue"
+$log = Join-Path $env:TEMP "td022_gap3.log"
+$p = Start-Process -FilePath "cmd.exe" -ArgumentList "/c exit 0" -PassThru -NoNewWindow -RedirectStandardOutput $log -RedirectStandardError "$log.err"
+$null = $p.Handle
+$null = $p.WaitForExit(5000)
+$null = & taskkill.exe /F /T /PID $p.Id 2>$null
+"taskkill on exited PID: LASTEXITCODE=$LASTEXITCODE HasExited=$($p.HasExited)"
+try { $p.Kill(); "Kill() on exited: no throw" } catch { "Kill() on exited: THROWS " + $_.Exception.GetType().Name }

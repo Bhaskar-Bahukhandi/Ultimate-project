@@ -1,0 +1,3 @@
+signed-off smoke_boot.png  sha256 2250e3b4cf83e45426ac8240eee1d798f959035fcb737c8d1a4aba25009560d8
+this run's capture         sha256 2250e3b4cf83e45426ac8240eee1d798f959035fcb737c8d1a4aba25009560d8
+IDENTICAL bytes

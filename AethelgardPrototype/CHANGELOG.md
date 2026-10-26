@@ -3,6 +3,20 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-26 — The Windows export check reports the game's real exit code (TD-022)
+
+- **fix(tools):** under Windows PowerShell 5.1 (`powershell -File tools/export_windows.ps1`, the documented command) the
+  export script lost the built game's exit code, so its release smoke check failed on every build with an empty `exit
+  code ` and a passing `-Tour` printed `FAILED: TOUR RESULT: … 0 problems`. It now reads the code (PowerShell 5.1 and 7
+  both), reports an unreadable code as `exit code unavailable` instead of a blank, and on a timeout stops the console
+  wrapper and the game together without the script itself crashing. Also: a failing tour's `TOUR RESULT` line prints on
+  one line (the game's log ends lines with CR LF; the `PROBLEM` lines get the same fix); a tour that reports a problem
+  or takes no screenshot fails even at exit code 0, and a non-zero exit code is named in the failure; a game that prints
+  nothing is reported instead of crashing the script; a game log that cannot be completed or read fails the build
+  instead of passing unchecked; a timed-out run removes its isolated `user://` folder in `%TEMP%`, retrying while the
+  game lets go of it, and warns if it cannot. Nothing in the game changes. Evidence:
+  `production/qa/evidence/2026-10-export/`.
+
 ## 2026-10-25 — A bot plays Chapter 3 to the credits (Y1-P0-T14a)
 
 - **test:** a new suite, `tests/integration/playthrough/full_playthrough_test.gd`, plays the game headless from Chapter

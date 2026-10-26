@@ -1,0 +1,36 @@
+mutation (h) flags=release; Aethelgard* processes before 0, after 0, after cleanup 0; aeth_phase0_test_<guid> folders in %TEMP% before 3, after 3; 46 s
+expected the FAILED list to contain: "the game didn't exit within 3 minutes" ; and FALLBACK HasExited=True ; and no PowerShell error text ; and STOPTREE taskkill exit 128 -> CAUGHT
+  script under test sha256 (working tree) a7266698eec8e03687616cac2979aa3cd4d80405bf9c8d52ae136ad13e85235c
+  mutant sha256           b7316ca8509f5fe0a52afb9d9aff4c5265c46dceee7e1962c4a98c0f465cce50
+  edit 1:
+    OLD:     $run = if (Test-Path $console) { $console } else { $exe }
+    NEW:     $run = if (Test-Path $console) { $console } else { $exe }
+    $run = "cmd.exe"
+  edit 2:
+    OLD:         $p = Start-Process -FilePath $run -ArgumentList $GameArgs -PassThru -NoNewWindow `
+    NEW:         $p = Start-Process -FilePath $run -ArgumentList '/c ping -n 30 127.0.0.1 >nul' -PassThru -NoNewWindow `
+  edit 3:
+    OLD:         $done = $p.WaitForExit($TimeoutSec * 1000)
+    NEW:         $null = $p.WaitForExit(2000); $done = $false
+  edit 4:
+    OLD:     try { $null = & taskkill.exe /F /T /PID $Proc.Id 2>&1 } catch { }
+    NEW:     try { $null = & taskkill.exe /F /T /PID 999999 2>&1 } catch { }
+  edit 5:
+    OLD:     $ErrorActionPreference = $old
+    NEW:     $ErrorActionPreference = $old
+    Write-Host ("STOPTREE: taskkill exit {0}; started process HasExited {1}" -f $LASTEXITCODE, $Proc.HasExited)
+  edit 6:
+    OLD:         if (-not $done) { Stop-Tree $p }
+    NEW:         if (-not $done) { Stop-Tree $p; Start-Sleep 1; Write-Host ("FALLBACK: started pid={0} HasExited={1}" -f $p.Id, $p.HasExited) }
+--- script output (stdout and stderr) ---
+Aethelgard 0.1.0
+Exporting 'Windows Desktop' (--export-release) with Godot 4.6.3.stable.official.7d41c59c4 ...
+Built C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows\Aethelgard.exe (101.8 MB); export errors: 0; scripts/debug files packed: 0
+STOPTREE: taskkill exit 128; started process HasExited False
+FALLBACK: started pid=27492 HasExited=True
+Smoke log: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows\smoke.log
+Boot frames: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows\smoke_boot.png
+FAILED:
+  - the game didn't exit within 3 minutes
+  - only 0 of 120 frames were recorded
+EXIT 1

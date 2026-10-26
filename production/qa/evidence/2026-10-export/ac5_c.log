@@ -1,0 +1,38 @@
+mutation (c) flags=-Tour; Aethelgard* processes before 0, after 0, after cleanup 0; aeth_phase0_test_<guid> folders in %TEMP% before 3, after 3; 38 s
+expected the FAILED list to contain: "the tour didn't finish within 15 minutes" -> CAUGHT
+  script under test sha256 (working tree) a7266698eec8e03687616cac2979aa3cd4d80405bf9c8d52ae136ad13e85235c
+  mutant sha256           40afa7c791e3da63460410fe0afeb455e2c717c0324b9ff7e10f211b239790aa
+  edit 1:
+    OLD: $r = Invoke-Built $gameArgs $tourLog 900
+    NEW: $r = Invoke-Built $gameArgs $tourLog 15
+  edit 2:
+    OLD: function Invoke-Built
+    NEW: function Diag($Tag, $Proc) {
+    $l = @(Get-CimInstance Win32_Process -Filter "Name LIKE 'Aethelgard%'" -ErrorAction SilentlyContinue |
+        ForEach-Object { "$($_.Name) pid=$($_.ProcessId) parent=$($_.ParentProcessId)" })
+    Write-Host ("DIAG {0}: started pid={1}; running: {2}" -f $Tag, $Proc.Id, $(if ($l.Count) { $l -join "; " } else { "none" }))
+}
+
+function Invoke-Built
+  edit 3:
+    OLD:         if (-not $done) { Stop-Tree $p }
+    NEW:         if (-not $done) { Diag "before-stop" $p; Stop-Tree $p; Diag "t+0" $p; Start-Sleep 5; Diag "t+5" $p; Start-Sleep 5; Diag "t+10" $p }
+  edit 4:
+    OLD:     $ErrorActionPreference = $old
+    NEW:     $ErrorActionPreference = $old
+    Write-Host ("STOPTREE: taskkill exit {0}; started process HasExited {1}" -f $LASTEXITCODE, $Proc.HasExited)
+--- script output (stdout and stderr) ---
+Aethelgard 0.1.0
+Exporting 'Windows Debug Test' (--export-debug) with Godot 4.6.3.stable.official.7d41c59c4 ...
+Built C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows_debug_test\Aethelgard.exe (98.1 MB); export errors: 0; scripts/debug files packed: 2
+Running the screenshot tour inside the built game (a window opens) ...
+DIAG before-stop: started pid=22200; running: Aethelgard.console.exe pid=22200 parent=30404; Aethelgard.exe pid=12952 parent=22200
+STOPTREE: taskkill exit 0; started process HasExited True
+DIAG t+0: started pid=22200; running: Aethelgard.exe pid=12952 parent=22200
+DIAG t+5: started pid=22200; running: none
+DIAG t+10: started pid=22200; running: none
+Tour log: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows_debug_test\tour.log
+Screenshots: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\run_artifacts\screenshots\build-20261026-221435
+FAILED:
+  - the tour didn't finish within 15 minutes
+EXIT 1

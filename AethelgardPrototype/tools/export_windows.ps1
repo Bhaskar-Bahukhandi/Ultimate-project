@@ -18,6 +18,7 @@
 #   -Only main_menu,ch2_ passes a subset to the tour.
 #
 # -NoSmoke: build only. Exit code: 0 = all checks passed, 1 = a check failed.
+# Runs under Windows PowerShell 5.1 (`powershell`) and PowerShell 7 (`pwsh`).
 # Usage (from AethelgardPrototype/):
 #   powershell -File tools/export_windows.ps1
 #   powershell -File tools/export_windows.ps1 -Tour
@@ -69,6 +70,28 @@ if (-not $Tour -and $packedDebug.Count -gt 0) { $failures.Add("the RELEASE build
 Write-Host ("Built {0} ({1:N1} MB); export errors: {2}; scripts/debug files packed: {3}" -f
     $exe, ((Get-Item $exe).Length / 1MB), $exportErrors.Count, $packedDebug.Count)
 
+function Stop-Tree($Proc) {
+    # A debug build's console wrapper starts the real game as a child; Kill() targets only the wrapper, /T stops the
+    # child directly.
+    # taskkill's stderr would throw under "Stop" (5.1); an already-exited process is not an error (it exits 128).
+    $old = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    $global:LASTEXITCODE = -1   # if taskkill cannot start, an earlier command's 0 must not skip Kill()
+    try { $null = & taskkill.exe /F /T /PID $Proc.Id 2>&1 } catch { }
+    $ErrorActionPreference = $old
+    if ($LASTEXITCODE -ne 0 -and -not $Proc.HasExited) { try { $Proc.Kill() } catch { } }
+}
+
+function Test-Until([scriptblock]$Try, [int]$Seconds) {
+    # Runs $Try until it returns $true or $Seconds have passed (0 = one try); returns whether it succeeded.
+    $until = [DateTime]::UtcNow.AddSeconds($Seconds)
+    while ($true) {
+        if (& $Try) { return $true }
+        if ([DateTime]::UtcNow -ge $until) { return $false }
+        Start-Sleep -Milliseconds 250
+    }
+}
+
 function Invoke-Built([string[]]$GameArgs, [string]$Log, [int]$TimeoutSec) {
     # Runs the built game with an isolated user:// (real saves are never touched).
     $isolated = Join-Path ([IO.Path]::GetTempPath()) ("aeth_phase0_test_" + [guid]::NewGuid().ToString("N"))
@@ -80,15 +103,36 @@ function Invoke-Built([string[]]$GameArgs, [string]$Log, [int]$TimeoutSec) {
         $env:APPDATA = $isolated
         $p = Start-Process -FilePath $run -ArgumentList $GameArgs -PassThru -NoNewWindow `
             -RedirectStandardOutput $Log -RedirectStandardError "$Log.err"
+        $null = $p.Handle   # Windows PowerShell 5.1 loses ExitCode unless the handle is read while the process runs
         $done = $p.WaitForExit($TimeoutSec * 1000)
-        if (-not $done) { $p.Kill() }
+        if (-not $done) { Stop-Tree $p }
     } finally {
         $env:APPDATA = $oldAppData
-        Remove-Item -LiteralPath $isolated -Recurse -Force -ErrorAction SilentlyContinue
+        # After a timeout the game may hold user:// and its logs for a moment while it is torn down: retry for up to 5 s.
+        $wait = if ($done) { 0 } else { 5 }
+        $removed = Test-Until {
+            Remove-Item -LiteralPath $isolated -Recurse -Force -ErrorAction SilentlyContinue
+            -not (Test-Path -LiteralPath $isolated)
+        } $wait
+        if (-not $removed) { Write-Warning "could not remove the isolated user:// folder $isolated" }
     }
-    Get-Content "$Log.err" -ErrorAction SilentlyContinue | Add-Content $Log
-    Remove-Item -LiteralPath "$Log.err" -Force -ErrorAction SilentlyContinue
-    return @{ Done = $done; Code = $(if ($done) { $p.ExitCode } else { -1 }); Text = (Get-Content $Log -Raw) }
+    $merged = Test-Until {
+        try {
+            if (Test-Path -LiteralPath "$Log.err") {
+                Get-Content -LiteralPath "$Log.err" -ErrorAction Stop | Add-Content -LiteralPath $Log -ErrorAction Stop
+            }
+            $true
+        } catch { $false }
+    } $wait
+    # A log that cannot be completed or read fails the build: the game's errors in it would go unchecked.
+    if (-not $merged) { $failures.Add("could not add the game's stderr to $Log (kept in $Log.err); its errors were not checked") }
+    else { Remove-Item -LiteralPath "$Log.err" -Force -ErrorAction SilentlyContinue }
+    $raw = Get-Content -LiteralPath $Log -Raw -ErrorAction SilentlyContinue
+    if ($null -eq $raw -and (Test-Path -LiteralPath $Log) -and (Get-Item -LiteralPath $Log).Length -gt 0) {
+        $failures.Add("could not read $Log; the game's errors in it were not checked")
+    }
+    # [string]: a game that printed nothing gives $null, which [regex]::Match would throw on.
+    return @{ Done = $done; Code = $(if ($done) { $p.ExitCode } else { -1 }); Text = [string]$raw }
 }
 
 function Test-LogClean([string]$Text) {
@@ -111,12 +155,16 @@ if ($NoSmoke) {
     $tourLog = Join-Path $outDir "tour.log"
     Write-Host "Running the screenshot tour inside the built game (a window opens) ..."
     $r = Invoke-Built $gameArgs $tourLog 900
-    $result = [regex]::Match($r.Text, "TOUR RESULT: .*").Value
+    $result = [regex]::Match($r.Text, "TOUR RESULT: [^\r\n]*").Value   # stop before the CR: the game's log ends lines with CR LF
     if (-not $r.Done) { $failures.Add("the tour didn't finish within 15 minutes") }
+    elseif ($null -eq $r.Code) { $failures.Add("exit code unavailable (PowerShell could not read it)" + $(if ($result) { "; $result" } else { "" })) }
     elseif (-not $result) { $failures.Add("the tour never started or never finished (exit code $($r.Code))") }
-    elseif ($r.Code -ne 0) { $failures.Add("$result (see $shots\report.md)") }
+    # The text is checked too: a problem, or a tour that took no screenshot, fails the build even at exit code 0.
+    elseif ($r.Code -ne 0 -or $result -notmatch '^TOUR RESULT: [1-9]\d* screenshots, 0 problems\s*$') {
+        $failures.Add("$result (see $shots\report.md)" + $(if ($r.Code -ne 0) { "; exit code $($r.Code)" } else { "" }))
+    }
     Test-LogClean $r.Text
-    [regex]::Matches($r.Text, "  PROBLEM: .*") | ForEach-Object { Write-Host $_.Value }
+    [regex]::Matches($r.Text, "  PROBLEM: [^\r\n]*") | ForEach-Object { Write-Host $_.Value }
     Write-Host "Tour log: $tourLog"
     Write-Host "Screenshots: $shots"
     if ($result) { Write-Host $result }
@@ -129,6 +177,7 @@ if ($NoSmoke) {
                   "--fixed-fps", "10", "--quit-after", "120", "--", "--debug-tour")
     $r = Invoke-Built $gameArgs $smokeLog 180
     if (-not $r.Done) { $failures.Add("the game didn't exit within 3 minutes") }
+    elseif ($null -eq $r.Code) { $failures.Add("exit code unavailable (PowerShell could not read it)") }
     elseif ($r.Code -ne 0) { $failures.Add("exit code $($r.Code)") }
     Test-LogClean $r.Text
     if ($r.Text -match "DebugTestMode|Screenshot tour") { $failures.Add("the release build reacted to --debug-tour") }

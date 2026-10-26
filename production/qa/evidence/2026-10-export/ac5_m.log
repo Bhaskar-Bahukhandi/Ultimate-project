@@ -1,0 +1,21 @@
+mutation (m) flags=-Tour; Aethelgard* processes before 0, after 0, after cleanup 0; aeth_phase0_test_<guid> folders in %TEMP% before 3, after 3; 14 s
+expected the FAILED list to contain: 'the tour never started or never finished (exit code 0)' ; and no PowerShell error text -> CAUGHT
+  script under test sha256 (working tree) a7266698eec8e03687616cac2979aa3cd4d80405bf9c8d52ae136ad13e85235c
+  mutant sha256           e40172dd54d1fddc1e4a8cbca132298b051d27f6d29182c98966576bf5061a71
+  edit 1:
+    OLD:     $run = if (Test-Path $console) { $console } else { $exe }
+    NEW:     $run = if (Test-Path $console) { $console } else { $exe }
+    $run = "cmd.exe"
+  edit 2:
+    OLD:         $p = Start-Process -FilePath $run -ArgumentList $GameArgs -PassThru -NoNewWindow `
+    NEW:         $p = Start-Process -FilePath $run -ArgumentList '/c exit 0' -PassThru -NoNewWindow `
+--- script output (stdout and stderr) ---
+Aethelgard 0.1.0
+Exporting 'Windows Debug Test' (--export-debug) with Godot 4.6.3.stable.official.7d41c59c4 ...
+Built C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows_debug_test\Aethelgard.exe (98.1 MB); export errors: 0; scripts/debug files packed: 2
+Running the screenshot tour inside the built game (a window opens) ...
+Tour log: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows_debug_test\tour.log
+Screenshots: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\run_artifacts\screenshots\build-20261026-222328
+FAILED:
+  - the tour never started or never finished (exit code 0)
+EXIT 1

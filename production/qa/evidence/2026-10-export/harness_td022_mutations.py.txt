@@ -1,0 +1,243 @@
+"""TD-022 AC-5: mutants of tools/export_windows.ps1, run under Windows PowerShell 5.1, one per run, in order.
+The committed script is never edited: each mutant is a copy at tools/export_windows_mut.ps1, deleted afterwards.
+Each log starts with every edit in full (old -> new), the Aethelgard* process counts and the count of
+aeth_phase0_test_* GUID folders in %TEMP% before and after (an isolated user:// left behind shows as +1).
+A copy of this harness is kept in the evidence folder (harness_td022_mutations.py.txt)."""
+import subprocess, os, re, sys, time, tempfile, hashlib
+
+ROOT = "C:/Users/BHASKAR BAHUKHANDI/OneDrive/Desktop/Ultimate project/"
+PROJ = ROOT + "AethelgardPrototype/"
+SRC = PROJ + "tools/export_windows.ps1"
+MUT = PROJ + "tools/export_windows_mut.ps1"
+EV = ROOT + "production/qa/evidence/2026-10-export/"
+TMP = tempfile.gettempdir()
+
+HANDLE = "        $null = $p.Handle   # Windows PowerShell 5.1 loses ExitCode unless the handle is read while the process runs\n"
+STOP = "        if (-not $done) { Stop-Tree $p }\n"
+DIAG_FN = '''function Diag($Tag, $Proc) {
+    $l = @(Get-CimInstance Win32_Process -Filter "Name LIKE 'Aethelgard%'" -ErrorAction SilentlyContinue |
+        ForEach-Object { "$($_.Name) pid=$($_.ProcessId) parent=$($_.ParentProcessId)" })
+    Write-Host ("DIAG {0}: started pid={1}; running: {2}" -f $Tag, $Proc.Id, $(if ($l.Count) { $l -join "; " } else { "none" }))
+}
+
+'''
+STOP_DIAG = ('        if (-not $done) { Diag "before-stop" $p; STOPCALL; Diag "t+0" $p; Start-Sleep 5; Diag "t+5" $p; '
+             'Start-Sleep 5; Diag "t+10" $p }\n')
+RUN_LINE = "    $run = if (Test-Path $console) { $console } else { $exe }\n"
+START = "        $p = Start-Process -FilePath $run -ArgumentList $GameArgs -PassThru -NoNewWindow `\n"
+WAIT = "        $done = $p.WaitForExit($TimeoutSec * 1000)\n"
+TOUR900 = "$r = Invoke-Built $gameArgs $tourLog 900"
+TASKKILL = "    try { $null = & taskkill.exe /F /T /PID $Proc.Id 2>&1 } catch { }\n"
+FORCE_TIMEOUT = (WAIT, "        $null = $p.WaitForExit(2000); $done = $false\n")
+SHOW_ALIVE = (STOP, '        if (-not $done) { Stop-Tree $p; Start-Sleep 1; Write-Host ("FALLBACK: started pid={0} HasExited={1}" -f $p.Id, $p.HasExited) }\n')
+# Logging inside Stop-Tree, right after the taskkill call (second review): what taskkill returned and whether the
+# started process had exited at that moment (taskkill's termination is asynchronous, so False here is possible).
+STOPLOG = ("    $ErrorActionPreference = $old\n",
+           "    $ErrorActionPreference = $old\n"
+           '    Write-Host ("STOPTREE: taskkill exit {0}; started process HasExited {1}" -f $LASTEXITCODE, $Proc.HasExited)\n')
+
+
+def hold_lock(target_expr, seconds, after="", anchor=None):
+    """Inserted after `anchor` (default: the forced timeout): another powershell process opens target_expr exclusively
+    for `seconds` (then runs `after`), and this script confirms the lock is in place before going on (LOCK: held=True)."""
+    anchor = anchor or FORCE_TIMEOUT[1]
+    return (anchor, anchor
+            + f"        $lockTarget = {target_expr}\n"
+            + "        $hold = \"`$f = [IO.File]::Open('$lockTarget', 'OpenOrCreate', 'ReadWrite', 'None'); "
+            + f"Start-Sleep -Seconds {seconds}; `$f.Close(); {after}\"\n"
+            + "        $null = Start-Process powershell -WindowStyle Hidden -ArgumentList ('-NoProfile -EncodedCommand ' + "
+            + "[Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($hold)))\n"
+            + "        $locked = $false\n"
+            + "        foreach ($i in 1..40) { try { ([IO.File]::Open($lockTarget, 'OpenOrCreate', 'ReadWrite', 'None')).Close(); "
+            + "Start-Sleep -Milliseconds 100 } catch { $locked = $true; break } }\n"
+            + "        Write-Host \"LOCK: held=$locked on $lockTarget\"\n")
+
+
+PASSING_TOUR = "'/c \"echo TOUR RESULT: 5 screenshots, 0 problems& exit 0\"'"
+PASSING_TOUR_STDERR = "'/c \"echo TOUR RESULT: 5 screenshots, 0 problems& echo TD022-STDERR-MARKER 1>&2& exit 0\"'"
+FAIL_CLOSED = '''    # A log that cannot be completed or read fails the build: the game's errors in it would go unchecked.
+    if (-not $merged) { $failures.Add("could not add the game's stderr to $Log (kept in $Log.err); its errors were not checked") }
+    else { Remove-Item -LiteralPath "$Log.err" -Force -ErrorAction SilentlyContinue }
+    $raw = Get-Content -LiteralPath $Log -Raw -ErrorAction SilentlyContinue
+    if ($null -eq $raw -and (Test-Path -LiteralPath $Log) -and (Get-Item -LiteralPath $Log).Length -gt 0) {
+        $failures.Add("could not read $Log; the game's errors in it were not checked")
+    }
+'''
+WARN_ONLY = '''    if (-not $merged) { Write-Warning "could not add the game's stderr to $Log" }
+    Remove-Item -LiteralPath "$Log.err" -Force -ErrorAction SilentlyContinue
+    $raw = Get-Content -LiteralPath $Log -Raw -ErrorAction SilentlyContinue
+'''
+
+
+def stub(args_literal):
+    return [(RUN_LINE, RUN_LINE + '    $run = "cmd.exe"\n'),
+            (START, '        $p = Start-Process -FilePath $run -ArgumentList ' + args_literal + ' -PassThru -NoNewWindow `\n')]
+
+
+# (name, flags, edits, required substring in the printed FAILED list, extra expectations)
+MUTS = [
+    ("a", [], [(HANDLE, "")], "exit code unavailable", {}),
+    ("b", [], stub("'/c exit 3'"), "exit code 3", {"no_ps_error": True}),
+    ("c", ["-Tour"], [(TOUR900, TOUR900.replace("900", "15")), ("function Invoke-Built", DIAG_FN + "function Invoke-Built"),
+                      (STOP, STOP_DIAG.replace("STOPCALL", "Stop-Tree $p")), STOPLOG],
+     "the tour didn't finish within 15 minutes", {"diag": True}),
+    ("d", ["-Tour"], [(TOUR900, TOUR900.replace("900", "15")), ("function Invoke-Built", DIAG_FN + "function Invoke-Built"),
+                      (STOP, STOP_DIAG.replace("STOPCALL", "$p.Kill()"))],
+     "the tour didn't finish within 15 minutes", {"diag": True, "cleanup": True}),
+    ("e", ["-Tour"], [(HANDLE, "")], "exit code unavailable", {}),
+    ("f", ["-Tour"], stub("'/c \"echo TOUR RESULT: 1 screenshots, 1 problems& exit 1\"'"),
+     "TOUR RESULT: 1 screenshots, 1 problems (see ", {"see_report": True}),
+    ("g", [], stub("'/c exit 0'") + [FORCE_TIMEOUT, STOPLOG], "the game didn't exit within 3 minutes", {"no_ps_error": True}),
+    # added at code review
+    ("h", [], stub("'/c ping -n 30 127.0.0.1 >nul'") + [FORCE_TIMEOUT, (TASKKILL, TASKKILL.replace("$Proc.Id", "999999")), STOPLOG, SHOW_ALIVE],
+     "the game didn't exit within 3 minutes", {"no_ps_error": True, "fallback_killed": True, "taskkill_exit": "128"}),
+    ("i", ["-Tour"], stub("'/c exit 0'") + [(HANDLE, "")], "exit code unavailable", {"absent": "never started"}),
+    ("j", ["-Tour"], stub("'/c \"echo TOUR RESULT: 1 screenshots, 1 problems& exit 0\"'"),
+     "TOUR RESULT: 1 screenshots, 1 problems (see ", {"see_report": True}),
+    ("k", ["-Tour"], [(TOUR900, TOUR900.replace("900", "15")), STOPLOG],
+     "the tour didn't finish within 15 minutes", {"no_ps_error": True, "no_orphan": True}),
+    ("l", [], stub("'/c ping -n 30 127.0.0.1 >nul'") + [FORCE_TIMEOUT, (TASKKILL, TASKKILL.replace("taskkill.exe", "taskkill_missing.exe")), STOPLOG, SHOW_ALIVE],
+     "the game didn't exit within 3 minutes", {"no_ps_error": True, "fallback_killed": True, "taskkill_exit": "-1"}),
+    # added at the second review
+    ("m", ["-Tour"], stub("'/c exit 0'"), "the tour never started or never finished (exit code 0)", {"no_ps_error": True}),
+    # added at the third review
+    ("n", ["-Tour"], stub("'/c \"echo TOUR RESULT: 0 screenshots, 0 problems& exit 0\"'"),
+     "TOUR RESULT: 0 screenshots, 0 problems (see ", {"no_ps_error": True}),
+    ("o", ["-Tour"], stub("'/c \"echo TOUR RESULT: 5 screenshots, 0 problems& exit 3\"'"),
+     "TOUR RESULT: 5 screenshots, 0 problems (see ", {"no_ps_error": True, "out_has": ["report.md); exit code 3"]}),
+    # (p) and (q): the stub writes a marker to stderr, so the merge has to open the locked log (an empty stderr never
+    # opens it); afterwards the harness reads smoke.log itself (after the lock is gone) for the marker.
+    ("p", [], stub("'/c \"echo TD022-STDERR-MARKER 1>&2& exit 0\"'") + [FORCE_TIMEOUT, hold_lock("$Log", 2)],
+     "the game didn't exit within 3 minutes",
+     {"no_ps_error": True, "out_has": ["LOCK: held=True"], "out_lacks": ["could not add the game's stderr"],
+      "settle": 2, "file_has": "TD022-STDERR-MARKER"}),
+    ("q", [], stub("'/c \"echo TD022-STDERR-MARKER 1>&2& exit 0\"'") + [FORCE_TIMEOUT, hold_lock("$Log", 8)],
+     "the game didn't exit within 3 minutes",
+     {"no_ps_error": True, "out_has": ["LOCK: held=True", "could not add the game's stderr"],
+      "settle": 8, "file_lacks": "TD022-STDERR-MARKER"}),
+    ("r", [], stub("'/c exit 0'") + [FORCE_TIMEOUT, hold_lock("(Join-Path $isolated 'held.tmp')", 8,
+                                                            "Start-Sleep -Milliseconds 300; Remove-Item -LiteralPath '$isolated' -Recurse -Force")],
+     "the game didn't exit within 3 minutes",
+     {"no_ps_error": True, "out_has": ["LOCK: held=True", "could not remove the isolated user:// folder"]}),
+    # added at the fourth review: a tour that otherwise passes, its log locked right after a normal exit
+    # (s): the stderr file is held (the game's errors go there), so the merge fails while the log itself still reads
+    # cleanly with a passing TOUR RESULT — the fail-open case.
+    ("s", ["-Tour"], stub(PASSING_TOUR_STDERR) + [hold_lock('"$Log.err"', 4, anchor=WAIT)],
+     "could not add the game's stderr", {"no_ps_error": True, "out_has": ["LOCK: held=True"], "out_lacks": ["TOUR BUILD OK"]}),
+    ("t", ["-Tour"], stub(PASSING_TOUR) + [hold_lock("$Log", 4, anchor=WAIT)],
+     "could not read", {"no_ps_error": True, "out_has": ["LOCK: held=True"], "out_lacks": ["TOUR BUILD OK"]}),
+    # (u) = (s) with the fail-closed lines reverted to the previous warn-only code: shows the gap R1 described.
+    ("u", ["-Tour"], stub(PASSING_TOUR_STDERR) + [hold_lock('"$Log.err"', 4, anchor=WAIT), (FAIL_CLOSED, WARN_ONLY)],
+     "", {"expect_pass": True, "no_ps_error": True, "out_has": ["LOCK: held=True", "TOUR BUILD OK"]}),
+]
+
+
+def ps(args, timeout=1500):
+    return subprocess.run(["powershell", "-NoProfile", "-Command", args], capture_output=True, text=True,
+                          encoding="utf-8", errors="replace", timeout=timeout)
+
+
+def procs():
+    return ps("(Get-Process Aethelgard* -ErrorAction SilentlyContinue | Measure-Object).Count").stdout.strip()
+
+
+def orphans():
+    return sum(1 for n in os.listdir(TMP) if re.fullmatch(r"aeth_phase0_test_[0-9a-f]{32}", n))
+
+
+def main():
+    base = open(SRC, "rb").read().decode("utf-8")
+    nl = "\r\n" if "\r\n" in base else "\n"
+    base = base.replace("\r\n", "\n")
+    results = []
+    only = set(sys.argv[1:])   # optional subset, e.g. "p q r"; their summary lines replace the old ones
+    try:
+        for name, flags, edits, need, extra in MUTS:
+            if only and name not in only:
+                continue
+            s = base
+            for old, new in edits:
+                assert s.count(old) == 1, (name, old[:60], s.count(old))
+                s = s.replace(old, new)
+            open(MUT, "wb").write(s.replace("\n", nl).encode("utf-8"))
+            pre, pre_dirs = procs(), orphans()
+            t0 = time.time()
+            cmd = f"Set-Location '{PROJ}'; & powershell -NoProfile -File tools/export_windows_mut.ps1 {' '.join(flags)} 2>&1; 'EXIT ' + $LASTEXITCODE"
+            r = ps(cmd)
+            out = r.stdout + r.stderr
+            time.sleep(2)
+            post, post_dirs = procs(), orphans()
+            if extra.get("cleanup"):
+                ps("Get-Process Aethelgard* -ErrorAction SilentlyContinue | Stop-Process -Force; Start-Sleep 2")
+            post_clean = procs()
+            failed_part = out.split("FAILED:")[-1] if "FAILED:" in out else ""
+            if extra.get("expect_pass"):   # the reverted code must let this run through
+                ok = "FAILED:" not in out and "EXIT 0" in out
+            else:
+                ok = need in failed_part and "EXIT 1" in out
+            if extra.get("no_ps_error"):
+                ok &= not re.search(r"At line|Exception|CategoryInfo|FullyQualifiedErrorId", out)
+            if extra.get("see_report"):
+                ok &= "report.md" in failed_part
+            if extra.get("diag"):
+                ok &= "DIAG t+10" in out
+            if extra.get("absent"):
+                ok &= extra["absent"] not in failed_part
+            if extra.get("fallback_killed"):
+                ok &= "HasExited=True" in out
+            if extra.get("no_orphan"):
+                ok &= post_dirs == pre_dirs
+            if extra.get("taskkill_exit"):
+                ok &= f"STOPTREE: taskkill exit {extra['taskkill_exit']};" in out
+            for want in extra.get("out_has", []):
+                ok &= want in out
+            for unwanted in extra.get("out_lacks", []):
+                ok &= unwanted not in out
+            smoke_note = ""
+            if "file_has" in extra or "file_lacks" in extra:
+                time.sleep(extra.get("settle", 0))
+                smoke = open(PROJ + "exports/windows/smoke.log", encoding="utf-8", errors="replace").read()
+                marker = extra.get("file_has") or extra.get("file_lacks")
+                present = marker in smoke
+                ok &= present if "file_has" in extra else not present
+                smoke_note = f"\nexports/windows/smoke.log read by the harness afterwards: {marker!r} {'present' if present else 'absent'}"
+            edits_txt = (f"  script under test sha256 (working tree) {hashlib.sha256(open(SRC, 'rb').read()).hexdigest()}\n"
+                         f"  mutant sha256           {hashlib.sha256(open(MUT, 'rb').read()).hexdigest()}\n") + "\n".join(f"  edit {i + 1}:\n    OLD: {o.rstrip()}\n    NEW: {n.rstrip() or '(deleted)'}" for i, (o, n) in enumerate(edits))
+            head = (f"mutation ({name}) flags={' '.join(flags) or 'release'}; Aethelgard* processes before {pre}, after {post}, "
+                    f"after cleanup {post_clean}; aeth_phase0_test_<guid> folders in %TEMP% before {pre_dirs}, after {post_dirs}; "
+                    f"{int(time.time() - t0)} s\n"
+                    + ("expected NO failure and exit 0 (the reverted code lets the run through)" if extra.get("expect_pass")
+                       else f"expected the FAILED list to contain: {need!r}")
+                    + (f"; and not {extra['absent']!r}" if extra.get("absent") else "")
+                    + (" ; and FALLBACK HasExited=True" if extra.get("fallback_killed") else "")
+                    + (" ; and no new orphan folder" if extra.get("no_orphan") else "")
+                    + (" ; and no PowerShell error text" if extra.get("no_ps_error") else "")
+                    + (f" ; and STOPTREE taskkill exit {extra['taskkill_exit']}" if extra.get("taskkill_exit") else "")
+                    + "".join(f" ; and the output contains {w!r}" for w in extra.get("out_has", []))
+                    + "".join(f" ; and the output lacks {w!r}" for w in extra.get("out_lacks", []))
+                    + (f" ; and smoke.log contains {extra['file_has']!r}" if "file_has" in extra else "")
+                    + (f" ; and smoke.log lacks {extra['file_lacks']!r}" if "file_lacks" in extra else "")
+                    + f" -> {'CAUGHT' if ok else 'NOT AS EXPECTED'}{smoke_note}\n{edits_txt}\n--- script output (stdout and stderr) ---\n")
+            open(EV + f"ac5_{name}.log", "w", encoding="utf-8", newline="\n").write(head + out)
+            results.append((name, ok, pre, post, pre_dirs, post_dirs))
+            print(head.splitlines()[0], "->", "CAUGHT" if ok else "NOT AS EXPECTED", flush=True)
+            ps("Get-Process Aethelgard* -ErrorAction SilentlyContinue | Stop-Process -Force")
+    finally:
+        if os.path.exists(MUT):
+            os.remove(MUT)
+    lines = {}
+    if only and os.path.exists(EV + "ac5_summary.log"):
+        for l in open(EV + "ac5_summary.log", encoding="utf-8"):
+            m = re.match(r"\((\w)\) ", l)
+            if m:
+                lines[m.group(1)] = l.rstrip("\n")
+    for n, ok, pre, post, pd, qd in results:
+        lines[n] = (f"({n}) {'CAUGHT' if ok else 'NOT AS EXPECTED'}; Aethelgard* processes before {pre}, after {post}; "
+                    f"orphan user:// folders before {pd}, after {qd}" + (" (re-run on its own)" if only else ""))
+    all_ok = all("CAUGHT;" in l and "NOT AS EXPECTED" not in l for l in lines.values())
+    open(EV + "ac5_summary.log", "w", encoding="utf-8", newline="\n").write(
+        "\n".join(lines[k] for k in sorted(lines)) + "\nALL CAUGHT: " + ("yes" if all_ok else "NO") + "\n")
+    print("ALL CAUGHT:", all_ok)
+
+
+main()

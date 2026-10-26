@@ -1,0 +1,22 @@
+mutation (k) flags=-Tour; Aethelgard* processes before 0, after 0, after cleanup 0; aeth_phase0_test_<guid> folders in %TEMP% before 3, after 3; 29 s
+expected the FAILED list to contain: "the tour didn't finish within 15 minutes" ; and no new orphan folder ; and no PowerShell error text -> CAUGHT
+  script under test sha256 (working tree) a7266698eec8e03687616cac2979aa3cd4d80405bf9c8d52ae136ad13e85235c
+  mutant sha256           6102da95c4a625c7e7fcd06fb34b755c61c85f0f088fee88f010cf036a1a3059
+  edit 1:
+    OLD: $r = Invoke-Built $gameArgs $tourLog 900
+    NEW: $r = Invoke-Built $gameArgs $tourLog 15
+  edit 2:
+    OLD:     $ErrorActionPreference = $old
+    NEW:     $ErrorActionPreference = $old
+    Write-Host ("STOPTREE: taskkill exit {0}; started process HasExited {1}" -f $LASTEXITCODE, $Proc.HasExited)
+--- script output (stdout and stderr) ---
+Aethelgard 0.1.0
+Exporting 'Windows Debug Test' (--export-debug) with Godot 4.6.3.stable.official.7d41c59c4 ...
+Built C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows_debug_test\Aethelgard.exe (98.1 MB); export errors: 0; scripts/debug files packed: 2
+Running the screenshot tour inside the built game (a window opens) ...
+STOPTREE: taskkill exit 0; started process HasExited True
+Tour log: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows_debug_test\tour.log
+Screenshots: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\run_artifacts\screenshots\build-20261026-222214
+FAILED:
+  - the tour didn't finish within 15 minutes
+EXIT 1

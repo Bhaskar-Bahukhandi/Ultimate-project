@@ -1,0 +1,11 @@
+Aethelgard 0.1.0
+Exporting 'Windows Debug Test' (--export-debug) with Godot 4.6.3.stable.official.7d41c59c4 ...
+Built C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows_debug_test\Aethelgard.exe (98.1 MB); export errors: 0; scripts/debug files packed: 2
+Running the screenshot tour inside the built game (a window opens) ...
+Tour log: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows_debug_test\tour.log
+Screenshots: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\run_artifacts\screenshots\build-20261026-220930
+TOUR RESULT: 68 screenshots, 0 problems
+TOUR BUILD OK
+EXIT 0
+pre-run Aethelgard processes: 0; post-run: 0
+shell: /c/Program Files/PowerShell/7/pwsh 7.6.9; script sha256: a7266698eec8e03687616cac2979aa3cd4d80405bf9c8d52ae136ad13e85235c

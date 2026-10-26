@@ -1,0 +1,8 @@
+Aethelgard 0.1.0
+Exporting 'Windows Desktop' (--export-release) with Godot 4.6.3.stable.official.7d41c59c4 ...
+Built C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows\Aethelgard.exe (101.8 MB); export errors: 0; scripts/debug files packed: 0
+Smoke log: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows\smoke.log
+Boot frames: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows\smoke_boot.png
+FAILED:
+  - exit code 
+EXIT 1

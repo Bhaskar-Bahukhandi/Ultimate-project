@@ -1,0 +1,21 @@
+mutation (b) flags=release; Aethelgard* processes before 0, after 0, after cleanup 0; aeth_phase0_test_<guid> folders in %TEMP% before 3, after 3; 11 s
+expected the FAILED list to contain: 'exit code 3' ; and no PowerShell error text -> CAUGHT
+  script under test sha256 (working tree) a7266698eec8e03687616cac2979aa3cd4d80405bf9c8d52ae136ad13e85235c
+  mutant sha256           89a2134cdc2d7549d42bac57b69d8f1a293c391605e7a3abc1b6b10c9c453951
+  edit 1:
+    OLD:     $run = if (Test-Path $console) { $console } else { $exe }
+    NEW:     $run = if (Test-Path $console) { $console } else { $exe }
+    $run = "cmd.exe"
+  edit 2:
+    OLD:         $p = Start-Process -FilePath $run -ArgumentList $GameArgs -PassThru -NoNewWindow `
+    NEW:         $p = Start-Process -FilePath $run -ArgumentList '/c exit 3' -PassThru -NoNewWindow `
+--- script output (stdout and stderr) ---
+Aethelgard 0.1.0
+Exporting 'Windows Desktop' (--export-release) with Godot 4.6.3.stable.official.7d41c59c4 ...
+Built C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows\Aethelgard.exe (101.8 MB); export errors: 0; scripts/debug files packed: 0
+Smoke log: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows\smoke.log
+Boot frames: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows\smoke_boot.png
+FAILED:
+  - exit code 3
+  - only 0 of 120 frames were recorded
+EXIT 1

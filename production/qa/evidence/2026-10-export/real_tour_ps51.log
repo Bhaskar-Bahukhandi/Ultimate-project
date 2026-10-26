@@ -1,0 +1,506 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Vulkan 1.4.329 - Forward+ - Using Device #0: NVIDIA - NVIDIA GeForce RTX 2050
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+[DebugTestMode] waiting for the main menu, then running the screenshot tour
+Screenshot tour → C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\run_artifacts\screenshots\build-20261026-220459
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  shot main_menu                          
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[10N-A2] Opening crash-site hook loaded
+  shot ch1_crash_site                     
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH1-SEQ2] Initializing Elara the Glitch-Witch meeting
+[CUTSCENE] Starting: Chapter 1 - The Wrong Weapon
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: character_enter
+  shot ch1_elara_meeting                  
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH1-SEQ3] Initializing Path to Oakhaven — Combat Tutorial
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+  shot ch1_broken_mile                    
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  shot ch1_oakhaven_village               
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[ENCOUNTER] Zone changed: Oakhaven Village
+  shot ch1_oakhaven_region                
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  shot ch1_aldric                         
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH1-SHATTER] Initializing The Shatter transition
+[CUTSCENE] Starting: Bridge Approach
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+  shot ch1_shatter                        
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH2-GATE] Initializing Ironhold Gate sequence
+[CUTSCENE] Starting: Ironhold Arrival
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+  shot ch2_ironhold_gate                  
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[ENCOUNTER] Zone changed: Ironhold City
+  shot ch2_ironhold_region                
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH2-SERAPHINA] Initializing Seraphina Encounter
+[CUTSCENE] Starting: Command Hall
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+  shot ch2_command_hall                   
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH2-ARENA] Initializing Battle Arena
+[SIDE QUEST] Discovered: Arena Legend
+[SIDE QUEST] Discovered: The Data Hoard
+[SIDE QUEST] Discovered: Merchant's Guild Troubles
+[SIDE QUEST] Started: Arena Legend
+  shot ch2_arena                          
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH2-CLOCKTOWER] Initializing Clock Tower dungeon
+DDA: 20.0 (mult=0.75) K:0 D:0.3
+  shot ch2_clock_tower                    
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH2-UNDERGROUND] Initializing Underground Network dungeon
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHECKPOINT] Underground Network — entry auto-save
+[SIDE QUEST] Discovered: The Data Hoard
+[SIDE QUEST] Started: The Data Hoard
+[SIDE QUEST] The Data Hoard — Step 1/3: Fix the routing junction
+  shot ch2_underground                    
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH2-ADMIN-BOSS] Initializing Administrator Proxy encounter
+  shot ch2_proxy                          
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH2-SERAPHINA-CHOICE] Initializing Seraphina's Choice
+  shot ch2_fragment_two                   
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH2-ENDING] Initializing Chapter 2 Conclusion
+  shot ch2_act1_end                       
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CH1-SHATTER] Initializing The Shatter transition
+[CUTSCENE] Starting: Bridge Approach
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Bridge Approach (walk)
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CH1-SHATTER] Environmental shift begins
+[CUTSCENE] Finished
+[CH1-SHATTER] Executing THE SHATTER
+  shot ch1_shatter_kill                   real scene run; first line of shatter.dlg `after_kill`
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CH1-SHATTER] Initializing The Shatter transition
+[CUTSCENE] Starting: Bridge Approach
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Bridge Approach (walk)
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CH1-SHATTER] Environmental shift begins
+[CUTSCENE] Finished
+[CH1-SHATTER] Executing THE SHATTER
+  shot ch1_shatter_spare                  real scene run; first line of shatter.dlg `after_spare`
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CH1-SHATTER] Initializing The Shatter transition
+[CUTSCENE] Starting: Bridge Approach
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Bridge Approach (walk)
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CH1-SHATTER] Environmental shift begins
+[CUTSCENE] Finished
+[CH1-SHATTER] Executing THE SHATTER
+  shot ch1_shatter_purge                  real scene run; first line of shatter.dlg `after_purge`
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  shot ch1_breadcrumb_oakhaven            real scene run; Chapter 1 step-6 breadcrumb; path: village arrival → ElaraHouseDoor handler → stew in elara_house.tscn → house Door handler → village; 5 choice(s) answered with option 1; objective `Spend the afternoon in Oakhaven. Meet the people here.`; ch1_stew_done set by the real stew (in the house): true; ch1_oakhaven_entered: true; arrow target cached: false; arrow text EMPTY
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[ENCOUNTER] Zone changed: Oakhaven Village
+[PAUSE] Game paused — IDE interface open
+  shot ui_pause                           
+[PAUSE] Game resumed
+  shot ui_controls                        
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[ENCOUNTER] Zone changed: Oakhaven Village
+[SIDE QUEST] Discovered: Forge Line Supply
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[SIDE QUEST] Shop discount: 5%
+[SIDE QUEST] Completed: Forge Line Supply!
+[ACHIEVEMENT] Unlocked: Side Tracked — Complete your first side quest.
+[ACHIEVEMENT] Unlocked: Helpful Variables — Complete an optional objective.
+[ACHIEVEMENT] Unlocked: Window Shopping — Visit a shop for the first time.
+  shot t06_shop_discount                  discount 0.05 from Forge Line Supply (quest state COMPLETED); health_potion raw 30G, get_buy_price 29G, button `BUY 29G`
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH3-ARCHIVE] Initializing Archive Depths
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHECKPOINT] Archive Depths — entry auto-save
+[SIDE QUEST] Discovered: Echo Hunter
+[SIDE QUEST] Discovered: Survivor's Cache
+  shot ch3_archive_flash_before           baseline: same scene, no flash yet
+  shot ch3_archive_flash                  SceneTransitions.flash((0.2, 0.6, 1.0, 0.4), 0.8) called by the stop (scene call is inside the Source Key coroutine; routing proven by screen_flash_test F1); overlay colour (0.2, 0.6, 1.0, 0.4), modulate.a 0.800 just before the capture
+  shot ch3_archive_flash                  mean RGB before (0.041, 0.055, 0.108) -> flash frame (0.087, 0.213, 0.367); shift toward the flash colour 0.307 (min 0.010)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  shot ch1_oakhaven_flash_before          baseline: same scene, no flash yet
+  shot ch1_oakhaven_flash                 real scene _on_dlg_event("fracture_spreads"); overlay colour (0.55, 0.0, 0.7, 0.35), modulate.a 0.800 just before the capture
+  shot ch1_oakhaven_flash                 mean RGB before (0.253, 0.378, 0.266) -> flash frame (0.304, 0.314, 0.341); shift toward the flash colour 0.112 (min 0.010)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  shot t11_combat_hud_strike2             real combat_arena scene; tutorial slime, 100000 HP, not hostile; strikes through player._perform_combo_attack(); combo_step 2; chain label `STRIKE 2`; GameJuice counter `2 HIT`
+DDA: 20.0 (mult=0.75) K:0 D:0.3
+  shot t11_combat_hud_after_hit           player.take_damage(5) from the slime's position, then one frame; HP 100 -> 95; chain label ``
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  shot t12_menu_version                   VersionLabel 'v0.1.0'
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[ENCOUNTER] Zone changed: Oakhaven Village
+[PAUSE] Game paused — IDE interface open
+  shot t12_pause_version                  header 'AETHELGARD IDE v0.1.0 — Chapter 1'
+[PAUSE] Game resumed
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH2-ENDING] Initializing Chapter 2 Conclusion
+[ACHIEVEMENT] Unlocked: On Fire — Win 5 arena matches in a row.
+[CH2-ENDING] Chapter 2 complete
+  shot t12_stats_card                     panel [P: (342.0, 39.0), S: (596.0, 641.0)]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH2-CLOCKTOWER] Initializing Clock Tower dungeon
+DDA: 20.0 (mult=0.75) K:0 D:0.3
+  shot t12_clock_tower                    BossTrigger band [P: (20.0, -182.0), S: (760.0, 32.0)], mask 2 (overlay drawn from the shape)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  shot s08_elara_house                    preset ch1_stew_done (stew already eaten, so no stew dialogue); real elara_house.tscn, player at the scene's start spot; on screen: Elara, Table, Player, Door, Bandages, Herbs, Focuses, Cloak, Map; door open: true; state EXPLORATION
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[ACHIEVEMENT] Unlocked: Flawless Victory — Defeat a boss without taking damage.
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  shot s08_shrine                         preset: golden kill-route flags; real arena: fight started, its own _on_boss_defeated, choices answered with option 0; 2 choice(s) answered with option 1; ch1_knight_killed true; arrived from the arena via the shrine_fresh_arrival hand-off; arrival card `Under the old gate` shown, then faded (black alpha 0.00, text alpha 0.00); dressing shown: DressingKilled; fragment taken: false; altar active: true; dialogue box false
+  shot s08_shrine_altar                   same arrival; player moved to (256.0, 150.0) on the runner (nothing interacted); fragment taken: false; dialogue box false
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[ENCOUNTER] Zone changed: Oakhaven Village
+  shot dlg_prologue_before_the_ground_line before_the_ground.dlg:16, 70 chars
+  shot dlg_ch1_aldric_line                aldric.dlg:90, 66 chars
+  shot dlg_ch1_aldric_choice              aldric.dlg:55, 3 options
+  shot dlg_ch1_broken_mile_line           broken_mile.dlg:128, 177 chars
+  shot dlg_ch1_broken_mile_choice         broken_mile.dlg:40, 2 options
+  shot dlg_ch1_crash_site_line            crash_site.dlg:33, 85 chars
+  shot dlg_ch1_elara_house_line           elara_house.dlg:35, 96 chars
+  shot dlg_ch1_elara_house_choice         elara_house.dlg:16, 5 options
+  shot dlg_ch1_elara_meeting_line         elara_meeting.dlg:81, 100 chars
+  shot dlg_ch1_elara_meeting_choice       elara_meeting.dlg:41, 3 options
+  shot dlg_ch1_fragment_one_line          fragment_one.dlg:38, 141 chars
+  shot dlg_ch1_fragment_one_choice        fragment_one.dlg:32, 3 options
+  shot dlg_ch1_north_field_line           north_field.dlg:25, 143 chars
+  shot dlg_ch1_north_field_choice         north_field.dlg:45, 3 options
+  shot dlg_ch1_oakhaven_gate_line         oakhaven_gate.dlg:28, 151 chars
+  shot dlg_ch1_oakhaven_village_line      oakhaven_village.dlg:95, 126 chars
+  shot dlg_ch1_shatter_line               shatter.dlg:39, 115 chars
+  shot dlg_ch2_act1_end_line              act1_end.dlg:28, 135 chars
+  shot dlg_ch2_act1_end_choice            act1_end.dlg:10, 3 options
+  shot dlg_ch2_administrator_proxy_line   administrator_proxy.dlg:19, 110 chars
+  shot dlg_ch2_arena_line                 arena.dlg:34, 95 chars
+  shot dlg_ch2_clock_tower_line           clock_tower.dlg:31, 88 chars
+  shot dlg_ch2_clock_tower_choice         clock_tower.dlg:64, 3 options
+  shot dlg_ch2_command_hall_line          command_hall.dlg:23, 152 chars
+  shot dlg_ch2_command_hall_choice        command_hall.dlg:16, 3 options
+  shot dlg_ch2_fragment_two_line          fragment_two.dlg:82, 70 chars
+  shot dlg_ch2_ironhold_arrival_line      ironhold_arrival.dlg:27, 173 chars
+  shot dlg_ch2_ironhold_city_line         ironhold_city.dlg:34, 160 chars
+  shot dlg_ch2_ironhold_city_choice       ironhold_city.dlg:240, 2 options
+  shot dlg_ch2_underground_line           underground.dlg:38, 129 chars
+  shot dlg_ch2_underground_choice         underground.dlg:63, 3 options
+TOUR RESULT: 68 screenshots, 0 problems
+WARNING: [AssetManager] Production art slot missing for Kaelen top-down sheet at res://assets/production_art/characters/player/kaelen_topdown_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:1000)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [6] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [7] _spawn_player (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:279)
+       [8] _ready (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:50)
+WARNING: [AssetManager] V2 top-down player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:1009)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [4] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [5] _spawn_player (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:279)
+       [6] _ready (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:50)
+WARNING: [AssetManager] Production art slot missing for Elara NPC sheet at res://assets/production_art/characters/npcs/elara_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/npcs/elara_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_npc (res://scripts/asset_manager.gd:1066)
+       [4] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:594)
+       [5] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:63)
+WARNING: [AssetManager] NPC sheet failed to load for Elara; using existing NPC fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_npc (res://scripts/asset_manager.gd:1074)
+       [2] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:594)
+       [3] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:63)
+WARNING: [AssetManager] Oakhaven afternoon production tileset missing at res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png; requested=afternoon.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_oakhaven_variant (res://scripts/asset_manager.gd:1231)
+       [2] _try_load_oakhaven_production_variant (res://scripts/asset_manager.gd:1210)
+       [3] get_oakhaven_tileset_slot (res://scripts/asset_manager.gd:1170)
+       [4] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1552)
+       [5] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [6] _build_region_environment (res://scripts/regions/oakhaven_region.gd:114)
+       [7] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] Oakhaven production tileset fallback: production variant missing or invalid; requested=afternoon resolved=afternoon generated=res://assets/generated_v2/tilesets/oakhaven_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _oakhaven_generated_fallback_slot (res://scripts/asset_manager.gd:1219)
+       [2] get_oakhaven_tileset_slot (res://scripts/asset_manager.gd:1199)
+       [3] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1552)
+       [4] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [5] _build_region_environment (res://scripts/regions/oakhaven_region.gd:114)
+       [6] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] Production art slot missing for environment prop atlas at res://assets/production_art/props/environment_prop_atlas.png; using generated fallback res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1486)
+       [4] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [5] _create_building (res://scripts/regions/oakhaven_region.gd:285)
+       [6] _build_region_environment (res://scripts/regions/oakhaven_region.gd:173)
+       [7] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1487)
+       [3] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [4] _create_building (res://scripts/regions/oakhaven_region.gd:285)
+       [5] _build_region_environment (res://scripts/regions/oakhaven_region.gd:173)
+       [6] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] Production art slot missing for environment decal atlas at res://assets/production_art/backgrounds/environment_decal_atlas.png; using generated fallback res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1497)
+       [4] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [5] _add_v3_oakhaven_polish (res://scripts/regions/oakhaven_region.gd:368)
+       [6] _build_region_environment (res://scripts/regions/oakhaven_region.gd:238)
+       [7] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1498)
+       [3] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [4] _add_v3_oakhaven_polish (res://scripts/regions/oakhaven_region.gd:368)
+       [5] _build_region_environment (res://scripts/regions/oakhaven_region.gd:238)
+       [6] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] Production art slot missing for Kaelen combat sheet at res://assets/production_art/characters/player/kaelen_combat_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:985)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _spawn_player (res://scripts/chapter1/ch1_tutorial_knight.gd:465)
+       [6] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:117)
+WARNING: [AssetManager] V2 combat player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:994)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _spawn_player (res://scripts/chapter1/ch1_tutorial_knight.gd:465)
+       [4] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:117)
+WARNING: [AssetManager] Production art slot missing for Tutorial Knight sheet at res://assets/production_art/characters/bosses/tutorial_knight_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/bosses/tutorial_knight_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_tutorial_knight (res://scripts/asset_manager.gd:1028)
+       [4] _try_install_v2_visual (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:1284)
+       [5] _ready (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:101)
+       [6] _spawn_boss (res://scripts/chapter1/ch1_tutorial_knight.gd:527)
+       [7] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:118)
+WARNING: [AssetManager] Tutorial Knight sheet failed to load; using existing boss fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_tutorial_knight (res://scripts/asset_manager.gd:1032)
+       [2] _try_install_v2_visual (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:1284)
+       [3] _ready (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:101)
+       [4] _spawn_boss (res://scripts/chapter1/ch1_tutorial_knight.gd:527)
+       [5] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:118)
+WARNING: [AssetManager] Production art slot missing for ironhold production tileset at res://assets/production_art/tilesets/ironhold/ironhold_tileset.png; using generated fallback res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _try_load_ironhold_production_tileset (res://scripts/asset_manager.gd:1274)
+       [3] get_ironhold_tileset_slot (res://scripts/asset_manager.gd:1255)
+       [4] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1554)
+       [5] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [6] _build_environment (res://scripts/regions/ironhold_region.gd:104)
+       [7] _ready (res://scripts/regions/ironhold_region.gd:61)
+WARNING: [AssetManager] Ironhold production tileset fallback: production tileset missing or invalid; generated=res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _ironhold_generated_fallback_slot (res://scripts/asset_manager.gd:1283)
+       [2] get_ironhold_tileset_slot (res://scripts/asset_manager.gd:1266)
+       [3] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1554)
+       [4] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [5] _build_environment (res://scripts/regions/ironhold_region.gd:104)
+       [6] _ready (res://scripts/regions/ironhold_region.gd:61)
+WARNING: [AssetManager] Production art slot missing for DataSprite enemy sheet at res://assets/production_art/characters/enemies/memory_wisp_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/enemies/memory_wisp_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_enemy (res://scripts/asset_manager.gd:1043)
+       [4] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [5] _ready (res://scripts/combat/enemy_base.gd:221)
+       [6] _ready (res://scripts/combat/enemies/data_sprite.gd:40)
+       [7] _spawn_enemy_at (res://scripts/chapter2/ch2_underground_network.gd:299)
+       [8] _spawn_dungeon_enemies (res://scripts/chapter2/ch2_underground_network.gd:227)
+       [9] _ready (res://scripts/chapter2/ch2_underground_network.gd:42)
+WARNING: [AssetManager] Enemy sheet failed to load for DataSprite; using existing enemy fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_enemy (res://scripts/asset_manager.gd:1051)
+       [2] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [3] _ready (res://scripts/combat/enemy_base.gd:221)
+       [4] _ready (res://scripts/combat/enemies/data_sprite.gd:40)
+       [5] _spawn_enemy_at (res://scripts/chapter2/ch2_underground_network.gd:299)
+       [6] _spawn_dungeon_enemies (res://scripts/chapter2/ch2_underground_network.gd:227)
+       [7] _ready (res://scripts/chapter2/ch2_underground_network.gd:42)
+WARNING: [AssetManager] Production art slot missing for Slime enemy sheet at res://assets/production_art/characters/enemies/fracture_slime_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/enemies/fracture_slime_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_enemy (res://scripts/asset_manager.gd:1043)
+       [4] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [5] _ready (res://scripts/combat/enemy_base.gd:221)
+       [6] _ready (res://scripts/combat/enemies/slime.gd:36)
+WARNING: [AssetManager] Enemy sheet failed to load for Slime; using existing enemy fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_enemy (res://scripts/asset_manager.gd:1051)
+       [2] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [3] _ready (res://scripts/combat/enemy_base.gd:221)
+       [4] _ready (res://scripts/combat/enemies/slime.gd:36)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] _perform_combo_attack (res://scripts/combat/player_combat.gd:988)
+WARNING: [SAVE] Refused: no game in progress (MENU)
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] save_game (res://scripts/game_manager.gd:1441)
+       [1] _save_with_feedback (res://scripts/game_manager.gd:1556)
+       [2] auto_save (res://scripts/game_manager.gd:1815)
+       [3] _on_boss_defeated (res://scripts/chapter1/ch1_tutorial_knight.gd:1111)
+       [4] _s08_shrine_shots (res://scripts/debug/screenshot_tour_runner.gd:778)
+       [5] _drive_dialogue_until (res://scripts/debug/screenshot_tour_runner.gd:678)
+       [6] _wait (res://scripts/debug/screenshot_tour_runner.gd:261)
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:810)

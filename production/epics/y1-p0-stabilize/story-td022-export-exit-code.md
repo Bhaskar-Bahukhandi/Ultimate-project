@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: TD-022 (`docs/tech-debt-register.md#TD-022`; raised at the T12 close, target "Sprint 001 (before T15)")
-> **Status**: Ready
+> **Status**: In Progress
 > **Layer**: Foundation (build tooling)
 > **Type**: Integration
 > **Estimate**: 0.5 day (register effort: S)
@@ -26,13 +26,14 @@ reads its exit code and console output). Engine note: a debug export has a conso
 
 **Control Manifest Rules**: NOT ASSESSED — no control manifest.
 
-**Performance**: none — build tooling; no game cost. The script's own run time is unchanged (one extra property read;
-`taskkill` only on a timeout).
+**Performance**: none — build tooling; no game cost. A normal run's time is unchanged (one extra property read); a
+timed-out run adds `taskkill` and up to about 10 s of cleanup and log-merge retries.
 
 **AGENTS.md protected areas**: none touched. No game code, scene, save format, test suite, `suite_limits.txt`, `ci.yml`,
 export preset or `.uid` change. Files: `AethelgardPrototype/tools/export_windows.ps1`, `AethelgardPrototype/CHANGELOG.md`,
-`docs/tech-debt-register.md` (TD-022 resolved, header counts), this story, a new evidence folder
-`production/qa/evidence/2026-10-export/`. Production-art fallback: not affected (no asset change).
+`docs/tech-debt-register.md` (TD-022 resolved, header counts), this story, its `production/sprint-status.yaml` entry
+(status only, written by `/dev-story` and `/story-done`), a new evidence folder `production/qa/evidence/2026-10-export/`.
+Production-art fallback: not affected (no asset change).
 
 ### Audit facts (2026-10-26, on HEAD `43449d2`)
 
@@ -45,16 +46,19 @@ export preset or `.uid` change. Files: `AethelgardPrototype/tools/export_windows
    release run fails with `exit code ` — a good build and a crashing build look the same. T12's run shows it: the game
    recorded 120 frames, exited, and the script printed `FAILED: - exit code `.
 3. **Effect on `-Tour`.** `elseif ($r.Code -ne 0) { $failures.Add("$result …") }` (:117) is also true for `$null`, so a
-   tour that passes prints `FAILED: TOUR RESULT: … passed`.
+   tour that passes prints `FAILED: TOUR RESULT: … 0 problems (see …\report.md)`.
 4. **Who runs it under 5.1.** The script's usage line (:22-23) and the "build the exe" step of the monthly plans
    (`production/plan/2026/2026-11.md`, six places) say `powershell -File …` (Windows PowerShell 5.1). T15 (a human
    plays the exported build) starts with that build.
 5. **History.** The same `Start-Process` pattern has been there since the first export script (`e964cc5`, 2026-10-05),
    whose CHANGELOG entry reports a clean first result; a run under PowerShell 7 (installed at
    `C:\Program Files\PowerShell\7`) would explain it, unproven.
-6. **Timeout path (inferred from the code, not yet run).** On a timeout `Invoke-Built` calls `$p.Kill()` (:84), which
-   stops only the process it started. Under `-Tour` that is the console wrapper, so the real game can keep running.
-   `tests/run_phase0_tests.ps1` stops a hung Godot with `taskkill /F /T` for the same reason.
+6. **Timeout path (inferred from the code; disproved at /dev-story, 2026-10-26).** On a timeout `Invoke-Built` calls
+   `$p.Kill()` (:84), which stops only the process it started; under `-Tour` that is the console wrapper, so the real
+   game was expected to keep running. *Correction (AC-5 d):* with the old `Kill()` the child `Aethelgard.exe` was still
+   listed straight after the kill and gone by the 5 s check — the same as with `taskkill /F /T` (AC-5 c). The old code
+   did not leave the game running in this run; `taskkill /F /T` is kept as the safer form (it does not depend on the
+   child noticing that its wrapper died), as `tests/run_phase0_tests.ps1` does.
 7. **taskkill and Kill() failure paths (verified 2026-10-26 in 5.1 at readiness).** Under the script's
    `$ErrorActionPreference = "Stop"`, any stderr from `taskkill.exe` throws `NativeCommandError`, even with `2>$null`.
    Under `Continue`, `taskkill /F /T /PID` on a process that has already exited returns 128, and `$p.Kill()` on an exited
@@ -86,14 +90,23 @@ export preset or `.uid` change. Files: `AethelgardPrototype/tools/export_windows
 - [ ] AC-2 **An unreadable code is its own failure, checked first.** In both branches the `$null` check comes first —
       before any `-ne 0` test and before the "never started" message — and adds
       `exit code unavailable (PowerShell could not read it)`; a `$null` code never reaches an `exit code $($r.Code)` string.
-      Release: a real non-zero code adds `exit code <N>`. `-Tour`: a `TOUR RESULT` line with code 0 passes; a non-zero code
-      adds `<TOUR RESULT line> (see …\report.md)`; no `TOUR RESULT` line with a readable code keeps
+      Release: a real non-zero code adds `exit code <N>`. `-Tour` (*amended at code review*): a run passes only with code 0
+      **and** a `TOUR RESULT` line reporting at least one screenshot and `0 problems`; otherwise it adds
+      `<TOUR RESULT line> (see …\report.md)`, followed by `; exit code <N>` when the code is non-zero; a `$null` code adds
+      the result line after the unavailable message when there is one; no `TOUR RESULT` line with a readable code keeps
       `the tour never started or never finished (exit code <N>)`.
 - [ ] AC-3 **Timeout stops the whole tree without crashing the script.** On a timeout: `taskkill.exe /F /T /PID $p.Id` runs
       with `$ErrorActionPreference = "Continue"` for that call only and its output discarded, and is judged by
-      `$LASTEXITCODE`; if non-zero and `$p.HasExited` is false, `$p.Kill()` runs inside `try/catch`. A process that exited
-      on its own in that window is still a timeout (`Done = $false`), not a script error. `Invoke-Built` always returns one
-      hashtable. Proven by AC-5 (c), (d) and (g).
+      `$LASTEXITCODE` (reset to -1 first, so a `taskkill` that cannot start does not read an earlier command's 0); if
+      non-zero and `$p.HasExited` is false, `$p.Kill()` runs inside `try/catch`. A process that exited on its own in that
+      window is still a timeout (`Done = $false`), not a script error. `Invoke-Built` always returns one hashtable. After
+      a timeout the isolated `user://` folder is removed with retries for up to 5 s (the game may hold it while it is torn
+      down), as `tests/run_phase0_tests.ps1` does, and a folder still there after that is named in a warning. The game's
+      stderr is merged into the log with the same retry (one try for a run that finished). *Amended at the fourth
+      review:* a merge that still fails, or a non-empty log that cannot be read, is a **failure** naming the log ("its
+      errors were not checked"; the unmerged stderr is kept in `<log>.err`), never just a warning — the game's errors in
+      it would otherwise go unchecked — and neither ends the script with an exception. Proven by AC-5 (c), (d), (g), (h),
+      (k), (l), (p), (q), (r), (s), (t) and (u).
 - [ ] AC-4 **Real builds pass under both shells**, run one after another (they share `exports/`), from
       `AethelgardPrototype/`: `powershell -File tools/export_windows.ps1` and `pwsh -File tools/export_windows.ps1` each
       end with `RELEASE OK: booted, ignored --debug-tour, exited cleanly` and exit 0; `powershell -File
@@ -108,17 +121,51 @@ export preset or `.uid` change. Files: `AethelgardPrototype/tools/export_windows
       (b) release, `Invoke-Built` starting `cmd.exe /c exit 3` instead of the game → contains `exit code 3`, and no
       PowerShell error is printed;
       (c) `-Tour`, timeout cut from 900 s to 15 s, after the log shows the game started → contains the tour-timeout line;
-      the wrapper and child PIDs are logged before the timeout, and `Get-Process -Id` for both is empty 5 s and 10 s after
-      the failure line;
+      the wrapper and child PIDs are logged before the stop, and no `Aethelgard*` process (matched by name, which covers
+      both PIDs) is running 5 s and 10 s after the stop;
       (d) as (c) with the old `$p.Kill()` in place of `taskkill` → records whether the child PID is still running at 5 s
       and 10 s (this proves or disproves audit fact 6; either result is recorded; if nothing is left, AC-3 stays as the
-      safer form and fact 6 is corrected); afterwards `taskkill /F /T /IM Aethelgard*.exe` and an empty `Get-Process
-      Aethelgard*` before the next run;
+      safer form and fact 6 is corrected); afterwards any `Aethelgard*` process is stopped (`Stop-Process -Force`) and
+      `Get-Process Aethelgard*` is empty before the next run;
       (e) `-Tour`, the `$p.Handle` line removed → contains `exit code unavailable`;
-      (f) `-Tour`, `Invoke-Built` starting `cmd.exe /c "echo TOUR RESULT: 1 screenshots, 1 problems & exit 1"` → contains
-      `TOUR RESULT: 1 screenshots, 1 problems (see …\report.md)`;
-      (g) the timeout branch forced on `cmd.exe /c exit 0` (timeout 0 s) → the script finishes with a timeout failure and
-      exit 1, no PowerShell exception, no stack trace.
+      (f) `-Tour`, `Invoke-Built` starting `cmd.exe /c "echo TOUR RESULT: 1 screenshots, 1 problems& exit 1"` → contains
+      `TOUR RESULT: 1 screenshots, 1 problems (see …\report.md)` on one line;
+      (g) the timeout branch forced on `cmd.exe /c exit 0` (`WaitForExit(2000)`, then `$done` set false, so the process
+      has already exited when `Stop-Tree` runs) → the script finishes with a timeout failure and exit 1, no PowerShell
+      exception, no stack trace.
+      *Added at code review (2026-10-26), same rules:*
+      (h) the timeout branch forced on a live `cmd.exe /c ping -n 30 127.0.0.1` with `taskkill` given a PID that does not
+      exist → the `Kill()` fallback stops the process (`HasExited` true, logged), timeout failure, exit 1, no exception;
+      (i) `-Tour`, the `$p.Handle` line removed and `Invoke-Built` starting `cmd.exe /c exit 0` (no `TOUR RESULT` line) →
+      contains `exit code unavailable`, not `never started`;
+      (j) `-Tour`, a stub printing `TOUR RESULT: 1 screenshots, 1 problems` and exiting **0** → contains that line with
+      `(see …\report.md)` (the tour text is checked, not only the exit code);
+      (k) `-Tour`, timeout cut to 15 s with no diagnostic pauses → timeout failure, exit 1, no exception, and no new
+      `aeth_phase0_test_<guid>` folder left in `%TEMP%`;
+      (l) as (h) but `taskkill.exe` renamed to a command that does not exist → `$LASTEXITCODE` stays -1 and `Kill()`
+      stops the process (`HasExited` true), no exception.
+      *Added at the second review:* (m) `-Tour`, `Invoke-Built` starting `cmd.exe /c exit 0` with the handle line kept (no
+      `TOUR RESULT` line, readable code 0) → contains `the tour never started or never finished (exit code 0)`. In the
+      mutations that run `Stop-Tree` ((c), (g), (h), (k), (l)) a logging line after the `taskkill` call prints its
+      `$LASTEXITCODE` and `HasExited`.
+      *Added at the third review:* (n) `-Tour`, a stub printing `TOUR RESULT: 0 screenshots, 0 problems` at exit 0 →
+      contains that line with `(see …\report.md)`; (o) `-Tour`, a stub printing `TOUR RESULT: 5 screenshots, 0 problems`
+      at exit 3 → contains that line followed by `; exit code 3`; (p) the timeout branch forced on
+      `cmd.exe /c "echo TD022-STDERR-MARKER 1>&2& exit 0"` (a stub that writes to stderr, so the merge has to open the
+      log), the log held open by another process for 2 s (confirmed locked before the merge) → no warning, no exception,
+      and the harness finds the marker in `smoke.log` afterwards; (q) as (p) with the lock held for 8 s →
+      contains `could not add the game's stderr` (a failure since the fourth review), no exception, the timeout failure
+      still listed, and the marker absent from `smoke.log`; (r) the timeout branch forced, a file inside the isolated
+      `user://` held open for 8 s → `could not remove the isolated user:// folder` warning, no exception (the holding
+      process deletes the folder when it lets go).
+      *Added at the fourth review — a run that otherwise passes:* (s) `-Tour`, a stub printing
+      `TOUR RESULT: 5 screenshots, 0 problems` and the stderr marker, exiting 0, with its stderr file held open for 4 s
+      right after it exits (the merge fails; the log itself still reads with a passing result) → contains
+      `could not add the game's stderr`, exit 1; (t) a passing-tour stub with nothing on stderr and the log itself held
+      open for 4 s → contains `could not read`, exit 1; (u) as (s) with the fail-closed lines reverted to the previous
+      warn-only code → no failure, `TOUR BUILD OK`, exit 0 (the gap the fourth review found, shown).
+      Each log starts with every edit in full, the SHA-256 of the script under test and of the mutant, and the process
+      and `%TEMP%` folder counts before and after; the harness is kept in the evidence folder.
 - [ ] AC-6 **Records.** The usage comment says the script runs under Windows PowerShell 5.1 and PowerShell 7; TD-022 is
       `Resolved <close date>` in the register with the evidence path, header counts updated; a CHANGELOG `fix:` entry;
       `production/qa/evidence/2026-10-export/README.md` maps each AC to its log and records the `smoke_boot.png`
@@ -128,8 +175,9 @@ export preset or `.uid` change. Files: `AethelgardPrototype/tools/export_windows
 
 ## Implementation Notes
 
-- The change is about ten lines in `Invoke-Built` plus the two `Code` checks (:117, :132). Keep the script's style
-  (comment density, `$failures.Add(...)` messages).
+- The change is in `Invoke-Built`, a new script-level `Stop-Tree` helper and the two branches' checks (:117, :132 at
+  audit time; about 30 lines in all after the code-review fixes). Keep the script's style (comment density,
+  `$failures.Add(...)` messages).
 - `$p.Id` is the PID for `taskkill`. Read the handle before anything that could let the process exit first.
 - Release builds take a few minutes to export (~100 MB); each tour run opens a game window for about two minutes. Run
   the real builds (AC-4) and the mutations one after another, not in parallel (they share `exports/`).
@@ -156,7 +204,8 @@ export preset or `.uid` change. Files: `AethelgardPrototype/tools/export_windows
 ## QA Test Cases
 
 - **C1 (AC-1, AC-2)** — read the diff: the handle line sits right after `Start-Process`; in both branches the `$null`
-  check is the first test; the pass conditions are `Code -eq 0`.
+  check is the first test; release passes on `Code -eq 0`, a tour on `Code -eq 0` and a `TOUR RESULT` line ending
+  `, 0 problems`.
 - **C2 (AC-3)** — read the diff: `taskkill` under `Continue` for that call only, output discarded, `$LASTEXITCODE`
   checked; `Kill()` only when `HasExited` is false, inside `try/catch`; one hashtable returned on every path.
 - **C3 (AC-4)** — five logs (release and tour under 5.1 and 7, `-NoSmoke` under 5.1), each ending with its OK line and
@@ -166,8 +215,17 @@ export preset or `.uid` change. Files: `AethelgardPrototype/tools/export_windows
 - **C5 (AC-5 c, d)** — two logs with the empty pre-run `Get-Process`, the logged PIDs and the 5 s / 10 s checks; (d)
   followed by the cleanup and an empty `Get-Process`.
 - **C6 (AC-5 g)** — a log ending with the timeout failure and exit 1, no exception text.
-- **C7 (AC-6)** — `git diff --name-only` lists only the script, CHANGELOG, register, story and evidence; register row
-  resolved; `git diff --check` clean.
+- **C6b (AC-5 h–m, added at code review)** — six logs: (h) and (l) `FALLBACK … HasExited=True`, with the logged
+  `taskkill` exit code (non-zero, -1 for (l)); (i) `exit code unavailable` without `never started`; (j) the
+  `TOUR RESULT … 1 problems (see …)` line at exit 0; (k) the `%TEMP%` folder count unchanged; (m) `never started or
+  never finished (exit code 0)`.
+- **C6c (AC-5 n–r, added at the third review)** — five logs: (n) the `0 screenshots` line at exit 0; (o) the result line
+  followed by `; exit code 3`; (p) the lock confirmed, no warning and the stderr marker present in `smoke.log`; (q) the
+  stderr-merge failure and the marker absent; (r) the user:// warning; none with PowerShell error text.
+- **C6d (AC-5 s–u, added at the fourth review)** — (s) and (t): otherwise-passing tours that end `FAILED` with exit 1:
+  (s) `could not add the game's stderr`, (t) `could not read`, neither ending `TOUR BUILD OK`; (u) the reverted code ends `TOUR BUILD OK`.
+- **C7 (AC-6)** — `git diff --name-only` lists only the script, CHANGELOG, register, story, its sprint-status entry and
+  evidence; register row resolved; `git diff --check` clean.
 
 ---
 
@@ -175,8 +233,9 @@ export preset or `.uid` change. Files: `AethelgardPrototype/tools/export_windows
 
 **Story Type**: Integration (build tooling)
 **Required evidence**: `production/qa/evidence/2026-10-export/` — `README.md` (AC map), the four real-build logs
-(AC-4) and the `-NoSmoke` log, `smoke_boot.png` with the user's sign-off, the seven mutation logs (AC-5 a–g) and the
-PowerShell 5.1 / 7 repro output (audit facts 1 and 7). No automated suite (D2).
+(AC-4) and the `-NoSmoke` log, a real `tour.log` with its line-ending record, `smoke_boot.png` with the user's
+sign-off, the twenty-one mutation logs (AC-5 a–u) with the harness, and the PowerShell 5.1 / 7 repro output (audit facts
+1 and 7). No automated suite (D2).
 **Run result**: to be recorded — the release smoke boot and the tour run the exported game with a real renderer.
 
 **Status**: [ ] Not yet created

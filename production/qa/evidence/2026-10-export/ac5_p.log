@@ -1,0 +1,35 @@
+mutation (p) flags=release; Aethelgard* processes before 0, after 0, after cleanup 0; aeth_phase0_test_<guid> folders in %TEMP% before 3, after 3; 16 s
+expected the FAILED list to contain: "the game didn't exit within 3 minutes" ; and no PowerShell error text ; and the output contains 'LOCK: held=True' ; and the output lacks "could not add the game's stderr" ; and smoke.log contains 'TD022-STDERR-MARKER' -> CAUGHT
+exports/windows/smoke.log read by the harness afterwards: 'TD022-STDERR-MARKER' present
+  script under test sha256 (working tree) a7266698eec8e03687616cac2979aa3cd4d80405bf9c8d52ae136ad13e85235c
+  mutant sha256           1e51c0a26a64766c2ff7d88432f19f504bfac1afb627c1a366b5358cc025a73b
+  edit 1:
+    OLD:     $run = if (Test-Path $console) { $console } else { $exe }
+    NEW:     $run = if (Test-Path $console) { $console } else { $exe }
+    $run = "cmd.exe"
+  edit 2:
+    OLD:         $p = Start-Process -FilePath $run -ArgumentList $GameArgs -PassThru -NoNewWindow `
+    NEW:         $p = Start-Process -FilePath $run -ArgumentList '/c "echo TD022-STDERR-MARKER 1>&2& exit 0"' -PassThru -NoNewWindow `
+  edit 3:
+    OLD:         $done = $p.WaitForExit($TimeoutSec * 1000)
+    NEW:         $null = $p.WaitForExit(2000); $done = $false
+  edit 4:
+    OLD:         $null = $p.WaitForExit(2000); $done = $false
+    NEW:         $null = $p.WaitForExit(2000); $done = $false
+        $lockTarget = $Log
+        $hold = "`$f = [IO.File]::Open('$lockTarget', 'OpenOrCreate', 'ReadWrite', 'None'); Start-Sleep -Seconds 2; `$f.Close(); "
+        $null = Start-Process powershell -WindowStyle Hidden -ArgumentList ('-NoProfile -EncodedCommand ' + [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($hold)))
+        $locked = $false
+        foreach ($i in 1..40) { try { ([IO.File]::Open($lockTarget, 'OpenOrCreate', 'ReadWrite', 'None')).Close(); Start-Sleep -Milliseconds 100 } catch { $locked = $true; break } }
+        Write-Host "LOCK: held=$locked on $lockTarget"
+--- script output (stdout and stderr) ---
+Aethelgard 0.1.0
+Exporting 'Windows Desktop' (--export-release) with Godot 4.6.3.stable.official.7d41c59c4 ...
+Built C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows\Aethelgard.exe (101.8 MB); export errors: 0; scripts/debug files packed: 0
+LOCK: held=True on C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows\smoke.log
+Smoke log: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows\smoke.log
+Boot frames: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\exports\windows\smoke_boot.png
+FAILED:
+  - the game didn't exit within 3 minutes
+  - only 0 of 120 frames were recorded
+EXIT 1
