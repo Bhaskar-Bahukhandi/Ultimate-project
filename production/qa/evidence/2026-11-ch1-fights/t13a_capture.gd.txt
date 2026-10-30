@@ -1,0 +1,84 @@
+extends SceneTree
+## T13a AC-9 capture (live renderer): the real hand-off path. The story metas are set as the meeting sets them, the
+## arena is the current scene, the win returns to the real Elara meeting, which resumes at after_slime.
+## Shots: slime.png (keyboard controls line), slime-controls-pad.png (after one pad event), slime-shards.png
+## (about 0.12 s after the kill), slime-resume.png (the meeting's first after_slime line, shards still showing).
+## Run: Godot (not headless) --path AethelgardPrototype --resolution 1280x720 --script <this> -- --out=<dir>
+
+const ARENA := "res://scenes/combat/combat_arena.tscn"
+const MEETING := "res://scenes/chapter1/elara_meeting.tscn"
+
+var _out := ""
+
+
+func _initialize() -> void:
+	for a in OS.get_cmdline_user_args():
+		if a.begins_with("--out="):
+			_out = a.substr(6)
+	_run.call_deferred()
+
+
+func _wait(seconds: float) -> void:
+	var end := Time.get_ticks_msec() + int(seconds * 1000.0)
+	while Time.get_ticks_msec() < end:
+		await process_frame
+
+
+func _shot(name: String) -> void:
+	await RenderingServer.frame_post_draw
+	var img := get_root().get_texture().get_image()
+	var path := _out.path_join(name)
+	print("SHOT %s %s err=%d size=%s" % [name, path, img.save_png(path), img.get_size()])
+
+
+func _run() -> void:
+	await process_frame
+	if not OS.get_user_data_dir().contains("aeth_phase0_test"):
+		push_error("not isolated")
+		quit(2)
+		return
+	var gm := get_root().get_node("GameManager")
+	gm.reset_game()
+	gm.set_meta("story_fight_id", "ch1_slime")
+	gm.set_meta("story_fight_return_scene", MEETING)
+	get_root().get_node("SceneTransitions").change_scene(ARENA)
+	await _wait(3.0)
+	var arena := current_scene
+	print("SCENE ", arena.scene_file_path if arena else "none")
+	var slime = arena.get_node_or_null("Enemies/StoryFightSlime")
+	print("SLIME ", slime != null, " LABEL ", arena.get_node_or_null("UI/StoryFightControls").text)
+	await _shot("slime.png")
+	# One pad event: the controls line re-renders for the pad.
+	var ev := InputEventJoypadButton.new()
+	ev.button_index = JOY_BUTTON_A
+	ev.pressed = true
+	Input.parse_input_event(ev)
+	await _wait(0.1)
+	ev = ev.duplicate()
+	ev.pressed = false
+	Input.parse_input_event(ev)
+	await _wait(0.8)
+	print("LABEL ", arena.get_node("UI/StoryFightControls").text)
+	await _shot("slime-controls-pad.png")
+	slime = arena.get_node_or_null("Enemies/StoryFightSlime")
+	slime.take_damage(slime.max_health)
+	await _wait(0.3)
+	await _shot("slime-shards.png")
+	var dm := get_root().get_node("DialogueManager")
+	var seen := false
+	var end := Time.get_ticks_msec() + 15000
+	while Time.get_ticks_msec() < end:
+		await process_frame
+		if current_scene and current_scene.scene_file_path == MEETING and dm.is_active:
+			seen = true
+			break
+	print("MEETING dialogue active: ", seen)
+	await _wait(0.15)
+	var shards := 0
+	if current_scene:
+		for n in current_scene.find_children("SlimeShard*", "", true, false):
+			shards += 1
+	print("RESUME shards=", shards)
+	await _shot("slime-resume.png")
+	await _wait(0.5)
+	quit(0)

@@ -182,9 +182,20 @@ const DLG := "res://dialogue/ch1/elara_meeting.dlg"
 
 var _slime: ColorRect = null
 
+const COMBAT_ARENA := "res://scenes/combat/combat_arena.tscn"
+const SELF_SCENE := "res://scenes/chapter1/elara_meeting.tscn"
+const SLIME_SHARD_COLOR := Color(0.45, 0.85, 0.75)
+
 func start_elara_meeting() -> void:
 	## A1-P02 — The Wrong Weapon. Every word is in dialogue/ch1/elara_meeting.dlg;
-	## this scene stages the camera, the characters and the slime.
+	## this scene stages the camera, the characters and the slime; the fight itself is
+	## a real one in the combat arena (Y1-P0-T13a) and comes back here with the
+	## ch1_slime_fought flag set, which resumes at after_slime. It resumes even when the
+	## meeting was already finished (a save made during the walk-out): replaying start would
+	## hand off to the fight again and come back here without end.
+	if GameManager.has_flag("ch1_slime_fought"):
+		await _resume_after_slime_fight()
+		return
 	await _beats([
 		{"type": "camera_move", "target": Vector2(640, 360), "duration": 0.5},
 		{"type": "character_enter", "character": "Kaelen", "position": Vector2(350, 420), "from": "left", "duration": 2.0},
@@ -193,12 +204,51 @@ func start_elara_meeting() -> void:
 	if not is_inside_tree(): return
 	await DialogueManager.run(DLG, "start", _on_dlg_event)
 	if not is_inside_tree(): return
-	await _stage_slime_fight()
-	if not is_inside_tree(): return
+	_hand_off_to_slime_fight()
+
+func _play_after_slime() -> void:
 	await DialogueManager.run(DLG, "after_slime", _on_dlg_event)
 	if not is_inside_tree(): return
 	GameManager.set_story_flag("ch1_elara_glitch_witch_met", true)
 	transition_to_path()
+
+## Back from the arena with the slime beaten: no walk-in, no fight. Kaelen stands where the
+## fight ended, the slime's shards lie where it broke and fade as after_slime begins.
+func _resume_after_slime_fight() -> void:
+	camera.global_position = Vector2(640, 360)
+	var kaelen = cutscene_mgr.get_or_create_character("Kaelen")
+	if kaelen:
+		kaelen.position = Vector2(490, 420)
+		kaelen.visible = true
+		kaelen.modulate.a = 1.0
+	_spawn_resume_shards(Vector2(520, 425))
+	await _play_after_slime()
+
+func _spawn_resume_shards(origin: Vector2) -> void:
+	for i in 7:
+		var shard := ColorRect.new()
+		shard.name = "SlimeShard%d" % i
+		shard.color = SLIME_SHARD_COLOR
+		shard.size = Vector2(8, 8)
+		shard.rotation = randf() * TAU
+		shard.position = origin + Vector2(randf_range(-40, 40), randf_range(-30, 14))
+		characters_layer.add_child(shard)
+		var t := create_tween()
+		t.tween_property(shard, "modulate:a", 0.0, 0.6)
+		t.tween_callback(shard.queue_free)
+
+## The slime has slid in and the words are said: the fight is real now. The story-fight metas
+## tell the arena which fight to run and where to come back to.
+func _hand_off_to_slime_fight() -> void:
+	if _is_transitioning:
+		return
+	_is_transitioning = true
+	print("[CH1-SEQ2] Handing off to the slime fight")
+	GameManager.set_meta("story_fight_id", "ch1_slime")
+	GameManager.set_meta("story_fight_return_scene", SELF_SCENE)
+	DialogueManager.hide_dialogue()
+	camera.disable_letterbox(0.4)
+	SceneTransitions.change_scene(COMBAT_ARENA, SceneTransitions.TransitionStyle.COMBAT_ENTRY)
 
 func _beats(beats: Array) -> void:
 	cutscene_mgr.play_cutscene({"name": "Chapter 1 - The Wrong Weapon", "beats": beats})
@@ -234,41 +284,6 @@ func _nudge(character_name: String, offset: Vector2) -> void:
 		var t := create_tween()
 		t.tween_property(c, "position", c.position + offset, 0.15)
 		t.tween_property(c, "position", c.position, 0.15)
-
-## The slime blocks the path; Kaelen can't get round it. It isn't playable
-## here (the real combat tutorial is on the Broken Mile), so it's staged:
-## it closes in, he swings, and it breaks into polygons, not blood.
-func _stage_slime_fight() -> void:
-	if not _slime:
-		return
-	var hop := create_tween()
-	hop.tween_property(_slime, "position", Vector2(530, 400), 0.35)
-	hop.tween_property(_slime, "position", Vector2(520, 425), 0.25)
-	await hop.finished
-	if not is_inside_tree(): return
-	await _beats([{"type": "character_move", "character": "Kaelen", "target": Vector2(490, 420), "duration": 0.25}])
-	if not is_inside_tree(): return
-	camera.shake(6.0, 0.25)
-	flash_overlay.color = Color(1, 1, 1, 0.5)
-	flash_overlay.modulate.a = 0.6
-	await get_tree().create_timer(0.08, false).timeout
-	if not is_inside_tree(): return
-	flash_overlay.modulate.a = 0.0
-	var origin := _slime.position
-	_slime.queue_free()
-	_slime = null
-	for i in 7:
-		var shard := ColorRect.new()
-		shard.color = Color(0.45, 0.85, 0.75)
-		shard.size = Vector2(8, 8)
-		shard.rotation = randf() * TAU
-		shard.position = origin + Vector2(20, 12)
-		characters_layer.add_child(shard)
-		var t := create_tween().set_parallel(true)
-		t.tween_property(shard, "position", shard.position + Vector2(randf_range(-60, 60), randf_range(-50, 10)), 0.6)
-		t.tween_property(shard, "modulate:a", 0.0, 0.6)
-		t.chain().tween_callback(shard.queue_free)
-	await get_tree().create_timer(0.7, false).timeout
 
 func transition_to_path() -> void:
 	## Transition to Sequence 3: Path to Oakhaven — Combat Tutorial

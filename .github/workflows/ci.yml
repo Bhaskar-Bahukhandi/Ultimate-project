@@ -183,6 +183,11 @@ jobs:
         working-directory: ${{ env.PROJECT_DIR }}
         run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/integration/combat/combat_fixes_test.gd
 
+      - name: "Story fight (Y1-P0-T13a: the opening slime in the arena, retry, resume, pause, gamepad)"
+        working-directory: ${{ env.PROJECT_DIR }}
+        timeout-minutes: 10
+        run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/integration/combat/story_fight_test.gd
+
       - name: Reachability (collision never walls off an NPC, shop, gate or trigger)
         working-directory: ${{ env.PROJECT_DIR }}
         run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/integration/level/reachability_test.gd

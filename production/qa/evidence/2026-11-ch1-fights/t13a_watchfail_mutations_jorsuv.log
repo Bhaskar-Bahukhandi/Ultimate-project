@@ -1,0 +1,90 @@
+t13a_watchfail_mutations.log - Y1-P0-T13a AC-9 mutation watch-fail
+Scratch worktree at HEAD (a682b18) + every uncommitted T13a file under AethelgardPrototype/ and .github/;
+a control (story_fight_test, 3 runs in a row), then one mutation per run, reverted after.
+GODOT unset; each suite through tests/run_phase0_tests.ps1.
+
+== (j) the retry resets the old slime in place instead of respawning it
+   suite res://tests/integration/combat/story_fight_test.gd
+   exit 1; STORY FIGHT RESULT: 58 passed, 5 failed; 48 s
+   expected failures containing 'a new instance' AND 'the slime is a fresh instance' ->FAILED as expected
+   diff applied:
+     --- a/scripts/combat/combat_arena.gd
+     +++ b/scripts/combat/combat_arena.gd
+     @@ -879 +879 @@
+     -	if is_instance_valid(old):
+     +	if false:
+     @@ -895 +895,5 @@
+     -	_spawn_story_enemy()
+     +	if is_instance_valid(old):
+     +		old.current_health = old.max_health
+     +		old.position = _story_cfg["enemy_spawn"]
+     +	else:
+     +		_spawn_story_enemy()
+   FAIL: AC-4 a fresh StoryFightSlime at full HP (a new instance), not the old one reset
+   FAIL: AC-4 the old slime is disabled, hidden and renamed at once
+   FAIL: AC-4 the old slime is freed about 0.6 s later
+   FAIL: AC-4 after a death during a pounce the slime is a fresh instance
+   FAIL: AC-4 a pounce whose windup ends after the retry never acts (old slime velocity -198)
+
+== (o) the win does not wait for the shard fade
+   suite res://tests/integration/combat/story_fight_test.gd
+   exit 1; STORY FIGHT RESULT: 61 passed, 2 failed; 42 s
+   expected failures containing 'waits for the 0.6 s shard fade' ->FAILED as expected
+   diff applied:
+     --- a/scripts/combat/combat_arena.gd
+     +++ b/scripts/combat/combat_arena.gd
+     @@ -826 +825,0 @@
+     -	await get_tree().create_timer(float(_story_cfg["shard_fade"]), false, false, true).timeout
+   FAIL: AC-3 the scene change waits for the 0.6 s shard fade (247 ms after the kill)
+   FAIL: AC-8 the player dies during the shard fade: the win stands, no retry, one scene change (in window false, retries 0, transitions 1)
+
+== (r) the story metas not cleared on load (not in TRANSIENT_METAS)
+   suite res://tests/integration/combat/story_fight_test.gd
+   exit 1; STORY FIGHT RESULT: 62 passed, 1 failed; 47 s
+   expected failures containing 'both story metas are in TRANSIENT_METAS' ->FAILED as expected
+   diff applied:
+     --- a/scripts/game_manager.gd
+     +++ b/scripts/game_manager.gd
+     @@ -684 +683,0 @@
+     -	"story_fight_id", "story_fight_return_scene",
+   FAIL: AC-6 both story metas are in TRANSIENT_METAS (clear_transient_metas, which load_game and reset_game call, removes them)
+
+== (s) the meeting's old resume check (both flags set: start replays, the fight loops)
+   suite res://tests/integration/story/chapter1_route_test.gd
+   exit 1; CH1 RESULT: 411 passed, 2 failed; 566 s
+   expected failures containing 'with both flags set the meeting resumes' ->FAILED as expected
+   diff applied:
+     --- a/scripts/chapter1/ch1_elara_meeting.gd
+     +++ b/scripts/chapter1/ch1_elara_meeting.gd
+     @@ -196 +196 @@
+     -	if GameManager.has_flag("ch1_slime_fought"):
+     +	if GameManager.has_flag("ch1_slime_fought") and not GameManager.has_flag("ch1_elara_glitch_witch_met"):
+   FAIL: T13a with both flags set the meeting resumes at after_slime: start not replayed, the arena never loaded
+   FAIL: T13a with both flags set the meeting goes on to the Broken Mile, with no trip to the arena on the way
+
+== (u) the retry does not mark the old slime DEAD (its pounce can act)
+   suite res://tests/integration/combat/story_fight_test.gd
+   exit 1; STORY FIGHT RESULT: 62 passed, 1 failed; 43 s
+   expected failures containing 'never acts' ->FAILED as expected
+   diff applied:
+     --- a/scripts/combat/combat_arena.gd
+     +++ b/scripts/combat/combat_arena.gd
+     @@ -882 +881,0 @@
+     -		old.current_state = EnemyBase.State.DEAD
+   FAIL: AC-4 a pounce whose windup ends after the retry never acts (old slime velocity -198)
+
+== (v) with both flags set: after_slime plays, then one extra trip to the fight, then the path
+   suite res://tests/integration/story/chapter1_route_test.gd
+   exit 1; CH1 RESULT: 412 passed, 1 failed; 548 s
+   expected failures containing 'no trip to the arena on the way' ->FAILED as expected
+   diff applied:
+     --- a/scripts/chapter1/ch1_elara_meeting.gd
+     +++ b/scripts/chapter1/ch1_elara_meeting.gd
+     @@ -211,0 +212,4 @@
+     +	if GameManager.has_flag("ch1_elara_glitch_witch_met") and not GameManager.has_meta("t13a_v_once"):
+     +		GameManager.set_meta("t13a_v_once", true)
+     +		_hand_off_to_slime_fight()
+     +		return
+   FAIL: T13a with both flags set the meeting goes on to the Broken Mile, with no trip to the arena on the way
+
+ALL MUTATIONS CAUGHT: yes

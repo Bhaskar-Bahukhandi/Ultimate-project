@@ -1,0 +1,50 @@
+=== res://tests/integration/meta/test_layout_test.gd
+LAYOUT RESULT: 6 passed, 0 failed
+=== res://tests/integration/project/load_all_test.gd
+=== res://tests/integration/dialogue/dialogue_test.gd
+DIALOGUE RESULT: 54 passed, 0 failed
+=== res://tests/integration/core/context_stack_test.gd
+CONTEXT RESULT: 33 passed, 0 failed
+=== res://tests/integration/input/input_test.gd
+INPUT RESULT: 52 passed, 0 failed
+=== res://tests/unit/input/input_bound_texts_prune_test.gd
+BOUNDTEXTS RESULT: 16 passed, 0 failed
+=== res://tests/unit/quests/side_quest_rewards_test.gd
+QUESTS UNIT RESULT: 134 passed, 0 failed
+=== res://tests/unit/ngplus/ngplus_buff_stacking_test.gd
+NGPLUS UNIT RESULT: 192 passed, 0 failed
+=== res://tests/unit/ngplus/ngplus_save_roundtrip_test.gd
+NGPLUS ROUNDTRIP RESULT: 129 passed, 0 failed
+=== res://tests/unit/achievements/fragment_achievement_test.gd
+FRAGMENT ACHIEVEMENT UNIT RESULT: 21 passed, 0 failed
+=== res://tests/unit/items/null_potion_test.gd
+NULL POTION UNIT RESULT: 83 passed, 0 failed
+=== res://tests/integration/vfx/screen_flash_test.gd
+SCREEN FLASH RESULT: 107 passed, 0 failed
+=== res://tests/integration/vfx/ch3_flash_runtime_test.gd
+CH3 FLASH RESULT: 53 passed, 0 failed
+=== res://tests/integration/ui/ui_version_card_test.gd
+UI VERSION CARD RESULT: 46 passed, 0 failed
+=== res://tests/integration/story/region_lore_ironhold_test.gd
+REGION LORE IRONHOLD RESULT: 127 passed, 0 failed
+=== res://tests/integration/level/clock_tower_trigger_test.gd
+CLOCK TOWER TRIGGER RESULT: 63 passed, 0 failed
+=== res://tests/integration/story/chapter1_route_test.gd
+CH1 RESULT: 411 passed, 0 failed
+=== res://tests/integration/story/chapter2_route_test.gd
+CH2 RESULT: 49 passed, 0 failed
+=== res://tests/integration/combat/combat_fixes_test.gd
+COMBAT FIXES RESULT: 45 passed, 0 failed
+=== res://tests/integration/combat/story_fight_test.gd
+STORY FIGHT RESULT: 49 passed, 0 failed
+=== res://tests/integration/level/reachability_test.gd
+REACH RESULT: 25 passed, 0 failed
+=== res://tests/integration/level/ch1_rooms_test.gd
+ROOMS RESULT: 445 passed, 0 failed
+=== res://tests/integration/quests/act1_quests_completable_test.gd
+QUESTS ACT1 RESULT: 114 passed, 0 failed
+=== res://tests/integration/playthrough/phase0_blockers_test.gd
+RUNNER FAIL res://tests/integration/playthrough/phase0_blockers_test.gd: timed out after 960 s
+=== res://tests/integration/playthrough/full_playthrough_test.gd
+PLAYTHROUGH RESULT: 172 passed, 0 failed
+FAILED 1 suite(s):

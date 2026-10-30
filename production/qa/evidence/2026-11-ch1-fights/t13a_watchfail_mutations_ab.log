@@ -1,0 +1,44 @@
+t13a_watchfail_mutations.log - Y1-P0-T13a AC-9 mutation watch-fail
+Scratch worktree at HEAD (a682b18) + every uncommitted T13a file under AethelgardPrototype/ and .github/;
+a control (story_fight_test, 3 runs in a row), then one mutation per run, reverted after.
+GODOT unset; each suite through tests/run_phase0_tests.ps1.
+
+== (a) the arena ignores the story metas (reads and removes them, but the tutorial mode runs)
+   suite res://tests/integration/combat/story_fight_test.gd
+   exit 1; STORY FIGHT RESULT: 3 passed, 4 failed; 8 s
+   expected a failure containing 'AC-2 exactly one enemy' -> FAILED as expected
+   diff applied:
+     --- a/scripts/combat/combat_arena.gd
+     +++ b/scripts/combat/combat_arena.gd
+     @@ -182 +182 @@
+     -	_story_id = _consume_story_fight_metas()
+     +	_consume_story_fight_metas()
+   FAIL: AC-2 exactly one enemy, StoryFightSlime, running slime.gd (found 1)
+   FAIL: AC-2 the scene's TutorialSlime is gone
+   FAIL: SCRIPT ERROR: Invalid access to property or key 'position' on a base object of type 'null instance'.
+   FAIL: AC-2 Root Access is refused from the keyboard, the pad and a direct call (no panel, no ContextStack entry)
+   FAIL: AC-2 Perfect Delete is refused: charges unchanged (2) and the slime still stands
+   FAIL: SCRIPT ERROR: Invalid access to property or key 'global_position' on a base object of type 'null instance'.
+   FAIL: SCRIPT ERROR: Invalid access to property or key 'max_health' on a base object of type 'null instance'.
+   FAIL: SCRIPT ERROR: Attempt to call function 'get_instance_id' in base 'null instance' on a null instance.
+   FAIL: SCRIPT ERROR: Attempt to call function '_perform_pounce' in base 'null instance' on a null instance.
+   FAIL: RUNNER FAIL res://tests/integration/combat/story_fight_test.gd: 8 script error line(s)
+   ... 1 more
+
+== (b) the retry meta is not set (the normal death path runs)
+   suite res://tests/integration/combat/story_fight_test.gd
+   exit 1; STORY FIGHT RESULT: 43 passed, 6 failed; 56 s
+   expected a failure containing 'AC-4' -> FAILED as expected
+   diff applied:
+     --- a/scripts/combat/combat_arena.gd
+     +++ b/scripts/combat/combat_arena.gd
+     @@ -688 +687,0 @@
+     -	player.set_meta("local_boss_retry_enabled", true)
+   FAIL: AC-4 the player is restored at the spawn with full HP
+   FAIL: AC-4 no corruption, player_died unset, no game over: still in the arena
+   FAIL: AC-4 retry 1 of 3: time scale 1.0, no ContextStack entry or time-scale request
+   FAIL: AC-4 retry 2 of 3: time scale 1.0, no ContextStack entry or time-scale request
+   FAIL: AC-4 retry 3 of 3: time scale 1.0, no ContextStack entry or time-scale request
+   FAIL: D5 the retry runs and the player's HP is full before anything leaves the arena
+
+ALL MUTATIONS CAUGHT: yes

@@ -681,6 +681,7 @@ const TRANSIENT_METAS: Array[String] = [
 	"return_position", "return_position_scene", "boss_return_scene",
 	"boss_fight_id", "pending_encounter", "return_to_overworld_from",
 	SHRINE_FRESH_ARRIVAL_META, VILLAGE_AFTERNOON_META,
+	"story_fight_id", "story_fight_return_scene",
 ]
 
 func set_return_point(scene_path: String, pos: Vector2) -> void:

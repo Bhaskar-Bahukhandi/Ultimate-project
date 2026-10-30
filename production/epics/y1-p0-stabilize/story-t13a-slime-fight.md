@@ -2,13 +2,13 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-T13a (`production/plan/_source/Y1-P0.json#Y1-P0-T13`, days 1–2 for the slime; sprint plan row Y1-P0-T13a)
-> **Status**: Ready
+> **Status**: Complete
 > **Layer**: Feature
 > **Type**: Integration
 > **Estimate**: 2 days (day 1 the arena's story-fight mode, the hand-off and the retry; day 2 resume, tests, mutations,
 > screenshots) — tight after the QL-STORY-READY additions; flagged as at risk of running over
 > **Manifest Version**: N/A — `docs/architecture/control-manifest.md` does not exist
-> **Last Updated**: 2026-10-28
+> **Last Updated**: 2026-10-30
 
 ## Context
 
@@ -97,6 +97,9 @@ placeholder fallback; the forest backdrop is procedural and labelled so).
 - **D6 drops (user, 2026-10-28):** the story fight suppresses the slime's item drops as well as XP and gold.
 - **D7 controls line (user, 2026-10-28):** a non-blocking on-screen label (not DialogueManager), re-rendered when the input
   device changes.
+- **D8 both flags set (user, 2026-10-29, during `/code-review`):** the meeting resumes at `after_slime` whenever
+  `ch1_slime_fought` is set, even when `ch1_elara_glitch_witch_met` is set too (a manual save during the walk-out's
+  fade). Replaying `start` there handed off to the fight again and came back to the same state, without end.
 - **QL-STORY-READY third pass (GAPS 1–4, folded in, 2026-10-28):** a real test for D6 (no pickup nodes; the loot table
   cleared after `add_child`), C3's direct-`die()` check held long enough to mean something, the D5 retry finding the old
   slime already freed, and `story_fight_resolved`'s outcome values.
@@ -108,13 +111,13 @@ placeholder fallback; the forest backdrop is procedural and labelled so).
 
 ## Acceptance Criteria
 
-- [ ] AC-1 **Hand-off.** When `start` reaches `do slime_appears`, the slime appears as today; then (instead of
+- [x] AC-1 **Hand-off.** When `start` reaches `do slime_appears`, the slime appears as today; then (instead of
       `_stage_slime_fight()`) the meeting sets the story-fight metas — `story_fight_id = "ch1_slime"` and
       `story_fight_return_scene = "res://scenes/chapter1/elara_meeting.tscn"` — and changes scene to
       `scenes/combat/combat_arena.tscn` through `SceneTransitions` (`COMBAT_ENTRY`). Tested: at the hand-off both metas
       hold those values and the next scene is the arena; the meeting loaded with `ch1_slime_fought` set never loads the
       arena.
-- [ ] AC-2 **The arena's story-fight mode.** With `story_fight_id = "ch1_slime"` the arena (checked after the encounter
+- [x] AC-2 **The arena's story-fight mode.** With `story_fight_id = "ch1_slime"` the arena (checked after the encounter
       and boss modes, before the tutorial mode) reads **and removes** both story metas in `_ready` (consume on read),
       then: removes the TutorialSlime; spawns one `slime.gd` enemy named `StoryFightSlime` at the right and keeps the
       player node `Player` at the left; draws a procedural forest backdrop from the Elara meeting's colour values
@@ -124,7 +127,7 @@ placeholder fallback; the forest backdrop is procedural and labelled so).
       start); offers no hold-to-skip (no `CutsceneManager`); refuses Root Access and Perfect Delete from keyboard and
       pad alike (no panel, no ContextStack entry, `perfect_delete_charges` unchanged); the slime's XP, gold and item
       drops are all suppressed (D6). A second load of the arena with no story metas runs its default mode.
-- [ ] AC-3 **Win.** The arena listens to the slime's `died` signal and owns the beat: 7 polygon shards of `Color(0.45,
+- [x] AC-3 **Win.** The arena listens to the slime's `died` signal and owns the beat: 7 polygon shards of `Color(0.45,
       0.85, 0.75)` spawn at the slime's position (the generic smoke puff still plays with them). A `_resolved` guard is
       set at the slime's death: from then on the player is invulnerable and the retry cannot run. This applies only if
       the player is alive when the slime dies (D5; otherwise see AC-4). Then `first_slime_defeated` and
@@ -134,7 +137,7 @@ placeholder fallback; the forest backdrop is procedural and labelled so).
       meeting sets PROLOGUE in `_ready`). The arena exposes the outcome for tests and the T14b bot: a
       `story_fight_resolved(outcome)` signal whose only outcome is `"win"` (a retry emits nothing and only increments
       `story_fight_retries`), the `story_fight_retries` count, and the `ch1_slime_fought` flag.
-- [ ] AC-4 **Death is a tutorial retry with a fresh slime.** In the story fight the player's death does not take the
+- [x] AC-4 **Death is a tutorial retry with a fresh slime.** In the story fight the player's death does not take the
       normal path: no corruption, `player_died` not set, no game-over scene. After the player's 1.0 s death timer (game
       time; the arena's own wait is pause-aware, `create_timer(1.0, false)`), unless `_resolved` is set, the old slime —
       if it still exists (`is_instance_valid`; after its own death it frees itself 0.6 s later) — is disabled and hidden
@@ -147,23 +150,23 @@ placeholder fallback; the forest backdrop is procedural and labelled so).
       is already dead when the player dies, the win stands and no retry runs. If the player is already dead when the
       slime dies (a hit in flight, the kill zone), the slime's death is ignored — no shards, no flags, no scene change —
       and the retry runs (D5).
-- [ ] AC-5 **Resume.** `elara_meeting.tscn` loaded with `ch1_slime_fought` set and `ch1_elara_glitch_witch_met` not set:
+- [x] AC-5 **Resume.** `elara_meeting.tscn` loaded with `ch1_slime_fought` set and `ch1_elara_glitch_witch_met` not set:
       the opening camera move and Kaelen's walk-in are skipped; Kaelen is placed at (490, 420); 7 static shards of the
       slime colour lie around (520, 425) and fade out over 0.6 s as `after_slime` starts; `start` is not replayed; the
       arena is never loaded; `after_slime` plays and continues exactly as today (Elara's entrance, the questions, the
       three-way choice, `elara_met`, `ch1_elara_glitch_witch_met`, the walk to the Broken Mile). With both flags set the
-      meeting behaves as it does today. Saving inside the arena is refused (existing rule). Tested: a save made in the
+      meeting also resumes at `after_slime` (D8). Saving inside the arena is refused (existing rule). Tested: a save made in the
       meeting after the return, loaded again → the first dialogue line shown is `after_slime`'s first line and no scene
       change to the arena happens.
-- [ ] AC-6 **Leaving the arena another way.** Returning to the main menu from the pause menu during the fight leaves no
+- [x] AC-6 **Leaving the arena another way.** Returning to the main menu from the pause menu during the fight leaves no
       story meta and does not set `ch1_slime_fought`, so the meeting loaded again reaches the hand-off and the fight
       again; Continue behaves as it does today (it loads the last save, which may be from before the meeting). With the
       pause context on the ContextStack, the slime, the death timer and the win and retry transitions do not advance,
       Root Access is refused, and resuming continues them.
-- [ ] AC-7 **Gamepad-only.** The fight can be won with joypad input only (`InputEventJoypadButton` /
+- [x] AC-7 **Gamepad-only.** The fight can be won with joypad input only (`InputEventJoypadButton` /
       `InputEventJoypadMotion` for move, jump, dash, attack, parry); the controls line shows pad glyphs after pad input;
       the `root_access` and `perfect_delete` pad bindings are refused as in AC-2.
-- [ ] AC-8 **Tests.** A new suite `tests/integration/combat/story_fight_test.gd` (own `STORY FIGHT RESULT` line) checks
+- [x] AC-8 **Tests.** A new suite `tests/integration/combat/story_fight_test.gd` (own `STORY FIGHT RESULT` line) checks
       AC-2, AC-3 (the slime dies first, then the player during the shards and during `COMBAT_EXIT`: flags set once, one
       scene change; the player dies first, then the slime within 0.5 s: the retry runs, D5), AC-4 (including a death
       during the pounce windup, then full HP 1 s after the restore, and 3 retries in a row), AC-6 and AC-7 (a scripted
@@ -172,7 +175,7 @@ placeholder fallback; the forest backdrop is procedural and labelled so).
       AC-5's resume and save/load case, adds `ch1_slime_fought` to its flag list, and every Chapter 1 flag check after
       the meeting is unchanged. Both registered in `tests/suite_limits.txt`, `run_all_tests.ps1` and `ci.yml`; the full
       suite green with every count at its minimum.
-- [ ] AC-9 **Evidence and records.** Live-renderer screenshots, each opened and checked, labelled live renderer in the
+- [x] AC-9 **Evidence and records.** Live-renderer screenshots, each opened and checked, labelled live renderer in the
       evidence README: `production/qa/evidence/2026-11-ch1-fights/slime.png` (the fight: player, slime, HUD, backdrop,
       controls line), `slime-shards.png` (the polygon beat), `slime-resume.png` (the meeting's resume staging) and
       `slime-controls-pad.png` (the controls line after pad input); the README labels the backdrop procedural and
@@ -184,7 +187,14 @@ placeholder fallback; the forest backdrop is procedural and labelled so).
       (h) the metas not removed on read → AC-6; (i) `ch1_slime_fought` not set → AC-5; (j) the retry resets the old
       slime in place instead of respawning it → C4's new-instance check; (k) the arena does not spawn the shards → C3's
       shard count; (l) the retry wait uses a timer that runs during pause → C6; (m) item drops not suppressed → C3's
-      pickup check. CHANGELOG `feat:` entry; `git diff --check` clean.
+      pickup check. Added after `/code-review` (2026-10-29): (n) the slime runs while paused → C6's stillness check;
+      (o) the win does not wait for the shard fade → C3's timing check; (p) the path drawn behind the ground → AC-2's
+      path check; (q) Root Access refused only by the input gate → AC-2's direct-call check; (r) the story metas not in
+      `TRANSIENT_METAS` → AC-6's load check; (s) the meeting's old resume check → AC-5's both-flags check; (t) the
+      Root Access guard removed and ContextStack not exclusive → AC-6's pause check. Added after the second review
+      round (2026-10-29): (u) the retry does not mark the old slime DEAD → AC-4's "a pounce whose windup ends after the
+      retry never acts" check; (v) with both flags set, one extra trip to the arena after `after_slime` → AC-5's "no trip
+      to the arena on the way" check. CHANGELOG `feat:` entry; `git diff --check` clean.
 
 ---
 
@@ -264,9 +274,11 @@ placeholder fallback; the forest backdrop is procedural and labelled so).
 `tests/integration/story/chapter1_route_test.gd` (passing), `production/qa/evidence/2026-11-ch1-fights/` (README with
 the AC map and the user's sign-off, `slime.png`, `slime-shards.png`, `slime-resume.png`, `slime-controls-pad.png`, the
 suite logs, the mutation log, the full-suite log).
-**Run result**: to be recorded — the fight is launched in the live renderer and the four screenshots retained.
+**Run result**: OBSERVED — live renderer (Vulkan Forward+, RTX 2050), capture 5: `slime.png`, `slime-controls-pad.png`,
+`slime-shards.png` and `slime-resume.png` in `production/qa/evidence/2026-11-ch1-fights/`, each opened and signed off by the
+user (captures 3 and 4 were rejected; the README records why and what changed).
 
-**Status**: [ ] Not yet created
+**Status**: [x] Created — uncommitted at close; the README maps each AC to its checks and logs
 
 ---
 
@@ -275,3 +287,49 @@ suite logs, the mutation log, the full-suite log).
 - Depends on: Y1-P0-T11 (Complete: combat-feel leftovers), Y1-P0-T04 (Complete: the shatter rewire shares
   `chapter1_route_test.gd`).
 - Unlocks: Y1-P0-T13b and Y1-P0-T13c (reuse the story-fight mode), Y1-P0-T14b (the bot's Chapter 1 fight legs).
+
+---
+
+## Completion Notes
+**Completed**: 2026-10-30
+**Criteria**: 9/9 passing, two of them with gaps. AC-6 is partial: the pause checks pass, but neither the main-menu route
+nor a win under pause is tested. AC-7 is partial: the scripted pad win presses only move and attack (jump, dash and parry
+by pad are untested). In AC-3, "HP kept" is checked from full HP only. Both gaps are logged as TD-032. Left to a
+playtest: the feel of the fight and a run on a real gamepad. Suites: `story_fight_test` 63/0 three runs in a row
+(42–43 s); `chapter1_route_test` 413/0 (540 s); full local suite 25/25 after the round-1 fixes. Round 2 changed tests
+only, and the two suites it touched were re-run green. Mutations (a)–(v) were all caught, each failing its own check.
+`git diff --check` is clean.
+**Code review**: two `/code-review` rounds.
+- Round 1 returned CHANGES REQUIRED; the user chose [A] and "resume after the slime" (D8). Fixed: the both-flags loop
+  (D8); the story metas added to `TRANSIENT_METAS`; the path strip drawn behind the ground; four vacuous checks; the
+  AC-8 death-during-win races.
+- Round 2 returned CHANGES REQUIRED, all test gaps; the user chose [A]. Fixed: the pounce check split; the fade bound
+  set to 400 ms; the metas check renamed; the no-arena clause added; mutations (u) and (v) added.
+- The round-2 fixes were verified by re-runs, not by a third review.
+- At close: QL-TEST-COVERAGE returned GAPS and LP-CODE-REVIEW returned CONCERNS C1–C5. Neither has a blocker. The user
+  accepted both and had them logged.
+**Deviations** (advisory):
+- NOT ASSESSED: GDD / ADR / TR-registry traceability (none exist for Chapter 1 combat encounters).
+- The win's 0.6 s shard fade and wait run in real time, not game time. Both are pause-aware, so the kill's slow motion
+  does not stretch the beat; capture 3 showed it bunched.
+- The slime spawns at x 760, not x 900, so it is inside the first frame.
+- Colour continuity: the meeting's slime is teal, the arena's slime is green (the shards are teal). Logged as TD-034.
+- Files changed outside the story's list:
+  - `phase0_blockers_test.gd`: the arena hand-off forward.
+  - `STORY_BIBLE.md`.
+  - `game_manager.gd`: `TRANSIENT_METAS` (round 1).
+- The AC-9 mutation list grew from (a)–(m) to (a)–(v) during review.
+**Test Evidence**: Integration, made of:
+- `tests/integration/combat/story_fight_test.gd` (new, 63 checks);
+- `tests/integration/story/chapter1_route_test.gd` (413 checks);
+- the fixture `tests/fixtures/story_fight_return_stub.tscn`;
+- `production/qa/evidence/2026-11-ch1-fights/`: the README with the AC map, the four signed-off screenshots, the suite
+  and full-run logs, the mutation logs, and the harness and capture scripts.
+**Tech debt logged**:
+- TD-031: the fight table to hold the whole fight before T13b, plus a shared enemy-body builder.
+- TD-032: the AC-6 and AC-7 test gaps.
+- TD-033: tests and the arena reaching into private state.
+- TD-034: the slime's colour continuity and the grey void.
+- TD-035: one unexplained native crash.
+**Known after close**: CI has not run this changeset. Once it has, set `story_fight_test`'s timeout (240 s now) to
+3× the slower of the local and CI times, at least 120 s.

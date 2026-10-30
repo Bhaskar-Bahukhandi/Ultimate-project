@@ -386,6 +386,11 @@ func _ch1_poke() -> void:
 		if spin:
 			spin.value = 0.0  # one of the two valid edits: turn the guardian's aggression down
 		s._on_root_access_apply()
+	elif p == ARENA_SCENE and not s.get("_story_id").is_empty() and not s.get("_story_resolved"):
+		# Y1-P0-T13a: the meeting hands off to the slime fight; the slime is damaged to 0 through its own API.
+		var slime = s.get_node_or_null("Enemies/StoryFightSlime")
+		if slime != null and slime.current_health > 0.0:
+			slime.take_damage(slime.max_health)
 	elif p == VILLAGE_SCENE and not s.get("in_dialogue") and Time.get_ticks_msec() >= _next_bridge_poke_ms:
 		_next_bridge_poke_ms = Time.get_ticks_msec() + 1000
 		var player := s.get_node_or_null("Player")
@@ -422,6 +427,7 @@ func _test_new_game_route_reaches_elara_and_oakhaven() -> void:
 	_check(await _wait_for_scene_poking(ELARA_SCENE, 30.0), "C3: opening hook continues into the Elara meeting")
 	_check(await _wait_for_scene_poking(PATH_SCENE, 240.0), "Elara meeting continues to the path to Oakhaven")
 	_check(gm.has_flag("ch1_elara_trusted"), "C3: Elara choice recorded (ch1_elara_trusted)")
+	_check(gm.has_flag("ch1_slime_fought"), "C3: the slime was fought in the arena on the way (ch1_slime_fought)")
 	_check(await _wait_for_scene_poking(VILLAGE_SCENE, 300.0), "path continues to Oakhaven village")
 	_check(gm.has_flag("ch1_data_vision_unlocked"), "C3: Data Vision unlocked on the New Game route")
 	_check(gm.has_flag("root_access_unlocked"), "C3: Root Access unlocked on the New Game route")

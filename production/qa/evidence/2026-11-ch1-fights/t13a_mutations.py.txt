@@ -1,0 +1,238 @@
+"""T13a AC-9 watch-fail: a scratch worktree at HEAD + the uncommitted T13a files; a green control (3 runs of
+story_fight_test), then one mutation per run (reverted after), each expected to fail its own check.
+(d) runs the Chapter 1 route test; the rest run story_fight_test. Never touches the main checkout."""
+import subprocess, os, difflib, time, sys
+
+ROOT = "C:/Users/BHASKAR BAHUKHANDI/OneDrive/Desktop/Ultimate project"
+SCR = "C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/38742c26-a8d5-4ddd-be96-9bff07452637/scratchpad"
+WT = SCR + "/wt_t13m"
+PROJ = WT + "/AethelgardPrototype"
+OUT = SCR + "/logs/t13a_watchfail_mutations.log"
+GODOT = "C:/Godot/Godot_v4.6.3-stable_win64_console.exe"
+SF = ("res://tests/integration/combat/story_fight_test.gd", "STORY FIGHT RESULT")
+CH1 = ("res://tests/integration/story/chapter1_route_test.gd", "CH1 RESULT")
+ARENA = "scripts/combat/combat_arena.gd"
+MEET = "scripts/chapter1/ch1_elara_meeting.gd"
+GM = "scripts/game_manager.gd"
+CS = "scripts/core/context_stack.gd"
+
+INPUT_GATE = ('\tif not _story_id.is_empty():\n'
+              '\t\tif event.is_action_pressed("root_access") or event.is_action_pressed("perfect_delete"):\n'
+              '\t\t\tget_viewport().set_input_as_handled()\n'
+              '\t\treturn\n')
+
+# (name, suite, edits [(file, old, new)], required FAIL substring)
+MUT = [
+    ("(a) the arena ignores the story metas (reads and removes them, but the tutorial mode runs)", SF,
+     [(ARENA, "\t_story_id = _consume_story_fight_metas()\n", "\t_consume_story_fight_metas()\n")],
+     "AC-2 exactly one enemy"),
+    ("(b) the retry meta is not set (the normal death path runs)", SF,
+     [(ARENA, '\tplayer.set_meta("local_boss_retry_enabled", true)\n', "")],
+     "AC-4"),
+    ("(c) base rewards not suppressed (_configure_scripted_reward_enemy not called)", SF,
+     [(ARENA, "\t_configure_scripted_reward_enemy(enemy)\n", "")],
+     "XP, gold and the inventory are unchanged"),
+    ("(d) the meeting's resume check removed (the fight replays)", CH1,
+     [(MEET, '\tif GameManager.has_flag("ch1_slime_fought"):\n',
+       '\tif false and GameManager.has_flag("ch1_slime_fought"):\n')],
+     "T13a the meeting resumed at after_slime"),
+    ("(e) Perfect Delete not refused (the input gate and the function guard)", SF,
+     [(ARENA, INPUT_GATE,
+       '\tif not _story_id.is_empty() and not event.is_action_pressed("perfect_delete"):\n'
+       '\t\tif event.is_action_pressed("root_access"):\n'
+       '\t\t\tget_viewport().set_input_as_handled()\n'
+       '\t\treturn\n'),
+      (ARENA, "\tif not _has_gm() or not _story_id.is_empty():\n\t\treturn\n\n\t# A second press",
+       "\tif not _has_gm():\n\t\treturn\n\n\t# A second press")],
+     "Perfect Delete is refused"),
+    ("(f) Root Access not refused (the input gate and the function guard)", SF,
+     [(ARENA, INPUT_GATE,
+       '\tif not _story_id.is_empty() and not event.is_action_pressed("root_access"):\n'
+       '\t\tif event.is_action_pressed("perfect_delete"):\n'
+       '\t\t\tget_viewport().set_input_as_handled()\n'
+       '\t\treturn\n'),
+      (ARENA, "func _open_root_access() -> void:\n\tif not _story_id.is_empty():\n\t\treturn\n",
+       "func _open_root_access() -> void:\n")],
+     "Root Access is refused from"),
+    ("(g) the _resolved guard removed from the retry wait", SF,
+     [(ARENA, "\tif not is_inside_tree() or _story_resolved:\n\t\treturn\n\t_story_retry()\n",
+       "\tif not is_inside_tree():\n\t\treturn\n\t_story_retry()\n")],
+     ("player.die() after the win", "AC-8 the player dies during the shard fade", "AC-8 the player dies during COMBAT_EXIT")),
+    ("(h) the metas are not removed on read", SF,
+     [(ARENA, "\t\tif GameManager.has_meta(key):\n\t\t\tGameManager.remove_meta(key)\n",
+       "\t\tif GameManager.has_meta(key):\n\t\t\tpass\n")],
+     "both story metas are removed"),
+    ("(i) ch1_slime_fought not set", SF,
+     [(ARENA, '"flags": ["first_slime_defeated", "ch1_slime_fought"]', '"flags": ["first_slime_defeated"]')],
+     "ch1_slime_fought are set"),
+    ("(j) the retry resets the old slime in place instead of respawning it", SF,
+     [(ARENA, "\t_spawn_story_enemy()\n\tplayer.force_restore_after_death_retry",
+       "\tif is_instance_valid(old):\n"
+       "\t\told.current_health = old.max_health\n"
+       "\t\told.position = _story_cfg[\"enemy_spawn\"]\n"
+       "\telse:\n"
+       "\t\t_spawn_story_enemy()\n"
+       "\tplayer.force_restore_after_death_retry"),
+      (ARENA, "\tvar old: EnemyBase = _story_enemy\n\tif is_instance_valid(old):\n\t\tif old.died",
+       "\tvar old: EnemyBase = _story_enemy\n\tif false:\n\t\tif old.died")],
+     ("a new instance", "the slime is a fresh instance")),
+    ("(k) the arena does not spawn the shards", SF,
+     [(ARENA, "\t_spawn_story_shards(origin)\n", "")],
+     "polygon shards"),
+    ("(l) the retry wait uses a timer that runs during pause", SF,
+     [(ARENA, "\tawait get_tree().create_timer(STORY_RETRY_DELAY, false).timeout\n",
+       "\tawait get_tree().create_timer(STORY_RETRY_DELAY).timeout\n")],
+     "paused for 2.5 s"),
+    ("(m) item drops not suppressed (the loot table is not cleared)", SF,
+     [(ARENA, '\tenemy.set("loot_table", null)\n', "")],
+     "no item or gold pickup"),
+    # added after /code-review (2026-10-29): each rewritten or new check, watched failing
+    ("(n) the story slime keeps running while paused", SF,
+     [(ARENA, '\tenemy.position = _story_cfg["enemy_spawn"]\n',
+       '\tenemy.position = _story_cfg["enemy_spawn"]\n\tenemy.process_mode = Node.PROCESS_MODE_ALWAYS\n')],
+     "the same slime in the same place"),
+    ("(o) the win does not wait for the shard fade", SF,
+     [(ARENA, '\tawait get_tree().create_timer(float(_story_cfg["shard_fade"]), false, false, true).timeout\n', "")],
+     "waits for the 0.6 s shard fade"),
+    ("(p) the path strip drawn behind the ground", SF,
+     [(ARENA, "\t\tground.add_child(path)\n", "\t\tground.add_child(path)\n\t\tground.move_child(path, 0)\n")],
+     "path strip is drawn in front of the ground"),
+    ("(q) Root Access not refused on a direct call (the input gate kept)", SF,
+     [(ARENA, "func _open_root_access() -> void:\n\tif not _story_id.is_empty():\n\t\treturn\n",
+       "func _open_root_access() -> void:\n")],
+     "Root Access is refused from"),
+    ("(t) Root Access over the pause: the story guard removed and ContextStack not exclusive", SF,
+     [(ARENA, "func _open_root_access() -> void:\n\tif not _story_id.is_empty():\n\t\treturn\n",
+       "func _open_root_access() -> void:\n"),
+      (CS, "\tif exclusive and not _stack.is_empty():\n", "\tif false and exclusive and not _stack.is_empty():\n")],
+     "Root Access is refused while paused"),
+    ("(r) the story metas not cleared on load (not in TRANSIENT_METAS)", SF,
+     [(GM, '\t"story_fight_id", "story_fight_return_scene",\n', "")],
+     "both story metas are in TRANSIENT_METAS"),
+    ("(s) the meeting's old resume check (both flags set: start replays, the fight loops)", CH1,
+     [(MEET, '\tif GameManager.has_flag("ch1_slime_fought"):\n',
+       '\tif GameManager.has_flag("ch1_slime_fought") and not GameManager.has_flag("ch1_elara_glitch_witch_met"):\n')],
+     "with both flags set the meeting resumes"),
+    # added after /code-review round 2: the "never acts" check on its own (a fresh slime, the old one not marked DEAD)
+    ("(u) the retry does not mark the old slime DEAD (its pounce can act)", SF,
+     [(ARENA, "\t\told.current_state = EnemyBase.State.DEAD\n", "")],
+     "never acts"),
+    # and the both-flags route check on a single extra trip to the arena (resume played, then the fight anyway)
+    ("(v) with both flags set: after_slime plays, then one extra trip to the fight, then the path", CH1,
+     [(MEET, "\tif not is_inside_tree(): return\n\tGameManager.set_story_flag(\"ch1_elara_glitch_witch_met\", true)\n",
+       "\tif not is_inside_tree(): return\n"
+       "\tif GameManager.has_flag(\"ch1_elara_glitch_witch_met\") and not GameManager.has_meta(\"t13a_v_once\"):\n"
+       "\t\tGameManager.set_meta(\"t13a_v_once\", true)\n"
+       "\t\t_hand_off_to_slime_fight()\n"
+       "\t\treturn\n"
+       "\tGameManager.set_story_flag(\"ch1_elara_glitch_witch_met\", true)\n")],
+     "no trip to the arena on the way"),
+]
+
+
+def run(cmd, **kw):
+    return subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace", **kw)
+
+
+def rd(rel):
+    return open(PROJ + "/" + rel, "rb").read()
+
+
+def edit(rel, old, new):
+    raw = rd(rel).decode("utf-8")
+    nl = "\r\n" if "\r\n" in raw else "\n"
+    s = raw.replace("\r\n", "\n")
+    assert s.count(old) == 1, (rel, old[:70], s.count(old))
+    open(PROJ + "/" + rel, "wb").write(s.replace(old, new).replace("\n", nl).encode("utf-8"))
+
+
+def suite(spec):
+    path, tag = spec
+    env = dict(os.environ)
+    env.pop("GODOT", None)
+    t0 = time.time()
+    r = run(["powershell", "-NoProfile", "-File", PROJ + "/tests/run_phase0_tests.ps1", "-Script", path], env=env)
+    out = r.stdout + r.stderr
+    res = [l.strip() for l in out.splitlines() if l.startswith(tag)]
+    fails, seen = [], set()
+    for l in out.splitlines():
+        t = l.strip()
+        if t.startswith("FAIL: ") and t[6:] not in seen:
+            seen.add(t[6:])
+            fails.append(t[6:])
+        if (t.startswith("RUNNER FAIL") or "SCRIPT ERROR" in t or "Parse Error" in t) and t not in seen:
+            seen.add(t)
+            fails.append(t)
+    return r.returncode, (res[-1] if res else "no result line"), fails, int(time.time() - t0)
+
+
+def main():
+    only = sys.argv[1:]
+    head = run(["git", "-C", ROOT, "rev-parse", "--short", "HEAD"]).stdout.strip()
+    fresh = not os.path.isdir(WT)
+    if fresh:
+        print(run(["git", "-c", "core.longpaths=true", "-C", ROOT, "worktree", "add", "--detach", WT, "HEAD"]).stderr)
+    if True:   # always re-copy, so a crashed run cannot leave a mutation behind
+        st = run(["git", "-C", ROOT, "status", "--porcelain", "--untracked-files=all"]).stdout.splitlines()
+        copied = []
+        for l in st:
+            f = l[3:].strip().strip('"')
+            if f.startswith("AethelgardPrototype/") or f.startswith(".github/"):
+                os.makedirs(os.path.dirname(WT + "/" + f), exist_ok=True)
+                open(WT + "/" + f, "wb").write(open(ROOT + "/" + f, "rb").read())
+                copied.append(f)
+        print("copied:", copied)
+        if fresh:
+            run([GODOT, "--headless", "--path", PROJ, "--import"])
+        for f in copied:
+            same = open(WT + "/" + f, "rb").read() == open(ROOT + "/" + f, "rb").read()
+            assert same, f
+    lines = ["t13a_watchfail_mutations.log - Y1-P0-T13a AC-9 mutation watch-fail",
+             f"Scratch worktree at HEAD ({head}) + every uncommitted T13a file under AethelgardPrototype/ and .github/;",
+             "a control (story_fight_test, 3 runs in a row), then one mutation per run, reverted after.",
+             "GODOT unset; each suite through tests/run_phase0_tests.ps1.", ""]
+    ok_all = True
+    if not only:
+        lines.append("== control (no mutation), story_fight_test, 3 runs")
+        for n in range(3):
+            rc, res, fails, secs = suite(SF)
+            green = rc == 0 and res.endswith(", 0 failed")
+            ok_all &= green
+            lines.append(f"   run {n + 1}: exit {rc}; {res}; {secs} s -> {'GREEN' if green else 'NOT GREEN'}")
+            lines += ["     FAIL: " + f[:170] for f in fails]
+            print(lines[-1 - len(fails)], flush=True)
+        lines.append("")
+    for name, spec, edits, need in MUT:
+        if only and name[1] not in only:
+            continue
+        backups = {rel: rd(rel) for rel, _, _ in edits}
+        for rel, old, new in edits:
+            edit(rel, old, new)
+        diff = []
+        for rel, data in backups.items():
+            a = data.decode("utf-8").replace("\r\n", "\n").splitlines()
+            b = rd(rel).decode("utf-8").replace("\r\n", "\n").splitlines()
+            diff += list(difflib.unified_diff(a, b, "a/" + rel, "b/" + rel, n=0, lineterm=""))
+        rc, res, fails, secs = suite(spec)
+        needs = (need,) if isinstance(need, str) else need
+        hit = rc != 0 and all(any(n in f for f in fails) for n in needs)
+        ok_all &= hit
+        lines += ["== " + name, f"   suite {spec[0]}", f"   exit {rc}; {res}; {secs} s",
+                  f"   expected failures containing {' AND '.join(repr(n) for n in needs)} ->{'FAILED as expected' if hit else 'NOT AS EXPECTED'}",
+                  "   diff applied:"]
+        lines += ["     " + d for d in diff]
+        lines += ["   FAIL: " + f[:190] for f in fails[:10]]
+        if len(fails) > 10:
+            lines.append(f"   ... {len(fails) - 10} more")
+        lines.append("")
+        for rel, data in backups.items():
+            open(PROJ + "/" + rel, "wb").write(data)
+        print("\n".join(lines[-6:]).encode("ascii", "replace").decode(), flush=True)
+    lines.append("ALL MUTATIONS CAUGHT: " + ("yes" if ok_all else "NO"))
+    os.makedirs(os.path.dirname(OUT), exist_ok=True)
+    out = OUT if not only else OUT.replace(".log", "_" + "".join(only) + ".log")
+    open(out, "w", encoding="utf-8", newline="\n").write("\n".join(lines) + "\n")
+    print(lines[-1])
+
+
+main()

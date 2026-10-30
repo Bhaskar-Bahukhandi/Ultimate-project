@@ -8,6 +8,8 @@ extends SceneTree
 
 const HOOK := "res://scenes/chapter1/opening_crash_site_hook.tscn"
 const ELARA := "res://scenes/chapter1/elara_meeting.tscn"
+## Y1-P0-T13a: the opening slime is a real fight in the combat arena's story-fight mode.
+const ARENA := "res://scenes/combat/combat_arena.tscn"
 const PATH := "res://scenes/chapter1/path_to_oakhaven.tscn"
 const VILLAGE := "res://scenes/chapter1/oakhaven_village.tscn"
 const REGION := "res://scenes/regions/oakhaven_region.tscn"
@@ -27,6 +29,7 @@ const OLD_SCRIPT := ["412", "iterations", "at that bridge", "AetherCorp", "Chapt
 var _passes := 0
 var _failures: Array[String] = []
 var _driving := false
+var _arena_save_refused := false   # T13a: save_game(1) was refused while the slime fight was on
 var _picks: Array = []
 var _seen_text: Array[String] = []
 var _shatter_mark := 0            # _seen_text index where the shatter scene began
@@ -67,6 +70,8 @@ func _run() -> void:
 	await _test_village_afternoon()
 	await _test_crash_site_interactions()
 	await _test_village_interactions()
+	await _test_t13a_resume()
+	await _test_t13a_both_flags()
 	# Y1-P0-T05 breadcrumb tests (pure resolver cases first, then the live scenes)
 	await _end_scene()
 	_test_bc_table_text()
@@ -79,6 +84,7 @@ func _run() -> void:
 	_test_bc_label_format()
 	_test_bc_kill_route_samples()
 	_test_bc_new_flags_registered()
+	_test_t13a_flag_registered()
 	await _test_bc_broken_mile_flag()
 	await _test_bc_arrows_hook()
 	await _test_bc_arrows_village()
@@ -140,6 +146,25 @@ func _saw(fragment: String) -> bool:
 	return _seen_text.any(func(l): return l.contains(fragment))
 
 
+## T13a: waits for the combat arena after the Elara meeting, recording the story-fight metas the
+## meeting set before the arena consumed them (the arena removes them when it reads them).
+func _wait_for_arena() -> Dictionary:
+	var seen := {}
+	var st := get_root().get_node("SceneTransitions")
+	var deadline := Time.get_ticks_msec() + 60000
+	while Time.get_ticks_msec() < deadline:
+		var gm := _gm()
+		if gm.has_meta("story_fight_id"):
+			seen = {"id": gm.get_meta("story_fight_id"), "ret": gm.get_meta("story_fight_return_scene", "")}
+		var s := current_scene
+		if s:
+			_scenes_seen[s.scene_file_path] = true
+			if s.scene_file_path == ARENA and not st.is_transitioning:
+				break
+		await process_frame
+	return seen
+
+
 ## Waits for `path`, poking scenes that need the player to do something.
 func _wait_for(path: String, timeout_sec: float) -> bool:
 	var deadline := Time.get_ticks_msec() + int(timeout_sec * 1000.0)
@@ -177,6 +202,13 @@ func _poke_room(s: Node) -> bool:
 			if s.get("_invited") and not s.get("_entrance_done") and not s._busy():
 				s._on_elara_house_door_interaction(player)   # walk to Elara's door
 				return true
+		ARENA:
+			# The test's combat driver (T13a): the slime is damaged to 0 through its own API.
+			var slime := s.get_node_or_null("Enemies/StoryFightSlime")
+			if slime != null and not s._story_resolved and slime.current_health > 0.0:
+				_arena_save_refused = not _gm().save_game(1)   # saving is refused inside the arena
+				slime.take_damage(slime.max_health)
+				return true
 		HOUSE:
 			if _gm().has_flag("ch1_stew_done") and not s._busy():
 				s._on_door_interaction(player)   # back out to the village
@@ -213,9 +245,19 @@ func _test_new_game_to_region() -> void:
 		await process_frame
 	hook._complete_opening_hook()
 	_check(await _wait_for(ELARA, 60.0), "crash site → Elara meeting")
+	var handoff := await _wait_for_arena()
+	_check(handoff.get("id") == "ch1_slime" and handoff.get("ret") == ELARA and current_scene.scene_file_path == ARENA,
+		"Elara meeting → the slime fight: the story-fight metas hold at the hand-off (%s)" % str(handoff))
+	_check(await _wait_for(ELARA, 120.0), "the slime fight won → back in the Elara meeting")
+	_check(gm.has_flag("ch1_slime_fought") and gm.has_flag("first_slime_defeated") and _arena_save_refused,
+		"T13a the fight set ch1_slime_fought and first_slime_defeated; saving was refused inside the arena (%s)" % _arena_save_refused)
 	_check(await _wait_for(PATH, 240.0), "Elara meeting → Broken Mile")
 	_check(_saw("Is that a place?") and gm.has_flag("elara_first_truth") and gm.has_flag("ch1_elara_trusted"),
 		"Elara meeting plays elara_meeting.dlg; 'trust' keeps the legacy flag")
+	var starts := _seen_text.filter(func(l): return l.contains("Why is there a sword on my belt")).size()
+	var afters := _seen_text.filter(func(l): return l.contains("That wasn't blood")).size()
+	_check(starts == 1 and afters == 1 and gm.has_flag("elara_met") and gm.has_flag("ch1_elara_glitch_witch_met"),
+		"T13a the meeting resumed at after_slime: start played once (%d), after_slime once (%d), the flags as before" % [starts, afters])
 	_check(await _wait_for(VILLAGE, 300.0), "Broken Mile → Oakhaven")
 	_check(gm.has_flag("ch1_data_vision_unlocked") and gm.has_flag("root_access_unlocked") and gm.has_flag("ch1_root_first_edit"),
 		"Data Vision and Root Access unlock; the target-filter edit counts as the first Root edit")
@@ -1670,3 +1712,114 @@ func _test_bc_alarm_routes() -> void:
 	_check(not gm.has_flag("ch1_north_field_refused"), "hesitate-then-help: refused never set")
 	_driving = false
 	await _end_scene()
+
+
+# Y1-P0-T13a (AC-5) ───────────────────────────────────────────────────────────
+## The meeting loaded with ch1_slime_fought set (and the meeting not yet done) resumes at after_slime:
+## no walk-in, no slime, no arena; Kaelen stands where the fight ended; 7 shards lie there and fade as
+## the dialogue starts. A save made then and loaded again resumes the same way (no arena).
+func _test_t13a_resume() -> void:
+	print("[T13a the Elara meeting resumes after the slime fight]")
+	var gm := _gm()
+	gm.reset_game()
+	_seen_text.clear()
+	_scenes_seen.clear()
+	gm.set_story_flag("ch1_slime_fought", true)
+	gm.set_story_flag("first_slime_defeated", true)
+	_start([0, 0, 0])
+	change_scene_to_file(ELARA)
+	var shards := 0
+	var kaelen_at := Vector2(-1, -1)
+	var slime_seen := false
+	var deadline := Time.get_ticks_msec() + 30000
+	while Time.get_ticks_msec() < deadline:
+		# sample first: the shards appear in the same frame the first line does
+		var s := current_scene
+		if s and s.scene_file_path == ELARA:
+			_scenes_seen[ELARA] = true
+			var layer := s.get_node_or_null("CharactersLayer")
+			if layer:
+				var found := layer.get_children().filter(func(n): return n.name.begins_with("SlimeShard")).size()
+				if found > shards:
+					shards = found
+					var k := layer.get_node_or_null("Kaelen")
+					if k and kaelen_at.x < 0.0:
+						kaelen_at = k.position
+				if layer.get_node_or_null("FractureSlime") != null:
+					slime_seen = true
+		if _saw("That wasn't blood"):
+			break
+		await process_frame
+	_check(_saw("That wasn't blood"), "T13a the resumed meeting starts with after_slime's first line")
+	_check(shards == 7 and kaelen_at.distance_to(Vector2(490, 420)) < 2.0,
+		"T13a Kaelen stands at (490, 420) and 7 shards lie where the slime broke (%d shards, Kaelen %s)" % [shards, kaelen_at])
+	_check(not slime_seen and not _saw("Why is there a sword on my belt") and not _scenes_seen.has(ARENA),
+		"T13a start is not replayed, no slime walks in, the arena is never loaded")
+	var save_ok: bool = gm.save_game(1)
+	_check(save_ok, "T13a a save made in the resumed meeting is allowed")
+	await create_timer(1.0).timeout   # the shards fade over 0.6 s
+	var live := current_scene.get_node_or_null("CharactersLayer")
+	var left := 0
+	if live:
+		left = live.get_children().filter(func(n): return n.name.begins_with("SlimeShard") and not n.is_queued_for_deletion()).size()
+	_check(left == 0, "T13a the shards have faded (%d left)" % left)
+	_driving = false
+	await process_frame
+	_seen_text.clear()
+	_scenes_seen.clear()
+	var ok: bool = await gm.load_game(1)
+	_check(ok, "T13a load_game(1) of that save")
+	_start([0, 0, 0])
+	var deadline2 := Time.get_ticks_msec() + 30000
+	while Time.get_ticks_msec() < deadline2 and not _saw("That wasn't blood"):
+		if current_scene:
+			_scenes_seen[current_scene.scene_file_path] = true
+		await process_frame
+	_check(_saw("That wasn't blood") and not _saw("Why is there a sword on my belt") and not _scenes_seen.has(ARENA),
+		"T13a after load the meeting resumes at after_slime, not at the fight")
+	_check(await _wait_for(PATH, 240.0), "T13a the resumed meeting goes on to the Broken Mile")
+	_check(gm.has_flag("elara_met") and gm.has_flag("ch1_elara_glitch_witch_met"), "T13a the flags of the chosen branch are set as before")
+	_driving = false
+
+
+## T13a (code review): the meeting loaded with the meeting already finished as well (a manual save made during
+## the walk-out's fade, after ch1_elara_glitch_witch_met is set) also resumes at after_slime. Replaying start
+## handed off to the fight, and the win came back to the same state: the meeting looped without end.
+func _test_t13a_both_flags() -> void:
+	print("[T13a the meeting with both flags set resumes at after_slime, no loop]")
+	var gm := _gm()
+	gm.reset_game()
+	_seen_text.clear()
+	_scenes_seen.clear()
+	for f in ["ch1_slime_fought", "first_slime_defeated", "elara_met", "ch1_elara_glitch_witch_met"]:
+		gm.set_story_flag(f, true)
+	_start([0, 0, 0])
+	change_scene_to_file(ELARA)
+	var deadline := Time.get_ticks_msec() + 30000
+	while Time.get_ticks_msec() < deadline and not _saw("That wasn't blood"):
+		if current_scene:
+			_scenes_seen[current_scene.scene_file_path] = true
+		await process_frame
+	var resumed := _saw("That wasn't blood") and not _saw("Why is there a sword on my belt") and not _scenes_seen.has(ARENA)
+	_check(resumed, "T13a with both flags set the meeting resumes at after_slime: start not replayed, the arena never loaded")
+	var reached := false
+	if resumed:   # only worth the walk when it resumed: on the loop it would wait out the whole 240 s
+		reached = await _wait_for(PATH, 240.0)
+	_check(reached and not _scenes_seen.has(ARENA),
+		"T13a with both flags set the meeting goes on to the Broken Mile, with no trip to the arena on the way")
+	_driving = false
+
+
+## T13a: ch1_slime_fought has one writer (the arena's story-fight table), the meeting only reads it, and it is
+## in the bible's section 5. (The Chapter 1 flag-write scan covers scripts/chapter1 only, and the arena is outside it.)
+func _test_t13a_flag_registered() -> void:
+	print("[T13a ch1_slime_fought has one writer and is in the bible]")
+	var arena_text := _read_text("res://scripts/combat/combat_arena.gd")
+	var meeting_text := _read_text("res://scripts/chapter1/ch1_elara_meeting.gd")
+	_check(arena_text.count("\"ch1_slime_fought\"") == 1, "ch1_slime_fought appears once in combat_arena.gd: its story-fight table")
+	_check(meeting_text.contains("has_flag(\"ch1_slime_fought\")") and not meeting_text.contains("set_story_flag(\"ch1_slime_fought\""),
+		"the Elara meeting reads ch1_slime_fought and never sets it")
+	var bible := _read_text(BC_BIBLE)
+	var s5 := bible.find("## 5. ")
+	var s6 := bible.find("## 6. ")
+	_check(s5 >= 0 and s6 > s5 and bible.substr(s5, s6 - s5).contains("| `ch1_slime_fought` |"), "STORY_BIBLE §5 has the ch1_slime_fought row")

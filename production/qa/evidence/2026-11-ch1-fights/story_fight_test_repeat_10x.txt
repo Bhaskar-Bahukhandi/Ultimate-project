@@ -1,0 +1,12 @@
+run 1: exit 0; 36s; STORY FIGHT RESULT: 49 passed, 0 failed
+run 2: exit 0; 34s; STORY FIGHT RESULT: 49 passed, 0 failed
+run 3: exit 0; 34s; STORY FIGHT RESULT: 49 passed, 0 failed
+run 4: exit 0; 34s; STORY FIGHT RESULT: 49 passed, 0 failed
+run 5: exit 0; 34s; STORY FIGHT RESULT: 49 passed, 0 failed
+run 6: exit 0; 34s; STORY FIGHT RESULT: 49 passed, 0 failed
+run 7: exit 0; 33s; STORY FIGHT RESULT: 49 passed, 0 failed
+run 8: exit 0; 34s; STORY FIGHT RESULT: 49 passed, 0 failed
+run 9: exit 0; 34s; STORY FIGHT RESULT: 49 passed, 0 failed
+run 10: exit 0; 34s; STORY FIGHT RESULT: 49 passed, 0 failed
+
+[exited with code 0]

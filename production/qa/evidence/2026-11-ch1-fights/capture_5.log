@@ -1,0 +1,71 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Vulkan 1.4.329 - Forward+ - Using Device #0: NVIDIA - NVIDIA GeForce RTX 2050
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [AssetManager] Production art slot missing for Slime enemy sheet at res://assets/production_art/characters/enemies/fracture_slime_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/enemies/fracture_slime_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_enemy (res://scripts/asset_manager.gd:1043)
+       [4] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [5] _ready (res://scripts/combat/enemy_base.gd:221)
+       [6] _ready (res://scripts/combat/enemies/slime.gd:36)
+WARNING: [AssetManager] Enemy sheet failed to load for Slime; using existing enemy fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_enemy (res://scripts/asset_manager.gd:1051)
+       [2] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [3] _ready (res://scripts/combat/enemy_base.gd:221)
+       [4] _ready (res://scripts/combat/enemies/slime.gd:36)
+WARNING: [AssetManager] Production art slot missing for Kaelen combat sheet at res://assets/production_art/characters/player/kaelen_combat_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:985)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _setup_sprites (res://scripts/combat/combat_arena.gd:926)
+       [6] _start_story_fight (res://scripts/combat/combat_arena.gd:689)
+       [7] _ready (res://scripts/combat/combat_arena.gd:209)
+WARNING: [AssetManager] V2 combat player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:994)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _setup_sprites (res://scripts/combat/combat_arena.gd:926)
+       [4] _start_story_fight (res://scripts/combat/combat_arena.gd:689)
+       [5] _ready (res://scripts/combat/combat_arena.gd:209)
+SCENE res://scenes/combat/combat_arena.tscn
+SLIME true LABEL WASD — Move | Space — Jump | Shift — Dash | J — Attack | K — Parry
+SHOT slime.png C:\Users\BHASKA~1\AppData\Local\Temp\claude\C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project\38742c26-a8d5-4ddd-be96-9bff07452637\scratchpad\t13a_shots5/slime.png err=0 size=(1280, 720)
+LABEL Left Stick — Move | A — Jump | RT — Dash | X — Attack | RB — Parry
+SHOT slime-controls-pad.png C:\Users\BHASKA~1\AppData\Local\Temp\claude\C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project\38742c26-a8d5-4ddd-be96-9bff07452637\scratchpad\t13a_shots5/slime-controls-pad.png err=0 size=(1280, 720)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] _run (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/38742c26-a8d5-4ddd-be96-9bff07452637/scratchpad/t13a_capture.gd:64)
+       [4] _shot (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/38742c26-a8d5-4ddd-be96-9bff07452637/scratchpad/t13a_capture.gd:31)
+DDA: 53.0 (mult=1.00) K:1 D:0.0
+SHOT slime-shards.png C:\Users\BHASKA~1\AppData\Local\Temp\claude\C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project\38742c26-a8d5-4ddd-be96-9bff07452637\scratchpad\t13a_shots5/slime-shards.png err=0 size=(1280, 720)
+[CH1-SEQ2] Initializing Elara the Glitch-Witch meeting
+[ACHIEVEMENT] Unlocked: First Blood — Defeat your first enemy.
+MEETING dialogue active: true
+RESUME shards=7
+SHOT slime-resume.png C:\Users\BHASKA~1\AppData\Local\Temp\claude\C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project\38742c26-a8d5-4ddd-be96-9bff07452637\scratchpad\t13a_shots5/slime-resume.png err=0 size=(1280, 720)
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)

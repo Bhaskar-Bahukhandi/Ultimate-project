@@ -1,0 +1,1266 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+[New Game → Oakhaven region]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[10N-A2] Opening crash-site hook loaded
+WARNING: [AssetManager] Production art slot missing for Kaelen top-down sheet at res://assets/production_art/characters/player/kaelen_topdown_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:1000)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [6] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [7] _spawn_player (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:279)
+       [8] _ready (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:50)
+WARNING: [AssetManager] V2 top-down player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:1009)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [4] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [5] _spawn_player (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:279)
+       [6] _ready (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:50)
+[ACHIEVEMENT] Unlocked: Crash Landing — Survive Flight 707.
+[CH1-SEQ2] Initializing Elara the Glitch-Witch meeting
+  PASS: crash site → Elara meeting
+[CUTSCENE] Starting: Chapter 1 - The Wrong Weapon
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE] Finished
+[CH1-SEQ2] Handing off to the slime fight
+WARNING: [AssetManager] Production art slot missing for Slime enemy sheet at res://assets/production_art/characters/enemies/fracture_slime_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/enemies/fracture_slime_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_enemy (res://scripts/asset_manager.gd:1043)
+       [4] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [5] _ready (res://scripts/combat/enemy_base.gd:221)
+       [6] _ready (res://scripts/combat/enemies/slime.gd:36)
+WARNING: [AssetManager] Enemy sheet failed to load for Slime; using existing enemy fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_enemy (res://scripts/asset_manager.gd:1051)
+       [2] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [3] _ready (res://scripts/combat/enemy_base.gd:221)
+       [4] _ready (res://scripts/combat/enemies/slime.gd:36)
+WARNING: [AssetManager] Production art slot missing for Kaelen combat sheet at res://assets/production_art/characters/player/kaelen_combat_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:985)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _setup_sprites (res://scripts/combat/combat_arena.gd:926)
+       [6] _start_story_fight (res://scripts/combat/combat_arena.gd:689)
+       [7] _ready (res://scripts/combat/combat_arena.gd:209)
+WARNING: [AssetManager] V2 combat player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:994)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _setup_sprites (res://scripts/combat/combat_arena.gd:926)
+       [4] _start_story_fight (res://scripts/combat/combat_arena.gd:689)
+       [5] _ready (res://scripts/combat/combat_arena.gd:209)
+  PASS: Elara meeting → the slime fight: the story-fight metas hold at the hand-off ({ "id": "ch1_slime", "ret": "res://scenes/chapter1/elara_meeting.tscn" })
+WARNING: [SAVE] Cannot manual save during COMBAT
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] save_game (res://scripts/game_manager.gd:1448)
+       [1] _poke_room (res://tests/integration/story/chapter1_route_test.gd:209)
+       [2] _wait_for (res://tests/integration/story/chapter1_route_test.gd:182)
+       [3] _test_new_game_to_region (res://tests/integration/story/chapter1_route_test.gd:251)
+       [4] _wait_for_arena (res://tests/integration/story/chapter1_route_test.gd:165)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] _poke_room (res://tests/integration/story/chapter1_route_test.gd:210)
+       [4] _wait_for (res://tests/integration/story/chapter1_route_test.gd:182)
+       [5] _test_new_game_to_region (res://tests/integration/story/chapter1_route_test.gd:251)
+       [6] _wait_for_arena (res://tests/integration/story/chapter1_route_test.gd:165)
+DDA: 53.0 (mult=1.00) K:1 D:0.0
+[CH1-SEQ2] Initializing Elara the Glitch-Witch meeting
+[ACHIEVEMENT] Unlocked: First Blood — Defeat your first enemy.
+  PASS: the slime fight won → back in the Elara meeting
+  PASS: T13a the fight set ch1_slime_fought and first_slime_defeated; saving was refused inside the arena (true)
+[CUTSCENE] Starting: Chapter 1 - The Wrong Weapon
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CH1-SEQ2] Transitioning to Path to Oakhaven
+[CH1-SEQ3] Initializing Path to Oakhaven — Combat Tutorial
+  PASS: Elara meeting → Broken Mile
+  PASS: Elara meeting plays elara_meeting.dlg; 'trust' keeps the legacy flag
+  PASS: T13a the meeting resumed at after_slime: start played once (1), after_slime once (1), the flags as before
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+[ACHIEVEMENT] Unlocked: Sudo Mode — Unlock Root Access.
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+[CH1-SEQ3] Transitioning to Oakhaven Village
+WARNING: [AssetManager] Production art slot missing for Elara NPC sheet at res://assets/production_art/characters/npcs/elara_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/npcs/elara_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_npc (res://scripts/asset_manager.gd:1066)
+       [4] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:594)
+       [5] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:63)
+WARNING: [AssetManager] NPC sheet failed to load for Elara; using existing NPC fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_npc (res://scripts/asset_manager.gd:1074)
+       [2] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:594)
+       [3] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:63)
+  PASS: Broken Mile → Oakhaven
+  PASS: Data Vision and Root Access unlock; the target-filter edit counts as the first Root edit
+  PASS: Broken Mile plays broken_mile.dlg (filter branch)
+[CH1-SEQ4] Transitioning to Oakhaven Region (open-world)
+WARNING: [AssetManager] Oakhaven afternoon production tileset missing at res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png; requested=afternoon.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_oakhaven_variant (res://scripts/asset_manager.gd:1231)
+       [2] _try_load_oakhaven_production_variant (res://scripts/asset_manager.gd:1210)
+       [3] get_oakhaven_tileset_slot (res://scripts/asset_manager.gd:1170)
+       [4] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1552)
+       [5] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [6] _build_region_environment (res://scripts/regions/oakhaven_region.gd:114)
+       [7] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] Oakhaven production tileset fallback: production variant missing or invalid; requested=afternoon resolved=afternoon generated=res://assets/generated_v2/tilesets/oakhaven_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _oakhaven_generated_fallback_slot (res://scripts/asset_manager.gd:1219)
+       [2] get_oakhaven_tileset_slot (res://scripts/asset_manager.gd:1199)
+       [3] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1552)
+       [4] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [5] _build_region_environment (res://scripts/regions/oakhaven_region.gd:114)
+       [6] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] Production art slot missing for environment prop atlas at res://assets/production_art/props/environment_prop_atlas.png; using generated fallback res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1486)
+       [4] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [5] _create_building (res://scripts/regions/oakhaven_region.gd:285)
+       [6] _build_region_environment (res://scripts/regions/oakhaven_region.gd:173)
+       [7] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1487)
+       [3] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [4] _create_building (res://scripts/regions/oakhaven_region.gd:285)
+       [5] _build_region_environment (res://scripts/regions/oakhaven_region.gd:173)
+       [6] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] Production art slot missing for environment decal atlas at res://assets/production_art/backgrounds/environment_decal_atlas.png; using generated fallback res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1497)
+       [4] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [5] _add_v3_oakhaven_polish (res://scripts/regions/oakhaven_region.gd:368)
+       [6] _build_region_environment (res://scripts/regions/oakhaven_region.gd:238)
+       [7] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1498)
+       [3] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [4] _add_v3_oakhaven_polish (res://scripts/regions/oakhaven_region.gd:368)
+       [5] _build_region_environment (res://scripts/regions/oakhaven_region.gd:238)
+       [6] _ready (res://scripts/regions/oakhaven_region.gd:74)
+[ENCOUNTER] Zone changed: Oakhaven Village
+  PASS: Oakhaven → the region (stopped at res://scenes/regions/oakhaven_region.tscn)
+  PASS: gate and road ledger played (Northfall entry seen)
+  PASS: stew topics played (in Elara's house, through her door and back: house seen true)
+  PASS: north field: helped, sluice edited, boar fought ["ch1_north_field_helped=true", "ch1_sluice_edited=true", "ch1_boar_fought=true", "ch1_corrupted_boar_defeated=true"]
+  PASS: the bridge was fixed before dark
+  PASS: no old-script lines or *stage directions* on screen
+[Aldric: kill → own it → tell the village everything]
+WARNING: [AssetManager] Production art slot missing for Tutorial Knight sheet at res://assets/production_art/characters/bosses/tutorial_knight_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/bosses/tutorial_knight_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_tutorial_knight (res://scripts/asset_manager.gd:1028)
+       [4] _try_install_v2_visual (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:1284)
+       [5] _ready (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:101)
+       [6] _spawn_boss (res://scripts/chapter1/ch1_tutorial_knight.gd:527)
+       [7] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:118)
+WARNING: [AssetManager] Tutorial Knight sheet failed to load; using existing boss fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_tutorial_knight (res://scripts/asset_manager.gd:1032)
+       [2] _try_install_v2_visual (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:1284)
+       [3] _ready (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:101)
+       [4] _spawn_boss (res://scripts/chapter1/ch1_tutorial_knight.gd:527)
+       [5] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:118)
+  PASS: Aldric Returns plays before the fight
+[ACHIEVEMENT] Unlocked: Flawless Victory — Defeat a boss without taking damage.
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 700)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[ACHIEVEMENT] Unlocked: First Fragment — Collect your first Source Key Fragment.
+[CH1-SHATTER] Initializing The Shatter transition
+  PASS: decision → shrine: altar (fragment) → stair door (meeting → Elara joins) → Chapter 1 ending (shrine seen true)
+  PASS: kill and how Kaelen owns it are recorded
+  PASS: Fragment One is awarded and counted once
+  PASS: Fragment One plays the memory flash
+  PASS: the village meeting plays (public warning)
+  PASS: Elara joins; the knight counts as defeated
+  PASS: a fixed bridge doesn't fall
+[CUTSCENE] Starting: Bridge Approach
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Bridge Approach (walk)
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CH1-SHATTER] Environmental shift begins
+[CUTSCENE] Finished
+  PASS: kill: 'do desaturate' drains the colour during the shift (red 0.78)
+  PASS: kill: 'do shake' shakes the camera before 'The bridge is still here' is shown
+[CH1-SHATTER] Executing THE SHATTER
+  PASS: kill: the drain has finished (modulate (0.6, 0.6, 0.7, 1.0)) before the first RECONSTRUCTION line
+  PASS: kill: 'do pan_ironhold' hides the dialogue box between 'steam hissing' and 'What are we walking into'
+  PASS: kill: the pan settles the camera at y≈320 (y 320.0)
+  PASS: kill: the scene shows after_kill's first line
+  PASS: kill: 'do look_back' swings the camera left and back (home 640, min 560, end 640)
+  PASS: kill: after_spare's first line never shows
+  PASS: kill: after_purge's first line never shows
+  PASS: kill: the scene reaches onward's last line
+  PASS: kill: no old-script wording or *stage directions* in 38 shown lines []
+[Aldric: purge → leave quietly; the unfixed bridge falls]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [SAVE] Refused: no game in progress (MENU)
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] save_game (res://scripts/game_manager.gd:1442)
+       [1] _save_with_feedback (res://scripts/game_manager.gd:1557)
+       [2] auto_save (res://scripts/game_manager.gd:1816)
+       [3] _on_boss_defeated (res://scripts/chapter1/ch1_tutorial_knight.gd:1111)
+       [4] _test_aldric_purge_route (res://tests/integration/story/chapter1_route_test.gd:321)
+       [5] _knight_scene (res://tests/integration/story/chapter1_route_test.gd:284)
+[CHOICE-FX] Applied buff: root_mastery — Root Mastery: -10 Max HP (corruption cost), but Root Access hacks cost 30% less corruption.
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CH1-SHATTER] Initializing The Shatter transition
+  PASS: purge route reaches the Chapter 1 ending through the shrine
+  PASS: purge keeps Aldric alive (legacy ch1_knight_spared)
+  PASS: the purge costs corruption (0 → 8)
+  PASS: Aldric wakes up after the purge
+  PASS: the unfixed bridge falls after dark; evacuating it saved lives
+  PASS: leaving quietly is challenged by Elara
+[CUTSCENE] Starting: Bridge Approach
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Bridge Approach (walk)
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CH1-SHATTER] Environmental shift begins
+[CUTSCENE] Finished
+[CH1-SHATTER] Executing THE SHATTER
+  PASS: purge: the scene shows after_purge's first line
+  PASS: purge: 'do look_back' swings the camera left and back (home 640, min 560, end 640)
+  PASS: purge: after_spare's first line never shows
+  PASS: purge: after_kill's first line never shows
+  PASS: purge: the scene reaches onward's last line
+  PASS: purge: no old-script wording or *stage directions* in 37 shown lines []
+[Aldric: spare → warn the village]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [SAVE] Refused: no game in progress (MENU)
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] save_game (res://scripts/game_manager.gd:1442)
+       [1] _save_with_feedback (res://scripts/game_manager.gd:1557)
+       [2] auto_save (res://scripts/game_manager.gd:1816)
+       [3] _on_boss_defeated (res://scripts/chapter1/ch1_tutorial_knight.gd:1111)
+       [4] _route_to_shatter (res://tests/integration/story/chapter1_route_test.gd:611)
+       [5] _knight_scene (res://tests/integration/story/chapter1_route_test.gd:284)
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CH1-SHATTER] Initializing The Shatter transition
+  PASS: spare route reaches the Chapter 1 ending
+  PASS: spare sets only ch1_knight_spared
+[CUTSCENE] Starting: Bridge Approach
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Bridge Approach (walk)
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CH1-SHATTER] Environmental shift begins
+[CUTSCENE] Finished
+[CH1-SHATTER] Executing THE SHATTER
+  PASS: spare: the scene shows after_spare's first line
+  PASS: spare: 'do look_back' swings the camera left and back (home 640, min 560, end 640)
+  PASS: spare: after_kill's first line never shows
+  PASS: spare: after_purge's first line never shows
+  PASS: spare: the scene reaches onward's last line
+  PASS: spare: no old-script wording or *stage directions* in 38 shown lines []
+[Aldric: purge prompt → 'No. Not like this. Hold him instead.']
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [SAVE] Refused: no game in progress (MENU)
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] save_game (res://scripts/game_manager.gd:1442)
+       [1] _save_with_feedback (res://scripts/game_manager.gd:1557)
+       [2] auto_save (res://scripts/game_manager.gd:1816)
+       [3] _on_boss_defeated (res://scripts/chapter1/ch1_tutorial_knight.gd:1111)
+       [4] _route_to_shatter (res://tests/integration/story/chapter1_route_test.gd:611)
+       [5] _knight_scene (res://tests/integration/story/chapter1_route_test.gd:284)
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 500)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CH1-SHATTER] Initializing The Shatter transition
+  PASS: cancelled purge reaches the Chapter 1 ending
+  PASS: cancelled purge: ch1_root_purge false, ch1_knight_spared true
+[CUTSCENE] Starting: Bridge Approach
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Bridge Approach (walk)
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CH1-SHATTER] Environmental shift begins
+[CUTSCENE] Finished
+[CH1-SHATTER] Executing THE SHATTER
+  PASS: purge cancelled: the scene shows after_spare's first line
+  PASS: purge cancelled: 'do look_back' swings the camera left and back (home 640, min 560, end 640)
+  PASS: purge cancelled: after_purge's first line never shows
+  PASS: purge cancelled: after_kill's first line never shows
+  PASS: purge cancelled: the scene reaches onward's last line
+  PASS: purge cancelled: no old-script wording or *stage directions* in 38 shown lines []
+[shatter.dlg: every Aldric route x every village route ends at onward]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+  PASS: aldric=purge village=warned_villagers: plays after_purge + village_warned and ends at onward (ok=true)
+  PASS: matrix aldric=purge village=warned_villagers: no old-script wording or *stage directions* in 26 shown lines []
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+  PASS: aldric=purge village=warned_leaders: plays after_purge + village_leaders and ends at onward (ok=true)
+  PASS: matrix aldric=purge village=warned_leaders: no old-script wording or *stage directions* in 26 shown lines []
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+  PASS: aldric=purge village=left_quietly: plays after_purge + village_quiet and ends at onward (ok=true)
+  PASS: matrix aldric=purge village=left_quietly: no old-script wording or *stage directions* in 25 shown lines []
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+  PASS: aldric=purge village=none: plays after_purge + village_none and ends at onward (ok=true)
+  PASS: matrix aldric=purge village=none: no old-script wording or *stage directions* in 24 shown lines []
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: aldric=kill village=warned_villagers: plays after_kill + village_warned and ends at onward (ok=true)
+  PASS: matrix aldric=kill village=warned_villagers: no old-script wording or *stage directions* in 25 shown lines []
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: aldric=kill village=warned_leaders: plays after_kill + village_leaders and ends at onward (ok=true)
+  PASS: matrix aldric=kill village=warned_leaders: no old-script wording or *stage directions* in 25 shown lines []
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: aldric=kill village=left_quietly: plays after_kill + village_quiet and ends at onward (ok=true)
+  PASS: matrix aldric=kill village=left_quietly: no old-script wording or *stage directions* in 24 shown lines []
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: aldric=kill village=none: plays after_kill + village_none and ends at onward (ok=true)
+  PASS: matrix aldric=kill village=none: no old-script wording or *stage directions* in 23 shown lines []
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+  PASS: aldric=spare village=warned_villagers: plays after_spare + village_warned and ends at onward (ok=true)
+  PASS: matrix aldric=spare village=warned_villagers: no old-script wording or *stage directions* in 26 shown lines []
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+  PASS: aldric=spare village=warned_leaders: plays after_spare + village_leaders and ends at onward (ok=true)
+  PASS: matrix aldric=spare village=warned_leaders: no old-script wording or *stage directions* in 26 shown lines []
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+  PASS: aldric=spare village=left_quietly: plays after_spare + village_quiet and ends at onward (ok=true)
+  PASS: matrix aldric=spare village=left_quietly: no old-script wording or *stage directions* in 25 shown lines []
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: guardian_blessing — Aldric's Blessing: +5 DEF, +15 Max HP. Aldric may rally to your aid in boss fights.
+  PASS: aldric=spare village=none: plays after_spare + village_none and ends at onward (ok=true)
+  PASS: matrix aldric=spare village=none: no old-script wording or *stage directions* in 24 shown lines []
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: aldric=none village=warned_villagers: plays after_none + village_warned and ends at onward (ok=true)
+  PASS: matrix aldric=none village=warned_villagers: no old-script wording or *stage directions* in 22 shown lines []
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: aldric=none village=warned_leaders: plays after_none + village_leaders and ends at onward (ok=true)
+  PASS: matrix aldric=none village=warned_leaders: no old-script wording or *stage directions* in 22 shown lines []
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: aldric=none village=left_quietly: plays after_none + village_quiet and ends at onward (ok=true)
+  PASS: matrix aldric=none village=left_quietly: no old-script wording or *stage directions* in 21 shown lines []
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: aldric=none village=none: plays after_none + village_none and ends at onward (ok=true)
+  PASS: matrix aldric=none village=none: no old-script wording or *stage directions* in 20 shown lines []
+[Shatter scene: old save with no Aldric and no village flag]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH1-SHATTER] Initializing The Shatter transition
+[CUTSCENE] Starting: Bridge Approach
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Bridge Approach (walk)
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CH1-SHATTER] Environmental shift begins
+[CUTSCENE] Finished
+[CH1-SHATTER] Executing THE SHATTER
+  PASS: no flags: after_none then village_none play
+[INVENTORY] Added 1 x Glitch Herb
+[ACHIEVEMENT] Unlocked: Speed Demon — Complete a chapter in under 30 minutes.
+  PASS: the scene continues to the end card (ch1_complete set)
+  PASS: old save: no old-script wording or *stage directions* in 32 shown lines []
+[Shatter scene script: no spoken lines, events handled]
+  PASS: SHATTER_DLG points at shatter.dlg
+  PASS: play_bridge_approach runs the 'bridge' node
+  PASS: play_bridge_approach holds no say(), no dialogue beat, no has_elara / flag branch
+  PASS: play_environmental_shift runs the 'shift' node
+  PASS: play_environmental_shift holds no say(), no dialogue beat, no has_elara / flag branch
+  PASS: play_the_shatter runs the 'reconstruct' node
+  PASS: play_the_shatter holds no say(), no dialogue beat, no has_elara / flag branch
+  PASS: play_post_shatter_dialogue runs the 'start' node
+  PASS: play_post_shatter_dialogue holds no say(), no dialogue beat, no has_elara / flag branch
+WARNING: [CH1-SHATTER] unhandled dialogue event: not_an_event
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _on_dlg_event (res://scripts/chapter1/ch1_shatter_transition.gd:212)
+       [1] <anonymous lambda> (res://tests/integration/story/chapter1_route_test.gd:728)
+       [2] _test_shatter_source (res://tests/integration/story/chapter1_route_test.gd:730)
+       [3] _run (res://tests/integration/story/chapter1_route_test.gd:67)
+       [4] _test_shatter_old_save (res://tests/integration/story/chapter1_route_test.gd:700)
+       [5] _end_scene (res://tests/integration/story/chapter1_route_test.gd:520)
+  PASS: an unknown dialogue event returns at once (no hang)
+[Shatter scene: hold-to-skip during each node]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CH1-SHATTER] Initializing The Shatter transition
+[CUTSCENE] Starting: Bridge Approach
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[INVENTORY] Added 1 x Data Ore
+[ACHIEVEMENT] Unlocked: The Awakening — Complete Chapter 1.
+[CH2-GATE] Initializing Ironhold Gate sequence
+  PASS: skip in bridge: hold-to-skip completes while 'Oakhaven ends where the oak does' is on screen
+  PASS: skip in bridge: the scene changes exactly once, to ironhold_gate (1 changes)
+  PASS: skip in bridge: shatter_witnessed, ch1_complete and chapter 2 are set
+  PASS: skip in bridge: the Aldric reward is granted exactly once (data_ore 0 → 1)
+  PASS: skip in bridge: no later node starts after the skip ["lamps back in Oakhaven", "RECONSTRUCTION COMPLETE", "Everything\'s heavier"]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CH1-SHATTER] Initializing The Shatter transition
+[CUTSCENE] Starting: Bridge Approach
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Bridge Approach (walk)
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CH1-SHATTER] Environmental shift begins
+[CUTSCENE] Finished
+[INVENTORY] Added 1 x Data Ore
+[CH2-GATE] Initializing Ironhold Gate sequence
+  PASS: skip in shift: hold-to-skip completes while 'REGION BOUNDARY' is on screen
+  PASS: skip in shift: the scene changes exactly once, to ironhold_gate (1 changes)
+  PASS: skip in shift: shatter_witnessed, ch1_complete and chapter 2 are set
+  PASS: skip in shift: the Aldric reward is granted exactly once (data_ore 0 → 1)
+  PASS: skip in shift: no later node starts after the skip ["RECONSTRUCTION COMPLETE", "Everything\'s heavier"]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CH1-SHATTER] Initializing The Shatter transition
+[CUTSCENE] Starting: Bridge Approach
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Bridge Approach (walk)
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CH1-SHATTER] Environmental shift begins
+[CUTSCENE] Finished
+[CH1-SHATTER] Executing THE SHATTER
+[INVENTORY] Added 1 x Data Ore
+[CH2-GATE] Initializing Ironhold Gate sequence
+  PASS: skip in reconstruct: hold-to-skip completes while 'RECONSTRUCTION COMPLETE' is on screen
+  PASS: skip in reconstruct: the scene changes exactly once, to ironhold_gate (1 changes)
+  PASS: skip in reconstruct: shatter_witnessed, ch1_complete and chapter 2 are set
+  PASS: skip in reconstruct: the Aldric reward is granted exactly once (data_ore 0 → 1)
+  PASS: skip in reconstruct: no later node starts after the skip ["Everything\'s heavier"]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CH1-SHATTER] Initializing The Shatter transition
+[CUTSCENE] Starting: Bridge Approach
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Bridge Approach (walk)
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CH1-SHATTER] Environmental shift begins
+[CUTSCENE] Finished
+[CH1-SHATTER] Executing THE SHATTER
+[INVENTORY] Added 1 x Data Ore
+[CH2-GATE] Initializing Ironhold Gate sequence
+  PASS: skip in start: hold-to-skip completes while 'Everything's heavier' is on screen
+  PASS: skip in start: the scene changes exactly once, to ironhold_gate (1 changes)
+  PASS: skip in start: shatter_witnessed, ch1_complete and chapter 2 are set
+  PASS: skip in start: the Aldric reward is granted exactly once (data_ore 0 → 1)
+  PASS: skip in start: no later node starts after the skip ["Somewhere behind that smoke is the gate he died guarding. It already looks smaller than it should.", "Walls first"]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CH1-SHATTER] Initializing The Shatter transition
+[CUTSCENE] Starting: Bridge Approach
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Bridge Approach (walk)
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CH1-SHATTER] Environmental shift begins
+[CUTSCENE] Finished
+[CH1-SHATTER] Executing THE SHATTER
+[INVENTORY] Added 1 x Data Ore
+[CH2-GATE] Initializing Ironhold Gate sequence
+  PASS: skip in after_kill: hold-to-skip completes while 'Somewhere behind that smoke is the gate he died guarding. It already looks smaller than it should.' is on screen
+  PASS: skip in after_kill: the scene changes exactly once, to ironhold_gate (1 changes)
+  PASS: skip in after_kill: shatter_witnessed, ch1_complete and chapter 2 are set
+  PASS: skip in after_kill: the Aldric reward is granted exactly once (data_ore 0 → 1)
+  PASS: skip in after_kill: no later node starts after the skip ["Walls first"]
+[shatter.dlg: a run stopped by force_reset() returns ok = false]
+  PASS: a run stopped mid-line returns ok = false (ok=false)
+  PASS: the stopped run never shows the node's second line
+[Shatter scene: a slow reader on the lamps line]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH1-SHATTER] Initializing The Shatter transition
+[CUTSCENE] Starting: Bridge Approach
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Bridge Approach (walk)
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CH1-SHATTER] Environmental shift begins
+[CUTSCENE] Finished
+[CH1-SHATTER] Executing THE SHATTER
+  PASS: 'do desaturate' isn't awaited at the event: red is mid-drain while the lamps line shows (413 samples)
+  PASS: a slow reader sees the drain finish on the lamps line
+  PASS: after a slow read the scene still reaches RECONSTRUCTION COMPLETE (no wait on a finished tween)
+[Oakhaven: a normal afternoon, then the alarm]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: gate and ledger play on arrival, then the invite; no stew in the village ({ "invited": true, "ledger_at_invite": true, "entrance_at_invite": false, "stew_before_house": false, "house": true, "stew_done": true, "village": OakhavenVillage:<Node2D#3152522775537> })
+  PASS: the stew plays in Elara's house
+  PASS: back through her door, the village afternoon has started
+  PASS: no alarm after two conversations
+  PASS: Old Fen, Jessa and the farmers play their lines
+  PASS: the third conversation brings the alarm; the field gets resolved
+  PASS: the child's lost sword appears in the world
+  PASS: returning the sword plants 'Uncle Aldric'
+[ACHIEVEMENT] Unlocked: Window Shopping — Visit a shop for the first time.
+[INVENTORY] Added 2 x Glitch Herb
+[ACHIEVEMENT] Unlocked: Lore Seeker — Discover your first optional lore entry.
+  PASS: Mara's shop opens with her rewritten lines
+[Crash site: prompts only where the key does something]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[10N-A2] Opening crash-site hook loaded
+  PASS: next to the torn card: a Look prompt
+  PASS: the fused metal's big area no longer steals the press (it's 139 from the card)
+  PASS: the prompt is hidden while the card's line plays
+  PASS: the torn card plays its own line, not the fused metal's
+  PASS: after looking, the card is no longer a target (now: signal)
+  PASS: a second look at the card does nothing (and nothing pretends it will)
+  PASS: standing at a used point with nothing else in reach: no prompt
+[Oakhaven: villagers wait for the key, and always answer]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+  PASS: walking up to Jessa doesn't start a conversation by itself
+  PASS: standing by Jessa: she's the target and the prompt shows
+[INTERACTION] Interacting with: Jessa
+  PASS: pressing interact plays Jessa's first conversation
+[INTERACTION] Interacting with: Jessa
+  PASS: talking to her again gives a repeat line, not silence
+  PASS: every villager in the npc group has something to say []
+  PASS: no villager talks on walk-in []
+[T13a the Elara meeting resumes after the slime fight]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH1-SEQ2] Initializing Elara the Glitch-Witch meeting
+  PASS: T13a the resumed meeting starts with after_slime's first line
+  PASS: T13a Kaelen stands at (490, 420) and 7 shards lie where the slime broke (7 shards, Kaelen (490.0, 420.0))
+  PASS: T13a start is not replayed, no slime walks in, the arena is never loaded
+[SAVE] Slot 1 saved successfully (v1.2.0)
+  PASS: T13a a save made in the resumed meeting is allowed
+[CUTSCENE] Starting: Chapter 1 - The Wrong Weapon
+[CUTSCENE BEAT] Type: character_enter
+  PASS: T13a the shards have faded (0 left)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[CUTSCENE] Finished
+[CH1-SEQ2] Initializing Elara the Glitch-Witch meeting
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  PASS: T13a load_game(1) of that save
+  PASS: T13a after load the meeting resumes at after_slime, not at the fight
+[CUTSCENE] Starting: Chapter 1 - The Wrong Weapon
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CH1-SEQ2] Transitioning to Path to Oakhaven
+[CH1-SEQ3] Initializing Path to Oakhaven — Combat Tutorial
+  PASS: T13a the resumed meeting goes on to the Broken Mile
+  PASS: T13a the flags of the chosen branch are set as before
+[T13a the meeting with both flags set resumes at after_slime, no loop]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH1-SEQ2] Initializing Elara the Glitch-Witch meeting
+  PASS: T13a with both flags set the meeting resumes at after_slime: start not replayed, the arena never loaded
+[CUTSCENE] Starting: Chapter 1 - The Wrong Weapon
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CH1-SEQ2] Transitioning to Path to Oakhaven
+[CH1-SEQ3] Initializing Path to Oakhaven — Combat Tutorial
+  PASS: T13a with both flags set the meeting goes on to the Broken Mile, with no trip to the arena on the way
+[Breadcrumb AC-1a: the 11 Chapter 1 lines]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: OBJECTIVES holds exactly 11 Chapter 1 entries (has 11)
+  PASS: no flags set -> no objective
+  PASS: S0 resolves to step 0 exactly: 'Find the plane. Look for survivors.' (got 'Find the plane. Look for survivors.', hint '')
+  PASS: S1 resolves to step 1 exactly: 'Find people. A settlement east may know what happened to Flight 707.' (got 'Find people. A settlement east may know what happened to Flight 707.', hint '')
+  PASS: S2 resolves to step 2 exactly: 'Reach Oakhaven. Follow the first lead on the missing passengers.' (got 'Reach Oakhaven. Follow the first lead on the missing passengers.', hint '')
+  PASS: S3 resolves to step 3 exactly: 'Get through the Broken Mile with Elara.' (got 'Get through the Broken Mile with Elara.', hint '')
+  PASS: S4 resolves to step 4 exactly: 'Ask about Flight 707. Find a safe route to Ironhold.' (got 'Ask about Flight 707. Find a safe route to Ironhold.', hint '')
+  PASS: S5 resolves to step 5 exactly: 'Go to Elara's house. She's making stew.' (got 'Go to Elara's house. She's making stew.', hint '')
+  PASS: S6 resolves to step 6 exactly: 'Spend the afternoon in Oakhaven. Meet the people here.' (got 'Spend the afternoon in Oakhaven. Meet the people here.', hint '')
+  PASS: S7 resolves to step 7 exactly: 'Answer the alarm in the north field.' (got 'Answer the alarm in the north field.', hint '')
+  PASS: S8 resolves to step 8 exactly: 'Deal with the north bridge before dark.' (got 'Deal with the north bridge before dark.', hint '')
+  PASS: S9 resolves to step 9 exactly: 'Stop Aldric.' (got 'Stop Aldric.', hint '')
+  PASS: S10 resolves to step 10 exactly: 'Go down to the shrine. Then decide what to tell the village.' (got 'Go down to the shrine. Then decide what to tell the village.', hint '')
+  PASS: S5 names the village scene and Doors/ElaraHouseDoor for its arrow (got 'res://scenes/chapter1/oakhaven_village.tscn', 'Doors/ElaraHouseDoor')
+  PASS: the OBJECTIVES scan found entries
+  PASS: stale entry gone from OBJECTIVES: 'Stand up. Find a signal.'
+  PASS: stale entry gone from OBJECTIVES: 'Follow the Oakhaven signal.'
+  PASS: stale entry gone from OBJECTIVES: 'Reach Oakhaven.'
+  PASS: stale entry gone from OBJECTIVES: 'Survive the crash site'
+  PASS: stale entry gone from OBJECTIVES: 'Defeat the Corrupted Sentinel'
+  PASS: stale entry gone from OBJECTIVES: 'Explore Oakhaven & find Elara'
+  PASS: stale hint gone from OBJECTIVES: 'a village that should not know your name'
+[Breadcrumb AC-1b: every table flag has a writer]
+  PASS: table names 15 distinct flags (derived from OBJECTIVES)
+  PASS: dialogue/ch1 scan read 1115 lines
+  PASS: scripts/ scan read 133 files
+  PASS: flag 'ch1_opening_hook_started' has a writer ["ch1_opening_crash_site_hook.gd"]
+  PASS: flag 'ch1_crash_trace_seen' has a writer ["crash_site.dlg: set ch1_crash_trace_seen"]
+  PASS: flag 'elara_met' has a writer ["elara_meeting.dlg: set elara_met", "main_menu.gd", "oakhaven.gd"]
+  PASS: flag 'ch1_broken_mile_entered' has a writer ["broken_mile.dlg: set ch1_broken_mile_entered"]
+  PASS: flag 'ch1_personal_goal_set' has a writer ["broken_mile.dlg: set ch1_personal_goal_set"]
+  PASS: flag 'ch1_oakhaven_entered' has a writer ["oakhaven_gate.dlg: set ch1_oakhaven_entered", "ch1_oakhaven_village.gd"]
+  PASS: flag 'ch1_stew_done' has a writer ["ch1_elara_house.gd"]
+  PASS: flag 'ch1_north_field_helped' has a writer ["north_field.dlg: set ch1_north_field_helped"]
+  PASS: flag 'ch1_north_field_refused' has a writer ["north_field.dlg: set ch1_north_field_refused"]
+  PASS: flag 'ch1_corrupted_boar_defeated' has a writer ["ch1_oakhaven_village.gd"]
+  PASS: flag 'ch1_bridge_repair_accepted' has a writer ["north_field.dlg: set ch1_bridge_repair_accepted"]
+  PASS: flag 'ch1_bridge_evacuated' has a writer ["north_field.dlg: set ch1_bridge_evacuated"]
+  PASS: flag 'ch1_bridge_ignored' has a writer ["north_field.dlg: set ch1_bridge_ignored"]
+  PASS: flag 'ch1_tutorial_knight_defeated' has a writer ["aldric.dlg: set ch1_tutorial_knight_defeated", "ch1_tutorial_knight.gd"]
+  PASS: flag 'ch1_complete' has a writer ["ch1_shatter_transition.gd"]
+[Breadcrumb AC-2a: Chapter 2+ results match the frozen golden baseline]
+  PASS: golden file parses
+  PASS: golden file holds 71 cases (has 71)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch1_complete' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 6 vs 6)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch2_ironhold_entered' -> 'Win the Arena's Bronze bracket' / has_target true (1850.0, 1020.0) (got 'Win the Arena's Bronze bracket', hint ok true, target (1850.0, 1020.0), live 'Win the Arena's Bronze bracket', flags 7 vs 7)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch2_arena_bronze_complete' -> 'Ascend the Clock Tower' / has_target true (2950.0, 620.0) (got 'Ascend the Clock Tower', hint ok true, target (2950.0, 620.0), live 'Ascend the Clock Tower', flags 8 vs 8)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch2_clockwork_automaton_defeated' -> 'Investigate the Underground Network' / has_target true (1150.0, 1950.0) (got 'Investigate the Underground Network', hint ok true, target (1150.0, 1950.0), live 'Investigate the Underground Network', flags 9 vs 9)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch2_data_wraith_defeated' -> 'Defeat the Administrator Proxy' / has_target true (1300.0, 2100.0) (got 'Defeat the Administrator Proxy', hint ok true, target (1300.0, 2100.0), live 'Defeat the Administrator Proxy', flags 10 vs 10)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch2_administrator_proxy_defeated' -> 'Complete Chapter 2' / has_target true (1400.0, 900.0) (got 'Complete Chapter 2', hint ok true, target (1400.0, 900.0), live 'Complete Chapter 2', flags 11 vs 11)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch2_complete' -> 'Enter the Fractured Wastes' / has_target true (1500.0, 1300.0) (got 'Enter the Fractured Wastes', hint ok true, target (1500.0, 1300.0), live 'Enter the Fractured Wastes', flags 12 vs 12)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch3_sovereign_defeated' -> 'Confront the Source' / has_target true (1500.0, 500.0) (got 'Confront the Source', hint ok true, target (1500.0, 500.0), live 'Confront the Source', flags 13 vs 13)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch3_complete' -> 'Enter the Forgotten Sectors' / has_target true (640.0, 360.0) (got 'Enter the Forgotten Sectors', hint ok true, target (640.0, 360.0), live 'Enter the Forgotten Sectors', flags 14 vs 14)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch4_forgotten_sectors_entered' -> 'Answer the Null Court' / has_target true (640.0, 360.0) (got 'Answer the Null Court', hint ok true, target (640.0, 360.0), live 'Answer the Null Court', flags 15 vs 15)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch4_complete' -> 'Enter the Mirror City' / has_target true (640.0, 360.0) (got 'Enter the Mirror City', hint ok true, target (640.0, 360.0), live 'Enter the Mirror City', flags 16 vs 16)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch5_mirror_city_entered' -> 'Resolve the Mirror Plaza echoes' / has_target true (640.0, 360.0) (got 'Resolve the Mirror Plaza echoes', hint ok true, target (640.0, 360.0), live 'Resolve the Mirror Plaza echoes', flags 17 vs 17)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch5_all_echoes_resolved' -> 'Begin the Reflection Trial' / has_target true (640.0, 360.0) (got 'Begin the Reflection Trial', hint ok true, target (640.0, 360.0), live 'Begin the Reflection Trial', flags 18 vs 18)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch5_choice_echo_resolved' -> 'Confront Mirror Kaelen' / has_target true (640.0, 360.0) (got 'Confront Mirror Kaelen', hint ok true, target (640.0, 360.0), live 'Confront Mirror Kaelen', flags 19 vs 19)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch5_complete' -> 'Enter the Cathedral Server' / has_target true (640.0, 360.0) (got 'Enter the Cathedral Server', hint ok true, target (640.0, 360.0), live 'Enter the Cathedral Server', flags 20 vs 20)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch6_cathedral_entered' -> 'Enter the Cathedral Nave' / has_target true (640.0, 360.0) (got 'Enter the Cathedral Nave', hint ok true, target (640.0, 360.0), live 'Enter the Cathedral Nave', flags 21 vs 21)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch6_nave_entered' -> 'Hear the three broken god doctrines' / has_target true (640.0, 360.0) (got 'Hear the three broken god doctrines', hint ok true, target (640.0, 360.0), live 'Hear the three broken god doctrines', flags 22 vs 22)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch6_all_voices_heard' -> 'Resolve the Choir Core' / has_target true (640.0, 360.0) (got 'Resolve the Choir Core', hint ok true, target (640.0, 360.0), live 'Resolve the Choir Core', flags 23 vs 23)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch6_complete' -> 'Enter the Deep Backup' / has_target true (640.0, 360.0) (got 'Enter the Deep Backup', hint ok true, target (640.0, 360.0), live 'Enter the Deep Backup', flags 24 vs 24)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch7_deep_backup_entered' -> 'Find the Memory Ocean' / has_target true (640.0, 360.0) (got 'Find the Memory Ocean', hint ok true, target (640.0, 360.0), live 'Find the Memory Ocean', flags 25 vs 25)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch7_memory_ocean_entered' -> 'Witness the three backup histories' / has_target true (640.0, 360.0) (got 'Witness the three backup histories', hint ok true, target (640.0, 360.0), live 'Witness the three backup histories', flags 26 vs 26)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch7_all_backups_seen' -> 'Resolve the Archive Tide' / has_target true (640.0, 360.0) (got 'Resolve the Archive Tide', hint ok true, target (640.0, 360.0), live 'Resolve the Archive Tide', flags 27 vs 27)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch7_complete' -> 'Awaken the saved regions' / has_target true (640.0, 360.0) (got 'Awaken the saved regions', hint ok true, target (640.0, 360.0), live 'Awaken the saved regions', flags 28 vs 28)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch8_revolt_intro_seen' -> 'Enter the Saved Assembly' / has_target true (640.0, 360.0) (got 'Enter the Saved Assembly', hint ok true, target (640.0, 360.0), live 'Enter the Saved Assembly', flags 29 vs 29)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch8_saved_assembly_entered' -> 'Hear the saved factions' / has_target true (640.0, 360.0) (got 'Hear the saved factions', hint ok true, target (640.0, 360.0), live 'Hear the saved factions', flags 30 vs 30)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch8_all_factions_heard' -> 'Resolve the Revolt Crisis' / has_target true (640.0, 360.0) (got 'Resolve the Revolt Crisis', hint ok true, target (640.0, 360.0), live 'Resolve the Revolt Crisis', flags 31 vs 31)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch8_complete' -> 'Enter the Human Patch' / has_target true (640.0, 360.0) (got 'Enter the Human Patch', hint ok true, target (640.0, 360.0), live 'Enter the Human Patch', flags 32 vs 32)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch9_human_patch_entered' -> 'Enter AetherCorp Memory Lab' / has_target true (640.0, 360.0) (got 'Enter AetherCorp Memory Lab', hint ok true, target (640.0, 360.0), live 'Enter AetherCorp Memory Lab', flags 33 vs 33)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch9_memory_lab_entered' -> 'Restore the four hidden truths' / has_target true (640.0, 360.0) (got 'Restore the four hidden truths', hint ok true, target (640.0, 360.0), live 'Restore the four hidden truths', flags 34 vs 34)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch9_all_truths_seen' -> 'Resolve the Creator Trial' / has_target true (640.0, 360.0) (got 'Resolve the Creator Trial', hint ok true, target (640.0, 360.0), live 'Resolve the Creator Trial', flags 35 vs 35)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch9_complete' -> 'Enter the Root of Heaven' / has_target true (640.0, 360.0) (got 'Enter the Root of Heaven', hint ok true, target (640.0, 360.0), live 'Enter the Root of Heaven', flags 36 vs 36)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch10_root_entered' -> 'Begin the Kernel Descent' / has_target true (640.0, 360.0) (got 'Begin the Kernel Descent', hint ok true, target (640.0, 360.0), live 'Begin the Kernel Descent', flags 37 vs 37)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch10_kernel_descent_started' -> 'Reach the Witness Chamber' / has_target true (640.0, 360.0) (got 'Reach the Witness Chamber', hint ok true, target (640.0, 360.0), live 'Reach the Witness Chamber', flags 38 vs 38)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch10_witness_chamber_entered' -> 'Confront SOVEREIGN' / has_target true (640.0, 360.0) (got 'Confront SOVEREIGN', hint ok true, target (640.0, 360.0), live 'Confront SOVEREIGN', flags 39 vs 39)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch10_sovereign_confronted' -> 'Choose Aethelgard's future' / has_target true (640.0, 360.0) (got 'Choose Aethelgard's future', hint ok true, target (640.0, 360.0), live 'Choose Aethelgard's future', flags 40 vs 40)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'entry:ch10_complete' -> 'True ending complete' / has_target false (0.0, 0.0) (got 'True ending complete', hint ok true, target (0.0, 0.0), live 'True ending complete', flags 41 vs 41)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 2 — Ironhold Gate' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 11 vs 11)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 2 — Arena District' -> 'Win the Arena's Bronze bracket' / has_target true (1850.0, 1020.0) (got 'Win the Arena's Bronze bracket', hint ok true, target (1850.0, 1020.0), live 'Win the Arena's Bronze bracket', flags 9 vs 9)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 2 — Administrator Boss' -> 'Win the Arena's Bronze bracket' / has_target true (1850.0, 1020.0) (got 'Win the Arena's Bronze bracket', hint ok true, target (1850.0, 1020.0), live 'Win the Arena's Bronze bracket', flags 12 vs 12)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 3 — Ironhold Departure' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 7 vs 7)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 3 — Fractured Wastes' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 7 vs 7)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CHOICE-FX] Applied buff: ranger_ally — Lyra's Bow: +3 ATK. Lyra fires ranged support shots in combat (15 dmg every 5s).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 3 — Data Stream' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 11 vs 11)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[CHOICE-FX] Applied buff: ranger_ally — Lyra's Bow: +3 ATK. Lyra fires ranged support shots in combat (15 dmg every 5s).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 3 — Archive Depths' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 12 vs 12)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 3 — Kaelthas Betrayal' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 12 vs 12)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 4 — Forgotten Sectors' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 11 vs 11)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 4 — Null Court' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 12 vs 12)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 5 — Mirror City' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 14 vs 14)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 5 - Mirror Plaza' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 15 vs 15)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 5 — Reflection Trial' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 23 vs 23)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 5 - Mirror Kaelen' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 27 vs 27)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 6 - Cathedral Server' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 21 vs 21)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 6 - Cathedral Nave' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 22 vs 22)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 6 - Choir Core' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 27 vs 27)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 6 - Ending' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 33 vs 33)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 7 - Deep Backup' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 22 vs 22)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 7 - Memory Ocean' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 24 vs 24)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 7 - Archive Tide' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 29 vs 29)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 7 - Ending' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 35 vs 35)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 8 - Revolt Intro' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 28 vs 28)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 8 - Saved Assembly' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 29 vs 29)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 8 - Revolt Crisis' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 36 vs 36)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 8 - Ending' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 40 vs 40)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 9 - Human Patch' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 31 vs 31)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 9 - Memory Lab' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 32 vs 32)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 9 - Creator Trial' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 38 vs 38)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 9 - Ending' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 42 vs 42)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 10 - Root of Heaven' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 35 vs 35)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 10 - Kernel Descent' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 36 vs 36)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 10 - Witness Chamber' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 37 vs 37)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 10 - Final Confrontation' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 38 vs 38)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+  PASS: golden 'preset+legacy_ch1_flags:Chapter 10 - True Ending' -> 'Travel to Ironhold' / has_target true (800.0, 400.0) (got 'Travel to Ironhold', hint ok true, target (800.0, 400.0), live 'Travel to Ironhold', flags 41 vs 41)
+  PASS: boundary set is {ch1_complete, ch1_oakhaven_entered, ch1_tutorial_knight_defeated}
+  PASS: the old resolver stuck on a stale Chapter 1 entry here (so this boundary is a real change)
+  PASS: boundary set resolves to 'Travel to Ironhold', never a Chapter 1 step (got 'Travel to Ironhold')
+  PASS: S10 + ch1_complete -> Chapter 2 entry with its target
+[Breadcrumb AC-2b: any-of required and blocker lists]
+  PASS: required_any: eligible with only the second flag
+  PASS: required_any: eligible with only the first flag
+  PASS: required_any: not eligible with neither flag
+  PASS: blockers: first blocker ends it
+  PASS: blockers: second blocker ends it
+  PASS: required and required_any are ANDed
+  PASS: S6 + boar defeated only (any-of: first flag) -> step 8 (got step 8 'Deal with the north bridge before dark.')
+  PASS: S6 + refused only (any-of: second flag) -> step 8 (got step 8 'Deal with the north bridge before dark.')
+  PASS: S6 alone (neither any-of flag) -> step 6 (got step 6 'Spend the afternoon in Oakhaven. Meet the people here.')
+  PASS: S6 + helped (ends step 6 through the blockers list) -> step 7 (got step 7 'Answer the alarm in the north field.')
+  PASS: S6 + refused (ends step 6 through the second blocker) -> step 8 (got step 8 'Deal with the north bridge before dark.')
+[Breadcrumb AC-3 / AC-8b: old saves, early alarm, later flag wins, chapter end]
+  PASS: AC-3a old save (no stew_done, no broken_mile_entered) -> step 5 (got step 5 'Go to Elara's house. She's making stew.')
+  PASS: AC-3b S6 + helped, no boar flag -> step 7 (got step 7 'Answer the alarm in the north field.')
+  PASS: AC-3b same + boar defeated -> step 8 (got step 8 'Deal with the north bridge before dark.')
+  PASS: AC-3c S10 without ch1_stew_done: the later flag wins -> step 10 (got step 10 'Go down to the shrine. Then decide what to tell the village.')
+  PASS: AC-3c only the knight flag set -> step 10 (got step 10 'Go down to the shrine. Then decide what to tell the village.')
+  PASS: AC-3d S10 + ch1_elara_joined, no ch1_complete -> step 10 (got step 10 'Go down to the shrine. Then decide what to tell the village.')
+  PASS: AC-3d + ch1_complete -> Chapter 2 entry (got 'Travel to Ironhold')
+  PASS: AC-8b S6 + refused skips step 7 -> step 8 (got step 8 'Deal with the north bridge before dark.')
+  PASS: AC-8b S6 alone is still step 6 (so the refused result above is a real move)
+  PASS: S6 + helped + refused (unreachable) -> step 8 (got step 8 'Deal with the north bridge before dark.')
+  PASS: {ch1_complete} alone -> 'Travel to Ironhold' (got 'Travel to Ironhold')
+[Breadcrumb AC-8c: each bridge end flag moves to step 9]
+  PASS: S8 before any bridge flag -> step 8 (got step 8 'Deal with the north bridge before dark.')
+  PASS: S6 + refused before any bridge flag -> step 8 (got step 8 'Deal with the north bridge before dark.')
+  PASS: S8 + ch1_bridge_repair_accepted -> step 9 (got step 9 'Stop Aldric.')
+  PASS: S6 + refused + ch1_bridge_repair_accepted -> step 9 (got step 9 'Stop Aldric.')
+  PASS: S8 + ch1_bridge_evacuated -> step 9 (got step 9 'Stop Aldric.')
+  PASS: S6 + refused + ch1_bridge_evacuated -> step 9 (got step 9 'Stop Aldric.')
+  PASS: S8 + ch1_bridge_ignored -> step 9 (got step 9 'Stop Aldric.')
+  PASS: S6 + refused + ch1_bridge_ignored -> step 9 (got step 9 'Stop Aldric.')
+[Breadcrumb AC-7: exactly four 'do objective' lines, each equal to its step]
+  PASS: exactly 4 'do objective' lines in dialogue/ch1 (found 4)
+  PASS: crash_site.dlg has the 'do objective' line of step 0
+  PASS: crash_site.dlg has the 'do objective' line of step 1
+  PASS: elara_meeting.dlg has the 'do objective' line of step 2
+  PASS: broken_mile.dlg has the 'do objective' line of step 4
+[Breadcrumb AC-4: label text with and without a hint]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: primed with the Chapter 2 entry
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: Chapter 1 step 3 is current
+  PASS: Chapter 1 label is just the objective line (got '[color=#4488CC][b]►[/b][/color] [color=#CCDDEE]Get through the Broken Mile with Elara.[/color]')
+  PASS: Chapter 1 label has no [i], [/i], line break
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: the Chapter 2 entry has a hint
+  PASS: Chapter 2 label equals the old format string byte for byte (got '[color=#4488CC][b]►[/b][/color] [color=#CCDDEE]Travel to Ironhold[/color]
+[color=#667788][i]Head to the world map and enter the Ironhold region[/i][/color]')
+[Breadcrumb AC-8a: live HUD at each step's start flag]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: after ch1_opening_hook_started the HUD shows step 0 (got 'Find the plane. Look for survivors.')
+  PASS: after ch1_crash_trace_seen the HUD shows step 1 (got 'Find people. A settlement east may know what happened to Flight 707.')
+  PASS: after elara_met the HUD shows step 2 (got 'Reach Oakhaven. Follow the first lead on the missing passengers.')
+  PASS: after ch1_broken_mile_entered the HUD shows step 3 (got 'Get through the Broken Mile with Elara.')
+  PASS: after ch1_personal_goal_set the HUD shows step 4 (got 'Ask about Flight 707. Find a safe route to Ironhold.')
+  PASS: after ch1_oakhaven_entered the HUD shows step 5 (got 'Go to Elara's house. She's making stew.')
+  PASS: after ch1_stew_done the HUD shows step 6 (got 'Spend the afternoon in Oakhaven. Meet the people here.')
+  PASS: after ch1_north_field_helped the HUD shows step 7 (got 'Answer the alarm in the north field.')
+  PASS: after ch1_corrupted_boar_defeated the HUD shows step 8 (got 'Deal with the north bridge before dark.')
+  PASS: after ch1_bridge_repair_accepted the HUD shows step 9 (got 'Stop Aldric.')
+  PASS: after ch1_tutorial_knight_defeated the HUD shows step 10 (got 'Go down to the shrine. Then decide what to tell the village.')
+  PASS: ch1_elara_joined leaves step 10 up
+  PASS: ch1_complete moves the HUD to the Chapter 2 entry
+  PASS: objective_changed fired once per step, in order (got 12: ["Find the plane. Look for survivors.", "Find people. A settlement east may know what happened to Flight 707.", "Reach Oakhaven. Follow the first lead on the missing passengers.", "Get through the Broken Mile with Elara.", "Ask about Flight 707. Find a safe route to Ironhold.", "Go to Elara\'s house. She\'s making stew.", "Spend the afternoon in Oakhaven. Meet the people here.", "Answer the alarm in the north field.", "Deal with the north bridge before dark.", "Stop Aldric.", "Go down to the shrine. Then decide what to tell the village.", "Travel to Ironhold"])
+[Breadcrumb AC-6c: the two new flags have one writer each and are in the bible]
+  PASS: ch1_broken_mile_entered: one 'set' line, in broken_mile.dlg (1)
+  PASS: ch1_stew_done is not set from a .dlg
+  PASS: scripts/ scan found files
+  PASS: ch1_stew_done: exactly one set_story_flag in scripts/, in ch1_elara_house.gd (1: ["res://scripts/chapter1/ch1_elara_house.gd"])
+  PASS: ch1_broken_mile_entered is not set from scripts/ (0)
+  PASS: STORY_BIBLE.md has sections 5 and 6
+  PASS: STORY_BIBLE §5 has the ch1_broken_mile_entered row
+  PASS: STORY_BIBLE §5 has the ch1_stew_done row
+  PASS: Chapter 1 flag-write scan read 19 files, found 72 names (frozen list 70)
+  PASS: Chapter 1 flag writes == d5ca821 set + T05's two (72 names; written but not expected: []; expected but not written: [])
+[T13a ch1_slime_fought has one writer and is in the bible]
+  PASS: ch1_slime_fought appears once in combat_arena.gd: its story-fight table
+  PASS: the Elara meeting reads ch1_slime_fought and never sets it
+  PASS: STORY_BIBLE §5 has the ch1_slime_fought row
+[Breadcrumb AC-6a: ch1_broken_mile_entered is set by the first node]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: flag is unset before the walk
+  PASS: tree_flicker ran and showed a line
+  PASS: flag is already set when tree_flicker's first line shows
+  PASS: flag is set after tree_flicker
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: walk_manifest ran and showed a line
+  PASS: running walk_manifest first does not set the flag
+[Breadcrumb AC-5: arrows at the crash site]
+  PASS: 5 Chapter 1 entries have an arrow (got 5)
+  PASS: each arrow entry names an existing res:// scene and a target node
+  PASS: step 5's arrow entry is the village scene + Doors/ElaraHouseDoor, no fixed target ([{ "chapter1": true, "required": "ch1_oakhaven_entered", "blockers": ["ch1_stew_done"], "text": "Go to Elara\'s house. She\'s making stew.", "hint": "", "scene": "res://scenes/chapter1/oakhaven_village.tscn", "target_node": "Doors/ElaraHouseDoor" }])
+  PASS: the other 6 Chapter 1 entries have no scene, node or fixed target
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[10N-A2] Opening crash-site hook loaded
+  PASS: SignalFragment and OakhavenPath exist in the crash-site scene
+  PASS: precondition: crash trace not seen yet
+  PASS: step 0 caches an arrow bound to the crash site
+  PASS: step 0 arrow aims at (545,370) (got (545.0, 370.0))
+  PASS: step 0 arrow is shown when the player is far (got '  ↘ 57m away')
+  PASS: step 1 arrow aims at (1030,370) (got (1030.0, 370.0))
+  PASS: step 1 arrow is shown (got '  → 101m away')
+  PASS: arrow text is empty when the cached scene is not the current scene (got '')
+  PASS: arrow is back once the scene matches again (got '  → 101m away')
+  PASS: arrow is hidden when the target node is missing (got '')
+  PASS: arrow returns when the node is back (got '  → 101m away')
+  PASS: step 2 has no arrow even though the player is in the crash site (got '')
+  PASS: the player stayed in the scene for the hide cases (so empty text is not 'no player')
+[Breadcrumb AC-5: arrows in Oakhaven]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: the two triggers are at different places
+  PASS: step 7 arrow aims at Triggers/BoarTrigger (1440.0, 1400.0) (got (1440.0, 1400.0))
+  PASS: step 7 arrow is shown (got '  ↘ 192m away')
+  PASS: step 8 arrow aims at Triggers/BridgeTrigger (1440.0, 1700.0) (got (1440.0, 1700.0))
+  PASS: step 8 arrow is shown (got '  ↘ 214m away')
+  PASS: step 8 arrow hides when the current scene is another scene (got '')
+[Breadcrumb AC-6b: ch1_stew_done on every stew path]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: topics then (Just eat.): the stew choices were seen and ch1_stew_done was not set while they were open
+  PASS: topics then (Just eat.): ch1_stew_done not set while the stew lines play (8 frames watched)
+  PASS: topics then (Just eat.): ch1_stew_done is set once the stew run has returned, exactly once (1 emits)
+  PASS: that path asked one topic, then ate
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: (Just eat.) straight away: the stew choices were seen and ch1_stew_done was not set while they were open
+  PASS: (Just eat.) straight away: ch1_stew_done not set while the stew lines play (8 frames watched)
+  PASS: (Just eat.) straight away: ch1_stew_done is set once the stew run has returned, exactly once (1 emits)
+  PASS: that path asked no topic
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: skip-all: the stew choices were seen and ch1_stew_done was not set while they were open
+  PASS: skip-all: ch1_stew_done not set while the stew lines play (3 frames watched)
+  PASS: skip-all: ch1_stew_done is set once the stew run has returned, exactly once (1 emits)
+  PASS: skip-all: skip_all was requested during the stew
+  PASS: the skip-all path asked no topic
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: scene left mid-run: the scene was left mid-run (after the first topic)
+  PASS: scene left mid-run: ch1_stew_done is not set when the scene is left mid-run (0 emits)
+[Breadcrumb AC-3b / AC-8b: the alarm on the live village route]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: early alarm: entrance done, stew done
+  PASS: early alarm: step 6 before the alarm (got 'Spend the afternoon in Oakhaven. Meet the people here.')
+  PASS: early alarm: the field run finished within 120s
+  PASS: early alarm: helped, field resolved, boar flag set
+  PASS: early alarm: a forced refresh shows step 8 (got 'Deal with the north bridge before dark.')
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: refuse: step 6 before the alarm (got 'Spend the afternoon in Oakhaven. Meet the people here.')
+  PASS: refuse: the field run finished within 120s
+  PASS: refuse: refused set, helped never set
+  PASS: refuse: the aftermath ended, no boar flag
+  PASS: refuse: a forced refresh shows step 8 (got 'Deal with the north bridge before dark.')
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: hesitate-then-help: the field run finished
+  PASS: hesitate-then-help: helped set -> step 7 while the boar is open (got step 7)
+  PASS: hesitate-then-help: refused never set
+
+CH1 RESULT: 413 passed, 0 failed
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)

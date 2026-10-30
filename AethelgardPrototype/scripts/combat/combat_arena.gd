@@ -82,6 +82,58 @@ var _boss_id: String = ""
 var _boss_initial_hp: float = 0.0  # Track boss max HP for partial reward calc
 var _perfect_delete_busy: bool = false
 
+# ── Story fight mode (Y1-P0-T13) ──────────────────────────────────────────
+## A scripted story encounter: the scene that wants it sets the GameManager metas
+## `story_fight_id` (a key of STORY_FIGHTS) and `story_fight_return_scene`, then
+## changes scene to this arena. Both metas are removed when `_ready` reads them,
+## so leaving the arena any other way (pause menu, game over) cannot leave one behind.
+## The player's death is a tutorial retry (never game over); winning sets the fight's
+## story flags and goes back to the return scene. Root Access and Perfect Delete are
+## refused; XP, gold and item drops are suppressed.
+## Emitted once when the fight is won. The only outcome is "win" (a retry emits nothing).
+signal story_fight_resolved(outcome: String)
+
+const STORY_FIGHTS: Dictionary = {
+	"ch1_slime": {
+		"enemy_script": "res://scripts/combat/enemies/slime.gd",
+		"enemy_type": "slime",
+		"enemy_name": "StoryFightSlime",
+		# Inside the first frame: the camera follows the player, so at the spawn it shows x up to 840.
+		"enemy_spawn": Vector2(760, 400),
+		"player_spawn": Vector2(200, 400),
+		"default_return_scene": "res://scenes/chapter1/elara_meeting.tscn",
+		# The polygon beat the Elara meeting used to stage (colour and count kept from it).
+		"shard_color": Color(0.45, 0.85, 0.75),
+		"shard_count": 7,
+		"shard_fade": 0.6,       # real seconds: the kill's slow-motion must not stretch the beat
+		"shard_size": 12.0,
+		"shard_z": 20,           # above the slime's death flash and smoke
+		"flags": ["first_slime_defeated", "ch1_slime_fought"],
+		# Procedural forest backdrop: the Elara meeting's colours (ch1_elara_meeting.gd).
+		"sky": Color(0.16, 0.1, 0.28),
+		"ground": Color(0.08, 0.16, 0.06),
+		"path": Color(0.22, 0.16, 0.08),
+		"tree": Color(0.06, 0.14, 0.04),
+		# The sky and ground reach this far past the 1280 x 720 arena, so the follow camera never shows
+		# the grey beyond them (half a viewport plus a margin for screen shake).
+		"backdrop_margin": Vector2(700, 400),
+		"controls": "{move} — Move | {jump} — Jump | {sprint} — Dash | {attack} — Attack | {defend} — Parry",
+	},
+}
+## The time the player's death animation runs before the retry (game time).
+const STORY_RETRY_DELAY: float = 1.0
+## How long a replaced enemy lives on (disabled, hidden) so no timer of its own
+## resumes on a freed instance; EnemyBase.die() frees itself after 0.6 s the same way.
+const STORY_OLD_ENEMY_LIFETIME: float = 0.6
+
+## Retries the player has needed in this fight (read by tests and the playthrough bot).
+var story_fight_retries: int = 0
+var _story_id: String = ""
+var _story_cfg: Dictionary = {}
+var _story_return_scene: String = ""
+var _story_resolved: bool = false
+var _story_enemy: EnemyBase = null
+
 
 # ═════════════════════════════════════════════════════════════════════════
 # LIFECYCLE
@@ -132,11 +184,15 @@ func _ready() -> void:
 	var legacy_hud = get_node_or_null("UI/CombatHUD")
 	if legacy_hud:
 		legacy_hud.visible = false
-	_build_phase10mm_arena_polish()
+	# The story-fight metas are read and removed first, whichever mode runs.
+	_story_id = _consume_story_fight_metas()
+	if _story_id.is_empty():
+		_build_phase10mm_arena_polish()
 	_add_arena_bounds()
 
 	# Check for random encounter mode
 	if _has_gm() and GameManager.has_meta("pending_encounter"):
+		_story_id = ""
 		_start_random_encounter()
 		return
 
@@ -144,8 +200,14 @@ func _ready() -> void:
 	if _has_gm() and GameManager.has_meta("boss_fight_id"):
 		var boss_id: String = GameManager.get_meta("boss_fight_id")
 		if boss_id in BOSS_SCRIPTS:
+			_story_id = ""
 			_start_boss_fight(boss_id)
 			return
+
+	# Story fight mode (Y1-P0-T13): checked after the encounter and boss modes
+	if not _story_id.is_empty():
+		_start_story_fight(_story_id)
+		return
 
 	# ── Tutorial Mode (original flow) ──
 	_setup_sprites()
@@ -599,6 +661,243 @@ func _award_boss_drop(boss_id: String) -> void:
 
 
 # ═════════════════════════════════════════════════════════════════════════
+# STORY FIGHT MODE (Y1-P0-T13)
+# ═════════════════════════════════════════════════════════════════════════
+
+## Reads and removes the story-fight metas; returns the fight id, or "" for none or an unknown id.
+func _consume_story_fight_metas() -> String:
+	if not _has_gm():
+		return ""
+	var id: String = str(GameManager.get_meta("story_fight_id", ""))
+	_story_return_scene = str(GameManager.get_meta("story_fight_return_scene", ""))
+	for key in ["story_fight_id", "story_fight_return_scene"]:
+		if GameManager.has_meta(key):
+			GameManager.remove_meta(key)
+	if not id.is_empty() and not STORY_FIGHTS.has(id):
+		push_warning("[STORY FIGHT] Unknown story fight id '%s'; running the default mode" % id)
+		return ""
+	return id
+
+
+func _start_story_fight(id: String) -> void:
+	_story_cfg = STORY_FIGHTS[id]
+	# The scene's own TutorialSlime has no place in a story fight.
+	if slime:
+		slime.queue_free()
+		slime = null
+	_apply_story_backdrop()
+	_setup_sprites()
+	_update_ui()
+	player.position = _story_cfg["player_spawn"]
+	# The player's death is a tutorial retry, not the normal death path (PlayerCombat.die()
+	# stops after its animation when this is set; the arena restores the player below).
+	player.set_meta("local_boss_retry_enabled", true)
+	player.died.connect(_on_story_player_died)
+	_spawn_story_enemy()
+	_build_story_controls_label()
+
+
+## A procedural forest in the Elara meeting's colours (no art import).
+func _apply_story_backdrop() -> void:
+	var margin: Vector2 = _story_cfg["backdrop_margin"]
+	var background := get_node_or_null("Background") as ColorRect
+	if background:
+		background.color = _story_cfg["sky"]
+		background.position = -margin
+		background.size = Vector2(ARENA_WIDTH, 720.0) + margin * 2.0
+	var ground_sprite := get_node_or_null("Ground/GroundSprite") as ColorRect
+	if ground_sprite:
+		ground_sprite.color = _story_cfg["ground"]
+		ground_sprite.position = Vector2(-margin.x, 0.0)
+		ground_sprite.size = Vector2(ARENA_WIDTH + margin.x * 2.0, 120.0 + margin.y)
+	var backdrop := Node2D.new()
+	backdrop.name = "StoryFightBackdrop"
+	var tree_color: Color = _story_cfg["tree"]
+	var trees: Array = [[-420.0, 38.0, 230.0], [-180.0, 34.0, 215.0], [50.0, 40.0, 240.0], [180.0, 35.0, 220.0],
+		[350.0, 30.0, 210.0], [800.0, 38.0, 230.0], [950.0, 42.0, 225.0], [1100.0, 36.0, 235.0], [1200.0, 32.0, 220.0],
+		[1420.0, 36.0, 225.0], [1660.0, 40.0, 235.0]]
+	for t in trees:
+		var trunk := ColorRect.new()
+		trunk.name = "StoryFightTrunk"
+		trunk.color = tree_color
+		trunk.size = Vector2(t[1], t[2])
+		trunk.position = Vector2(t[0], 600.0 - t[2])
+		trunk.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		backdrop.add_child(trunk)
+		var canopy := ColorRect.new()
+		canopy.name = "StoryFightCanopy"
+		canopy.color = Color(tree_color.r + 0.02, tree_color.g + 0.03, tree_color.b + 0.01, 0.9)
+		canopy.size = Vector2(t[1] * 3.0, t[1] * 2.5)
+		canopy.position = Vector2(t[0] - t[1], 600.0 - t[2] - t[1] * 1.5)
+		canopy.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		backdrop.add_child(canopy)
+	add_child(backdrop)
+	# Behind the ground and everything else, in front of the sky.
+	var ground := get_node_or_null("Ground")
+	move_child(backdrop, ground.get_index() if ground else 1)
+	if ground:
+		# The path lies on the ground, so it is the ground's last child: drawn after the ground's rect.
+		var path := ColorRect.new()
+		path.name = "StoryFightPath"
+		path.color = _story_cfg["path"]
+		path.position = Vector2(-margin.x, 0.0)
+		path.size = Vector2(ARENA_WIDTH + margin.x * 2.0, 22)
+		path.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ground.add_child(path)
+
+
+## One non-blocking controls line (not a DialogueManager line); InputService re-renders it
+## whenever the input device or the bindings change, so pad glyphs show after pad input.
+func _build_story_controls_label() -> void:
+	var ui := get_node_or_null("UI")
+	if ui == null:
+		return
+	var label := Label.new()
+	label.name = "StoryFightControls"
+	label.position = Vector2(0, 612)   # above the HUD's action buttons (y 650-708)
+	label.size = Vector2(ARENA_WIDTH, 28)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.add_theme_color_override("font_color", Color(0.92, 0.92, 0.85))
+	label.add_theme_color_override("font_outline_color", Color(0, 0, 0))
+	label.add_theme_constant_override("outline_size", 4)
+	ui.add_child(label)
+	InputService.bind_text(label, _story_cfg["controls"])
+
+
+## Builds the fight's enemy (a fresh instance each time: the slime has no reset, and a pounce
+## already in flight cannot be cancelled from outside) and wires its death.
+func _spawn_story_enemy() -> void:
+	var enemy_script = load(_story_cfg["enemy_script"])
+	var enemies_node: Node2D = get_node_or_null("Enemies")
+	if enemies_node == null:
+		enemies_node = Node2D.new()
+		enemies_node.name = "Enemies"
+		add_child(enemies_node)
+	var enemy_type: String = _story_cfg["enemy_type"]
+	var size: Vector2 = ENEMY_SIZES.get(enemy_type, Vector2(48, 48))
+	var enemy := CharacterBody2D.new()
+	enemy.name = _story_cfg["enemy_name"]
+	var sprite_rect := ColorRect.new()
+	sprite_rect.name = "Sprite"
+	sprite_rect.size = size
+	sprite_rect.position = Vector2(-size.x / 2.0, -size.y)
+	sprite_rect.color = ENEMY_COLORS.get(enemy_type, Color(0.5, 0.5, 0.5))
+	sprite_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	enemy.add_child(sprite_rect)
+	var col_shape := CollisionShape2D.new()
+	var rect_shape := RectangleShape2D.new()
+	rect_shape.size = size
+	col_shape.shape = rect_shape
+	col_shape.position = Vector2(0, -size.y / 2.0)
+	enemy.add_child(col_shape)
+	enemy.collision_layer = 4
+	enemy.collision_mask = 1
+	enemy.position = _story_cfg["enemy_spawn"]
+	enemy.set_script(enemy_script)
+	enemies_node.add_child(enemy)
+	_configure_scripted_reward_enemy(enemy)
+	# No item drops either: EnemyBase._ready regenerates a default loot table when it is
+	# null, so the table is cleared after add_child (a story fight gives flags only).
+	enemy.set("loot_table", null)
+	enemy.died.connect(_on_story_enemy_died)
+	_story_enemy = enemy
+
+
+func _on_story_enemy_died() -> void:
+	if _story_resolved:
+		return
+	# The player died first (a hit already in flight, the kill zone): the retry wins, so 0 HP
+	# never leaves the arena. The slime frees itself; the retry spawns a fresh one.
+	if is_instance_valid(player) and player.is_dead:
+		return
+	_story_resolved = true
+	if is_instance_valid(player):
+		player.invulnerable = true
+		player.invuln_timer = 1.0e9
+	var origin := Vector2(900, 400)
+	if is_instance_valid(_story_enemy):
+		origin = _story_enemy.global_position
+	_spawn_story_shards(origin)
+	if _has_gm():
+		for flag in _story_cfg["flags"]:
+			GameManager.set_story_flag(flag, true)
+	# Pause-aware (process_always false) but in real time, like the shards' tween.
+	await get_tree().create_timer(float(_story_cfg["shard_fade"]), false, false, true).timeout
+	if not is_inside_tree():
+		return
+	story_fight_resolved.emit("win")
+	_leave_story_fight()
+
+
+## The polygon beat: the slime breaks into shards, not blood (the staged beat's colour and count).
+func _spawn_story_shards(origin: Vector2) -> void:
+	var fade: float = _story_cfg["shard_fade"]
+	var side: float = _story_cfg["shard_size"]
+	for i in int(_story_cfg["shard_count"]):
+		var shard := ColorRect.new()
+		shard.name = "StoryFightShard%d" % i   # unique: Godot renames duplicate sibling names
+		shard.color = _story_cfg["shard_color"]
+		shard.size = Vector2(side, side)
+		shard.rotation = randf() * TAU
+		shard.position = origin + Vector2(-side * 0.5, -22)
+		shard.z_index = int(_story_cfg["shard_z"])
+		shard.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(shard)
+		var t := create_tween().set_parallel(true).set_ignore_time_scale(true)
+		t.tween_property(shard, "position", shard.position + Vector2(randf_range(-60, 60), randf_range(-50, 10)), fade)
+		t.tween_property(shard, "modulate:a", 0.0, fade)
+		t.chain().tween_callback(shard.queue_free)
+
+
+func _leave_story_fight() -> void:
+	var scene: String = _story_return_scene
+	if scene.is_empty():
+		scene = _story_cfg["default_return_scene"]
+	# The kill and the death slow-mo leave time-scale requests behind; the next scene starts clean.
+	ContextStack.clear_time_scale()
+	if has_node("/root/SceneTransitions"):
+		SceneTransitions.change_scene(scene, SceneTransitions.TransitionStyle.COMBAT_EXIT)
+	else:
+		get_tree().change_scene_to_file(scene)
+
+
+func _on_story_player_died() -> void:
+	# create_timer(..., false) is pause-aware: nothing here advances while the game is paused.
+	await get_tree().create_timer(STORY_RETRY_DELAY, false).timeout
+	if not is_inside_tree() or _story_resolved:
+		return
+	_story_retry()
+
+
+## Tutorial retry: the old enemy is disabled and hidden at once (state DEAD, so any timer of its
+## own returns on its next resume) and freed later; a fresh enemy is spawned; the player is
+## restored at the spawn with full HP. No corruption, no player_died flag, no game over.
+func _story_retry() -> void:
+	story_fight_retries += 1
+	var old: EnemyBase = _story_enemy
+	if is_instance_valid(old):
+		if old.died.is_connected(_on_story_enemy_died):
+			old.died.disconnect(_on_story_enemy_died)
+		old.current_state = EnemyBase.State.DEAD
+		old.set_physics_process(false)
+		old.set_process(false)
+		old.collision_layer = 0
+		old.collision_mask = 0
+		old.visible = false
+		old.remove_from_group("enemies")
+		old.name = "%s_old" % old.name
+		var free_old := get_tree().create_timer(STORY_OLD_ENEMY_LIFETIME, false)
+		free_old.timeout.connect(func():
+			if is_instance_valid(old):
+				old.queue_free()
+		)
+	_spawn_story_enemy()
+	player.force_restore_after_death_retry(_story_cfg["player_spawn"])
+	_update_ui()
+
+
+# ═════════════════════════════════════════════════════════════════════════
 # SCENE VALIDATION
 # ═════════════════════════════════════════════════════════════════════════
 
@@ -664,6 +963,11 @@ func _show_combat_tutorial() -> void:
 # ═════════════════════════════════════════════════════════════════════════
 
 func _input(event: InputEvent) -> void:
+	# A story fight refuses Root Access and Perfect Delete (the story unlocks Root Access later).
+	if not _story_id.is_empty():
+		if event.is_action_pressed("root_access") or event.is_action_pressed("perfect_delete"):
+			get_viewport().set_input_as_handled()
+		return
 	if event.is_action_pressed("root_access") and not root_access_active:
 		_open_root_access()
 		get_viewport().set_input_as_handled()
@@ -677,6 +981,8 @@ func _input(event: InputEvent) -> void:
 # ═════════════════════════════════════════════════════════════════════════
 
 func _open_root_access() -> void:
+	if not _story_id.is_empty():
+		return
 	# Select target based on mode
 	var target_enemy: EnemyBase = null
 	if _is_boss_fight:
@@ -774,7 +1080,7 @@ func _close_root_access() -> void:
 # ═════════════════════════════════════════════════════════════════════════
 
 func _use_perfect_delete() -> void:
-	if not _has_gm():
+	if not _has_gm() or not _story_id.is_empty():
 		return
 
 	# A second press during the 0.6 s dissolve spent another charge on the same

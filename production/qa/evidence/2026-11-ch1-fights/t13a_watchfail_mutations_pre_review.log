@@ -1,0 +1,214 @@
+t13a_watchfail_mutations.log - Y1-P0-T13a AC-9 mutation watch-fail
+Scratch worktree at HEAD (a682b18) + every uncommitted T13a file under AethelgardPrototype/ and .github/;
+a control (story_fight_test, 3 runs in a row), then one mutation per run, reverted after.
+GODOT unset; each suite through tests/run_phase0_tests.ps1.
+
+== control (no mutation), story_fight_test, 3 runs
+   run 1: exit 0; STORY FIGHT RESULT: 54 passed, 0 failed; 38 s -> GREEN
+   run 2: exit 0; STORY FIGHT RESULT: 54 passed, 0 failed; 35 s -> GREEN
+   run 3: exit 0; STORY FIGHT RESULT: 54 passed, 0 failed; 35 s -> GREEN
+
+== (a) the arena ignores the story metas (reads and removes them, but the tutorial mode runs)
+   suite res://tests/integration/combat/story_fight_test.gd
+   exit 1; STORY FIGHT RESULT: 4 passed, 3 failed; 5 s
+   expected a failure containing 'AC-2 exactly one enemy' -> FAILED as expected
+   diff applied:
+     --- a/scripts/combat/combat_arena.gd
+     +++ b/scripts/combat/combat_arena.gd
+     @@ -188 +188 @@
+     -	_story_id = _consume_story_fight_metas()
+     +	_consume_story_fight_metas()
+   FAIL: AC-2 exactly one enemy, StoryFightSlime, running slime.gd (found 1)
+   FAIL: AC-2 the scene's TutorialSlime is gone
+   FAIL: SCRIPT ERROR: Invalid access to property or key 'position' on a base object of type 'null instance'.
+   FAIL: AC-2 Perfect Delete is refused: charges unchanged (3) and the slime still stands
+   FAIL: SCRIPT ERROR: Invalid access to property or key 'global_position' on a base object of type 'null instance'.
+   FAIL: SCRIPT ERROR: Invalid access to property or key 'max_health' on a base object of type 'null instance'.
+   FAIL: SCRIPT ERROR: Attempt to call function 'get_instance_id' in base 'null instance' on a null instance.
+   FAIL: SCRIPT ERROR: Attempt to call function '_perform_pounce' in base 'null instance' on a null instance.
+   FAIL: RUNNER FAIL res://tests/integration/combat/story_fight_test.gd: 9 script error line(s)
+   FAIL: RUNNER FAIL res://tests/integration/combat/story_fight_test.gd: 7 check(s) ran, expected at least 54
+
+== (b) the retry meta is not set (the normal death path runs)
+   suite res://tests/integration/combat/story_fight_test.gd
+   exit 1; STORY FIGHT RESULT: 48 passed, 6 failed; 54 s
+   expected a failure containing 'AC-4' -> FAILED as expected
+   diff applied:
+     --- a/scripts/combat/combat_arena.gd
+     +++ b/scripts/combat/combat_arena.gd
+     @@ -694 +693,0 @@
+     -	player.set_meta("local_boss_retry_enabled", true)
+   FAIL: AC-4 the player is restored at the spawn with full HP
+   FAIL: AC-4 no corruption, player_died unset, no game over: still in the arena
+   FAIL: AC-4 retry 1 of 3: time scale 1.0, no ContextStack entry or time-scale request
+   FAIL: AC-4 retry 2 of 3: time scale 1.0, no ContextStack entry or time-scale request
+   FAIL: AC-4 retry 3 of 3: time scale 1.0, no ContextStack entry or time-scale request
+   FAIL: D5 the retry runs and the player's HP is full before anything leaves the arena
+
+== (c) base rewards not suppressed (_configure_scripted_reward_enemy not called)
+   suite res://tests/integration/combat/story_fight_test.gd
+   exit 1; STORY FIGHT RESULT: 52 passed, 2 failed; 35 s
+   expected a failure containing 'XP, gold and the inventory are unchanged' -> FAILED as expected
+   diff applied:
+     --- a/scripts/combat/combat_arena.gd
+     +++ b/scripts/combat/combat_arena.gd
+     @@ -797 +796,0 @@
+     -	_configure_scripted_reward_enemy(enemy)
+   FAIL: AC-2 the slime's XP and gold are suppressed and its loot table is cleared (no item drops)
+   FAIL: AC-3 XP, gold and the inventory are unchanged
+
+== (d) the meeting's resume check removed (the fight replays)
+   suite res://tests/integration/story/chapter1_route_test.gd
+   exit 124; no result line; 1624 s
+   expected a failure containing 'T13a the meeting resumed at after_slime' -> FAILED as expected
+   diff applied:
+     --- a/scripts/chapter1/ch1_elara_meeting.gd
+     +++ b/scripts/chapter1/ch1_elara_meeting.gd
+     @@ -194 +194 @@
+     -	if GameManager.has_flag("ch1_slime_fought") and not GameManager.has_flag("ch1_elara_glitch_witch_met"):
+     +	if false and GameManager.has_flag("ch1_slime_fought") and not GameManager.has_flag("ch1_elara_glitch_witch_met"):
+   FAIL: Elara meeting → Broken Mile
+   FAIL: Elara meeting plays elara_meeting.dlg; 'trust' keeps the legacy flag
+   FAIL: T13a the meeting resumed at after_slime: start played once (27), after_slime once (0), the flags as before
+   FAIL: Broken Mile → Oakhaven
+   FAIL: Data Vision and Root Access unlock; the target-filter edit counts as the first Root edit
+   FAIL: Broken Mile plays broken_mile.dlg (filter branch)
+   FAIL: Oakhaven → the region (stopped at res://scenes/chapter1/elara_meeting.tscn)
+   FAIL: gate and road ledger played (Northfall entry seen)
+   FAIL: stew topics played (in Elara's house, through her door and back: house seen false)
+   FAIL: north field: helped, sluice edited, boar fought ["ch1_north_field_helped=false", "ch1_sluice_edited=false", "ch1_boar_fought=false", "ch1_corrupted_boar_defeated=false"]
+   ... 8 more
+
+== (e) Perfect Delete not refused (the input gate and the function guard)
+   suite res://tests/integration/combat/story_fight_test.gd
+   exit 1; STORY FIGHT RESULT: 53 passed, 1 failed; 35 s
+   expected a failure containing 'Perfect Delete is refused' -> FAILED as expected
+   diff applied:
+     --- a/scripts/combat/combat_arena.gd
+     +++ b/scripts/combat/combat_arena.gd
+     @@ -965,2 +965,2 @@
+     -	if not _story_id.is_empty():
+     -		if event.is_action_pressed("root_access") or event.is_action_pressed("perfect_delete"):
+     +	if not _story_id.is_empty() and not event.is_action_pressed("perfect_delete"):
+     +		if event.is_action_pressed("root_access"):
+     @@ -1081 +1081 @@
+     -	if not _has_gm() or not _story_id.is_empty():
+     +	if not _has_gm():
+   FAIL: AC-2 Perfect Delete is refused: charges unchanged (2) and the slime still stands
+
+== (f) Root Access not refused (the input gate and the function guard)
+   suite res://tests/integration/combat/story_fight_test.gd
+   exit 1; STORY FIGHT RESULT: 53 passed, 1 failed; 35 s
+   expected a failure containing 'Root Access is refused' -> FAILED as expected
+   diff applied:
+     --- a/scripts/combat/combat_arena.gd
+     +++ b/scripts/combat/combat_arena.gd
+     @@ -965,2 +965,2 @@
+     -	if not _story_id.is_empty():
+     -		if event.is_action_pressed("root_access") or event.is_action_pressed("perfect_delete"):
+     +	if not _story_id.is_empty() and not event.is_action_pressed("root_access"):
+     +		if event.is_action_pressed("perfect_delete"):
+     @@ -982,2 +981,0 @@
+     -	if not _story_id.is_empty():
+     -		return
+   FAIL: AC-2 Root Access is refused from the keyboard, the pad and a direct call (no panel, no ContextStack entry)
+
+== (g) the _resolved guard removed from the retry wait
+   suite res://tests/integration/combat/story_fight_test.gd
+   exit 1; STORY FIGHT RESULT: 53 passed, 1 failed; 35 s
+   expected a failure containing 'player.die() after the win' -> FAILED as expected
+   diff applied:
+     --- a/scripts/combat/combat_arena.gd
+     +++ b/scripts/combat/combat_arena.gd
+     @@ -866 +866 @@
+     -	if not is_inside_tree() or _story_resolved:
+     +	if not is_inside_tree():
+   FAIL: AC-3 player.die() after the win: no retry, no new slime, no second scene change (retries 1)
+
+== (h) the metas are not removed on read
+   suite res://tests/integration/combat/story_fight_test.gd
+   exit 1; STORY FIGHT RESULT: 52 passed, 2 failed; 35 s
+   expected a failure containing 'both story metas are removed' -> FAILED as expected
+   diff applied:
+     --- a/scripts/combat/combat_arena.gd
+     +++ b/scripts/combat/combat_arena.gd
+     @@ -675 +675 @@
+     -			GameManager.remove_meta(key)
+     +			pass
+   FAIL: AC-2 both story metas are removed when the arena reads them
+   FAIL: the encounter mode still starts first, ignores the story fight and still consumes its metas
+
+== (i) ch1_slime_fought not set
+   suite res://tests/integration/combat/story_fight_test.gd
+   exit 1; STORY FIGHT RESULT: 51 passed, 1 failed; 35 s
+   expected a failure containing 'ch1_slime_fought are set' -> FAILED as expected
+   diff applied:
+     --- a/scripts/combat/combat_arena.gd
+     +++ b/scripts/combat/combat_arena.gd
+     @@ -111 +111 @@
+     -		"flags": ["first_slime_defeated", "ch1_slime_fought"],
+     +		"flags": ["first_slime_defeated"],
+   FAIL: AC-3 first_slime_defeated and ch1_slime_fought are set
+   FAIL: SCRIPT ERROR: Invalid access to property or key 'global_position' on a base object of type 'previously freed'.
+   FAIL: RUNNER FAIL res://tests/integration/combat/story_fight_test.gd: 1 script error line(s)
+   FAIL: RUNNER FAIL res://tests/integration/combat/story_fight_test.gd: 52 check(s) ran, expected at least 54
+
+== (j) the retry resets the old slime in place instead of respawning it
+   suite res://tests/integration/combat/story_fight_test.gd
+   exit 1; STORY FIGHT RESULT: 51 passed, 3 failed; 35 s
+   expected a failure containing 'a new instance' -> FAILED as expected
+   diff applied:
+     --- a/scripts/combat/combat_arena.gd
+     +++ b/scripts/combat/combat_arena.gd
+     @@ -877 +877 @@
+     -	if is_instance_valid(old):
+     +	if false:
+     @@ -893 +893,5 @@
+     -	_spawn_story_enemy()
+     +	if is_instance_valid(old):
+     +		old.current_health = old.max_health
+     +		old.position = _story_cfg["enemy_spawn"]
+     +	else:
+     +		_spawn_story_enemy()
+   FAIL: AC-4 a fresh StoryFightSlime at full HP (a new instance), not the old one reset
+   FAIL: AC-4 the old slime is disabled, hidden and renamed at once
+   FAIL: AC-4 the old slime is freed about 0.6 s later
+
+== (k) the arena does not spawn the shards
+   suite res://tests/integration/combat/story_fight_test.gd
+   exit 1; STORY FIGHT RESULT: 51 passed, 3 failed; 35 s
+   expected a failure containing 'polygon shards' -> FAILED as expected
+   diff applied:
+     --- a/scripts/combat/combat_arena.gd
+     +++ b/scripts/combat/combat_arena.gd
+     @@ -819 +818,0 @@
+     -	_spawn_story_shards(origin)
+   FAIL: AC-3 the slime breaks into 7 polygon shards of the staged colour at its position (0)
+   FAIL: AC-3 under 0.1x time scale the shards spread in real time (mean 0.0 px from the slime after 0.4 s)
+   FAIL: AC-3 the shards are drawn above the slime's death flash and are 12 px
+
+== (l) the retry wait uses a timer that runs during pause
+   suite res://tests/integration/combat/story_fight_test.gd
+   exit 1; STORY FIGHT RESULT: 53 passed, 1 failed; 34 s
+   expected a failure containing 'paused for 2.5 s' -> FAILED as expected
+   diff applied:
+     --- a/scripts/combat/combat_arena.gd
+     +++ b/scripts/combat/combat_arena.gd
+     @@ -865 +865 @@
+     -	await get_tree().create_timer(STORY_RETRY_DELAY, false).timeout
+     +	await get_tree().create_timer(STORY_RETRY_DELAY).timeout
+   FAIL: AC-6 paused for 2.5 s: no retry, the player still dead at HP 0, the same slime in the same place
+
+== (m) item drops not suppressed (the loot table is not cleared)
+   suite res://tests/integration/combat/story_fight_test.gd
+   exit 1; STORY FIGHT RESULT: 52 passed, 2 failed; 35 s
+   expected a failure containing 'no item or gold pickup' -> FAILED as expected
+   diff applied:
+     --- a/scripts/combat/combat_arena.gd
+     +++ b/scripts/combat/combat_arena.gd
+     @@ -800 +799,0 @@
+     -	enemy.set("loot_table", null)
+   FAIL: AC-2 the slime's XP and gold are suppressed and its loot table is cleared (no item drops)
+   FAIL: AC-3 no item or gold pickup in the arena and the loot table stays cleared
+
+ALL MUTATIONS CAUGHT: yes

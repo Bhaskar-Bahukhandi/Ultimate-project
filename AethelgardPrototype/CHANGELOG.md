@@ -3,6 +3,20 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-10-29 — The opening slime is a real fight (Y1-P0-T13a)
+
+- **feat(ch1):** the slime that interrupts Kaelen's first meeting with Elara is now a real side-scroll fight. It used
+  to be a scripted moment. When the slime slides in, the game moves to the combat arena, which is dressed as the same
+  forest. A line at the bottom shows the controls for the keyboard or the pad, and switches when the player switches
+  device. Root Access and Perfect Delete are not available yet. The slime gives no XP, gold or items.
+- **feat(ch1):** beating the slime breaks it into polygon shards, then the meeting carries on where it left off, with
+  Kaelen standing where the fight ended. A save made after the fight resumes there and does not replay the fight.
+- **feat(ch1):** dying to the slime is a tutorial retry, not a game over. A fresh slime appears and Kaelen is back at
+  full health. Quitting to the main menu mid-fight does not count as a win: the fight plays again when the meeting
+  is reached again.
+- **test:** a new suite, `tests/integration/combat/story_fight_test.gd` (25 suites now). The Chapter 1 route test and the
+  Phase 0 bot play the fight. Evidence: `production/qa/evidence/2026-11-ch1-fights/`.
+
 ## 2026-10-26 — The Windows export check reports the game's real exit code (TD-022)
 
 - **fix(tools):** under Windows PowerShell 5.1 (`powershell -File tools/export_windows.ps1`, the documented command) the

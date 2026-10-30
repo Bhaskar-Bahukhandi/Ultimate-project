@@ -1,0 +1,261 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+[AC-2 the story-fight mode]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [AssetManager] Production art slot missing for Slime enemy sheet at res://assets/production_art/characters/enemies/fracture_slime_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/enemies/fracture_slime_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_enemy (res://scripts/asset_manager.gd:1043)
+       [4] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [5] _ready (res://scripts/combat/enemy_base.gd:221)
+       [6] _ready (res://scripts/combat/enemies/slime.gd:36)
+       [7] _start_arena (res://tests/integration/combat/story_fight_test.gd:113)
+       [8] _test_mode_setup (res://tests/integration/combat/story_fight_test.gd:181)
+       [9] _run (res://tests/integration/combat/story_fight_test.gd:44)
+WARNING: [AssetManager] Enemy sheet failed to load for Slime; using existing enemy fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_enemy (res://scripts/asset_manager.gd:1051)
+       [2] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [3] _ready (res://scripts/combat/enemy_base.gd:221)
+       [4] _ready (res://scripts/combat/enemies/slime.gd:36)
+       [5] _start_arena (res://tests/integration/combat/story_fight_test.gd:113)
+       [6] _test_mode_setup (res://tests/integration/combat/story_fight_test.gd:181)
+       [7] _run (res://tests/integration/combat/story_fight_test.gd:44)
+WARNING: [AssetManager] Production art slot missing for Kaelen combat sheet at res://assets/production_art/characters/player/kaelen_combat_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:985)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _setup_sprites (res://scripts/combat/combat_arena.gd:924)
+       [6] _start_story_fight (res://scripts/combat/combat_arena.gd:689)
+       [7] _ready (res://scripts/combat/combat_arena.gd:209)
+       [8] _start_arena (res://tests/integration/combat/story_fight_test.gd:113)
+       [9] _test_mode_setup (res://tests/integration/combat/story_fight_test.gd:181)
+       [10] _run (res://tests/integration/combat/story_fight_test.gd:44)
+WARNING: [AssetManager] V2 combat player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:994)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _setup_sprites (res://scripts/combat/combat_arena.gd:924)
+       [4] _start_story_fight (res://scripts/combat/combat_arena.gd:689)
+       [5] _ready (res://scripts/combat/combat_arena.gd:209)
+       [6] _start_arena (res://tests/integration/combat/story_fight_test.gd:113)
+       [7] _test_mode_setup (res://tests/integration/combat/story_fight_test.gd:181)
+       [8] _run (res://tests/integration/combat/story_fight_test.gd:44)
+  PASS: AC-2 both story metas are removed when the arena reads them
+  PASS: AC-2 exactly one enemy, StoryFightSlime, running slime.gd (found 1)
+  PASS: AC-2 the scene's TutorialSlime is gone
+  PASS: AC-2 the player is at the left, the slime at the right
+  PASS: AC-2 GameState is COMBAT (no random encounter can start)
+  PASS: AC-2 no CutsceneManager, so no hold-to-skip
+  PASS: AC-2 the backdrop uses the Elara meeting's sky, ground and path colours
+  PASS: AC-2 the arena's cathedral decals are not drawn in the forest
+  PASS: AC-2 the camera's view at the spawn and at both walls stays inside the forest backdrop (sky [P: (-700.0, -400.0), S: (2680.0, 1520.0)])
+  PASS: AC-2 the slime starts inside the first frame (player x 200, slime x 760)
+  PASS: AC-2 one controls line names move, jump, dash, attack and parry (WASD — Move | Space — Jump | Shift — Dash | J — Attack | K — Parry)
+  PASS: AC-2 the controls line is a label, not a DialogueManager line
+  PASS: AC-2 the controls line sits above the HUD's action buttons (bottom 640)
+  PASS: AC-2 the slime's XP and gold are suppressed and its loot table is cleared (no item drops)
+  PASS: AC-7 after pad input the controls line shows pad glyphs (Left Stick — Move | A — Jump | RT — Dash | X — Attack | RB — Parry)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [AssetManager] Production art slot missing for environment decal atlas at res://assets/production_art/backgrounds/environment_decal_atlas.png; using generated fallback res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1497)
+       [4] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [5] _build_phase10mm_arena_polish (res://scripts/combat/combat_arena.gd:263)
+       [6] _ready (res://scripts/combat/combat_arena.gd:190)
+       [7] _start_arena (res://tests/integration/combat/story_fight_test.gd:113)
+       [8] _test_mode_setup (res://tests/integration/combat/story_fight_test.gd:230)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1498)
+       [3] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [4] _build_phase10mm_arena_polish (res://scripts/combat/combat_arena.gd:263)
+       [5] _ready (res://scripts/combat/combat_arena.gd:190)
+       [6] _start_arena (res://tests/integration/combat/story_fight_test.gd:113)
+       [7] _test_mode_setup (res://tests/integration/combat/story_fight_test.gd:230)
+WARNING: [AssetManager] Production art slot missing for environment prop atlas at res://assets/production_art/props/environment_prop_atlas.png; using generated fallback res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1486)
+       [4] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [5] _build_phase10mm_arena_polish (res://scripts/combat/combat_arena.gd:265)
+       [6] _ready (res://scripts/combat/combat_arena.gd:190)
+       [7] _start_arena (res://tests/integration/combat/story_fight_test.gd:113)
+       [8] _test_mode_setup (res://tests/integration/combat/story_fight_test.gd:230)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1487)
+       [3] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [4] _build_phase10mm_arena_polish (res://scripts/combat/combat_arena.gd:265)
+       [5] _ready (res://scripts/combat/combat_arena.gd:190)
+       [6] _start_arena (res://tests/integration/combat/story_fight_test.gd:113)
+       [7] _test_mode_setup (res://tests/integration/combat/story_fight_test.gd:230)
+  PASS: AC-2 a second load without story metas runs the default (tutorial) mode
+[AC-2 Root Access and Perfect Delete are refused]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: AC-2 Root Access is refused from the keyboard, the pad and a direct call (no panel, no ContextStack entry)
+  PASS: AC-2 Perfect Delete is refused: charges unchanged (3) and the slime still stands
+[the encounter and boss modes win over the story mode]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: the encounter mode still starts first, ignores the story fight and still consumes its metas
+  PASS: the boss mode still starts, ignoring the story fight
+[AC-3 winning]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] _test_win (res://tests/integration/combat/story_fight_test.gd:325)
+       [4] _start_arena (res://tests/integration/combat/story_fight_test.gd:119)
+DDA: 53.0 (mult=1.00) K:1 D:0.0
+  PASS: AC-3 the slime breaks into 7 polygon shards of the staged colour at its position (7)
+  PASS: AC-3 first_slime_defeated and ch1_slime_fought are set
+  PASS: AC-3 the guard is set and the player is invulnerable
+  PASS: AC-3 XP, gold and the inventory are unchanged
+  PASS: AC-3 no item or gold pickup in the arena and the loot table stays cleared
+  PASS: AC-3 story_fight_resolved emitted once, outcome 'win' (["win"])
+[ACHIEVEMENT] Unlocked: First Blood — Defeat your first enemy.
+  PASS: AC-3 the game changed once to the return scene (transitions 1)
+  PASS: AC-3 the player's HP is kept (100) and no retry ran
+  PASS: AC-3 no ContextStack entry or time-scale request is left
+[AC-3 the guard: after the win the player cannot die and no retry runs]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] _test_win_guard (res://tests/integration/combat/story_fight_test.gd:353)
+       [4] _start_arena (res://tests/integration/combat/story_fight_test.gd:119)
+DDA: 53.0 (mult=1.00) K:1 D:0.0
+  PASS: AC-3 player damage after the slime's death changes nothing (HP 100, is_dead false)
+  PASS: AC-3 player.die() after the win: no retry, no new slime, no second scene change (retries 0)
+[AC-3 the shard beat runs in real time, above the slime]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] _test_shards_readable (res://tests/integration/combat/story_fight_test.gd:382)
+       [4] _start_arena (res://tests/integration/combat/story_fight_test.gd:119)
+DDA: 53.0 (mult=1.00) K:1 D:0.0
+  FAIL: AC-3 under 0.1x time scale the shards spread in real time (mean 6.0 px from the slime after 0.4 s)
+  FAIL: AC-3 the shards are drawn above the slime's death flash and are 12 px
+[AC-4 dying is a tutorial retry with a fresh slime]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+DDA: 20.0 (mult=0.75) K:0 D:0.3
+  PASS: AC-4 the player dies
+  PASS: AC-4 the retry runs after the death animation
+  PASS: AC-4 a fresh StoryFightSlime at full HP (a new instance), not the old one reset
+  PASS: AC-4 the old slime is disabled, hidden and renamed at once
+  PASS: AC-4 the player is restored at the spawn with full HP
+  FAIL: AC-4 no corruption, player_died unset, no game over: still in the arena
+  PASS: AC-4 time scale 1.0 and no ContextStack entry after the retry
+  PASS: AC-4 the old slime is freed about 0.6 s later
+[AC-4 a death during the pounce windup, and three retries in a row]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+DDA: 20.0 (mult=0.75) K:0 D:0.3
+  PASS: AC-4 after a death during the windup the player is still at full HP 1.3 s after the restore
+DDA: 20.0 (mult=0.75) K:0 D:0.6
+  PASS: AC-4 retry 1 of 3: time scale 1.0, no ContextStack entry or time-scale request
+DDA: 20.0 (mult=0.75) K:0 D:0.9
+  PASS: AC-4 retry 2 of 3: time scale 1.0, no ContextStack entry or time-scale request
+DDA: 20.0 (mult=0.75) K:0 D:1.2
+  PASS: AC-4 retry 3 of 3: time scale 1.0, no ContextStack entry or time-scale request
+[AC-4 D5: the player dies first, the slime inside the death window]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+DDA: 20.0 (mult=0.75) K:0 D:0.3
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] _test_player_died_first (res://tests/integration/combat/story_fight_test.gd:465)
+       [4] _wait (res://tests/integration/combat/story_fight_test.gd:84)
+DDA: 60.0 (mult=1.06) K:1 D:0.3
+  PASS: D5 the slime's death is ignored: no shards, no flags, no outcome, no guard
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+  PASS: D5 the retry runs and the player's HP is full before anything leaves the arena
+  PASS: D5 a fresh slime, no scene change, time scale clean
+[AC-6 pause stops the retry]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+DDA: 20.0 (mult=0.75) K:0 D:0.3
+  PASS: AC-6 the pause context opens
+  PASS: AC-6 paused for 2.5 s: no retry, the player still dead at HP 0, the same slime in the same place
+  PASS: AC-6 Root Access is refused while paused
+  PASS: AC-6 resuming continues the retry
+[AC-7 the fight is won with joypad events only]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] _perform_combo_attack (res://scripts/combat/player_combat.gd:988)
+DDA: 53.0 (mult=1.00) K:1 D:0.0
+  PASS: AC-7 the slime is beaten with pad attack and move events only
+  PASS: AC-7 the win outcome is emitted
+
+STORY FIGHT RESULT: 51 passed, 3 failed
+  FAIL: AC-3 under 0.1x time scale the shards spread in real time (mean 6.0 px from the slime after 0.4 s)
+  FAIL: AC-3 the shards are drawn above the slime's death flash and are 12 px
+  FAIL: AC-4 no corruption, player_died unset, no game over: still in the arena
+ERROR: 1 RID allocations of type 'P12GodotShape2D' were leaked at exit.
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)
+ERROR: 2 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:810)

@@ -181,6 +181,7 @@ silently erases the main plot. Every deadline is signposted.
 | `ch1_data_vision_unlocked`, `root_access_unlocked` | Broken Mile | Abilities, tests |
 | `ch1_broken_mile_entered` | Broken Mile, when the walk starts (first node, `tree_flicker`, `set` line) | Progression breadcrumb (steps 2 and 3) |
 | `ch1_stew_done` | The stew scene (`elara_house` `start`) has finished, set by `ch1_elara_house.gd` | Progression breadcrumb (steps 5 and 6) |
+| `ch1_slime_fought` | The opening slime fight in the combat arena is won (set by the arena's story-fight table with `first_slime_defeated`) | Elara meeting: resumes at `after_slime` instead of replaying the fight |
 | `ch1_root_first_edit` / `ch1_root_discovered_unused` | First Root edit, or refusing it | Elara, corruption lines |
 | `ch1_northfall_registry_seen` | Bran's ledger (Seraphina's old entry) | Ch2 recognition scene |
 | `ch1_north_field_helped` / `_refused` | The alarm | Village reactions |

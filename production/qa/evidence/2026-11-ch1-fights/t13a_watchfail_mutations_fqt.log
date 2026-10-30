@@ -1,0 +1,54 @@
+t13a_watchfail_mutations.log - Y1-P0-T13a AC-9 mutation watch-fail
+Scratch worktree at HEAD (a682b18) + every uncommitted T13a file under AethelgardPrototype/ and .github/;
+a control (story_fight_test, 3 runs in a row), then one mutation per run, reverted after.
+GODOT unset; each suite through tests/run_phase0_tests.ps1.
+
+== (f) Root Access not refused (the input gate and the function guard)
+   suite res://tests/integration/combat/story_fight_test.gd
+   exit 1; STORY FIGHT RESULT: 61 passed, 1 failed; 45 s
+   expected failures containing 'Root Access is refused from' ->FAILED as expected
+   diff applied:
+     --- a/scripts/combat/combat_arena.gd
+     +++ b/scripts/combat/combat_arena.gd
+     @@ -967,2 +967,2 @@
+     -	if not _story_id.is_empty():
+     -		if event.is_action_pressed("root_access") or event.is_action_pressed("perfect_delete"):
+     +	if not _story_id.is_empty() and not event.is_action_pressed("root_access"):
+     +		if event.is_action_pressed("perfect_delete"):
+     @@ -984,2 +983,0 @@
+     -	if not _story_id.is_empty():
+     -		return
+   FAIL: AC-2 Root Access is refused from the keyboard, the pad and a direct call (no panel, no ContextStack entry)
+
+== (q) Root Access not refused on a direct call (the input gate kept)
+   suite res://tests/integration/combat/story_fight_test.gd
+   exit 1; STORY FIGHT RESULT: 61 passed, 1 failed; 47 s
+   expected failures containing 'Root Access is refused from' ->FAILED as expected
+   diff applied:
+     --- a/scripts/combat/combat_arena.gd
+     +++ b/scripts/combat/combat_arena.gd
+     @@ -984,2 +983,0 @@
+     -	if not _story_id.is_empty():
+     -		return
+   FAIL: AC-2 Root Access is refused from the keyboard, the pad and a direct call (no panel, no ContextStack entry)
+
+== (t) Root Access over the pause: the story guard removed and ContextStack not exclusive
+   suite res://tests/integration/combat/story_fight_test.gd
+   exit 1; STORY FIGHT RESULT: 59 passed, 3 failed; 54 s
+   expected failures containing 'Root Access is refused while paused' ->FAILED as expected
+   diff applied:
+     --- a/scripts/combat/combat_arena.gd
+     +++ b/scripts/combat/combat_arena.gd
+     @@ -984,2 +983,0 @@
+     -	if not _story_id.is_empty():
+     -		return
+     --- a/scripts/core/context_stack.gd
+     +++ b/scripts/core/context_stack.gd
+     @@ -48 +48 @@
+     -	if exclusive and not _stack.is_empty():
+     +	if false and exclusive and not _stack.is_empty():
+   FAIL: AC-2 Root Access is refused from the keyboard, the pad and a direct call (no panel, no ContextStack entry)
+   FAIL: AC-6 Root Access is refused while paused (the story guard and ContextStack's pause both refuse it)
+   FAIL: AC-6 resuming continues the retry
+
+ALL MUTATIONS CAUGHT: yes
