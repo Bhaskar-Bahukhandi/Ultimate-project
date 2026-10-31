@@ -236,6 +236,32 @@ is not covered; a pause-refusal check in tutorial mode would cover ContextStack'
 The full suite was not re-run after round 2: round 2 changed only `story_fight_test.gd`, `chapter1_route_test.gd` and
 `suite_limits.txt`, and both suites were run on their own (Runs table).
 
+## CI run #45 (2026-10-31): Linux crash in the test → fixed
+
+CI run #45 on `f715414` (run 41147782038) failed at the Story fight step. Godot exited with code 134 (abort) and
+printed no result line. The steps after it did not run.
+
+**Reproduced** under WSL Ubuntu with the official Godot 4.6.3 Linux build, the same file CI downloads (SHA-512 checked
+against the release's `SHA512-SUMS.txt`). The project was a `git archive` of `f715414`, run through
+`tests/run_tests.sh` as CI runs it.
+- It crashed on every run, with signal 11 after about 6 s: `story_fight_test_linux_crash_f715414.log`.
+- The GDScript backtrace points to `_test_win_guard`, `story_fight_test.gd:387`.
+
+**Cause (in the test, not the game):** `var slime_id := slime.get_instance_id()` ran after the slime had freed itself.
+`EnemyBase.die()` frees the enemy 0.6 s after it dies, and the test had already waited for the win and the scene to
+settle. Calling a method through an untyped variable that holds a freed object crashed natively on Linux. On Windows it
+passed every time but once: the one unexplained 0xC0000005 in about 70 Windows runs (TD-035) is probably the same bug.
+That is not proven, because that run's backtrace was not kept.
+
+**Fix:** the id is read before the kill. The check compares the same slime's id, so what it tests is unchanged.
+
+| Run | Result | Log |
+|---|---|---|
+| Linux, test from `f715414` | exit 134, signal 11 at `:387`, no result line | `story_fight_test_linux_crash_f715414.log` |
+| Linux, fixed test, 3 in a row | 63/0 each, 39–42 s | `story_fight_test_linux_fixed_1-3.log` |
+| Windows, fixed test, 3 in a row | 63/0 each, 44–47 s (while the Linux runs below were going) | `story_fight_test_windows_fixed_1-3.log` |
+| Linux, the CI steps #45 skipped | reachability 25/0, ch1_rooms 445/0, act1_quests 114/0, phase0 82/0, playthrough 172/0 | `linux_ci_steps_after_story_fight.txt` |
+
 ## Changes outside the story's declared files
 
 - `tests/integration/playthrough/phase0_blockers_test.gd`:
@@ -272,7 +298,7 @@ The full suite was not re-run after round 2: round 2 changed only `story_fight_t
 - **Grey void in the other arena modes.**
   - The grey void beside the arena is fixed only in story-fight mode. The tutorial, encounter and boss modes still show it when the camera reaches a wall.
   - This predates the story, which did not change those modes.
-- **Story-fight timeout.** The `story_fight_test` timeout is 240 s, against 42–47 s locally. It will be set to 3× the slower of the local and CI
-  times (at least 120 s) once CI has run it.
+- **Story-fight timeout.** The `story_fight_test` timeout is 240 s, against 42–47 s on Windows and 39–42 s on Linux
+  (WSL). It will be set to 3× the slower of the local and CI times (at least 120 s) once CI has run it to the end.
 - **Not judged here:** the pacing and feel of the fight (slime difficulty, the retry delay). They are for `/team-qa` and
   T14b's playtest.

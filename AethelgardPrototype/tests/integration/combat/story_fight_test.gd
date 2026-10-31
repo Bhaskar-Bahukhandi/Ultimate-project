@@ -374,6 +374,7 @@ func _test_win_guard() -> void:
 	var gm := _gm()
 	var arena := await _start_arena()
 	var slime = _slime(arena)
+	var slime_id := slime.get_instance_id()   # read before the kill: the slime frees itself 0.6 s after dying
 	_freeze(slime)
 	slime.take_damage(slime.max_health)
 	await _wait_until(func(): return _outcomes.size() > 0, 3.0)
@@ -384,7 +385,6 @@ func _test_win_guard() -> void:
 	await process_frame
 	_check(arena.player.current_health == hp and not arena.player.is_dead,
 		"AC-3 player damage after the slime's death changes nothing (HP %d, is_dead %s)" % [arena.player.current_health, str(arena.player.is_dead)])
-	var slime_id := slime.get_instance_id()
 	arena.player.die()   # bypasses the invulnerability: only the guard can stop the retry
 	await _wait(3.5)     # the arena is kept alive well past the retry's wait (1.0 s of game time)
 	# the slime frees itself 0.6 s after dying, so "no retry" is: no new enemy instance appeared
