@@ -298,7 +298,8 @@ That is not proven, because that run's backtrace was not kept.
 - **Grey void in the other arena modes.**
   - The grey void beside the arena is fixed only in story-fight mode. The tutorial, encounter and boss modes still show it when the camera reaches a wall.
   - This predates the story, which did not change those modes.
-- **Story-fight timeout.** The `story_fight_test` timeout is 240 s, against 42–47 s on Windows and 39–42 s on Linux
-  (WSL). It will be set to 3× the slower of the local and CI times (at least 120 s) once CI has run it to the end.
+- **Story-fight timeout.** Set to 180 s on 2026-11-01 (was 240 s). The suite takes 42–47 s on Windows, 39–42 s on
+  Linux (WSL) and 40 s on CI (run #47, 005ac99, the first CI run to finish it). 3× the slowest, 47 s, is 141 s, rounded
+  up to a whole minute, per `suite_limits.txt`'s rule; well under the step's 10-minute `timeout-minutes`.
 - **Not judged here:** the pacing and feel of the fight (slime difficulty, the retry delay). They are for `/team-qa` and
   T14b's playtest.

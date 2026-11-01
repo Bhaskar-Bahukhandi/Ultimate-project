@@ -331,5 +331,6 @@ only, and the two suites it touched were re-run green. Mutations (a)–(v) were 
 - TD-033: tests and the arena reaching into private state.
 - TD-034: the slime's colour continuity and the grey void.
 - TD-035: one unexplained native crash.
-**Known after close**: CI has not run this changeset. Once it has, set `story_fight_test`'s timeout (240 s now) to
-3× the slower of the local and CI times, at least 120 s.
+**Known after close**: CI run #45 crashed on Linux in `story_fight_test` (the test read the slime's id after the
+slime freed itself), fixed in fe6449d; CI run #47 (005ac99, 2026-11-01) is green, Story fight step 40 s.
+`story_fight_test`'s timeout is set to 180 s (was 240 s): 3× the slowest time, Windows 47 s, rounded up to a minute.

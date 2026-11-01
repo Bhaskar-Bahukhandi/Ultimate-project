@@ -53,4 +53,4 @@ res://tests/integration/level/ch1_rooms_test.gd           445   600
 res://tests/integration/quests/act1_quests_completable_test.gd 114 180
 res://tests/integration/playthrough/phase0_blockers_test.gd 82  960
 res://tests/integration/playthrough/full_playthrough_test.gd 172 240
-res://tests/integration/combat/story_fight_test.gd       63   240
+res://tests/integration/combat/story_fight_test.gd       63   180
