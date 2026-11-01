@@ -227,7 +227,7 @@ change, mutations a-j, after ×3), the regression suite logs, the full local run
 ## Completion Notes
 **Completed**: 2026-11-01
 **Verdict**: COMPLETE WITH NOTES
-**Criteria**: 8/8 passing; AC-8's CI is DEFERRED (the changeset has not been pushed; local full run 26/26 on Godot 4.6.3, `run_all_final.log`).
+**Criteria**: 8/8 passing; AC-8's CI was DEFERRED at close (local full run 26/26 on Godot 4.6.3, `run_all_final.log`) and is now met (CI #49, below).
 **Deviations** (advisory, user-accepted):
 - AC-1: `_start_random_encounter` (105 lines) and `_start_boss_fight` (92) stay over 40 lines; splitting them would restructure the encounter and boss flow (out of scope). TD-037.
 - AC-1: the source-text check (the old literal is absent) passes trivially, since the trees sit in the same file as ints; QA 5 and mutation (c) are the evidence.
@@ -238,4 +238,4 @@ change, mutations a-j, after ×3), the regression suite logs, the full local run
 **Code Review**: Complete — `/code-review` round 1 CHANGES REQUIRED (fixed), round 2 APPROVED WITH SUGGESTIONS; QL-TEST-COVERAGE GAPS (advisory; two closed with mutations l and h2, CI deferred); LP-CODE-REVIEW CONCERNS (fixed by the row keys).
 **Found on the way**: TD-036 — the Windows runner picks the highest Godot in `C:\Godot` (4.7.2 since 2026-10-30); every TD-031 run set `GODOT` to 4.6.3.
 **Tech debt logged**: TD-037 (long spawners), TD-038 (EnemyBase check, before T13b), TD-039 (unchecked `default_return_scene` / `enemy_name`, untested non-Dictionary row), TD-040 (`_validate_story_backdrop` complexity 9; move the schema and validator to their own file if row keys grow).
-**Known after close**: push and confirm CI is green on this changeset (AC-8).
+**Known after close**: CI run #49 on `973cb7d` (2026-11-01, run 41309580612) is green, 24m54s; the new "Story fight table" step took 8 s, "Story fight" 40 s. AC-8's deferred CI check is met.

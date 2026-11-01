@@ -143,3 +143,9 @@ golden cases pass untouched. `_spawn_story_shards`' doc comment now describes th
 | (m) the story enemy ignores the row's `enemy_size` | 273/4: QA 6b (sprite and shape size and offsets 48×48, not 70×50) | `mutation_m.log` |
 | Full local run, final, 26 suites | all passed on 4.6.3 (table 277/0, story_fight 63/0), 1536 s | `run_all_final.log` |
 | (e), (f) re-run on this code (their target code changed) | (e) 273/4: QA 2, QA 3; (f) 276/1: QA 6 | `mutation_e.log`, `mutation_f.log` |
+
+## CI (AC-8)
+
+CI run #49 on `973cb7d` (2026-11-01, https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/41309580612):
+success in 24m54s on Godot 4.6.3 (Linux). Every step passed, including the whitespace and commit-message checks, "Story
+fight" (40 s) and the new "Story fight table (TD-031 …)" step (8 s, limit 120 s).
