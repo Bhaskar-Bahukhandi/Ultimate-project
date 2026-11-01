@@ -259,8 +259,13 @@ That is not proven, because that run's backtrace was not kept.
 |---|---|---|
 | Linux, test from `f715414` | exit 134, signal 11 at `:387`, no result line | `story_fight_test_linux_crash_f715414.log` |
 | Linux, fixed test, 3 in a row | 63/0 each, 39–42 s | `story_fight_test_linux_fixed_1-3.log` |
-| Windows, fixed test, 3 in a row | 63/0 each, 44–47 s (while the Linux runs below were going) | `story_fight_test_windows_fixed_1-3.log` |
+| Windows, fixed test, 3 in a row | 63/0 each, 44–47 s (while the Linux runs below were going), **on Godot 4.7.2**, not the pinned 4.6.3 (see the note below) | `story_fight_test_windows_fixed_1-3.log` |
 | Linux, the CI steps #45 skipped | reachability 25/0, ch1_rooms 445/0, act1_quests 114/0, phase0 82/0, playthrough 172/0 | `linux_ci_steps_after_story_fight.txt` |
+
+**Correction (2026-11-01, TD-036).** The three Windows logs above ran on Godot 4.7.2, as their first line says. 4.7.2
+was installed in `C:\Godot` beside 4.6.3 on 2026-10-30, and `run_phase0_tests.ps1` picks the highest version by name.
+The Linux runs and CI use 4.6.3. CI #47 and #48 then ran the fixed test green on 4.6.3, so the fix itself is confirmed
+on the pinned version.
 
 ## Changes outside the story's declared files
 
@@ -298,7 +303,7 @@ That is not proven, because that run's backtrace was not kept.
 - **Grey void in the other arena modes.**
   - The grey void beside the arena is fixed only in story-fight mode. The tutorial, encounter and boss modes still show it when the camera reaches a wall.
   - This predates the story, which did not change those modes.
-- **Story-fight timeout.** Set to 180 s on 2026-11-01 (was 240 s). The suite takes 42–47 s on Windows, 39–42 s on
+- **Story-fight timeout.** Set to 180 s on 2026-11-01 (was 240 s). The suite takes 42–47 s on Windows (4.7.2, TD-036), 39–42 s on
   Linux (WSL) and 40 s on CI (run #47, 005ac99, the first CI run to finish it). 3× the slowest, 47 s, is 141 s, rounded
   up to a whole minute, per `suite_limits.txt`'s rule; well under the step's 10-minute `timeout-minutes`.
 - **Not judged here:** the pacing and feel of the fight (slime difficulty, the retry delay). They are for `/team-qa` and

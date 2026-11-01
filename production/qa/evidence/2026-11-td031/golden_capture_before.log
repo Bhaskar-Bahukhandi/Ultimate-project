@@ -1,0 +1,309 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+[QA 8 the ch1_slime fight: backdrop rects and the story enemy body]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [AssetManager] Production art slot missing for Slime enemy sheet at res://assets/production_art/characters/enemies/fracture_slime_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/enemies/fracture_slime_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_enemy (res://scripts/asset_manager.gd:1043)
+       [4] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [5] _ready (res://scripts/combat/enemy_base.gd:221)
+       [6] _ready (res://scripts/combat/enemies/slime.gd:36)
+       [7] _begin_case (res://tests/integration/combat/story_fight_table_test.gd:157)
+       [8] _test_slime_backdrop_and_body_match_golden (res://tests/integration/combat/story_fight_table_test.gd:292)
+       [9] _run (res://tests/integration/combat/story_fight_table_test.gd:57)
+WARNING: [AssetManager] Enemy sheet failed to load for Slime; using existing enemy fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_enemy (res://scripts/asset_manager.gd:1051)
+       [2] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [3] _ready (res://scripts/combat/enemy_base.gd:221)
+       [4] _ready (res://scripts/combat/enemies/slime.gd:36)
+       [5] _begin_case (res://tests/integration/combat/story_fight_table_test.gd:157)
+       [6] _test_slime_backdrop_and_body_match_golden (res://tests/integration/combat/story_fight_table_test.gd:292)
+       [7] _run (res://tests/integration/combat/story_fight_table_test.gd:57)
+WARNING: [AssetManager] Production art slot missing for Kaelen combat sheet at res://assets/production_art/characters/player/kaelen_combat_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:985)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _setup_sprites (res://scripts/combat/combat_arena.gd:926)
+       [6] _start_story_fight (res://scripts/combat/combat_arena.gd:689)
+       [7] _ready (res://scripts/combat/combat_arena.gd:209)
+       [8] _begin_case (res://tests/integration/combat/story_fight_table_test.gd:157)
+       [9] _test_slime_backdrop_and_body_match_golden (res://tests/integration/combat/story_fight_table_test.gd:292)
+       [10] _run (res://tests/integration/combat/story_fight_table_test.gd:57)
+WARNING: [AssetManager] V2 combat player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:994)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _setup_sprites (res://scripts/combat/combat_arena.gd:926)
+       [4] _start_story_fight (res://scripts/combat/combat_arena.gd:689)
+       [5] _ready (res://scripts/combat/combat_arena.gd:209)
+       [6] _begin_case (res://tests/integration/combat/story_fight_table_test.gd:157)
+       [7] _test_slime_backdrop_and_body_match_golden (res://tests/integration/combat/story_fight_table_test.gd:292)
+       [8] _run (res://tests/integration/combat/story_fight_table_test.gd:57)
+  PASS: QA 8 the slime fight built 11 trunks, 11 canopies, the path and the slime (11 trunks)
+GOLDEN-CAPTURE slime.first_trunk_name = "StoryFightTrunk"
+GOLDEN-CAPTURE slime.first_canopy_name = "StoryFightCanopy"
+GOLDEN-CAPTURE slime.trunk_count = 11
+GOLDEN-CAPTURE slime.canopy_count = 11
+GOLDEN-CAPTURE slime.trunk[0].present = true
+GOLDEN-CAPTURE slime.trunk[0].position = "-420.000,370.000"
+GOLDEN-CAPTURE slime.trunk[0].size = "38.000,230.000"
+GOLDEN-CAPTURE slime.trunk[0].color = "0f240aff"
+GOLDEN-CAPTURE slime.trunk[1].present = true
+GOLDEN-CAPTURE slime.trunk[1].position = "-180.000,385.000"
+GOLDEN-CAPTURE slime.trunk[1].size = "34.000,215.000"
+GOLDEN-CAPTURE slime.trunk[1].color = "0f240aff"
+GOLDEN-CAPTURE slime.trunk[2].present = true
+GOLDEN-CAPTURE slime.trunk[2].position = "50.000,360.000"
+GOLDEN-CAPTURE slime.trunk[2].size = "40.000,240.000"
+GOLDEN-CAPTURE slime.trunk[2].color = "0f240aff"
+GOLDEN-CAPTURE slime.trunk[3].present = true
+GOLDEN-CAPTURE slime.trunk[3].position = "180.000,380.000"
+GOLDEN-CAPTURE slime.trunk[3].size = "35.000,220.000"
+GOLDEN-CAPTURE slime.trunk[3].color = "0f240aff"
+GOLDEN-CAPTURE slime.trunk[4].present = true
+GOLDEN-CAPTURE slime.trunk[4].position = "350.000,390.000"
+GOLDEN-CAPTURE slime.trunk[4].size = "30.000,210.000"
+GOLDEN-CAPTURE slime.trunk[4].color = "0f240aff"
+GOLDEN-CAPTURE slime.trunk[5].present = true
+GOLDEN-CAPTURE slime.trunk[5].position = "800.000,370.000"
+GOLDEN-CAPTURE slime.trunk[5].size = "38.000,230.000"
+GOLDEN-CAPTURE slime.trunk[5].color = "0f240aff"
+GOLDEN-CAPTURE slime.trunk[6].present = true
+GOLDEN-CAPTURE slime.trunk[6].position = "950.000,375.000"
+GOLDEN-CAPTURE slime.trunk[6].size = "42.000,225.000"
+GOLDEN-CAPTURE slime.trunk[6].color = "0f240aff"
+GOLDEN-CAPTURE slime.trunk[7].present = true
+GOLDEN-CAPTURE slime.trunk[7].position = "1100.000,365.000"
+GOLDEN-CAPTURE slime.trunk[7].size = "36.000,235.000"
+GOLDEN-CAPTURE slime.trunk[7].color = "0f240aff"
+GOLDEN-CAPTURE slime.trunk[8].present = true
+GOLDEN-CAPTURE slime.trunk[8].position = "1200.000,380.000"
+GOLDEN-CAPTURE slime.trunk[8].size = "32.000,220.000"
+GOLDEN-CAPTURE slime.trunk[8].color = "0f240aff"
+GOLDEN-CAPTURE slime.trunk[9].present = true
+GOLDEN-CAPTURE slime.trunk[9].position = "1420.000,375.000"
+GOLDEN-CAPTURE slime.trunk[9].size = "36.000,225.000"
+GOLDEN-CAPTURE slime.trunk[9].color = "0f240aff"
+GOLDEN-CAPTURE slime.trunk[10].present = true
+GOLDEN-CAPTURE slime.trunk[10].position = "1660.000,365.000"
+GOLDEN-CAPTURE slime.trunk[10].size = "40.000,235.000"
+GOLDEN-CAPTURE slime.trunk[10].color = "0f240aff"
+GOLDEN-CAPTURE slime.canopy[0].present = true
+GOLDEN-CAPTURE slime.canopy[0].position = "-458.000,313.000"
+GOLDEN-CAPTURE slime.canopy[0].size = "114.000,95.000"
+GOLDEN-CAPTURE slime.canopy[0].color = "142b0de6"
+GOLDEN-CAPTURE slime.canopy[1].present = true
+GOLDEN-CAPTURE slime.canopy[1].position = "-214.000,334.000"
+GOLDEN-CAPTURE slime.canopy[1].size = "102.000,85.000"
+GOLDEN-CAPTURE slime.canopy[1].color = "142b0de6"
+GOLDEN-CAPTURE slime.canopy[2].present = true
+GOLDEN-CAPTURE slime.canopy[2].position = "10.000,300.000"
+GOLDEN-CAPTURE slime.canopy[2].size = "120.000,100.000"
+GOLDEN-CAPTURE slime.canopy[2].color = "142b0de6"
+GOLDEN-CAPTURE slime.canopy[3].present = true
+GOLDEN-CAPTURE slime.canopy[3].position = "145.000,327.500"
+GOLDEN-CAPTURE slime.canopy[3].size = "105.000,87.500"
+GOLDEN-CAPTURE slime.canopy[3].color = "142b0de6"
+GOLDEN-CAPTURE slime.canopy[4].present = true
+GOLDEN-CAPTURE slime.canopy[4].position = "320.000,345.000"
+GOLDEN-CAPTURE slime.canopy[4].size = "90.000,75.000"
+GOLDEN-CAPTURE slime.canopy[4].color = "142b0de6"
+GOLDEN-CAPTURE slime.canopy[5].present = true
+GOLDEN-CAPTURE slime.canopy[5].position = "762.000,313.000"
+GOLDEN-CAPTURE slime.canopy[5].size = "114.000,95.000"
+GOLDEN-CAPTURE slime.canopy[5].color = "142b0de6"
+GOLDEN-CAPTURE slime.canopy[6].present = true
+GOLDEN-CAPTURE slime.canopy[6].position = "908.000,312.000"
+GOLDEN-CAPTURE slime.canopy[6].size = "126.000,105.000"
+GOLDEN-CAPTURE slime.canopy[6].color = "142b0de6"
+GOLDEN-CAPTURE slime.canopy[7].present = true
+GOLDEN-CAPTURE slime.canopy[7].position = "1064.000,311.000"
+GOLDEN-CAPTURE slime.canopy[7].size = "108.000,90.000"
+GOLDEN-CAPTURE slime.canopy[7].color = "142b0de6"
+GOLDEN-CAPTURE slime.canopy[8].present = true
+GOLDEN-CAPTURE slime.canopy[8].position = "1168.000,332.000"
+GOLDEN-CAPTURE slime.canopy[8].size = "96.000,80.000"
+GOLDEN-CAPTURE slime.canopy[8].color = "142b0de6"
+GOLDEN-CAPTURE slime.canopy[9].present = true
+GOLDEN-CAPTURE slime.canopy[9].position = "1384.000,321.000"
+GOLDEN-CAPTURE slime.canopy[9].size = "108.000,90.000"
+GOLDEN-CAPTURE slime.canopy[9].color = "142b0de6"
+GOLDEN-CAPTURE slime.canopy[10].present = true
+GOLDEN-CAPTURE slime.canopy[10].position = "1620.000,305.000"
+GOLDEN-CAPTURE slime.canopy[10].size = "120.000,100.000"
+GOLDEN-CAPTURE slime.canopy[10].color = "142b0de6"
+GOLDEN-CAPTURE slime.background.present = true
+GOLDEN-CAPTURE slime.background.position = "-700.000,-400.000"
+GOLDEN-CAPTURE slime.background.size = "2680.000,1520.000"
+GOLDEN-CAPTURE slime.background.color = "291a47ff"
+GOLDEN-CAPTURE slime.ground_sprite.present = true
+GOLDEN-CAPTURE slime.ground_sprite.position = "-700.000,0.000"
+GOLDEN-CAPTURE slime.ground_sprite.size = "2680.000,520.000"
+GOLDEN-CAPTURE slime.ground_sprite.color = "14290fff"
+GOLDEN-CAPTURE slime.path.present = true
+GOLDEN-CAPTURE slime.path.position = "-700.000,0.000"
+GOLDEN-CAPTURE slime.path.size = "2680.000,22.000"
+GOLDEN-CAPTURE slime.path.color = "382914ff"
+GOLDEN-CAPTURE slime.slime.present = true
+GOLDEN-CAPTURE slime.slime.name = "StoryFightSlime"
+GOLDEN-CAPTURE slime.slime.position = "760.000,400.000"
+GOLDEN-CAPTURE slime.slime.collision_layer = 4
+GOLDEN-CAPTURE slime.slime.collision_mask = 1
+GOLDEN-CAPTURE slime.slime.script = "res://scripts/combat/enemies/slime.gd"
+GOLDEN-CAPTURE slime.slime.sprite.present = true
+GOLDEN-CAPTURE slime.slime.sprite.size = "48.000,36.000"
+GOLDEN-CAPTURE slime.slime.sprite.position = "-24.000,-36.000"
+GOLDEN-CAPTURE slime.slime.sprite.color = "33cc33ff"
+GOLDEN-CAPTURE slime.slime.sprite.mouse_filter = 2
+GOLDEN-CAPTURE slime.slime.shape.present = true
+GOLDEN-CAPTURE slime.slime.shape.position = "0.000,-18.000"
+GOLDEN-CAPTURE slime.slime.shape.size = "48.000,36.000"
+[QA 10 an encounter: two bodies of different types, one at level 3]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [AssetManager] Production art slot missing for environment decal atlas at res://assets/production_art/backgrounds/environment_decal_atlas.png; using generated fallback res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1497)
+       [4] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [5] _build_phase10mm_arena_polish (res://scripts/combat/combat_arena.gd:263)
+       [6] _ready (res://scripts/combat/combat_arena.gd:190)
+       [7] _begin_case (res://tests/integration/combat/story_fight_table_test.gd:157)
+       [8] _test_encounter_bodies_match_golden (res://tests/integration/combat/story_fight_table_test.gd:304)
+       [9] _run (res://tests/integration/combat/story_fight_table_test.gd:59)
+       [10] _test_slime_backdrop_and_body_match_golden (res://tests/integration/combat/story_fight_table_test.gd:297)
+       [11] _end_case (res://tests/integration/combat/story_fight_table_test.gd:169)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1498)
+       [3] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [4] _build_phase10mm_arena_polish (res://scripts/combat/combat_arena.gd:263)
+       [5] _ready (res://scripts/combat/combat_arena.gd:190)
+       [6] _begin_case (res://tests/integration/combat/story_fight_table_test.gd:157)
+       [7] _test_encounter_bodies_match_golden (res://tests/integration/combat/story_fight_table_test.gd:304)
+       [8] _run (res://tests/integration/combat/story_fight_table_test.gd:59)
+       [9] _test_slime_backdrop_and_body_match_golden (res://tests/integration/combat/story_fight_table_test.gd:297)
+       [10] _end_case (res://tests/integration/combat/story_fight_table_test.gd:169)
+WARNING: [AssetManager] Production art slot missing for environment prop atlas at res://assets/production_art/props/environment_prop_atlas.png; using generated fallback res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1486)
+       [4] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [5] _build_phase10mm_arena_polish (res://scripts/combat/combat_arena.gd:265)
+       [6] _ready (res://scripts/combat/combat_arena.gd:190)
+       [7] _begin_case (res://tests/integration/combat/story_fight_table_test.gd:157)
+       [8] _test_encounter_bodies_match_golden (res://tests/integration/combat/story_fight_table_test.gd:304)
+       [9] _run (res://tests/integration/combat/story_fight_table_test.gd:59)
+       [10] _test_slime_backdrop_and_body_match_golden (res://tests/integration/combat/story_fight_table_test.gd:297)
+       [11] _end_case (res://tests/integration/combat/story_fight_table_test.gd:169)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1487)
+       [3] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [4] _build_phase10mm_arena_polish (res://scripts/combat/combat_arena.gd:265)
+       [5] _ready (res://scripts/combat/combat_arena.gd:190)
+       [6] _begin_case (res://tests/integration/combat/story_fight_table_test.gd:157)
+       [7] _test_encounter_bodies_match_golden (res://tests/integration/combat/story_fight_table_test.gd:304)
+       [8] _run (res://tests/integration/combat/story_fight_table_test.gd:59)
+       [9] _test_slime_backdrop_and_body_match_golden (res://tests/integration/combat/story_fight_table_test.gd:297)
+       [10] _end_case (res://tests/integration/combat/story_fight_table_test.gd:169)
+  PASS: QA 10 the encounter built 2 bodies and consumed pending_encounter (2 bodies)
+  PASS: QA 10 the two bodies differ in max_health and the second has zone_level 3
+GOLDEN-CAPTURE encounter.body_count = 2
+GOLDEN-CAPTURE encounter.enemy[0].present = true
+GOLDEN-CAPTURE encounter.enemy[0].name = "Slime_0"
+GOLDEN-CAPTURE encounter.enemy[0].position = "500.000,400.000"
+GOLDEN-CAPTURE encounter.enemy[0].collision_layer = 4
+GOLDEN-CAPTURE encounter.enemy[0].collision_mask = 1
+GOLDEN-CAPTURE encounter.enemy[0].script = "res://scripts/combat/enemies/slime.gd"
+GOLDEN-CAPTURE encounter.enemy[0].sprite.present = true
+GOLDEN-CAPTURE encounter.enemy[0].sprite.size = "48.000,36.000"
+GOLDEN-CAPTURE encounter.enemy[0].sprite.position = "-24.000,-36.000"
+GOLDEN-CAPTURE encounter.enemy[0].sprite.color = "33cc33ff"
+GOLDEN-CAPTURE encounter.enemy[0].sprite.mouse_filter = 2
+GOLDEN-CAPTURE encounter.enemy[0].shape.present = true
+GOLDEN-CAPTURE encounter.enemy[0].shape.position = "0.000,-18.000"
+GOLDEN-CAPTURE encounter.enemy[0].shape.size = "48.000,36.000"
+GOLDEN-CAPTURE encounter.enemy[0].zone_level = 1
+GOLDEN-CAPTURE encounter.enemy[0].max_health = "29.423"
+GOLDEN-CAPTURE encounter.enemy[0].has_pending_zone_level = true
+GOLDEN-CAPTURE encounter.enemy[0].pending_zone_level = 1
+GOLDEN-CAPTURE encounter.enemy[1].present = true
+GOLDEN-CAPTURE encounter.enemy[1].name = "CorruptedRat_1"
+GOLDEN-CAPTURE encounter.enemy[1].position = "800.000,400.000"
+GOLDEN-CAPTURE encounter.enemy[1].collision_layer = 4
+GOLDEN-CAPTURE encounter.enemy[1].collision_mask = 1
+GOLDEN-CAPTURE encounter.enemy[1].script = "res://scripts/combat/enemies/corrupted_rat.gd"
+GOLDEN-CAPTURE encounter.enemy[1].sprite.present = true
+GOLDEN-CAPTURE encounter.enemy[1].sprite.size = "40.000,28.000"
+GOLDEN-CAPTURE encounter.enemy[1].sprite.position = "-20.000,-28.000"
+GOLDEN-CAPTURE encounter.enemy[1].sprite.color = "8c5933ff"
+GOLDEN-CAPTURE encounter.enemy[1].sprite.mouse_filter = 2
+GOLDEN-CAPTURE encounter.enemy[1].shape.present = true
+GOLDEN-CAPTURE encounter.enemy[1].shape.position = "0.000,-14.000"
+GOLDEN-CAPTURE encounter.enemy[1].shape.size = "40.000,28.000"
+GOLDEN-CAPTURE encounter.enemy[1].zone_level = 3
+GOLDEN-CAPTURE encounter.enemy[1].max_health = "30.404"
+GOLDEN-CAPTURE encounter.enemy[1].has_pending_zone_level = true
+GOLDEN-CAPTURE encounter.enemy[1].pending_zone_level = 3
+[QA 11 a boss fight with a checkpoint that gives 0.8 HP]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: QA 11 the boss fight started and the pinned checkpoint gives retry fraction 0.8 (0.800)
+  PASS: QA 11 current_health is max_health * 0.8 and _boss_initial_hp is max_health
+GOLDEN-CAPTURE boss.boss.present = true
+GOLDEN-CAPTURE boss.boss.name = "Clockwork Automaton"
+GOLDEN-CAPTURE boss.boss.position = "800.000,400.000"
+GOLDEN-CAPTURE boss.boss.collision_layer = 4
+GOLDEN-CAPTURE boss.boss.collision_mask = 1
+GOLDEN-CAPTURE boss.boss.script = "res://scripts/combat/enemies/clockwork_automaton_boss.gd"
+GOLDEN-CAPTURE boss.boss.sprite.present = true
+GOLDEN-CAPTURE boss.boss.sprite.size = "80.000,100.000"
+GOLDEN-CAPTURE boss.boss.sprite.position = "-40.000,-100.000"
+GOLDEN-CAPTURE boss.boss.sprite.color = "99804dff"
+GOLDEN-CAPTURE boss.boss.sprite.mouse_filter = 2
+GOLDEN-CAPTURE boss.boss.shape.present = true
+GOLDEN-CAPTURE boss.boss.shape.position = "0.000,-50.000"
+GOLDEN-CAPTURE boss.boss.shape.size = "80.000,100.000"
+GOLDEN-CAPTURE boss.boss.is_the_spawned_body = true
+GOLDEN-CAPTURE boss.boss.max_health = "2306.769"
+GOLDEN-CAPTURE boss.boss.current_health = "1845.415"
+GOLDEN-CAPTURE boss.boss.expected_current_health = "1845.415"
+GOLDEN-CAPTURE boss.boss.arena_initial_hp = "2306.769"
+GOLDEN-CAPTURE boss.boss.initial_hp_equals_max = true
+GOLDEN-CAPTURE boss.boss.retry_fraction = "0.800"
+  PASS: QA 11 teardown removed the boss_fight_id meta
+
+STORY FIGHT TABLE RESULT: 6 passed, 0 failed

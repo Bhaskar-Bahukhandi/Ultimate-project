@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: TD-031 (`docs/tech-debt-register.md#TD-031`; raised at the T13a close by LP-CODE-REVIEW C1 and C2, target "before T13b")
-> **Status**: Ready
+> **Status**: Complete
 > **Layer**: Core (combat arena)
 > **Type**: Integration
 > **Estimate**: 1.5 days (register effort: M; +0.5 day for the golden encounter, boss and slime checks QL-STORY-READY asked for)
@@ -86,7 +86,7 @@ ending, NG+, world map, region baselines. Production-art fallback: not affected 
 
 ## Acceptance Criteria
 
-- [ ] AC-1 **The backdrop is data.** The `ch1_slime` row's flat keys `sky`, `ground`, `path`, `tree` and
+- [x] AC-1 **The backdrop is data.** The `ch1_slime` row's flat keys `sky`, `ground`, `path`, `tree` and
       `backdrop_margin` move into one `backdrop` dictionary: `sky`, `ground`, `tree` (colours), `margin` (Vector2, was
       `backdrop_margin`), `trees` (array of `[x, width, height]`, the 11 trees from the code) and an optional `path`
       colour. Every value is unchanged. No tree position, width or height literal is left in the arena's code (checked by
@@ -94,12 +94,12 @@ ending, NG+, world map, region baselines. Production-art fallback: not affected 
       `combat_arena.gd`). A row with `backdrop` `{}` leaves `Background` and `Ground/GroundSprite` as the scene has them
       and adds no `StoryFightBackdrop` node; a backdrop without `path` adds no `StoryFightPath`. Every function this story
       adds or changes is at most 40 lines (line counts recorded in the evidence README).
-- [ ] AC-2 **Optional keys have defaults.** A `STORY_FIGHT_DEFAULTS` constant gives every optional key its value:
+- [x] AC-2 **Optional keys have defaults.** A `STORY_FIGHT_DEFAULTS` constant gives every optional key its value:
       `shard_count` 0 (no shard beat), `shard_fade` 0.6, `shard_size` 12.0, `shard_z` 20, `shard_color` `Color(1, 1, 1)`,
       `backdrop` `{}`. The active config is the row merged over the defaults. With `shard_count` 0 the win still waits
       `shard_fade` real seconds: `story_fight_resolved("win")` is not emitted before it and is emitted after, then the
       arena leaves.
-- [ ] AC-3 **A row is checked before the fight starts.** A static `validate_story_fight(row: Dictionary) ->
+- [x] AC-3 **A row is checked before the fight starts.** A static `validate_story_fight(row: Dictionary) ->
       PackedStringArray` returns one message per problem, naming the key:
       - a missing required key (`enemy_script` String, `enemy_type` String, `enemy_name` String, `enemy_spawn` Vector2,
         `player_spawn` Vector2, `default_return_scene` String, `flags` Array, `controls` String);
@@ -113,9 +113,9 @@ ending, NG+, world map, region baselines. Production-art fallback: not affected 
       A row with problems is refused like an unknown id: one `push_warning` per problem, the metas are still removed, and
       the arena runs its default mode. The test checks the returned messages; the warnings are checked by reading the
       suite's log and recorded in the evidence.
-- [ ] AC-4 **No hard-coded fallback.** When the enemy is already freed at the win, the shard origin is the row's
+- [x] AC-4 **No hard-coded fallback.** When the enemy is already freed at the win, the shard origin is the row's
       `enemy_spawn`; `Vector2(900, 400)` is gone.
-- [ ] AC-5 **One enemy-body builder.** `_build_enemy_body(node_name: String, size: Vector2, color: Color, pos: Vector2)
+- [x] AC-5 **One enemy-body builder.** `_build_enemy_body(node_name: String, size: Vector2, color: Color, pos: Vector2)
       -> CharacterBody2D` returns an unscripted body with the `Sprite` `ColorRect` and `CollisionShape2D` exactly as audit
       fact 6, layer 4, mask 1, at `pos`. The encounter, boss and story spawns (the story retry included) all use it.
       `CharacterBody2D.new()` appears once in `combat_arena.gd`, inside `_build_enemy_body`; no spawn function creates a
@@ -124,19 +124,19 @@ ending, NG+, world map, region baselines. Production-art fallback: not affected 
       (QA case 10) and gets `zone_level` after `set_script` and before `add_child` (case 10 through `max_health`, mutation
       g). The meta's place before `set_script` and every caller's `set_script` before `add_child` have no observable
       effect today (audit fact 9) and are checked at code review.
-- [ ] AC-6 **A new fight is a row.** The arena reads its table through a public `story_fight_table: Dictionary`
+- [x] AC-6 **A new fight is a row.** The arena reads its table through a public `story_fight_table: Dictionary`
       (default `STORY_FIGHTS`), which a test assigns before `add_child` (audit fact 11). In the new test, a row defined
       only in the test — required keys only, a different enemy script, no backdrop — runs a whole fight with no arena code
       for it: spawn at its `enemy_spawn`, the player at its `player_spawn`, kill → its flags set,
       `story_fight_resolved("win")` once, the change to its return scene; a death → retry with a fresh enemy.
-- [ ] AC-7 **Nothing else changes.** The kit stays refused in every story fight (D3; the doc comment says so).
+- [x] AC-7 **Nothing else changes.** The kit stays refused in every story fight (D3; the doc comment says so).
       - **The slime fight:** golden values captured from the code before the change (each `StoryFightTrunk` and
         `StoryFightCanopy` rect's position, size and colour; the `Background`, `GroundSprite` and `StoryFightPath`
         rects; the story enemy's body) are equal after it, and `story_fight_test` stays 63/0. A live before/after
         screenshot pair is retained for the user's sign-off.
       - **The encounter and boss bodies:** golden values captured before the change are equal after it (QA cases 10,
         11).
-- [ ] AC-8 **Tests.** `story_fight_table_test.gd` covers AC-1 to AC-7 through QA cases 1-11, including: every row of
+- [x] AC-8 **Tests.** `story_fight_table_test.gd` covers AC-1 to AC-7 through QA cases 1-11, including: every row of
       `STORY_FIGHTS` validates clean; the builder's node shape; a test backdrop of 2 trees makes exactly 2 trunks.
       **Watched failing:** the golden cases (8, 10, 11) are captured on and pass against the code before the change;
       every other case is watched failing against the code before the change. Every case is watched failing against at
@@ -215,7 +215,7 @@ CI; `production/qa/evidence/2026-11-td031/` — `README.md` (AC map, watched-fai
 AC-3 warning lines read from the log), the golden-capture log on the unchanged code, the new test's logs (before the
 change, mutations a-j, after ×3), the regression suite logs, the full local run log, and
 `story-fight-before.png` / `story-fight-after.png` from the live renderer (AC-7), for the user's sign-off.
-**Run result**: not yet run.
+**Run result**: OBSERVED — live renderer (Godot 4.6.3, Vulkan, RTX 2050): `story-fight-before.png` and `story-fight-after.png` in `production/qa/evidence/2026-11-td031/`, byte-identical (0 differing pixels), signed off by the user 2026-11-01.
 
 ## Dependencies
 
@@ -225,5 +225,17 @@ change, mutations a-j, after ×3), the regression suite logs, the full local run
 ---
 
 ## Completion Notes
-
-(empty until /story-done)
+**Completed**: 2026-11-01
+**Verdict**: COMPLETE WITH NOTES
+**Criteria**: 8/8 passing; AC-8's CI is DEFERRED (the changeset has not been pushed; local full run 26/26 on Godot 4.6.3, `run_all_final.log`).
+**Deviations** (advisory, user-accepted):
+- AC-1: `_start_random_encounter` (105 lines) and `_start_boss_fight` (92) stay over 40 lines; splitting them would restructure the encounter and boss flow (out of scope). TD-037.
+- AC-1: the source-text check (the old literal is absent) passes trivially, since the trees sit in the same file as ints; QA 5 and mutation (c) are the evidence.
+- Beyond AC-3's list (code review round 1): the validator also checks each `backdrop.trees` entry (3 numbers), each `flags` entry (non-empty String), that `enemy_script` loads as a Script, and refuses a row that is not a Dictionary; `validate_story_fight` is split into helpers (each complexity < 10).
+- Beyond the story (LP-CODE-REVIEW, user decision): optional row keys `enemy_size` (Vector2) and `enemy_color` (Color), declared in `STORY_FIGHT_OPTIONAL`; a row whose size or colour cannot be resolved is refused, so the story spawn has no 48×48 grey fallback (QA 6b, mutation m).
+- Files outside the declared list: `tests/run_all_tests.ps1` (one suite line, required by the layout test; usage comment 25 → 26 suites), `story_fight_table_test.gd.uid` (Godot import), `production/qa/evidence/2026-11-ch1-fights/README.md` (the TD-036 correction: the T13a "Windows fixed" logs ran on Godot 4.7.2).
+**Test Evidence**: Integration test `AethelgardPrototype/tests/integration/combat/story_fight_table_test.gd` (277 checks): golden cases captured on the unchanged arena; new cases watched failing before each change (`tdd_before_change.log` 190/32, `review_fix_tests_before.log` 255/5, `rowkeys_tests_before.log` 262/15); mutations (a)–(m) each caught by the case the story names; `story_fight_test` 63/0; boot check clean. All in `production/qa/evidence/2026-11-td031/` (README maps the work).
+**Code Review**: Complete — `/code-review` round 1 CHANGES REQUIRED (fixed), round 2 APPROVED WITH SUGGESTIONS; QL-TEST-COVERAGE GAPS (advisory; two closed with mutations l and h2, CI deferred); LP-CODE-REVIEW CONCERNS (fixed by the row keys).
+**Found on the way**: TD-036 — the Windows runner picks the highest Godot in `C:\Godot` (4.7.2 since 2026-10-30); every TD-031 run set `GODOT` to 4.6.3.
+**Tech debt logged**: TD-037 (long spawners), TD-038 (EnemyBase check, before T13b), TD-039 (unchecked `default_return_scene` / `enemy_name`, untested non-Dictionary row), TD-040 (`_validate_story_backdrop` complexity 9; move the schema and validator to their own file if row keys grow).
+**Known after close**: push and confirm CI is green on this changeset (AC-8).

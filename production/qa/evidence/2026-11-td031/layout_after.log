@@ -1,0 +1,17 @@
+GODOT override: C:\Godot\Godot_v4.6.3-stable_win64_console.exe
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+  PASS: found 26 suites (at least 10)
+  PASS: no *_test.gd directly under tests/ []
+  PASS: every folder under tests/ is lowercase (tests/Unit vs tests/unit) []
+  PASS: every suite has its .uid beside it []
+  PASS: run_all_tests.ps1 runs every suite []
+  PASS: ci.yml runs every suite []
+
+LAYOUT RESULT: 6 passed, 0 failed
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active

@@ -88,11 +88,23 @@ var _perfect_delete_busy: bool = false
 ## changes scene to this arena. Both metas are removed when `_ready` reads them,
 ## so leaving the arena any other way (pause menu, game over) cannot leave one behind.
 ## The player's death is a tutorial retry (never game over); winning sets the fight's
-## story flags and goes back to the return scene. Root Access and Perfect Delete are
-## refused; XP, gold and item drops are suppressed.
+## story flags and goes back to the return scene. XP, gold and item drops are suppressed.
+## Root Access and Perfect Delete stay refused in every story fight: their targeting knows no
+## story enemy and a Perfect Delete kill would skip the story win (TD-031 D3), so no row key allows them.
 ## Emitted once when the fight is won. The only outcome is "win" (a retry emits nothing).
 signal story_fight_resolved(outcome: String)
 
+## A new fight is a new row, not new code (TD-031). One enemy per fight.
+## Required keys (STORY_FIGHT_REQUIRED): enemy_script, enemy_type, enemy_name (the body's node name),
+## enemy_spawn, player_spawn, default_return_scene (used when the return-scene meta is empty), flags
+## (set on the win), controls (the InputService template of the controls line).
+## Optional keys, defaults in STORY_FIGHT_DEFAULTS: shard_color, shard_count, shard_fade, shard_size,
+## shard_z (the win's polygon beat; the win waits shard_fade even with no shards) and backdrop:
+## {sky, ground, tree (colours), margin (Vector2), trees ([x, width, height] each), optional path (colour)};
+## an empty backdrop keeps the scene's own sky and ground.
+## Optional keys without a default (STORY_FIGHT_OPTIONAL): enemy_size, enemy_color, the body's placeholder
+## size and colour; left out, the enemy_type's ENEMY_SIZES / ENEMY_COLORS entry. A row whose enemy_type has
+## no entry must give them. validate_story_fight checks a row before its fight.
 const STORY_FIGHTS: Dictionary = {
 	"ch1_slime": {
 		"enemy_script": "res://scripts/combat/enemies/slime.gd",
@@ -110,15 +122,45 @@ const STORY_FIGHTS: Dictionary = {
 		"shard_z": 20,           # above the slime's death flash and smoke
 		"flags": ["first_slime_defeated", "ch1_slime_fought"],
 		# Procedural forest backdrop: the Elara meeting's colours (ch1_elara_meeting.gd).
-		"sky": Color(0.16, 0.1, 0.28),
-		"ground": Color(0.08, 0.16, 0.06),
-		"path": Color(0.22, 0.16, 0.08),
-		"tree": Color(0.06, 0.14, 0.04),
-		# The sky and ground reach this far past the 1280 x 720 arena, so the follow camera never shows
-		# the grey beyond them (half a viewport plus a margin for screen shake).
-		"backdrop_margin": Vector2(700, 400),
+		"backdrop": {
+			"sky": Color(0.16, 0.1, 0.28),
+			"ground": Color(0.08, 0.16, 0.06),
+			"path": Color(0.22, 0.16, 0.08),
+			"tree": Color(0.06, 0.14, 0.04),
+			# The sky and ground reach this far past the 1280 x 720 arena, so the follow camera never shows
+			# the grey beyond them (half a viewport plus a margin for screen shake).
+			"margin": Vector2(700, 400),
+			# [x, width, height]: each trunk stands on y 600; its canopy is 3 x 2.5 widths.
+			"trees": [[-420, 38, 230], [-180, 34, 215], [50, 40, 240], [180, 35, 220], [350, 30, 210],
+				[800, 38, 230], [950, 42, 225], [1100, 36, 235], [1200, 32, 220], [1420, 36, 225], [1660, 40, 235]],
+		},
 		"controls": "{move} — Move | {jump} — Jump | {sprint} — Dash | {attack} — Attack | {defend} — Parry",
 	},
+}
+## Every required row key and the Variant type its value must have.
+const STORY_FIGHT_REQUIRED: Dictionary = {
+	"enemy_script": TYPE_STRING, "enemy_type": TYPE_STRING, "enemy_name": TYPE_STRING,
+	"enemy_spawn": TYPE_VECTOR2, "player_spawn": TYPE_VECTOR2, "default_return_scene": TYPE_STRING,
+	"flags": TYPE_ARRAY, "controls": TYPE_STRING,
+}
+## The value of every optional row key when the row leaves it out (the active config is the row merged
+## over these). A number key takes an int or a float.
+const STORY_FIGHT_DEFAULTS: Dictionary = {
+	"shard_color": Color(1, 1, 1),
+	"shard_count": 0,        # no shard beat; the win still waits shard_fade
+	"shard_fade": 0.6,
+	"shard_size": 12.0,
+	"shard_z": 20,
+	"backdrop": {},          # the scene's own sky and ground, no trees
+}
+## The keys a non-empty backdrop must have and their types; `path` (a Color) is its one optional key.
+## Optional keys with no default, and their types: left out, the spawn reads the enemy_type's entry in
+## STORY_ENEMY_LOOK_TABLES instead (validate_story_fight refuses a row that has neither).
+const STORY_FIGHT_OPTIONAL: Dictionary = {"enemy_size": TYPE_VECTOR2, "enemy_color": TYPE_COLOR}
+## Where each STORY_FIGHT_OPTIONAL key falls back to, by enemy_type.
+const STORY_ENEMY_LOOK_TABLES: Dictionary = {"enemy_size": ENEMY_SIZES, "enemy_color": ENEMY_COLORS}
+const STORY_BACKDROP_REQUIRED: Dictionary = {
+	"sky": TYPE_COLOR, "ground": TYPE_COLOR, "tree": TYPE_COLOR, "margin": TYPE_VECTOR2, "trees": TYPE_ARRAY,
 }
 ## The time the player's death animation runs before the retry (game time).
 const STORY_RETRY_DELAY: float = 1.0
@@ -126,6 +168,10 @@ const STORY_RETRY_DELAY: float = 1.0
 ## resumes on a freed instance; EnemyBase.die() frees itself after 0.6 s the same way.
 const STORY_OLD_ENEMY_LIFETIME: float = 0.6
 
+## The story-fight table this arena reads (STORY_FIGHTS unless replaced). A test sets its own rows
+## here before add_child: _ready consumes the metas, so a later assignment comes too late.
+## Assign a new Dictionary; never mutate this one (it starts as the read-only STORY_FIGHTS const).
+var story_fight_table: Dictionary = STORY_FIGHTS
 ## Retries the player has needed in this fight (read by tests and the playthrough bot).
 var story_fight_retries: int = 0
 var _story_id: String = ""
@@ -267,6 +313,42 @@ func _build_phase10mm_arena_polish() -> void:
 
 
 # ═════════════════════════════════════════════════════════════════════════
+# ENEMY BODIES (TD-031)
+# ═════════════════════════════════════════════════════════════════════════
+
+## The one enemy body every mode spawns (encounter, boss, story fight and its retry): a
+## CharacterBody2D at `pos` whose feet are at its origin, with a "Sprite" ColorRect placeholder and
+## a CollisionShape2D of the same `size`. Returned without a script: the caller sets any meta the
+## script reads, then set_script, then add_child, so _ready runs with every child in place.
+func _build_enemy_body(node_name: String, size: Vector2, color: Color, pos: Vector2) -> CharacterBody2D:
+	var body := CharacterBody2D.new()
+	body.name = node_name
+
+	# Sprite placeholder (ColorRect) — EnemyBase expects a "Sprite" child
+	var sprite_rect := ColorRect.new()
+	sprite_rect.name = "Sprite"
+	sprite_rect.size = size
+	sprite_rect.position = Vector2(-size.x / 2.0, -size.y)
+	sprite_rect.color = color
+	sprite_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	body.add_child(sprite_rect)
+
+	# CollisionShape2D — required for CharacterBody2D physics
+	var col_shape := CollisionShape2D.new()
+	var rect_shape := RectangleShape2D.new()
+	rect_shape.size = size
+	col_shape.shape = rect_shape
+	col_shape.position = Vector2(0, -size.y / 2.0)
+	body.add_child(col_shape)
+
+	# Collision layers (same as the tutorial slime)
+	body.collision_layer = 4  # Enemy layer
+	body.collision_mask = 1   # Collide with world
+	body.position = pos
+	return body
+
+
+# ═════════════════════════════════════════════════════════════════════════
 # RANDOM ENCOUNTER MODE
 # ═════════════════════════════════════════════════════════════════════════
 
@@ -318,40 +400,19 @@ func _start_random_encounter() -> void:
 		if not enemy_script:
 			continue
 
-		# Create the CharacterBody2D enemy node
-		var enemy_node: CharacterBody2D = CharacterBody2D.new()
-		enemy_node.name = "%s_%d" % [enemy_type.capitalize().replace(" ", ""), i]
-
-		# Set zone_level BEFORE applying script (so _ready() uses it for scaling)
-		enemy_node.set_meta("pending_zone_level", enemy_level)
-
-		# Add Sprite placeholder (ColorRect) — EnemyBase expects a "Sprite" child
-		var sprite_size: Vector2 = ENEMY_SIZES.get(enemy_type, Vector2(48, 48))
-		var sprite_color: Color = ENEMY_COLORS.get(enemy_type, Color(0.5, 0.5, 0.5))
-		var sprite_rect: ColorRect = ColorRect.new()
-		sprite_rect.name = "Sprite"
-		sprite_rect.size = sprite_size
-		sprite_rect.position = Vector2(-sprite_size.x / 2.0, -sprite_size.y)
-		sprite_rect.color = sprite_color
-		sprite_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		enemy_node.add_child(sprite_rect)
-
-		# Add CollisionShape2D — required for CharacterBody2D physics
-		var col_shape: CollisionShape2D = CollisionShape2D.new()
-		var rect_shape: RectangleShape2D = RectangleShape2D.new()
-		rect_shape.size = sprite_size
-		col_shape.shape = rect_shape
-		col_shape.position = Vector2(0, -sprite_size.y / 2.0)
-		enemy_node.add_child(col_shape)
-
-		# Set collision layers (same as tutorial slime)
-		enemy_node.collision_layer = 4  # Enemy layer
-		enemy_node.collision_mask = 1   # Collide with world
-
 		# Position enemies spread across the arena
 		var spread: float = arena_width / maxf(enemies_list.size() + 1, 2)
 		var x_pos: float = base_x + spread * (i + 1) - arena_width / 2.0
-		enemy_node.position = Vector2(x_pos, ground_y)
+
+		# Create the CharacterBody2D enemy node (Sprite placeholder, collision, layers)
+		var enemy_node: CharacterBody2D = _build_enemy_body(
+			"%s_%d" % [enemy_type.capitalize().replace(" ", ""), i],
+			ENEMY_SIZES.get(enemy_type, Vector2(48, 48)),
+			ENEMY_COLORS.get(enemy_type, Color(0.5, 0.5, 0.5)),
+			Vector2(x_pos, ground_y))
+
+		# Set zone_level BEFORE applying script (so _ready() uses it for scaling)
+		enemy_node.set_meta("pending_zone_level", enemy_level)
 
 		# Apply script — this triggers _ready() with all children in place
 		enemy_node.set_script(enemy_script)
@@ -447,31 +508,10 @@ func _start_boss_fight(boss_id: String) -> void:
 		_return_from_boss()
 		return
 
-	var boss_node: CharacterBody2D = CharacterBody2D.new()
-	boss_node.name = boss_id.capitalize().replace("_", "")
-
-	# Create placeholder sprite
-	var b_size: Vector2 = BOSS_SIZES.get(boss_id, Vector2(80, 100))
-	var b_color: Color = BOSS_COLORS.get(boss_id, Color(0.6, 0.2, 0.2))
-	var sprite_rect: ColorRect = ColorRect.new()
-	sprite_rect.name = "Sprite"
-	sprite_rect.size = b_size
-	sprite_rect.position = Vector2(-b_size.x / 2.0, -b_size.y)
-	sprite_rect.color = b_color
-	sprite_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	boss_node.add_child(sprite_rect)
-
-	# Collision
-	var col_shape: CollisionShape2D = CollisionShape2D.new()
-	var rect_shape: RectangleShape2D = RectangleShape2D.new()
-	rect_shape.size = b_size
-	col_shape.shape = rect_shape
-	col_shape.position = Vector2(0, -b_size.y / 2.0)
-	boss_node.add_child(col_shape)
-
-	boss_node.collision_layer = 4
-	boss_node.collision_mask = 1
-	boss_node.position = Vector2(800, 400)
+	# Placeholder sprite and collision, the boss's own size and colour
+	var boss_node: CharacterBody2D = _build_enemy_body(boss_id.capitalize().replace("_", ""),
+		BOSS_SIZES.get(boss_id, Vector2(80, 100)), BOSS_COLORS.get(boss_id, Color(0.6, 0.2, 0.2)),
+		Vector2(800, 400))
 
 	# Apply boss script
 	boss_node.set_script(boss_script)
@@ -664,7 +704,8 @@ func _award_boss_drop(boss_id: String) -> void:
 # STORY FIGHT MODE (Y1-P0-T13)
 # ═════════════════════════════════════════════════════════════════════════
 
-## Reads and removes the story-fight metas; returns the fight id, or "" for none or an unknown id.
+## Reads and removes the story-fight metas; returns the fight id, or "" for none, an unknown id or a
+## row that fails validate_story_fight (one warning per problem; the arena runs its default mode).
 func _consume_story_fight_metas() -> String:
 	if not _has_gm():
 		return ""
@@ -673,14 +714,149 @@ func _consume_story_fight_metas() -> String:
 	for key in ["story_fight_id", "story_fight_return_scene"]:
 		if GameManager.has_meta(key):
 			GameManager.remove_meta(key)
-	if not id.is_empty() and not STORY_FIGHTS.has(id):
+	if id.is_empty():
+		return ""
+	if not story_fight_table.has(id) or not (story_fight_table[id] is Dictionary):
 		push_warning("[STORY FIGHT] Unknown story fight id '%s'; running the default mode" % id)
 		return ""
-	return id
+	var problems := validate_story_fight(story_fight_table[id])
+	for problem in problems:
+		push_warning("[STORY FIGHT] Story fight '%s' refused, running the default mode: %s" % [id, problem])
+	return id if problems.is_empty() else ""
+
+
+## Checks a story-fight row before its fight starts, so a bad row fails at the start, not mid-fight.
+## Returns one message per problem, each naming its key: a required key missing or of the wrong type,
+## an optional key of the wrong type, an unknown key, an enemy_script that is not a Script, a flag that
+## is not a non-empty String, a non-empty backdrop missing, mistyping or adding a key, a tree that is not
+## [x, width, height] numbers. Empty: the row is good. Static, so a row can be checked without an arena.
+static func validate_story_fight(row: Dictionary) -> PackedStringArray:
+	var problems := PackedStringArray()
+	problems.append_array(_validate_story_required(row))
+	problems.append_array(_validate_story_optional(row))
+	problems.append_array(_validate_story_unknown(row))
+	problems.append_array(_validate_story_script(row))
+	problems.append_array(_validate_story_flags(row))
+	problems.append_array(_validate_story_enemy_look(row))
+	if typeof(row.get("backdrop")) == TYPE_DICTIONARY:
+		problems.append_array(_validate_story_backdrop(row["backdrop"]))
+	return problems
+
+
+## Every STORY_FIGHT_REQUIRED key is present with its type.
+static func _validate_story_required(row: Dictionary) -> PackedStringArray:
+	var problems := PackedStringArray()
+	for key in STORY_FIGHT_REQUIRED:
+		if not row.has(key):
+			problems.append("missing required key '%s'" % key)
+		elif typeof(row[key]) != STORY_FIGHT_REQUIRED[key]:
+			problems.append(_story_type_message(key, row[key], type_string(STORY_FIGHT_REQUIRED[key])))
+	return problems
+
+
+## Every optional key the row gives has its default's type (a number key: int or float).
+static func _validate_story_optional(row: Dictionary) -> PackedStringArray:
+	var problems := PackedStringArray()
+	for key in STORY_FIGHT_DEFAULTS:
+		var default_value: Variant = STORY_FIGHT_DEFAULTS[key]
+		if not row.has(key):
+			continue
+		if _story_is_number(default_value) and not _story_is_number(row[key]):
+			problems.append(_story_type_message(key, row[key], "int or float"))
+		elif not _story_is_number(default_value) and typeof(row[key]) != typeof(default_value):
+			problems.append(_story_type_message(key, row[key], type_string(typeof(default_value))))
+	return problems
+
+
+## Every key is a required or an optional one, with or without a default (the old flat backdrop keys are unknown).
+static func _validate_story_unknown(row: Dictionary) -> PackedStringArray:
+	var problems := PackedStringArray()
+	for key in row:
+		if not STORY_FIGHT_REQUIRED.has(key) and not STORY_FIGHT_DEFAULTS.has(key) and not STORY_FIGHT_OPTIONAL.has(key):
+			problems.append("unknown key '%s'" % key)
+	return problems
+
+
+## enemy_size and enemy_color: the row's value has its type, or, left out, the enemy_type has an entry in
+## STORY_ENEMY_LOOK_TABLES, so no fight falls back to a grey 48 x 48 body. A missing or non-String enemy_type
+## is _validate_story_required's message.
+static func _validate_story_enemy_look(row: Dictionary) -> PackedStringArray:
+	var problems := PackedStringArray()
+	var enemy_type: Variant = row.get("enemy_type")
+	for key in STORY_FIGHT_OPTIONAL:
+		if row.has(key) and typeof(row[key]) != STORY_FIGHT_OPTIONAL[key]:
+			problems.append(_story_type_message(key, row[key], type_string(STORY_FIGHT_OPTIONAL[key])))
+		elif not row.has(key) and typeof(enemy_type) == TYPE_STRING and not STORY_ENEMY_LOOK_TABLES[key].has(enemy_type):
+			problems.append("missing key '%s': enemy_type '%s' has no entry to fall back to" % [key, enemy_type])
+	return problems
+
+
+## enemy_script loads as a Script (a scene or any other resource is refused). A missing or non-String
+## enemy_script is _validate_story_required's message.
+static func _validate_story_script(row: Dictionary) -> PackedStringArray:
+	var path: Variant = row.get("enemy_script")
+	if typeof(path) != TYPE_STRING:
+		return PackedStringArray()
+	if not ResourceLoader.exists(path):
+		return PackedStringArray(["key 'enemy_script': no script at '%s'" % path])
+	if not (load(path) is Script):
+		return PackedStringArray(["key 'enemy_script': '%s' is not a Script" % path])
+	return PackedStringArray()
+
+
+## Every flag is a non-empty String (GameManager.set_story_flag takes a String name).
+static func _validate_story_flags(row: Dictionary) -> PackedStringArray:
+	var problems := PackedStringArray()
+	var flags: Variant = row.get("flags")
+	if typeof(flags) != TYPE_ARRAY:
+		return problems
+	for i in flags.size():
+		if typeof(flags[i]) != TYPE_STRING or flags[i].is_empty():
+			problems.append("key 'flags[%d]' must be a non-empty String, not %s" % [i, var_to_str(flags[i])])
+	return problems
+
+
+## A non-empty backdrop needs every STORY_BACKDROP_REQUIRED key with its type; `path` is optional.
+static func _validate_story_backdrop(backdrop: Dictionary) -> PackedStringArray:
+	var problems := PackedStringArray()
+	if backdrop.is_empty():
+		return problems
+	for key in STORY_BACKDROP_REQUIRED:
+		if not backdrop.has(key):
+			problems.append("key 'backdrop' is missing '%s'" % key)
+	for key in backdrop:
+		var wanted: int = STORY_BACKDROP_REQUIRED.get(key, TYPE_COLOR if key == "path" else TYPE_NIL)
+		if wanted == TYPE_NIL:
+			problems.append("key 'backdrop' has an unknown key '%s'" % key)
+		elif typeof(backdrop[key]) != wanted:
+			problems.append(_story_type_message("backdrop." + str(key), backdrop[key], type_string(wanted)))
+	if typeof(backdrop.get("trees")) == TYPE_ARRAY:
+		problems.append_array(_validate_story_trees(backdrop["trees"]))
+	return problems
+
+
+## Every tree is an Array of exactly 3 numbers: [x, width, height].
+static func _validate_story_trees(trees: Array) -> PackedStringArray:
+	var problems := PackedStringArray()
+	for i in trees.size():
+		var t: Variant = trees[i]
+		if typeof(t) != TYPE_ARRAY or t.size() != 3 or not t.all(func(v): return _story_is_number(v)):
+			problems.append("key 'backdrop.trees[%d]' must be [x, width, height] numbers, not %s" % [i, var_to_str(t)])
+	return problems
+
+
+static func _story_is_number(value: Variant) -> bool:
+	return typeof(value) in [TYPE_INT, TYPE_FLOAT]
+
+
+static func _story_type_message(key: String, value: Variant, wanted: String) -> String:
+	return "key '%s' must be %s, not %s" % [key, wanted, type_string(typeof(value))]
 
 
 func _start_story_fight(id: String) -> void:
-	_story_cfg = STORY_FIGHTS[id]
+	# The row wins over the defaults (the merge keeps the row's value where both have the key).
+	var row: Dictionary = story_fight_table[id]
+	_story_cfg = row.merged(STORY_FIGHT_DEFAULTS)
 	# The scene's own TutorialSlime has no place in a story fight.
 	if slime:
 		slime.queue_free()
@@ -697,53 +873,63 @@ func _start_story_fight(id: String) -> void:
 	_build_story_controls_label()
 
 
-## A procedural forest in the Elara meeting's colours (no art import).
+## The row's procedural backdrop (no art import): the sky and ground recoloured and stretched past the
+## arena, its trees, and the path if it has one. An empty backdrop leaves the scene as it is.
 func _apply_story_backdrop() -> void:
-	var margin: Vector2 = _story_cfg["backdrop_margin"]
+	var data: Dictionary = _story_cfg["backdrop"]
+	if data.is_empty():
+		return
+	var margin: Vector2 = data["margin"]
 	var background := get_node_or_null("Background") as ColorRect
 	if background:
-		background.color = _story_cfg["sky"]
+		background.color = data["sky"]
 		background.position = -margin
 		background.size = Vector2(ARENA_WIDTH, 720.0) + margin * 2.0
 	var ground_sprite := get_node_or_null("Ground/GroundSprite") as ColorRect
 	if ground_sprite:
-		ground_sprite.color = _story_cfg["ground"]
+		ground_sprite.color = data["ground"]
 		ground_sprite.position = Vector2(-margin.x, 0.0)
 		ground_sprite.size = Vector2(ARENA_WIDTH + margin.x * 2.0, 120.0 + margin.y)
+	var backdrop := _build_story_trees(data)
+	add_child(backdrop)
+	# Behind the ground and everything else, in front of the sky.
+	var ground := get_node_or_null("Ground")
+	move_child(backdrop, ground.get_index() if ground else 1)
+	if ground and data.has("path"):
+		# The path lies on the ground, so it is the ground's last child: drawn after the ground's rect.
+		var path := ColorRect.new()
+		path.name = "StoryFightPath"
+		path.color = data["path"]
+		path.position = Vector2(-margin.x, 0.0)
+		path.size = Vector2(ARENA_WIDTH + margin.x * 2.0, 22)
+		path.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ground.add_child(path)
+
+
+## The backdrop's trees: a trunk standing on y 600 and a canopy over it per `[x, width, height]`.
+func _build_story_trees(data: Dictionary) -> Node2D:
 	var backdrop := Node2D.new()
 	backdrop.name = "StoryFightBackdrop"
-	var tree_color: Color = _story_cfg["tree"]
-	var trees: Array = [[-420.0, 38.0, 230.0], [-180.0, 34.0, 215.0], [50.0, 40.0, 240.0], [180.0, 35.0, 220.0],
-		[350.0, 30.0, 210.0], [800.0, 38.0, 230.0], [950.0, 42.0, 225.0], [1100.0, 36.0, 235.0], [1200.0, 32.0, 220.0],
-		[1420.0, 36.0, 225.0], [1660.0, 40.0, 235.0]]
-	for t in trees:
+	var tree_color: Color = data["tree"]
+	for t in data["trees"]:
+		var x := float(t[0])
+		var w := float(t[1])
+		var h := float(t[2])
 		var trunk := ColorRect.new()
 		trunk.name = "StoryFightTrunk"
 		trunk.color = tree_color
-		trunk.size = Vector2(t[1], t[2])
-		trunk.position = Vector2(t[0], 600.0 - t[2])
+		trunk.size = Vector2(w, h)
+		trunk.position = Vector2(x, 600.0 - h)
 		trunk.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		backdrop.add_child(trunk)
 		var canopy := ColorRect.new()
 		canopy.name = "StoryFightCanopy"
 		canopy.color = Color(tree_color.r + 0.02, tree_color.g + 0.03, tree_color.b + 0.01, 0.9)
-		canopy.size = Vector2(t[1] * 3.0, t[1] * 2.5)
-		canopy.position = Vector2(t[0] - t[1], 600.0 - t[2] - t[1] * 1.5)
+		canopy.size = Vector2(w * 3.0, w * 2.5)
+		canopy.position = Vector2(x - w, 600.0 - h - w * 1.5)
 		canopy.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		backdrop.add_child(canopy)
-	add_child(backdrop)
-	# Behind the ground and everything else, in front of the sky.
-	var ground := get_node_or_null("Ground")
-	move_child(backdrop, ground.get_index() if ground else 1)
-	if ground:
-		# The path lies on the ground, so it is the ground's last child: drawn after the ground's rect.
-		var path := ColorRect.new()
-		path.name = "StoryFightPath"
-		path.color = _story_cfg["path"]
-		path.position = Vector2(-margin.x, 0.0)
-		path.size = Vector2(ARENA_WIDTH + margin.x * 2.0, 22)
-		path.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		ground.add_child(path)
+	return backdrop
 
 
 ## One non-blocking controls line (not a DialogueManager line); InputService re-renders it
@@ -775,25 +961,10 @@ func _spawn_story_enemy() -> void:
 		enemies_node.name = "Enemies"
 		add_child(enemies_node)
 	var enemy_type: String = _story_cfg["enemy_type"]
-	var size: Vector2 = ENEMY_SIZES.get(enemy_type, Vector2(48, 48))
-	var enemy := CharacterBody2D.new()
-	enemy.name = _story_cfg["enemy_name"]
-	var sprite_rect := ColorRect.new()
-	sprite_rect.name = "Sprite"
-	sprite_rect.size = size
-	sprite_rect.position = Vector2(-size.x / 2.0, -size.y)
-	sprite_rect.color = ENEMY_COLORS.get(enemy_type, Color(0.5, 0.5, 0.5))
-	sprite_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	enemy.add_child(sprite_rect)
-	var col_shape := CollisionShape2D.new()
-	var rect_shape := RectangleShape2D.new()
-	rect_shape.size = size
-	col_shape.shape = rect_shape
-	col_shape.position = Vector2(0, -size.y / 2.0)
-	enemy.add_child(col_shape)
-	enemy.collision_layer = 4
-	enemy.collision_mask = 1
-	enemy.position = _story_cfg["enemy_spawn"]
+	# The row's own look, else the enemy_type's entry (validate_story_fight refused a row with neither).
+	var size: Vector2 = _story_cfg["enemy_size"] if _story_cfg.has("enemy_size") else ENEMY_SIZES[enemy_type]
+	var color: Color = _story_cfg["enemy_color"] if _story_cfg.has("enemy_color") else ENEMY_COLORS[enemy_type]
+	var enemy := _build_enemy_body(_story_cfg["enemy_name"], size, color, _story_cfg["enemy_spawn"])
 	enemy.set_script(enemy_script)
 	enemies_node.add_child(enemy)
 	_configure_scripted_reward_enemy(enemy)
@@ -815,7 +986,8 @@ func _on_story_enemy_died() -> void:
 	if is_instance_valid(player):
 		player.invulnerable = true
 		player.invuln_timer = 1.0e9
-	var origin := Vector2(900, 400)
+	# An enemy already freed (it frees itself 0.6 s after dying) leaves the shards at its spawn.
+	var origin: Vector2 = _story_cfg["enemy_spawn"]
 	if is_instance_valid(_story_enemy):
 		origin = _story_enemy.global_position
 	_spawn_story_shards(origin)
@@ -830,7 +1002,7 @@ func _on_story_enemy_died() -> void:
 	_leave_story_fight()
 
 
-## The polygon beat: the slime breaks into shards, not blood (the staged beat's colour and count).
+## The row's polygon beat: the defeated enemy breaks into shard_count shards of shard_color, not blood.
 func _spawn_story_shards(origin: Vector2) -> void:
 	var fade: float = _story_cfg["shard_fade"]
 	var side: float = _story_cfg["shard_size"]

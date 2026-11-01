@@ -3,6 +3,18 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-11-01 — A story fight is a row in a table (TD-031)
+
+- **refactor(combat):** everything a story fight needs is now in the arena's `STORY_FIGHTS` table, including the forest
+  backdrop and its trees, so the Chapter 1 guardian and boar can be added as new rows without new code. Shard keys and
+  the backdrop are optional and have defaults. A row with a missing, misspelt or wrongly typed key is now refused when
+  the fight starts, with one warning per problem, and the arena runs its default mode. Before, the fight failed partway
+  through. Root Access and Perfect Delete stay unavailable in every story fight. The encounter, boss and story enemies
+  are now built by one function. Nothing players see changes: the slime fight's backdrop and enemy, and the encounter
+  and boss bodies, match values captured before the change.
+- **test:** a new suite, `tests/integration/combat/story_fight_table_test.gd` (26 suites now). Evidence:
+  `production/qa/evidence/2026-11-td031/`.
+
 ## 2026-10-29 — The opening slime is a real fight (Y1-P0-T13a)
 
 - **feat(ch1):** the slime that interrupts Kaelen's first meeting with Elara is now a real side-scroll fight. It used
