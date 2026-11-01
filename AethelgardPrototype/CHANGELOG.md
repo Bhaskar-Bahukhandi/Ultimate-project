@@ -3,6 +3,15 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-11-01 — A story-fight row's enemy script must be an enemy (TD-038)
+
+- **fix(combat):** a story-fight row whose `enemy_script` is a script that is not an enemy (does not extend
+  `EnemyBase`) is now refused when the fight starts, with one warning, and the arena runs its default mode. Before, the
+  fight failed partway through, after the tutorial slime was gone. Nothing players see changes: the slime fight is
+  untouched and every enemy script in the game passes the check.
+- **test:** `story_fight_table_test.gd` checks the refusal, the walk up a script's parents, and every script in
+  `scripts/combat/enemies/`. Evidence: `production/qa/evidence/2026-11-td038/`.
+
 ## 2026-11-01 — A story fight is a row in a table (TD-031)
 
 - **refactor(combat):** everything a story fight needs is now in the arena's `STORY_FIGHTS` table, including the forest

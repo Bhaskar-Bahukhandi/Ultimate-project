@@ -727,9 +727,10 @@ func _consume_story_fight_metas() -> String:
 
 ## Checks a story-fight row before its fight starts, so a bad row fails at the start, not mid-fight.
 ## Returns one message per problem, each naming its key: a required key missing or of the wrong type,
-## an optional key of the wrong type, an unknown key, an enemy_script that is not a Script, a flag that
-## is not a non-empty String, a non-empty backdrop missing, mistyping or adding a key, a tree that is not
-## [x, width, height] numbers. Empty: the row is good. Static, so a row can be checked without an arena.
+## an optional key of the wrong type, an unknown key, an enemy_script that is not a Script or does not extend
+## EnemyBase, a flag that is not a non-empty String, a non-empty backdrop missing, mistyping or adding a key,
+## a tree that is not [x, width, height] numbers. Empty: the row is good. Static, so a row can be checked
+## without an arena.
 static func validate_story_fight(row: Dictionary) -> PackedStringArray:
 	var problems := PackedStringArray()
 	problems.append_array(_validate_story_required(row))
@@ -791,17 +792,39 @@ static func _validate_story_enemy_look(row: Dictionary) -> PackedStringArray:
 	return problems
 
 
-## enemy_script loads as a Script (a scene or any other resource is refused). A missing or non-String
-## enemy_script is _validate_story_required's message.
+## enemy_script loads as a Script (a scene or any other resource is refused) that extends EnemyBase, directly or
+## through a parent script (the fight needs EnemyBase's `died` signal, loot_table and State). The path is loaded
+## once. A missing or non-String enemy_script is _validate_story_required's message. (Y1-P0 TD-038)
 static func _validate_story_script(row: Dictionary) -> PackedStringArray:
 	var path: Variant = row.get("enemy_script")
 	if typeof(path) != TYPE_STRING:
 		return PackedStringArray()
 	if not ResourceLoader.exists(path):
 		return PackedStringArray(["key 'enemy_script': no script at '%s'" % path])
-	if not (load(path) is Script):
+	var resource: Resource = load(path)
+	return _validate_story_script_class(path, resource)
+
+
+## The loaded enemy_script resource is a Script and extends EnemyBase: one message when it does not. Split from
+## _validate_story_script to keep each function to three branch points. (Y1-P0 TD-038)
+static func _validate_story_script_class(path: String, resource: Resource) -> PackedStringArray:
+	if not (resource is Script):
 		return PackedStringArray(["key 'enemy_script': '%s' is not a Script" % path])
+	if not _story_script_extends_enemy_base(resource):
+		return PackedStringArray([("key 'enemy_script': '%s' does not extend EnemyBase" % path)
+			+ " (or failed to compile; see Godot's error above)"])
 	return PackedStringArray()
+
+
+## True when `script` is EnemyBase's script or inherits from it through its chain of parent scripts. The walk
+## compares scripts, not file names; a script that merely extends a node class (or the arena script) is false.
+static func _story_script_extends_enemy_base(script: Script) -> bool:
+	var current: Script = script
+	while current != null:
+		if current == EnemyBase:
+			return true
+		current = current.get_base_script()
+	return false
 
 
 ## Every flag is a non-empty String (GameManager.set_story_flag takes a String name).

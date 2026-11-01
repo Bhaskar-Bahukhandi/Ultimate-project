@@ -38,14 +38,20 @@ extends SceneTree
 ## _encounter_enemies, _boss_node and _boss_initial_hp are read; every body is read the moment the arena's
 ## _ready has built it (the enemies' physics would move them afterwards), except the boss, whose HP is set
 ## and recorded on the arena's two awaited frames.
+## TD-038 (a story row's enemy_script must extend EnemyBase), cases named "TD-038 QA n":
+##   QA 1  an enemy_script that is not an EnemyBase (the arena script): one message naming enemy_script and EnemyBase
+##   QA 2  every *.gd in scripts/combat/enemies/ (at least 17) is accepted as a row's enemy_script
+##   QA 5  the chain walk _story_script_extends_enemy_base on in-memory scripts: inherited true, Node2D false,
+##         arena false
+## (QA 3 and 4 are the TD-031 cases above, unchanged. QA 6, a script with a parse error, is checked by hand.)
 ## Run: tests/run_phase0_tests.ps1 -Script res://tests/integration/combat/story_fight_table_test.gd
 
 const ARENA := "res://scenes/combat/combat_arena.tscn"
 const STUB := "res://tests/fixtures/story_fight_return_stub.tscn"
 ## True prints every snapshot as `GOLDEN-CAPTURE <label>.<key> = <value>` and asserts only structure.
 const CAPTURE := false
-const CASE_ORDER := ["slime", "encounter", "boss", "defaults", "validate", "refused", "required_only", "slow_fade", "trees",
-	"retry", "own_look", "builder", "shard_fallback"]
+const CASE_ORDER := ["slime", "encounter", "boss", "defaults", "validate", "enemy_base", "enemy_folder", "base_chain",
+	"refused", "required_only", "slow_fade", "trees", "retry", "own_look", "builder", "shard_fallback"]
 const ARENA_SCRIPT := "res://scripts/combat/combat_arena.gd"
 ## The functions that build an enemy body: none may build one inline (AC-5). The story retry spawns through
 ## _spawn_story_enemy (case 6 covers it at run time).
@@ -118,6 +124,12 @@ func _run() -> void:
 				_test_every_row_validates_and_defaults_hold_ac2_values()
 			"validate":
 				_test_validate_names_each_problem_key()
+			"enemy_base":
+				_test_script_not_extending_enemy_base_is_refused()
+			"enemy_folder":
+				_test_every_enemy_script_passes_the_enemy_base_check()
+			"base_chain":
+				_test_enemy_base_chain_walk_on_in_memory_scripts()
 			"refused":
 				await _test_invalid_row_runs_default_mode()
 			"required_only":
@@ -581,6 +593,72 @@ func _test_validate_names_each_problem_key() -> void:
 	for extra in [{"shard_size": 12}, {"shard_count": 3.0}]:
 		var msgs := _validate(_row(extra))
 		_check(msgs.is_empty(), "QA 2 a row with %s gives no message %s" % [var_to_str(extra).replace("\n", ""), str(msgs)])
+
+
+# ── TD-038: a row's enemy_script must extend EnemyBase ────────────────────
+
+const ENEMIES_DIR := "res://scripts/combat/enemies/"
+const ENEMY_SCRIPT_FLOOR := 17   # the count of enemy scripts at TD-038; an empty listing must fail, not pass
+const SLIME_SCRIPT := "res://scripts/combat/enemies/slime.gd"
+
+
+func _has_base_walk() -> bool:
+	return _arena_script().get_script_method_list().any(func(m): return m["name"] == "_story_script_extends_enemy_base")
+
+
+## _story_script_extends_enemy_base(script), or null on an arena without it (a null result fails its check by name).
+func _extends_enemy_base(script: Script) -> Variant:
+	if not _has_base_walk():
+		return null
+	return _arena_script().call("_story_script_extends_enemy_base", script)
+
+
+## An in-memory script (no fixture file) with the given source, reloaded.
+func _memory_script(source: String) -> GDScript:
+	var script := GDScript.new()
+	script.source_code = source
+	script.reload()
+	return script
+
+
+func _test_script_not_extending_enemy_base_is_refused() -> void:
+	print("[TD-038 QA 1 an enemy_script that does not extend EnemyBase gives one message naming it]")
+	var msgs := _validate(_row({"enemy_script": ARENA_SCRIPT}))
+	_check(msgs.size() == 1 and str(msgs[0]).contains("enemy_script") and str(msgs[0]).contains("EnemyBase"),
+		"TD-038 QA 1 the arena script as enemy_script gives one message with 'enemy_script' and 'EnemyBase' %s" % str(msgs))
+
+
+func _test_every_enemy_script_passes_the_enemy_base_check() -> void:
+	print("[TD-038 QA 2 every *.gd in scripts/combat/enemies/ is accepted as a row's enemy_script]")
+	var scripts: Array[String] = []
+	for file in DirAccess.get_files_at(ENEMIES_DIR):
+		if file.ends_with(".gd"):
+			scripts.append(file)
+	_check(scripts.size() >= ENEMY_SCRIPT_FLOOR,
+		"TD-038 QA 2 the folder lists at least %d enemy scripts (found %d)" % [ENEMY_SCRIPT_FLOOR, scripts.size()])
+	for file in scripts:
+		var row := _row({"enemy_script": ENEMIES_DIR + file, "enemy_size": Vector2(48, 36),
+			"enemy_color": Color(0.5, 0.5, 0.5)})
+		var msgs := _validate(row)
+		_check(msgs.is_empty(), "TD-038 QA 2 %s as enemy_script gives no message %s" % [file, str(msgs)])
+
+
+func _test_enemy_base_chain_walk_on_in_memory_scripts() -> void:
+	print("[TD-038 QA 5 the EnemyBase chain walk on in-memory scripts]")
+	_check(_has_base_walk(), "TD-038 QA 5 the arena script has a static _story_script_extends_enemy_base")
+	var inherited := _memory_script("extends \"%s\"\n" % SLIME_SCRIPT)
+	_check(inherited.get_base_script() == load(SLIME_SCRIPT),
+		"TD-038 QA 5a the in-memory script's base is slime.gd (EnemyBase is two levels up)")
+	_check(_extends_enemy_base(inherited) == true,
+		"TD-038 QA 5a a script extending slime.gd (EnemyBase two levels up) extends EnemyBase")
+	var node_script := _memory_script("extends Node2D\n")
+	_check(node_script.can_instantiate(), "TD-038 QA 5b the in-memory Node2D script reloaded and can be instantiated")
+	_check(_extends_enemy_base(node_script) == false, "TD-038 QA 5b a script extending Node2D does not extend EnemyBase")
+	var arena_child := _memory_script("extends \"%s\"\n" % ARENA_SCRIPT)
+	_check(arena_child.get_base_script() == _arena_script(),
+		"TD-038 QA 5c the in-memory script's base is combat_arena.gd")
+	_check(_extends_enemy_base(arena_child) == false,
+		"TD-038 QA 5c a script extending combat_arena.gd does not extend EnemyBase")
 
 
 # ── QA case 3: an invalid row is refused ──────────────────────────────────

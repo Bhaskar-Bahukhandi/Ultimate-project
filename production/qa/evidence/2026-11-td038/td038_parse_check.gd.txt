@@ -1,0 +1,24 @@
+extends SceneTree
+## TD-038 QA 6 (by hand): a story-fight row whose enemy_script has a parse error gives exactly one message and no
+## crash. Writes user://td038_parse_error.gd, validates a copy of the ch1_slime row pointing at it, deletes the file.
+
+const PATH := "user://td038_parse_error.gd"
+
+
+func _initialize() -> void:
+	_run.call_deferred()
+
+
+func _run() -> void:
+	await process_frame
+	var f := FileAccess.open(PATH, FileAccess.WRITE)
+	f.store_string("extends EnemyBase\n\nfunc broken(:\n\tpass\n")
+	f.close()
+	var arena: Script = load("res://scripts/combat/combat_arena.gd")
+	var row: Dictionary = arena.STORY_FIGHTS["ch1_slime"].duplicate(true)
+	row["enemy_script"] = PATH
+	var msgs: PackedStringArray = arena.validate_story_fight(row)
+	print("TD038 QA6 messages=%d %s" % [msgs.size(), str(msgs)])
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(PATH))
+	print("TD038 QA6 temp file removed: %s" % (not FileAccess.file_exists(PATH)))
+	quit(0)

@@ -1,0 +1,22 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+SCRIPT ERROR: Parse Error: Expected parameter name.
+   at: GDScript::reload (user://td038_parse_error.gd:3)
+   GDScript backtrace (most recent call first):
+       [0] _validate_story_script (res://scripts/combat/combat_arena.gd:803)
+       [1] validate_story_fight (res://scripts/combat/combat_arena.gd:738)
+       [2] _run (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/38742c26-a8d5-4ddd-be96-9bff07452637/scratchpad/td038_parse_check.gd:20)
+ERROR: Failed to load script "user://td038_parse_error.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2907)
+   GDScript backtrace (most recent call first):
+       [0] _validate_story_script (res://scripts/combat/combat_arena.gd:803)
+       [1] validate_story_fight (res://scripts/combat/combat_arena.gd:738)
+       [2] _run (C:/Users/BHASKA~1/AppData/Local/Temp/claude/C--Users-BHASKAR-BAHUKHANDI-OneDrive-Desktop-Ultimate-project/38742c26-a8d5-4ddd-be96-9bff07452637/scratchpad/td038_parse_check.gd:20)
+TD038 QA6 messages=1 ["key \'enemy_script\': \'user://td038_parse_error.gd\' does not extend EnemyBase"]
+TD038 QA6 temp file removed: true

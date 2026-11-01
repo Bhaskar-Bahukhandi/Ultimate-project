@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: TD-038 (`docs/tech-debt-register.md#TD-038`; raised at the TD-031 close by /code-review and LP-CODE-REVIEW, target "before T13b")
-> **Status**: Ready
+> **Status**: Complete
 > **Layer**: Core (combat arena)
 > **Type**: Integration
 > **Estimate**: 0.5 day (register effort: S; +0.25 for the QL-STORY-READY test additions)
@@ -62,19 +62,19 @@ story; its `production/sprint-status.yaml` entry; new evidence folder `productio
 
 ## Acceptance Criteria
 
-- [ ] AC-1 **A non-EnemyBase script is refused.** `_validate_story_script` refuses an `enemy_script` that loads as a
+- [x] AC-1 **A non-EnemyBase script is refused.** `_validate_story_script` refuses an `enemy_script` that loads as a
       Script but does not extend `EnemyBase` (directly or through a parent script): exactly one message, naming
       `enemy_script` and saying it does not extend EnemyBase. The two existing messages (no script at the path; not a
       Script) are unchanged. The chain walk is its own static helper, `_story_script_extends_enemy_base(script: Script)
       -> bool`, so a test can check it on in-memory scripts. The script is loaded once. Each function stays ≤ 40 lines
       with at most 3 branch points (counted by hand). A script that fails to parse gives exactly one message and no
       crash (checked once by hand, below — a committed broken script would fail the runner's `Parse Error` rule).
-- [ ] AC-2 **No false refusal.** Every `STORY_FIGHTS` row still validates clean, and every `*.gd` file in
+- [x] AC-2 **No false refusal.** Every `STORY_FIGHTS` row still validates clean, and every `*.gd` file in
       `res://scripts/combat/enemies/` passes the check as a row's `enemy_script` (the test lists the folder, so a new
       enemy script that does not extend EnemyBase fails the suite). The listing must find at least 17 scripts (the
       count today), so an empty listing fails rather than passing with nothing checked; only `*.gd` files are checked
       (`*.gd.uid` skipped). The listing runs from the project, not an exported build (which lists `.remap` files).
-- [ ] AC-3 **Tests.** QA cases 1–5 below. Watched failing: QA 1 and QA 5 fail on the code before the change (QA 2 is a
+- [x] AC-3 **Tests.** QA cases 1–5 below. Watched failing: QA 1 and QA 5 fail on the code before the change (QA 2 is a
       no-false-refusal check and cannot fail there; it is watched failing through mutation b). Three mutations, one
       per invocation, each caught by the named case: (a) the validator no longer calls the helper → QA 1; (b) the check
       always refuses → QA 2; (c) the walk checks one level only (`get_base_script() == EnemyBase`) → QA 5a. The suite's
@@ -131,5 +131,15 @@ is untouched, and its golden checks stay in the suite).
 ---
 
 ## Completion Notes
-
-(empty until /story-done)
+**Completed**: 2026-11-01
+**Verdict**: COMPLETE WITH NOTES
+**Criteria**: 3/3 passing; AC-3's CI is DEFERRED (the changeset is not pushed; local full run 26/26 on Godot 4.6.3).
+**Deviations** (advisory, user-accepted):
+- `_validate_story_script` is split into `_validate_story_script_class` to keep each function at ≤ 3 branch points (the story named one function); the two existing messages are unchanged.
+- The refusal message ends "(or failed to compile; see Godot's error above)" (LP-CODE-REVIEW, user decision), because a script that fails to parse has no base script and gets this message. A first wording that named the engine's parse-error text tripped the runner's TD-003 rule (QA 1 prints the message) and was reverted.
+- The full local run (`run_all_after.log`) predates the review fixes and the wording change; those touched only this suite's TD-038 cases, one doc comment and one message string, re-verified by the suite runs (303/0 ×3).
+**Test Evidence**: Integration test `AethelgardPrototype/tests/integration/combat/story_fight_table_test.gd` (303 checks, 29 TD-038): watched failing before the change (`tdd_before_change.log` 295/5); mutations (a) → QA 1, (b) → QA 2, (c) → QA 5a; QA 6 (parse error) by hand, one message, no crash; `story_fight_test` 63/0. All in `production/qa/evidence/2026-11-td038/` (README maps it).
+**Code Review**: Complete — `/code-review` APPROVED WITH SUGGESTIONS (applied: doc-comment rewrap, `
+` escapes, chain-shape checks in QA 5, README note on the non-recursive listing); QL-TEST-COVERAGE ADEQUATE; LP-CODE-REVIEW CONCERNS (fixed: the message wording).
+**Tech debt logged**: none. Noted in the README: the QA 2 folder listing is not recursive, so a new enemy script must sit directly in `scripts/combat/enemies/`.
+**Known after close**: push and confirm CI is green on this changeset (AC-3).
