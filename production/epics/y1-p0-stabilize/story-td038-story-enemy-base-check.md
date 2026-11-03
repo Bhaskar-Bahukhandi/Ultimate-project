@@ -133,13 +133,12 @@ is untouched, and its golden checks stay in the suite).
 ## Completion Notes
 **Completed**: 2026-11-01
 **Verdict**: COMPLETE WITH NOTES
-**Criteria**: 3/3 passing; AC-3's CI is DEFERRED (the changeset is not pushed; local full run 26/26 on Godot 4.6.3).
+**Criteria**: 3/3 passing; AC-3's CI was DEFERRED at close (local full run 26/26 on Godot 4.6.3) and is now met (CI #51, below).
 **Deviations** (advisory, user-accepted):
 - `_validate_story_script` is split into `_validate_story_script_class` to keep each function at ≤ 3 branch points (the story named one function); the two existing messages are unchanged.
 - The refusal message ends "(or failed to compile; see Godot's error above)" (LP-CODE-REVIEW, user decision), because a script that fails to parse has no base script and gets this message. A first wording that named the engine's parse-error text tripped the runner's TD-003 rule (QA 1 prints the message) and was reverted.
 - The full local run (`run_all_after.log`) predates the review fixes and the wording change; those touched only this suite's TD-038 cases, one doc comment and one message string, re-verified by the suite runs (303/0 ×3).
 **Test Evidence**: Integration test `AethelgardPrototype/tests/integration/combat/story_fight_table_test.gd` (303 checks, 29 TD-038): watched failing before the change (`tdd_before_change.log` 295/5); mutations (a) → QA 1, (b) → QA 2, (c) → QA 5a; QA 6 (parse error) by hand, one message, no crash; `story_fight_test` 63/0. All in `production/qa/evidence/2026-11-td038/` (README maps it).
-**Code Review**: Complete — `/code-review` APPROVED WITH SUGGESTIONS (applied: doc-comment rewrap, `
-` escapes, chain-shape checks in QA 5, README note on the non-recursive listing); QL-TEST-COVERAGE ADEQUATE; LP-CODE-REVIEW CONCERNS (fixed: the message wording).
+**Code Review**: Complete — `/code-review` APPROVED WITH SUGGESTIONS (applied: doc-comment rewrap, `\n` escapes, chain-shape checks in QA 5, README note on the non-recursive listing); QL-TEST-COVERAGE ADEQUATE; LP-CODE-REVIEW CONCERNS (fixed: the message wording).
 **Tech debt logged**: none. Noted in the README: the QA 2 folder listing is not recursive, so a new enemy script must sit directly in `scripts/combat/enemies/`.
-**Known after close**: push and confirm CI is green on this changeset (AC-3).
+**Known after close**: CI run #51 on `bbc45b2` (2026-11-01 23:59 UTC, run 41364767402) is green, 24m48s; "Story fight table" took 9 s, "Story fight" 40 s. AC-3's deferred CI check is met.

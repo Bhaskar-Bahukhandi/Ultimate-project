@@ -3,7 +3,7 @@
 Story: `production/epics/y1-p0-stabilize/story-td038-story-enemy-base-check.md`. Every run here is on **Godot 4.6.3**
 (`GODOT` set to the 4.6.3 console exe, TD-036; each log's Godot line says so). Arena:
 `AethelgardPrototype/scripts/combat/combat_arena.gd`. Suite:
-`AethelgardPrototype/tests/integration/combat/story_fight_table_test.gd` (300 checks, was 277).
+`AethelgardPrototype/tests/integration/combat/story_fight_table_test.gd` (303 checks, was 277).
 
 ## What changed
 
@@ -69,9 +69,16 @@ long test lines wrapped; the non-recursive folder listing noted above. Suite 303
 - **LP-CODE-REVIEW: CONCERNS (minor), fixed.** A script with a parse error got "does not extend EnemyBase", which would
   send an author after the wrong problem. The message is now `… does not extend EnemyBase (or failed to compile; see
   Godot's error above)`. A first wording that named the engine's parse-error text failed the runner's TD-003 rule
-  (QA 1 prints the message) and was reverted (`wording_after_*` first attempt overwritten; `wording_reverted.log`).
+  (QA 1 prints the message) and was reverted. Its logs were overwritten by the final wording's runs, so no log of the
+  failed attempt is kept.
   With the final wording: 303/0 ×3, no `RUNNER FAIL` (`wording_after_1-3.log`); mutation (a) re-run, still caught by
   QA 1 (`mutation_a.log`); QA 6 redone by hand, one message with the new wording, temp file removed
   (`qa6_parse_error_by_hand_v2.log`).
 - The full local run (`run_all_after.log`, 26/26) was on the code before the review fixes and the wording change; those
   touched only this suite's TD-038 cases, one doc comment and one message string, re-verified by the runs above.
+
+## CI (AC-3)
+
+CI run #51 on `bbc45b2` (2026-11-01 23:59 UTC, https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/41364767402):
+success in 24m48s on Godot 4.6.3 (Linux). Every step passed, including the whitespace and commit-message checks, "Story
+fight" (40 s) and "Story fight table (TD-031 …)" (9 s, limit 120 s).
