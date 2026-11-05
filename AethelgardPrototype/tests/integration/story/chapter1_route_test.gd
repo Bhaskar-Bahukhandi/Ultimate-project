@@ -85,6 +85,7 @@ func _run() -> void:
 	_test_bc_kill_route_samples()
 	_test_bc_new_flags_registered()
 	_test_t13a_flag_registered()
+	_test_t13b_flag_registered()
 	await _test_bc_broken_mile_flag()
 	await _test_bc_arrows_hook()
 	await _test_bc_arrows_village()
@@ -259,6 +260,8 @@ func _test_new_game_to_region() -> void:
 	_check(starts == 1 and afters == 1 and gm.has_flag("elara_met") and gm.has_flag("ch1_elara_glitch_witch_met"),
 		"T13a the meeting resumed at after_slime: start played once (%d), after_slime once (%d), the flags as before" % [starts, afters])
 	_check(await _wait_for(VILLAGE, 300.0), "Broken Mile → Oakhaven")
+	_check(T13B_NEW_FLAGS.all(func(f): return not gm.has_flag(f)),
+		"T13b the filter route leaves %s unset: no guardian fight on the edit branches" % str(T13B_NEW_FLAGS))
 	_check(gm.has_flag("ch1_data_vision_unlocked") and gm.has_flag("root_access_unlocked") and gm.has_flag("ch1_root_first_edit"),
 		"Data Vision and Root Access unlock; the target-filter edit counts as the first Root edit")
 	_check(_saw("Changed what it thinks it's defending against") and _saw("metadata"), "Broken Mile plays broken_mile.dlg (filter branch)")
@@ -930,6 +933,10 @@ const BC_CH1_FLAG_WRITES_D5CA821: Array = [
 ]
 ## The only flag writes T05 may add (user decision 2026-10-19).
 const BC_T05_NEW_FLAGS: Array = ["ch1_broken_mile_entered", "ch1_stew_done"]
+## Y1-P0-T13b's story flag (user decision D1, 2026-11-05). Its one writer is the combat arena's STORY_FIGHTS
+## table, outside scripts/chapter1, so it is not in the Chapter 1 flag-write scan above (as ch1_slime_fought);
+## _test_t13b_flag_registered checks its writer and reader instead.
+const T13B_NEW_FLAGS: Array = ["ch1_guardian_fought"]
 ## A field run that has not returned by then counts as stalled (a check fails).
 const BC_FIELD_TIMEOUT_SEC := 120.0
 
@@ -1823,3 +1830,22 @@ func _test_t13a_flag_registered() -> void:
 	var s5 := bible.find("## 5. ")
 	var s6 := bible.find("## 6. ")
 	_check(s5 >= 0 and s6 > s5 and bible.substr(s5, s6 - s5).contains("| `ch1_slime_fought` |"), "STORY_BIBLE §5 has the ch1_slime_fought row")
+
+
+## T13b: ch1_guardian_fought has one writer (the arena's story-fight table); the Broken Mile reads it with has_flag
+## and never sets it, nor does its dialogue; it is in the bible's section 5.
+func _test_t13b_flag_registered() -> void:
+	print("[T13b ch1_guardian_fought has one writer and is in the bible]")
+	var arena_text := _read_text("res://scripts/combat/combat_arena.gd")
+	var mile_text := _read_text("res://scripts/chapter1/ch1_path_to_oakhaven.gd")
+	var mile_dlg := _read_text(BC_BROKEN_MILE)
+	var bible := _read_text(BC_BIBLE)
+	var s5 := bible.find("## 5. ")
+	var s6 := bible.find("## 6. ")
+	for flag in T13B_NEW_FLAGS:
+		_check(arena_text.count("\"%s\"" % flag) == 1, "%s appears once in combat_arena.gd: its story-fight table" % flag)
+		_check(mile_text.contains("has_flag(\"%s\")" % flag) and not mile_text.contains("set_story_flag(\"%s\"" % flag)
+			and not mile_dlg.contains("set %s" % flag),
+			"the Broken Mile reads %s with has_flag and never sets it (script or broken_mile.dlg)" % flag)
+		_check(s5 >= 0 and s6 > s5 and bible.substr(s5, s6 - s5).contains("| `%s` |" % flag),
+			"STORY_BIBLE §5 has the %s row" % flag)

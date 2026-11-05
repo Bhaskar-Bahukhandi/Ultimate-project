@@ -1,0 +1,88 @@
+extends SceneTree
+## T13b AC-7 capture (live renderer): the real hand-off path. The story metas are set as the Broken Mile sets them,
+## the arena is the current scene, the win returns to the real Broken Mile, which resumes at root_refused.
+## Shots: guardian.png (the fight, keyboard controls line), guardian-charge.png (the charge's telegraph, mid-way),
+## guardian-shards.png (about 0.3 s after the kill), guardian-resume.png (the Broken Mile's first root_refused line).
+## Run: Godot (not headless) --path AethelgardPrototype --resolution 1280x720 --script <this> -- --out=<dir>
+
+const ARENA := "res://scenes/combat/combat_arena.tscn"
+const MILE := "res://scenes/chapter1/path_to_oakhaven.tscn"
+
+var _out := ""
+
+
+func _initialize() -> void:
+	for a in OS.get_cmdline_user_args():
+		if a.begins_with("--out="):
+			_out = a.substr(6)
+	_run.call_deferred()
+
+
+func _wait(seconds: float) -> void:
+	var end := Time.get_ticks_msec() + int(seconds * 1000.0)
+	while Time.get_ticks_msec() < end:
+		await process_frame
+
+
+func _shot(name: String) -> void:
+	await RenderingServer.frame_post_draw
+	var img := get_root().get_texture().get_image()
+	var path := _out.path_join(name)
+	print("SHOT %s %s err=%d size=%s" % [name, path, img.save_png(path), img.get_size()])
+
+
+func _run() -> void:
+	await process_frame
+	if not OS.get_user_data_dir().contains("aeth_phase0_test"):
+		push_error("not isolated")
+		quit(2)
+		return
+	var gm := get_root().get_node("GameManager")
+	gm.reset_game()
+	gm.set_story_flag("root_access_unlocked", true)   # set by guardian_directive before the panel
+	gm.set_meta("story_fight_id", "ch1_guardian")
+	gm.set_meta("story_fight_return_scene", MILE)
+	get_root().get_node("SceneTransitions").change_scene(ARENA)
+	await _wait(3.0)
+	var arena := current_scene
+	print("SCENE ", arena.scene_file_path if arena else "none")
+	var g = arena.get_node_or_null("Enemies/StoryFightGuardian")
+	print("GUARDIAN ", g != null, " LABEL ", arena.get_node("UI/StoryFightControls").text)
+	await _shot("guardian.png")
+	# The guardian spawns beyond its detection range and waits; a player walks in. Put the player 260 px from it, on
+	# its floor, inside CHARGE_RANGE: it telegraphs its charge. Shoot half-way through the telegraph.
+	var player = arena.get("player")
+	player.global_position = Vector2(g.global_position.x - 260.0, g.global_position.y)
+	player.velocity = Vector2.ZERO
+	var telegraphing := false
+	var end := Time.get_ticks_msec() + 10000
+	while Time.get_ticks_msec() < end:
+		await process_frame
+		g = arena.get_node_or_null("Enemies/StoryFightGuardian")
+		if g and g.current_state == g.State.TELEGRAPH and g.current_attack == g.AttackType.CHARGE:
+			telegraphing = true
+			break
+	print("CHARGE TELEGRAPH seen: ", telegraphing, " distance ", g.distance_to_player() if g else -1.0)
+	await _wait(0.3)
+	await _shot("guardian-charge.png")
+	# After the charge the guardian stands near the player, in the middle of the frame: the kill's shards show there.
+	await _wait(1.5)
+	g = arena.get_node_or_null("Enemies/StoryFightGuardian")
+	print("KILL at distance ", g.distance_to_player())
+	g.take_damage(g.max_health)
+	await _wait(0.3)
+	await _shot("guardian-shards.png")
+	var dm := get_root().get_node("DialogueManager")
+	var seen := false
+	end = Time.get_ticks_msec() + 15000
+	while Time.get_ticks_msec() < end:
+		await process_frame
+		if current_scene and current_scene.scene_file_path == MILE and dm.is_active:
+			seen = true
+			break
+	print("MILE dialogue active: ", seen, " fought=", gm.has_flag("ch1_guardian_fought"))
+	# Long enough for the first line to finish typing and the achievement toast to clear.
+	await _wait(3.0)
+	await _shot("guardian-resume.png")
+	await _wait(0.5)
+	quit(0)

@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-T13b (`production/plan/_source/Y1-P0.json#Y1-P0-T13`, the guardian day; sprint plan row Y1-P0-T13b)
-> **Status**: Ready
+> **Status**: Complete
 > **Layer**: Feature
 > **Type**: Integration
 > **Estimate**: 3 days (sprint row: 2). Day 1 the guardian's script and its row; day 2 the Broken Mile's hand-off,
@@ -27,7 +27,8 @@ of `STORY_FIGHTS`; this story adds a row and an enemy script, not a mode.
 **ADR Decision Summary**: N/A
 **ADR Version**: N/A
 
-**Engine**: Godot 4.6 (4.6.3 at `C:/Godot`; every run sets `GODOT` to the 4.6.3 console exe, TD-036) | **Risk**: MEDIUM
+**Engine**: Godot 4.6 (4.6.3 at `C:/Godot`; every run sets `GODOT` to the 4.6.3 console exe, TD-036) | **Risk**: HIGH
+(`docs/engine-reference/godot/VERSION.md`, 4.6 row)
 **Engine Notes**: no post-cutoff API is planned. The guardian uses `EnemyBase`'s own state machine: the TELEGRAPH
 state (`_begin_telegraph`, `enemy_base.gd:415`, a tint tween and a "!" marker), `AttackType.CHARGE` and
 `AttackType.SLAM` (`_execute_attack`, `:483`), and `stagger()` on a parry (`:982`). Three things in that code
@@ -103,12 +104,26 @@ backdrop is procedural and labelled so).
   parried charge always staggers it (a parry staggers enemies within 120 px of the player). The 120 px is a
   straight-line distance and the 110 px horizontal, so this holds while the two centres differ in height by about
   48 px or less; on the arena floor they do.
+- **D9 poise while attacking (user, 2026-11-05, during /dev-story review):** a player hit during the guardian's
+  TELEGRAPH or ATTACK takes HP but does not interrupt it (EnemyBase's light hit-stun is ignored there); only a parry
+  does. A hit-stun that starts in RECOVER ends with the attack cooldown set, so a hit never skips the cooldown. Hits in
+  CHASE or IDLE stun as EnemyBase does and do not raise the cooldown (`/code-review` R1: raising it there let steady
+  hits stop the guardian ever attacking). `dodge_chance` 0: no random dodge on a hit.
+- **D10 telegraph through `super` (user, 2026-11-05, during /dev-story review):** `_begin_telegraph` calls
+  `super._begin_telegraph()`, then sets the guardian's own duration and restarts the tint at that length.
+- **Accepted deviations (user, 2026-11-05):** a `stagger()` override (a parry landing through an earlier frame's hit
+  box ends the attack in RECOVER) and the guardian's extra named constants; `T13B_NEW_FLAGS` in the route test
+  instead of the frozen Chapter 1 flag list; the guardian suite's timeout 180 s, raised to 240 s (2026-11-05) when
+  the suite grew to about 78 s.
+- **`/code-review` (2026-11-05): CHANGES REQUIRED, user chose fix and re-review:** R1 (above), R2 (the panel's give-up
+  overwrote a choice made in its last tick), R3 (the multiplier clauses of AC-1 tested at 1.0 only), R4 (this record);
+  with the charge stopping at its travel end and `dodge_chance` 0.
 
 ---
 
 ## Acceptance Criteria
 
-- [ ] AC-1 **The guardian.** `scripts/combat/enemies/broken_mile_guardian.gd` extends `EnemyBase` (class
+- [x] AC-1 **The guardian.** `scripts/combat/enemies/broken_mile_guardian.gd` extends `EnemyBase` (class
       `BrokenMileGuardian`, `enemy_name` "Mosswood Guardian"). Its values are named members at the top of the script
       (D5): `GUARDIAN_MAX_HEALTH` 60, `STOMP_RANGE` 70 px, `CHARGE_RANGE` 360 px (≤ its `detection_range`, set before
       `super._ready()`), `attack_range` = `STOMP_RANGE`, `STOMP_TELEGRAPH` 0.45 s, `CHARGE_TELEGRAPH` 0.6 s,
@@ -125,9 +140,11 @@ backdrop is procedural and labelled so).
       that is 60 HP, 0.6 s / 14 for the charge and 0.45 s / 12 for the stomp. One attack, then RECOVER (`max_combo` 1,
       so `_execute_attack`'s `randf()` combo branch never runs). Both attacks can be parried by the player's universal
       parry (D7): the guardian staggers (`_stun_active` true for its stagger time, no new attack meanwhile) and the hit
-      does no damage. Standing within 30 px of it does no damage. No `reset_for_retry()` (the arena respawns the enemy,
-      as for the slime). Nothing in `enemy_base.gd` changes.
-- [ ] AC-2 **The row.** `STORY_FIGHTS["ch1_guardian"]`: `enemy_script` the guardian's; `enemy_type`
+      does no damage. Standing within 30 px of it does no damage. The charge stops when its travel time ends (no slide
+      in RECOVER). Poise (D9): a hit during TELEGRAPH or ATTACK takes HP and does not interrupt the attack; a hit-stun
+      from RECOVER ends with the cooldown set; hits in CHASE do not raise the cooldown; `dodge_chance` 0. No
+      `reset_for_retry()` (the arena respawns the enemy, as for the slime). Nothing in `enemy_base.gd` changes.
+- [x] AC-2 **The row.** `STORY_FIGHTS["ch1_guardian"]`: `enemy_script` the guardian's; `enemy_type`
       `"broken_mile_guardian"`; `enemy_name` `"StoryFightGuardian"`; `enemy_size` `Vector2(78, 56)` and `enemy_color`
       `Color(0.32, 0.26, 0.2)` (the staged rectangle's); the enemy spawned inside the first frame (x ≤ 840, as the
       slime's); `default_return_scene` `res://scenes/chapter1/path_to_oakhaven.tscn`; `flags` `["ch1_guardian_fought"]`;
@@ -137,14 +154,14 @@ backdrop is procedural and labelled so).
       returns no message for it. Nothing else in `combat_arena.gd` changes. `story/STORY_BIBLE.md` §5 gains a
       `ch1_guardian_fought` row (set by the arena's story-fight table; read by the Broken Mile to resume at
       `root_refused`), beside `ch1_slime_fought`'s.
-- [ ] AC-3 **Hand-off, fight branch only.** When the panel resolves as *fight* (the Fight button; the give-up after
+- [x] AC-3 **Hand-off, fight branch only.** When the panel resolves as *fight* (the Fight button; the give-up after
       `root_panel_timeout` seconds, 180 by default and a member a test can lower; or the no-panel fallback,
       `ch1_path_to_oakhaven.gd:371-372`), the Broken Mile does not run `_stage_guardian_fight()` (it goes): it sets
       `story_fight_id = "ch1_guardian"` and `story_fight_return_scene` to its own scene, hides the dialogue and changes
       scene to the arena through `SceneTransitions` (`COMBAT_ENTRY`), once, within 0.5 s of the choice, with the staged
       guardian still fully visible (`modulate.a` 1.0) at that moment. *Filter* and *calm* never load the arena and play
       exactly as today (`root_used` / `root_used_calm`, their flags and the 10 corruption).
-- [ ] AC-4 **The fight.** In the arena the guardian fight behaves as T13a's: one enemy `StoryFightGuardian`, the
+- [x] AC-4 **The fight.** In the arena the guardian fight behaves as T13a's: one enemy `StoryFightGuardian`, the
       player's death a retry with a fresh guardian and full HP, Root Access and Perfect Delete refused, no XP, gold or
       item drops, GameState COMBAT. The win spawns 10 shards of the guardian's colour, sets `ch1_guardian_fought` once,
       keeps the player's HP, emits `story_fight_resolved("win")` and changes scene once to the Broken Mile
@@ -153,14 +170,14 @@ backdrop is procedural and labelled so).
       guardian is disabled, a new instance spawns, and the player takes no hit from the old charge after the restore.
       The rest of T13a's arena behaviour (the win/retry races, pause, the kit refusal from keyboard and pad) is shared
       code, tested on the slime row by `story_fight_test` and not repeated here.
-- [ ] AC-5 **Resume.** `path_to_oakhaven.tscn` loaded with `ch1_guardian_fought` set: no walk-in, no `tree_flicker` to
+- [x] AC-5 **Resume.** `path_to_oakhaven.tscn` loaded with `ch1_guardian_fought` set: no walk-in, no `tree_flicker` to
       `guardian_directive` lines, no Root Access panel, no arena; Kaelen at x 600 and Elara at x 680, no guardian;
       `root_refused` plays (setting `ch1_root_discovered_unused`), then the walk, `rest_stop`, `ridge` and Oakhaven as
       today. `rest_stop` shows the not-edited line ("you looked at that beast like you could read it"). It resumes the
       same way whenever the flag is set, including from a save made later in the scene, so it never hands off twice.
       `root_access_unlocked` stays set. Leaving the arena by the pause menu's main menu leaves no story meta and does
       not set `ch1_guardian_fought`.
-- [ ] AC-6 **Tests.** A new suite `tests/integration/combat/guardian_fight_test.gd` (own `GUARDIAN FIGHT RESULT` line)
+- [x] AC-6 **Tests.** A new suite `tests/integration/combat/guardian_fight_test.gd` (own `GUARDIAN FIGHT RESULT` line)
       checks AC-1, AC-3, AC-4 and AC-5 through cases C1–C5 below. Every runtime number in AC-1 is checked under one
       named pin helper, applied before the guardian spawns (its HP is scaled in `_ready`, `enemy_base.gd:216`) with the
       DDA score re-applied before each attack: player level 1, DDA score 52.5 (the multiplier is `remap(score, 20, 85,
@@ -176,14 +193,21 @@ backdrop is procedural and labelled so).
       STORY_BIBLE §5 has its row. Watched failing: the new suite's cases fail on today's code (no guardian script; the
       Broken Mile stages the fight). Mutations, one per run, each caught by its own check: (a) the guardian picks by
       `randf()` → C1's choice check; (b) the charge's telegraph left at EnemyBase's 0.55 s → C1's telegraph check; (c)
-      the stomp deals EnemyBase's `contact_damage × 1.6` instead of `STOMP_DAMAGE` → C1's stomp-damage check; (d) filter
+      the stomp deals `STOMP_DAMAGE × 1.6` (EnemyBase's SLAM factor) → C1's stomp-damage check; (d) filter
       hands off too → C3's filter check; (e) the timeout does not hand off → C3's timeout check; (f) the resume check
       removed → C5; (g) the row's flag left out → C4's flag check; (h) `_stage_guardian_fight()` still runs before the
       hand-off → C3's 0.5 s and still-visible check; (i) no `_state_chase` override → C1's mid-range charge check; (j)
       `contact_damage` left at a non-zero value → C1's contact check; (k) the arena's `enemy.set("loot_table", null)`
-      line removed → C4's `loot_table` null check. Registered in `tests/suite_limits.txt`, `run_all_tests.ps1` and
-      `ci.yml`; the full local run green on 4.6.3 and CI green.
-- [ ] AC-7 **Evidence.** Live-renderer screenshots, each opened and signed off by the user, labelled live renderer in
+      line removed → C4's `loot_table` null check; (l) the poise override removed → C1's poise checks; (m) the Broken
+      Mile sets `ch1_guardian_fought` itself → the route test's one-writer check. Added after `/code-review`
+      (2026-11-05): (n) the guardian multiplies its own damage by `get_enemy_damage_multiplier()` as well → C1's scaled
+      damage check; (o) the telegraph not divided by the difficulty multiplier → C1's scaled telegraph check; (p) the
+      charge keeps sliding in RECOVER → C1's charge-stop check; (q) the cooldown raised after every hit-stun → C1's
+      steady-hits check; (r) the give-up ignores a choice made in its last tick → C3's last-tick check. The scaled
+      checks
+      run once with the guardian's `zone_level` above the player's level and the DDA score away from 52.5. Registered
+      in `tests/suite_limits.txt`, `run_all_tests.ps1` and `ci.yml`; the full local run green on 4.6.3 and CI green.
+- [x] AC-7 **Evidence.** Live-renderer screenshots, each opened and signed off by the user, labelled live renderer in
       the evidence README: `production/qa/evidence/2026-11-ch1-fights/guardian.png` (player, guardian, HUD, backdrop,
       controls line), `guardian-charge.png` (the charge's telegraph showing), `guardian-shards.png` (the win beat) and
       `guardian-resume.png` (the Broken Mile's resume staging). The README labels the backdrop procedural and the body a
@@ -255,13 +279,20 @@ backdrop is procedural and labelled so).
   frame); the player's HP drops by exactly 12 / 14; after one attack the state is RECOVER, never a second attack
   straight away; a parry of the stomp and, separately, of the charge (each timed as in the notes) → `_stun_active` true,
   no new attack for the stagger time, player HP unchanged; the player held within 30 px for 1.0 s with physics running,
-  `is_hostile` true, `player_ref` set and no attack under way → HP unchanged.
+  `is_hostile` true, `player_ref` set and no attack under way → HP unchanged. Poise (D9): a hit during the stomp's
+  telegraph → HP down, not stunned, the stomp lands on time; a hit in RECOVER → no telegraph before the cooldown; hits
+  every 0.9 s while it walks in → it still starts a telegraph; `dodge_chance` 0. The charge's travel ends within one
+  frame of `CHARGE_SPEED × CHARGE_TRAVEL_TIME` from its start, and RECOVER adds no slide. Scaled (R3): with the
+  guardian's `zone_level` above the player's level and the DDA score away from 52.5, the stomp and the charge each take
+  raw damage × `get_enemy_damage_multiplier()` and telegraph for raw time ÷ the difficulty multiplier.
 - **C2 (AC-2)** — `validate_story_fight(STORY_FIGHTS["ch1_guardian"])` empty (also covered by the table suite's QA 1);
   the row's values as listed.
 - **C3 (AC-3)** — the Broken Mile driven to the panel: Fight → `story_fight_id == "ch1_guardian"`, the return meta is
   the Broken Mile, one change to the arena within 0.5 s with the staged guardian's `modulate.a` still 1.0, no
   `root_refused` line before it; `root_panel_timeout` set to 0.5 → the same; the no-panel fallback → the same; filter →
-  `root_used`, no arena; calm → `root_used_calm`, no arena; corruption and flags as today.
+  `root_used`, no arena; calm → `root_used_calm`, no arena; corruption and flags as today; the last-tick case (R2):
+  `root_panel_timeout` 0.05 and the filter applied before the panel's first 0.1 s tick → `root_used`, no arena, 10
+  corruption once.
 - **C4 (AC-4)** — guardian HP to 0 → 10 shards of `Color(0.32, 0.26, 0.2)`, `ch1_guardian_fought` once, player HP
   unchanged, XP, gold and the inventory unchanged, no pickup node and `loot_table` null, `story_fight_resolved("win")`,
   one change to the Broken Mile; player HP to 0 → a new `StoryFightGuardian` instance, player HP full,
@@ -271,7 +302,7 @@ backdrop is procedural and labelled so).
   arena; `rest_stop` reached with the not-edited line; a save there and a load → the first line is `root_refused`'s
   again, no arena; pause → main menu during the fight → no meta, the flag unset.
 - **C6 (AC-6/7)** — suites registered and green; the route test's one-writer check for `ch1_guardian_fought`; mutations
-  (a)–(k) each failing its own check; four screenshots opened and signed off.
+  (a)–(r) each failing its own check; four screenshots opened and signed off.
 
 ---
 
@@ -282,7 +313,9 @@ backdrop is procedural and labelled so).
 `tests/integration/story/chapter1_route_test.gd` (passing), `production/qa/evidence/2026-11-ch1-fights/` (the README's
 T13b section with the AC map and the user's sign-off, `guardian.png`, `guardian-charge.png`, `guardian-shards.png`,
 `guardian-resume.png`, the suite logs, the mutation logs, the full-run log).
-**Run result**: not yet run.
+**Run result**: OBSERVED — live renderer (Vulkan Forward+, RTX 2050), capture 4 on the final code: `guardian.png`,
+`guardian-charge.png`, `guardian-shards.png`, `guardian-resume.png` in `production/qa/evidence/2026-11-ch1-fights/`,
+each opened and signed off by the user (2026-11-05).
 
 ---
 
@@ -296,4 +329,31 @@ T13b section with the AC map and the user's sign-off, `guardian.png`, `guardian-
 
 ## Completion Notes
 
-(empty until /story-done)
+**Completed**: 2026-11-05
+**Verdict**: COMPLETE WITH NOTES
+**Criteria**: 7/7 passing; AC-6's "CI green" is DEFERRED (the changeset is not pushed; local full run 27/27 on Godot
+4.6.3, `t13b_run_all_rev2.log`).
+**Deviations** (advisory, user-accepted):
+- The guardian's `stagger()` override and its extra named constants (beyond AC-1's list).
+- `T13B_NEW_FLAGS` in `chapter1_route_test` instead of the frozen Chapter 1 flag list (AC-6 said "its flag list").
+- The guardian suite's timeout 240 s (180 s first; the suite grew to about 78 s).
+- D9 (poise, `dodge_chance` 0) and D10 (`_begin_telegraph` through `super`), added during the stage A review.
+- Estimate 3 days against the sprint row's 2.
+**Test Evidence**: Integration tests `AethelgardPrototype/tests/integration/combat/guardian_fight_test.gd` (new, 129
+checks) and `AethelgardPrototype/tests/integration/story/chapter1_route_test.gd` (417 checks, the T13b flag checks);
+watched failing before the code (0/29, 84/24); mutations (a)–(t) and the R1 watch-fail each caught by a named check,
+the older ones re-run on the final suite; four screenshots signed off. All in
+`production/qa/evidence/2026-11-ch1-fights/` (README, T13b section).
+**Code Review**: Complete. `/code-review` three rounds (CHANGES REQUIRED → fixed: R1 a hit-stun lockout, R2 the
+give-up overwriting a last-tick edit, R3 the multiplier clauses tested at 1.0 only, R4 the story record; then F1 a
+check that could not fail; then APPROVED WITH SUGGESTIONS). QL-TEST-COVERAGE GAPS (stale mutation evidence, closed by
+the re-run; the rest below). LP-CODE-REVIEW APPROVE.
+**Open, not fixed** (noted in the evidence README; no tech debt logged at the user's choice):
+- QL: poise during a hit mid-charge is not checked; no mutation removes the hand-off guard; the range boundaries
+  (70/71, 360/361 px) are not checked; AC-3's "hides the dialogue" has no assertion.
+- LP: a stagger arriving in RECOVER can leave the cooldown at 0; the stagger tint can stay yellow after a late hit
+  flash (as in EnemyBase); the 0.25 s floor and the cooldown formula are copied from EnemyBase.
+- Review suggestions: the hand-off guard does not reset if `change_scene` refuses (as T13a's); the resume does not
+  redraw the cart and flicker tree; the pause menu during any scene transition (project-wide); the shard contrast and
+  the Kaelen/Elara placeholder overlap in the screenshots.
+**Known after close**: push and confirm CI is green on this changeset (AC-6).

@@ -3,6 +3,18 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-11-05 — The Broken Mile guardian is a real fight (Y1-P0-T13b)
+
+- **feat(ch1):** on the Broken Mile, choosing "Don't edit it. Fight." at the Root Access panel (or leaving the panel
+  untouched for three minutes) now starts a real side-scroll fight against the Mosswood Guardian in the combat arena,
+  dressed as the Broken Mile. It used to be three screen shakes and a fade. The guardian has 60 HP and two telegraphed
+  attacks: a charge from range (jump or dash it) and a stomp up close (parry it). Touching it does no harm, a light hit
+  does not interrupt its attacks, and a parry staggers it. Dying is a retry with a fresh guardian, never game over; no
+  XP, gold or items. Winning breaks it into shards and returns to the Broken Mile, which goes on from Kaelen's "I
+  could've changed it" line. Editing the guardian (target filter or aggression) plays exactly as before, with no fight.
+- **test:** a new suite, `tests/integration/combat/guardian_fight_test.gd` (27 suites now); the Chapter 1 route test
+  checks the new `ch1_guardian_fought` flag. Evidence: `production/qa/evidence/2026-11-ch1-fights/` (T13b section).
+
 ## 2026-11-01 — A story-fight row's enemy script must be an enemy (TD-038)
 
 - **fix(combat):** a story-fight row whose `enemy_script` is a script that is not an enemy (does not extend

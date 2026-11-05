@@ -213,11 +213,24 @@ var guardian_resolved := false
 var _target_filter: OptionButton = null
 var _guardian: ColorRect = null
 var _cart: ColorRect = null
+## Seconds the Root Access panel waits for the player before it gives up and the
+## guardian is fought (no edit). A member so a test can lower it (Y1-P0-T13b).
+var root_panel_timeout: float = 180.0
+
+const COMBAT_ARENA := "res://scenes/combat/combat_arena.tscn"
+const SELF_SCENE := "res://scenes/chapter1/path_to_oakhaven.tscn"
+var _is_handing_off_to_fight: bool = false
 
 func start_path_sequence() -> void:
 	## A1-P03 to A1-P06 — the Broken Mile. The words are all in
 	## dialogue/ch1/broken_mile.dlg; this scene stages it and runs the first
-	## Root Access edit.
+	## Root Access edit. Refusing the edit is a real fight in the combat arena
+	## (Y1-P0-T13b), which comes back here with ch1_guardian_fought set and
+	## resumes at root_refused. It resumes whenever the flag is set, including
+	## from a save made later in the scene, so the fight is never handed off twice.
+	if GameManager.has_flag("ch1_guardian_fought"):
+		await _resume_after_guardian_fight()
+		return
 	await _beats([
 		{"type": "camera_move", "target": Vector2(640, 360), "duration": 0.5},
 		{"type": "parallel", "beats": [
@@ -251,10 +264,13 @@ func start_path_sequence() -> void:
 		"calm":
 			await _say_node("root_used_calm")
 		_:
-			await _stage_guardian_fight()
-			if not is_inside_tree(): return
-			await _say_node("root_refused")
+			_hand_off_to_guardian_fight()   # root_refused plays on the way back
+			return
 	if not is_inside_tree(): return
+	await _walk_on_to_oakhaven()
+
+## The tail every branch shares: the walk on, rest_stop, the ridge, Oakhaven.
+func _walk_on_to_oakhaven() -> void:
 	await _walk(760, 840)
 	if not is_inside_tree(): return
 	await _say_node("rest_stop")
@@ -262,6 +278,34 @@ func start_path_sequence() -> void:
 	await _say_node("ridge")
 	if not is_inside_tree(): return
 	transition_to_oakhaven()
+
+## Back from the arena with the guardian beaten: no walk-in, no panel, no fight.
+## Kaelen and Elara stand where they faced it; the guardian is gone.
+func _resume_after_guardian_fight() -> void:
+	camera.global_position = Vector2(640, 360)
+	for who in [["Kaelen", 600.0], ["Elara", 680.0]]:
+		var c = cutscene_mgr.get_or_create_character(who[0])
+		if c:
+			c.position = Vector2(who[1], 420)
+			c.visible = true
+			c.modulate.a = 1.0
+	await _say_node("root_refused")
+	if not is_inside_tree(): return
+	await _walk_on_to_oakhaven()
+
+## The player refused the edit (or gave up on the panel, or there is no panel):
+## the fight is real now. The story-fight metas tell the arena which fight to run
+## and where to come back to.
+func _hand_off_to_guardian_fight() -> void:
+	if _is_handing_off_to_fight or _is_transitioning_to_oakhaven:
+		return
+	_is_handing_off_to_fight = true
+	print("[CH1-SEQ3] Handing off to the guardian fight")
+	GameManager.set_meta("story_fight_id", "ch1_guardian")
+	GameManager.set_meta("story_fight_return_scene", SELF_SCENE)
+	DialogueManager.hide_dialogue()
+	camera.disable_letterbox(0.4)
+	SceneTransitions.change_scene(COMBAT_ARENA, SceneTransitions.TransitionStyle.COMBAT_ENTRY)
 
 func _say_node(node: String) -> void:
 	await DialogueManager.run(DLG, node, _on_dlg_event)
@@ -387,7 +431,8 @@ func _run_root_access_panel() -> void:
 		await get_tree().create_timer(0.1, false).timeout
 		if not is_inside_tree(): return
 		waited += 0.1
-		if waited > 180.0:   # nobody at the keyboard: fight it, no edit made
+		# A choice applied during this tick's wait stands: the give-up only fires while nothing is resolved.
+		if waited > root_panel_timeout and not guardian_resolved:   # nobody at the keyboard: fight it, no edit made
 			_root_choice = "fight"
 			guardian_resolved = true
 	root_access_panel.visible = false
@@ -465,21 +510,6 @@ func _guardian_turns_away() -> void:
 	t.tween_property(_guardian, "position:x", 1150.0, 1.0)
 	t.parallel().tween_property(_guardian, "modulate:a", 0.0, 1.0)
 	await t.finished
-
-func _stage_guardian_fight() -> void:
-	for i in 3:
-		camera.shake(6.0, 0.2)
-		flash_overlay.color = Color(1, 1, 1, 0.4)
-		flash_overlay.modulate.a = 0.5
-		await get_tree().create_timer(0.1, false).timeout
-		if not is_inside_tree(): return
-		flash_overlay.modulate.a = 0.0
-		await get_tree().create_timer(0.35, false).timeout
-		if not is_inside_tree(): return
-	if _guardian:
-		var t := create_tween()
-		t.tween_property(_guardian, "modulate:a", 0.0, 0.8)
-		await t.finished
 
 var _is_transitioning_to_oakhaven: bool = false
 

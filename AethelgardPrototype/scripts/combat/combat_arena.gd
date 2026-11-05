@@ -136,6 +136,36 @@ const STORY_FIGHTS: Dictionary = {
 		},
 		"controls": "{move} — Move | {jump} — Jump | {sprint} — Dash | {attack} — Attack | {defend} — Parry",
 	},
+	# The Broken Mile's guardian (Y1-P0-T13b): only the panel's fight branch starts it.
+	"ch1_guardian": {
+		"enemy_script": "res://scripts/combat/enemies/broken_mile_guardian.gd",
+		"enemy_type": "broken_mile_guardian",
+		"enemy_name": "StoryFightGuardian",
+		# No ENEMY_SIZES / ENEMY_COLORS entry: the staged rectangle's size and colour (ch1_path_to_oakhaven.gd).
+		"enemy_size": Vector2(78, 56),
+		"enemy_color": Color(0.32, 0.26, 0.2),
+		"enemy_spawn": Vector2(760, 400),
+		"player_spawn": Vector2(200, 400),
+		"default_return_scene": "res://scenes/chapter1/path_to_oakhaven.tscn",
+		"shard_color": Color(0.32, 0.26, 0.2),
+		"shard_count": 10,
+		"shard_fade": 0.6,
+		"shard_size": 12.0,
+		"shard_z": 20,
+		"flags": ["ch1_guardian_fought"],
+		# Procedural forest backdrop: the Broken Mile's colours and trees (ch1_path_to_oakhaven.gd), with four more
+		# trees in the margin past the arena.
+		"backdrop": {
+			"sky": Color(0.1, 0.07, 0.14),
+			"ground": Color(0.05, 0.09, 0.04),
+			"path": Color(0.14, 0.1, 0.06),
+			"tree": Color(0.035, 0.065, 0.025),
+			"margin": Vector2(700, 400),
+			"trees": [[-380, 40, 240], [-160, 36, 225], [30, 45, 260], [120, 38, 235], [280, 32, 215], [430, 28, 200],
+				[750, 35, 230], [900, 40, 225], [1050, 38, 240], [1180, 35, 230], [1420, 36, 235], [1640, 40, 225]],
+		},
+		"controls": "{move} — Move | {jump} — Jump | {sprint} — Dash | {attack} — Attack | {defend} — Parry",
+	},
 }
 ## Every required row key and the Variant type its value must have.
 const STORY_FIGHT_REQUIRED: Dictionary = {

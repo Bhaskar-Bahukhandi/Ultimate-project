@@ -1,0 +1,219 @@
+GODOT override: C:\Godot\Godot_v4.6.3-stable_win64_console.exe
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+[C1 the guardian: values, choice by distance, telegraphs, damage, recover, parry, contact]
+  FAIL: C1 constant GUARDIAN_MAX_HEALTH is 60.0 (found <missing>)
+  FAIL: C1 constant STOMP_RANGE is 70.0 (found <missing>)
+  FAIL: C1 constant CHARGE_RANGE is 360.0 (found <missing>)
+  FAIL: C1 constant STOMP_TELEGRAPH is 0.45 (found <missing>)
+  FAIL: C1 constant CHARGE_TELEGRAPH is 0.6 (found <missing>)
+  FAIL: C1 constant STOMP_DAMAGE is 12.0 (found <missing>)
+  FAIL: C1 constant CHARGE_DAMAGE is 14.0 (found <missing>)
+  FAIL: C1 the stomp's hit box is wider than 2 x STOMP_RANGE, so a stomp started at the range edge can land ((0.0, 0.0))
+  FAIL: C1 the charge's hit box reaches at most 110 px from the centre, so a parried charge always staggers it (D8; inf px)
+  FAIL: C1 the charge covers at least 200 px (speed x travel time = 0.0 px)
+  FAIL: C1 CHARGE_RANGE is within the detection range
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [AssetManager] Production art slot missing for Slime enemy sheet at res://assets/production_art/characters/enemies/fracture_slime_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/enemies/fracture_slime_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_enemy (res://scripts/asset_manager.gd:1043)
+       [4] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [5] _ready (res://scripts/combat/enemy_base.gd:221)
+       [6] _ready (res://scripts/combat/enemies/slime.gd:36)
+       [7] _start_arena (res://tests/integration/combat/guardian_fight_test.gd:221)
+       [8] _test_c1_guardian (res://tests/integration/combat/guardian_fight_test.gd:334)
+       [9] _run (res://tests/integration/combat/guardian_fight_test.gd:57)
+WARNING: [AssetManager] Enemy sheet failed to load for Slime; using existing enemy fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_enemy (res://scripts/asset_manager.gd:1051)
+       [2] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [3] _ready (res://scripts/combat/enemy_base.gd:221)
+       [4] _ready (res://scripts/combat/enemies/slime.gd:36)
+       [5] _start_arena (res://tests/integration/combat/guardian_fight_test.gd:221)
+       [6] _test_c1_guardian (res://tests/integration/combat/guardian_fight_test.gd:334)
+       [7] _run (res://tests/integration/combat/guardian_fight_test.gd:57)
+WARNING: [STORY FIGHT] Unknown story fight id 'ch1_guardian'; running the default mode
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _consume_story_fight_metas (res://scripts/combat/combat_arena.gd:720)
+       [1] _ready (res://scripts/combat/combat_arena.gd:234)
+       [2] _start_arena (res://tests/integration/combat/guardian_fight_test.gd:221)
+       [3] _test_c1_guardian (res://tests/integration/combat/guardian_fight_test.gd:334)
+       [4] _run (res://tests/integration/combat/guardian_fight_test.gd:57)
+WARNING: [AssetManager] Production art slot missing for environment decal atlas at res://assets/production_art/backgrounds/environment_decal_atlas.png; using generated fallback res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1497)
+       [4] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [5] _build_phase10mm_arena_polish (res://scripts/combat/combat_arena.gd:309)
+       [6] _ready (res://scripts/combat/combat_arena.gd:236)
+       [7] _start_arena (res://tests/integration/combat/guardian_fight_test.gd:221)
+       [8] _test_c1_guardian (res://tests/integration/combat/guardian_fight_test.gd:334)
+       [9] _run (res://tests/integration/combat/guardian_fight_test.gd:57)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1498)
+       [3] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [4] _build_phase10mm_arena_polish (res://scripts/combat/combat_arena.gd:309)
+       [5] _ready (res://scripts/combat/combat_arena.gd:236)
+       [6] _start_arena (res://tests/integration/combat/guardian_fight_test.gd:221)
+       [7] _test_c1_guardian (res://tests/integration/combat/guardian_fight_test.gd:334)
+       [8] _run (res://tests/integration/combat/guardian_fight_test.gd:57)
+WARNING: [AssetManager] Production art slot missing for environment prop atlas at res://assets/production_art/props/environment_prop_atlas.png; using generated fallback res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1486)
+       [4] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [5] _build_phase10mm_arena_polish (res://scripts/combat/combat_arena.gd:311)
+       [6] _ready (res://scripts/combat/combat_arena.gd:236)
+       [7] _start_arena (res://tests/integration/combat/guardian_fight_test.gd:221)
+       [8] _test_c1_guardian (res://tests/integration/combat/guardian_fight_test.gd:334)
+       [9] _run (res://tests/integration/combat/guardian_fight_test.gd:57)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1487)
+       [3] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [4] _build_phase10mm_arena_polish (res://scripts/combat/combat_arena.gd:311)
+       [5] _ready (res://scripts/combat/combat_arena.gd:236)
+       [6] _start_arena (res://tests/integration/combat/guardian_fight_test.gd:221)
+       [7] _test_c1_guardian (res://tests/integration/combat/guardian_fight_test.gd:334)
+       [8] _run (res://tests/integration/combat/guardian_fight_test.gd:57)
+WARNING: [AssetManager] Production art slot missing for Kaelen combat sheet at res://assets/production_art/characters/player/kaelen_combat_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:985)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _setup_sprites (res://scripts/combat/combat_arena.gd:1121)
+       [6] _ready (res://scripts/combat/combat_arena.gd:259)
+       [7] _start_arena (res://tests/integration/combat/guardian_fight_test.gd:221)
+       [8] _test_c1_guardian (res://tests/integration/combat/guardian_fight_test.gd:334)
+       [9] _run (res://tests/integration/combat/guardian_fight_test.gd:57)
+WARNING: [AssetManager] V2 combat player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:994)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _setup_sprites (res://scripts/combat/combat_arena.gd:1121)
+       [4] _ready (res://scripts/combat/combat_arena.gd:259)
+       [5] _start_arena (res://tests/integration/combat/guardian_fight_test.gd:221)
+       [6] _test_c1_guardian (res://tests/integration/combat/guardian_fight_test.gd:334)
+       [7] _run (res://tests/integration/combat/guardian_fight_test.gd:57)
+  FAIL: C1 the arena spawns one StoryFightGuardian running broken_mile_guardian.gd
+[C2 the ch1_guardian row]
+  FAIL: C2 STORY_FIGHTS has the row 'ch1_guardian'
+  FAIL: C2 validate_story_fight gives no message for the row ["missing required key \'enemy_script\'", "missing required key \'enemy_type\'", "missing required key \'enemy_name\'", "missing required key \'enemy_spawn\'", "missing required key \'player_spawn\'", "missing required key \'default_return_scene\'", "missing required key \'flags\'", "missing required key \'controls\'"]
+  FAIL: C2 enemy_script, enemy_type and enemy_name are the guardian's
+  FAIL: C2 the body is the staged rectangle's: 78 x 56, Color(0.32, 0.26, 0.2)
+  FAIL: C2 the guardian spawns inside the first frame (x <= 840), to the right of the player (x 9999.0)
+  FAIL: C2 default_return_scene is the Broken Mile's scene
+  FAIL: C2 flags is ["ch1_guardian_fought"] (found <null>)
+  FAIL: C2 10 shards of the guardian's colour
+  FAIL: C2 shard_fade is the slime row's (<null>)
+  FAIL: C2 shard_size is the slime row's (<null>)
+  FAIL: C2 shard_z is the slime row's (<null>)
+  FAIL: C2 the controls line is the slime row's
+  FAIL: C2 the backdrop is the Broken Mile's sky, ground, path and tree colours
+  FAIL: C2 STORY_BIBLE section 5 has a row for ch1_guardian_fought
+[C4 winning]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [STORY FIGHT] Unknown story fight id 'ch1_guardian'; running the default mode
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _consume_story_fight_metas (res://scripts/combat/combat_arena.gd:720)
+       [1] _ready (res://scripts/combat/combat_arena.gd:234)
+       [2] _start_arena (res://tests/integration/combat/guardian_fight_test.gd:221)
+       [3] _test_c4_win (res://tests/integration/combat/guardian_fight_test.gd:504)
+       [4] _run (res://tests/integration/combat/guardian_fight_test.gd:60)
+       [5] _test_c1_guardian (res://tests/integration/combat/guardian_fight_test.gd:341)
+  FAIL: C4 the win: no StoryFightGuardian in the arena
+[C4 the player's death is a retry with a fresh guardian]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [STORY FIGHT] Unknown story fight id 'ch1_guardian'; running the default mode
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _consume_story_fight_metas (res://scripts/combat/combat_arena.gd:720)
+       [1] _ready (res://scripts/combat/combat_arena.gd:234)
+       [2] _start_arena (res://tests/integration/combat/guardian_fight_test.gd:221)
+       [3] _test_c4_retry (res://tests/integration/combat/guardian_fight_test.gd:550)
+       [4] _run (res://tests/integration/combat/guardian_fight_test.gd:61)
+       [5] _test_c4_win (res://tests/integration/combat/guardian_fight_test.gd:510)
+  FAIL: C4 the retry: no StoryFightGuardian in the arena
+[C4 the player dies while the guardian is mid-charge]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [STORY FIGHT] Unknown story fight id 'ch1_guardian'; running the default mode
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _consume_story_fight_metas (res://scripts/combat/combat_arena.gd:720)
+       [1] _ready (res://scripts/combat/combat_arena.gd:234)
+       [2] _start_arena (res://tests/integration/combat/guardian_fight_test.gd:221)
+       [3] _test_c4_retry_mid_charge (res://tests/integration/combat/guardian_fight_test.gd:582)
+       [4] _run (res://tests/integration/combat/guardian_fight_test.gd:62)
+       [5] _test_c4_retry (res://tests/integration/combat/guardian_fight_test.gd:556)
+  FAIL: C4 the mid-charge retry: no StoryFightGuardian in the arena
+
+GUARDIAN FIGHT RESULT: 0 passed, 29 failed
+  FAIL: C1 constant GUARDIAN_MAX_HEALTH is 60.0 (found <missing>)
+  FAIL: C1 constant STOMP_RANGE is 70.0 (found <missing>)
+  FAIL: C1 constant CHARGE_RANGE is 360.0 (found <missing>)
+  FAIL: C1 constant STOMP_TELEGRAPH is 0.45 (found <missing>)
+  FAIL: C1 constant CHARGE_TELEGRAPH is 0.6 (found <missing>)
+  FAIL: C1 constant STOMP_DAMAGE is 12.0 (found <missing>)
+  FAIL: C1 constant CHARGE_DAMAGE is 14.0 (found <missing>)
+  FAIL: C1 the stomp's hit box is wider than 2 x STOMP_RANGE, so a stomp started at the range edge can land ((0.0, 0.0))
+  FAIL: C1 the charge's hit box reaches at most 110 px from the centre, so a parried charge always staggers it (D8; inf px)
+  FAIL: C1 the charge covers at least 200 px (speed x travel time = 0.0 px)
+  FAIL: C1 CHARGE_RANGE is within the detection range
+  FAIL: C1 the arena spawns one StoryFightGuardian running broken_mile_guardian.gd
+  FAIL: C2 STORY_FIGHTS has the row 'ch1_guardian'
+  FAIL: C2 validate_story_fight gives no message for the row ["missing required key \'enemy_script\'", "missing required key \'enemy_type\'", "missing required key \'enemy_name\'", "missing required key \'enemy_spawn\'", "missing required key \'player_spawn\'", "missing required key \'default_return_scene\'", "missing required key \'flags\'", "missing required key \'controls\'"]
+  FAIL: C2 enemy_script, enemy_type and enemy_name are the guardian's
+  FAIL: C2 the body is the staged rectangle's: 78 x 56, Color(0.32, 0.26, 0.2)
+  FAIL: C2 the guardian spawns inside the first frame (x <= 840), to the right of the player (x 9999.0)
+  FAIL: C2 default_return_scene is the Broken Mile's scene
+  FAIL: C2 flags is ["ch1_guardian_fought"] (found <null>)
+  FAIL: C2 10 shards of the guardian's colour
+  FAIL: C2 shard_fade is the slime row's (<null>)
+  FAIL: C2 shard_size is the slime row's (<null>)
+  FAIL: C2 shard_z is the slime row's (<null>)
+  FAIL: C2 the controls line is the slime row's
+  FAIL: C2 the backdrop is the Broken Mile's sky, ground, path and tree colours
+  FAIL: C2 STORY_BIBLE section 5 has a row for ch1_guardian_fought
+  FAIL: C4 the win: no StoryFightGuardian in the arena
+  FAIL: C4 the retry: no StoryFightGuardian in the arena
+  FAIL: C4 the mid-charge retry: no StoryFightGuardian in the arena
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)
+RUNNER WARN res://tests/integration/combat/guardian_fight_test.gd: 29 checks ran, suite_limits.txt minimum is 1
+EXIT 1

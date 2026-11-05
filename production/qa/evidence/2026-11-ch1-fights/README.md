@@ -308,3 +308,118 @@ on the pinned version.
   up to a whole minute, per `suite_limits.txt`'s rule; well under the step's 10-minute `timeout-minutes`.
 - **Not judged here:** the pacing and feel of the fight (slime difficulty, the retry delay). They are for `/team-qa` and
   T14b's playtest.
+
+---
+
+# Evidence: Y1-P0-T13b — The Broken Mile guardian is a real side-scroll fight
+
+Story: `production/epics/y1-p0-stabilize/story-t13b-guardian-fight.md`. Every run here is on **Godot 4.6.3** (`GODOT`
+set to the 4.6.3 console exe, TD-036; each log's first lines say so). The T13a sections above are unchanged.
+
+## Acceptance criteria → evidence
+
+| AC | Evidence |
+|---|---|
+| AC-1 the guardian | `guardian_fight_test.gd` C1 (constants, attack by distance, telegraph from range, telegraph times, exact damage, one attack then RECOVER, parry of both attacks, no contact damage, poise D9); mutations (a), (b), (c), (i), (j), (l) |
+| AC-2 the row | C2; `story_fight_table_test` 305/0 (its QA 1 and QA 2 now include the row and `broken_mile_guardian.gd`); STORY_BIBLE §5 row; mutation (g) |
+| AC-3 hand-off | C3 (Fight button 0.090 s, give-up 0.563 s, no-panel 0.000 s, staged guardian still visible; filter and calm unchanged); mutations (d), (e), (h) |
+| AC-4 the fight | C4 (win: 10 shards, flag once, one change back; drops; retry; retry while the old charge runs); R1 watch-fail; mutations (g), (k) |
+| AC-5 resume | C5 (first line `root_refused`'s, no panel or arena, Kaelen 600 / Elara 680, rest_stop not-edited line, save and load, main menu leaves no meta); mutation (f) |
+| AC-6 tests | Suites registered in `suite_limits.txt`, `run_all_tests.ps1`, `ci.yml`; route test one-writer check (mutation (m)); full run 27/27 |
+| AC-7 evidence | The four screenshots below, signed off by the user; CHANGELOG entry |
+
+## Screenshots (live renderer, not headless)
+
+All four are from a real 1280x720 window (Godot 4.6.3, Vulkan 1.4.329 Forward+, NVIDIA GeForce RTX 2050), driven by
+`t13b_capture.gd.txt` through the real hand-off path: the story metas set as the Broken Mile sets them, then
+`SceneTransitions.change_scene` to the arena, and the win returns to the real Broken Mile (`t13b_capture.log`). The
+body is the arena's placeholder rectangle and the backdrop is procedural (no production art). The orchestrator opened
+each one before showing it to the user. These are **capture 4**, taken on the final code after the `/code-review`
+fixes. **Signed off by the user, 2026-11-05** (capture 3, on the code before the fixes, was signed off first and
+replaced: the charge now stops at its travel end, which changed the shards shot).
+
+| File | Shows |
+|---|---|
+| `guardian.png` | The fight: Kaelen, the guardian (78 x 56 brown body), HUD, the Broken Mile backdrop with its path, the keyboard controls line |
+| `guardian-charge.png` | Half-way through the charge's telegraph: the guardian tinted, EnemyBase's "!" marker, 260 px from Kaelen (the capture places the player in charge range; the guardian spawns outside its 420 px detection range and waits, as the slime does) |
+| `guardian-shards.png` | 0.3 s after the kill, once the charge had landed (HP 86/100, the 14) and stopped next to Kaelen (kill at 40 px): the death flash, with the brown shards over it, mostly hides him |
+| `guardian-resume.png` | The Broken Mile's resume: `root_refused`'s first line in full, Kaelen at 600 and Elara at 680, no guardian |
+
+Noted at sign-off, not fixed: the shards (the guardian's own brown) read poorly against the salmon death flash at
+0.3 s; Elara's wider placeholder covers part of Kaelen in the resume shot (the positions the scene already uses at the
+panel). Captures 1 and 2 (scratchpad only) failed or were reshot: an unquoted output path with a space, an
+`EnemyBase` reference in the capture script compiled before the autoloads, no charge (player out of detection range),
+shards at the frame's edge, the resume line not yet typed.
+
+## Runs
+
+| Run | Result | Log |
+|---|---|---|
+| Stage A, before the guardian existed | 0 passed, 29 failed, each by name | `t13b_tdd_before.log` |
+| Stage A, after (3 runs) | 68/0 each | `t13b_guardian_fight_test_run1-3.log` |
+| After review fixes R1, D9, D10, S1–S4 (3 runs) | 72/0 each | `t13b_guardian_fight_test_rev1_run1-3.log` |
+| R1 watch-fail: the old guardian left alive on retry | 68 passed, 4 failed; "the old charge does not hit" failed (lowest HP 86.0) | `t13b_retry_check_watch_fail.log` |
+| Stage B, before the scene change | 84 passed, 24 failed (C3 15, C5 8, one test bug fixed) | `t13b_stage_b_before.log` |
+| Stage B, after (3 runs) | 108/0 each, about 56 s | `t13b_guardian_fight_test_final_run1-3.log` |
+| `chapter1_route_test` | 417/0 (was 413) | `t13b_chapter1_route_test.log` |
+| `phase0_blockers_test` | 82/0 | `t13b_phase0_blockers_test.log` |
+| `story_fight_test`, `story_fight_table_test`, `load_all_test` | 63/0, 305/0, 210 ok | `t13b_story_fight_test_stage_b.log`, `t13b_story_fight_table_test_rev1.log`, `t13b_load_all_test_after_row.log` |
+| After the mutations | 108/0 | `t13b_after_mutations.log` |
+| Full local run, 27 suites | all passed, 1613 s | `t13b_run_all.log` |
+| After the `/code-review` fixes (3 runs) | 128/0 each, about 78 s | `t13b_guardian_fight_test_rev2_run1-3.log` |
+| `story_fight_test` after the fixes | 63/0 | `t13b_story_fight_test_rev2.log` |
+| Full local run after the fixes, 27 suites | all passed, 1622 s (guardian 128/0, route 417/0, table 305/0, phase0 82/0, playthrough 172/0) | `t13b_run_all_rev2.log` |
+| After the second review's test fixes F1–F6 (3 runs, then once after a comment re-wrap) | 129/0 each, about 77 s | `t13b_guardian_fight_test_rev3_run1-3.log`, `t13b_guardian_fight_test_rev3_after_comment_wrap.log` |
+| R1 watch-fail at the wider retry distance (332 px) | 125 passed, 4 failed; "the old charge does not hit" failed (lowest HP 86.0) | `t13b_retry_check_watch_fail_rev3.log` |
+| Parse check of the five changed scripts | all `ok`, exit 0 | (this README) |
+
+## Mutations (AC-6)
+
+`t13b_mutate.py`: one mutation per invocation, an exact one-match replacement, the file restored byte for byte and
+SHA-256 checked. All 13 caught, each by its named check (`t13b_mutation_a.log` … `t13b_mutation_m.log`): (a) attack by
+`randf()`; (b) the charge telegraph left at 0.55 s; (c) the stomp at `contact_damage * 1.6`; (d) filter hands off;
+(e) the give-up never fires; (f) the resume check removed; (g) the row's flags empty; (h) the old ~2.15 s staging
+before the hand-off; (i) no `_state_chase` override; (j) contact damage 8; (k) the arena's `loot_table = null` removed;
+(l) poise removed; (m) the Broken Mile sets the flag itself (route test). (m) ran alongside (i), (j) and (l), which
+touch only the guardian script; its target check reads source text.
+
+After `/code-review` (`t13b_mutation_<id>_rev2.log`), all caught: (c) changed to `STOMP_DAMAGE * 1.6` (the stomp check
+saw 19.2); (l) re-run; (n) the damage multiplier applied twice (27.0 instead of 18.0); (o) the telegraph not divided
+(both scaled telegraph checks); (p) the charge not stopped (268.8 px travel, 221.3 px slide); (q) the cooldown raised
+after every hit-stun (6 hits, no telegraph); (r) the give-up without `not guardian_resolved` (the four last-tick
+checks); (e) re-run on R2's new line (the five give-up checks).
+
+After the second review (`_rev3`): (s) a dead guardian that keeps acting (a `die()` override restoring physics and
+state) → "C4 the guardian killed mid-charge: the player's HP is unchanged after the kill" (lowest HP 72, two charge
+hits); the mid-telegraph variant of that check is backed by the guardian freeing itself 0.6 s after death, which this
+mutation cannot switch off without changing `enemy_base.gd`; (t) Apply's `or guardian_resolved` guard removed →
+"corruption was added once" (2 changes) and the 10-corruption check.
+
+At `/story-done` (QL-TEST-COVERAGE gap: the first set had last run on the 108-check suite), (a), (b), (d), (f),
+(g), (h), (i), (j), (k) and (m) were re-run on the final 129-check suite (`t13b_mutation_<id>_final.log`): all caught
+by their named checks, every file SHA-restored, no Godot process left.
+
+## `/code-review` (2026-11-05): CHANGES REQUIRED → fixed
+
+GDScript, Godot scene-flow and QA reviews, each finding checked in the code by the orchestrator. Required: R1 a hit-stun
+in CHASE raised the cooldown, so steady hits kept the guardian from attacking (now only from RECOVER); R2 the panel's
+give-up overwrote a choice made in its last tick (paid edit, then the fight); R3 the multiplier clauses of AC-1 were
+tested at 1.0 only (now also at damage x1.5 and difficulty x1.25); R4 D9/D10 recorded in the story. Also fixed: the
+charge slid about 320 px in RECOVER, `dodge_chance` 0, the telegraph tween killed on a stagger, a full-length
+no-second-attack watch, the freed-guardian checks, a stun check in `_arm`, GameState COMBAT, a kill mid-telegraph and
+mid-charge. Not fixed, noted: the hand-off guard does not reset if `change_scene` refuses (as T13a's); the pause menu
+during any scene transition (project-wide); the resume does not redraw the cart and flicker tree.
+
+Second pass: GDScript CLEAN (every fix closed); QA GAPS, one required: C4's HP-after-kill check could not fail (the
+win makes the player invulnerable). Fixed in the test (invulnerability cleared during the watch, mutation (s)), with
+the corruption guard exercised (F2, mutation (t)), the multipliers asserted (F3), a wider retry margin (F4) and
+game-time watches (F5, F6). Gameplay code unchanged in this round (SHA-256 as after the first fixes).
+
+## Deviations and notes
+
+- Accepted by the user: the guardian's `stagger()` override and its extra named constants (2026-11-05);
+  `T13B_NEW_FLAGS` in the route test instead of the frozen Chapter 1 flag list; the guardian suite's timeout 180 s, raised to 240 s when the suite grew to about 78 s.
+- Added during review (user decisions): D9 poise while attacking, D10 `_begin_telegraph` through `super`.
+- Existing EnemyBase issues seen, not changed (out of scope): `get_meta("flash_tween", null)` prints an `ERROR:` line
+  per telegraph; the parry tint stays on an enemy that leaves STUNNED early; a "Lambda capture freed" line.
+- The four poise checks were watched failing through mutation (l), not directly.

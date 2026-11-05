@@ -1,0 +1,768 @@
+GODOT override: C:\Godot\Godot_v4.6.3-stable_win64_console.exe
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+[C1 the guardian: values, choice by distance, telegraphs, damage, recover, parry, contact]
+  PASS: C1 constant GUARDIAN_MAX_HEALTH is 60.0 (found 60.0)
+  PASS: C1 constant STOMP_RANGE is 70.0 (found 70.0)
+  PASS: C1 constant CHARGE_RANGE is 360.0 (found 360.0)
+  PASS: C1 constant STOMP_TELEGRAPH is 0.45 (found 0.45)
+  PASS: C1 constant CHARGE_TELEGRAPH is 0.6 (found 0.6)
+  PASS: C1 constant STOMP_DAMAGE is 12.0 (found 12.0)
+  PASS: C1 constant CHARGE_DAMAGE is 14.0 (found 14.0)
+  PASS: C1 the stomp's hit box is wider than 2 x STOMP_RANGE, so a stomp started at the range edge can land ((168.0, 96.0))
+  PASS: C1 the charge's hit box reaches at most 110 px from the centre, so a parried charge staggers it (D8; 110.0 px)
+  PASS: C1 the charge covers at least 200 px (speed x travel time = 260.0 px)
+  PASS: C1 CHARGE_RANGE is within the detection range
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [AssetManager] Production art slot missing for Slime enemy sheet at res://assets/production_art/characters/enemies/fracture_slime_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/enemies/fracture_slime_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_enemy (res://scripts/asset_manager.gd:1043)
+       [4] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [5] _ready (res://scripts/combat/enemy_base.gd:221)
+       [6] _ready (res://scripts/combat/enemies/slime.gd:36)
+       [7] _start_arena (res://tests/integration/combat/guardian_fight_test.gd:279)
+       [8] _test_c1_guardian (res://tests/integration/combat/guardian_fight_test.gd:434)
+       [9] _run (res://tests/integration/combat/guardian_fight_test.gd:105)
+WARNING: [AssetManager] Enemy sheet failed to load for Slime; using existing enemy fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_enemy (res://scripts/asset_manager.gd:1051)
+       [2] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [3] _ready (res://scripts/combat/enemy_base.gd:221)
+       [4] _ready (res://scripts/combat/enemies/slime.gd:36)
+       [5] _start_arena (res://tests/integration/combat/guardian_fight_test.gd:279)
+       [6] _test_c1_guardian (res://tests/integration/combat/guardian_fight_test.gd:434)
+       [7] _run (res://tests/integration/combat/guardian_fight_test.gd:105)
+WARNING: [AssetManager] Production art slot missing for Kaelen combat sheet at res://assets/production_art/characters/player/kaelen_combat_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:985)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _setup_sprites (res://scripts/combat/combat_arena.gd:1151)
+       [6] _start_story_fight (res://scripts/combat/combat_arena.gd:918)
+       [7] _ready (res://scripts/combat/combat_arena.gd:285)
+       [8] _start_arena (res://tests/integration/combat/guardian_fight_test.gd:279)
+       [9] _test_c1_guardian (res://tests/integration/combat/guardian_fight_test.gd:434)
+       [10] _run (res://tests/integration/combat/guardian_fight_test.gd:105)
+WARNING: [AssetManager] V2 combat player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:994)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _setup_sprites (res://scripts/combat/combat_arena.gd:1151)
+       [4] _start_story_fight (res://scripts/combat/combat_arena.gd:918)
+       [5] _ready (res://scripts/combat/combat_arena.gd:285)
+       [6] _start_arena (res://tests/integration/combat/guardian_fight_test.gd:279)
+       [7] _test_c1_guardian (res://tests/integration/combat/guardian_fight_test.gd:434)
+       [8] _run (res://tests/integration/combat/guardian_fight_test.gd:105)
+  PASS: C1 the arena spawns one StoryFightGuardian running broken_mile_guardian.gd
+  PASS: C1 enemy_name is 'Mosswood Guardian' (found 'Mosswood Guardian')
+  PASS: C1 max_health is 60 under the pins, zone_level 0 (found 60.0)
+  PASS: C1 attack_range is 70 = STOMP_RANGE (found 70.0)
+  PASS: C1 contact_damage is 0 (found 0.0)
+  PASS: C1 max_combo is 1, so EnemyBase's random combo branch never runs (found 1)
+  PASS: C1 detection_range (420.0) reaches CHARGE_RANGE
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:98)
+       [3] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:106)
+       [2] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+DDA: 20.0 (mult=0.75) K:0 D:0.3
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:98)
+       [3] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:106)
+       [2] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+DDA: 20.0 (mult=0.75) K:0 D:0.6
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:98)
+       [3] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:106)
+       [2] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+DDA: 20.0 (mult=0.75) K:0 D:0.9
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:98)
+       [3] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:106)
+       [2] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+DDA: 20.0 (mult=0.75) K:0 D:1.2
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:98)
+       [3] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:106)
+       [2] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+DDA: 20.0 (mult=0.75) K:0 D:1.5
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:98)
+       [3] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:106)
+       [2] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+DDA: 20.0 (mult=0.75) K:0 D:1.8
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:98)
+       [3] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:106)
+       [2] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+DDA: 20.0 (mult=0.75) K:0 D:2.1
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:98)
+       [3] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:106)
+       [2] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+DDA: 20.0 (mult=0.75) K:0 D:2.4
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:98)
+       [3] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:106)
+       [2] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+DDA: 20.0 (mult=0.75) K:0 D:2.7
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:98)
+       [3] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:106)
+       [2] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+DDA: 20.0 (mult=0.75) K:0 D:3.0
+  PASS: C1 the player at 50 px: telegraph then SLAM, on all 5 repeats ([2, 2, 2, 2, 2])
+  PASS: C1 the player at 200 px: telegraph then CHARGE, on all 5 repeats ([3, 3, 3, 3, 3])
+  PASS: C1 the charge is telegraphed from range: the player outside attack_range when it began (physics frames, no direct _begin_telegraph; [201.4, 201.4, 201.4, 201.4, 201.4] px)
+  PASS: C1 the stomp's telegraph is 0.45 s, +- one frame (duration 0.45, 28 frames)
+  PASS: C1 the charge's telegraph is 0.6 s, +- one frame (duration 0.6, 36 frames)
+  PASS: C1 the stomp takes exactly 12 HP from the player ([12.0, 12.0, 12.0, 12.0, 12.0])
+  PASS: C1 the charge takes exactly 14 HP from the player ([14.0, 14.0, 14.0, 14.0, 14.0])
+  PASS: C1 the charge runs in ATTACK after its telegraph; the stomp lands straight from the telegraph
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:98)
+       [3] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:106)
+       [2] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+DDA: 20.0 (mult=0.75) K:0 D:3.3
+  PASS: C1 after the attack at 50 px the state is RECOVER and no second attack starts within 1.783 s (acted false)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:98)
+       [3] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:106)
+       [2] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+DDA: 20.0 (mult=0.75) K:0 D:3.6
+  PASS: C1 after the attack at 200 px the state is RECOVER and no second attack starts within 1.783 s (acted false)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:98)
+       [3] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:106)
+       [2] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+DDA: 20.0 (mult=0.75) K:0 D:3.9
+  PASS: C1 the charge travels CHARGE_SPEED x CHARGE_TRAVEL_TIME = 260 px, +- one frame (260.6 px)
+  PASS: C1 RECOVER after the charge adds no slide (0.0 px in 0.5 s)
+  PASS: C1 dodge_chance is 0: no random dodge on a hit (D9; found 0.0)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:98)
+       [3] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:106)
+       [2] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] _run_attack (res://tests/integration/combat/guardian_fight_test.gd:377)
+DDA: 20.0 (mult=0.75) K:0 D:4.2
+  PASS: C1 a hit during the telegraph takes 15.0 HP (guardian at 45.0) and does not stun it (states [4, 5])
+  PASS: C1 after a hit during its telegraph the stomp still lands on time: 0.45 s +- one frame, 12 HP (0.467 s, 12.0 HP)
+DDA: 20.0 (mult=0.75) K:0 D:4.5
+  PASS: C1 a hit during RECOVER takes HP and stuns it (in RECOVER true, stunned true, HP 45.0 of 60.0)
+  PASS: C1 after a hit during RECOVER no telegraph starts within 0.9 x its cooldown (D9)
+  PASS: C1 hit every 0.9 s while it walks in, it still starts a telegraph (R1; 3 hits, stunned true, telegraph true)
+DDA: 20.0 (mult=0.75) K:0 D:4.8
+  PASS: C1 scaled (R3): the multipliers under test are 1.5 (damage) and 1.25 (difficulty) (1.5, 1.25)
+DDA: 20.0 (mult=0.75) K:0 D:5.1
+  PASS: C1 scaled (R3): the stomp takes raw x get_enemy_damage_multiplier() = 12.0 x 1.5 = 18.0 HP (took 18.0)
+  PASS: C1 scaled (R3): the stomp telegraphs raw / difficulty multiplier = 0.45 / 1.25 = 0.360 s (0.36 s, 0.367 s run)
+DDA: 20.0 (mult=0.75) K:0 D:5.4
+  PASS: C1 scaled (R3): the charge takes raw x get_enemy_damage_multiplier() = 14.0 x 1.5 = 21.0 HP (took 21.0)
+  PASS: C1 scaled (R3): the charge telegraphs raw / difficulty multiplier = 0.6 / 1.25 = 0.480 s (0.48 s, 0.483 s run)
+  PASS: C1 the parried stomp: the guardian is staggered (_stun_active true) and the player's HP is unchanged (drop 0.0; parry frame 22 at 0 px, hit frame 29)
+[ACHIEVEMENT] Unlocked: Perfect Timing — Land your first parry.
+  PASS: C1 after the parried stomp no new attack starts while it is staggered (acted false)
+  PASS: C1 the stagger after the parried stomp ends (1.2 s)
+  PASS: C1 the parried charge: the guardian is staggered (_stun_active true) and the player's HP is unchanged (drop 0.0; parry frame 41 at 157 px, hit frame 47)
+  PASS: C1 after the parried charge no new attack starts while it is staggered (acted false)
+  PASS: C1 the stagger after the parried charge ends (1.2 s)
+  PASS: C1 within 30 px of the guardian for 1.0 s with physics running and no attack under way: HP unchanged (100.0 of 100.0; 20.0 px, acted false)
+[C2 the ch1_guardian row]
+  PASS: C2 STORY_FIGHTS has the row 'ch1_guardian'
+  PASS: C2 validate_story_fight gives no message for the row []
+  PASS: C2 enemy_script, enemy_type and enemy_name are the guardian's
+  PASS: C2 the body is the staged rectangle's: 78 x 56, Color(0.32, 0.26, 0.2)
+  PASS: C2 the guardian spawns inside the first frame (x <= 840), to the right of the player (x 760.0)
+  PASS: C2 default_return_scene is the Broken Mile's scene
+  PASS: C2 flags is ["ch1_guardian_fought"] (found ["ch1_guardian_fought"])
+  PASS: C2 10 shards of the guardian's colour
+  PASS: C2 shard_fade is the slime row's (0.6)
+  PASS: C2 shard_size is the slime row's (12.0)
+  PASS: C2 shard_z is the slime row's (20)
+  PASS: C2 the controls line is the slime row's
+  PASS: C2 the backdrop is the Broken Mile's sky, ground, path and tree colours
+  PASS: C2 STORY_BIBLE section 5 has a row for ch1_guardian_fought
+[C3 the Broken Mile hands the fight to the arena; filter and calm resolve without it]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH1-SEQ3] Initializing Path to Oakhaven — Combat Tutorial
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+[CH1-SEQ3] Handing off to the guardian fight
+[ACHIEVEMENT] Unlocked: Sudo Mode — Unlock Root Access.
+  PASS: C3 the Fight button: story_fight_id is 'ch1_guardian' and the return meta is the Broken Mile at the hand-off (reached true; ch1_guardian, res://scenes/chapter1/path_to_oakhaven.tscn)
+  PASS: C3 the Fight button: the change to the arena starts within 0.5 s of the choice (0.104 s)
+  PASS: C3 the Fight button: the staged guardian is still fully visible at the hand-off (modulate.a 1.0)
+  PASS: C3 the Fight button: no root_refused line before the hand-off
+  PASS: C3 the Fight button: one scene change, to the arena (next 'res://scenes/combat/combat_arena.tscn', 1 changes)
+  PASS: C3 the Fight button: no corruption and no edit flag, root_access_unlocked set, ch1_guardian_fought not set before the fight
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH1-SEQ3] Initializing Path to Oakhaven — Combat Tutorial
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+[CH1-SEQ3] Handing off to the guardian fight
+  PASS: C3 the give-up: story_fight_id is 'ch1_guardian' and the return meta is the Broken Mile at the hand-off (reached true; ch1_guardian, res://scenes/chapter1/path_to_oakhaven.tscn)
+  PASS: C3 the give-up: the change to the arena starts within 1.1 s of the choice (0.552 s)
+  PASS: C3 the give-up: the staged guardian is still fully visible at the hand-off (modulate.a 1.0)
+  PASS: C3 the give-up: no root_refused line before the hand-off
+  PASS: C3 the give-up: one scene change, to the arena (next 'res://scenes/combat/combat_arena.tscn', 1 changes)
+  PASS: C3 the give-up: no corruption and no edit flag, root_access_unlocked set, ch1_guardian_fought not set before the fight
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH1-SEQ3] Initializing Path to Oakhaven — Combat Tutorial
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+[CH1-SEQ3] Handing off to the guardian fight
+  PASS: C3 the no-panel fallback: story_fight_id is 'ch1_guardian' and the return meta is the Broken Mile at the hand-off (reached true; ch1_guardian, res://scenes/chapter1/path_to_oakhaven.tscn)
+  PASS: C3 the no-panel fallback: the change to the arena starts within 0.5 s of the choice (0.000 s)
+  PASS: C3 the no-panel fallback: the staged guardian is still fully visible at the hand-off (modulate.a 1.0)
+  PASS: C3 the no-panel fallback: no root_refused line before the hand-off
+  PASS: C3 the no-panel fallback: one scene change, to the arena (next 'res://scenes/combat/combat_arena.tscn', 1 changes)
+  PASS: C3 the no-panel fallback: no corruption and no edit flag, root_access_unlocked set, ch1_guardian_fought not set before the fight
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH1-SEQ3] Initializing Path to Oakhaven — Combat Tutorial
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+  PASS: C3 filter: its line plays ('Changed what it thinks it's defending against'), then rest_stop's edited line; no root_refused line
+  PASS: C3 filter: no story meta and no scene change up to rest_stop (meta false, changed false)
+  PASS: C3 filter: the edit flags set, 10 corruption added (10.0), ch1_root_discovered_unused and ch1_guardian_fought unset
+  PASS: C3 filter: the staged guardian turns away (modulate.a 0.0)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH1-SEQ3] Initializing Path to Oakhaven — Combat Tutorial
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+  PASS: C3 calm: its line plays ('Turned it down'), then rest_stop's edited line; no root_refused line
+  PASS: C3 calm: no story meta and no scene change up to rest_stop (meta false, changed false)
+  PASS: C3 calm: the edit flags set, 10 corruption added (10.0), ch1_root_discovered_unused and ch1_guardian_fought unset
+  PASS: C3 calm: the staged guardian stays (modulate.a 1.0)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH1-SEQ3] Initializing Path to Oakhaven — Combat Tutorial
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+  PASS: C3 filter in the give-up's last tick: its line plays ('Changed what it thinks it's defending against'), then rest_stop's edited line; no root_refused line
+  PASS: C3 filter in the give-up's last tick: no story meta and no scene change up to rest_stop (meta false, changed false)
+  PASS: C3 filter in the give-up's last tick: the edit flags set, 10 corruption added (10.0), ch1_root_discovered_unused and ch1_guardian_fought unset
+  PASS: C3 filter in the give-up's last tick: the staged guardian turns away (modulate.a 0.0)
+  PASS: C3 filter in the give-up's last tick: corruption was added once (1 changes: [10.0])
+[C4 winning]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: C4 GameState is COMBAT during the fight
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] _test_c4_win (res://tests/integration/combat/guardian_fight_test.gd:1041)
+       [4] _start_arena (res://tests/integration/combat/guardian_fight_test.gd:285)
+DDA: 53.0 (mult=1.00) K:1 D:0.0
+  PASS: C4 the guardian breaks into 10 polygon shards of Color(0.32, 0.26, 0.2) at its position (10)
+  PASS: C4 ch1_guardian_fought is set
+  PASS: C4 the guard is set and the player is invulnerable
+  PASS: C4 XP, gold and the inventory are unchanged
+  PASS: C4 no item or gold pickup in the arena and the loot table is null
+  PASS: C4 story_fight_resolved emitted once, outcome 'win' (["win"])
+  PASS: C4 the game changed once to the return scene (transitions 1)
+  PASS: C4 ch1_guardian_fought was set once (1 times)
+  PASS: C4 the player's HP is kept (100) and no retry ran
+  PASS: C4 no ContextStack entry or time-scale request is left
+[ACHIEVEMENT] Unlocked: First Blood — Defeat your first enemy.
+[C4 the player's death is a retry with a fresh guardian]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+DDA: 20.0 (mult=0.75) K:0 D:0.3
+  PASS: C4 the player dies
+  PASS: C4 a new StoryFightGuardian instance at full HP, story_fight_retries + 1 (1)
+  PASS: C4 the player's HP is full after the retry
+  PASS: C4 the old guardian is disabled, hidden and renamed at once (still in the tree true)
+  PASS: C4 time scale 1.0 and no ContextStack entry after the retry
+[C4 the player dies while the guardian is mid-charge]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+DDA: 20.0 (mult=0.75) K:0 D:0.3
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:98)
+       [3] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:106)
+       [2] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+  PASS: C4 the old guardian was mid-charge (ATTACK) when the retry ran, its hit box short of the spawn (telegraphed true, charging true, 0.18 s into the charge, 204 px away)
+  PASS: C4 a new StoryFightGuardian instance, the player at full HP, story_fight_retries + 1 (1)
+  PASS: C4 the old, mid-charge guardian is disabled (still in the tree true)
+  PASS: C4 the player's HP stays full for 1 s after the restore, invulnerability cleared: the old charge does not hit (lowest HP 100.0)
+[C4 the guardian killed mid-telegraph]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:98)
+       [3] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:106)
+       [2] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] _test_c4_kill_mid_attack (res://tests/integration/combat/guardian_fight_test.gd:1201)
+       [4] _wait_until (res://tests/integration/combat/guardian_fight_test.gd:151)
+DDA: 53.0 (mult=1.00) K:1 D:0.0
+  PASS: C4 the guardian killed mid-telegraph: one win and one scene change (reached true, ["win"], 1 changes)
+  PASS: C4 the guardian killed mid-telegraph: ch1_guardian_fought set once (1 times)
+  PASS: C4 the guardian killed mid-telegraph: the player's HP is unchanged after the kill, invulnerability cleared (100.0, lowest 100.0)
+[C4 the guardian killed mid-charge]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:98)
+       [3] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:106)
+       [2] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] _test_c4_kill_mid_attack (res://tests/integration/combat/guardian_fight_test.gd:1201)
+       [4] _wait_until (res://tests/integration/combat/guardian_fight_test.gd:151)
+DDA: 53.0 (mult=1.00) K:1 D:0.0
+  PASS: C4 the guardian killed mid-charge: one win and one scene change (reached true, ["win"], 1 changes)
+  PASS: C4 the guardian killed mid-charge: ch1_guardian_fought set once (1 times)
+  PASS: C4 the guardian killed mid-charge: the player's HP is unchanged after the kill, invulnerability cleared (100.0, lowest 100.0)
+[C5 the Broken Mile loaded with ch1_guardian_fought resumes at root_refused]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[CH1-SEQ3] Initializing Path to Oakhaven — Combat Tutorial
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+  PASS: C5 the first line shown is root_refused's first ('Kaelen (Internal): I could've changed it. I saw the field, right there. I could've just...')
+  PASS: C5 Kaelen at x 600 and Elara at x 680, no staged guardian, as root_refused begins ({ "kaelen": 600.0, "elara": 680.0, "guardian": false })
+  PASS: C5 no tree_flicker to guardian_directive line, no Root Access panel, no arena or story meta (panel false)
+  PASS: C5 rest_stop is reached with the not-edited line ('you looked at that beast like you could read it')
+  PASS: C5 root_refused set ch1_root_discovered_unused; root_access_unlocked is still set, no edit flag
+[SAVE] Slot 1 saved successfully (v1.2.0)
+  PASS: C5 a save made at rest_stop is allowed
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[CH1-SEQ3] Initializing Path to Oakhaven — Combat Tutorial
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+  PASS: C5 after a load of that save the first line is root_refused's again, no panel, no arena ('Kaelen (Internal): I could've changed it. I saw the field, right there. I could've just...')
+[CH1-SEQ3] Transitioning to Oakhaven Village
+WARNING: [AssetManager] Production art slot missing for Kaelen top-down sheet at res://assets/production_art/characters/player/kaelen_topdown_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:1000)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [6] _ready (res://scripts/exploration/player_topdown.gd:51)
+WARNING: [AssetManager] V2 top-down player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:1009)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [4] _ready (res://scripts/exploration/player_topdown.gd:51)
+WARNING: [AssetManager] Production art slot missing for Elara NPC sheet at res://assets/production_art/characters/npcs/elara_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/npcs/elara_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_npc (res://scripts/asset_manager.gd:1066)
+       [4] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:594)
+       [5] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:63)
+WARNING: [AssetManager] NPC sheet failed to load for Elara; using existing NPC fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_npc (res://scripts/asset_manager.gd:1074)
+       [2] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:594)
+       [3] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:63)
+  PASS: C5 the resumed scene goes on to ridge and Oakhaven, with no trip to the arena
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Game paused — IDE interface open
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: C5 pause -> main menu from the guardian fight reaches the main menu (guardian true ["StoryFightGuardian"], paused true, yes true, menu true)
+  PASS: C5 leaving the fight by the main menu leaves no story meta and ch1_guardian_fought unset
+
+GUARDIAN FIGHT RESULT: 129 passed, 0 failed
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)
+EXIT 0 WALL_SECONDS 79
