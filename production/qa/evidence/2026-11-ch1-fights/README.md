@@ -423,3 +423,10 @@ game-time watches (F5, F6). Gameplay code unchanged in this round (SHA-256 as af
 - Existing EnemyBase issues seen, not changed (out of scope): `get_meta("flash_tween", null)` prints an `ERROR:` line
   per telegraph; the parry tint stays on an enemy that leaves STUNNED early; a "Lambda capture freed" line.
 - The four poise checks were watched failing through mutation (l), not directly.
+
+## CI (AC-6)
+
+CI run #53 on `449032a` (2026-11-05, https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/42016657461):
+success in 25m48s on Godot 4.6.3 (Linux). Every step passed, including the whitespace and commit-message checks, the new
+"Guardian fight (T13b …)" step (72 s, limit 240 s), "Story fight" (39 s), "Story fight table" (9 s) and "Chapter 1
+route" (538 s).

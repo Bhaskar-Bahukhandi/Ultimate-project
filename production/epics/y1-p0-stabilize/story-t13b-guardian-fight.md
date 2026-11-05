@@ -331,8 +331,8 @@ each opened and signed off by the user (2026-11-05).
 
 **Completed**: 2026-11-05
 **Verdict**: COMPLETE WITH NOTES
-**Criteria**: 7/7 passing; AC-6's "CI green" is DEFERRED (the changeset is not pushed; local full run 27/27 on Godot
-4.6.3, `t13b_run_all_rev2.log`).
+**Criteria**: 7/7 passing; AC-6's "CI green" was DEFERRED at close (local full run 27/27 on Godot 4.6.3,
+`t13b_run_all_rev2.log`) and is now met (CI #53, below).
 **Deviations** (advisory, user-accepted):
 - The guardian's `stagger()` override and its extra named constants (beyond AC-1's list).
 - `T13B_NEW_FLAGS` in `chapter1_route_test` instead of the frozen Chapter 1 flag list (AC-6 said "its flag list").
@@ -356,4 +356,6 @@ the re-run; the rest below). LP-CODE-REVIEW APPROVE.
 - Review suggestions: the hand-off guard does not reset if `change_scene` refuses (as T13a's); the resume does not
   redraw the cart and flicker tree; the pause menu during any scene transition (project-wide); the shard contrast and
   the Kaelen/Elara placeholder overlap in the screenshots.
-**Known after close**: push and confirm CI is green on this changeset (AC-6).
+**Known after close**: CI run #53 on `449032a` (2026-11-05, run 42016657461) is green, 25m48s; the new "Guardian
+fight" step took 72 s on Linux (limit 240 s), "Story fight" 39 s, "Chapter 1 route" 538 s. AC-6's deferred CI check
+is met.
