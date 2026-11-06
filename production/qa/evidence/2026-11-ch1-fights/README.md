@@ -540,3 +540,10 @@ touched two places and is superseded by (e).
   (`t13c_mutation_<id>_fix4.log`), every file restored byte for byte. (e) (armour removed) also produces script errors
   after its named failures, as in every earlier (e) run: with the armour gone the boar dies early and a later case's
   wait reads it after it is freed (`boar_fight_test.gd:348`).
+
+## CI (T13c, AC-6)
+
+CI run #55 on `3b594ff` (2026-11-06, https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/42209447887):
+success in 28m44s on Godot 4.6.3 (Linux). Every step passed (the Godot install skipped on a cache hit, as in #54),
+including the commit-message check, the new "Boar fight (T13c …)" step (162 s; step limit 10 minutes, runner 540 s),
+"Guardian fight" (72 s), "Story fight" (40 s), "Story fight table" (9 s) and "Chapter 1 route" (542 s).

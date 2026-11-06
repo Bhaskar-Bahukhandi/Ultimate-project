@@ -361,7 +361,8 @@ full-run log).
 ## Completion Notes
 
 **Completed**: 2026-11-06
-**Criteria**: 7/7 passing locally. Deferred: AC-6's "CI green", recorded after the push (as T13b).
+**Criteria**: 7/7 passing; AC-6's "CI green" was DEFERRED at close (local full run 28/28 on Godot 4.6.3,
+`t13c_run_all_story_done.log`) and is now met (CI #55, below).
 **Deviations** (advisory, accepted at close):
 - D9–D11 added during the work: D9 a parry outside an attack keeps the cooldown, its floor scaled by the difficulty
   multiplier (as EnemyBase's RECOVER); D10 the star cue; D11 `ch1_rooms_test` calms the boar. D11's CI step is 10
@@ -392,3 +393,6 @@ SUGGESTIONS, suggestions applied); LP-CODE-REVIEW APPROVE; QL-TEST-COVERAGE GAPS
   arena; unverified); `_begin_telegraph` and the stagger tint repeat EnemyBase's colours and floor; three private
   helpers lack doc comments.
 - Noted at screenshot sign-off: Kaelen below full HP in two shots; HUD labels read poorly on the daytime sky.
+**Known after close**: CI run #55 on `3b594ff` (2026-11-06, run 42209447887) is green, 28m44s; the new "Boar fight"
+step took 162 s on Linux (step limit 10 minutes, runner 540 s), "Guardian fight" 72 s, "Story fight" 40 s, "Chapter 1
+route" 542 s. AC-6's deferred CI check is met.
