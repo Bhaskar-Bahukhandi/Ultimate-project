@@ -2,14 +2,14 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-T13c (`production/plan/_source/Y1-P0.json#Y1-P0-T13`, the boar day; sprint plan row Y1-P0-T13c)
-> **Status**: Ready
+> **Status**: Complete
 > **Layer**: Feature
 > **Type**: Integration
 > **Estimate**: 3 days (sprint row: 2). Day 1 the boar's script and its row; day 2 the village's hand-off and resume and
 > the two test bots; day 3 tests, mutations, screenshots. Over the row's 2 days for the same reason as T13b (new AI;
 > T13b took 3 with review).
 > **Manifest Version**: N/A — `docs/architecture/control-manifest.md` does not exist
-> **Last Updated**: 2026-11-05
+> **Last Updated**: 2026-11-06
 
 ## Context
 
@@ -108,6 +108,24 @@ fallback: unchanged (the boar uses the arena's placeholder body; the backdrop is
 - **D8 (derived, as the guardian's `stagger()`):** a parry ends the charge, the boar staggers (armour holds), then
   RECOVER and the cooldown.
 - **Tech debt (user, 2026-11-05):** the guardian's likely off-screen slowdown (G5) is logged as TD-041, not fixed here.
+- **D9 parry outside an attack (user, 2026-11-05, stage A review):** a parry stagger that lands while the boar is not
+  telegraphing or charging (RECOVER or CHASE) leaves `attack_cooldown` at least `ATTACK_COOLDOWN`, so a parry never lets
+  it telegraph at once.
+- **D10 dizzy cue (user, 2026-11-05, stage A review):** a small label of stars above the body, shown only while dizzy;
+  no tint (a modulate change would be recorded as the rest colour by `EnemyBase._sprite_rest_modulate` and corrupt later
+  hit flashes).
+- **`/code-review` (2026-11-06): CHANGES REQUIRED, user chose fix and re-review:** R1 Mara's shop opened over the
+  hand-off when her first talk was the third afternoon beat (the shop's pausing modal survived into the arena); R2 no
+  case for pause mid-charge or while dizzy; R3 hits only tested while the boar was idle; R4 C4's HP-kept check compared
+  full HP after a win that makes the player invulnerable. Also folded in: D9's cooldown floor scaled by the difficulty
+  multiplier, as `EnemyBase`'s RECOVER and the guardian's (a change to D9's wording); `_alarm_done` set in the field's
+  end; parry cases during the telegraph and on a dizzy boar; control runs for the mid-charge retry, a real-input jump
+  and once per charge; the pogo's damage number on the armoured boar logged as TD-042 (`player_combat.gd`, protected
+  here).
+- **D11 other suites through the field (user, 2026-11-06, stage B):** `ch1_rooms_test` (S08's) also drove the village's
+  alarm with the first choice, now "Fight it.", and read the freed village; it picks *calm* there instead, since its
+  subject is the house and the shrine. The boar suite's CI step is raised to 8 minutes (its runner timeout is 420 s,
+  three times about 126 s).
 
 ---
 
@@ -199,13 +217,23 @@ fallback: unchanged (the boar uses the arena's placeholder body; the backdrop is
       parry stagger counts as dizzy → C1's parry-armour check; (h) the damage multiplier applied twice → C1's scaled
       damage check; (i) the telegraph not divided by the difficulty multiplier → C1's scaled telegraph check; (j)
       `dodge_chance` left at 0.15 → C1's check of the `dodge_chance` field; (k) calm hands off too → C3's calm check;
-      (l) the resume ignores `ch1_corrupted_boar_defeated` (pays twice) → C5's pay-once check; (m) the row's flag left
-      out → C4's flag check; (n) the village still plays `boar_fight_staged` before the hand-off → C3's 0.5 s check; (o)
-      the village sets `ch1_boar_fight_won` itself → the route test's one-writer check; (p) the bridge trigger carries
-      on after a hand-off → C3's bridge check; (q) the reload fix removed → C5's reload check; (r) the off-screen
-      override removed → C1's off-screen check; (s) knockback while dizzy → C1's dizzy-still check; (t)
-      `CHARGE_MAX_TIME` back to 2.5 s → C1's wall-to-wall check. Registered in `tests/suite_limits.txt`,
-      `run_all_tests.ps1` and `ci.yml`; the full local run green on 4.6.3 and CI green.
+      (l) the resume ignores `ch1_corrupted_boar_defeated` (pays twice) → C5's save-and-load check (no
+      `boar_fight_after`, no payment after a load; the first return still pays once); (m) the row's flag left out → C4's
+      flag check; (n) the village still plays `boar_fight_staged` before the hand-off → C3's 0.5 s check; (o) the
+      village sets `ch1_boar_fight_won` itself → the route test's one-writer check; (p) the bridge trigger carries on
+      after a hand-off → C3's bridge check; (q) the reload fix removed → C5's reload check; (r) the off-screen override
+      removed → C1's off-screen check; (s) knockback while dizzy → C1's dizzy-still check; (t) `CHARGE_MAX_TIME` back to
+      2.5 s → C1's wall-to-wall check; (u) D9 removed (a stagger outside an attack leaves the cooldown) → C1's
+      stagger-in-RECOVER check; (v) D10 removed (the cue never shown) → C1's and C4's cue checks. Added after
+      `/code-review` (2026-11-06): (w) Mara's handler carries on after a hand-off → C3's Mara check; (x) contact damage
+      8 → C1's contact check; (y) a parried charge not sent to RECOVER → C1's parried-charge check; (z) the charge sweep
+      keeps querying after a hit (its `_charge_hit_pending` condition dropped) → C1's once-per-charge check with the
+      player's invulnerability cleared (a first (z), one of the flag's two clearing sites removed, survived as an
+      equivalent mutant: either site alone stops a second hit); (aa) the return beat does not wait for the fade-in →
+      C5's fade check; (ab) a hit during the telegraph or the charge starts a hit-stun → C1's hits-during-attack check;
+      (ac) the arena's win heals the player to full → C4's HP-kept check (the player's HP set to 40 before the win).
+      Registered in `tests/suite_limits.txt`, `run_all_tests.ps1` and `ci.yml`; the full local run green on 4.6.3 and CI
+      green.
 - [ ] AC-7 **Evidence.** Live-renderer screenshots, each opened and signed off by the user, labelled live renderer in
       the evidence README (`production/qa/evidence/2026-11-ch1-fights/`, a T13c section): `boar.png` (player, boar, HUD,
       backdrop, the controls line with the pogo), `boar-charge.png` (the charge's telegraph showing), `boar-dizzy.png`
@@ -305,7 +333,7 @@ fallback: unchanged (the boar uses the arena's placeholder body; the backdrop is
   trigger → no dialogue, no payment (the same after a calm or a nest outcome and a load); pause → main menu during the
   fight → no story meta, no stash, `ch1_boar_fight_won` unset.
 - **C6 (AC-6/7)** — suites registered and green (the boar suite, the route test, `phase0_blockers_test`); the route
-  test's one-writer check; mutations (a)–(t) each failing its own check; four screenshots opened and signed off.
+  test's one-writer check; mutations (a)–(ac) each failing its own check; four screenshots opened and signed off.
 
 ---
 
@@ -317,7 +345,8 @@ fallback: unchanged (the boar uses the arena's placeholder body; the backdrop is
 (passing), `production/qa/evidence/2026-11-ch1-fights/` (the README's T13c section with the AC map and the user's
 sign-off, `boar.png`, `boar-charge.png`, `boar-dizzy.png`, `boar-return.png`, the suite logs, the mutation logs, the
 full-run log).
-**Run result**: not yet run.
+**Run result**: OBSERVED — live renderer (Vulkan Forward+, RTX 2050): `boar.png`, `boar-charge.png`,
+`boar-dizzy.png`, `boar-return.png`, opened and signed off by the user 2026-11-06.
 
 ---
 
@@ -331,4 +360,35 @@ full-run log).
 
 ## Completion Notes
 
-(empty until /story-done)
+**Completed**: 2026-11-06
+**Criteria**: 7/7 passing locally. Deferred: AC-6's "CI green", recorded after the push (as T13b).
+**Deviations** (advisory, accepted at close):
+- D9–D11 added during the work: D9 a parry outside an attack keeps the cooldown, its floor scaled by the difficulty
+  multiplier (as EnemyBase's RECOVER); D10 the star cue; D11 `ch1_rooms_test` calms the boar. D11's CI step is 10
+  minutes, not 8 (raised in `/code-review` round 1); the runner timeout is 540 s.
+- The dizzy timer is `create_timer(DIZZY_TIME, false, true)` (physics frames, stable ±1 frame), not AC-1's
+  `create_timer(DIZZY_TIME, false)`.
+- A wall ends a charge only when the boar runs into it (wall normal opposing the charge), after the first frame.
+- An extra `ATTACK_RANGE` (60) the base class needs; the row keeps a `tree` colour though `trees` is empty.
+- A one-hit-per-charge override of `_on_enemy_attack_hitbox_body_entered` (each frame's charge box outlives a frame and
+  keeps its own hit list), beyond the plan text.
+- C1's off-screen readings at 2000 px and 1200 px are INFO lines, not checks; the structural check (no ScreenNotifier
+  child, no notifier reference) is the gate (mutation (r)).
+- The route test also follows the fight on its early-alarm and hesitate-then-help routes.
+- AC-6's mutation list gained (ac); (z) was redefined after its first definition proved equivalent.
+- Mutation (e) (armour removed) is caught by eight named checks but also produces script errors afterwards (a freed boar
+  read at `boar_fight_test.gd:348`), as in every (e) run.
+**Test Evidence**: Integration: `tests/integration/combat/boar_fight_test.gd` 138/0 (three runs,
+`t13c_boar_fight_fix4_run1-3.log`); all 29 mutations caught on the final test file (`t13c_mutation_<id>_fix4.log`);
+full local run 28/28 on 4.6.3 (`t13c_run_all_story_done.log`); screenshots and README in
+`production/qa/evidence/2026-11-ch1-fights/`.
+**Code Review**: Complete — `/code-review` three rounds (CHANGES REQUIRED, CHANGES REQUIRED, APPROVED WITH
+SUGGESTIONS, suggestions applied); LP-CODE-REVIEW APPROVE; QL-TEST-COVERAGE GAPS (advisory).
+**Open, not logged as debt** (user chose close without tech-debt rows):
+- QA gaps: Root Access and Perfect Delete refusal is tested on the slime row only (`story_fight_test.gd`); `_alarm_done`
+  after a load is not asserted directly (mutation (q) is caught through the other reload checks); no check for the
+  0.25 s telegraph floor, `max_health` through level scaling, or the dizzy timer's DEAD return.
+- Code: `DETECTION_RANGE` is exactly its 1280 minimum (the player very likely cannot leave the circle in a 1232-px
+  arena; unverified); `_begin_telegraph` and the stagger tint repeat EnemyBase's colours and floor; three private
+  helpers lack doc comments.
+- Noted at screenshot sign-off: Kaelen below full HP in two shots; HUD labels read poorly on the daytime sky.

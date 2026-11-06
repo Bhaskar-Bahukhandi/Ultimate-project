@@ -3,6 +3,21 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-11-06 — The north-field boar is a real fight (Y1-P0-T13c)
+
+- **feat(ch1):** at the north field, choosing "Fight it." against the corrupted boar now starts a real side-scroll
+  fight in the combat arena, dressed as an open daytime field. It used to be shakes and shouted lines. The boar has 45
+  HP and one move: after a short tell it charges and cannot turn, so jump it. When it hits a wall it is dizzy for two
+  seconds (stars over its head), and only then do hits hurt it; the pogo (jump, then down + attack) is on the controls
+  line. A parry blocks the charge. Dying is a retry, never game over; the arena gives no XP, gold or items. Winning
+  breaks it into shards and returns to the north field, where Kaelen and Elara say their two lines and the field pays
+  its usual 100 gold and 50 XP once. Calming it or building it a nest plays exactly as before, with no fight.
+- **fix(ch1):** after loading a save made once the north field was settled, the village no longer replays the field's
+  alarm and choice or pays its reward again (for the fight, calm or nest outcome).
+- **test:** a new suite, `tests/integration/combat/boar_fight_test.gd` (28 suites now); the Chapter 1 route test and
+  the Phase 0 bot finish the boar fight, and the rooms test calms the boar. Evidence:
+  `production/qa/evidence/2026-11-ch1-fights/` (T13c section).
+
 ## 2026-11-05 — The Broken Mile guardian is a real fight (Y1-P0-T13b)
 
 - **feat(ch1):** on the Broken Mile, choosing "Don't edit it. Fight." at the Root Access panel (or leaving the panel

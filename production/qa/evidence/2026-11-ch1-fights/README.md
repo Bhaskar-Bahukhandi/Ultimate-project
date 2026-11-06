@@ -430,3 +430,113 @@ CI run #53 on `449032a` (2026-11-05, https://github.com/Bhaskar-Bahukhandi/Ultim
 success in 25m48s on Godot 4.6.3 (Linux). Every step passed, including the whitespace and commit-message checks, the new
 "Guardian fight (T13b …)" step (72 s, limit 240 s), "Story fight" (39 s), "Story fight table" (9 s) and "Chapter 1
 route" (538 s).
+
+---
+
+# Evidence: Y1-P0-T13c — The north-field boar is a real side-scroll fight
+
+Story: `production/epics/y1-p0-stabilize/story-t13c-boar-fight.md`. Every run here is on **Godot 4.6.3** (`GODOT` set
+to the 4.6.3 console exe, TD-036; each log's first lines say so). The T13a and T13b sections above are unchanged.
+
+## Acceptance criteria → evidence
+
+| AC | Evidence |
+|---|---|
+| AC-1 the boar | `boar_fight_test.gd` C1 (constants; telegraph 0.6 s near, mid, far and off-screen; no turn; 14 once; jump clears it; wall to wall ends dizzy; dizzy 2.0 s, still, no hop; 3.5 s without a wall → RECOVER; armour: no HP, hit-stun, knockback or flash outside dizzy; 15 and the pogo's 27 while dizzy; the pogo bounces off the armoured boar; parry; D9 stagger in RECOVER; D10 star cue; contact; `dodge_chance` 0; scaled at ×1.5 / ×1.25); mutations a–j, r–v |
+| AC-2 the row | C2; `story_fight_table_test` 307/0; STORY_BIBLE §5 row; mutation m |
+| AC-3 hand-off | C3 (the boar trigger and the bridge trigger: stash, return point, metas, within 0.5 s, no staged line; the bridge trigger stops after the hand-off; calm and nest unchanged); mutations k, n, p |
+| AC-4 the fight | C4 (win: 8 shards, the flag once, no XP/gold/drops, GameState COMBAT, one change back; retry; mid-charge retry with the player's invulnerability cleared; the cue hidden on death); mutation m |
+| AC-5 return | C5 (the beat after the fade-in, the triggers held off, the two lines, paid once, the bridge after; a save and a load replays nothing and pays nothing after fight, calm or nest; main menu leaves no meta, stash or flag); mutations l, q |
+| AC-6 tests | Suites registered; the route test drives the boar arena and its one-writer check (mutation o); the Phase 0 bot finishes the boar; full run (below) |
+| AC-7 evidence | The four screenshots below, signed off by the user; CHANGELOG entry |
+
+## Screenshots (live renderer, not headless)
+
+All four are from a real 1280x720 window (Godot 4.6.3, Vulkan 1.4.329 Forward+, NVIDIA GeForce RTX 2050), driven by
+`t13c_capture.gd.txt` through the real hand-off path: the village's flags, stash, return point and story metas set as
+the village sets them at the fight choice, the arena as the scene, and the win back to the real village
+(`t13c_capture.log`). The body is the arena's placeholder rectangle and the backdrop is procedural (no production art).
+The orchestrator opened each one before showing it to the user. **Signed off by the user, 2026-11-06.**
+
+| File | Shows |
+|---|---|
+| `boar.png` | The fight: Kaelen, the boar (48 x 40, the village marker's red), HUD at full HP, the open daytime field, the controls line with `Space then S + J — Pogo` |
+| `boar-charge.png` | The boar half-way through its charge's telegraph (the "!!" glyph and EnemyBase's "!" marker) |
+| `boar-dizzy.png` | The boar dizzy against the right wall, the `* * *` cue over it |
+| `boar-return.png` | The north field after the win: Kaelen's "...It was still trying to get back to the nest. Right up until the end.", gold 100 paid |
+
+Noted at sign-off, not fixed: Kaelen is below full HP in the charge and dizzy shots (earlier charges had landed while
+the capture staged them); the HUD's SOUL, XP and Corruption labels read poorly on the light daytime sky. Capture 1
+(scratchpad only) was reshot: the charge shot overlapped Kaelen, and the dizzy boar was outside the camera's view.
+
+## Runs
+
+| Run | Result | Log |
+|---|---|---|
+| Stage A, before the boar existed | 0 passed, 36 failed | `t13c_boar_fight_before.log` |
+| Stage A, after (3 runs, then once after a re-wrap) | 90/0 each | `t13c_boar_fight_final_run1-3.log`, `…_run4_after_wrap.log` |
+| Stage A review fixes, before the boar changes | 92 passed, 3 failed (the cue, D9) | `t13c_boar_fight_rev1_before.log` |
+| Stage A review fixes, after (3 runs) | 95/0 each | `t13c_boar_fight_rev1_run1-3.log` |
+| Stage B, before the village change | 103 passed, 25 failed (C3, C5) | `t13c_stage_b_before.log` |
+| Stage B, after (3 runs) | 128/0 each, about 126 s | `t13c_boar_fight_final_b_run1-3.log` |
+| `chapter1_route_test` | 425/0 (was 417) | `t13c_chapter1_route_test.log` |
+| `phase0_blockers_test` | 82/0 | `t13c_phase0_blockers_test.log` |
+| `ch1_rooms_test` (calms the boar, D11) | 445/0 | `t13c_ch1_rooms_test.log` |
+| Dialogue format | 54/0 | `t13c_dialogue_test.log` |
+| `story_fight_table_test`, `load_all_test` | 307/0, 211 ok | `t13c_story_fight_table_test.log`, `t13c_load_all_test.log` |
+| Full local run, 28 suites | 27 passed; `test_layout` failed: `boar_fight_test.gd` had no `.uid` yet | `t13c_run_all.log` |
+| `test_layout` after an import created the `.uid` files | 6/0 | `t13c_test_layout_after_uid.log` |
+| Parse check of the seven changed scripts | all `ok`, exit 0 | (this README) |
+
+## Mutations (AC-6)
+
+`t13c_mutate.py`: one mutation per invocation, an exact one-match replacement (`--check` verifies every pattern without
+running anything), the file restored byte for byte and SHA-256 checked. All 22 caught, each by its named check
+(`t13c_mutation_a.log` … `t13c_mutation_v.log`): (a) the charge turns; (b) the telegraph left at 0.55 s; (c) the charge
+at `CHARGE_DAMAGE * 1.6`; (d) no dizzy at the wall; (e) the armour removed; (f) the armour also while dizzy; (g) a parry
+stagger counts as dizzy; (h) the multiplier applied twice; (i) the telegraph not divided; (j) `dodge_chance` 0.15;
+(k) calm hands off; (l) the resume pays twice (caught by C5's save-and-load check); (m) the row's flags empty; (n) the
+staged fight before the hand-off; (o) the village sets the flag itself (route test); (p) the bridge trigger carries on;
+(q) the reload fix removed; (r) the off-screen override removed; (s) knockback while dizzy; (t) the 2.5 s charge;
+(u) D9 removed; (v) D10 removed. A separate stage-A watch-fail of the armour check (`t13c_boar_fight_rev1_mutation_armour.log`)
+touched two places and is superseded by (e).
+
+## Deviations and notes
+
+- Decisions D1–D11 are in the story. Added during the work: D9 (a parry outside an attack keeps the cooldown) and D10
+  (the star cue) from the stage A review; D11 (`ch1_rooms_test` calms the boar; the boar's CI step 8 minutes).
+- Stage A choices: the dizzy timer runs on physics frames (stable ±1 frame); a wall ends a charge only if the boar is
+  running into it; an extra `ATTACK_RANGE` the base class needs; the row's `tree` colour with no trees.
+- The route test also follows the fight on its early-alarm and hesitate-then-help routes, which pick "Fight it." too.
+- Existing EnemyBase log noise (`flash_tween` `ERROR:` lines) appears here as in T13a and T13b; TD-041 logs the guardian's
+  likely off-screen slowdown found during this story's readiness review.
+
+## `/code-review` (2026-11-06): three rounds
+
+- **Round 1: CHANGES REQUIRED → fixed.** R1 Mara's shop opened over the hand-off when her first talk was the third
+  afternoon beat (watched failing: `t13c_r1_before.log`); R2 no case for pause mid-charge or while dizzy; R3 hits only
+  tested while the boar was idle; R4 C4's HP-kept check compared full HP after a win that makes the player invulnerable
+  (now from 40; mutation (ac)). Also: D9's floor scaled by the difficulty multiplier; `_alarm_done` set in the field's
+  end; parry cases during the telegraph and on a dizzy boar; control runs (the mid-charge retry seen hitting; a
+  real-input jump); a one-hit-per-charge override for charge boxes (a dev run took 3 hits from one charge with the
+  player's invulnerability cleared); the off-screen checks turned into INFO lines; the knockback check made able to
+  fail; the boar's CI step 10 minutes (runner timeout 540 s, about 165 s a run); TD-042 for the pogo's damage number on
+  an armoured enemy. Full run after round 1: 28/28 (`t13c_run_all_final.log`).
+- **Mutations added in round 1:** (w)–(ac), all caught. The first (z), which removed one of two clearing sites of
+  `_charge_hit_pending`, survived (`t13c_mutation_z_first_def_survived.log`): an equivalent mutant, since either site
+  alone stops a second hit. (z) was redefined to drop the sweep's own condition.
+- **Round 2: CHANGES REQUIRED → fixed (test only).** The once-per-charge check crashed under (z) instead of failing by
+  name; it now stops at a second hit (`t13c_mutation_z_fix3.log`: 137/1, no crash). Also: a direct test of the
+  charge-box gate (watched failing by removing it, `t13c_boar_fight_fix3_watchfail_gate.log`); wall-clock caps on the
+  game-time loops; game time in the two restore watches; two tidy-ups. 138/0 three times
+  (`t13c_boar_fight_fix3_run1-3.log`).
+- **Round 3: APPROVED WITH SUGGESTIONS → suggestions applied (test only).** S1 the retry control now also requires
+  that a retry ran and the watch started from full HP; S2 the once-per-charge check now requires the charge watched to
+  its end (dizzy or RECOVER); S3 the whole mutation set re-run on the final test file. S1's suspected vacuous pass did
+  not occur: under (z) the control logs "retried true, start HP 100.0" (its lowest HP 0 is the old charge hitting
+  every frame). S2 was not watched failing (it needs the 24 s wall cap to expire mid-charge).
+- **Final evidence (game code unchanged since round 1; SHA-256 checked after every mutation):** boar suite 138/0 three
+  times (`t13c_boar_fight_fix4_run1-3.log`, no script errors); all 29 mutations (a)–(ac) caught by their named checks
+  (`t13c_mutation_<id>_fix4.log`), every file restored byte for byte. (e) (armour removed) also produces script errors
+  after its named failures, as in every earlier (e) run: with the armour gone the boar dies early and a later case's
+  wait reads it after it is freed (`boar_fight_test.gd:348`).

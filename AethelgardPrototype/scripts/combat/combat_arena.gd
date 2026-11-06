@@ -166,6 +166,35 @@ const STORY_FIGHTS: Dictionary = {
 		},
 		"controls": "{move} — Move | {jump} — Jump | {sprint} — Dash | {attack} — Attack | {defend} — Parry",
 	},
+	# The north-field boar (Y1-P0-T13c): only the village's fight choice at `boar` starts it.
+	"ch1_boar": {
+		"enemy_script": "res://scripts/combat/enemies/field_boar.gd",
+		"enemy_type": "field_boar",
+		"enemy_name": "StoryFightBoar",
+		# No ENEMY_SIZES / ENEMY_COLORS entry: the village marker's size and colour (oakhaven_village.tscn).
+		"enemy_size": Vector2(48, 40),
+		"enemy_color": Color(0.7, 0.15, 0.15),
+		"enemy_spawn": Vector2(760, 400),
+		"player_spawn": Vector2(200, 400),
+		"default_return_scene": "res://scenes/chapter1/oakhaven_village.tscn",
+		"shard_color": Color(0.7, 0.15, 0.15),
+		"shard_count": 8,
+		"shard_fade": 0.6,
+		"shard_size": 12.0,
+		"shard_z": 20,
+		"flags": ["ch1_boar_fight_won"],
+		# Procedural daytime field: the village's ground, an open sky and a worn path, no trees.
+		"backdrop": {
+			"sky": Color(0.55, 0.72, 0.88),
+			"ground": Color(0.25, 0.55, 0.3),
+			"path": Color(0.4, 0.3, 0.18),
+			"tree": Color(0.06, 0.14, 0.04),
+			"margin": Vector2(700, 400),
+			"trees": [],
+		},
+		"controls": "{move} — Move | {jump} — Jump | {sprint} — Dash | {attack} — Attack"
+			+ " | {jump} then {move_down} + {attack} — Pogo | {defend} — Parry",
+	},
 }
 ## Every required row key and the Variant type its value must have.
 const STORY_FIGHT_REQUIRED: Dictionary = {

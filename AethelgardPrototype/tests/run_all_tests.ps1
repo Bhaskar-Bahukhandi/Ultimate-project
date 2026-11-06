@@ -34,6 +34,7 @@ $suites = @(
     @{ Script = "res://tests/integration/combat/story_fight_test.gd";         Long = $false }
     @{ Script = "res://tests/integration/combat/story_fight_table_test.gd";   Long = $false }
     @{ Script = "res://tests/integration/combat/guardian_fight_test.gd";      Long = $false }
+    @{ Script = "res://tests/integration/combat/boar_fight_test.gd";          Long = $false }
     @{ Script = "res://tests/integration/level/reachability_test.gd";         Long = $false }
     @{ Script = "res://tests/integration/level/ch1_rooms_test.gd";            Long = $true }
     @{ Script = "res://tests/integration/quests/act1_quests_completable_test.gd"; Long = $true }

@@ -1,0 +1,624 @@
+GODOT override: C:\Godot\Godot_v4.6.3-stable_win64_console.exe
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+[C1 the boar: values, telegraph, charge, dizzy, armour, pogo, parry, contact, scaled]
+  PASS: C1 constant BOAR_MAX_HEALTH is 45.0 (found 45.0)
+  PASS: C1 constant CHARGE_TELEGRAPH is 0.6 (found 0.6)
+  PASS: C1 constant CHARGE_DAMAGE is 14.0 (found 14.0)
+  PASS: C1 constant CHARGE_SPEED is 420.0 (found 420.0)
+  PASS: C1 constant CHARGE_MAX_TIME is 3.5 (found 3.5)
+  PASS: C1 constant DIZZY_TIME is 2.0 (found 2.0)
+  PASS: C1 constant RECOVER_TIME is 0.8 (found 0.8)
+  PASS: C1 constant ATTACK_COOLDOWN is 1.2 (found 1.2)
+  PASS: C1 constant MOVE_SPEED is 0.0 (found 0.0)
+  PASS: C1 constant CHARGE_SWEEP_ACTIVE is 0.02 (found 0.02)
+  PASS: C1 constant BOAR_CONTACT_DAMAGE is 0.0 (found 0.0)
+  PASS: C1 constant BOAR_DODGE_CHANCE is 0.0 (found 0.0)
+  PASS: C1 the charge's hit box is 60 x 36 at offset (30, -20) ((60.0, 36.0), (30.0, -20.0))
+  PASS: C1 the charge's hit box reaches 60 px from the centre, within the parry's 120 px (60.0 px)
+  PASS: C1 DETECTION_RANGE is at least the arena's width, 1280 (1280.0)
+  PASS: C1 a full charge (speed x CHARGE_MAX_TIME = 1470.0 px) is longer than the 1232 px between the walls
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [AssetManager] Production art slot missing for Slime enemy sheet at res://assets/production_art/characters/enemies/fracture_slime_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/enemies/fracture_slime_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_enemy (res://scripts/asset_manager.gd:1043)
+       [4] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [5] _ready (res://scripts/combat/enemy_base.gd:221)
+       [6] _ready (res://scripts/combat/enemies/slime.gd:36)
+       [7] _start_arena (res://tests/integration/combat/boar_fight_test.gd:305)
+       [8] _test_c1_boar (res://tests/integration/combat/boar_fight_test.gd:541)
+       [9] _run (res://tests/integration/combat/boar_fight_test.gd:84)
+WARNING: [AssetManager] Enemy sheet failed to load for Slime; using existing enemy fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_enemy (res://scripts/asset_manager.gd:1051)
+       [2] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [3] _ready (res://scripts/combat/enemy_base.gd:221)
+       [4] _ready (res://scripts/combat/enemies/slime.gd:36)
+       [5] _start_arena (res://tests/integration/combat/boar_fight_test.gd:305)
+       [6] _test_c1_boar (res://tests/integration/combat/boar_fight_test.gd:541)
+       [7] _run (res://tests/integration/combat/boar_fight_test.gd:84)
+WARNING: [AssetManager] Production art slot missing for Kaelen combat sheet at res://assets/production_art/characters/player/kaelen_combat_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:985)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _setup_sprites (res://scripts/combat/combat_arena.gd:1180)
+       [6] _start_story_fight (res://scripts/combat/combat_arena.gd:947)
+       [7] _ready (res://scripts/combat/combat_arena.gd:314)
+       [8] _start_arena (res://tests/integration/combat/boar_fight_test.gd:305)
+       [9] _test_c1_boar (res://tests/integration/combat/boar_fight_test.gd:541)
+       [10] _run (res://tests/integration/combat/boar_fight_test.gd:84)
+WARNING: [AssetManager] V2 combat player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:994)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _setup_sprites (res://scripts/combat/combat_arena.gd:1180)
+       [4] _start_story_fight (res://scripts/combat/combat_arena.gd:947)
+       [5] _ready (res://scripts/combat/combat_arena.gd:314)
+       [6] _start_arena (res://tests/integration/combat/boar_fight_test.gd:305)
+       [7] _test_c1_boar (res://tests/integration/combat/boar_fight_test.gd:541)
+       [8] _run (res://tests/integration/combat/boar_fight_test.gd:84)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:117)
+       [3] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:125)
+       [2] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+  PASS: C1 the arena spawns one StoryFightBoar running field_boar.gd
+  PASS: C1 enemy_name is 'Corrupted Boar' (found 'Corrupted Boar')
+  PASS: C1 max_health is 45 under the pins, zone_level 0 (found 45.0)
+  PASS: C1 contact_damage is 0 (found 0.0)
+  PASS: C1 dodge_chance is 0: no random dodge on a hit (found 0.0)
+  PASS: C1 movement_speed is 0: it does not walk between charges (0.0)
+  PASS: C1 its one attack is the charge ([3])
+  PASS: C1 detection_range (1280.0) reaches across the arena
+  PASS: C1 off-screen culling is off: no ScreenNotifier child and no notifier reference
+  PASS: C1 _is_on_screen stays true with the player 2000 px away (true)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:117)
+       [3] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:125)
+       [2] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+  PASS: C1 the player near: telegraph then CHARGE, 0.6 s +- one frame (duration 0.6, 36 frames, 0.600 s)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:117)
+       [3] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:125)
+       [2] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+  PASS: C1 the player mid: telegraph then CHARGE, 0.6 s +- one frame (duration 0.6, 36 frames, 0.600 s)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:117)
+       [3] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:125)
+       [2] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+  PASS: C1 the player far: telegraph then CHARGE, 0.6 s +- one frame (duration 0.6, 36 frames, 0.600 s)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:117)
+       [3] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:125)
+       [2] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+  PASS: C1 the player 1200 px away: telegraph then CHARGE, 0.6 s +- one frame (duration 0.6, 36 frames, 0.600 s)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:117)
+       [3] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:125)
+       [2] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+  PASS: C1 the charge keeps its launch direction when the player crosses behind it (dir -1.0, one direction true)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:117)
+       [3] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:125)
+       [2] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+DDA: 20.0 (mult=0.75) K:0 D:0.3
+  PASS: C1 a player in the path loses exactly 14, once per charge (14.0 HP, 1 hits)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:117)
+       [3] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:125)
+       [2] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+  PASS: C1 a player who jumps the charge loses nothing (0.0 HP)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:117)
+       [3] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:125)
+       [2] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+  PASS: C1 a charge launched at the left wall reaches the right wall and ends dizzy (dizzy true, x 1256)
+  PASS: C1 at the wall `_dizzy` and `_stun_active` are both true
+  PASS: C1 the dizzy cue (D10) is hidden before the wall, shown while dizzy and hidden after (hidden, shown, hidden)
+  PASS: C1 dizzy lasts 2.0 s of game time +- one frame, stunned throughout (2.000 s, both true)
+  PASS: C1 while dizzy it stands still and starts nothing (moved 0.0 px, acted false)
+  PASS: C1 after dizzy it is in RECOVER (state 5)
+  PASS: C1 no new telegraph before RECOVER_TIME + ATTACK_COOLDOWN after dizzy
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] take_damage (res://scripts/combat/enemies/field_boar.gd:170)
+       [4] _c1_wall_and_dizzy (res://tests/integration/combat/boar_fight_test.gd:680)
+  PASS: C1 a hit while dizzy takes 15, leaves x unchanged (0.00 px) and velocity at 0 (still true)
+  PASS: C1 outside dizzy a 15-damage hit leaves HP at 45 (HP 45.0)
+  PASS: C1 outside dizzy a hit starts no hit-stun (stun false, state 2)
+  PASS: C1 outside dizzy a hit gives no knockback, read before the next frame (velocity (0.0, 0.0) -> (0.0, 0.0), x 760.0 -> 760.0)
+  PASS: C1 outside dizzy a hit plays no hit flash: modulate unchanged ((1.0, 1.0, 1.0, 1.0) -> (1.0, 1.0, 1.0, 1.0)), no new flash or hurt tween
+  PASS: C1 outside dizzy even 9999 damage cannot kill it
+  PASS: C1 a pogo on an armoured boar bounces the player and takes nothing (fired true, vy -500.0, HP drop 0.0; diff 86, just_pressed true, floor false, pogoing false, boar y 600, player y 505)
+  PASS: C1 the combo multiplier is 1.0 before the pogo
+  PASS: C1 a pogo on a dizzy boar takes 27 = 15 x 1.8 (fired true, HP drop 27.0; diff 86, just_pressed true, floor false, pogoing false, boar y 600, player y 505)
+  PASS: C1 the parried charge: the boar is staggered (stun true), the charge is over, the player's HP unchanged (drop 0.0, parry at 102 px) and it is not dizzy
+  PASS: C1 a hit during the parry stagger leaves HP unchanged (HP 45.0 of 45.0)
+[ACHIEVEMENT] Unlocked: Perfect Timing — Land your first parry.
+  PASS: C1 after the stagger it is in RECOVER and starts nothing before RECOVER_TIME + ATTACK_COOLDOWN (ended true, true)
+  PASS: C1 a parry stagger in RECOVER: no telegraph within 0.9 x ATTACK_COOLDOWN after it ends (D9; ended true, quiet)
+  PASS: C1 within 30 px of the boar for 1.0 s with physics running and no charge: HP unchanged (100.0 of 100.0; 20.0 px)
+  PASS: C1 scaled: the multipliers under test are 1.5 (damage) and 1.25 (difficulty) (1.5, 1.25)
+DDA: 20.0 (mult=0.75) K:0 D:0.6
+  PASS: C1 scaled: the charge takes 14 x get_enemy_damage_multiplier() = 21.0 HP, once (took 21.0 in 1 hits)
+  PASS: C1 scaled: the charge telegraphs 0.6 / the difficulty multiplier = 0.480 s (0.48 s, 0.483 s run)
+[C1 a charge with no walls ends in RECOVER after CHARGE_MAX_TIME]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:117)
+       [3] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:125)
+       [2] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:117)
+       [3] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:125)
+       [2] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+  PASS: C1 with 2 walls removed a charge ends in RECOVER after 3.5 s, not dizzy (recovered true, dizzy false, 3.517 s)
+[C2 the ch1_boar row]
+  PASS: C2 STORY_FIGHTS has the row 'ch1_boar'
+  PASS: C2 validate_story_fight gives no message for the row []
+  PASS: C2 enemy_script, enemy_type and enemy_name are the boar's
+  PASS: C2 the body is 48 x 40, Color(0.7, 0.15, 0.15), the village marker's
+  PASS: C2 the boar spawns inside the first frame (x <= 840), to the right of the player (x 760.0)
+  PASS: C2 default_return_scene is the village's scene
+  PASS: C2 flags is ["ch1_boar_fight_won"] (found ["ch1_boar_fight_won"])
+  PASS: C2 8 shards of the boar's colour
+  PASS: C2 shard_fade is the slime row's (0.6)
+  PASS: C2 shard_size is the slime row's (12.0)
+  PASS: C2 shard_z is the slime row's (20)
+  PASS: C2 the backdrop is the village's ground, a daytime sky and a field path, with no trees
+  PASS: C2 the controls line is the slime row's with the pogo inserted before Parry ({move} — Move | {jump} — Jump | {sprint} — Dash | {attack} — Attack | {jump} then {move_down} + {attack} — Pogo | {defend} — Parry)
+  PASS: C2 the controls line renders the pogo with the bound keys and fits the 1280 px line (745 px: WASD — Move | Space — Jump | Shift — Dash | J — Attack | Space then S + J — Pogo | K — Parry)
+  PASS: C2 STORY_BIBLE section 5 has a row for ch1_boar_fight_won
+[C3 the village hands the boar fight to the arena; calm and nest resolve without it]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+WARNING: [AssetManager] Production art slot missing for Kaelen top-down sheet at res://assets/production_art/characters/player/kaelen_topdown_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:1000)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [6] _ready (res://scripts/exploration/player_topdown.gd:51)
+WARNING: [AssetManager] V2 top-down player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:1009)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [4] _ready (res://scripts/exploration/player_topdown.gd:51)
+WARNING: [AssetManager] Production art slot missing for Elara NPC sheet at res://assets/production_art/characters/npcs/elara_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/npcs/elara_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_npc (res://scripts/asset_manager.gd:1066)
+       [4] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:643)
+       [5] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:67)
+WARNING: [AssetManager] NPC sheet failed to load for Elara; using existing NPC fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_npc (res://scripts/asset_manager.gd:1074)
+       [2] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:643)
+       [3] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:67)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:117)
+       [3] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:125)
+       [2] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+  PASS: C3 the boar trigger: story_fight_id is 'ch1_boar' and the return meta is the village at the hand-off (held true; 'ch1_boar', 'res://scenes/chapter1/oakhaven_village.tscn')
+  PASS: C3 the boar trigger: the afternoon is stashed and the return point is the north field (1440.0, 1290.0) (stash true, 'res://scenes/chapter1/oakhaven_village.tscn' (1440.0, 1290.0))
+  PASS: C3 the boar trigger: the change to the arena starts within 0.5 s of the choice (0.034 s)
+  PASS: C3 the boar trigger: no boar_fight_staged line before the hand-off
+  PASS: C3 the boar trigger: one scene change, to the arena (next 'res://scenes/combat/combat_arena.tscn', 1 changes)
+  PASS: C3 the boar trigger: ch1_boar_fought set; ch1_corrupted_boar_defeated and ch1_boar_fight_won unset before the fight
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:117)
+       [3] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:125)
+       [2] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+  PASS: C3 the bridge trigger: story_fight_id is 'ch1_boar' and the return meta is the village at the hand-off (held true; 'ch1_boar', 'res://scenes/chapter1/oakhaven_village.tscn')
+  PASS: C3 the bridge trigger: the afternoon is stashed and the return point is the north field (1440.0, 1290.0) (stash true, 'res://scenes/chapter1/oakhaven_village.tscn' (1440.0, 1290.0))
+  PASS: C3 the bridge trigger: the change to the arena starts within 0.5 s of the choice (0.006 s)
+  PASS: C3 the bridge trigger: no boar_fight_staged line before the hand-off
+  PASS: C3 the bridge trigger: one scene change, to the arena (next 'res://scenes/combat/combat_arena.tscn', 1 changes)
+  PASS: C3 the bridge trigger: ch1_boar_fought set; ch1_corrupted_boar_defeated and ch1_boar_fight_won unset before the fight
+  PASS: C3 the bridge trigger: no bridge line, no ch1_bridge_* flag, _bridge_done unchanged (false, false, false)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: C3 calm: no arena (no story meta, no scene change) and the field resolves in the village (held true, meta false)
+  PASS: C3 calm: ch1_boar_calmed set; ch1_boar_fought and ch1_boar_fight_won unset
+  PASS: C3 calm: 5 corruption added (5.0)
+  PASS: C3 calm: the field's end once: ch1_corrupted_boar_defeated, gold +100, XP +50 (gold +100, XP +50)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: C3 nest: no arena (no story meta, no scene change) and the field resolves in the village (held true, meta false)
+  PASS: C3 nest: ch1_boar_nest_rebuilt set; ch1_boar_fought and ch1_boar_fight_won unset
+  PASS: C3 nest: the field's end once: ch1_corrupted_boar_defeated, gold +100, XP +50 (gold +100, XP +50)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[ACHIEVEMENT] Unlocked: Window Shopping — Visit a shop for the first time.
+  FAIL: C3 Mara as the third beat, fight: arena reached, shop shut, tree not paused (arena true, shop true, paused true)
+[C4 winning]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: C4 GameState is COMBAT during the fight
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:117)
+       [3] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:125)
+       [2] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+  PASS: C4 HP to 0 outside dizzy is not possible: no death, no flag, no win
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] take_damage (res://scripts/combat/enemies/field_boar.gd:170)
+       [4] _test_c4_win (res://tests/integration/combat/boar_fight_test.gd:952)
+       [5] _wait (res://tests/integration/combat/boar_fight_test.gd:126)
+DDA: 53.0 (mult=1.00) K:1 D:0.0
+  PASS: C4 the dizzy cue is shown while dizzy and hidden when the boar dies (shown, hidden)
+  PASS: C4 the boar breaks into 8 polygon shards of Color(0.7, 0.15, 0.15) at its position (8)
+  PASS: C4 ch1_boar_fight_won is set
+  PASS: C4 the guard is set and the player is invulnerable
+  PASS: C4 XP, gold and the inventory are unchanged
+  PASS: C4 no item or gold pickup in the arena and the loot table is null
+  PASS: C4 story_fight_resolved emitted once, outcome 'win' (["win"])
+  PASS: C4 the game changed once to the return scene (transitions 1)
+  PASS: C4 ch1_boar_fight_won was set once (1 times)
+  PASS: C4 the player's HP is kept (40) and no retry ran
+  PASS: C4 no ContextStack entry or time-scale request is left
+[C4 the player's death is a retry with a fresh boar]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+DDA: 20.0 (mult=0.75) K:0 D:0.3
+  PASS: C4 the player dies
+  PASS: C4 a new StoryFightBoar instance at full HP, story_fight_retries + 1 (1)
+  PASS: C4 the player's HP is full after the retry
+  PASS: C4 the old boar is disabled, hidden and renamed at once (still in the tree true)
+  PASS: C4 time scale 1.0 and no ContextStack entry after the retry
+[C4 the player dies while the boar is mid-charge]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:117)
+       [3] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:125)
+       [2] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+DDA: 20.0 (mult=0.75) K:0 D:0.3
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+   at: call (modules/gdscript/gdscript_lambda_callable.cpp:110)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:117)
+       [3] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:125)
+       [2] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+  PASS: C4 the old boar was mid-charge (ATTACK) when the retry ran, its hit box short of the spawn (telegraphed true, charging true, 0.18 s into the charge, 159 px away)
+  PASS: C4 a new StoryFightBoar instance, the player at full HP, story_fight_retries + 1 (1)
+  PASS: C4 the old, mid-charge boar is disabled (still in the tree true)
+  PASS: C4 the player's HP stays full for 1 s after the restore, invulnerability cleared: the old charge does not hit (lowest HP 100.0)
+[C5 back from the boar fight: the return beat once, the reload, the main menu]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:117)
+       [3] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:125)
+       [2] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] take_damage (res://scripts/combat/enemies/field_boar.gd:170)
+       [4] _kill_boar (res://tests/integration/combat/boar_fight_test.gd:1311)
+       [5] _c5_resume_and_reload (res://tests/integration/combat/boar_fight_test.gd:1472)
+       [6] _village_to_arena (res://tests/integration/combat/boar_fight_test.gd:1300)
+       [7] _wait_until (res://tests/integration/combat/boar_fight_test.gd:133)
+DDA: 53.0 (mult=1.00) K:1 D:0.0
+[ACHIEVEMENT] Unlocked: First Blood — Defeat your first enemy.
+  PASS: C5 the boar won in the arena (dizzy, then HP to 0); the scene is the village
+  PASS: C5 the player arrives at the north field (1440.0, 1290.0) with the field running at once (at (1440.0, 1290.0), running true)
+  PASS: C5 the boar and bridge triggers walked onto during the return beat do nothing; no alarm line
+  PASS: C5 the return beat starts only after the fade-in (fade alpha 0.0 at its first line)
+  PASS: C5 boar_fight_after's two lines play; no boar_fight_staged line
+  PASS: C5 the field's end once: ch1_corrupted_boar_defeated, gold +100, XP +50, _field_resolved (gold +100, XP +50)
+[SAVE] Slot 1 saved successfully (v1.2.0)
+  PASS: C5 a save made in the village after the return beat is allowed
+  PASS: C5 the bridge trigger then answers: north_field bridge plays
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  PASS: C5 a save there and a load: no boar_fight_after, no payment; the boar trigger does nothing ({ "loaded": true, "lines": [], "paid": false, "resolved": true, "running": false })
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[SAVE] Slot 1 saved successfully (v1.2.0)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  PASS: C5 after calm, a save and a load: no field line, no payment; the boar trigger does nothing (saved true, { "loaded": true, "lines": [], "paid": false, "resolved": true, "running": false })
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[SAVE] Slot 1 saved successfully (v1.2.0)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LOAD] Slot 1 loaded successfully (v1.2.0)
+  PASS: C5 after nest, a save and a load: no field line, no payment; the boar trigger does nothing (saved true, { "loaded": true, "lines": [], "paid": false, "resolved": true, "running": false })
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  FAIL: C5 a return with no stash: after the return beat the field is resolved and _alarm_done is true (true, false)
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:117)
+       [3] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:125)
+       [2] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+[PAUSE] Game paused — IDE interface open
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: C5 pause -> main menu from the boar fight reaches the menu (boar true, stash true, paused true, yes true, menu true)
+  PASS: C5 leaving the fight by the main menu leaves no story meta, no stash and ch1_boar_fight_won unset
+
+BOAR FIGHT RESULT: 128 passed, 2 failed
+  FAIL: C3 Mara as the third beat, fight: arena reached, shop shut, tree not paused (arena true, shop true, paused true)
+  FAIL: C5 a return with no stash: after the return beat the field is resolved and _alarm_done is true (true, false)
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)

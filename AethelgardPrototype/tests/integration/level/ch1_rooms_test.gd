@@ -798,6 +798,9 @@ func _c2_c3_village_loop() -> void:
 	_check(not v2._alarm_done, "no alarm after two first-time talks")
 	v2._on_farmer_interaction(vp)
 	await _idle(v2)
+	# Y1-P0-T13c (D11): "Fight it." now hands the boar to the arena; this suite stays in the village, so the alarm
+	# is answered help, edit the sluice, then calm.
+	_picks = [0, 0, 1]
 	_check(await _wait(func(): return v2._alarm_done, 60000), "the third first-time talk fires the alarm")
 	_check(await _wait(func(): return v2._field_resolved, 120000), "the north field runs to its end after the return")
 	await _idle(v2)

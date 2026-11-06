@@ -147,6 +147,12 @@ System: ELITE DEFEATED.
 Kaelen: ...It was still trying to get back to the nest. Right up until the end.
 Elara: I know. I saw.
 
+# Y1-P0-T13c: back in the village after the boar fight in the arena. Its two
+# closing lines, moved here word for word from boar_fight_staged (unplayed now).
+~ boar_fight_after
+Kaelen: ...It was still trying to get back to the nest. Right up until the end.
+Elara: I know. I saw.
+
 # Kaelen stayed in the village. Time passes; the field gets closed without him.
 ~ field_refused_aftermath
 do time_passes

@@ -16,6 +16,10 @@ const ALARM_AFTER_BEATS := 3          # afternoon conversations before the alarm
 const NORTH_FIELD_POS := Vector2(1440, 1380)
 const ELARA_HOUSE_SCENE := "res://scenes/chapter1/elara_house.tscn"
 const ELARA_AT_DOOR_POS := Vector2(728, 1196)   # where Elara waits after the invite, beside Doors/ElaraHouseDoor
+## Y1-P0-T13c: "Fight it." at the boar is a real fight in the combat arena's story-fight mode.
+const SELF_SCENE := "res://scenes/chapter1/oakhaven_village.tscn"
+const COMBAT_ARENA := "res://scenes/combat/combat_arena.tscn"
+const BOAR_FIGHT_ID := "ch1_boar"
 
 @onready var shop_panel = get_node_or_null("UI/ShopPanel")
 @onready var auction_panel = get_node_or_null("UI/AuctionPanel")
@@ -73,6 +77,10 @@ func _ready() -> void:
 
 	_arrive_from_return_point(player)
 	_restore_afternoon()
+	# Y1-P0-T13c (D6): once the field is over (fight, calm or nest), a load never replays its alarm or pays again.
+	if GameManager.has_flag("ch1_corrupted_boar_defeated"):
+		_field_resolved = true
+		_alarm_done = true
 	# Y1-P0-S08: once the stew has played in Elara's house, the arrival (gate,
 	# ledger, invite) does not replay and the afternoon starts at once.
 	if GameManager.has_flag("ch1_stew_done"):
@@ -84,13 +92,19 @@ func _ready() -> void:
 	if auction_panel:
 		auction_panel.visible = false
 
+	var fade_tween: Tween = null
 	if fade_rect:
 		fade_rect.modulate = Color(0, 0, 0, 1)
-		var tween = create_tween()
-		tween.tween_property(fade_rect, "modulate:a", 0.0, 1.5)
+		fade_tween = create_tween()
+		fade_tween.tween_property(fade_rect, "modulate:a", 0.0, 1.5)
 
 	_update_gold_display()
 	_update_glitch_display()
+
+	# Y1-P0-T13c: back from the boar fight, won and not yet paid: the return beat, then the field's end.
+	if GameManager.has_flag("ch1_boar_fight_won") and not GameManager.has_flag("ch1_corrupted_boar_defeated"):
+		await _resume_after_boar_fight(fade_tween)
+		if not is_inside_tree(): return
 
 	if _entrance_done:
 		return
@@ -471,7 +485,8 @@ func _on_apothecary_interaction(body) -> void:
 	GameManager.set_story_flag("ch1_apothecary_visited", true)
 	if await _run_once("oakhaven_village", "mara"):
 		await _afternoon_beat_done()
-		if not is_inside_tree(): return
+		# Y1-P0-T13c (R1): the third beat can run the field, and "Fight it." hands off; no shop over that.
+		if not is_inside_tree() or _is_transitioning: return
 		await open_shop()
 		if not is_inside_tree(): return
 		await _grant_crafting_intro_materials()
@@ -522,15 +537,50 @@ func _run_north_field() -> void:
 	await _run("north_field", "boar")
 	if not is_inside_tree(): return
 	if GameManager.has_flag("ch1_boar_fought"):
-		await _run("north_field", "boar_fight_staged")
-		if not is_inside_tree(): return
-	# The field is closed and the boar dealt with, whichever way.
+		# Y1-P0-T13c: the arena plays the fight; the village comes back to _resume_after_boar_fight.
+		# Nothing else runs here (boar_fight_staged stays in north_field.dlg, unplayed).
+		_hand_off_to_boar_fight()
+		return
+	_finish_north_field()
+
+## The field is closed and the boar dealt with, whichever way: the flag, the pay and the
+## field's state. Calm and nest reach it from _run_north_field, the fight from
+## _resume_after_boar_fight once the arena is won.
+func _finish_north_field() -> void:
 	GameManager.set_story_flag("ch1_corrupted_boar_defeated", true)
 	GameManager.add_gold(100)
 	GameManager.add_xp(50)
 	_update_gold_display()
 	_field_resolved = true
+	_alarm_done = true   # a return with no stash (a load) leaves it false otherwise, and the alarm could re-arm
 	_field_running = false
+
+## Y1-P0-T13c (AC-3): "Fight it." hands the boar to the arena. The afternoon is stashed and
+## the return point set to the north field; _is_transitioning, set before the change, keeps
+## every trigger off and tells _on_bridge_trigger to stop.
+func _hand_off_to_boar_fight() -> void:
+	if _is_transitioning or SceneTransitions.is_transitioning:
+		return
+	_is_transitioning = true
+	_stash_afternoon()
+	GameManager.set_return_point(SELF_SCENE, NORTH_FIELD_POS + Vector2(0, -90))
+	GameManager.set_meta("story_fight_id", BOAR_FIGHT_ID)
+	GameManager.set_meta("story_fight_return_scene", SELF_SCENE)
+	DialogueManager.hide_dialogue()
+	SceneTransitions.change_scene(COMBAT_ARENA, SceneTransitions.TransitionStyle.COMBAT_ENTRY)
+
+## Y1-P0-T13c (AC-5): the village rebuilt after the boar fight was won. The field counts as
+## running at once, so _busy() holds the boar and bridge triggers off; the beat waits for the
+## fade-in, then the field ends as it always has. The caller pays once: it runs this only
+## while ch1_corrupted_boar_defeated is unset.
+func _resume_after_boar_fight(fade_tween: Tween) -> void:
+	_field_running = true
+	if fade_tween:
+		await fade_tween.finished
+		if not is_inside_tree(): return
+	await _run("north_field", "boar_fight_after")
+	if not is_inside_tree(): return
+	_finish_north_field()
 
 # ── C1-S07: the bridge, then on to the region (and Aldric) ────────────────
 
@@ -540,7 +590,8 @@ func _on_bridge_trigger(body) -> void:
 	_bridge_running = true
 	if not _field_resolved:
 		await _run_north_field()
-		if not is_inside_tree(): return
+		# Y1-P0-T13c: a fight hands the boar to the arena; the bridge waits for the village's return.
+		if not is_inside_tree() or _is_transitioning: return
 	if not _bridge_done:
 		_bridge_done = true
 		await _run("north_field", "bridge")

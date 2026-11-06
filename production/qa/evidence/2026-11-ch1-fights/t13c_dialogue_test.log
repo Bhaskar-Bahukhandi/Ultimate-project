@@ -1,0 +1,112 @@
+GODOT override: C:\Godot\Godot_v4.6.3-stable_win64_console.exe
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+[parser]
+  PASS: fixture parses without errors []
+  PASS: nodes in order
+  PASS: line with speaker and id
+  PASS: [if flag] condition
+  PASS: do event
+  PASS: choice block with prompt and 3 options
+  PASS: => END option
+  PASS: '- [if flag] text' puts the condition on the option, not in its text
+  PASS: set flag / set flag = false
+  PASS: [if not flag] jump
+  PASS: missing_ids() finds the one line without [#id] (1)
+  PASS: a new '?' prompt starts a separate choice block
+  PASS: \n becomes a line break
+[validation]
+  PASS: text before first node is an error
+  PASS: jump to unknown node is an error
+  PASS: option without => is an error
+  PASS: duplicate node is an error
+  PASS: line without 'Speaker: ' is an error
+  PASS: prompt without options is an error
+  PASS: set value must be true/false
+  PASS: errors carry the line number (<source>:2: jump to unknown node 'nowhere')
+[runner]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: run() completes
+  PASS: do event reached the scene handler
+  PASS: set / set = false applied
+  PASS: conditional jump followed (ended at 'after')
+  PASS: choice recorded
+  PASS: [if flag] option shown and picked
+  PASS: hidden option is skipped; index maps to visible options (ok=true secret=false choices=[{ "node": "start", "index": 1, "target": "END" }] end=start)
+ERROR: [Dialogue] res://tests/fixtures/sample.dlg has no node 'no_such_node'
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] _run_impl (res://scripts/dialogue_manager.gd:543)
+       [1] run (res://scripts/dialogue_manager.gd:504)
+       [2] _test_runner (res://tests/integration/dialogue/dialogue_test.gd:138)
+       [3] run (res://scripts/dialogue_manager.gd:510)
+       [4] _run_impl (res://scripts/dialogue_manager.gd:606)
+       [5] show_choices (res://scripts/dialogue_manager.gd:391)
+       [6] _show_choices_impl (res://scripts/dialogue_manager.gd:477)
+  PASS: unknown start node fails cleanly
+  PASS: dialogue box closes after run()
+[built-in do events]
+  PASS: do trust changes the relationship (30)
+  PASS: reaching 30 sets <name>_trust_high
+  PASS: built-ins aren't passed to the scene; other events are (["scene_thing"])
+[all .dlg files]
+  PASS: found 81 .dlg files
+  PASS: every .dlg file parses (0 with errors)
+[voice lint — authored .dlg files]
+  PASS: found 20 authored .dlg files
+  PASS: questions end in a question mark []
+  PASS: no banned tics []
+  PASS: no hardcoded key names — use {action} tokens []
+  PASS: every speaker is registered in SPEAKER_COLORS []
+  PASS: no long file without a single contraction []
+  PASS: no file is more than 30% lines of 3 words or fewer []
+  PASS: no more than 4 short lines in a row outside '# rhythm: clipped' nodes []
+[voice lint — runtime speakers in scripts/**/*.gd]
+  PASS: title ban flags say(title, …), say(data.get("title" …) and _show_dialogue(title, …), not say("Journal", …) (fixtures)
+  PASS: the literal regex reads a call split after the bracket (fixture)
+  PASS: baseline file exists: res://tests/integration/dialogue/runtime_speaker_baseline.txt
+  PASS: the scan read 1287 literal say()/_show_dialogue() calls in 135 scripts (4 split after the bracket), at least 800
+  PASS: no call takes a title as its speaker (0) []
+  PASS: every literal runtime speaker is in SPEAKER_COLORS or the baseline (0 not) []
+  PASS: the baseline (82 names) only holds unregistered names still in use (0 stale) []
+[opening scene wiring]
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[10N-A2] Opening crash-site hook loaded
+WARNING: [AssetManager] Production art slot missing for Kaelen top-down sheet at res://assets/production_art/characters/player/kaelen_topdown_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:1000)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [6] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [7] _spawn_player (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:279)
+       [8] _ready (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:50)
+WARNING: [AssetManager] V2 top-down player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:1009)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [4] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [5] _spawn_player (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:279)
+       [6] _ready (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:50)
+  PASS: New Game opens with the prologue, then Kaelen at the crash site ["Flight Attendant", "Voice", "Kaelen", "Passenger", "Kaelen (Internal)"]
+  PASS: opening dialogue finishes and hands control back
+  PASS: the fused metal plays its .dlg node and opens the road east
+  PASS: the .dlg's 'do objective' updates the HUD (OBJECTIVE: Find people. A settlement east may know what happened to Flight 707.)
+
+DIALOGUE RESULT: 54 passed, 0 failed
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)

@@ -198,6 +198,11 @@ jobs:
         timeout-minutes: 5
         run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/integration/combat/guardian_fight_test.gd
 
+      - name: "Boar fight (T13c: the north-field boar, its row, its win and retry)"
+        working-directory: ${{ env.PROJECT_DIR }}
+        timeout-minutes: 10
+        run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/integration/combat/boar_fight_test.gd
+
       - name: Reachability (collision never walls off an NPC, shop, gate or trigger)
         working-directory: ${{ env.PROJECT_DIR }}
         run: GODOT=~/godot/godot bash tests/run_tests.sh res://tests/integration/level/reachability_test.gd

@@ -1,0 +1,109 @@
+extends SceneTree
+## T13c AC-7 capture (live renderer): the real hand-off path. The village's flags, stash, return point and story
+## metas are set as the village sets them at the fight choice; the arena is the current scene; the win returns to the
+## real village, which plays boar_fight_after.
+## Shots: boar.png (the fight, the controls line with the pogo), boar-charge.png (half-way through the charge's
+## telegraph), boar-dizzy.png (dizzy at the wall, the star cue), boar-return.png (the village's return beat).
+## Run: Godot (not headless) --path AethelgardPrototype --resolution 1280x720 --script <this> -- --out=<dir>
+
+const ARENA := "res://scenes/combat/combat_arena.tscn"
+const VILLAGE := "res://scenes/chapter1/oakhaven_village.tscn"
+
+var _out := ""
+
+
+func _initialize() -> void:
+	for a in OS.get_cmdline_user_args():
+		if a.begins_with("--out="):
+			_out = a.substr(6)
+	_run.call_deferred()
+
+
+func _wait(seconds: float) -> void:
+	var end := Time.get_ticks_msec() + int(seconds * 1000.0)
+	while Time.get_ticks_msec() < end:
+		await process_frame
+
+
+func _shot(name: String) -> void:
+	await RenderingServer.frame_post_draw
+	var img := get_root().get_texture().get_image()
+	var path := _out.path_join(name)
+	print("SHOT %s %s err=%d size=%s" % [name, path, img.save_png(path), img.get_size()])
+
+
+func _boar(arena: Node) -> Node:
+	return arena.get_node_or_null("Enemies/StoryFightBoar")
+
+
+func _run() -> void:
+	await process_frame
+	if not OS.get_user_data_dir().contains("aeth_phase0_test"):
+		push_error("not isolated")
+		quit(2)
+		return
+	var gm := get_root().get_node("GameManager")
+	gm.reset_game()
+	# The afternoon as the village has it at the boar choice (fight).
+	for flag in ["ch1_stew_done", "ch1_north_field_helped", "ch1_boar_fought"]:
+		gm.set_story_flag(flag, true)
+	gm.set_meta(gm.VILLAGE_AFTERNOON_META, {"seen": {}, "beats": 3, "alarm_done": true, "field_resolved": false,
+		"bridge_done": false})
+	gm.set_return_point(VILLAGE, Vector2(1440, 1290))
+	gm.set_meta("story_fight_id", "ch1_boar")
+	gm.set_meta("story_fight_return_scene", VILLAGE)
+	get_root().get_node("SceneTransitions").change_scene(ARENA)
+	await _wait(3.0)
+	var arena := current_scene
+	print("SCENE ", arena.scene_file_path if arena else "none")
+	var b = _boar(arena)
+	print("BOAR ", b != null, " LABEL ", arena.get_node("UI/StoryFightControls").text)
+	await _shot("boar.png")
+	# Hold the boar's next charge while the player is placed 500 px to its left, so the telegraph shot is a fresh one
+	# with the player at full HP, and the charge then runs to the left wall near the player (dizzy in the camera's view).
+	b.attack_cooldown = 1.0
+	var player = arena.get("player")
+	player.global_position = Vector2(b.global_position.x - 500.0, b.global_position.y)
+	player.velocity = Vector2.ZERO
+	await _wait(0.2)
+	var telegraphing := false
+	var end := Time.get_ticks_msec() + 10000
+	while Time.get_ticks_msec() < end:
+		await process_frame
+		b = _boar(arena)
+		if b and b.current_state == b.State.TELEGRAPH:
+			telegraphing = true
+			break
+	print("TELEGRAPH seen: ", telegraphing)
+	await _wait(0.3)
+	await _shot("boar-charge.png")
+	# Out of the charge's path (a jump would do the same), so the boar runs on to the wall.
+	player.global_position = Vector2(player.global_position.x, player.global_position.y - 160.0)
+	var dizzy := false
+	end = Time.get_ticks_msec() + 8000
+	while Time.get_ticks_msec() < end:
+		await process_frame
+		b = _boar(arena)
+		if b and bool(b.get("_dizzy")):
+			dizzy = true
+			break
+	print("DIZZY seen: ", dizzy, " cue ", b.get_node("DizzyCue").visible if b and b.has_node("DizzyCue") else false)
+	await _wait(0.4)
+	await _shot("boar-dizzy.png")
+	b = _boar(arena)
+	if b and bool(b.get("_dizzy")):
+		b.take_damage(b.max_health)
+	var dm := get_root().get_node("DialogueManager")
+	var seen := false
+	end = Time.get_ticks_msec() + 20000
+	while Time.get_ticks_msec() < end:
+		await process_frame
+		if current_scene and current_scene.scene_file_path == VILLAGE and dm.is_active:
+			seen = true
+			break
+	print("VILLAGE dialogue active: ", seen, " won=", gm.has_flag("ch1_boar_fight_won"))
+	# Long enough for the first line to finish typing.
+	await _wait(3.0)
+	await _shot("boar-return.png")
+	await _wait(0.5)
+	quit(0)

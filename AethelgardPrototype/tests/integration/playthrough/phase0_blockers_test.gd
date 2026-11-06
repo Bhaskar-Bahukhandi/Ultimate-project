@@ -387,10 +387,13 @@ func _ch1_poke() -> void:
 			spin.value = 0.0  # one of the two valid edits: turn the guardian's aggression down
 		s._on_root_access_apply()
 	elif p == ARENA_SCENE and not s.get("_story_id").is_empty() and not s.get("_story_resolved"):
-		# Y1-P0-T13a: the meeting hands off to the slime fight; the slime is damaged to 0 through its own API.
-		var slime = s.get_node_or_null("Enemies/StoryFightSlime")
-		if slime != null and slime.current_health > 0.0:
-			slime.take_damage(slime.max_health)
+		# Y1-P0-T13a, T13c: the scene hands off to a story fight; whichever story enemy the arena holds is damaged
+		# to 0 through its own API. The boar is armoured until dizzy, so it is made dizzy first.
+		var enemy = s.get("_story_enemy")
+		if is_instance_valid(enemy) and enemy.current_health > 0.0:
+			if enemy.has_method("_enter_dizzy"):
+				enemy._enter_dizzy()
+			enemy.take_damage(enemy.max_health)
 	elif p == VILLAGE_SCENE and not s.get("in_dialogue") and Time.get_ticks_msec() >= _next_bridge_poke_ms:
 		_next_bridge_poke_ms = Time.get_ticks_msec() + 1000
 		var player := s.get_node_or_null("Player")

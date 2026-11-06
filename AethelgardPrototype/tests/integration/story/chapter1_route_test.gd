@@ -30,6 +30,8 @@ var _passes := 0
 var _failures: Array[String] = []
 var _driving := false
 var _arena_save_refused := false   # T13a: save_game(1) was refused while the slime fight was on
+var _boar_pay_base := {}           # T13c: gold and XP when the driver first won the boar arena
+var _boar_pay_last := {}           # T13c: gold and XP on the last frame _wait_for saw the village after that
 var _picks: Array = []
 var _seen_text: Array[String] = []
 var _shatter_mark := 0            # _seen_text index where the shatter scene began
@@ -86,6 +88,7 @@ func _run() -> void:
 	_test_bc_new_flags_registered()
 	_test_t13a_flag_registered()
 	_test_t13b_flag_registered()
+	_test_t13c_flag_registered()
 	await _test_bc_broken_mile_flag()
 	await _test_bc_arrows_hook()
 	await _test_bc_arrows_village()
@@ -175,6 +178,8 @@ func _wait_for(path: String, timeout_sec: float) -> bool:
 		var s := current_scene
 		if s:
 			_scenes_seen[s.scene_file_path] = true
+		if s and s.scene_file_path == VILLAGE and not _boar_pay_base.is_empty():
+			_boar_pay_last = _pay_now()
 		if s and s.scene_file_path == path and not st.is_transitioning:
 			return true
 		if s and s.scene_file_path == PATH and s.get("root_access_tutorial_active") and not s.get("guardian_resolved"):
@@ -204,11 +209,16 @@ func _poke_room(s: Node) -> bool:
 				s._on_elara_house_door_interaction(player)   # walk to Elara's door
 				return true
 		ARENA:
-			# The test's combat driver (T13a): the slime is damaged to 0 through its own API.
-			var slime := s.get_node_or_null("Enemies/StoryFightSlime")
-			if slime != null and not s._story_resolved and slime.current_health > 0.0:
+			# The test's combat driver (T13a, T13c): the arena's story enemy is damaged to 0 through its own
+			# API. The boar is armoured until dizzy, so it is made dizzy first.
+			var enemy = s.get("_story_enemy")
+			if is_instance_valid(enemy) and not s._story_resolved and enemy.current_health > 0.0:
 				_arena_save_refused = not _gm().save_game(1)   # saving is refused inside the arena
-				slime.take_damage(slime.max_health)
+				if enemy.has_method("_enter_dizzy"):
+					if _boar_pay_base.is_empty():
+						_boar_pay_base = _pay_now()
+					enemy._enter_dizzy()
+				enemy.take_damage(enemy.max_health)
 				return true
 		HOUSE:
 			if _gm().has_flag("ch1_stew_done") and not s._busy():
@@ -271,6 +281,17 @@ func _test_new_game_to_region() -> void:
 		"stew topics played (in Elara's house, through her door and back: house seen %s)" % _scenes_seen.has(HOUSE))
 	var field_flags := ["ch1_north_field_helped", "ch1_sluice_edited", "ch1_boar_fought", "ch1_corrupted_boar_defeated"]
 	_check(field_flags.all(func(f): return gm.has_flag(f)), "north field: helped, sluice edited, boar fought %s" % [field_flags.map(func(f): return "%s=%s" % [f, gm.has_flag(f)])])
+	var paid_gold := int(_boar_pay_last.get("gold", 0)) - int(_boar_pay_base.get("gold", 0))
+	var paid_xp := int(_boar_pay_last.get("xp", 0)) - int(_boar_pay_base.get("xp", 0))
+	var boar_afters := _seen_text.filter(func(l): return l.contains(T13C_AFTER_LINE)).size()
+	_check(T13C_NEW_FLAGS.all(func(f): return gm.has_flag(f)) and _scenes_seen.has(ARENA) and boar_afters == 1
+		and not _saw("ELITE DEFEATED"),
+		"T13c the fight route went through the boar arena: %s set, boar_fight_after once (%d), no staged fight"
+			% [str(T13C_NEW_FLAGS), boar_afters])
+	_check(not _boar_pay_base.is_empty() and paid_gold == T13C_FIELD_GOLD and paid_xp >= T13C_FIELD_XP
+		and paid_xp < 2 * T13C_FIELD_XP,
+		"T13c the field paid once after the boar arena: gold +%d (%d), XP +%d (%d times the DDA bonus)"
+			% [paid_gold, T13C_FIELD_GOLD, paid_xp, T13C_FIELD_XP])
 	_check(gm.has_flag("ch1_bridge_saved"), "the bridge was fixed before dark")
 	_check(not _saw("looped 412 times") and not _saw("*"), "no old-script lines or *stage directions* on screen")
 	_driving = false
@@ -338,7 +359,7 @@ func _test_aldric_purge_route() -> void:
 func _idle(s: Node, timeout_sec: float = 30.0) -> void:
 	var deadline := Time.get_ticks_msec() + int(timeout_sec * 1000.0)
 	await process_frame
-	while s._busy() and Time.get_ticks_msec() < deadline:
+	while is_instance_valid(s) and s._busy() and Time.get_ticks_msec() < deadline:
 		var shop := get_root().get_node("ShopSystem")
 		if shop.get("_is_open"):
 			shop.close_shop()
@@ -376,8 +397,16 @@ func _test_village_afternoon() -> void:
 	s._on_farmer_interaction(player)
 	await _idle(s)
 	deadline = Time.get_ticks_msec() + 60000
-	while not s._field_resolved and Time.get_ticks_msec() < deadline:
+	while is_instance_valid(s) and current_scene == s and not s._field_resolved and Time.get_ticks_msec() < deadline:
 		await process_frame
+	if not is_instance_valid(s) or current_scene != s:
+		# T13c: "Fight it." hands the boar to the arena; the afternoon carries on in the village rebuilt after the win.
+		s = await _follow_boar_fight(BC_FIELD_TIMEOUT_SEC)
+		_check(s != null, "T13c the afternoon's alarm: the fight went through the boar arena and back to the village")
+		if s == null:
+			_driving = false
+			return
+		player = s.get_node("Player")
 	await _idle(s)
 	_check(_saw("Guessing.") and _saw("Plants don't ask") and _saw("That was the sluice's fault."), "Old Fen, Jessa and the farmers play their lines")
 	_check(s._alarm_done and gm.has_flag("ch1_north_field_helped") and s._field_resolved, "the third conversation brings the alarm; the field gets resolved")
@@ -937,6 +966,12 @@ const BC_T05_NEW_FLAGS: Array = ["ch1_broken_mile_entered", "ch1_stew_done"]
 ## table, outside scripts/chapter1, so it is not in the Chapter 1 flag-write scan above (as ch1_slime_fought);
 ## _test_t13b_flag_registered checks its writer and reader instead.
 const T13B_NEW_FLAGS: Array = ["ch1_guardian_fought"]
+## Y1-P0-T13c's story flag (user decision D1, 2026-11-05). Its one writer is the combat arena's STORY_FIGHTS
+## (the ch1_boar row); the village reads it to play the return beat.
+const T13C_NEW_FLAGS: Array = ["ch1_boar_fight_won"]
+const T13C_AFTER_LINE := "It was still trying to get back to the nest"   # boar_fight_after's first line
+const T13C_FIELD_GOLD := 100   # the north field's end (ch1_oakhaven_village.gd)
+const T13C_FIELD_XP := 50      # the same, before GameManager.add_xp's DDA bonus
 ## A field run that has not returned by then counts as stalled (a check fails).
 const BC_FIELD_TIMEOUT_SEC := 120.0
 
@@ -1674,6 +1709,9 @@ func _test_bc_alarm_routes() -> void:
 	_check(bc.get_current_objective() == BC_STEPS[6], "early alarm: step 6 before the alarm (got '%s')" % bc.get_current_objective())
 	_start([0])
 	_check(await _run_field_bounded(s, BC_FIELD_TIMEOUT_SEC), "early alarm: the field run finished within %ds" % int(BC_FIELD_TIMEOUT_SEC))
+	# T13c: "Fight it." hands the boar to the arena; the field is resolved back in the village.
+	s = await _follow_boar_fight(BC_FIELD_TIMEOUT_SEC)
+	_check(s != null, "T13c early alarm: the fight went through the boar arena and back to the village")
 	_check(gm.has_flag("ch1_north_field_helped") and gm.has_flag("ch1_corrupted_boar_defeated"), "early alarm: helped, field resolved, boar flag set")
 	_force_explore()
 	bc.force_refresh()
@@ -1717,6 +1755,8 @@ func _test_bc_alarm_routes() -> void:
 	_check(st["done"], "hesitate-then-help: the field run finished")
 	_check(step_when_helped == 7 and not refused_when_helped, "hesitate-then-help: helped set -> step 7 while the boar is open (got step %d)" % step_when_helped)
 	_check(not gm.has_flag("ch1_north_field_refused"), "hesitate-then-help: refused never set")
+	var back := await _follow_boar_fight(BC_FIELD_TIMEOUT_SEC)
+	_check(back != null, "T13c hesitate-then-help: the fight went through the boar arena and back to the village")
 	_driving = false
 	await _end_scene()
 
@@ -1849,3 +1889,44 @@ func _test_t13b_flag_registered() -> void:
 			"the Broken Mile reads %s with has_flag and never sets it (script or broken_mile.dlg)" % flag)
 		_check(s5 >= 0 and s6 > s5 and bible.substr(s5, s6 - s5).contains("| `%s` |" % flag),
 			"STORY_BIBLE §5 has the %s row" % flag)
+
+
+## T13c: ch1_boar_fight_won has one writer (the arena's story-fight table); the village reads it with has_flag and
+## never sets it, nor does north_field.dlg; it is in the bible's section 5.
+func _test_t13c_flag_registered() -> void:
+	print("[T13c ch1_boar_fight_won has one writer and is in the bible]")
+	var arena_text := _read_text("res://scripts/combat/combat_arena.gd")
+	var village_text := _read_text("res://scripts/chapter1/ch1_oakhaven_village.gd")
+	var field_dlg := _read_text("res://dialogue/ch1/north_field.dlg")
+	var bible := _read_text(BC_BIBLE)
+	var s5 := bible.find("## 5. ")
+	var s6 := bible.find("## 6. ")
+	for flag in T13C_NEW_FLAGS:
+		_check(arena_text.count("\"%s\"" % flag) == 1,
+			"%s appears once in combat_arena.gd: its story-fight table" % flag)
+		_check(village_text.contains("has_flag(\"%s\")" % flag)
+			and not village_text.contains("set_story_flag(\"%s\"" % flag) and not field_dlg.contains("set %s" % flag),
+			"the village reads %s with has_flag and never sets it (script or north_field.dlg)" % flag)
+		_check(s5 >= 0 and s6 > s5 and bible.substr(s5, s6 - s5).contains("| `%s` |" % flag),
+			"STORY_BIBLE §5 has the %s row" % flag)
+
+
+## T13c: gold and XP now.
+func _pay_now() -> Dictionary:
+	return {"gold": int(_gm().player_stats.get("gold", 0)), "xp": int(_gm().player_stats.get("xp", 0))}
+
+
+## T13c: after a field run that chose to fight (the hand-off under way), follows it: the arena, won by _poke_room's
+## driver, then the village rebuilt and its return beat. Returns the village once its field is resolved, or null.
+func _follow_boar_fight(timeout_sec: float) -> Node:
+	var arena := await _scene_ready(ARENA, timeout_sec)
+	if arena == null:
+		return null
+	var back: bool = await _wait_for(VILLAGE, timeout_sec)
+	if not back:
+		return null
+	var v := current_scene
+	var deadline := Time.get_ticks_msec() + int(timeout_sec * 1000.0)
+	while is_instance_valid(v) and (not v._field_resolved or v._field_running) and Time.get_ticks_msec() < deadline:
+		await process_frame
+	return v if is_instance_valid(v) and v._field_resolved and not v._field_running else null
