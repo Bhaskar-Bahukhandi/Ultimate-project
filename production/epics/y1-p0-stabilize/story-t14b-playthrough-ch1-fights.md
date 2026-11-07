@@ -232,8 +232,14 @@ the bot's logs are the observation.
 
 **Completed**: 2026-11-07
 
-**Criteria**: 7/7 met locally, with two CI parts DEFERRED to the push: AC-7 "CI green" and AC-6 "the CI job stays under
-its 45-minute limit" (expected about 31 min; the first CI run also logs leg 04's time against its 180 s cap).
+**Criteria**: 7/7 met. AC-7's "CI green" and AC-6's "the CI job stays under its 45-minute limit" were DEFERRED at close
+and are now met (CI #58, below).
+
+**Known after close**: CI run #58 on `1188264` (2026-11-07, run 42379377917) is green, 30m45s against the job's
+45-minute limit; the "Playthrough bot (Y1-P0-T14a/T14b: New Game to the credits …)" step took 171 s on Linux (step limit
+12 minutes, suite limit 600 s), "Chapter 1 route" 543 s, "Phase 0 regression tests" 311 s. Leg 04's own time on CI is
+NOT VERIFIED: the job log needs a GitHub sign-in, and the public API gives step times only. The whole bot step (171 s)
+is under the local runs (182-184 s), so the guardian leg is not expected near its 180 s cap.
 
 **Final bot**: SHA-256 `5fb81cfe…` (`b6e7b29f…` plus `CAP_GUARDIAN` 160 -> 180 at the /story-done gate). 405 passed, 0
 failed in `t14b_hopfix_run1..3.log` (182.1-183.2 s) and `t14b_capfix_run1.log` (183.9 s); full run 28/28 on 4.6.3

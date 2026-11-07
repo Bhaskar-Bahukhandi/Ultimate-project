@@ -218,3 +218,14 @@ costs. Player-possible inputs used: a real `move_right` hold in the arena fights
   - The "Not verified" section said the boar flake's cause was not investigated; corrected.
   - Left as suggestions: four functions over 40 code lines (`_drive_leg` 112, `_drive_fight` 63, `_drive_boss` 43,
     `_play` 42; `_drive_leg` also over complexity 10); a null player is read as a death (`:811`, `:1060`).
+
+## CI (T14b, AC-6 and AC-7)
+
+CI run #58 on `1188264` (2026-11-07, https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/42379377917):
+success in 30m45s on Godot 4.6.3 (Linux), against the job's 45-minute limit (the estimate was about 31 min). Every step
+passed, the Godot install skipped on a cache hit. The "Playthrough bot (Y1-P0-T14a/T14b: New Game to the credits …)"
+step took 171 s (step limit 12 minutes, suite limit 600 s; local 182-184 s). Other long steps: "Chapter 1 route" 543 s,
+"Phase 0 regression tests" 311 s, "Elara's house and the shrine" 187 s, "Boar fight" 162 s, "Chapter 2 route" 147 s.
+
+Not verified on CI: leg 04's own time against its 180 s cap. The step log needs a GitHub sign-in; the public API gives
+step times only. The whole step ran faster than locally, so the leg is not expected near its cap.
