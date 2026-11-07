@@ -3,6 +3,17 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-11-07 — The playthrough bot plays New Game to the credits (Y1-P0-T14b)
+
+- **test:** the playthrough bot (`tests/integration/playthrough/full_playthrough_test.gd`) now starts from a real New
+  Game instead of a seeded Chapter 3 and plays every scene to the credits in one headless run (66 legs, about 3
+  minutes): the crash site, the three Chapter 1 arena fights (the guardian through the Root Access panel's give-up),
+  Oakhaven, the Tutorial Knight reached through the region's own boss gate, the shrine, the shatter played through,
+  Chapter 2 on its careful route, then Chapters 3-10, the ending, NEW GAME+ and the credits. Each leg has its own
+  measured time cap and per-leg checks; five scenes that hand off with the dialogue box still up are a known list
+  (TD-043). No game code changed. New tech-debt rows TD-043 to TD-046. Evidence:
+  `production/qa/evidence/2026-11-playthrough/`.
+
 ## 2026-11-06 — The north-field boar is a real fight (Y1-P0-T13c)
 
 - **feat(ch1):** at the north field, choosing "Fight it." against the corrupted boar now starts a real side-scroll

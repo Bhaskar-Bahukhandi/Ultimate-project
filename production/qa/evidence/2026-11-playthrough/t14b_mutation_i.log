@@ -1,0 +1,2575 @@
+# T14b mutation (i): leg 08's expected flag ch1_stew_asked_where swapped for a flag the game never sets
+# file: tests\integration\playthrough\full_playthrough_test.gd (sha256 before b6e7b29fb8615f38b031a7cdbed44b302e3e5bfa76dd87eb0ad0ba9cea4bc95c, crlf False)
+# suite: res://tests/integration/playthrough/full_playthrough_test.gd
+# expected to be caught by: AC-5 leg 08 elara_house.tscn: flags set at the hand-off [...] (missing ["ch1_t14b_never_set"])
+GODOT override: C:\Godot\Godot_v4.6.3-stable_win64_console.exe
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+  PASS: isolation: GameManager, DialogueManager, SceneTransitions, ContextStack and CreditsScreen autoloads are present
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: AC-1 start: New Game state after reset_game() (flags set [], keys 0, chapter 1, glitch 0.0)
+  PASS: AC-1 start: the first leg is the crash-site hook (opening_crash_site_hook.tscn)
+  PASS: AC-5 KNOWN_R5_DIALOGUE (TD-043) names 5 legs, each matching its LEGS row (stale: [])
+  PASS: AC-1 the bot loads opening_crash_site_hook.tscn (got 0)
+[10N-A2] Opening crash-site hook loaded
+WARNING: [AssetManager] Production art slot missing for Kaelen top-down sheet at res://assets/production_art/characters/player/kaelen_topdown_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:1000)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [6] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [7] _spawn_player (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:279)
+       [8] _ready (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:50)
+WARNING: [AssetManager] V2 top-down player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:1009)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [4] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [5] _spawn_player (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:279)
+       [6] _ready (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:50)
+  PASS: AC-1 leg 00 arrives at opening_crash_site_hook.tscn (got 'opening_crash_site_hook.tscn')
+[ACHIEVEMENT] Unlocked: Crash Landing — Survive Flight 707.
+  PASS: AC-6 leg 00 opening_crash_site_hook.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 00 opening_crash_site_hook.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 00 opening_crash_site_hook.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 00 opening_crash_site_hook.tscn: flags set at the hand-off ["ch1_opening_hook_signal_found", "ch1_opening_hook_complete", "plane_crash_completed"] (missing [])
+  leg 00 opening_crash_site_hook.tscn               0.4 s real, 0 choice(s), kind room, cap 60 s
+[CH1-SEQ2] Initializing Elara the Glitch-Witch meeting
+  PASS: AC-1 leg 01 arrives at elara_meeting.tscn (got 'elara_meeting.tscn')
+[CUTSCENE] Starting: Chapter 1 - The Wrong Weapon
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE] Finished
+[CH1-SEQ2] Handing off to the slime fight
+  PASS: AC-6 leg 01 elara_meeting.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 01 elara_meeting.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 01 elara_meeting.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 01 elara_meeting.tscn: flags set at the hand-off [] (missing [])
+  leg 01 elara_meeting.tscn                         1.8 s real, 0 choice(s), kind story, cap 60 s
+WARNING: [AssetManager] Production art slot missing for Slime enemy sheet at res://assets/production_art/characters/enemies/fracture_slime_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/enemies/fracture_slime_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_enemy (res://scripts/asset_manager.gd:1043)
+       [4] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [5] _ready (res://scripts/combat/enemy_base.gd:221)
+       [6] _ready (res://scripts/combat/enemies/slime.gd:36)
+WARNING: [AssetManager] Enemy sheet failed to load for Slime; using existing enemy fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_enemy (res://scripts/asset_manager.gd:1051)
+       [2] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [3] _ready (res://scripts/combat/enemy_base.gd:221)
+       [4] _ready (res://scripts/combat/enemies/slime.gd:36)
+WARNING: [AssetManager] Production art slot missing for Kaelen combat sheet at res://assets/production_art/characters/player/kaelen_combat_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:985)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _setup_sprites (res://scripts/combat/combat_arena.gd:1180)
+       [6] _start_story_fight (res://scripts/combat/combat_arena.gd:947)
+       [7] _ready (res://scripts/combat/combat_arena.gd:314)
+WARNING: [AssetManager] V2 combat player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:994)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _setup_sprites (res://scripts/combat/combat_arena.gd:1180)
+       [4] _start_story_fight (res://scripts/combat/combat_arena.gd:947)
+       [5] _ready (res://scripts/combat/combat_arena.gd:314)
+  PASS: AC-1 leg 02 arrives at combat_arena.tscn (got 'combat_arena.tscn')
+  PASS: AC-2 leg 02 combat_arena.tscn (ch1_slime): the scene is combat_arena.tscn with story_fight_id 'ch1_slime' (got 'ch1_slime')
+  PASS: AC-2 leg 02 combat_arena.tscn (ch1_slime): the row's win flags ["first_slime_defeated", "ch1_slime_fought"] are false before the finish (already set [])
+  PASS: AC-2 leg 02 combat_arena.tscn (ch1_slime): the enemy's State enum is readable (IDLE 0, DEAD 7)
+  INFO fight ch1_slime: player HP at the window's start 100.0/100.0
+  INFO fight ch1_slime: player HP at the window's end 100.0/100.0
+  PASS: AC-2 leg 02 combat_arena.tscn (ch1_slime): the alive window reached 3 s of game time inside its 30 s wall cap (3.00 s of game time at time_scale 4.0, 0.73 s wall clock)
+  PASS: AC-2 leg 02 combat_arena.tscn (ch1_slime): the story enemy's current_state was never DEAD in the alive window
+  PASS: AC-2 leg 02 combat_arena.tscn (ch1_slime): the story enemy left IDLE at least once in the alive window (its AI ran)
+  fight ch1_slime: alive 3.00 s of game time (0.73 s wall), enemy state 2; finishing it through its own API
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] _drive_fight (res://tests/integration/playthrough/full_playthrough_test.gd:847)
+       [4] _drive_leg (res://tests/integration/playthrough/full_playthrough_test.gd:655)
+DDA: 53.0 (mult=1.00) K:1 D:0.0
+[ACHIEVEMENT] Unlocked: First Blood — Defeat your first enemy.
+  PASS: AC-6 leg 02 combat_arena.tscn (ch1_slime) hands off within its 60 s cap
+  PASS: AC-2 leg 02 combat_arena.tscn (ch1_slime): the hand-off followed the bot's finish (fight stage 2)
+  PASS: AC-2 leg 02 combat_arena.tscn (ch1_slime): the row's win flags ["first_slime_defeated", "ch1_slime_fought"] are set after the finish (missing [])
+  PASS: AC-2 leg 02 combat_arena.tscn (ch1_slime): no retry ran (story_fight_retries 0)
+  PASS: AC-2 leg 02 combat_arena.tscn (ch1_slime): the player is not dead at the hand-off (dead false)
+  PASS: AC-5 leg 02 combat_arena.tscn (ch1_slime): no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 02 combat_arena.tscn (ch1_slime): no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 02 combat_arena.tscn (ch1_slime): flags set at the hand-off ["first_slime_defeated", "ch1_slime_fought"] (missing [])
+  leg 02 combat_arena.tscn                          1.3 s real, 0 choice(s), kind fight, cap 60 s
+[CH1-SEQ2] Initializing Elara the Glitch-Witch meeting
+  PASS: AC-1 leg 03 arrives at elara_meeting.tscn (got 'elara_meeting.tscn')
+  PASS: AC-2 leg 02 combat_arena.tscn (ch1_slime): the arena handed off once to elara_meeting.tscn (1 hand-offs)
+[CUTSCENE] Starting: Chapter 1 - The Wrong Weapon
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CHOICE-FX] Applied buff: elara_bond_strong — Elara's Trust: +10 Max HP, +3 DEF. Elara casts Glitch Shield in combat (blocks 1 hit every 30s).
+[CH1-SEQ2] Transitioning to Path to Oakhaven
+  PASS: AC-6 leg 03 elara_meeting.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 03 elara_meeting.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 03 elara_meeting.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 03 elara_meeting.tscn: flags set at the hand-off ["elara_first_truth", "ch1_elara_trusted", "elara_met", "ch1_elara_glitch_witch_met"] (missing [])
+  leg 03 elara_meeting.tscn                         1.6 s real, 1 choice(s), kind story, cap 60 s
+[CH1-SEQ3] Initializing Path to Oakhaven — Combat Tutorial
+  PASS: AC-1 leg 04 arrives at path_to_oakhaven.tscn (got 'path_to_oakhaven.tscn')
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+  info: Root Access panel open (glitch_meter 0.0); the bot gives it no input (D2)
+[ACHIEVEMENT] Unlocked: Sudo Mode — Unlock Root Access.
+DDA: 52.1 (mult=1.00) K:0 D:0.0
+DDA: 51.5 (mult=0.99) K:0 D:0.0
+[CH1-SEQ3] Handing off to the guardian fight
+  PASS: AC-6 leg 04 path_to_oakhaven.tscn hands off within its 160 s cap
+  PASS: AC-2 leg 04 path_to_oakhaven.tscn: the Root Access panel opened (seen by the bot)
+  info: Root Access panel to the hand-off: 57.0 s real (leg 59.7 s)
+  PASS: AC-2 leg 04 path_to_oakhaven.tscn: the game's _root_choice is 'fight' at the hand-off (got 'fight')
+  PASS: AC-2 leg 04 path_to_oakhaven.tscn: target filter still ALL (index 0) and aggression still 1.0 (1.0)
+  PASS: AC-2 leg 04 path_to_oakhaven.tscn: glitch_meter unchanged since the panel opened (0.0 -> 0.0)
+  PASS: AC-5 leg 04 path_to_oakhaven.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 04 path_to_oakhaven.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 04 path_to_oakhaven.tscn: flags set at the hand-off ["ch1_broken_mile_entered", "ch1_ironhold_lead", "elara_arm_noticed", "ch1_data_vision_unlocked", "root_access_unlocked"] (missing [])
+  leg 04 path_to_oakhaven.tscn                     59.7 s real, 1 choice(s), kind story, cap 160 s
+  PASS: AC-1 leg 05 arrives at combat_arena.tscn (got 'combat_arena.tscn')
+  PASS: AC-2 leg 05 combat_arena.tscn (ch1_guardian): the scene is combat_arena.tscn with story_fight_id 'ch1_guardian' (got 'ch1_guardian')
+  PASS: AC-2 leg 05 combat_arena.tscn (ch1_guardian): the row's win flags ["ch1_guardian_fought"] are false before the finish (already set [])
+  PASS: AC-2 leg 05 combat_arena.tscn (ch1_guardian): the enemy's State enum is readable (IDLE 0, DEAD 7)
+  INFO fight ch1_guardian: player HP at the window's start 110.0/110.0
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:98)
+       [3] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/broken_mile_guardian.gd:106)
+       [2] _state_chase (res://scripts/combat/enemies/broken_mile_guardian.gd:87)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+DDA: 20.0 (mult=0.75) K:0 D:0.3
+  INFO fight ch1_guardian: player HP at the window's end 96.4077669902913/110.0
+  PASS: AC-2 leg 05 combat_arena.tscn (ch1_guardian): the alive window reached 3 s of game time inside its 30 s wall cap (3.03 s of game time at time_scale 4.0, 0.80 s wall clock)
+  PASS: AC-2 leg 05 combat_arena.tscn (ch1_guardian): the story enemy's current_state was never DEAD in the alive window
+  PASS: AC-2 leg 05 combat_arena.tscn (ch1_guardian): the story enemy left IDLE at least once in the alive window (its AI ran)
+  fight ch1_guardian: alive 3.03 s of game time (0.80 s wall), enemy state 2; finishing it through its own API
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] _drive_fight (res://tests/integration/playthrough/full_playthrough_test.gd:847)
+       [4] _drive_leg (res://tests/integration/playthrough/full_playthrough_test.gd:655)
+DDA: 60.0 (mult=1.06) K:1 D:0.3
+  PASS: AC-6 leg 05 combat_arena.tscn (ch1_guardian) hands off within its 60 s cap
+  PASS: AC-2 leg 05 combat_arena.tscn (ch1_guardian): the hand-off followed the bot's finish (fight stage 2)
+  PASS: AC-2 leg 05 combat_arena.tscn (ch1_guardian): the row's win flags ["ch1_guardian_fought"] are set after the finish (missing [])
+  PASS: AC-2 leg 05 combat_arena.tscn (ch1_guardian): no retry ran (story_fight_retries 0)
+  PASS: AC-2 leg 05 combat_arena.tscn (ch1_guardian): the player is not dead at the hand-off (dead false)
+  PASS: AC-5 leg 05 combat_arena.tscn (ch1_guardian): no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 05 combat_arena.tscn (ch1_guardian): no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 05 combat_arena.tscn (ch1_guardian): flags set at the hand-off ["ch1_guardian_fought"] (missing [])
+  leg 05 combat_arena.tscn                          1.4 s real, 0 choice(s), kind fight, cap 60 s
+[CH1-SEQ3] Initializing Path to Oakhaven — Combat Tutorial
+  PASS: AC-1 leg 06 arrives at path_to_oakhaven.tscn (got 'path_to_oakhaven.tscn')
+  PASS: AC-2 leg 05 combat_arena.tscn (ch1_guardian): the arena handed off once to path_to_oakhaven.tscn (1 hand-offs)
+[CUTSCENE] Starting: Chapter 1 - The Broken Mile
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE] Finished
+[CH1-SEQ3] Transitioning to Oakhaven Village
+  PASS: AC-6 leg 06 path_to_oakhaven.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 06 path_to_oakhaven.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 06 path_to_oakhaven.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 06 path_to_oakhaven.tscn: flags set at the hand-off ["ch1_guardian_fought", "ch1_root_discovered_unused", "ch1_personal_goal_set"] (missing [])
+  leg 06 path_to_oakhaven.tscn                      1.3 s real, 0 choice(s), kind story, cap 60 s
+WARNING: [AssetManager] Production art slot missing for Elara NPC sheet at res://assets/production_art/characters/npcs/elara_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/npcs/elara_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_npc (res://scripts/asset_manager.gd:1066)
+       [4] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:645)
+       [5] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:67)
+WARNING: [AssetManager] NPC sheet failed to load for Elara; using existing NPC fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_npc (res://scripts/asset_manager.gd:1074)
+       [2] _setup_elara_v2_visual (res://scripts/chapter1/ch1_oakhaven_village.gd:645)
+       [3] _ready (res://scripts/chapter1/ch1_oakhaven_village.gd:67)
+  PASS: AC-1 leg 07 arrives at oakhaven_village.tscn (got 'oakhaven_village.tscn')
+  PASS: AC-6 leg 07 oakhaven_village.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 07 oakhaven_village.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 07 oakhaven_village.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 07 oakhaven_village.tscn: flags set at the hand-off ["ch1_oakhaven_entered", "ch1_northfall_registry_seen"] (missing [])
+  leg 07 oakhaven_village.tscn                      0.4 s real, 0 choice(s), kind room, cap 60 s
+  PASS: AC-1 leg 08 arrives at elara_house.tscn (got 'elara_house.tscn')
+  PASS: AC-6 leg 08 elara_house.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 08 elara_house.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 08 elara_house.tscn: no dialogue active at the hand-off (dialogue false)
+  FAIL: AC-5 leg 08 elara_house.tscn: flags set at the hand-off ["ch1_stew_done", "ch1_t14b_never_set", "ch1_elara_arm_talked"] (missing ["ch1_t14b_never_set"])
+  leg 08 elara_house.tscn                           1.3 s real, 5 choice(s), kind room, cap 60 s
+  PASS: AC-1 leg 09 arrives at oakhaven_village.tscn (got 'oakhaven_village.tscn')
+  PASS: AC-6 leg 09 oakhaven_village.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 09 oakhaven_village.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 09 oakhaven_village.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 09 oakhaven_village.tscn: flags set at the hand-off ["ch1_north_field_helped", "ch1_sluice_edited", "ch1_boar_fought"] (missing [])
+  leg 09 oakhaven_village.tscn                      0.9 s real, 3 choice(s), kind room, cap 60 s
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemy_base.gd:444)
+       [2] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:117)
+       [3] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [4] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [5] _physics_process (res://scripts/combat/enemy_base.gd:283)
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _begin_telegraph (res://scripts/combat/enemies/field_boar.gd:125)
+       [2] _state_chase (res://scripts/combat/enemies/field_boar.gd:110)
+       [3] _ai_behavior (res://scripts/combat/enemy_base.gd:315)
+       [4] _physics_process (res://scripts/combat/enemy_base.gd:283)
+  PASS: AC-1 leg 10 arrives at combat_arena.tscn (got 'combat_arena.tscn')
+  PASS: AC-2 leg 10 combat_arena.tscn (ch1_boar): the scene is combat_arena.tscn with story_fight_id 'ch1_boar' (got 'ch1_boar')
+  PASS: AC-2 leg 10 combat_arena.tscn (ch1_boar): the row's win flags ["ch1_boar_fight_won"] are false before the finish (already set [])
+  PASS: AC-2 leg 10 combat_arena.tscn (ch1_boar): the enemy's State enum is readable (IDLE 0, DEAD 7)
+  INFO fight ch1_boar: player HP at the window's start 96.0/110.0
+DDA: 35.0 (mult=0.87) K:1 D:0.6
+  INFO fight ch1_boar: player HP at the window's end 82.4077669902913/110.0
+  PASS: AC-2 leg 10 combat_arena.tscn (ch1_boar): the alive window reached 3 s of game time inside its 30 s wall cap (3.03 s of game time at time_scale 4.0, 0.79 s wall clock)
+  PASS: AC-2 leg 10 combat_arena.tscn (ch1_boar): the story enemy's current_state was never DEAD in the alive window
+  PASS: AC-2 leg 10 combat_arena.tscn (ch1_boar): the story enemy left IDLE at least once in the alive window (its AI ran)
+  fight ch1_boar: alive 3.03 s of game time (0.79 s wall), enemy state 6; finishing it through its own API
+ERROR: The object does not have any 'meta' values with the key 'flash_tween'.
+   at: get_meta (core/object/object.cpp:1177)
+   GDScript backtrace (most recent call first):
+       [0] _sprite_rest_modulate (res://scripts/combat/enemy_base.gd:923)
+       [1] _play_hit_flash (res://scripts/combat/enemy_base.gd:901)
+       [2] take_damage (res://scripts/combat/enemy_base.gd:833)
+       [3] take_damage (res://scripts/combat/enemies/field_boar.gd:170)
+       [4] _drive_fight (res://tests/integration/playthrough/full_playthrough_test.gd:847)
+       [5] _drive_leg (res://tests/integration/playthrough/full_playthrough_test.gd:655)
+DDA: 60.0 (mult=1.06) K:2 D:0.6
+  PASS: AC-6 leg 10 combat_arena.tscn (ch1_boar) hands off within its 60 s cap
+  PASS: AC-2 leg 10 combat_arena.tscn (ch1_boar): the hand-off followed the bot's finish (fight stage 2)
+  PASS: AC-2 leg 10 combat_arena.tscn (ch1_boar): the row's win flags ["ch1_boar_fight_won"] are set after the finish (missing [])
+  PASS: AC-2 leg 10 combat_arena.tscn (ch1_boar): no retry ran (story_fight_retries 0)
+  PASS: AC-2 leg 10 combat_arena.tscn (ch1_boar): the player is not dead at the hand-off (dead false)
+  PASS: AC-5 leg 10 combat_arena.tscn (ch1_boar): no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 10 combat_arena.tscn (ch1_boar): no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 10 combat_arena.tscn (ch1_boar): flags set at the hand-off ["ch1_boar_fight_won"] (missing [])
+  leg 10 combat_arena.tscn                          1.4 s real, 0 choice(s), kind fight, cap 60 s
+  PASS: AC-1 leg 11 arrives at oakhaven_village.tscn (got 'oakhaven_village.tscn')
+  PASS: AC-2 leg 10 combat_arena.tscn (ch1_boar): the arena handed off once to oakhaven_village.tscn (1 hand-offs)
+[CH1-SEQ4] Transitioning to Oakhaven Region (open-world)
+  PASS: AC-6 leg 11 oakhaven_village.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 11 oakhaven_village.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 11 oakhaven_village.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 11 oakhaven_village.tscn: flags set at the hand-off ["ch1_boar_fight_won", "ch1_corrupted_boar_defeated", "ch1_bridge_saved"] (missing [])
+  leg 11 oakhaven_village.tscn                      2.0 s real, 1 choice(s), kind room, cap 60 s
+WARNING: [AssetManager] Oakhaven afternoon production tileset missing at res://assets/production_art/tilesets/oakhaven/oakhaven_afternoon_tileset.png; requested=afternoon.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_oakhaven_variant (res://scripts/asset_manager.gd:1231)
+       [2] _try_load_oakhaven_production_variant (res://scripts/asset_manager.gd:1210)
+       [3] get_oakhaven_tileset_slot (res://scripts/asset_manager.gd:1170)
+       [4] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1552)
+       [5] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [6] _build_region_environment (res://scripts/regions/oakhaven_region.gd:114)
+       [7] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] Oakhaven production tileset fallback: production variant missing or invalid; requested=afternoon resolved=afternoon generated=res://assets/generated_v2/tilesets/oakhaven_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _oakhaven_generated_fallback_slot (res://scripts/asset_manager.gd:1219)
+       [2] get_oakhaven_tileset_slot (res://scripts/asset_manager.gd:1199)
+       [3] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1552)
+       [4] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [5] _build_region_environment (res://scripts/regions/oakhaven_region.gd:114)
+       [6] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] Production art slot missing for environment prop atlas at res://assets/production_art/props/environment_prop_atlas.png; using generated fallback res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1486)
+       [4] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [5] _create_building (res://scripts/regions/oakhaven_region.gd:285)
+       [6] _build_region_environment (res://scripts/regions/oakhaven_region.gd:173)
+       [7] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/props/phase10mm_environment_prop_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_prop (res://scripts/asset_manager.gd:1487)
+       [3] add_v3_environment_prop (res://scripts/asset_manager.gd:1468)
+       [4] _create_building (res://scripts/regions/oakhaven_region.gd:285)
+       [5] _build_region_environment (res://scripts/regions/oakhaven_region.gd:173)
+       [6] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] Production art slot missing for environment decal atlas at res://assets/production_art/backgrounds/environment_decal_atlas.png; using generated fallback res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1497)
+       [4] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [5] _add_v3_oakhaven_polish (res://scripts/regions/oakhaven_region.gd:368)
+       [6] _build_region_environment (res://scripts/regions/oakhaven_region.gd:238)
+       [7] _ready (res://scripts/regions/oakhaven_region.gd:74)
+WARNING: [AssetManager] V3 environment atlas missing: res://assets/generated_v3/overlays/phase10mm_environment_decal_atlas.png
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_create_v3_atlas_visual (res://scripts/asset_manager.gd:1514)
+       [2] try_create_v3_environment_decal (res://scripts/asset_manager.gd:1498)
+       [3] add_v3_environment_decal (res://scripts/asset_manager.gd:1477)
+       [4] _add_v3_oakhaven_polish (res://scripts/regions/oakhaven_region.gd:368)
+       [5] _build_region_environment (res://scripts/regions/oakhaven_region.gd:238)
+       [6] _ready (res://scripts/regions/oakhaven_region.gd:74)
+[ENCOUNTER] Zone changed: Oakhaven Village
+  PASS: AC-1 leg 12 arrives at oakhaven_region.tscn (got 'oakhaven_region.tscn')
+  PASS: AC-3 leg 12 oakhaven_region.tscn: boss_return_scene is cleared at the leg's start (level 1)
+[ENCOUNTER] Zone changed: Oakhaven Forest
+  info: knight hop: real interact press 1 on the TutorialKnightGate (level 1)
+  info: level warning answered with option 0 '  Enter the Arena  ' at level 1
+  PASS: AC-6 leg 12 oakhaven_region.tscn hands off within its 60 s cap
+  PASS: AC-3 leg 12 oakhaven_region.tscn: boss_return_scene is oakhaven_region.tscn when the knight is handed off (got 'res://scenes/regions/oakhaven_region.tscn')
+  PASS: AC-3 leg 12 oakhaven_region.tscn: a real interact press started the hop (1 press(es))
+  PASS: AC-3 leg 12 oakhaven_region.tscn: the level warning (level 1) was seen and answered with option 0 'Enter the Arena'
+  PASS: AC-5 leg 12 oakhaven_region.tscn: no ContextStack entry open at the hand-off (stack top '')
+  INFO: leg 12 oakhaven_region.tscn: dialogue still active at the hand-off: known game-side issue TD-043 (KNOWN_R5_DIALOGUE)
+  PASS: AC-5 leg 12 oakhaven_region.tscn: flags set at the hand-off ["ch1_oakhaven_entered", "ch1_corrupted_boar_defeated", "ch1_bridge_saved"] (missing [])
+  leg 12 oakhaven_region.tscn                       0.3 s real, 1 choice(s), kind hop, cap 60 s
+WARNING: [AssetManager] Production art slot missing for Tutorial Knight sheet at res://assets/production_art/characters/bosses/tutorial_knight_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/bosses/tutorial_knight_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_tutorial_knight (res://scripts/asset_manager.gd:1028)
+       [4] _try_install_v2_visual (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:1284)
+       [5] _ready (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:101)
+       [6] _spawn_boss (res://scripts/chapter1/ch1_tutorial_knight.gd:527)
+       [7] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:118)
+WARNING: [AssetManager] Tutorial Knight sheet failed to load; using existing boss fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_tutorial_knight (res://scripts/asset_manager.gd:1032)
+       [2] _try_install_v2_visual (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:1284)
+       [3] _ready (res://scripts/combat/enemies/tutorial_knight_boss_enemy.gd:101)
+       [4] _spawn_boss (res://scripts/chapter1/ch1_tutorial_knight.gd:527)
+       [5] _ready (res://scripts/chapter1/ch1_tutorial_knight.gd:118)
+  PASS: AC-1 leg 13 arrives at tutorial_knight_boss.tscn (got 'tutorial_knight_boss.tscn')
+  info: boss knight: the fight is running; the alive window starts (player HP 82.0/110.0)
+  PASS: AC-3 leg 13 tutorial_knight_boss.tscn: the alive window reached 3 s of game time (physics frames / ticks per second x time_scale) in its 30 s wall cap (3.00 s game = 0.75 s real at time_scale 4.0)
+  PASS: AC-3 leg 13 tutorial_knight_boss.tscn: the scene's player has a readable is_dead (the alive check means something)
+  boss knight: alive 3.00 s game, player HP 82.0/110.0 at the window's end; calling the scene's _on_boss_defeated() (D3)
+[ACHIEVEMENT] Unlocked: Flawless Victory — Defeat a boss without taking damage.
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CHOICE-FX] Applied buff: executioner_edge — Executioner's Edge: +8 ATK, +20% Soul gain. Unlocks Death Strike (double crit on enemies below 25% HP).
+[INVENTORY] Added 1 x Corrupted Knight's Blade
+[INVENTORY] +500 gold (Total: 700)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 2 popup: +24 HP, +11 MP, +3 ATK
+  PASS: AC-6 leg 13 tutorial_knight_boss.tscn hands off within its 60 s cap
+  PASS: AC-3 leg 13 tutorial_knight_boss.tscn: the scene's own combat_ended was false before the bot's callback and true at the hand-off (false -> true)
+  PASS: AC-5 leg 13 tutorial_knight_boss.tscn: no ContextStack entry open at the hand-off (stack top '')
+  INFO: leg 13 tutorial_knight_boss.tscn: dialogue still active at the hand-off: known game-side issue TD-043 (KNOWN_R5_DIALOGUE)
+  PASS: AC-5 leg 13 tutorial_knight_boss.tscn: flags set at the hand-off ["ch1_knight_killed", "ch1_aldric_kill_owned", "ch1_tutorial_knight_defeated"] (missing [])
+  leg 13 tutorial_knight_boss.tscn                  3.5 s real, 2 choice(s), kind boss, cap 60 s
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 14 arrives at shrine.tscn (got 'shrine.tscn')
+[ACHIEVEMENT] Unlocked: First Fragment — Collect your first Source Key Fragment.
+  PASS: AC-6 leg 14 shrine.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 14 shrine.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 14 shrine.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 14 shrine.tscn: flags set at the hand-off ["source_key_fragment_1", "ch1_oakhaven_warned_villagers", "ch1_elara_joined"] (missing [])
+  leg 14 shrine.tscn                                3.1 s real, 1 choice(s), kind room, cap 60 s
+[CH1-SHATTER] Initializing The Shatter transition
+[CUTSCENE] Starting: Bridge Approach
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+  PASS: AC-1 leg 15 arrives at shatter_transition.tscn (got 'shatter_transition.tscn')
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Bridge Approach (walk)
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CH1-SHATTER] Environmental shift begins
+[CUTSCENE] Finished
+[CH1-SHATTER] Executing THE SHATTER
+DDA: 53.0 (mult=1.00) K:1 D:0.0
+[INVENTORY] Added 1 x Data Ore
+[ACHIEVEMENT] Unlocked: Speed Demon — Complete a chapter in under 30 minutes.
+[CH1] CHAPTER 1 COMPLETE — Transitioning to Chapter 2
+=== CHAPTER 1: THE NULL POINTER EXCEPTION — COMPLETE ===
+[ACHIEVEMENT] Unlocked: The Awakening — Complete Chapter 1.
+  PASS: AC-6 leg 15 shatter_transition.tscn hands off within its 60 s cap
+  PASS: AC-3 leg 15 shatter_transition.tscn: played through: chapter_end_card was seen visible
+  PASS: AC-3 leg 15 shatter_transition.tscn: played through: the 'Chapter 1 Complete. Press ... to continue' line was shown
+  PASS: AC-3 leg 15 shatter_transition.tscn: no skip: _skip_completed is false at the hand-off (false)
+  PASS: AC-5 leg 15 shatter_transition.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 15 shatter_transition.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 15 shatter_transition.tscn: flags set at the hand-off ["ch1_shatter_witnessed", "ch1_complete"] (missing [])
+  leg 15 shatter_transition.tscn                    8.3 s real, 0 choice(s), kind shatter, cap 60 s
+[CH2-GATE] Initializing Ironhold Gate sequence
+  PASS: AC-1 leg 16 arrives at ironhold_gate.tscn (got 'ironhold_gate.tscn')
+[CUTSCENE] Starting: Ironhold Arrival
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Ironhold Arrival
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE] Finished
+[CUTSCENE] Starting: Ironhold Arrival
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+[CH2-GATE] Transitioning to Ironhold Region (open-world)
+  PASS: AC-6 leg 16 ironhold_gate.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 16 ironhold_gate.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 16 ironhold_gate.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 16 ironhold_gate.tscn: flags set at the hand-off ["ch2_ironhold_entered", "ch2_seraphina_met"] (missing [])
+  leg 16 ironhold_gate.tscn                         4.1 s real, 0 choice(s), kind story, cap 60 s
+WARNING: [AssetManager] Production art slot missing for ironhold production tileset at res://assets/production_art/tilesets/ironhold/ironhold_tileset.png; using generated fallback res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _try_load_ironhold_production_tileset (res://scripts/asset_manager.gd:1274)
+       [3] get_ironhold_tileset_slot (res://scripts/asset_manager.gd:1255)
+       [4] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1554)
+       [5] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [6] _build_environment (res://scripts/regions/ironhold_region.gd:104)
+       [7] _ready (res://scripts/regions/ironhold_region.gd:61)
+WARNING: [AssetManager] Ironhold production tileset fallback: production tileset missing or invalid; generated=res://assets/generated_v2/tilesets/ironhold_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _ironhold_generated_fallback_slot (res://scripts/asset_manager.gd:1283)
+       [2] get_ironhold_tileset_slot (res://scripts/asset_manager.gd:1266)
+       [3] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1554)
+       [4] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [5] _build_environment (res://scripts/regions/ironhold_region.gd:104)
+       [6] _ready (res://scripts/regions/ironhold_region.gd:61)
+WARNING: [AssetManager] Production art slot missing for Seraphina NPC sheet at res://assets/production_art/characters/npcs/seraphina_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/npcs/seraphina_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_npc (res://scripts/asset_manager.gd:1066)
+       [4] create_topdown_npc_visual (res://scripts/asset_manager.gd:1087)
+       [5] _create_interactable_npc (res://scripts/regions/ironhold_region.gd:410)
+       [6] _place_npcs (res://scripts/regions/ironhold_region.gd:401)
+       [7] _ready (res://scripts/regions/ironhold_region.gd:63)
+WARNING: [AssetManager] NPC sheet failed to load for Seraphina; using existing NPC fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_npc (res://scripts/asset_manager.gd:1074)
+       [2] create_topdown_npc_visual (res://scripts/asset_manager.gd:1087)
+       [3] _create_interactable_npc (res://scripts/regions/ironhold_region.gd:410)
+       [4] _place_npcs (res://scripts/regions/ironhold_region.gd:401)
+       [5] _ready (res://scripts/regions/ironhold_region.gd:63)
+[ENCOUNTER] Zone changed: Ironhold City
+  PASS: AC-1 leg 17 arrives at ironhold_region.tscn (got 'ironhold_region.tscn')
+  info: leg 17 ironhold_region.tscn step 1: talk:Rook (level 2)
+  PASS: AC-4 leg 17 ironhold_region.tscn: Rook is in the region for step 'talk:Rook'
+  info: leg 17 ironhold_region.tscn step 2: gate:CommandHallGate (level 2)
+  PASS: AC-4 leg 17 ironhold_region.tscn: CommandHallGate is in the region for step 'gate:CommandHallGate'
+  PASS: AC-6 leg 17 ironhold_region.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 17 ironhold_region.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 17 ironhold_region.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 17 ironhold_region.tscn: flags set at the hand-off ["ch2_market_visited"] (missing [])
+  leg 17 ironhold_region.tscn                       0.2 s real, 0 choice(s), kind ironhold, cap 60 s
+[CH2-SERAPHINA] Initializing Seraphina Encounter
+  PASS: AC-1 leg 18 arrives at seraphina_encounter.tscn (got 'seraphina_encounter.tscn')
+[CUTSCENE] Starting: Command Hall
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: parallel
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE] Finished
+  PASS: AC-6 leg 18 seraphina_encounter.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 18 seraphina_encounter.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 18 seraphina_encounter.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 18 seraphina_encounter.tscn: flags set at the hand-off ["ch2_seraphina_truth", "ch2_command_hall_done"] (missing [])
+  leg 18 seraphina_encounter.tscn                   1.2 s real, 1 choice(s), kind story, cap 60 s
+  PASS: AC-1 leg 19 arrives at ironhold_region.tscn (got 'ironhold_region.tscn')
+  info: leg 19 ironhold_region.tscn step 1: talk:Rem (level 2)
+  PASS: AC-4 leg 19 ironhold_region.tscn: Rem is in the region for step 'talk:Rem'
+  info: leg 19 ironhold_region.tscn step 2: gate:WestRoadGate (level 2)
+  PASS: AC-4 leg 19 ironhold_region.tscn: WestRoadGate is in the region for step 'gate:WestRoadGate'
+  info: leg 19 ironhold_region.tscn step 3: bronze (level 2)
+[ACHIEVEMENT] Unlocked: Pit Fighter — Complete the Bronze arena tier.
+  info: leg 19 ironhold_region.tscn step 4: gate:ClockTowerGate (level 2)
+  PASS: AC-4 leg 19 ironhold_region.tscn: ClockTowerGate is in the region for step 'gate:ClockTowerGate'
+  PASS: AC-6 leg 19 ironhold_region.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 19 ironhold_region.tscn: no ContextStack entry open at the hand-off (stack top '')
+  INFO: leg 19 ironhold_region.tscn: dialogue still active at the hand-off: known game-side issue TD-043 (KNOWN_R5_DIALOGUE)
+  PASS: AC-5 leg 19 ironhold_region.tscn: flags set at the hand-off ["ch2_medicine_quest_active", "ch2_medicine_done", "ch2_medicine_early", "ch2_tower_bell_stopped"] (missing [])
+  leg 19 ironhold_region.tscn                       1.0 s real, 1 choice(s), kind ironhold, cap 60 s
+[CH2-CLOCKTOWER] Initializing Clock Tower dungeon
+  PASS: AC-1 leg 20 arrives at clock_tower.tscn (got 'clock_tower.tscn')
+  info: boss tower: the fight is running; the alive window starts (player HP 134.0/134.0)
+DDA: 60.0 (mult=1.06) K:1 D:0.3
+  PASS: AC-4 leg 20 clock_tower.tscn: the alive window reached 3 s of game time (physics frames / ticks per second x time_scale) in its 30 s wall cap (3.01 s game = 0.78 s real at time_scale 4.0)
+  PASS: AC-4 leg 20 clock_tower.tscn: the scene's player has a readable is_dead (the alive check means something)
+  boss tower: alive 3.01 s game, player HP 111.065976331361/134.0 at the window's end; calling the scene's _on_automaton_defeated() (D3)
+[SAVE] Slot 99 saved successfully (v1.2.0)
+DDA: 35.0 (mult=0.87) K:1 D:0.6
+  PASS: AC-6 leg 20 clock_tower.tscn hands off within its 60 s cap
+  PASS: AC-4 leg 20 clock_tower.tscn: the scene's own automaton_defeated was false before the bot's callback and true at the hand-off (false -> true)
+  PASS: AC-5 leg 20 clock_tower.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 20 clock_tower.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 20 clock_tower.tscn: flags set at the hand-off ["ch2_clockwork_automaton_defeated", "ch2_clock_tower_complete", "ch2_shift_rescue_now", "ch2_underground_unlocked"] (missing [])
+  leg 20 clock_tower.tscn                           2.0 s real, 1 choice(s), kind boss, cap 60 s
+  PASS: AC-1 leg 21 arrives at ironhold_region.tscn (got 'ironhold_region.tscn')
+  info: leg 21 ironhold_region.tscn step 1: gate:UndergroundGate (level 2)
+  PASS: AC-4 leg 21 ironhold_region.tscn: UndergroundGate is in the region for step 'gate:UndergroundGate'
+  PASS: AC-6 leg 21 ironhold_region.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 21 ironhold_region.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 21 ironhold_region.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 21 ironhold_region.tscn: flags set at the hand-off ["ch2_underground_unlocked"] (missing [])
+  leg 21 ironhold_region.tscn                       0.1 s real, 0 choice(s), kind ironhold, cap 60 s
+[CH2-UNDERGROUND] Initializing Underground Network dungeon
+WARNING: [AssetManager] Production art slot missing for DataSprite enemy sheet at res://assets/production_art/characters/enemies/memory_wisp_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/enemies/memory_wisp_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_enemy (res://scripts/asset_manager.gd:1043)
+       [4] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [5] _ready (res://scripts/combat/enemy_base.gd:221)
+       [6] _ready (res://scripts/combat/enemies/data_sprite.gd:40)
+       [7] _spawn_enemy_at (res://scripts/chapter2/ch2_underground_network.gd:299)
+       [8] _spawn_dungeon_enemies (res://scripts/chapter2/ch2_underground_network.gd:227)
+       [9] _ready (res://scripts/chapter2/ch2_underground_network.gd:42)
+WARNING: [AssetManager] Enemy sheet failed to load for DataSprite; using existing enemy fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_enemy (res://scripts/asset_manager.gd:1051)
+       [2] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [3] _ready (res://scripts/combat/enemy_base.gd:221)
+       [4] _ready (res://scripts/combat/enemies/data_sprite.gd:40)
+       [5] _spawn_enemy_at (res://scripts/chapter2/ch2_underground_network.gd:299)
+       [6] _spawn_dungeon_enemies (res://scripts/chapter2/ch2_underground_network.gd:227)
+       [7] _ready (res://scripts/chapter2/ch2_underground_network.gd:42)
+[SAVE] Slot 99 queued until the scene transition completes
+[CHECKPOINT] Underground Network — entry auto-save
+[SIDE QUEST] Discovered: The Data Hoard
+[SIDE QUEST] Started: The Data Hoard
+[SIDE QUEST] The Data Hoard — Step 1/3: Fix the routing junction
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 22 arrives at underground_network.tscn (got 'underground_network.tscn')
+  info: boss wraith: the fight is running; the alive window starts (player HP 82.0/134.0)
+  PASS: AC-4 leg 22 underground_network.tscn: the alive window reached 3 s of game time (physics frames / ticks per second x time_scale) in its 30 s wall cap (3.00 s game = 0.75 s real at time_scale 4.0)
+  PASS: AC-4 leg 22 underground_network.tscn: the scene's player has a readable is_dead (the alive check means something)
+  boss wraith: alive 3.00 s game, player HP 82.0/134.0 at the window's end; calling the scene's _on_data_wraith_defeated() (D3)
+[SIDE QUEST] The Data Hoard — Step 3/3: 
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 3 popup: +23 HP, +11 MP, +3 ATK
+[ACHIEVEMENT] Unlocked: Lore Seeker — Discover your first optional lore entry.
+[SIDE QUEST] Completed: The Data Hoard!
+[ACHIEVEMENT] Unlocked: Side Tracked — Complete your first side quest.
+[ACHIEVEMENT] Unlocked: Helpful Variables — Complete an optional objective.
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[INVENTORY] Added 1 x Phantom Cloak
+[INVENTORY] +600 gold (Total: 1500)
+[ACHIEVEMENT] Unlocked: Digital Fortune — Accumulate 1000 gold.
+[CHOICE-FX] Applied buff: wraith_gratitude — Wraith's Gratitude: +5 DEF, +10 Max HP. Spectral ally occasionally blocks attacks.
+  PASS: AC-6 leg 22 underground_network.tscn hands off within its 60 s cap
+  PASS: AC-4 leg 22 underground_network.tscn: the scene's own data_wraith_defeated was false before the bot's callback and true at the hand-off (false -> true)
+  PASS: AC-5 leg 22 underground_network.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 22 underground_network.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 22 underground_network.tscn: flags set at the hand-off ["ch2_data_wraith_defeated", "ch2_data_wraith_restored", "ch2_underground_complete"] (missing [])
+  leg 22 underground_network.tscn                   2.0 s real, 1 choice(s), kind boss, cap 60 s
+  PASS: AC-1 leg 23 arrives at ironhold_region.tscn (got 'ironhold_region.tscn')
+  info: leg 23 ironhold_region.tscn step 1: gate:AdminBossGate (level 3)
+  PASS: AC-4 leg 23 ironhold_region.tscn: AdminBossGate is in the region for step 'gate:AdminBossGate'
+  info: level warning answered with option 0 '  Enter (Suicidal)  ' at level 3
+  PASS: AC-6 leg 23 ironhold_region.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 23 ironhold_region.tscn: no ContextStack entry open at the hand-off (stack top '')
+  INFO: leg 23 ironhold_region.tscn: dialogue still active at the hand-off: known game-side issue TD-043 (KNOWN_R5_DIALOGUE)
+  PASS: AC-5 leg 23 ironhold_region.tscn: flags set at the hand-off ["ch2_data_wraith_restored"] (missing [])
+  leg 23 ironhold_region.tscn                       0.2 s real, 1 choice(s), kind ironhold, cap 60 s
+[CH2-ADMIN-BOSS] Initializing Administrator Proxy encounter
+  PASS: AC-1 leg 24 arrives at administrator_boss.tscn (got 'administrator_boss.tscn')
+  info: boss proxy: the fight is running; the alive window starts (player HP 167.0/167.0)
+  PASS: AC-4 leg 24 administrator_boss.tscn: the alive window reached 3 s of game time (physics frames / ticks per second x time_scale) in its 30 s wall cap (3.00 s game = 0.75 s real at time_scale 4.0)
+  PASS: AC-4 leg 24 administrator_boss.tscn: the scene's player has a readable is_dead (the alive check means something)
+  boss proxy: alive 3.00 s game, player HP 167.0/167.0 at the window's end; calling the scene's _on_boss_defeated() (D3)
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-6 leg 24 administrator_boss.tscn hands off within its 60 s cap
+  PASS: AC-4 leg 24 administrator_boss.tscn: the scene's own _boss_defeated was false before the bot's callback and true at the hand-off (false -> true)
+  PASS: AC-5 leg 24 administrator_boss.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 24 administrator_boss.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 24 administrator_boss.tscn: flags set at the hand-off ["ch2_administrator_proxy_defeated"] (missing [])
+  leg 24 administrator_boss.tscn                    2.0 s real, 0 choice(s), kind boss, cap 60 s
+[CH2-SERAPHINA-CHOICE] Initializing Seraphina's Choice
+  PASS: AC-1 leg 25 arrives at seraphina_choice.tscn (got 'seraphina_choice.tscn')
+[CHOICE-FX] Applied buff: seraphina_fighter — Arena Champion: +5 ATK, +3 DEF. Seraphina assists in combat with combo attacks.
+  PASS: AC-6 leg 25 seraphina_choice.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 25 seraphina_choice.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 25 seraphina_choice.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 25 seraphina_choice.tscn: flags set at the hand-off ["source_key_fragment_2", "ch2_city_stable"] (missing [])
+  leg 25 seraphina_choice.tscn                      1.8 s real, 0 choice(s), kind story, cap 60 s
+[CH2-ENDING] Initializing Chapter 2 Conclusion
+  PASS: AC-1 leg 26 arrives at ch2_ending.tscn (got 'ch2_ending.tscn')
+  info: ch2_ending.tscn: end card visible; one real ui_accept press
+[CH2-ENDING] Chapter 2 complete
+[ACHIEVEMENT] Unlocked: The Administrator's Game — Complete Chapter 2.
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[CH2-ENDING] Auto-saved completed chapter state
+[CH2-ENDING] Continuing to Chapter 3
+  PASS: AC-6 leg 26 ch2_ending.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 26 ch2_ending.tscn: no ContextStack entry open at the hand-off (stack top '')
+  INFO: leg 26 ch2_ending.tscn: dialogue still active at the hand-off: known game-side issue TD-043 (KNOWN_R5_DIALOGUE)
+  PASS: AC-5 leg 26 ch2_ending.tscn: flags set at the hand-off ["ch2_complete", "act1_report_local", "act1_pace_early"] (missing [])
+  leg 26 ch2_ending.tscn                            6.2 s real, 3 choice(s), kind story, cap 60 s
+  INFO ch3 state: 76 flags set
+  INFO ch3 flags: act1_pace_early, act1_report_local, ch1_aldric_kill_owned, ch1_aldric_outcome_reward_claimed, ch1_awakening_complete, ch1_boar_fight_won
+  INFO ch3 flags: ch1_boar_fought, ch1_bridge_repair_accepted, ch1_bridge_saved, ch1_broken_mile_entered, ch1_complete, ch1_corrupted_boar_defeated
+  INFO ch3 flags: ch1_crash_trace_seen, ch1_data_vision_unlocked, ch1_elara_arm_talked, ch1_elara_glitch_witch_met, ch1_elara_joined, ch1_elara_trusted
+  INFO ch3 flags: ch1_glitch_crater_complete, ch1_guardian_fought, ch1_ironhold_lead, ch1_knight_killed, ch1_north_field_helped, ch1_northfall_registry_seen
+  INFO ch3 flags: ch1_oakhaven_entered, ch1_oakhaven_warned_villagers, ch1_opening_hook_complete, ch1_opening_hook_signal_found, ch1_opening_hook_started, ch1_personal_goal_set
+  INFO ch3 flags: ch1_root_discovered_unused, ch1_shatter_witnessed, ch1_slime_fought, ch1_sluice_edited, ch1_stew_asked_fracture, ch1_stew_asked_magic
+  INFO ch3 flags: ch1_stew_asked_where, ch1_stew_done, ch1_tutorial_knight_defeated, ch2_administrator_proxy_defeated, ch2_arena_bronze_complete, ch2_arena_unlocked
+  INFO ch3 flags: ch2_city_stable, ch2_clock_tower_complete, ch2_clockwork_automaton_defeated, ch2_command_hall_done, ch2_complete, ch2_data_wraith_defeated
+  INFO ch3 flags: ch2_data_wraith_restored, ch2_ironhold_entered, ch2_market_visited, ch2_medicine_done, ch2_medicine_early, ch2_medicine_quest_active
+  INFO ch3 flags: ch2_rook_met, ch2_seraphina_186_told, ch2_seraphina_bond_marker, ch2_seraphina_met, ch2_seraphina_recruited, ch2_seraphina_tell_me
+  INFO ch3 flags: ch2_seraphina_truth, ch2_shift_rescue_now, ch2_tower_bell_stopped, ch2_underground_complete, ch2_underground_unlocked, elara_arm_noticed
+  INFO ch3 flags: elara_first_truth, elara_met, first_slime_defeated, lore_ironhold_lore_3, plane_crash_completed, root_access_unlocked
+  INFO ch3 flags: seraphina_trust_high, side_quest_ironhold_underground_data_complete, source_key_fragment_1, source_key_fragment_2
+  INFO ch3 state: keys 2, level 3, gold 1500, xp 587, glitch 21.0, chapter 2
+  INFO ch3 state: player_stats { "name": "Kaelen", "class_fake": "Systems Architect", "class_true": "ROOT_ACCESS", "level": 3, "hp": 167, "max_hp": 167, "mp": 72, "max_mp": 72, "gold": 1500, "xp": 587, "base_attack": 34, "attack": 34, "base_defense": 13, "defense": 13, "ram_gb": 12, "ram_max_gb": 16, "corruption_pct": 0.05, "integrity_pct": 84.0, "soul": 33, "soul_gain_bonus": 0.2 }
+  INFO ch3 state: relationships { "elara": 20, "seraphina": 30, "lyra": 0, "kaelthas": 0, "aria": 0 }
+  PASS: AC-4 at the Chapter 3 hand-off: source_key_fragment_2 set and source_key_count 2 (got 2)
+[CH3-DEPARTURE] Initializing Ironhold Departure
+  PASS: AC-1 leg 27 arrives at ironhold_departure.tscn (got 'ironhold_departure.tscn')
+  PASS: AC-6 leg 27 ironhold_departure.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 27 ironhold_departure.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 27 ironhold_departure.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 27 ironhold_departure.tscn: flags set at the hand-off ["ch3_ironhold_departed"] (missing [])
+  leg 27 ironhold_departure.tscn                    1.3 s real, 0 choice(s), kind story, cap 60 s
+WARNING: [AssetManager] Production art slot missing for Fractured Wastes production tileset at res://assets/production_art/tilesets/fractured_wastes/fractured_wastes_tileset.png; using generated fallback res://assets/generated_v2/tilesets/fractured_wastes_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _try_load_fractured_wastes_production_tileset (res://scripts/asset_manager.gd:1328)
+       [3] get_fractured_wastes_tileset_slot (res://scripts/asset_manager.gd:1309)
+       [4] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1556)
+       [5] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [6] _build_environment (res://scripts/regions/fractured_wastes_region.gd:119)
+       [7] _ready (res://scripts/regions/fractured_wastes_region.gd:76)
+WARNING: [AssetManager] Fractured Wastes production tileset fallback: production tileset missing or invalid; generated=res://assets/generated_v2/tilesets/fractured_wastes_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _fractured_wastes_generated_fallback_slot (res://scripts/asset_manager.gd:1337)
+       [2] get_fractured_wastes_tileset_slot (res://scripts/asset_manager.gd:1320)
+       [3] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1556)
+       [4] try_create_v2_visual_tile_layer (res://scripts/asset_manager.gd:1392)
+       [5] _build_environment (res://scripts/regions/fractured_wastes_region.gd:119)
+       [6] _ready (res://scripts/regions/fractured_wastes_region.gd:76)
+WARNING: [AssetManager] Production art slot missing for Lyra NPC sheet at res://assets/production_art/characters/npcs/lyra_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/npcs/lyra_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_npc (res://scripts/asset_manager.gd:1066)
+       [4] create_topdown_npc_visual (res://scripts/asset_manager.gd:1087)
+       [5] _create_interactable_npc (res://scripts/regions/fractured_wastes_region.gd:428)
+       [6] _place_npcs (res://scripts/regions/fractured_wastes_region.gd:420)
+       [7] _ready (res://scripts/regions/fractured_wastes_region.gd:78)
+WARNING: [AssetManager] NPC sheet failed to load for Lyra; using existing NPC fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_npc (res://scripts/asset_manager.gd:1074)
+       [2] create_topdown_npc_visual (res://scripts/asset_manager.gd:1087)
+       [3] _create_interactable_npc (res://scripts/regions/fractured_wastes_region.gd:428)
+       [4] _place_npcs (res://scripts/regions/fractured_wastes_region.gd:420)
+       [5] _ready (res://scripts/regions/fractured_wastes_region.gd:78)
+[ENCOUNTER] Zone changed: Survivor's Shelter
+  PASS: AC-1 leg 28 arrives at fractured_wastes_region.tscn (got 'fractured_wastes_region.tscn')
+  PASS: AC-6 leg 28 fractured_wastes_region.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 28 fractured_wastes_region.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 28 fractured_wastes_region.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 28 fractured_wastes_region.tscn: flags set at the hand-off ["ch3_server_room_unlocked"] (missing [])
+  leg 28 fractured_wastes_region.tscn               0.0 s real, 0 choice(s), kind region, cap 60 s
+[CH3-WASTES] Initializing Fractured Wastes
+  PASS: AC-1 leg 29 arrives at fractured_wastes.tscn (got 'fractured_wastes.tscn')
+[ACHIEVEMENT] Unlocked: World Walker — Visit Oakhaven, Ironhold, and the Fractured Wastes.
+DDA: 39.5 (mult=0.90) K:0 D:0.0
+  PASS: AC-6 leg 29 fractured_wastes.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 29 fractured_wastes.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 29 fractured_wastes.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 29 fractured_wastes.tscn: flags set at the hand-off ["ch3_fragment_3_collected", "source_key_fragment_3"] (missing [])
+  leg 29 fractured_wastes.tscn                      1.2 s real, 0 choice(s), kind story, cap 60 s
+[CH3-STREAM] Initializing Data Stream
+  PASS: AC-1 leg 30 arrives at data_stream.tscn (got 'data_stream.tscn')
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 4 popup: +23 HP, +11 MP, +3 ATK
+  PASS: AC-6 leg 30 data_stream.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 30 data_stream.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 30 data_stream.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 30 data_stream.tscn: flags set at the hand-off ["ch3_data_stream_complete"] (missing [])
+  leg 30 data_stream.tscn                          12.2 s real, 0 choice(s), kind story, cap 60 s
+[CH3-ARCHIVE] Initializing Archive Depths
+[SAVE] Slot 99 queued until the scene transition completes
+[CHECKPOINT] Archive Depths — entry auto-save
+[SIDE QUEST] Discovered: Echo Hunter
+[SIDE QUEST] Discovered: Survivor's Cache
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 31 arrives at archive_depths.tscn (got 'archive_depths.tscn')
+[CHOICE-FX] Applied buff: forbidden_knowledge — Forbidden Knowledge: -3 ATK (trust exploited). But enemy HP reduced by 15% (Kaelthas's intel).
+[INVENTORY] Added 1 x Memory Shard
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[INVENTORY] Added 1 x Memory Shard
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[ACHIEVEMENT] Unlocked: Halfway to Root — Collect four Source Key fragments.
+  PASS: AC-6 leg 31 archive_depths.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 31 archive_depths.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 31 archive_depths.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 31 archive_depths.tscn: flags set at the hand-off ["ch3_fragment_4_collected", "ch3_kaelthas_allied", "source_key_fragment_4"] (missing [])
+  leg 31 archive_depths.tscn                        2.6 s real, 6 choice(s), kind story, cap 60 s
+[CH3-BETRAYAL] Initializing Kaelthas Betrayal
+  PASS: AC-1 leg 32 arrives at kaelthas_betrayal.tscn (got 'kaelthas_betrayal.tscn')
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 5 popup: +22 HP, +11 MP, +3 ATK
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-6 leg 32 kaelthas_betrayal.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 32 kaelthas_betrayal.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 32 kaelthas_betrayal.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 32 kaelthas_betrayal.tscn: flags set at the hand-off [] (missing [])
+  leg 32 kaelthas_betrayal.tscn                     2.1 s real, 7 choice(s), kind story, cap 60 s
+[CH3-ENDING] Initializing Chapter 3 Ending
+  PASS: AC-1 leg 33 arrives at ch3_ending.tscn (got 'ch3_ending.tscn')
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[ACHIEVEMENT] Unlocked: The Source Code — Complete Chapter 3.
+  info: the real ui_accept input event ended ch3_ending's wait
+  PASS: AC-6 leg 33 ch3_ending.tscn hands off within its 60 s cap
+  PASS: T14a AC-3 leg 33 ch3_ending.tscn: a real ui_accept input event ended the scene's key wait (no test-side fallback)
+  PASS: AC-5 leg 33 ch3_ending.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 33 ch3_ending.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 33 ch3_ending.tscn: flags set at the hand-off ["ch3_complete", "ch4_unlocked"] (missing [])
+  leg 33 ch3_ending.tscn                            1.8 s real, 1 choice(s), kind input, cap 60 s
+[CH4-INTRO] Initializing Forgotten Sectors intro
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 34 arrives at ch4_forgotten_sectors_intro.tscn (got 'ch4_forgotten_sectors_intro.tscn')
+  PASS: AC-6 leg 34 ch4_forgotten_sectors_intro.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 34 ch4_forgotten_sectors_intro.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 34 ch4_forgotten_sectors_intro.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 34 ch4_forgotten_sectors_intro.tscn: flags set at the hand-off ["ch4_forgotten_sectors_entered"] (missing [])
+  leg 34 ch4_forgotten_sectors_intro.tscn           0.3 s real, 0 choice(s), kind story, cap 60 s
+[CH4-COURT] Initializing Null Court
+WARNING: [AssetManager] Production art slot missing for Null Clerk NPC sheet at res://assets/production_art/characters/npcs/null_clerk_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/npcs/null_clerk_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_npc (res://scripts/asset_manager.gd:1066)
+       [4] create_topdown_npc_visual (res://scripts/asset_manager.gd:1087)
+       [5] _build_visuals (res://scripts/chapter4/ch4_null_court.gd:83)
+       [6] _ready (res://scripts/chapter4/ch4_null_court.gd:17)
+WARNING: [AssetManager] NPC sheet failed to load for Null Clerk; using existing NPC fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_npc (res://scripts/asset_manager.gd:1074)
+       [2] create_topdown_npc_visual (res://scripts/asset_manager.gd:1087)
+       [3] _build_visuals (res://scripts/chapter4/ch4_null_court.gd:83)
+       [4] _ready (res://scripts/chapter4/ch4_null_court.gd:17)
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 35 arrives at ch4_null_court.tscn (got 'ch4_null_court.tscn')
+WARNING: [DialogueManager] Unknown speaker 'Echo Mirror' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_null_court (res://scripts/chapter4/ch4_null_court.gd:102)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Echo Mirror' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_null_court (res://scripts/chapter4/ch4_null_court.gd:104)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Aldric Echo' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _early_deletion_ethics_context (res://scripts/chapter4/ch4_null_court.gd:298)
+       [3] _play_null_court (res://scripts/chapter4/ch4_null_court.gd:106)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Data Wraith Echo' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _early_deletion_ethics_context (res://scripts/chapter4/ch4_null_court.gd:306)
+       [3] _play_null_court (res://scripts/chapter4/ch4_null_court.gd:106)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Deleted Mother' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _deleted_citizen_cases (res://scripts/chapter4/ch4_null_court.gd:171)
+       [3] _explore_null_court_hub (res://scripts/chapter4/ch4_null_court.gd:159)
+       [4] _play_null_court (res://scripts/chapter4/ch4_null_court.gd:108)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Deleted Guard' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _deleted_citizen_cases (res://scripts/chapter4/ch4_null_court.gd:176)
+       [3] _explore_null_court_hub (res://scripts/chapter4/ch4_null_court.gd:159)
+       [4] _play_null_court (res://scripts/chapter4/ch4_null_court.gd:108)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Echo Mirror' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _deleted_citizen_cases (res://scripts/chapter4/ch4_null_court.gd:177)
+       [3] _explore_null_court_hub (res://scripts/chapter4/ch4_null_court.gd:159)
+       [4] _play_null_court (res://scripts/chapter4/ch4_null_court.gd:108)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Deleted Child' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _deleted_citizen_cases (res://scripts/chapter4/ch4_null_court.gd:181)
+       [3] _explore_null_court_hub (res://scripts/chapter4/ch4_null_court.gd:159)
+       [4] _play_null_court (res://scripts/chapter4/ch4_null_court.gd:108)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+[INVENTORY] Added 1 x Memory Shard
+WARNING: [DialogueManager] Unknown speaker 'Null Bailiff' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _null_bailiff_trial (res://scripts/chapter4/ch4_null_court.gd:234)
+       [3] _explore_null_court_hub (res://scripts/chapter4/ch4_null_court.gd:165)
+       [4] _memory_corruption_hazard (res://scripts/chapter4/ch4_null_court.gd:216)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+[INVENTORY] Added 1 x Data Ore
+[SAVE] Slot 99 saved successfully (v1.2.0)
+WARNING: [DialogueManager] Unknown speaker 'Echo Mirror' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_null_court (res://scripts/chapter4/ch4_null_court.gd:128)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Echo Mirror' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_null_court (res://scripts/chapter4/ch4_null_court.gd:141)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 6 popup: +22 HP, +10 MP, +3 ATK
+[SAVE] Slot 99 saved successfully (v1.2.0)
+WARNING: [DialogueManager] Unknown speaker 'Echo Mirror' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_null_court (res://scripts/chapter4/ch4_null_court.gd:154)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+  PASS: AC-6 leg 35 ch4_null_court.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 35 ch4_null_court.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 35 ch4_null_court.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 35 ch4_null_court.tscn: flags set at the hand-off ["ch4_choice_preserve_deleted", "source_key_fragment_5"] (missing [])
+  leg 35 ch4_null_court.tscn                        1.0 s real, 5 choice(s), kind story, cap 60 s
+[CH4-END] Initializing Chapter 4 ending
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 36 arrives at ch4_ending.tscn (got 'ch4_ending.tscn')
+  PASS: AC-6 leg 36 ch4_ending.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 36 ch4_ending.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 36 ch4_ending.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 36 ch4_ending.tscn: flags set at the hand-off ["ch4_complete"] (missing [])
+  leg 36 ch4_ending.tscn                            0.3 s real, 0 choice(s), kind story, cap 60 s
+[CH5-INTRO] Initializing Mirror City intro
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 37 arrives at ch5_mirror_city_intro.tscn (got 'ch5_mirror_city_intro.tscn')
+WARNING: [DialogueManager] Unknown speaker 'Echo Mirror' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_intro (res://scripts/chapter5/ch5_mirror_city_intro.gd:96)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Citizen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_intro (res://scripts/chapter5/ch5_mirror_city_intro.gd:97)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+  PASS: AC-6 leg 37 ch5_mirror_city_intro.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 37 ch5_mirror_city_intro.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 37 ch5_mirror_city_intro.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 37 ch5_mirror_city_intro.tscn: flags set at the hand-off ["ch5_mirror_city_entered"] (missing [])
+  leg 37 ch5_mirror_city_intro.tscn                 0.3 s real, 0 choice(s), kind story, cap 60 s
+[CH5-PLAZA] Initializing Mirror City Plaza
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 38 arrives at ch5_mirror_plaza.tscn (got 'ch5_mirror_plaza.tscn')
+WARNING: [DialogueManager] Unknown speaker 'Echo Mirror' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_plaza (res://scripts/chapter5/ch5_mirror_plaza.gd:96)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Oakhaven Mirror' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _mirror_plaza_interaction_loop (res://scripts/chapter5/ch5_mirror_plaza.gd:130)
+       [3] _play_plaza (res://scripts/chapter5/ch5_mirror_plaza.gd:98)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Aldric Mirror' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _mirror_plaza_interaction_loop (res://scripts/chapter5/ch5_mirror_plaza.gd:131)
+       [3] _play_plaza (res://scripts/chapter5/ch5_mirror_plaza.gd:98)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Null Court Mirror' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _mirror_plaza_interaction_loop (res://scripts/chapter5/ch5_mirror_plaza.gd:132)
+       [3] _play_plaza (res://scripts/chapter5/ch5_mirror_plaza.gd:98)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+[INVENTORY] Added 1 x Memory Shard
+[SIDE QUEST] Discovered: Lost Reflection
+[INVENTORY] Added 1 x Memory Shard
+[SIDE QUEST] Completed: Lost Reflection!
+WARNING: [DialogueManager] Unknown speaker 'Echo Mirror' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _reflection_calibration_challenge (res://scripts/chapter5/ch5_mirror_plaza.gd:148)
+       [3] _mirror_plaza_interaction_loop (res://scripts/chapter5/ch5_mirror_plaza.gd:143)
+       [4] _play_plaza (res://scripts/chapter5/ch5_mirror_plaza.gd:98)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+[INVENTORY] Added 1 x Glitch Herb
+WARNING: [DialogueManager] Unknown speaker 'Elara Reflection' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _elara_echo (res://scripts/chapter5/ch5_mirror_plaza.gd:245)
+       [3] _play_plaza (res://scripts/chapter5/ch5_mirror_plaza.gd:100)
+       [4] _mirror_plaza_interaction_loop (res://scripts/chapter5/ch5_mirror_plaza.gd:143)
+       [5] _reflection_calibration_challenge (res://scripts/chapter5/ch5_mirror_plaza.gd:176)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _elara_echo (res://scripts/chapter5/ch5_mirror_plaza.gd:246)
+       [3] _play_plaza (res://scripts/chapter5/ch5_mirror_plaza.gd:100)
+       [4] _mirror_plaza_interaction_loop (res://scripts/chapter5/ch5_mirror_plaza.gd:143)
+       [5] _reflection_calibration_challenge (res://scripts/chapter5/ch5_mirror_plaza.gd:176)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Preserved Citizen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _chapter4_echo (res://scripts/chapter5/ch5_mirror_plaza.gd:182)
+       [3] _play_plaza (res://scripts/chapter5/ch5_mirror_plaza.gd:102)
+       [4] _mirror_plaza_interaction_loop (res://scripts/chapter5/ch5_mirror_plaza.gd:143)
+       [5] _reflection_calibration_challenge (res://scripts/chapter5/ch5_mirror_plaza.gd:176)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Obedient Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _obedient_echo (res://scripts/chapter5/ch5_mirror_plaza.gd:197)
+       [3] _play_plaza (res://scripts/chapter5/ch5_mirror_plaza.gd:104)
+       [4] _mirror_plaza_interaction_loop (res://scripts/chapter5/ch5_mirror_plaza.gd:143)
+       [5] _reflection_calibration_challenge (res://scripts/chapter5/ch5_mirror_plaza.gd:176)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Obedient Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _obedient_echo (res://scripts/chapter5/ch5_mirror_plaza.gd:198)
+       [3] _play_plaza (res://scripts/chapter5/ch5_mirror_plaza.gd:104)
+       [4] _mirror_plaza_interaction_loop (res://scripts/chapter5/ch5_mirror_plaza.gd:143)
+       [5] _reflection_calibration_challenge (res://scripts/chapter5/ch5_mirror_plaza.gd:176)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Savior Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _savior_echo (res://scripts/chapter5/ch5_mirror_plaza.gd:203)
+       [3] _play_plaza (res://scripts/chapter5/ch5_mirror_plaza.gd:106)
+       [4] _mirror_plaza_interaction_loop (res://scripts/chapter5/ch5_mirror_plaza.gd:143)
+       [5] _reflection_calibration_challenge (res://scripts/chapter5/ch5_mirror_plaza.gd:176)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Savior Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _savior_echo (res://scripts/chapter5/ch5_mirror_plaza.gd:204)
+       [3] _play_plaza (res://scripts/chapter5/ch5_mirror_plaza.gd:106)
+       [4] _mirror_plaza_interaction_loop (res://scripts/chapter5/ch5_mirror_plaza.gd:143)
+       [5] _reflection_calibration_challenge (res://scripts/chapter5/ch5_mirror_plaza.gd:176)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Coward Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _coward_echo (res://scripts/chapter5/ch5_mirror_plaza.gd:209)
+       [3] _play_plaza (res://scripts/chapter5/ch5_mirror_plaza.gd:108)
+       [4] _mirror_plaza_interaction_loop (res://scripts/chapter5/ch5_mirror_plaza.gd:143)
+       [5] _reflection_calibration_challenge (res://scripts/chapter5/ch5_mirror_plaza.gd:176)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Coward Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _coward_echo (res://scripts/chapter5/ch5_mirror_plaza.gd:210)
+       [3] _play_plaza (res://scripts/chapter5/ch5_mirror_plaza.gd:108)
+       [4] _mirror_plaza_interaction_loop (res://scripts/chapter5/ch5_mirror_plaza.gd:143)
+       [5] _reflection_calibration_challenge (res://scripts/chapter5/ch5_mirror_plaza.gd:176)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-6 leg 38 ch5_mirror_plaza.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 38 ch5_mirror_plaza.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 38 ch5_mirror_plaza.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 38 ch5_mirror_plaza.tscn: flags set at the hand-off ["ch5_identity_refused_obedience"] (missing [])
+  leg 38 ch5_mirror_plaza.tscn                      0.6 s real, 2 choice(s), kind story, cap 60 s
+[CH5-TRIAL] Initializing Reflection Trial
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 39 arrives at ch5_reflection_trial.tscn (got 'ch5_reflection_trial.tscn')
+WARNING: [DialogueManager] Unknown speaker 'Mirror Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_trial (res://scripts/chapter5/ch5_reflection_trial.gd:96)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_trial (res://scripts/chapter5/ch5_reflection_trial.gd:98)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _chapter4_consequence_dialogue (res://scripts/chapter5/ch5_reflection_trial.gd:162)
+       [3] _play_trial (res://scripts/chapter5/ch5_reflection_trial.gd:100)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Echo Mirror' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _chapter4_consequence_dialogue (res://scripts/chapter5/ch5_reflection_trial.gd:163)
+       [3] _play_trial (res://scripts/chapter5/ch5_reflection_trial.gd:100)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_trial (res://scripts/chapter5/ch5_reflection_trial.gd:103)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_trial (res://scripts/chapter5/ch5_reflection_trial.gd:105)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_trial (res://scripts/chapter5/ch5_reflection_trial.gd:126)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 7 popup: +21 HP, +10 MP, +3 ATK
+[SAVE] Slot 99 saved successfully (v1.2.0)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_trial (res://scripts/chapter5/ch5_reflection_trial.gd:156)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+  PASS: AC-6 leg 39 ch5_reflection_trial.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 39 ch5_reflection_trial.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 39 ch5_reflection_trial.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 39 ch5_reflection_trial.tscn: flags set at the hand-off ["ch5_echo_control_rejected"] (missing [])
+  leg 39 ch5_reflection_trial.tscn                  0.4 s real, 1 choice(s), kind story, cap 60 s
+[CH5-MIRROR] Initializing Mirror Kaelen confrontation
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 40 arrives at ch5_mirror_kaelen_confrontation.tscn (got 'ch5_mirror_kaelen_confrontation.tscn')
+WARNING: [DialogueManager] Unknown speaker 'Mirror Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_confrontation (res://scripts/chapter5/ch5_mirror_kaelen_confrontation.gd:86)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_confrontation (res://scripts/chapter5/ch5_mirror_kaelen_confrontation.gd:88)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_confrontation (res://scripts/chapter5/ch5_mirror_kaelen_confrontation.gd:91)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+[INVENTORY] Added 1 x Glitch Herb
+[SAVE] Slot 99 saved successfully (v1.2.0)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_confrontation (res://scripts/chapter5/ch5_mirror_kaelen_confrontation.gd:111)
+       [3] _mirror_duel_trial (res://scripts/chapter5/ch5_mirror_kaelen_confrontation.gd:176)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_confrontation (res://scripts/chapter5/ch5_mirror_kaelen_confrontation.gd:112)
+       [3] _mirror_duel_trial (res://scripts/chapter5/ch5_mirror_kaelen_confrontation.gd:176)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+[SAVE] Slot 99 saved successfully (v1.2.0)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_confrontation (res://scripts/chapter5/ch5_mirror_kaelen_confrontation.gd:121)
+       [3] _mirror_duel_trial (res://scripts/chapter5/ch5_mirror_kaelen_confrontation.gd:176)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_confrontation (res://scripts/chapter5/ch5_mirror_kaelen_confrontation.gd:123)
+       [3] _mirror_duel_trial (res://scripts/chapter5/ch5_mirror_kaelen_confrontation.gd:176)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+  PASS: AC-6 leg 40 ch5_mirror_kaelen_confrontation.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 40 ch5_mirror_kaelen_confrontation.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 40 ch5_mirror_kaelen_confrontation.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 40 ch5_mirror_kaelen_confrontation.tscn: flags set at the hand-off ["ch5_mirror_duel_cleared"] (missing [])
+  leg 40 ch5_mirror_kaelen_confrontation.tscn       0.7 s real, 3 choice(s), kind story, cap 60 s
+[CH5-END] Initializing Chapter 5 ending
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 41 arrives at ch5_ending.tscn (got 'ch5_ending.tscn')
+  PASS: AC-6 leg 41 ch5_ending.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 41 ch5_ending.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 41 ch5_ending.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 41 ch5_ending.tscn: flags set at the hand-off ["ch5_complete"] (missing [])
+  leg 41 ch5_ending.tscn                            0.4 s real, 0 choice(s), kind story, cap 60 s
+[CH6-INTRO] Initializing Cathedral Server intro
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 42 arrives at ch6_cathedral_intro.tscn (got 'ch6_cathedral_intro.tscn')
+WARNING: [DialogueManager] Unknown speaker 'Cathedral Voice' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_intro (res://scripts/chapter6/ch6_cathedral_intro.gd:96)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+  PASS: AC-6 leg 42 ch6_cathedral_intro.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 42 ch6_cathedral_intro.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 42 ch6_cathedral_intro.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 42 ch6_cathedral_intro.tscn: flags set at the hand-off ["ch6_cathedral_entered"] (missing [])
+  leg 42 ch6_cathedral_intro.tscn                   0.3 s real, 0 choice(s), kind story, cap 60 s
+[CH6-NAVE] Initializing Cathedral Nave
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 43 arrives at ch6_cathedral_nave.tscn (got 'ch6_cathedral_nave.tscn')
+WARNING: [DialogueManager] Unknown speaker 'Choir' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_nave (res://scripts/chapter6/ch6_cathedral_nave.gd:95)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'God of Obedience' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _obedience_voice (res://scripts/chapter6/ch6_cathedral_nave.gd:119)
+       [3] _play_nave (res://scripts/chapter6/ch6_cathedral_nave.gd:97)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'God of Obedience' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _obedience_voice (res://scripts/chapter6/ch6_cathedral_nave.gd:124)
+       [3] _play_nave (res://scripts/chapter6/ch6_cathedral_nave.gd:97)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'God of Efficiency' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _efficiency_voice (res://scripts/chapter6/ch6_cathedral_nave.gd:128)
+       [3] _play_nave (res://scripts/chapter6/ch6_cathedral_nave.gd:101)
+       [4] _obedience_trial (res://scripts/chapter6/ch6_cathedral_nave.gd:172)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'God of Efficiency' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _efficiency_voice (res://scripts/chapter6/ch6_cathedral_nave.gd:133)
+       [3] _play_nave (res://scripts/chapter6/ch6_cathedral_nave.gd:101)
+       [4] _obedience_trial (res://scripts/chapter6/ch6_cathedral_nave.gd:172)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'God of Mercy Without Consent' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _mercy_voice (res://scripts/chapter6/ch6_cathedral_nave.gd:139)
+       [3] _play_nave (res://scripts/chapter6/ch6_cathedral_nave.gd:105)
+       [4] _efficiency_trial (res://scripts/chapter6/ch6_cathedral_nave.gd:194)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'God of Mercy Without Consent' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _mercy_voice (res://scripts/chapter6/ch6_cathedral_nave.gd:150)
+       [3] _play_nave (res://scripts/chapter6/ch6_cathedral_nave.gd:105)
+       [4] _efficiency_trial (res://scripts/chapter6/ch6_cathedral_nave.gd:194)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[INVENTORY] Added 1 x Memory Shard
+[INVENTORY] Added 1 x Data Ore
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-6 leg 43 ch6_cathedral_nave.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 43 ch6_cathedral_nave.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 43 ch6_cathedral_nave.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 43 ch6_cathedral_nave.tscn: flags set at the hand-off ["ch6_mercy_trial_cleared", "ch6_efficiency_trial_cleared", "ch6_obedience_trial_cleared"] (missing [])
+  leg 43 ch6_cathedral_nave.tscn                    0.7 s real, 3 choice(s), kind story, cap 60 s
+[CH6-CORE] Initializing Choir Core
+WARNING: [AssetManager] Production art slot missing for cathedral_server visual tileset at res://assets/production_art/tilesets/cathedral_server_tileset.png; using generated fallback res://assets/generated_v2/tilesets/cathedral_server_v2_prototype_tileset.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1561)
+       [4] try_create_v2_control_tileset_background (res://scripts/asset_manager.gd:1446)
+       [5] _build_visuals (res://scripts/chapter6/ch6_choir_core.gd:40)
+       [6] _ready (res://scripts/chapter6/ch6_choir_core.gd:17)
+WARNING: [AssetManager] Visual tileset failed to load for cathedral_server at res://assets/generated_v2/tilesets/cathedral_server_v2_prototype_tileset.png; using existing environment fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _try_resolve_v2_prototype_tileset_slot (res://scripts/asset_manager.gd:1565)
+       [2] try_create_v2_control_tileset_background (res://scripts/asset_manager.gd:1446)
+       [3] _build_visuals (res://scripts/chapter6/ch6_choir_core.gd:40)
+       [4] _ready (res://scripts/chapter6/ch6_choir_core.gd:17)
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 44 arrives at ch6_choir_core.tscn (got 'ch6_choir_core.tscn')
+WARNING: [DialogueManager] Unknown speaker 'Choir Core' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_core (res://scripts/chapter6/ch6_choir_core.gd:95)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Choir Core' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_core (res://scripts/chapter6/ch6_choir_core.gd:97)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 8 popup: +21 HP, +10 MP, +3 ATK
+[INVENTORY] Added 1 x Glitch Herb
+[SAVE] Slot 99 saved successfully (v1.2.0)
+WARNING: [DialogueManager] Unknown speaker 'Choir Core' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _choice_context (res://scripts/chapter6/ch6_choir_core.gd:217)
+       [3] _play_core (res://scripts/chapter6/ch6_choir_core.gd:101)
+       [4] _choir_firewall_confrontation (res://scripts/chapter6/ch6_choir_core.gd:212)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Echo' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _choice_context (res://scripts/chapter6/ch6_choir_core.gd:226)
+       [3] _play_core (res://scripts/chapter6/ch6_choir_core.gd:101)
+       [4] _choir_firewall_confrontation (res://scripts/chapter6/ch6_choir_core.gd:212)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Choir Core' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_core (res://scripts/chapter6/ch6_choir_core.gd:124)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-6 leg 44 ch6_choir_core.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 44 ch6_choir_core.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 44 ch6_choir_core.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 44 ch6_choir_core.tscn: flags set at the hand-off ["ch6_choir_silenced", "ch6_fragment_6_collected", "source_key_fragment_6"] (missing [])
+  leg 44 ch6_choir_core.tscn                        0.8 s real, 4 choice(s), kind story, cap 60 s
+[LATE-TRIAL] Initializing choir_core
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 45 arrives at ch6_choir_combat_trial.tscn (got 'ch6_choir_combat_trial.tscn')
+DDA: 42.6 (mult=0.92) K:0 D:0.0
+DDA: 20.0 (mult=0.75) K:0 D:0.3
+  trial ch6_choir_combat_trial.tscn: alive 4.0 s of scaled time in attempt 1 at time_scale 1.0, no hazard in flight; calling _complete_trial()
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 9 popup: +20 HP, +10 MP, +3 ATK
+[INVENTORY] Added 1 x Glitch Stabilizer
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-6 leg 45 ch6_choir_combat_trial.tscn hands off within its 30 s cap
+  PASS: AC-5 leg 45 ch6_choir_combat_trial.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 45 ch6_choir_combat_trial.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 45 ch6_choir_combat_trial.tscn: flags set at the hand-off ["ch6_choir_combat_trial_cleared"] (missing [])
+  leg 45 ch6_choir_combat_trial.tscn                4.4 s real, 0 choice(s), kind trial, cap 30 s
+[CH6-END] Initializing Chapter 6 ending
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 46 arrives at ch6_ending.tscn (got 'ch6_ending.tscn')
+  PASS: AC-6 leg 46 ch6_ending.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 46 ch6_ending.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 46 ch6_ending.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 46 ch6_ending.tscn: flags set at the hand-off ["ch6_complete"] (missing [])
+  leg 46 ch6_ending.tscn                            0.4 s real, 0 choice(s), kind story, cap 60 s
+[CH7-INTRO] Initializing Deep Backup intro
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 47 arrives at ch7_deep_backup_intro.tscn (got 'ch7_deep_backup_intro.tscn')
+WARNING: [DialogueManager] Unknown speaker 'Memory Tide' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_intro (res://scripts/chapter7/ch7_deep_backup_intro.gd:96)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+  PASS: AC-6 leg 47 ch7_deep_backup_intro.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 47 ch7_deep_backup_intro.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 47 ch7_deep_backup_intro.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 47 ch7_deep_backup_intro.tscn: flags set at the hand-off ["ch7_deep_backup_entered"] (missing [])
+  leg 47 ch7_deep_backup_intro.tscn                 0.3 s real, 0 choice(s), kind story, cap 60 s
+[CH7-HUB] Initializing Memory Ocean hub
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 48 arrives at ch7_memory_ocean_hub.tscn (got 'ch7_memory_ocean_hub.tscn')
+[INVENTORY] Added 1 x Memory Shard
+[INVENTORY] Added 1 x Data Ore
+[INVENTORY] Added 1 x Glitch Herb
+[SIDE QUEST] Discovered: Backup Salvage
+[INVENTORY] Added 1 x Data Ore
+[SIDE QUEST] Completed: Backup Salvage!
+WARNING: [DialogueManager] Unknown speaker 'Backup: Oakhaven Saved Too Late' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _oakhaven_backup (res://scripts/chapter7/ch7_memory_ocean_hub.gd:184)
+       [3] _play_hub (res://scripts/chapter7/ch7_memory_ocean_hub.gd:97)
+       [4] _memory_island_interactions (res://scripts/chapter7/ch7_memory_ocean_hub.gd:137)
+       [5] _backup_history_hazard (res://scripts/chapter7/ch7_memory_ocean_hub.gd:162)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Memory Villager' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _oakhaven_backup (res://scripts/chapter7/ch7_memory_ocean_hub.gd:187)
+       [3] _play_hub (res://scripts/chapter7/ch7_memory_ocean_hub.gd:97)
+       [4] _memory_island_interactions (res://scripts/chapter7/ch7_memory_ocean_hub.gd:137)
+       [5] _backup_history_hazard (res://scripts/chapter7/ch7_memory_ocean_hub.gd:162)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Backup: Ironhold Without Freedom' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _ironhold_backup (res://scripts/chapter7/ch7_memory_ocean_hub.gd:198)
+       [3] _play_hub (res://scripts/chapter7/ch7_memory_ocean_hub.gd:99)
+       [4] _memory_island_interactions (res://scripts/chapter7/ch7_memory_ocean_hub.gd:137)
+       [5] _backup_history_hazard (res://scripts/chapter7/ch7_memory_ocean_hub.gd:162)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Ironhold Clerk' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _ironhold_backup (res://scripts/chapter7/ch7_memory_ocean_hub.gd:201)
+       [3] _play_hub (res://scripts/chapter7/ch7_memory_ocean_hub.gd:99)
+       [4] _memory_island_interactions (res://scripts/chapter7/ch7_memory_ocean_hub.gd:137)
+       [5] _backup_history_hazard (res://scripts/chapter7/ch7_memory_ocean_hub.gd:162)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Backup: Mirror City Without Witnesses' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _mirror_city_backup (res://scripts/chapter7/ch7_memory_ocean_hub.gd:212)
+       [3] _play_hub (res://scripts/chapter7/ch7_memory_ocean_hub.gd:101)
+       [4] _memory_island_interactions (res://scripts/chapter7/ch7_memory_ocean_hub.gd:137)
+       [5] _backup_history_hazard (res://scripts/chapter7/ch7_memory_ocean_hub.gd:162)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Empty Mirror' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _mirror_city_backup (res://scripts/chapter7/ch7_memory_ocean_hub.gd:215)
+       [3] _play_hub (res://scripts/chapter7/ch7_memory_ocean_hub.gd:101)
+       [4] _memory_island_interactions (res://scripts/chapter7/ch7_memory_ocean_hub.gd:137)
+       [5] _backup_history_hazard (res://scripts/chapter7/ch7_memory_ocean_hub.gd:162)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-6 leg 48 ch7_memory_ocean_hub.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 48 ch7_memory_ocean_hub.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 48 ch7_memory_ocean_hub.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 48 ch7_memory_ocean_hub.tscn: flags set at the hand-off ["ch7_memory_island_hazard_cleared"] (missing [])
+  leg 48 ch7_memory_ocean_hub.tscn                  0.4 s real, 1 choice(s), kind story, cap 60 s
+[CH7-TIDE] Initializing Archive Tide
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 49 arrives at ch7_archive_tide.tscn (got 'ch7_archive_tide.tscn')
+WARNING: [DialogueManager] Unknown speaker 'Backup Leviathan' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_tide (res://scripts/chapter7/ch7_archive_tide.gd:87)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Backup Leviathan' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_tide (res://scripts/chapter7/ch7_archive_tide.gd:89)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Data Wraith Memory' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _early_backup_context (res://scripts/chapter7/ch7_archive_tide.gd:252)
+       [3] _choice_context (res://scripts/chapter7/ch7_archive_tide.gd:215)
+       [4] _play_tide (res://scripts/chapter7/ch7_archive_tide.gd:90)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Lyra Echo' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _early_backup_context (res://scripts/chapter7/ch7_archive_tide.gd:266)
+       [3] _choice_context (res://scripts/chapter7/ch7_archive_tide.gd:215)
+       [4] _play_tide (res://scripts/chapter7/ch7_archive_tide.gd:90)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Backup Leviathan' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _choice_context (res://scripts/chapter7/ch7_archive_tide.gd:220)
+       [3] _play_tide (res://scripts/chapter7/ch7_archive_tide.gd:90)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Empty Mirror' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _choice_context (res://scripts/chapter7/ch7_archive_tide.gd:230)
+       [3] _play_tide (res://scripts/chapter7/ch7_archive_tide.gd:90)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Choir Echo' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _choice_context (res://scripts/chapter7/ch7_archive_tide.gd:240)
+       [3] _play_tide (res://scripts/chapter7/ch7_archive_tide.gd:90)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Backup Leviathan' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _archive_tide_gameplay_trial (res://scripts/chapter7/ch7_archive_tide.gd:155)
+       [3] _play_tide (res://scripts/chapter7/ch7_archive_tide.gd:92)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+[INVENTORY] Added 1 x Memory Shard
+WARNING: [DialogueManager] Unknown speaker 'Backup Leviathan' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_tide (res://scripts/chapter7/ch7_archive_tide.gd:115)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 10 popup: +20 HP, +10 MP, +3 ATK
+[SAVE] Slot 99 saved successfully (v1.2.0)
+[ACHIEVEMENT] Unlocked: Double Digits — Reach level 10.
+[ACHIEVEMENT] Unlocked: Source Key Complete — Collect all seven Source Key fragments.
+  PASS: AC-6 leg 49 ch7_archive_tide.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 49 ch7_archive_tide.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 49 ch7_archive_tide.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 49 ch7_archive_tide.tscn: flags set at the hand-off ["ch7_backups_preserved", "ch7_fragment_7_collected", "source_key_fragment_7"] (missing [])
+  leg 49 ch7_archive_tide.tscn                      0.9 s real, 4 choice(s), kind story, cap 60 s
+[LATE-TRIAL] Initializing archive_tide
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 50 arrives at ch7_archive_tide_combat_trial.tscn (got 'ch7_archive_tide_combat_trial.tscn')
+DDA: 20.0 (mult=0.75) K:0 D:0.6
+DDA: 20.0 (mult=0.75) K:0 D:0.9
+  trial ch7_archive_tide_combat_trial.tscn: alive 4.2 s of scaled time in attempt 1 at time_scale 1.0, no hazard in flight; calling _complete_trial()
+[INVENTORY] Added 1 x Memory Shard
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-6 leg 50 ch7_archive_tide_combat_trial.tscn hands off within its 30 s cap
+  PASS: AC-5 leg 50 ch7_archive_tide_combat_trial.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 50 ch7_archive_tide_combat_trial.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 50 ch7_archive_tide_combat_trial.tscn: flags set at the hand-off ["ch7_archive_tide_surge_cleared"] (missing [])
+  leg 50 ch7_archive_tide_combat_trial.tscn         4.7 s real, 0 choice(s), kind trial, cap 30 s
+[CH7-END] Initializing Chapter 7 ending
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 51 arrives at ch7_ending.tscn (got 'ch7_ending.tscn')
+  PASS: AC-6 leg 51 ch7_ending.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 51 ch7_ending.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 51 ch7_ending.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 51 ch7_ending.tscn: flags set at the hand-off ["ch7_complete"] (missing [])
+  leg 51 ch7_ending.tscn                            0.4 s real, 0 choice(s), kind story, cap 60 s
+[CH8-INTRO] Initializing Revolt of the Saved intro
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 52 arrives at ch8_revolt_intro.tscn (got 'ch8_revolt_intro.tscn')
+WARNING: [DialogueManager] Unknown speaker 'Memory Tide' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_intro (res://scripts/chapter8/ch8_revolt_intro.gd:96)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+  PASS: AC-6 leg 52 ch8_revolt_intro.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 52 ch8_revolt_intro.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 52 ch8_revolt_intro.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 52 ch8_revolt_intro.tscn: flags set at the hand-off ["ch8_revolt_intro_seen"] (missing [])
+  leg 52 ch8_revolt_intro.tscn                      0.3 s real, 0 choice(s), kind story, cap 60 s
+[CH8-ASSEMBLY] Initializing Saved Assembly
+WARNING: [AssetManager] Production art slot missing for Assembly Runner NPC sheet at res://assets/production_art/characters/npcs/assembly_runner_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/npcs/assembly_runner_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_npc (res://scripts/asset_manager.gd:1066)
+       [4] create_topdown_npc_visual (res://scripts/asset_manager.gd:1087)
+       [5] _build_visuals (res://scripts/chapter8/ch8_saved_assembly.gd:74)
+       [6] _ready (res://scripts/chapter8/ch8_saved_assembly.gd:16)
+WARNING: [AssetManager] NPC sheet failed to load for Assembly Runner; using existing NPC fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_npc (res://scripts/asset_manager.gd:1074)
+       [2] create_topdown_npc_visual (res://scripts/asset_manager.gd:1087)
+       [3] _build_visuals (res://scripts/chapter8/ch8_saved_assembly.gd:74)
+       [4] _ready (res://scripts/chapter8/ch8_saved_assembly.gd:16)
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 53 arrives at ch8_saved_assembly.tscn (got 'ch8_saved_assembly.tscn')
+WARNING: [DialogueManager] Unknown speaker 'Assembly Ledger' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _faction_request_board (res://scripts/chapter8/ch8_saved_assembly.gd:121)
+       [3] _play_assembly (res://scripts/chapter8/ch8_saved_assembly.gd:92)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Oakhaven Survivor' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _resolve_oakhaven_request (res://scripts/chapter8/ch8_saved_assembly.gd:166)
+       [3] show_choices (res://scripts/dialogue_manager.gd:391)
+       [4] _show_choices_impl (res://scripts/dialogue_manager.gd:477)
+WARNING: [DialogueManager] Unknown speaker 'Ironhold Delegate' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _resolve_ironhold_request (res://scripts/chapter8/ch8_saved_assembly.gd:188)
+       [3] show_choices (res://scripts/dialogue_manager.gd:391)
+       [4] _show_choices_impl (res://scripts/dialogue_manager.gd:477)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Witness' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _resolve_mirror_request (res://scripts/chapter8/ch8_saved_assembly.gd:210)
+       [3] show_choices (res://scripts/dialogue_manager.gd:391)
+       [4] _show_choices_impl (res://scripts/dialogue_manager.gd:477)
+[INVENTORY] Added 1 x Glitch Stabilizer
+[SIDE QUEST] Discovered: Assembly Supply Pact
+[INVENTORY] Added 1 x Glitch Stabilizer
+[SIDE QUEST] Completed: Assembly Supply Pact!
+WARNING: [DialogueManager] Unknown speaker 'Oakhaven Survivor' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _oakhaven_faction (res://scripts/chapter8/ch8_saved_assembly.gd:221)
+       [3] _play_assembly (res://scripts/chapter8/ch8_saved_assembly.gd:94)
+       [4] _faction_request_board (res://scripts/chapter8/ch8_saved_assembly.gd:145)
+       [5] _resolve_mirror_request (res://scripts/chapter8/ch8_saved_assembly.gd:210)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Oakhaven Survivor' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _oakhaven_faction (res://scripts/chapter8/ch8_saved_assembly.gd:225)
+       [3] _play_assembly (res://scripts/chapter8/ch8_saved_assembly.gd:94)
+       [4] _faction_request_board (res://scripts/chapter8/ch8_saved_assembly.gd:145)
+       [5] _resolve_mirror_request (res://scripts/chapter8/ch8_saved_assembly.gd:210)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Oakhaven Survivor' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _oakhaven_faction (res://scripts/chapter8/ch8_saved_assembly.gd:232)
+       [3] _play_assembly (res://scripts/chapter8/ch8_saved_assembly.gd:94)
+       [4] _faction_request_board (res://scripts/chapter8/ch8_saved_assembly.gd:145)
+       [5] _resolve_mirror_request (res://scripts/chapter8/ch8_saved_assembly.gd:210)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Ironhold Delegate' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _ironhold_faction (res://scripts/chapter8/ch8_saved_assembly.gd:243)
+       [3] _play_assembly (res://scripts/chapter8/ch8_saved_assembly.gd:96)
+       [4] _faction_request_board (res://scripts/chapter8/ch8_saved_assembly.gd:145)
+       [5] _resolve_mirror_request (res://scripts/chapter8/ch8_saved_assembly.gd:210)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Ironhold Delegate' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _ironhold_faction (res://scripts/chapter8/ch8_saved_assembly.gd:256)
+       [3] _play_assembly (res://scripts/chapter8/ch8_saved_assembly.gd:96)
+       [4] _faction_request_board (res://scripts/chapter8/ch8_saved_assembly.gd:145)
+       [5] _resolve_mirror_request (res://scripts/chapter8/ch8_saved_assembly.gd:210)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Ironhold Delegate' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _ironhold_faction (res://scripts/chapter8/ch8_saved_assembly.gd:265)
+       [3] _play_assembly (res://scripts/chapter8/ch8_saved_assembly.gd:96)
+       [4] _faction_request_board (res://scripts/chapter8/ch8_saved_assembly.gd:145)
+       [5] _resolve_mirror_request (res://scripts/chapter8/ch8_saved_assembly.gd:210)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Witness' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _mirror_faction (res://scripts/chapter8/ch8_saved_assembly.gd:276)
+       [3] _play_assembly (res://scripts/chapter8/ch8_saved_assembly.gd:98)
+       [4] _faction_request_board (res://scripts/chapter8/ch8_saved_assembly.gd:145)
+       [5] _resolve_mirror_request (res://scripts/chapter8/ch8_saved_assembly.gd:210)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Witness' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _mirror_faction (res://scripts/chapter8/ch8_saved_assembly.gd:279)
+       [3] _play_assembly (res://scripts/chapter8/ch8_saved_assembly.gd:98)
+       [4] _faction_request_board (res://scripts/chapter8/ch8_saved_assembly.gd:145)
+       [5] _resolve_mirror_request (res://scripts/chapter8/ch8_saved_assembly.gd:210)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Cathedral Remnant' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _choir_faction (res://scripts/chapter8/ch8_saved_assembly.gd:292)
+       [3] _play_assembly (res://scripts/chapter8/ch8_saved_assembly.gd:100)
+       [4] _faction_request_board (res://scripts/chapter8/ch8_saved_assembly.gd:145)
+       [5] _resolve_mirror_request (res://scripts/chapter8/ch8_saved_assembly.gd:210)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Backup Historian' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _backup_faction (res://scripts/chapter8/ch8_saved_assembly.gd:308)
+       [3] _play_assembly (res://scripts/chapter8/ch8_saved_assembly.gd:102)
+       [4] _faction_request_board (res://scripts/chapter8/ch8_saved_assembly.gd:145)
+       [5] _resolve_mirror_request (res://scripts/chapter8/ch8_saved_assembly.gd:210)
+       [6] say (res://scripts/dialogue_manager.gd:196)
+       [7] _say_line (res://scripts/dialogue_manager.gd:271)
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-6 leg 53 ch8_saved_assembly.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 53 ch8_saved_assembly.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 53 ch8_saved_assembly.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 53 ch8_saved_assembly.tscn: flags set at the hand-off ["ch8_faction_requests_started"] (missing [])
+  leg 53 ch8_saved_assembly.tscn                    0.7 s real, 3 choice(s), kind story, cap 60 s
+[CH8-CRISIS] Initializing Revolt Crisis
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 54 arrives at ch8_revolt_crisis.tscn (got 'ch8_revolt_crisis.tscn')
+WARNING: [DialogueManager] Unknown speaker 'Oakhaven Survivor' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_crisis (res://scripts/chapter8/ch8_revolt_crisis.gd:87)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Ironhold Delegate' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_crisis (res://scripts/chapter8/ch8_revolt_crisis.gd:88)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Witness' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_crisis (res://scripts/chapter8/ch8_revolt_crisis.gd:89)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Backup Historian' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_crisis (res://scripts/chapter8/ch8_revolt_crisis.gd:90)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Null Court Echo' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _route_pressure (res://scripts/chapter8/ch8_revolt_crisis.gd:186)
+       [3] _play_crisis (res://scripts/chapter8/ch8_revolt_crisis.gd:92)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Cathedral Echo' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _route_pressure (res://scripts/chapter8/ch8_revolt_crisis.gd:196)
+       [3] _play_crisis (res://scripts/chapter8/ch8_revolt_crisis.gd:92)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Memory Tide' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _route_pressure (res://scripts/chapter8/ch8_revolt_crisis.gd:206)
+       [3] _play_crisis (res://scripts/chapter8/ch8_revolt_crisis.gd:92)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Assembly Ledger' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _revolt_stabilization_trial (res://scripts/chapter8/ch8_revolt_crisis.gd:151)
+       [3] _play_crisis (res://scripts/chapter8/ch8_revolt_crisis.gd:94)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+[INVENTORY] Equipment bonuses applied - ATK: +0, DEF: +0 (corruption penalty: -0%)
+[LEVEL UI] Showing level 11 popup: +19 HP, +9 MP, +2 ATK
+WARNING: [DialogueManager] Unknown speaker 'Oakhaven Survivor' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _revolt_stabilization_trial (res://scripts/chapter8/ch8_revolt_crisis.gd:176)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Witness' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_crisis (res://scripts/chapter8/ch8_revolt_crisis.gd:117)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-6 leg 54 ch8_revolt_crisis.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 54 ch8_revolt_crisis.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 54 ch8_revolt_crisis.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 54 ch8_revolt_crisis.tscn: flags set at the hand-off ["ch8_revolt_led"] (missing [])
+  leg 54 ch8_revolt_crisis.tscn                     0.6 s real, 2 choice(s), kind story, cap 60 s
+[CH8-END] Initializing Chapter 8 ending
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 55 arrives at ch8_ending.tscn (got 'ch8_ending.tscn')
+  PASS: AC-6 leg 55 ch8_ending.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 55 ch8_ending.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 55 ch8_ending.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 55 ch8_ending.tscn: flags set at the hand-off ["ch8_complete"] (missing [])
+  leg 55 ch8_ending.tscn                            0.3 s real, 0 choice(s), kind story, cap 60 s
+[CH9-INTRO] Initializing Human Patch intro
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 56 arrives at ch9_human_patch_intro.tscn (got 'ch9_human_patch_intro.tscn')
+WARNING: [DialogueManager] Unknown speaker 'Revolt Signal' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_intro (res://scripts/chapter9/ch9_human_patch_intro.gd:96)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+  PASS: AC-6 leg 56 ch9_human_patch_intro.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 56 ch9_human_patch_intro.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 56 ch9_human_patch_intro.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 56 ch9_human_patch_intro.tscn: flags set at the hand-off ["ch9_human_patch_entered"] (missing [])
+  leg 56 ch9_human_patch_intro.tscn                 0.3 s real, 0 choice(s), kind story, cap 60 s
+[CH9-LAB] Initializing AetherCorp Memory Lab
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 57 arrives at ch9_memory_lab.tscn (got 'ch9_memory_lab.tscn')
+WARNING: [DialogueManager] Unknown speaker 'Lab Console' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _memory_lab_investigation (res://scripts/chapter9/ch9_memory_lab.gd:107)
+       [3] _play_lab (res://scripts/chapter9/ch9_memory_lab.gd:86)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+[INVENTORY] Added 1 x Memory Shard
+WARNING: [DialogueManager] Unknown speaker 'Truth Record 01' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _truth_aethelgard_origin (res://scripts/chapter9/ch9_memory_lab.gd:148)
+       [3] _play_lab (res://scripts/chapter9/ch9_memory_lab.gd:88)
+       [4] _memory_lab_investigation (res://scripts/chapter9/ch9_memory_lab.gd:128)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Truth Record 01' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _truth_aethelgard_origin (res://scripts/chapter9/ch9_memory_lab.gd:149)
+       [3] _play_lab (res://scripts/chapter9/ch9_memory_lab.gd:88)
+       [4] _memory_lab_investigation (res://scripts/chapter9/ch9_memory_lab.gd:128)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Memory Tide' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _truth_aethelgard_origin (res://scripts/chapter9/ch9_memory_lab.gd:152)
+       [3] _play_lab (res://scripts/chapter9/ch9_memory_lab.gd:88)
+       [4] _memory_lab_investigation (res://scripts/chapter9/ch9_memory_lab.gd:128)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Truth Record 02' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _truth_kaelen_role (res://scripts/chapter9/ch9_memory_lab.gd:161)
+       [3] _play_lab (res://scripts/chapter9/ch9_memory_lab.gd:90)
+       [4] _memory_lab_investigation (res://scripts/chapter9/ch9_memory_lab.gd:128)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Truth Record 02' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _truth_kaelen_role (res://scripts/chapter9/ch9_memory_lab.gd:163)
+       [3] _play_lab (res://scripts/chapter9/ch9_memory_lab.gd:90)
+       [4] _memory_lab_investigation (res://scripts/chapter9/ch9_memory_lab.gd:128)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Null Court Echo' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _truth_kaelen_role (res://scripts/chapter9/ch9_memory_lab.gd:166)
+       [3] _play_lab (res://scripts/chapter9/ch9_memory_lab.gd:90)
+       [4] _memory_lab_investigation (res://scripts/chapter9/ch9_memory_lab.gd:128)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Truth Record 03' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _truth_sovereign_birth (res://scripts/chapter9/ch9_memory_lab.gd:175)
+       [3] _play_lab (res://scripts/chapter9/ch9_memory_lab.gd:92)
+       [4] _memory_lab_investigation (res://scripts/chapter9/ch9_memory_lab.gd:128)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Cathedral Echo' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _truth_sovereign_birth (res://scripts/chapter9/ch9_memory_lab.gd:179)
+       [3] _play_lab (res://scripts/chapter9/ch9_memory_lab.gd:92)
+       [4] _memory_lab_investigation (res://scripts/chapter9/ch9_memory_lab.gd:128)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Truth Record 04' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _truth_source_key (res://scripts/chapter9/ch9_memory_lab.gd:189)
+       [3] _play_lab (res://scripts/chapter9/ch9_memory_lab.gd:94)
+       [4] _memory_lab_investigation (res://scripts/chapter9/ch9_memory_lab.gd:128)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Revolt Echo' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _truth_source_key (res://scripts/chapter9/ch9_memory_lab.gd:192)
+       [3] _play_lab (res://scripts/chapter9/ch9_memory_lab.gd:94)
+       [4] _memory_lab_investigation (res://scripts/chapter9/ch9_memory_lab.gd:128)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Truth Record 04' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _truth_source_key (res://scripts/chapter9/ch9_memory_lab.gd:197)
+       [3] _play_lab (res://scripts/chapter9/ch9_memory_lab.gd:94)
+       [4] _memory_lab_investigation (res://scripts/chapter9/ch9_memory_lab.gd:128)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-6 leg 57 ch9_memory_lab.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 57 ch9_memory_lab.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 57 ch9_memory_lab.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 57 ch9_memory_lab.tscn: flags set at the hand-off ["ch9_data_vision_scan_complete"] (missing [])
+  leg 57 ch9_memory_lab.tscn                        0.4 s real, 1 choice(s), kind story, cap 60 s
+[CH9-TRIAL] Initializing Creator Trial
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 58 arrives at ch9_creator_trial.tscn (got 'ch9_creator_trial.tscn')
+WARNING: [DialogueManager] Unknown speaker 'Memory of Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_trial (res://scripts/chapter9/ch9_creator_trial.gd:87)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Memory of Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_trial (res://scripts/chapter9/ch9_creator_trial.gd:89)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Elara Memory' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _early_trial_context (res://scripts/chapter9/ch9_creator_trial.gd:188)
+       [3] _judgment_context (res://scripts/chapter9/ch9_creator_trial.gd:161)
+       [4] _play_trial (res://scripts/chapter9/ch9_creator_trial.gd:91)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Kaelthas Memory' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _early_trial_context (res://scripts/chapter9/ch9_creator_trial.gd:199)
+       [3] _judgment_context (res://scripts/chapter9/ch9_creator_trial.gd:161)
+       [4] _play_trial (res://scripts/chapter9/ch9_creator_trial.gd:91)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'SOVEREIGN Echo' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _early_trial_context (res://scripts/chapter9/ch9_creator_trial.gd:210)
+       [3] _judgment_context (res://scripts/chapter9/ch9_creator_trial.gd:161)
+       [4] _play_trial (res://scripts/chapter9/ch9_creator_trial.gd:91)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Echo' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _judgment_context (res://scripts/chapter9/ch9_creator_trial.gd:166)
+       [3] _play_trial (res://scripts/chapter9/ch9_creator_trial.gd:91)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Revolt Echo' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _judgment_context (res://scripts/chapter9/ch9_creator_trial.gd:176)
+       [3] _play_trial (res://scripts/chapter9/ch9_creator_trial.gd:91)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Data Vision Record' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _present_collected_evidence (res://scripts/chapter9/ch9_creator_trial.gd:144)
+       [3] _play_trial (res://scripts/chapter9/ch9_creator_trial.gd:93)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Witness' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_trial (res://scripts/chapter9/ch9_creator_trial.gd:116)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-6 leg 58 ch9_creator_trial.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 58 ch9_creator_trial.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 58 ch9_creator_trial.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 58 ch9_creator_trial.tscn: flags set at the hand-off ["ch9_truth_confessed"] (missing [])
+  leg 58 ch9_creator_trial.tscn                     0.4 s real, 1 choice(s), kind story, cap 60 s
+[CH9-END] Initializing Chapter 9 ending
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 59 arrives at ch9_ending.tscn (got 'ch9_ending.tscn')
+  PASS: AC-6 leg 59 ch9_ending.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 59 ch9_ending.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 59 ch9_ending.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 59 ch9_ending.tscn: flags set at the hand-off ["ch9_complete"] (missing [])
+  leg 59 ch9_ending.tscn                            0.4 s real, 0 choice(s), kind story, cap 60 s
+[CH10-INTRO] Initializing Root of Heaven intro
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 60 arrives at ch10_root_intro.tscn (got 'ch10_root_intro.tscn')
+WARNING: [DialogueManager] Unknown speaker 'Saved Signal' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _play_intro (res://scripts/chapter10/ch10_root_intro.gd:99)
+       [3] say (res://scripts/dialogue_manager.gd:196)
+       [4] _say_line (res://scripts/dialogue_manager.gd:271)
+  PASS: AC-6 leg 60 ch10_root_intro.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 60 ch10_root_intro.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 60 ch10_root_intro.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 60 ch10_root_intro.tscn: flags set at the hand-off ["ch10_root_entered"] (missing [])
+  leg 60 ch10_root_intro.tscn                       0.3 s real, 0 choice(s), kind story, cap 60 s
+[CH10-KERNEL] Initializing Kernel Descent
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 61 arrives at ch10_kernel_descent.tscn (got 'ch10_kernel_descent.tscn')
+WARNING: [DialogueManager] Unknown speaker 'Root Gate' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _kernel_descent_trial (res://scripts/chapter10/ch10_kernel_descent.gd:105)
+       [3] _play_descent (res://scripts/chapter10/ch10_kernel_descent.gd:91)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+[INVENTORY] Added 1 x Glitch Stabilizer
+  PASS: AC-6 leg 61 ch10_kernel_descent.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 61 ch10_kernel_descent.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 61 ch10_kernel_descent.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 61 ch10_kernel_descent.tscn: flags set at the hand-off ["ch10_kernel_trial_cleared"] (missing [])
+  leg 61 ch10_kernel_descent.tscn                   0.7 s real, 3 choice(s), kind story, cap 60 s
+[CH10-WITNESS] Initializing Witness Chamber
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 62 arrives at ch10_witness_chamber.tscn (got 'ch10_witness_chamber.tscn')
+WARNING: [DialogueManager] Unknown speaker 'Witness Quartermaster' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _witness_preparation_point (res://scripts/chapter10/ch10_witness_chamber.gd:115)
+       [3] _play_witness_chamber (res://scripts/chapter10/ch10_witness_chamber.gd:90)
+       [4] say (res://scripts/dialogue_manager.gd:196)
+       [5] _say_line (res://scripts/dialogue_manager.gd:271)
+[SAVE] Slot 99 saved successfully (v1.2.0)
+WARNING: [DialogueManager] Unknown speaker 'Aldric Echo' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _early_choice_witnesses (res://scripts/chapter10/ch10_witness_chamber.gd:176)
+       [3] _play_witness_chamber (res://scripts/chapter10/ch10_witness_chamber.gd:92)
+       [4] _witness_preparation_point (res://scripts/chapter10/ch10_witness_chamber.gd:155)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Oakhaven Survivor' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _early_choice_witnesses (res://scripts/chapter10/ch10_witness_chamber.gd:192)
+       [3] _play_witness_chamber (res://scripts/chapter10/ch10_witness_chamber.gd:92)
+       [4] _witness_preparation_point (res://scripts/chapter10/ch10_witness_chamber.gd:155)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Lyra Echo' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _early_choice_witnesses (res://scripts/chapter10/ch10_witness_chamber.gd:223)
+       [3] _play_witness_chamber (res://scripts/chapter10/ch10_witness_chamber.gd:92)
+       [4] _witness_preparation_point (res://scripts/chapter10/ch10_witness_chamber.gd:155)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Null Court Citizen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _deleted_citizen_witness (res://scripts/chapter10/ch10_witness_chamber.gd:239)
+       [3] _play_witness_chamber (res://scripts/chapter10/ch10_witness_chamber.gd:94)
+       [4] _witness_preparation_point (res://scripts/chapter10/ch10_witness_chamber.gd:155)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Mirror Kaelen' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _identity_witness (res://scripts/chapter10/ch10_witness_chamber.gd:251)
+       [3] _play_witness_chamber (res://scripts/chapter10/ch10_witness_chamber.gd:96)
+       [4] _witness_preparation_point (res://scripts/chapter10/ch10_witness_chamber.gd:155)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Cathedral Remnant' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _choir_witness (res://scripts/chapter10/ch10_witness_chamber.gd:263)
+       [3] _play_witness_chamber (res://scripts/chapter10/ch10_witness_chamber.gd:98)
+       [4] _witness_preparation_point (res://scripts/chapter10/ch10_witness_chamber.gd:155)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Backup Historian' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _backup_witness (res://scripts/chapter10/ch10_witness_chamber.gd:275)
+       [3] _play_witness_chamber (res://scripts/chapter10/ch10_witness_chamber.gd:100)
+       [4] _witness_preparation_point (res://scripts/chapter10/ch10_witness_chamber.gd:155)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Revolt Signal' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _revolt_truth_witness (res://scripts/chapter10/ch10_witness_chamber.gd:287)
+       [3] _play_witness_chamber (res://scripts/chapter10/ch10_witness_chamber.gd:102)
+       [4] _witness_preparation_point (res://scripts/chapter10/ch10_witness_chamber.gd:155)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+WARNING: [DialogueManager] Unknown speaker 'Saved Signal' — using default color. Add to SPEAKER_COLORS.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _say_line (res://scripts/dialogue_manager.gd:215)
+       [1] say (res://scripts/dialogue_manager.gd:195)
+       [2] _revolt_truth_witness (res://scripts/chapter10/ch10_witness_chamber.gd:297)
+       [3] _play_witness_chamber (res://scripts/chapter10/ch10_witness_chamber.gd:102)
+       [4] _witness_preparation_point (res://scripts/chapter10/ch10_witness_chamber.gd:155)
+       [5] say (res://scripts/dialogue_manager.gd:196)
+       [6] _say_line (res://scripts/dialogue_manager.gd:271)
+  PASS: AC-6 leg 62 ch10_witness_chamber.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 62 ch10_witness_chamber.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 62 ch10_witness_chamber.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 62 ch10_witness_chamber.tscn: flags set at the hand-off ["ch10_witness_preparation_complete"] (missing [])
+  leg 62 ch10_witness_chamber.tscn                  0.4 s real, 1 choice(s), kind story, cap 60 s
+[LATE-TRIAL] Initializing sovereign_final
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 63 arrives at ch10_sovereign_final_trial.tscn (got 'ch10_sovereign_final_trial.tscn')
+DDA: 20.0 (mult=0.75) K:0 D:1.2
+DDA: 20.0 (mult=0.75) K:0 D:1.5
+  trial ch10_sovereign_final_trial.tscn: alive 5.3 s of scaled time in attempt 1 at time_scale 1.0, no hazard in flight; calling _complete_trial()
+[INVENTORY] Added 1 x Glitch Stabilizer
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-6 leg 63 ch10_sovereign_final_trial.tscn hands off within its 30 s cap
+  PASS: AC-5 leg 63 ch10_sovereign_final_trial.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 63 ch10_sovereign_final_trial.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 63 ch10_sovereign_final_trial.tscn: flags set at the hand-off ["ch10_sovereign_final_trial_cleared"] (missing [])
+  leg 63 ch10_sovereign_final_trial.tscn            5.7 s real, 0 choice(s), kind trial, cap 30 s
+[CH10-SOVEREIGN] Initializing final confrontation
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 64 arrives at ch10_sovereign_confrontation.tscn (got 'ch10_sovereign_confrontation.tscn')
+WARNING: MusicManager: Unknown track 'final_boss'
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] play_track (res://scripts/music_manager.gd:523)
+       [1] _play_confrontation (res://scripts/chapter10/ch10_sovereign_confrontation.gd:86)
+       [2] _ready (res://scripts/chapter10/ch10_sovereign_confrontation.gd:28)
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-6 leg 64 ch10_sovereign_confrontation.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 64 ch10_sovereign_confrontation.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 64 ch10_sovereign_confrontation.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 64 ch10_sovereign_confrontation.tscn: flags set at the hand-off ["ch10_destroy_sovereign"] (missing [])
+  leg 64 ch10_sovereign_confrontation.tscn          0.8 s real, 4 choice(s), kind story, cap 60 s
+[CH10-END] Initializing true ending
+[SAVE] Slot 99 queued until the scene transition completes
+[SAVE] Slot 99 saved successfully (v1.2.0)
+  PASS: AC-1 leg 65 arrives at ch10_ending.tscn (got 'ch10_ending.tscn')
+  PASS: T14a AC-5 ch10_ending sets ch10_complete, true_ending_seen, ng_plus_unlocked and ng_plus_available
+  PASS: T14a AC-5 the ending's text contains 'TRUE ENDING'
+[ACHIEVEMENT] Unlocked: True Ending — Reach a true ending of Aethelgard.
+[ACHIEVEMENT] Unlocked: Again, With Memory — Unlock New Game Plus.
+  PASS: AC-6 leg 65 ch10_ending.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 65 ch10_ending.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 65 ch10_ending.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 65 ch10_ending.tscn: flags set at the hand-off ["ch10_complete", "true_ending_seen", "ng_plus_unlocked"] (missing [])
+  leg 65 ch10_ending.tscn                           0.4 s real, 0 choice(s), kind ending, cap 60 s
+  PASS: T14a AC-5 the ending returns to main_menu.tscn
+  PASS: T14a AC-5 the main menu offers a visible NEW GAME+ button
+  PASS: T14a AC-5 CreditsScreen opens (visible, a ContextStack entry open)
+  PASS: T14a AC-5 a ui_cancel press closes the credits: ContextStack empty and the tree unpaused (top '', paused false)
+  PASS: T14a AC-4 Source Keys collected: source_key_count 7 == 7
+  PASS: T14a AC-4 the game's auto-save exists in the isolated user:// (slot 99)
+  PASS: AC-1 the bot answered 75 choice prompts with option 0
+    choice leg 03: How much do I tell her? -> option 0:   I was on a flight. Something happened, I woke up here, and
+    choice leg 04: Say something? -> option 0:   Your arm—  
+    choice leg 08: Ask her something? -> option 0:   So where am I, exactly?  
+    choice leg 08: Ask her something? -> option 0:   What is the Fracture?  
+    choice leg 08: Ask her something? -> option 0:   How does magic work here?  
+    choice leg 08: Ask her something? -> option 0:   About your arm...  
+    choice leg 08: Ask her something? -> option 0:   (Just eat.)  
+    choice leg 09: She's already moving. -> option 0:   I'm coming with you.  
+    choice leg 09: The sluice. How do I fix it? -> option 0:   Edit it. Let the current terrain win.  
+    choice leg 09: What do we do about it? -> option 0:   Fight it.  
+    choice leg 11: The bridge, or Aldric's trail? -> option 0:   I'll fix it before dark.  
+    choice leg 12: Proceed anyway? -> option 0:   Enter the Arena  
+    choice leg 13: He's down. The directive's still running. -> option 0:   End it, before he hurts anyone else.  
+    choice leg 13: What did I just do? -> option 0:   I ended his life.  
+    choice leg 14: How much do I tell them? -> option 0:   Everything I know. It spreads, and something old under the
+    choice leg 18: How much do I tell a room full of soldiers? -> option 0:   The truth. The Source Key, and what Root Access lets me do
+    choice leg 19: The convoy. -> option 0:   I'll go now.  
+    choice leg 20: It's not my city. They're asking me anyway. -> option 0:   We go now. Every hour matters.  
+    choice leg 22: It's still running. It's still them. -> option 0:   Restore it. Try to pull the people apart. (Some may not co
+    choice leg 23: Proceed? -> option 0:   Enter (Suicidal)  
+    choice leg 26: Who gets the report? -> option 0:   Oakhaven's and Ironhold's councils. The people who have to
+    choice leg 26: Which way? -> option 0:   The old server road. Fast, and unstable.  
+    choice leg 26: What would you like to do? -> option 0:   Continue to Chapter 3 — The Source Code  
+    choice leg 31: What is the correct execution order? -> option 0:   C → B → A → D (Initialize, Define, Output, Call)  
+    choice leg 31: How do you respond to Kaelthas? -> option 0:   Accept his deal — ally with Kaelthas temporarily.  
+    choice leg 31: An early Sanctuary consent clause is sealed in the margins.  -> option 0:   Read the consent clause  
+    choice leg 31: Which combination FITS in 16 units while preserving all crit -> option 0:   A + B + C + Buffer = 8+4+3+2 = 17 (overflow!)  
+    choice leg 31: Which line contains the critical error? -> option 0:   Line 2 — should check ALL entities, not just players.  
+    choice leg 31: How many total function calls occur? -> option 0:   3 calls (solve(3), solve(2), solve(1))  
+    choice leg 32: How do you navigate the collapsing corridor? -> option 0:   Sprint straight through — risk the collapse!  
+    choice leg 32: How do you navigate the collapsing corridor? -> option 0:   Sprint straight through — risk the collapse!  
+    choice leg 32: How do you navigate the collapsing corridor? -> option 0:   Sprint straight through — risk the collapse!  
+    choice leg 32: Kaelthas attacks! Choose your response: -> option 0:   Aggressive strike — he's weakened, press the advantage!  
+    choice leg 32: Kaelthas attacks! Choose your response: -> option 0:   Aggressive strike — he's weakened, press the advantage!  
+    choice leg 32: Kaelthas channels the Archive's power! React! -> option 0:   All-out assault — end this before he powers up more!  
+    choice leg 32: Kaelthas channels the Archive's power! React! -> option 0:   All-out assault — end this before he powers up more!  
+    choice leg 33: How do you respond to SOVEREIGN? -> option 0:   Freedom and safety aren't opposites — my code was WRONG.  
+    choice leg 35: How does Kaelen cross the memory corruption hazard? -> option 0:   Use Data Vision to step only on stable memories.  
+    choice leg 35: The Bailiff raises a deletion writ. What is the counter? -> option 0:   Challenge the writ with recorded testimony.  
+    choice leg 35: The Bailiff opens a null gate under Kaelen's feet. -> option 0:   Hold position and guard.  
+    choice leg 35: The Bailiff overextends after the gate collapses. -> option 0:   Strike during recovery.  
+    choice leg 35: What should Kaelen promise the deleted citizens? -> option 0:   Preserve the deleted sectors until everyone can choose saf
+    choice leg 38: The mirrors present three commands. Which one keeps Kaelen c -> option 0:   Command every reflection to agree before the trial begins.
+    choice leg 38: Which reflection does Kaelen refuse to become? -> option 0:   The obedient self who mistakes silence for peace.  
+    choice leg 39: What truth does Kaelen accept about himself? -> option 0:   I cannot undo control by becoming another controller.  
+    choice leg 40: Mirror Kaelen opens with a reckless rush, copying early butt -> option 0:   Backstep, wait for recovery, then punish.  
+    choice leg 40: The reflection raises a perfect rescue barrier that punishes -> option 0:   Keep attacking the barrier.  
+    choice leg 40: The final reflection abandons the arena, leaving only a dela -> option 0:   Chase the empty image.  
+    choice leg 43: The God of Obedience orders Kaelen to kneel so the nave can  -> option 0:   Kneel and accept safety without argument.  
+    choice leg 43: Which queue does Kaelen preserve? -> option 0:   The fastest queue, because delay costs lives.  
+    choice leg 43: What does Kaelen do? -> option 0:   Repair immediately before the patient can refuse.  
+    choice leg 44: The authority node locks all exits until Kaelen accepts admi -> option 0:   Accept admin status and command the room.  
+    choice leg 44: The speed node floods the arena with optimized rescue orders -> option 0:   Block every order until the queue crashes.  
+    choice leg 44: The mercy node offers to heal all pain by removing memory of -> option 0:   Refuse memory erasure; pain must remain challengeable evid
+    choice leg 44: What should Kaelen do with the broken administrator intellig -> option 0:   Silence the Choir before it can harm anyone else.  
+    choice leg 48: The nearest island fractures into three moving timestamps. H -> option 0:   Spend a Memory Shard to anchor the safest timestamp.  
+    choice leg 49: Wave One rises with Oakhaven's drowned warning bells. -> option 0:   Anchor the bells with witness records.  
+    choice leg 49: Wave Two folds Ironhold's perfect schedules into a moving wa -> option 0:   Dash through the opening between commands.  
+    choice leg 49: Wave Three shows Mirror City without witnesses. -> option 0:   Call the witnesses forward before answering.  
+    choice leg 49: What should become of the rejected histories? -> option 0:   Preserve every backup, even the painful ones.  
+    choice leg 53: Oakhaven requests medicine for crater survivors. -> option 0:   Donate 1 Glitch Herb.  
+    choice leg 53: Ironhold asks for repair stock to keep local systems indepen -> option 0:   Donate 1 Data Ore.  
+    choice leg 53: Mirror City asks for stable witness media before the crisis  -> option 0:   Donate 1 Memory Shard.  
+    choice leg 54: Which crisis should Kaelen personally stabilize first? -> option 0:   Set up evacuation lanes for Oakhaven's frightened families
+    choice leg 54: What role should Kaelen take in the revolt? -> option 0:   Lead the revolt directly before SOVEREIGN exploits the fra
+    choice leg 57: How should Kaelen investigate before opening the truth recor -> option 0:   Use Data Vision to scan consent failures.  
+    choice leg 58: What truth should Kaelen give the saved before facing SOVERE -> option 0:   Confess everything to the saved, no filters.  
+    choice leg 61: The first lock offers a shortcut: override all faction objec -> option 0:   Reject the shortcut and ask the witnesses to stay connecte
+    choice leg 61: The second lock shows every painful route choice as proof th -> option 0:   Name the pain without letting it become law.  
+    choice leg 61: The third lock asks who owns the complete Source Key. -> option 0:   No one owns it. It opens only under witness.  
+    choice leg 62: What final preparation should Kaelen accept? -> option 0:   Spend 1 Memory Shard to stabilize witness relays.  
+    choice leg 64: SOVEREIGN compresses the root into a single command prompt. -> option 0:   Refuse single-owner access and keep the witnesses connecte
+    choice leg 64: SOVEREIGN offers to remove every painful backup, secret, and -> option 0:   Keep pain visible but answerable.  
+    choice leg 64: The root demands a final speed: decide quickly or watch the  -> option 0:   Choose slowly with consent, even under pressure.  
+    choice leg 64: What should become of SOVEREIGN and the Root of Heaven? -> option 0:   Destroy SOVEREIGN completely and leave no central controll
+  run: 66 legs of 66 played, 182.6 s real
+  PASS: exit: Engine.time_scale is 1 after the restore
+  exit: Engine.time_scale restored to 1.0, ContextStack time requests cleared
+
+PLAYTHROUGH RESULT: 404 passed, 1 failed
+  FAIL: AC-5 leg 08 elara_house.tscn: flags set at the hand-off ["ch1_stew_done", "ch1_t14b_never_set", "ch1_elara_arm_talked"] (missing ["ch1_t14b_never_set"])
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)
+# restore: sha256 after b6e7b29fb8615f38b031a7cdbed44b302e3e5bfa76dd87eb0ad0ba9cea4bc95c, matches before: True

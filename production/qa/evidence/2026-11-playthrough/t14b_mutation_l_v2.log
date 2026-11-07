@@ -1,0 +1,124 @@
+# T14b mutation (l): the player killed in the slime fight's alive window (the arena player's own die())
+# file: tests\integration\playthrough\full_playthrough_test.gd (sha256 before 8c4390f8cd12bc50e32c9150300f54423650c20e9f4d497d6cde8fdbd0b14a81, crlf False)
+# suite: res://tests/integration/playthrough/full_playthrough_test.gd
+# expected to be caught by: AC-2 leg 02 combat_arena.tscn (ch1_slime): the player stays alive through the alive window + SOFTLOCK REPORT: the player died
+GODOT override: C:\Godot\Godot_v4.6.3-stable_win64_console.exe
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AssetManager initialized - Scanning for asset availability...
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+[PAUSE] Pause screen system initialized
+[STATUS] Status window system initialized
+[BackgroundManager] Initialized — procedural backgrounds active
+  PASS: isolation: GameManager, DialogueManager, SceneTransitions, ContextStack and CreditsScreen autoloads are present
+[INVENTORY] Added 3 x Health Potion
+[INVENTORY] Added 2 x Glitch Stabilizer
+  PASS: AC-1 start: New Game state after reset_game() (flags set [], keys 0, chapter 1, glitch 0.0)
+  PASS: AC-1 start: the first leg is the crash-site hook (opening_crash_site_hook.tscn)
+  PASS: AC-5 KNOWN_R5_DIALOGUE (TD-043) names 5 legs, each matching its LEGS row (stale: [])
+  PASS: AC-1 the bot loads opening_crash_site_hook.tscn (got 0)
+[10N-A2] Opening crash-site hook loaded
+WARNING: [AssetManager] Production art slot missing for Kaelen top-down sheet at res://assets/production_art/characters/player/kaelen_topdown_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_topdown_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:1000)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [6] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [7] _spawn_player (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:279)
+       [8] _ready (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:50)
+WARNING: [AssetManager] V2 top-down player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:1009)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _upgrade_topdown_visual (res://scripts/exploration/player_topdown.gd:76)
+       [4] _ready (res://scripts/exploration/player_topdown.gd:51)
+       [5] _spawn_player (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:279)
+       [6] _ready (res://scripts/chapter1/ch1_opening_crash_site_hook.gd:50)
+  PASS: AC-1 leg 00 arrives at opening_crash_site_hook.tscn (got 'opening_crash_site_hook.tscn')
+[ACHIEVEMENT] Unlocked: Crash Landing — Survive Flight 707.
+  PASS: AC-6 leg 00 opening_crash_site_hook.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 00 opening_crash_site_hook.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 00 opening_crash_site_hook.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 00 opening_crash_site_hook.tscn: flags set at the hand-off ["ch1_opening_hook_signal_found", "ch1_opening_hook_complete", "plane_crash_completed"] (missing [])
+  leg 00 opening_crash_site_hook.tscn               0.4 s real, 0 choice(s), kind room, cap 60 s
+[CH1-SEQ2] Initializing Elara the Glitch-Witch meeting
+  PASS: AC-1 leg 01 arrives at elara_meeting.tscn (got 'elara_meeting.tscn')
+[CUTSCENE] Starting: Chapter 1 - The Wrong Weapon
+[CUTSCENE BEAT] Type: camera_move
+[CUTSCENE BEAT] Type: character_enter
+[CUTSCENE BEAT] Type: character_move
+[CUTSCENE] Finished
+[CH1-SEQ2] Handing off to the slime fight
+  PASS: AC-6 leg 01 elara_meeting.tscn hands off within its 60 s cap
+  PASS: AC-5 leg 01 elara_meeting.tscn: no ContextStack entry open at the hand-off (stack top '')
+  PASS: AC-5 leg 01 elara_meeting.tscn: no dialogue active at the hand-off (dialogue false)
+  PASS: AC-5 leg 01 elara_meeting.tscn: flags set at the hand-off [] (missing [])
+  leg 01 elara_meeting.tscn                         1.8 s real, 0 choice(s), kind story, cap 60 s
+WARNING: [AssetManager] Production art slot missing for Slime enemy sheet at res://assets/production_art/characters/enemies/fracture_slime_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/enemies/fracture_slime_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_v2_enemy (res://scripts/asset_manager.gd:1043)
+       [4] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [5] _ready (res://scripts/combat/enemy_base.gd:221)
+       [6] _ready (res://scripts/combat/enemies/slime.gd:36)
+WARNING: [AssetManager] Enemy sheet failed to load for Slime; using existing enemy fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_v2_enemy (res://scripts/asset_manager.gd:1051)
+       [2] _try_load_v2_animated_sprite (res://scripts/combat/enemy_base.gd:1143)
+       [3] _ready (res://scripts/combat/enemy_base.gd:221)
+       [4] _ready (res://scripts/combat/enemies/slime.gd:36)
+WARNING: [AssetManager] Production art slot missing for Kaelen combat sheet at res://assets/production_art/characters/player/kaelen_combat_alpha_sheet.png; using generated fallback res://assets/generated_v2/sprites/player/kaelen_combat_v2_alpha_sheet.png.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] _warn_missing_production_art (res://scripts/asset_manager.gd:1134)
+       [2] _resolve_visual_texture_slot (res://scripts/asset_manager.gd:1114)
+       [3] try_build_animated_player (res://scripts/asset_manager.gd:985)
+       [4] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [5] _setup_sprites (res://scripts/combat/combat_arena.gd:1180)
+       [6] _start_story_fight (res://scripts/combat/combat_arena.gd:947)
+       [7] _ready (res://scripts/combat/combat_arena.gd:314)
+WARNING: [AssetManager] V2 combat player sheet missing; using existing player fallback.
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _warn_once (res://scripts/asset_manager.gd:1144)
+       [1] try_build_animated_player (res://scripts/asset_manager.gd:994)
+       [2] replace_player_sprite (res://scripts/asset_manager.gd:658)
+       [3] _setup_sprites (res://scripts/combat/combat_arena.gd:1180)
+       [4] _start_story_fight (res://scripts/combat/combat_arena.gd:947)
+       [5] _ready (res://scripts/combat/combat_arena.gd:314)
+  PASS: AC-1 leg 02 arrives at combat_arena.tscn (got 'combat_arena.tscn')
+  PASS: AC-2 leg 02 combat_arena.tscn (ch1_slime): the scene is combat_arena.tscn with story_fight_id 'ch1_slime' (got 'ch1_slime')
+  PASS: AC-2 leg 02 combat_arena.tscn (ch1_slime): the row's win flags ["first_slime_defeated", "ch1_slime_fought"] are false before the finish (already set [])
+  PASS: AC-2 leg 02 combat_arena.tscn (ch1_slime): the enemy's State enum is readable (IDLE 0, DEAD 7)
+  INFO fight ch1_slime: player HP at the window's start 100.0/100.0
+  FAIL: AC-2 leg 02 combat_arena.tscn (ch1_slime): the player stays alive through the alive window (dead true, retries 0 at 0.07 s of game time)
+  SOFTLOCK REPORT: the player died in the alive window of the ch1_slime fight
+    leg 2 of 66, scene res://scenes/combat/combat_arena.tscn, 0.0 s real
+    last line: Kaelen: ...Apparently I own a sword.
+    open choice prompt: (none)
+    last choice answered: (none)
+    dialogue active: false, ContextStack top: '', time_scale 0.2
+  run: 2 legs of 66 played, 3.5 s real
+  PASS: exit: Engine.time_scale is 1 after the restore
+  exit: Engine.time_scale restored to 1.0, ContextStack time requests cleared
+
+PLAYTHROUGH RESULT: 20 passed, 1 failed
+  FAIL: AC-2 leg 02 combat_arena.tscn (ch1_slime): the player stays alive through the alive window (dead true, retries 0 at 0.07 s of game time)
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)
+
+RUNNER FAIL res://tests/integration/playthrough/full_playthrough_test.gd: 21 check(s) ran, expected at least 405
+# restore: sha256 after 8c4390f8cd12bc50e32c9150300f54423650c20e9f4d497d6cde8fdbd0b14a81, matches before: True

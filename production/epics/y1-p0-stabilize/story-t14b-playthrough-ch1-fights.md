@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-T14b (`production/plan/_source/Y1-P0.json#Y1-P0-T14`; sprint plan row Y1-P0-T14b)
-> **Status**: Ready
+> **Status**: Complete
 > **Layer**: Feature
 > **Type**: Integration
 > **Estimate**: 3 days (sprint row: 1). Day 1 the Chapter 1 legs and the three arena fights; day 2 the knight, shrine,
@@ -230,4 +230,47 @@ the bot's logs are the observation.
 
 ## Completion Notes
 
-(empty until /story-done)
+**Completed**: 2026-11-07
+
+**Criteria**: 7/7 met locally, with two CI parts DEFERRED to the push: AC-7 "CI green" and AC-6 "the CI job stays under
+its 45-minute limit" (expected about 31 min; the first CI run also logs leg 04's time against its 180 s cap).
+
+**Final bot**: SHA-256 `5fb81cfe…` (`b6e7b29f…` plus `CAP_GUARDIAN` 160 -> 180 at the /story-done gate). 405 passed, 0
+failed in `t14b_hopfix_run1..3.log` (182.1-183.2 s) and `t14b_capfix_run1.log` (183.9 s); full run 28/28 on 4.6.3
+(`t14b_run_all_final.log`, on `b6e7b29f…`); mutations a, b, c, d, e, f, f2, g, h, i, j, l each caught by its named
+check, file restored and SHA-256 verified (`t14b_mutation_<id>.log`, on `b6e7b29f…`; `t14b_mutate.py --check` 12/12 on
+the final file).
+
+**Deviations** (advisory, accepted):
+- AC-2: the alive window counts physics frames ÷ ticks per second × the time scale (the story's formula without the
+  scale counts real seconds); the arena window also needs the enemy out of IDLE; the knight and Chapter 2 boss windows
+  use the same game time.
+- AC-5: five hand-offs with the dialogue box up are excepted by `KNOWN_R5_DIALOGUE` (user decision; TD-043); a listed
+  leg with no dialogue fails, so the list can only shrink.
+- AC-6: caps measured locally only. At the /story-done gate `suite_limits.txt` went from `405 360` (2x, against the
+  file's 3x rule) to `405 600`, the CI step's `timeout-minutes` from 10 to 12 (AC-6's raise had not been done), and the
+  guardian leg's cap from 160 s to 180 s (3x its slowest final run, 60.0 s).
+- AC-7: mutation (e) redefined to option 1 "We go up now." at `tower_warning` (the game refuses the tower under option
+  0); (f) uses `SceneTransitions.change_scene` so it reaches the hop check, the story's `change_scene_to_file` is the
+  extra (f2); b v2 and l v2 are re-runs on the game-time window; (k) was dropped at readiness.
+- C1: `SEED_` remains in one header comment ("T14a's SEED_* … is gone"), no symbol.
+- Two flakes root-caused and fixed test-side: the boar death (HP carried over, 3 s real windows) and the knight hop
+  (re-placement loop never pressed interact, steps built a random ambush). Evidence README sections.
+
+**Tech debt logged**: TD-043 (five hand-offs with dialogue up), TD-044 (random encounter in the knight scene), TD-045
+(`enemy_base.gd:923` flash_tween ERROR), TD-046 (duplicated drivers, D4), TD-047 (enemy AI during the COMBAT_ENTRY
+fade).
+
+**Test Evidence**: Integration: `AethelgardPrototype/tests/integration/playthrough/full_playthrough_test.gd`;
+`production/qa/evidence/2026-11-playthrough/` (README with the AC map, `leg_table.md`, run and mutation logs, the
+Chapter 3 state diff). Run result: N/A, test-only, no game code, scene or dialogue change (`git diff --name-only`
+checked).
+
+**Code Review**: Complete. /code-review round 1 CHANGES REQUIRED, fixed, then APPROVED WITH SUGGESTIONS; LP-CODE-REVIEW
+CONCERNS, acted on (AC-6 limits, leg-table times, README); QL-TEST-COVERAGE ADEQUATE.
+
+**Open suggestions and untested checks** (not logged as debt): `_drive_leg` 112, `_drive_fight` 63, `_drive_boss` 43 and
+`_play` 42 code lines (over 40; `_drive_leg` over complexity 10); a null player reads as a death (`:811`, `:1060`);
+"left IDLE" also passes for PATROL; legs 12, 21 and 23 check only flags set earlier; no mutation for the
+enemy-never-DEAD check, the hand-off retries / player-alive checks, the boss alive window, the R5 dialogue half, or a
+death outside the slime fight; the warning log matches option text exactly; SETTLE_FRAMES counts frames.
