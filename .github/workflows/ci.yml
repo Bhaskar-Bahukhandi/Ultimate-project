@@ -10,7 +10,10 @@ env:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    # Pinned (TD-055): ubuntu-latest became ubuntu-26.04, whose timeout(1) is uutils coreutils 0.10.0. Its -k KILL did
+    # not stop a suite that ignores TERM (CI #61, runner self-test case ignore_term), so run_tests.sh's watchdog is
+    # only trustworthy on GNU coreutils for now.
+    runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
