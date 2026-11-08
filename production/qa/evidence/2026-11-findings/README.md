@@ -16,7 +16,7 @@ Everything below ran locally on Windows, Python 3.13, 2026-11-07..08. Published 
 | AC-4 publish script | 48 unit tests against a stubbed `gh` (45 first, watched failing 45 of 45 on stubs; 3 added in the code review, the new scan cases watched failing first); dry runs of the labels and issues phases on the final table (265 rows, body scan 0 hits, approval OK) | `unittest_first_fail.log`, `unittest_pass.log`, `review_fix_first_fail.log`, `review_fix_pass.log`, `dryrun_labels.log`, `dryrun_issues.log` |
 | AC-5 published | 28 labels, 7 milestones, issues #2-#173 (one per open row), each batch after the user's OK; `api_check.py` (public API, PRs excluded): 15/15 PASS — one issue per open row, `[id]` unique, none closed, milestones and labels match, per-milestone counts match | `publish_labels.log`, `publish_batch1..4.log`, `api_check.py`, `api_check.log`, `api_issues.json`, `api_milestones.json` |
 | AC-6 linked and triaged | Y1-P0 priorities proposed and approved (P1 #39; P2 #8 #9 #50 #53 #55 #56; P3 #51 #52 #54 #57 #58; P4 #59 #119-#124), labels set and checked on the API (19 issues, one priority label each); ROADMAP §11 (20 rows) and the register (45 open TD rows) carry the issue numbers; `plan_task` column links rows to plan tasks; issue forms `bug.yml`, `playtest.yml`, `config.yml` | `publish_priorities.log`, `AethelgardPrototype/ROADMAP_10_YEAR.md`, `docs/tech-debt-register.md`, `.github/ISSUE_TEMPLATE/` |
-| AC-7 evidence and CI | this folder; CI step "Findings table and publish script" runs `check_findings.py` and both unit suites (not yet run on CI). After the /story-done gates, `check_findings.py` gained `--strict` (unreachable commit hashes, register-header drift and changelog-marker counts are warnings by default so ordinary doc edits or a squash merge cannot turn CI red; each warning is printed by name) and always-on offline checks: a leak scan of every cell, open-row/issue pairing, register `#N` = table issue, approval hash = table; 20 tests of its own, watched failing first | `.github/workflows/ci.yml`, `production/findings/test_check_findings.py`, `check_tests_first_fail.log`, `check_tests_pass.log`, `check_merged.log` |
+| AC-7 evidence and CI | this folder; CI step "Findings table and publish script" runs `check_findings.py` and both unit suites (green on CI #62, below). After the /story-done gates, `check_findings.py` gained `--strict` (unreachable commit hashes, register-header drift and changelog-marker counts are warnings by default so ordinary doc edits or a squash merge cannot turn CI red; each warning is printed by name) and always-on offline checks: a leak scan of every cell, open-row/issue pairing, register `#N` = table issue, approval hash = table; 20 tests of its own, watched failing first | `.github/workflows/ci.yml`, `production/findings/test_check_findings.py`, `check_tests_first_fail.log`, `check_tests_pass.log`, `check_merged.log` |
 
 ## Status checking (AC-2)
 
@@ -63,3 +63,15 @@ Everything below ran locally on Windows, Python 3.13, 2026-11-07..08. Published 
 The re-check agents noted about ten problems the review does not list. The user chose to log them as tech-debt
 rows (2026-11-08); see `new_findings.md`. Seven held up in today's code and became TD-048..TD-054 (register and
 table); the rest were already covered, already fixed, or not defects.
+
+## CI (AC-7)
+
+CI #61 on `b57fad9` (2026-11-08, https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/42467461633): the
+new step "Findings table and publish script" passed (2 s); the job failed at "Runner self-test", case ignore_term
+(runner took 20 s, limit 17 s). Cause, from the step log (read with the user's `gh`, read-only): ubuntu-latest had
+become ubuntu-26.04, whose `timeout` is uutils coreutils 0.10.0; its `-k 10` KILL did not stop the TERM-ignoring stub.
+CI #60 on ubuntu-24.04 had passed. Not an S05 defect: TD-055, and `ci.yml` pins `runs-on: ubuntu-24.04` (`28d78d5`).
+
+CI #62 on `28d78d5` (2026-11-08, https://github.com/Bhaskar-Bahukhandi/Ultimate-project/actions/runs/42472674780):
+success in 30m31s (job limit 45 minutes). "Findings table and publish script" 2 s (check_findings.py and both unit
+suites), "Runner self-test" 18 s, "Playthrough bot" 169 s; every step passed. AC-7's "CI green" is met.

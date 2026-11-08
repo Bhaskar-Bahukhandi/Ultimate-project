@@ -232,7 +232,13 @@ replaced in Year 1 keeps its group's milestone above and can be moved at a later
 
 **Completed**: 2026-11-08
 
-**Criteria**: 7/7 met, with AC-7's "CI green" DEFERRED to the push (the new CI step has not run yet).
+**Criteria**: 7/7 met. AC-7's "CI green" was DEFERRED at close and is now met (CI #62, below).
+
+**Known after close**: CI #61 on `b57fad9` (2026-11-08) ran the new findings step green (2 s) but failed at the runner
+self-test: ubuntu-latest had moved to ubuntu-26.04, whose uutils `timeout` did not KILL a TERM-ignoring suite (case
+ignore_term, 20 s against 17 s); unrelated to S05, logged as TD-055 and worked around by pinning `runs-on: ubuntu-24.04`
+(`28d78d5`). CI #62 on `28d78d5` (run 42472674780) is green in 30m31s against the 45-minute limit: "Findings table and
+publish script" 2 s, runner self-test 18 s, playthrough bot 169 s.
 
 **Result**: `production/findings/findings.csv` 265 rows: 172 open, 87 fixed, 6 duplicate. Every fixed row was confirmed
 by a second reader (seeded hand check of 20: 5 PARTIAL; strict re-check of the other 75: 3 PARTIAL; all 8 reopened).
