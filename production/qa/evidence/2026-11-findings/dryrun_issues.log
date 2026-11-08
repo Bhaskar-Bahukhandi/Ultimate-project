@@ -1,0 +1,6 @@
+# publish_findings issues: DRY RUN (no gh call is made); table production/findings/findings.csv; 265 rows, 172 open
+# body scan: 172 issue title+body pair(s) checked; rules: local-path, windows-user, email, token-prefix, hex-run, base64-run
+# body scan: PASS (0 hits)
+# approval OK (table hash 31cc973ee56f9ed186c6a9052e2502d1b0f82aa2cf3ca2873257ff7289e09369)
+# issues phase: 172 open rows, 172 already numbered, 0 pending; this run: 0 row(s) in 0 batch(es) of up to 50; 0 left for later
+# nothing to do

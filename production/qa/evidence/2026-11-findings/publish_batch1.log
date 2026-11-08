@@ -1,0 +1,109 @@
+# publish_findings issues: REAL RUN; table production/findings/findings.csv; 265 rows, 172 open
+# body scan: 172 issue title+body pair(s) checked; rules: local-path, windows-user, email, token-prefix, hex-run, base64-run
+# body scan: PASS (0 hits)
+# approval OK (table hash 6be5f0759a56ee892dedee8bc124fb4d7fa893ce571832ca397c97a3bd32b9e9)
+# issues phase: 172 open rows, 0 already numbered, 172 pending; this run: 50 row(s) in 1 batch(es) of up to 50; 122 left for later
+gh issue list --state all --limit 1000 --json number,title --repo Bhaskar-Bahukhandi/Ultimate-project
+#   0 issue(s) in the repo, 0 with a [<id>] title
+gh issue create --title '[CR-R1] No single owner for tree pause, time scale, GameState or input focus' --body-file <body 524 chars sha256:a6822d89e803> --label area:core --label severity:root-cause --label source:code-review --milestone 'Y1-P1 Spine' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #2 for CR-R1
+gh issue create --title '[CR-R2] Fire-and-forget coroutines ignore pause and cannot be cancelled' --body-file <body 538 chars sha256:b496e3315f2e> --label area:combat --label severity:root-cause --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #3 for CR-R2
+gh issue create --title '[CR-R3] Story progression is untyped string flags and set_meta hand-offs with no schema' --body-file <body 514 chars sha256:2d1a7c42697a> --label area:story --label severity:root-cause --label source:code-review --milestone 'Y1-P1 Spine' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #4 for CR-R3
+gh issue create --title '[CR-R4] Save system rejects saves silently while the UI reports success' --body-file <body 734 chars sha256:766c10307870> --label area:save --label severity:root-cause --label source:code-review --milestone 'Y1-P1 Spine' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #5 for CR-R4
+gh issue create --title '[CR-R6] World built in _ready() from ColorRects; hitboxes sized from placeholder rects' --body-file <body 491 chars sha256:32898723c8ed> --label area:art --label severity:root-cause --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #6 for CR-R6
+gh issue create --title '[CR-R7] Duplicated systems instead of shared ones (items, transitions, flashes, shake, regions)' --body-file <body 594 chars sha256:7797caeebf29> --label area:core --label severity:root-cause --label source:code-review --milestone 'Y1-P1 Spine' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #7 for CR-R7
+gh issue create --title '[CR-R8] No tests, no CI, no playthrough logs; smoke probe can overwrite autosave slot 99' --body-file <body 558 chars sha256:87769f90a056> --label area:tooling --label severity:root-cause --label source:code-review --milestone 'Y1-P0 Stabilize' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #8 for CR-R8
+gh issue create --title '[CR-C12] ESC on the main menu opens pause, whose save slots can overwrite a real save' --body-file <body 727 chars sha256:b38f59979a2d> --label area:ui --label severity:critical --label source:code-review --milestone 'Y1-P0 Stabilize' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #9 for CR-C12
+gh issue create --title '[CR-H4.1-01] Reloading a save replays scene rewards (ch4_null_court pays XP and gold each reload)' --body-file <body 551 chars sha256:37bd2dfa0bf0> --label area:save --label severity:high --label source:code-review --milestone 'Y1-P1 Spine' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #10 for CR-H4.1-01
+gh issue create --title '[CR-H4.1-02] Save is not atomic on Windows; no .bak fallback; checksum mismatch only warns' --body-file <body 578 chars sha256:39978a7d7b8c> --label area:save --label severity:high --label source:code-review --milestone 'Y1-P1 Spine' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #11 for CR-H4.1-02
+gh issue create --title '[CR-H4.1-03] NG+ re-applies choice buffs so stats grow each cycle; XP and fresh-launch state wrong' --body-file <body 598 chars sha256:cfb4a836337a> --label area:save --label severity:high --label source:code-review --milestone 'Y1-P1 Spine' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #12 for CR-H4.1-03
+gh issue create --title '[CR-H4.1-05] Load with a missing saved scene keeps the old scene and still returns true' --body-file <body 523 chars sha256:967924ab35f3> --label area:save --label severity:high --label source:code-review --milestone 'Y1-P1 Spine' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #13 for CR-H4.1-05
+gh issue create --title '[CR-H4.1-06] Boss deaths pay up to 30% of boss rewards, so dying is farmable' --body-file <body 520 chars sha256:940481f779e6> --label area:economy --label severity:high --label source:code-review --milestone 'Y1-P1 Spine' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #14 for CR-H4.1-06
+gh issue create --title '[CR-H4.1-08] Load Last Save prefers slot 99 without comparing times; Del has no confirmation' --body-file <body 586 chars sha256:1a90446d708b> --label area:save --label severity:high --label source:code-review --milestone 'Y1-P1 Spine' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #15 for CR-H4.1-08
+gh issue create --title '[CR-H4.2-01] Pause looks up a nonexistent /root/CutsceneManager, so it opens during cutscenes' --body-file <body 591 chars sha256:cbc52d0a76fd> --label area:ui --label severity:high --label source:code-review --milestone 'Y1-P1 Spine' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #16 for CR-H4.2-01
+gh issue create --title '[CR-H4.2-03] World map is not modal; input and encounters pass through, even mid boss fight' --body-file <body 622 chars sha256:9cf7d1053652> --label area:ui --label severity:high --label source:code-review --milestone 'Y1-P1 Spine' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #17 for CR-H4.2-03
+gh issue create --title '[CR-H4.2-04] Chapter 3 scripts toggle pause on ui_cancel, so pause opens and closes at once' --body-file <body 581 chars sha256:d91dd65a3c67> --label area:ui --label severity:high --label source:code-review --milestone 'Y1-P1 Spine' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #18 for CR-H4.2-04
+gh issue create --title '[CR-H4.2-07] Main menu lacks focus for keyboard and pad; rebinding and settings loading broken' --body-file <body 566 chars sha256:d321d5bfab30> --label area:input --label severity:high --label source:code-review --milestone 'Y1-P1 Spine' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #19 for CR-H4.2-07
+gh issue create --title '[CR-H4.3-02] Every kill pays gold twice (direct and as a pickup)' --body-file <body 586 chars sha256:5285b6a1a07b> --label area:economy --label severity:high --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #20 for CR-H4.3-02
+gh issue create --title '[CR-H4.3-03] Crafting then selling is an infinite gold source' --body-file <body 481 chars sha256:35a6908049b9> --label area:economy --label severity:high --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #21 for CR-H4.3-03
+gh issue create --title '[CR-H4.3-04] Potions usable from the pause menu in combat but not in exploration' --body-file <body 528 chars sha256:271e57e1b0c1> --label area:economy --label severity:high --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #22 for CR-H4.3-04
+gh issue create --title '[CR-H4.3-05] Three item databases with conflicting prices and names; ItemResource unused' --body-file <body 541 chars sha256:221fe413388c> --label area:economy --label severity:high --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #23 for CR-H4.3-05
+gh issue create --title '[CR-H4.3-06] perfect_delete_charges never refill; the faster-recharge buff acts on nothing' --body-file <body 562 chars sha256:5179de170282> --label area:combat --label severity:high --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #24 for CR-H4.3-06
+gh issue create --title '[CR-H4.4-04] Enemies keep acting while the player is frozen in dialogue' --body-file <body 481 chars sha256:808b99d04df0> --label area:combat --label severity:high --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #25 for CR-H4.4-04
+gh issue create --title '[CR-H4.4-06] Root Access edits current_health, so any boss can be killed instantly' --body-file <body 622 chars sha256:52942f36da32> --label area:combat --label severity:high --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #26 for CR-H4.4-06
+gh issue create --title '[CR-H4.5-02] 12 enemy subclasses skip super _ai_behavior, so is_hostile=false is ignored' --body-file <body 565 chars sha256:dbf9977f551f> --label area:enemies --label severity:high --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #27 for CR-H4.5-02
+gh issue create --title '[CR-H4.5-03] Boss phase changes set absolute stats, discarding zone, NG+ and DDA scaling' --body-file <body 516 chars sha256:1bb7761ef92e> --label area:enemies --label severity:high --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #28 for CR-H4.5-03
+gh issue create --title '[CR-H4.5-04] Bosses take generic hitstun; pogo every 0.2 s stun-locks them' --body-file <body 489 chars sha256:47624bb50f7e> --label area:enemies --label severity:high --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #29 for CR-H4.5-04
+gh issue create --title '[CR-H4.5-05] In-flight boss attack coroutines are never cancelled' --body-file <body 519 chars sha256:c598a4aa6412> --label area:enemies --label severity:high --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #30 for CR-H4.5-05
+gh issue create --title '[CR-H4.5-06] Ranged enemies never fire: AssetManager.get_asset() does not exist' --body-file <body 485 chars sha256:4935975ab8df> --label area:enemies --label severity:high --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #31 for CR-H4.5-06
+gh issue create --title '[CR-H4.5-07] Corruption elemental adds 2.4% corruption per second by proximity' --body-file <body 479 chars sha256:847e238304bf> --label area:enemies --label severity:high --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #32 for CR-H4.5-07
+gh issue create --title '[CR-H4.5-08] administrator_enforcer spawns invisible with no collision and falls forever' --body-file <body 520 chars sha256:fe621bedea08> --label area:enemies --label severity:high --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #33 for CR-H4.5-08
+gh issue create --title '[CR-H4.5-09] end_boss_fight() runs twice for Knight and Administrator and never for SOVEREIGN' --body-file <body 677 chars sha256:0d823eb36ae8> --label area:enemies --label severity:high --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #34 for CR-H4.5-09
+gh issue create --title '[CR-H4.6-03] Source key 2 is missable, so the 7/7 Synthesis ending can be lost without warning' --body-file <body 737 chars sha256:f1c181acbde1> --label area:story --label severity:high --label source:code-review --milestone 'Y2-PP Pre-production' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #35 for CR-H4.6-03
+gh issue create --title '[CR-H4.6-04] Every ending is labelled TRUE ENDING and the trials cannot be failed' --body-file <body 463 chars sha256:cc64678b486f> --label area:story --label severity:high --label source:code-review --milestone 'Y2-PP Pre-production' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #36 for CR-H4.6-04
+gh issue create --title '[CR-H4.6-05] Chapter 4-5 route flags are not exclusive; replays stack conflicting flags' --body-file <body 495 chars sha256:3464475a4b4e> --label area:story --label severity:high --label source:code-review --milestone 'Y2-PP Pre-production' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #37 for CR-H4.6-05
+gh issue create --title '[CR-H4.6-06] Final SOVEREIGN fight plays a missing final_boss track' --body-file <body 513 chars sha256:73051092f5a5> --label area:audio --label severity:high --label source:code-review --milestone 'Y2-PP Pre-production' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #38 for CR-H4.6-06
+gh issue create --title '[CR-H4.6-07] get_revival_scene knows only chapters 1-3; deaths in 4-10 revive in the Wastes' --body-file <body 511 chars sha256:355dc0d918f5> --label area:story --label severity:high --label source:code-review --milestone 'Y1-P0 Stabilize' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #39 for CR-H4.6-07
+gh issue create --title '[CR-H4.6-08] SOVEREIGN, the final antagonist, is an optional Chapter 3 arena boss' --body-file <body 473 chars sha256:db048945e2bd> --label area:story --label severity:high --label source:code-review --milestone 'Y2-PP Pre-production' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #40 for CR-H4.6-08
+gh issue create --title '[CR-H4.6-09] Region Lyra overwrites the Chapter 3 Lyra choice every 4th conversation' --body-file <body 522 chars sha256:562a72a6a4d8> --label area:story --label severity:high --label source:code-review --milestone 'Y2-PP Pre-production' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #41 for CR-H4.6-09
+gh issue create --title '[CR-H4.7-03] Enemy tweens move and scale the physics body instead of the sprite' --body-file <body 697 chars sha256:4ae3e0357518> --label area:enemies --label severity:high --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #42 for CR-H4.7-03
+gh issue create --title '[CR-H4.7-04] Cinematic camera shake decay, move/zoom durations and dutch angles do not work' --body-file <body 590 chars sha256:1006a14d7965> --label area:effects --label severity:high --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #43 for CR-H4.7-04
+gh issue create --title '[CR-H4.7-05] add_trauma exists only on cinematic cameras, so combat screen shake is a no-op' --body-file <body 534 chars sha256:6417c056936c> --label area:effects --label severity:high --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #44 for CR-H4.7-05
+gh issue create --title '[CR-H4.7-06] Full-screen VFX flashes are 0x0 under Node2D roots' --body-file <body 543 chars sha256:9b67f33e41d1> --label area:effects --label severity:high --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #45 for CR-H4.7-06
+gh issue create --title '[CR-H4.7-07] VFX textures are never loaded, so spawn_oneshot_vfx does nothing' --body-file <body 674 chars sha256:5cde8dcf91e9> --label area:effects --label severity:high --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #46 for CR-H4.7-07
+gh issue create --title '[CR-H4.7-09] SFX pitch variation re-synthesises audio on the main thread (25-295 ms hitches)' --body-file <body 475 chars sha256:7de282500925> --label area:audio --label severity:high --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #47 for CR-H4.7-09
+gh issue create --title '[CR-H4.7-10] No audio bus layout: SFX volume baked into cached audio breaks the slider' --body-file <body 565 chars sha256:4c3fdd41a40a> --label area:audio --label severity:high --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #48 for CR-H4.7-10
+gh issue create --title '[CR-H4.7-11] Dynamic music overrides chosen tracks within 1 s; music clock slows in hitstop' --body-file <body 549 chars sha256:c9169b6c87a4> --label area:audio --label severity:high --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #49 for CR-H4.7-11
+gh issue create --title '[CR-V02] Audit P0-2 Ironhold story gates partly broken; reachability overstated' --body-file <body 570 chars sha256:06dfebcc18c8> --label area:story --label severity:audit-check --label source:code-review --milestone 'Y1-P0 Stabilize' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #50 for CR-V02
+gh issue create --title '[CR-V04] Audit P0-4 load lock can stay set after a runtime error in load_game' --body-file <body 509 chars sha256:23916ee81569> --label area:save --label severity:audit-check --label source:code-review --milestone 'Y1-P0 Stabilize' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #51 for CR-V04
+# done: created 50, adopted 0, labels 0, milestones 0, priority edits 0
+table consistent: 50 of 172 open rows hold an issue number; every number written so far is in the file; run the same command again to resume

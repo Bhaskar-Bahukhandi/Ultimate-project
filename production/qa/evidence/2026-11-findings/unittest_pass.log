@@ -1,0 +1,50 @@
+test_existing_id_title_is_adopted_not_created (test_publish_findings.AdoptTest.test_existing_id_title_is_adopted_not_created) ... ok
+test_truncated_issue_list_is_not_trusted (test_publish_findings.AdoptTest.test_truncated_issue_list_is_not_trusted) ... ok
+test_approval_file_accepts_sha256sum_style_line (test_publish_findings.ApprovalTest.test_approval_file_accepts_sha256sum_style_line) ... ok
+test_approval_survives_the_scripts_own_issue_write_backs (test_publish_findings.ApprovalTest.test_approval_survives_the_scripts_own_issue_write_backs) ... ok
+test_duplicate_id_refuses (test_publish_findings.ApprovalTest.test_duplicate_id_refuses) ... ok
+test_garbage_approval_refuses (test_publish_findings.ApprovalTest.test_garbage_approval_refuses) ... ok
+test_invalid_table_refuses (test_publish_findings.ApprovalTest.test_invalid_table_refuses) ... ok
+test_missing_approval_refuses_before_any_call (test_publish_findings.ApprovalTest.test_missing_approval_refuses_before_any_call) ... ok
+test_stale_approval_refuses (test_publish_findings.ApprovalTest.test_stale_approval_refuses) ... ok
+test_constants (test_publish_findings.ConstantsTest.test_constants) ... ok
+test_label_scheme (test_publish_findings.ConstantsTest.test_label_scheme) ... ok
+test_title_and_body_format (test_publish_findings.ConstantsTest.test_title_and_body_format) ... ok
+test_dry_run_calls_nothing_and_equals_real_issue_call_log (test_publish_findings.DryRunTest.test_dry_run_calls_nothing_and_equals_real_issue_call_log) ... ok
+test_dry_run_equals_real_label_and_milestone_call_log (test_publish_findings.DryRunTest.test_dry_run_equals_real_label_and_milestone_call_log) ... ok
+test_dry_run_equals_real_priority_call_log (test_publish_findings.DryRunTest.test_dry_run_equals_real_priority_call_log) ... ok
+test_dry_run_prints_scan_result_and_works_without_approval (test_publish_findings.DryRunTest.test_dry_run_prints_scan_result_and_works_without_approval) ... ok
+test_hash_ignores_issue_column_and_line_endings_but_not_content (test_publish_findings.HashTest.test_hash_ignores_issue_column_and_line_endings_but_not_content) ... ok
+test_hash_subcommand_prints_the_hash (test_publish_findings.HashTest.test_hash_subcommand_prints_the_hash) ... ok
+test_batch_size_option_and_pause_between_batches (test_publish_findings.PlanTest.test_batch_size_option_and_pause_between_batches) ... ok
+test_batches (test_publish_findings.PlanTest.test_batches) ... ok
+test_non_open_rows_never_get_an_issue (test_publish_findings.PlanTest.test_non_open_rows_never_get_an_issue) ... ok
+test_only_open_rows_are_planned (test_publish_findings.PlanTest.test_only_open_rows_are_planned) ... ok
+test_priorities_only_for_open_rows_with_an_issue_and_a_priority (test_publish_findings.PlanTest.test_priorities_only_for_open_rows_with_an_issue_and_a_priority) ... ok
+test_priorities_pause_between_batches (test_publish_findings.PlanTest.test_priorities_pause_between_batches) ... ok
+test_resume_skips_rows_with_an_issue_number (test_publish_findings.PlanTest.test_resume_skips_rows_with_an_issue_number) ... ok
+test_existing_milestone_is_tolerated (test_publish_findings.RateLimitTest.test_existing_milestone_is_tolerated) ... ok
+test_other_failures_are_not_retried (test_publish_findings.RateLimitTest.test_other_failures_are_not_retried) ... ok
+test_parse_server_wait (test_publish_findings.RateLimitTest.test_parse_server_wait) ... ok
+test_plain_403_is_not_a_rate_limit (test_publish_findings.RateLimitTest.test_plain_403_is_not_a_rate_limit) ... ok
+test_rate_limit_detection (test_publish_findings.RateLimitTest.test_rate_limit_detection) ... ok
+test_rate_limit_waits_the_backoff_then_continues (test_publish_findings.RateLimitTest.test_rate_limit_waits_the_backoff_then_continues) ... ok
+test_second_consecutive_limit_waits_longer (test_publish_findings.RateLimitTest.test_second_consecutive_limit_waits_longer) ... ok
+test_stop_after_three_failed_retries_leaves_the_table_consistent (test_publish_findings.RateLimitTest.test_stop_after_three_failed_retries_leaves_the_table_consistent) ... ok
+test_wait_is_the_longer_of_retry_after_and_backoff (test_publish_findings.RateLimitTest.test_wait_is_the_longer_of_retry_after_and_backoff) ... ok
+test_an_empty_user_name_does_not_flag_everything (test_publish_findings.ScanTest.test_an_empty_user_name_does_not_flag_everything) ... ok
+test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) ... ok
+test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) ... ok
+test_scan_rules_are_named (test_publish_findings.ScanTest.test_scan_rules_are_named) ... ok
+test_secret_in_any_phase_refuses_before_the_first_call (test_publish_findings.ScanTest.test_secret_in_any_phase_refuses_before_the_first_call) ... ok
+test_missing_gh_is_a_clear_result_not_a_crash (test_publish_findings.SubprocessGhTest.test_missing_gh_is_a_clear_result_not_a_crash) ... ok
+test_runs_gh_without_a_shell_and_without_reading_a_token (test_publish_findings.SubprocessGhTest.test_runs_gh_without_a_shell_and_without_reading_a_token) ... ok
+test_body_goes_through_body_file_not_the_command_line (test_publish_findings.WriteBackTest.test_body_goes_through_body_file_not_the_command_line) ... ok
+test_failed_replace_leaves_table_untouched_and_no_temp_file (test_publish_findings.WriteBackTest.test_failed_replace_leaves_table_untouched_and_no_temp_file) ... ok
+test_number_is_written_right_after_each_create_and_adopt (test_publish_findings.WriteBackTest.test_number_is_written_right_after_each_create_and_adopt) ... ok
+test_write_is_atomic_and_keeps_crlf_unicode_and_other_columns (test_publish_findings.WriteBackTest.test_write_is_atomic_and_keeps_crlf_unicode_and_other_columns) ... ok
+
+----------------------------------------------------------------------
+Ran 45 tests in 2.663s
+
+OK

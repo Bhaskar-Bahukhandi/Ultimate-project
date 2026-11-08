@@ -56,6 +56,13 @@ jobs:
           done
           exit $bad
 
+      - name: "Findings table and publish script (Y1-P0-S05: reconciliation + unit tests, no GitHub calls)"
+        timeout-minutes: 5
+        run: |
+          python3 -I production/findings/check_findings.py
+          python3 -I -m unittest discover -s tools/github -v
+          python3 -I -m unittest discover -s production/findings -v
+
       - name: Cache Godot
         id: godot-cache
         uses: actions/cache@v4

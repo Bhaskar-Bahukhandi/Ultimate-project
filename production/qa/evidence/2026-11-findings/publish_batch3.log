@@ -1,0 +1,109 @@
+# publish_findings issues: REAL RUN; table production/findings/findings.csv; 265 rows, 172 open
+# body scan: 172 issue title+body pair(s) checked; rules: local-path, windows-user, email, token-prefix, hex-run, base64-run
+# body scan: PASS (0 hits)
+# approval OK (table hash 6be5f0759a56ee892dedee8bc124fb4d7fa893ce571832ca397c97a3bd32b9e9)
+# issues phase: 172 open rows, 100 already numbered, 72 pending; this run: 50 row(s) in 1 batch(es) of up to 50; 22 left for later
+gh issue list --state all --limit 1000 --json number,title --repo Bhaskar-Bahukhandi/Ultimate-project
+#   100 issue(s) in the repo, 100 with a [<id>] title
+gh issue create --title '[CR-A-audio-04] One AudioStreamPlayer created per music note' --body-file <body 473 chars sha256:87679902cbfd> --label area:audio --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #102 for CR-A-audio-04
+gh issue create --title '[CR-A-background-02] Seven locations have no BG_ASSETS key' --body-file <body 552 chars sha256:a68d0b6c6022> --label area:art --label severity:medium-low --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #103 for CR-A-background-02
+gh issue create --title '[CR-A-background-03] CRT shader overwrites R and B with raw samples (magenta edges)' --body-file <body 510 chars sha256:336a3d0ef8be> --label area:effects --label severity:medium-low --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #104 for CR-A-background-03
+gh issue create --title '[CR-A-background-04] filter_linear_mipmap used on screen textures' --body-file <body 541 chars sha256:1ce560929a23> --label area:effects --label severity:medium-low --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #105 for CR-A-background-04
+gh issue create --title '[CR-A-background-05] One TextureRect per background tile (317 nodes)' --body-file <body 552 chars sha256:d7d94deec74a> --label area:art --label severity:medium-low --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #106 for CR-A-background-05
+gh issue create --title '[CR-A-background-06] 1280x720 background gradients computed on the CPU' --body-file <body 495 chars sha256:6ec41809fbe4> --label area:art --label severity:medium-low --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #107 for CR-A-background-06
+gh issue create --title '[CR-A-background-07] About 150 ms of dead set_pixel parallax code' --body-file <body 516 chars sha256:5ec44e1997d1> --label area:art --label severity:medium-low --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #108 for CR-A-background-07
+gh issue create --title '[CR-A-regions-01] Region interactions re-run during open dialogue (repeat gold payouts)' --body-file <body 602 chars sha256:8cee71054805> --label area:regions --label severity:medium-low --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #109 for CR-A-regions-01
+gh issue create --title '[CR-A-regions-02] Region shops shadowed by NPC talk radii' --body-file <body 577 chars sha256:cfe945a32eeb> --label area:regions --label severity:medium-low --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #110 for CR-A-regions-02
+gh issue create --title '[CR-A-regions-03] Regions have no collision' --body-file <body 554 chars sha256:ae2d2c857691> --label area:regions --label severity:medium-low --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #111 for CR-A-regions-03
+gh issue create --title '[CR-A-regions-06] Storm map -30% effect is not implemented' --body-file <body 607 chars sha256:90ea6d5eaafb> --label area:regions --label severity:medium-low --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #112 for CR-A-regions-06
+gh issue create --title '[CR-A-regions-07] Region layouts are unseeded random and rebuilt on every load' --body-file <body 538 chars sha256:c008b97702d9> --label area:regions --label severity:medium-low --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #113 for CR-A-regions-07
+gh issue create --title '[CR-A-regions-08] Mirror City floor built with per-pixel image operations (69 ms)' --body-file <body 514 chars sha256:6ca766fd8fae> --label area:regions --label severity:medium-low --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #114 for CR-A-regions-08
+gh issue create --title '[CR-A-chapters-02] About 46% of Chapter 2-3 dialogue lines are unreachable' --body-file <body 578 chars sha256:c243e083d4ad> --label area:story --label severity:medium-low --label source:code-review --milestone 'Y2-PP Pre-production' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #115 for CR-A-chapters-02
+gh issue create --title '[CR-A-chapters-03] 78 of 87 late-game speakers have no colour or portrait entry' --body-file <body 586 chars sha256:e21a20aa0c22> --label area:story --label severity:medium-low --label source:code-review --milestone 'Y2-PP Pre-production' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #116 for CR-A-chapters-03
+gh issue create --title '[CR-A-chapters-04] Synthesis ending needs 5 earlier picks and is first hinted in Chapter 10' --body-file <body 457 chars sha256:c4200976934d> --label area:story --label severity:medium-low --label source:code-review --milestone 'Y2-PP Pre-production' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #117 for CR-A-chapters-04
+gh issue create --title '[CR-A-chapters-05] Chapter 3 menu boss fights cannot be lost' --body-file <body 550 chars sha256:09c8f88d2feb> --label area:story --label severity:medium-low --label source:code-review --milestone 'Y2-PP Pre-production' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #118 for CR-A-chapters-05
+gh issue create --title '[CR-A-tooling-01] r1/r2/q1/q2 validators are stale and would fail' --body-file <body 546 chars sha256:e1f8cf2336a9> --label area:tooling --label severity:medium-low --label source:code-review --milestone 'Y1-P0 Stabilize' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #119 for CR-A-tooling-01
+gh issue create --title '[CR-A-tooling-02] 13 probes always exit 0' --body-file <body 542 chars sha256:c2eac51c9cb8> --label area:tooling --label severity:medium-low --label source:code-review --milestone 'Y1-P0 Stabilize' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #120 for CR-A-tooling-02
+gh issue create --title '[CR-A-tooling-03] Over half of the tooling lines are copy-paste' --body-file <body 473 chars sha256:78bcf4b28f26> --label area:tooling --label severity:medium-low --label source:code-review --milestone 'Y1-P0 Stabilize' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #121 for CR-A-tooling-03
+gh issue create --title '[CR-A-tooling-04a] S3 generator hardcodes an absolute path' --body-file <body 543 chars sha256:49a801d62d85> --label area:tooling --label severity:medium-low --label source:code-review --milestone 'Y1-P0 Stabilize' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #122 for CR-A-tooling-04a
+gh issue create --title '[CR-A-tooling-04b] S3 generator rewrites its own validator' --body-file <body 501 chars sha256:04d0d130cbe5> --label area:tooling --label severity:medium-low --label source:code-review --milestone 'Y1-P0 Stabilize' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #123 for CR-A-tooling-04b
+gh issue create --title '[CR-A-tooling-05] assets/generated v1 is dead' --body-file <body 795 chars sha256:2e2710d48029> --label area:tooling --label severity:medium-low --label source:code-review --milestone 'Y1-P0 Stabilize' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #124 for CR-A-tooling-05
+gh issue create --title '[CL-1004-D2] Decision: building and prop collision in regions and overworld' --body-file <body 743 chars sha256:04cc8f394dba> --label area:regions --label severity:medium-low --label source:changelog --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #125 for CL-1004-D2
+gh issue create --title '[CL-1004-D3] Decision: Chapter 1 shatter scene text predates the rewrite' --body-file <body 823 chars sha256:b3580becd81c> --label area:story --label severity:medium-low --label source:changelog --milestone 'Y2-PP Pre-production' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #126 for CL-1004-D3
+gh issue create --title '[CL-1006-S3] Hold-to-skip cutscene only half-skips' --body-file <body 548 chars sha256:772275e22a4a> --label area:effects --label severity:medium-low --label source:changelog --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #127 for CL-1006-S3
+gh issue create --title '[CL-1006-S4] Kaelen and Elara placeholder boxes overlap on the walks' --body-file <body 521 chars sha256:695ec4324bc9> --label area:art --label severity:medium-low --label source:changelog --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #128 for CL-1006-S4
+gh issue create --title '[TD-001] Pre-v1.2 saves rebuild buffs without stat mods; NG+ can remove buffs never applied' --body-file <body 527 chars sha256:acad3e8a4c3d> --label area:save --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #129 for TD-001
+gh issue create --title '[TD-005] SceneTransitions.flash() overlapping tweens fight over the overlay' --body-file <body 474 chars sha256:721a6910c171> --label area:effects --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #130 for TD-005
+gh issue create --title '[TD-006] Chapter 3 and Oakhaven fade rects are zero-size and never visible' --body-file <body 516 chars sha256:0247bf27e66f> --label area:effects --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #131 for TD-006
+gh issue create --title '[TD-008] Test suites pass on failures that print only ERROR:' --body-file <body 384 chars sha256:9b2139d974a4> --label area:tooling --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #132 for TD-008
+gh issue create --title '[TD-011] CI boot check passes a crashed boot (no pipefail on tee)' --body-file <body 473 chars sha256:3b62b79c6f69> --label area:tooling --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #133 for TD-011
+gh issue create --title '[TD-012] AudioStream object leaks at exit (ObjectDB and resources still in use)' --body-file <body 429 chars sha256:4d04de139bbc> --label area:audio --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #134 for TD-012
+gh issue create --title '[TD-013] enemy_base.gd:920 logs a missing flash_tween meta error on hit' --body-file <body 459 chars sha256:b9f7b960f1e6> --label area:enemies --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #135 for TD-013
+gh issue create --title '[TD-014] Hitstop countdown uses delta / time_scale, so one long frame eats the hitstop' --body-file <body 443 chars sha256:9966a87db96a> --label area:combat --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #136 for TD-014
+gh issue create --title '[TD-015] T11 combat feel test coverage gaps' --body-file <body 380 chars sha256:57600f4dae8c> --label area:tooling --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #137 for TD-015
+gh issue create --title '[TD-016] ch3_flash_runtime_test destination checks and private DialogueManager access' --body-file <body 438 chars sha256:cfd77fda6455> --label area:tooling --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #138 for TD-016
+gh issue create --title '[TD-017] PowerShell runner watchdog timeout and kill paths have no self-test' --body-file <body 453 chars sha256:488d1920adc2> --label area:tooling --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #139 for TD-017
+gh issue create --title '[TD-018] Runner self-test follow-ups (negative cases, missing Godot message)' --body-file <body 424 chars sha256:979f18cbfef3> --label area:tooling --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #140 for TD-018
+gh issue create --title '[TD-019] 82 late-game speaker names missing from SPEAKER_COLORS' --body-file <body 440 chars sha256:176a5bd8123e> --label area:ui --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #141 for TD-019
+gh issue create --title '[TD-020] Clock Tower MidTrigger and time zones use the wrong collision mask' --body-file <body 444 chars sha256:34c7cf6f6639> --label area:story --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #142 for TD-020
+gh issue create --title '[TD-021] T12 follow-ups: Journal note helper, title lint, card fit checks' --body-file <body 436 chars sha256:81bee9971ef7> --label area:ui --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #143 for TD-021
+gh issue create --title '[TD-023] True ending never rolls the scrolling credits; credits say Version 1.0' --body-file <body 428 chars sha256:71ad8d92fd4f> --label area:story --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #144 for TD-023
+gh issue create --title '[TD-024] Hazard trial can write to a freed hazard marker' --body-file <body 473 chars sha256:8ce68bc42425> --label area:combat --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #145 for TD-024
+gh issue create --title '[TD-025] Decide whether the Chapter 3 Data Stream lane-dodge can be failed' --body-file <body 385 chars sha256:fa2d08d79038> --label area:story --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #146 for TD-025
+gh issue create --title '[TD-026] Playthrough bot follow-ups: checks never watched failing' --body-file <body 412 chars sha256:48472824ddb7> --label area:tooling --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #147 for TD-026
+gh issue create --title '[TD-027] Oakhaven afternoon progress is not saved; north field pays rewards unconditionally' --body-file <body 532 chars sha256:dbb89e6bfb6e> --label area:save --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #148 for TD-027
+gh issue create --title '[TD-028] Chapter 1 room-suite test gaps (null focus owner, shrine guards)' --body-file <body 428 chars sha256:f58a7963251b> --label area:tooling --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #149 for TD-028
+gh issue create --title '[TD-029] Chapter 1 room code follow-ups (shrine exit resets state)' --body-file <body 418 chars sha256:16669410ce6c> --label area:story --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #150 for TD-029
+gh issue create --title '[TD-030] export_windows.ps1 follow-ups and evidence limits' --body-file <body 401 chars sha256:5a153645901e> --label area:tooling --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #151 for TD-030
+# done: created 50, adopted 0, labels 0, milestones 0, priority edits 0
+table consistent: 150 of 172 open rows hold an issue number; every number written so far is in the file; run the same command again to resume

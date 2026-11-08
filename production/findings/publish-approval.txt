@@ -1,0 +1,2 @@
+31cc973ee56f9ed186c6a9052e2502d1b0f82aa2cf3ca2873257ff7289e09369
+# Approved by the user on 2026-11-08: "Approve as is" (258 rows), "Approve additions" (TD-048..TD-054: 265 rows, 172 open), then "Approve as proposed" for the 19 Y1-P0 priorities (P1 #39; P2 #8 #9 #50 #53 #55 #56; P3 #51 #52 #54 #57 #58; P4 #59 #119-#124). Hash from publish_findings.py hash.

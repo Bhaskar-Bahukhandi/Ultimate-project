@@ -1,0 +1,109 @@
+# publish_findings issues: REAL RUN; table production/findings/findings.csv; 265 rows, 172 open
+# body scan: 172 issue title+body pair(s) checked; rules: local-path, windows-user, email, token-prefix, hex-run, base64-run
+# body scan: PASS (0 hits)
+# approval OK (table hash 6be5f0759a56ee892dedee8bc124fb4d7fa893ce571832ca397c97a3bd32b9e9)
+# issues phase: 172 open rows, 50 already numbered, 122 pending; this run: 50 row(s) in 1 batch(es) of up to 50; 72 left for later
+gh issue list --state all --limit 1000 --json number,title --repo Bhaskar-Bahukhandi/Ultimate-project
+#   50 issue(s) in the repo, 50 with a [<id>] title
+gh issue create --title '[CR-V06] Audit P0-6 change_background stacks layers and mishandles .tscn locations' --body-file <body 557 chars sha256:8b782b67f8f6> --label area:art --label severity:audit-check --label source:code-review --milestone 'Y1-P0 Stabilize' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #52 for CR-V06
+gh issue create --title '[CR-V09] Audit P1-6 DDA: one hit before first kill floors DDA; blocked chip counts' --body-file <body 519 chars sha256:ea5ceb413dad> --label area:combat --label severity:audit-check --label source:code-review --milestone 'Y1-P0 Stabilize' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #53 for CR-V09
+gh issue create --title '[CR-V10] Audit P1-7 _attack_token not bumped by jump, double-jump, dash or spells' --body-file <body 514 chars sha256:3c5f776bda5a> --label area:combat --label severity:audit-check --label source:code-review --milestone 'Y1-P0 Stabilize' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #54 for CR-V10
+gh issue create --title '[CR-V11] Audit P1-9 collision layers OK but melee and projectiles ignore walls' --body-file <body 521 chars sha256:92fc714f797c> --label area:combat --label severity:audit-check --label source:code-review --milestone 'Y1-P0 Stabilize' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #55 for CR-V11
+gh issue create --title '[CR-V12] Audit P1-10 reset_game misses lore, quest HUD, metas, UIStack and more' --body-file <body 497 chars sha256:9361e857c730> --label area:save --label severity:audit-check --label source:code-review --milestone 'Y1-P0 Stabilize' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #56 for CR-V12
+gh issue create --title '[CR-V13] Audit P1-11 choice buffs: cleared flags keep party members; 17 abilities uncalled' --body-file <body 554 chars sha256:2f1d2422196c> --label area:story --label severity:audit-check --label source:code-review --milestone 'Y1-P0 Stabilize' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #57 for CR-V13
+gh issue create --title '[CR-V14] Audit P2-5 wrong: CRT problem is draw order, not BackBufferCopy' --body-file <body 508 chars sha256:450b845486de> --label area:effects --label severity:audit-check --label source:code-review --milestone 'Y1-P0 Stabilize' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #58 for CR-V14
+gh issue create --title '[CR-V15] Audit P2-7 overstated: camera follow, dead-zone and bounds code has no callers' --body-file <body 497 chars sha256:b22a0ac46fb2> --label area:effects --label severity:audit-check --label source:code-review --milestone 'Y1-P0 Stabilize' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #59 for CR-V15
+gh issue create --title '[CR-PAE-01] PAE offline importer for pae-sheet JSON with validation' --body-file <body 445 chars sha256:3b506aac98d1> --label area:art --label severity:pipeline --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #60 for CR-PAE-01
+gh issue create --title '[CR-PAE-02] Generate SpriteFrames with shared-sheet AtlasTextures and per-frame durations' --body-file <body 458 chars sha256:272d7408f489> --label area:art --label severity:pipeline --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #61 for CR-PAE-02
+gh issue create --title '[CR-PAE-03] Map PAE directions to clip names (south to down and so on)' --body-file <body 438 chars sha256:d9cd726ab627> --label area:art --label severity:pipeline --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #62 for CR-PAE-03
+gh issue create --title '[CR-PAE-04] Rig sidecar file with feet pivot, hurtboxes and attack hitboxes' --body-file <body 445 chars sha256:52b54a13bdf5> --label area:art --label severity:pipeline --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #63 for CR-PAE-04
+gh issue create --title '[CR-PAE-05] Pixel-art import settings: lossless, no mipmaps, no alpha border fix, nearest' --body-file <body 500 chars sha256:9c1c70ac3474> --label area:art --label severity:pipeline --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #64 for CR-PAE-05
+gh issue create --title '[CR-PAE-06] Convert PAE tiles to TileSet and TileMapLayer scenes' --body-file <body 406 chars sha256:73d8aff5bf29> --label area:art --label severity:pipeline --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #65 for CR-PAE-06
+gh issue create --title '[CR-PAE-07] Asset registry by ID with one-time warnings and a debug magenta checkerboard' --body-file <body 483 chars sha256:b578c16d7ba4> --label area:art --label severity:pipeline --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #66 for CR-PAE-07
+gh issue create --title '[CR-PAE-08] One CharacterVisual component replacing the parallel sprite systems' --body-file <body 429 chars sha256:96505a5aa26e> --label area:art --label severity:pipeline --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #67 for CR-PAE-08
+gh issue create --title '[CR-PAE-09] Pixel-perfect setup: integer scale and zoom, snapping, renderer decision' --body-file <body 522 chars sha256:4559a4f93357> --label area:art --label severity:pipeline --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #68 for CR-PAE-09
+gh issue create --title '[CR-PAE-10] Export filter so rig sidecar JSON ships in builds' --body-file <body 431 chars sha256:cf61e5a4d46b> --label area:art --label severity:pipeline --label source:code-review --milestone 'Y1-P3 Art pipeline + Pillar Slice' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #69 for CR-PAE-10
+gh issue create --title '[CR-A-core-01a] LoreJournal leaks between saves' --body-file <body 568 chars sha256:401dcb46c35c> --label area:save --label severity:medium-low --label source:code-review --milestone 'Y1-P1 Spine' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #70 for CR-A-core-01a
+gh issue create --title '[CR-A-core-01b] Runtime lore loses its text on load' --body-file <body 522 chars sha256:ad1e8eaf9a7d> --label area:save --label severity:medium-low --label source:code-review --milestone 'Y1-P1 Spine' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #71 for CR-A-core-01b
+gh issue create --title '[CR-A-core-04] Two completion formulas disagree' --body-file <body 563 chars sha256:fc52883eea95> --label area:core --label severity:medium-low --label source:code-review --milestone 'Y1-P1 Spine' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #72 for CR-A-core-04
+gh issue create --title '[CR-A-core-06] completion_100, all_quests and all_secrets achievements cannot unlock' --body-file <body 585 chars sha256:69b099e99bb5> --label area:core --label severity:medium-low --label source:code-review --milestone 'Y1-P1 Spine' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #73 for CR-A-core-06
+gh issue create --title '[CR-A-core-08] Turning subtitles off removes all story text' --body-file <body 507 chars sha256:3990952ec761> --label area:ui --label severity:medium-low --label source:code-review --milestone 'Y1-P1 Spine' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #74 for CR-A-core-08
+gh issue create --title '[CR-A-core-09] achievements.save is written non-atomically' --body-file <body 494 chars sha256:fdd96d86f80b> --label area:save --label severity:medium-low --label source:code-review --milestone 'Y1-P1 Spine' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #75 for CR-A-core-09
+gh issue create --title '[CR-A-ui-01b] Breadcrumb targets the constant (640,360)' --body-file <body 537 chars sha256:0e4107233251> --label area:ui --label severity:medium-low --label source:code-review --milestone 'Y1-P4 Open-world tech + tools' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #76 for CR-A-ui-01b
+gh issue create --title '[CR-A-ui-02] Status, pause and map hardcoded to Chapters 1-2 with nonexistent regions' --body-file <body 529 chars sha256:96700f3ade65> --label area:ui --label severity:medium-low --label source:code-review --milestone 'Y1-P4 Open-world tech + tools' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #77 for CR-A-ui-02
+gh issue create --title '[CR-A-ui-03] Key labels are hardcoded and wrong after rebinding' --body-file <body 742 chars sha256:ae7630fbec95> --label area:input --label severity:medium-low --label source:code-review --milestone 'Y1-P4 Open-world tech + tools' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #78 for CR-A-ui-03
+gh issue create --title '[CR-A-combat-02] i-frames are assigned rather than taking the max' --body-file <body 549 chars sha256:56c286f80a4b> --label area:combat --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #79 for CR-A-combat-02
+gh issue create --title '[CR-A-combat-06] Combat HUD buttons take focus and inject phantom actions' --body-file <body 529 chars sha256:2c06ce0330cd> --label area:input --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #80 for CR-A-combat-06
+gh issue create --title '[CR-A-combat-07] Fight again only heals cosmetically' --body-file <body 568 chars sha256:ff57a1e5630f> --label area:combat --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #81 for CR-A-combat-07
+gh issue create --title '[CR-A-combat-08] Damage multiplier lives in a VFX autoload' --body-file <body 515 chars sha256:4d2fd67f7c96> --label area:core --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #82 for CR-A-combat-08
+gh issue create --title '[CR-A-combat-09] About 20 nodes allocated per dash' --body-file <body 533 chars sha256:2adc347ac934> --label area:combat --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #83 for CR-A-combat-09
+gh issue create --title '[CR-A-combat-11] Gravity ranges disagree in three places' --body-file <body 568 chars sha256:f0786e6011f9> --label area:combat --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #84 for CR-A-combat-11
+gh issue create --title '[CR-A-enemies-01] Scale tweens on slime, rat and elemental shrink V2 sprites permanently' --body-file <body 598 chars sha256:88fa721586ef> --label area:enemies --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #85 for CR-A-enemies-01
+gh issue create --title '[CR-A-enemies-02] Flat special-attack damage ignores scaling' --body-file <body 628 chars sha256:f357ec349025> --label area:enemies --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #86 for CR-A-enemies-02
+gh issue create --title '[CR-A-enemies-03] Enemy teleports have no geometry check' --body-file <body 557 chars sha256:86af32305c2f> --label area:enemies --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #87 for CR-A-enemies-03
+gh issue create --title '[CR-A-enemies-04] Data-sprite clones skip zone level and pay 3x XP' --body-file <body 598 chars sha256:46849f62bfd5> --label area:enemies --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #88 for CR-A-enemies-04
+gh issue create --title '[CR-A-enemies-06] Corrupted Guard'"'"'s counter cannot be reacted to' --body-file <body 542 chars sha256:64e745d5e097> --label area:enemies --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #89 for CR-A-enemies-06
+gh issue create --title '[CR-A-enemies-07] Off-screen enemy AI runs timers at 1/3 speed' --body-file <body 502 chars sha256:93b34e1b643c> --label area:enemies --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #90 for CR-A-enemies-07
+gh issue create --title '[CR-A-encounters-01] Encounter zone never cleared, so encounters fire in story dungeons' --body-file <body 600 chars sha256:239581a3db98> --label area:encounters --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #91 for CR-A-encounters-01
+gh issue create --title '[CR-A-encounters-02] DANGER HUD persists into menus' --body-file <body 573 chars sha256:57cc876f8cc2> --label area:ui --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #92 for CR-A-encounters-02
+gh issue create --title '[CR-A-encounters-05] Encounter kill count is doubled' --body-file <body 519 chars sha256:060724332953> --label area:encounters --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #93 for CR-A-encounters-05
+gh issue create --title '[CR-A-cutscenes-01] 16 of 25 cutscene beat types are unused or untested' --body-file <body 626 chars sha256:d3d382b702a2> --label area:effects --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #94 for CR-A-cutscenes-01
+gh issue create --title '[CR-A-cutscenes-02] Unknown cutscene beats and missing actors fail silently' --body-file <body 541 chars sha256:a3e002719266> --label area:effects --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #95 for CR-A-cutscenes-02
+gh issue create --title '[CR-A-cutscenes-03] Cutscene entrance tween is sequential (1.5x duration, no fade)' --body-file <body 547 chars sha256:a5e79d1f6b80> --label area:effects --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #96 for CR-A-cutscenes-03
+gh issue create --title '[CR-A-cutscenes-04] wipe_out LEFT and UP only cover off-screen space' --body-file <body 548 chars sha256:26d50b9df346> --label area:effects --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #97 for CR-A-cutscenes-04
+gh issue create --title '[CR-A-cutscenes-06] vfx_pickup_burst is undefined' --body-file <body 588 chars sha256:d148dfce4ee3> --label area:effects --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #98 for CR-A-cutscenes-06
+gh issue create --title '[CR-A-cutscenes-07] 36 of 58 TweenAnimator functions are unused' --body-file <body 516 chars sha256:3aa05bb24678> --label area:effects --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #99 for CR-A-cutscenes-07
+gh issue create --title '[CR-A-cutscenes-08] cutscene_director.gd and cinematic_vfx.gd are orphaned' --body-file <body 536 chars sha256:7ced3f3c888d> --label area:effects --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #100 for CR-A-cutscenes-08
+gh issue create --title '[CR-A-audio-03] Note caps drop critical sounds' --body-file <body 519 chars sha256:b035dabe05b5> --label area:audio --label severity:medium-low --label source:code-review --milestone 'Y1-P2 Combat foundation' --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #101 for CR-A-audio-03
+# done: created 50, adopted 0, labels 0, milestones 0, priority edits 0
+table consistent: 100 of 172 open rows hold an issue number; every number written so far is in the file; run the same command again to resume

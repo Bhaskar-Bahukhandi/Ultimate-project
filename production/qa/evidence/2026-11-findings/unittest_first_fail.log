@@ -1,0 +1,1375 @@
+test_existing_id_title_is_adopted_not_created (test_publish_findings.AdoptTest.test_existing_id_title_is_adopted_not_created) ... ERROR
+test_truncated_issue_list_is_not_trusted (test_publish_findings.AdoptTest.test_truncated_issue_list_is_not_trusted) ... ERROR
+test_approval_file_accepts_sha256sum_style_line (test_publish_findings.ApprovalTest.test_approval_file_accepts_sha256sum_style_line) ... ERROR
+test_approval_survives_the_scripts_own_issue_write_backs (test_publish_findings.ApprovalTest.test_approval_survives_the_scripts_own_issue_write_backs) ... ERROR
+test_duplicate_id_refuses (test_publish_findings.ApprovalTest.test_duplicate_id_refuses) ... ERROR
+test_garbage_approval_refuses (test_publish_findings.ApprovalTest.test_garbage_approval_refuses) ... FAIL
+test_invalid_table_refuses (test_publish_findings.ApprovalTest.test_invalid_table_refuses) ... 
+  test_invalid_table_refuses (test_publish_findings.ApprovalTest.test_invalid_table_refuses) (field='area') ... ERROR
+  test_invalid_table_refuses (test_publish_findings.ApprovalTest.test_invalid_table_refuses) (field='status') ... ERROR
+  test_invalid_table_refuses (test_publish_findings.ApprovalTest.test_invalid_table_refuses) (field='severity') ... ERROR
+  test_invalid_table_refuses (test_publish_findings.ApprovalTest.test_invalid_table_refuses) (field='milestone') ... ERROR
+  test_invalid_table_refuses (test_publish_findings.ApprovalTest.test_invalid_table_refuses) (field='issue') ... ERROR
+  test_invalid_table_refuses (test_publish_findings.ApprovalTest.test_invalid_table_refuses) (field='priority') ... ERROR
+test_missing_approval_refuses_before_any_call (test_publish_findings.ApprovalTest.test_missing_approval_refuses_before_any_call) ... 
+  test_missing_approval_refuses_before_any_call (test_publish_findings.ApprovalTest.test_missing_approval_refuses_before_any_call) (phase='labels') ... FAIL
+  test_missing_approval_refuses_before_any_call (test_publish_findings.ApprovalTest.test_missing_approval_refuses_before_any_call) (phase='issues') ... FAIL
+  test_missing_approval_refuses_before_any_call (test_publish_findings.ApprovalTest.test_missing_approval_refuses_before_any_call) (phase='priorities') ... FAIL
+test_stale_approval_refuses (test_publish_findings.ApprovalTest.test_stale_approval_refuses) ... ERROR
+test_constants (test_publish_findings.ConstantsTest.test_constants) ... FAIL
+test_label_scheme (test_publish_findings.ConstantsTest.test_label_scheme) ... ERROR
+test_title_and_body_format (test_publish_findings.ConstantsTest.test_title_and_body_format) ... ERROR
+test_dry_run_calls_nothing_and_equals_real_issue_call_log (test_publish_findings.DryRunTest.test_dry_run_calls_nothing_and_equals_real_issue_call_log) ... ERROR
+test_dry_run_equals_real_label_and_milestone_call_log (test_publish_findings.DryRunTest.test_dry_run_equals_real_label_and_milestone_call_log) ... ERROR
+test_dry_run_equals_real_priority_call_log (test_publish_findings.DryRunTest.test_dry_run_equals_real_priority_call_log) ... ERROR
+test_dry_run_prints_scan_result_and_works_without_approval (test_publish_findings.DryRunTest.test_dry_run_prints_scan_result_and_works_without_approval) ... FAIL
+test_hash_ignores_issue_column_and_line_endings_but_not_content (test_publish_findings.HashTest.test_hash_ignores_issue_column_and_line_endings_but_not_content) ... ERROR
+test_hash_subcommand_prints_the_hash (test_publish_findings.HashTest.test_hash_subcommand_prints_the_hash) ... FAIL
+test_batch_size_option_and_pause_between_batches (test_publish_findings.PlanTest.test_batch_size_option_and_pause_between_batches) ... ERROR
+test_batches (test_publish_findings.PlanTest.test_batches) ... ERROR
+test_non_open_rows_never_get_an_issue (test_publish_findings.PlanTest.test_non_open_rows_never_get_an_issue) ... ERROR
+test_only_open_rows_are_planned (test_publish_findings.PlanTest.test_only_open_rows_are_planned) ... ERROR
+test_priorities_only_for_open_rows_with_an_issue_and_a_priority (test_publish_findings.PlanTest.test_priorities_only_for_open_rows_with_an_issue_and_a_priority) ... ERROR
+test_priorities_pause_between_batches (test_publish_findings.PlanTest.test_priorities_pause_between_batches) ... ERROR
+test_resume_skips_rows_with_an_issue_number (test_publish_findings.PlanTest.test_resume_skips_rows_with_an_issue_number) ... ERROR
+test_existing_milestone_is_tolerated (test_publish_findings.RateLimitTest.test_existing_milestone_is_tolerated) ... ERROR
+test_other_failures_are_not_retried (test_publish_findings.RateLimitTest.test_other_failures_are_not_retried) ... ERROR
+test_parse_server_wait (test_publish_findings.RateLimitTest.test_parse_server_wait) ... 
+  test_parse_server_wait (test_publish_findings.RateLimitTest.test_parse_server_wait) (text='Retry-After: 120') ... ERROR
+  test_parse_server_wait (test_publish_findings.RateLimitTest.test_parse_server_wait) (text='retry after 45 seconds') ... ERROR
+  test_parse_server_wait (test_publish_findings.RateLimitTest.test_parse_server_wait) (text='try again in 2 minutes') ... ERROR
+  test_parse_server_wait (test_publish_findings.RateLimitTest.test_parse_server_wait) (text='x-ratelimit-reset: 1700000061') ... ERROR
+  test_parse_server_wait (test_publish_findings.RateLimitTest.test_parse_server_wait) (text='x-ratelimit-reset: 1699999995') ... ERROR
+test_parse_server_wait (test_publish_findings.RateLimitTest.test_parse_server_wait) ... ERROR
+test_plain_403_is_not_a_rate_limit (test_publish_findings.RateLimitTest.test_plain_403_is_not_a_rate_limit) ... ERROR
+test_rate_limit_detection (test_publish_findings.RateLimitTest.test_rate_limit_detection) ... 
+  test_rate_limit_detection (test_publish_findings.RateLimitTest.test_rate_limit_detection) (text='API rate limit exceeded for user ID 1') ... ERROR
+  test_rate_limit_detection (test_publish_findings.RateLimitTest.test_rate_limit_detection) (text='You have exceeded a secondary rate limit') ... ERROR
+  test_rate_limit_detection (test_publish_findings.RateLimitTest.test_rate_limit_detection) (text='gh: HTTP 429: Too Many Requests') ... ERROR
+  test_rate_limit_detection (test_publish_findings.RateLimitTest.test_rate_limit_detection) (text='HTTP 403: abuse detection mechanism') ... ERROR
+  test_rate_limit_detection (test_publish_findings.RateLimitTest.test_rate_limit_detection) (text='Retry-After: 12') ... ERROR
+  test_rate_limit_detection (test_publish_findings.RateLimitTest.test_rate_limit_detection) (text='gh: HTTP 403: API Rate Limit Exceeded') ... ERROR
+test_rate_limit_detection (test_publish_findings.RateLimitTest.test_rate_limit_detection) ... ERROR
+test_rate_limit_waits_the_backoff_then_continues (test_publish_findings.RateLimitTest.test_rate_limit_waits_the_backoff_then_continues) ... ERROR
+test_second_consecutive_limit_waits_longer (test_publish_findings.RateLimitTest.test_second_consecutive_limit_waits_longer) ... ERROR
+test_stop_after_three_failed_retries_leaves_the_table_consistent (test_publish_findings.RateLimitTest.test_stop_after_three_failed_retries_leaves_the_table_consistent) ... ERROR
+test_wait_is_the_longer_of_retry_after_and_backoff (test_publish_findings.RateLimitTest.test_wait_is_the_longer_of_retry_after_and_backoff) ... 
+  test_wait_is_the_longer_of_retry_after_and_backoff (test_publish_findings.RateLimitTest.test_wait_is_the_longer_of_retry_after_and_backoff) (hint='Retry-After: 90') ... ERROR
+  test_wait_is_the_longer_of_retry_after_and_backoff (test_publish_findings.RateLimitTest.test_wait_is_the_longer_of_retry_after_and_backoff) (hint='Retry-After: 10') ... ERROR
+  test_wait_is_the_longer_of_retry_after_and_backoff (test_publish_findings.RateLimitTest.test_wait_is_the_longer_of_retry_after_and_backoff) (hint='retry-after: 500') ... ERROR
+  test_wait_is_the_longer_of_retry_after_and_backoff (test_publish_findings.RateLimitTest.test_wait_is_the_longer_of_retry_after_and_backoff) (hint='X-RateLimit-Reset: 1700000300') ... ERROR
+  test_wait_is_the_longer_of_retry_after_and_backoff (test_publish_findings.RateLimitTest.test_wait_is_the_longer_of_retry_after_and_backoff) (hint='no hint at all') ... ERROR
+test_an_empty_user_name_does_not_flag_everything (test_publish_findings.ScanTest.test_an_empty_user_name_does_not_flag_everything) ... ERROR
+test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) ... 
+  test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='fixed in commit f82daf20123456789abcdef0123456789abcdef0') ... ERROR
+  test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='commits abc1234, f82daf20123456789abcdef0123456789abcdef0 and 1234567') ... ERROR
+  test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='commit abc1234') ... ERROR
+  test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='Commit `a144ad2`') ... ERROR
+  test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='AethelgardPrototype/scripts/ui/MainMenu2.gd:120') ... ERROR
+  test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='res://assets/art_sources/oakhaven_village_background_layer_far_01.png') ... ERROR
+  test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='docs/art_pipeline/real_comfyui_generation_requirements.md') ... ERROR
+  test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='@export var speed := 4  # @onready') ... ERROR
+  test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='https://github.com/Bhaskar-Bahukhandi/Ultimate-project/issues') ... ERROR
+  test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='highs_score and ghost_mode') ... ERROR
+  test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='Y1-P0 Stabilize') ... ERROR
+  test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='AethelgardPrototype/scripts/combat/EnemyAttackPatternController/phase_two_helper.gd') ... ERROR
+test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) ... 
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='windows path', field='evidence') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='windows path', field='title') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='windows path forward slashes', field='evidence') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='windows path forward slashes', field='title') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='mac path', field='evidence') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='mac path', field='title') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='windows user name', field='evidence') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='windows user name', field='title') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='e-mail', field='evidence') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='e-mail', field='title') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='ghp token', field='evidence') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='ghp token', field='title') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='fine-grained token', field='evidence') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='fine-grained token', field='title') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='40-hex without commit', field='evidence') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='40-hex without commit', field='title') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='64-hex', field='evidence') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='64-hex', field='title') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='base64 run', field='evidence') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='base64 run', field='title') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='hash on another line than the word commit', field='evidence') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='64-hex after commit', field='evidence') ... ERROR
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='64-hex after commit', field='title') ... ERROR
+test_scan_rules_are_named (test_publish_findings.ScanTest.test_scan_rules_are_named) ... ERROR
+test_secret_in_any_phase_refuses_before_the_first_call (test_publish_findings.ScanTest.test_secret_in_any_phase_refuses_before_the_first_call) ... ERROR
+test_missing_gh_is_a_clear_result_not_a_crash (test_publish_findings.SubprocessGhTest.test_missing_gh_is_a_clear_result_not_a_crash) ... ERROR
+test_runs_gh_without_a_shell_and_without_reading_a_token (test_publish_findings.SubprocessGhTest.test_runs_gh_without_a_shell_and_without_reading_a_token) ... ERROR
+test_body_goes_through_body_file_not_the_command_line (test_publish_findings.WriteBackTest.test_body_goes_through_body_file_not_the_command_line) ... ERROR
+test_failed_replace_leaves_table_untouched_and_no_temp_file (test_publish_findings.WriteBackTest.test_failed_replace_leaves_table_untouched_and_no_temp_file) ... ERROR
+test_number_is_written_right_after_each_create_and_adopt (test_publish_findings.WriteBackTest.test_number_is_written_right_after_each_create_and_adopt) ... ERROR
+test_write_is_atomic_and_keeps_crlf_unicode_and_other_columns (test_publish_findings.WriteBackTest.test_write_is_atomic_and_keeps_crlf_unicode_and_other_columns) ... ERROR
+
+======================================================================
+ERROR: test_existing_id_title_is_adopted_not_created (test_publish_findings.AdoptTest.test_existing_id_title_is_adopted_not_created)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 342, in test_existing_id_title_is_adopted_not_created
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_truncated_issue_list_is_not_trusted (test_publish_findings.AdoptTest.test_truncated_issue_list_is_not_trusted)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 357, in test_truncated_issue_list_is_not_trusted
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_approval_file_accepts_sha256sum_style_line (test_publish_findings.ApprovalTest.test_approval_file_accepts_sha256sum_style_line)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 578, in test_approval_file_accepts_sha256sum_style_line
+    self.approval.write_text(f"# approved by the user\n{pf.table_hash(self.table).upper()}  findings.csv\n",
+                                                        ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_approval_survives_the_scripts_own_issue_write_backs (test_publish_findings.ApprovalTest.test_approval_survives_the_scripts_own_issue_write_backs)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 570, in test_approval_survives_the_scripts_own_issue_write_backs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_duplicate_id_refuses (test_publish_findings.ApprovalTest.test_duplicate_id_refuses)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 600, in test_duplicate_id_refuses
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_invalid_table_refuses (test_publish_findings.ApprovalTest.test_invalid_table_refuses) (field='area')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 589, in test_invalid_table_refuses
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_invalid_table_refuses (test_publish_findings.ApprovalTest.test_invalid_table_refuses) (field='status')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 589, in test_invalid_table_refuses
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_invalid_table_refuses (test_publish_findings.ApprovalTest.test_invalid_table_refuses) (field='severity')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 589, in test_invalid_table_refuses
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_invalid_table_refuses (test_publish_findings.ApprovalTest.test_invalid_table_refuses) (field='milestone')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 589, in test_invalid_table_refuses
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_invalid_table_refuses (test_publish_findings.ApprovalTest.test_invalid_table_refuses) (field='issue')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 589, in test_invalid_table_refuses
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_invalid_table_refuses (test_publish_findings.ApprovalTest.test_invalid_table_refuses) (field='priority')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 589, in test_invalid_table_refuses
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_stale_approval_refuses (test_publish_findings.ApprovalTest.test_stale_approval_refuses)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 552, in test_stale_approval_refuses
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_label_scheme (test_publish_findings.ConstantsTest.test_label_scheme)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 157, in test_label_scheme
+    specs = pf.label_specs()
+  File "<repo>\tools\github\publish_findings.py", line 67, in label_specs
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_title_and_body_format (test_publish_findings.ConstantsTest.test_title_and_body_format)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 176, in test_title_and_body_format
+    self.assertEqual(pf.build_title(row), "[CR-C01] Finding number 1")
+                     ~~~~~~~~~~~~~~^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 55, in build_title
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_dry_run_calls_nothing_and_equals_real_issue_call_log (test_publish_findings.DryRunTest.test_dry_run_calls_nothing_and_equals_real_issue_call_log)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 207, in test_dry_run_calls_nothing_and_equals_real_issue_call_log
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_dry_run_equals_real_label_and_milestone_call_log (test_publish_findings.DryRunTest.test_dry_run_equals_real_label_and_milestone_call_log)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 222, in test_dry_run_equals_real_label_and_milestone_call_log
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_dry_run_equals_real_priority_call_log (test_publish_findings.DryRunTest.test_dry_run_equals_real_priority_call_log)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 239, in test_dry_run_equals_real_priority_call_log
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_hash_ignores_issue_column_and_line_endings_but_not_content (test_publish_findings.HashTest.test_hash_ignores_issue_column_and_line_endings_but_not_content)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 187, in test_hash_ignores_issue_column_and_line_endings_but_not_content
+    base = pf.table_hash(self.table)
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_batch_size_option_and_pause_between_batches (test_publish_findings.PlanTest.test_batch_size_option_and_pause_between_batches)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 305, in test_batch_size_option_and_pause_between_batches
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_batches (test_publish_findings.PlanTest.test_batches)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 290, in test_batches
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_non_open_rows_never_get_an_issue (test_publish_findings.PlanTest.test_non_open_rows_never_get_an_issue)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 282, in test_non_open_rows_never_get_an_issue
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_only_open_rows_are_planned (test_publish_findings.PlanTest.test_only_open_rows_are_planned)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 260, in test_only_open_rows_are_planned
+    plan = pf.build_plan(rows, "issues", 50, 1, None)
+  File "<repo>\tools\github\publish_findings.py", line 63, in build_plan
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_priorities_only_for_open_rows_with_an_issue_and_a_priority (test_publish_findings.PlanTest.test_priorities_only_for_open_rows_with_an_issue_and_a_priority)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 319, in test_priorities_only_for_open_rows_with_an_issue_and_a_priority
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_priorities_pause_between_batches (test_publish_findings.PlanTest.test_priorities_pause_between_batches)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 334, in test_priorities_pause_between_batches
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_resume_skips_rows_with_an_issue_number (test_publish_findings.PlanTest.test_resume_skips_rows_with_an_issue_number)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 272, in test_resume_skips_rows_with_an_issue_number
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_existing_milestone_is_tolerated (test_publish_findings.RateLimitTest.test_existing_milestone_is_tolerated)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 528, in test_existing_milestone_is_tolerated
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_other_failures_are_not_retried (test_publish_findings.RateLimitTest.test_other_failures_are_not_retried)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 494, in test_other_failures_are_not_retried
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_parse_server_wait (test_publish_findings.RateLimitTest.test_parse_server_wait) (text='Retry-After: 120')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 523, in test_parse_server_wait
+    self.assertEqual(pf.parse_server_wait(pf.GhResult(1, "", text), NOW), expected)
+                     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 47, in parse_server_wait
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_parse_server_wait (test_publish_findings.RateLimitTest.test_parse_server_wait) (text='retry after 45 seconds')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 523, in test_parse_server_wait
+    self.assertEqual(pf.parse_server_wait(pf.GhResult(1, "", text), NOW), expected)
+                     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 47, in parse_server_wait
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_parse_server_wait (test_publish_findings.RateLimitTest.test_parse_server_wait) (text='try again in 2 minutes')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 523, in test_parse_server_wait
+    self.assertEqual(pf.parse_server_wait(pf.GhResult(1, "", text), NOW), expected)
+                     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 47, in parse_server_wait
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_parse_server_wait (test_publish_findings.RateLimitTest.test_parse_server_wait) (text='x-ratelimit-reset: 1700000061')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 523, in test_parse_server_wait
+    self.assertEqual(pf.parse_server_wait(pf.GhResult(1, "", text), NOW), expected)
+                     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 47, in parse_server_wait
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_parse_server_wait (test_publish_findings.RateLimitTest.test_parse_server_wait) (text='x-ratelimit-reset: 1699999995')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 523, in test_parse_server_wait
+    self.assertEqual(pf.parse_server_wait(pf.GhResult(1, "", text), NOW), expected)
+                     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 47, in parse_server_wait
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_parse_server_wait (test_publish_findings.RateLimitTest.test_parse_server_wait)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 524, in test_parse_server_wait
+    self.assertIsNone(pf.parse_server_wait(pf.GhResult(1, "", "nothing here"), NOW))
+                      ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 47, in parse_server_wait
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_plain_403_is_not_a_rate_limit (test_publish_findings.RateLimitTest.test_plain_403_is_not_a_rate_limit)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 505, in test_plain_403_is_not_a_rate_limit
+    self.assertFalse(pf.is_rate_limited(pf.GhResult(1, "", "gh: HTTP 403: Resource not accessible")))
+                     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 43, in is_rate_limited
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rate_limit_detection (test_publish_findings.RateLimitTest.test_rate_limit_detection) (text='API rate limit exceeded for user ID 1')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 513, in test_rate_limit_detection
+    self.assertTrue(pf.is_rate_limited(pf.GhResult(1, "", text)))
+                    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 43, in is_rate_limited
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rate_limit_detection (test_publish_findings.RateLimitTest.test_rate_limit_detection) (text='You have exceeded a secondary rate limit')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 513, in test_rate_limit_detection
+    self.assertTrue(pf.is_rate_limited(pf.GhResult(1, "", text)))
+                    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 43, in is_rate_limited
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rate_limit_detection (test_publish_findings.RateLimitTest.test_rate_limit_detection) (text='gh: HTTP 429: Too Many Requests')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 513, in test_rate_limit_detection
+    self.assertTrue(pf.is_rate_limited(pf.GhResult(1, "", text)))
+                    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 43, in is_rate_limited
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rate_limit_detection (test_publish_findings.RateLimitTest.test_rate_limit_detection) (text='HTTP 403: abuse detection mechanism')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 513, in test_rate_limit_detection
+    self.assertTrue(pf.is_rate_limited(pf.GhResult(1, "", text)))
+                    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 43, in is_rate_limited
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rate_limit_detection (test_publish_findings.RateLimitTest.test_rate_limit_detection) (text='Retry-After: 12')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 513, in test_rate_limit_detection
+    self.assertTrue(pf.is_rate_limited(pf.GhResult(1, "", text)))
+                    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 43, in is_rate_limited
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rate_limit_detection (test_publish_findings.RateLimitTest.test_rate_limit_detection) (text='gh: HTTP 403: API Rate Limit Exceeded')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 513, in test_rate_limit_detection
+    self.assertTrue(pf.is_rate_limited(pf.GhResult(1, "", text)))
+                    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 43, in is_rate_limited
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rate_limit_detection (test_publish_findings.RateLimitTest.test_rate_limit_detection)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 514, in test_rate_limit_detection
+    self.assertFalse(pf.is_rate_limited(pf.GhResult(0, "", "rate limit")))     # exit code 0 is success
+                     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 43, in is_rate_limited
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rate_limit_waits_the_backoff_then_continues (test_publish_findings.RateLimitTest.test_rate_limit_waits_the_backoff_then_continues)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 440, in test_rate_limit_waits_the_backoff_then_continues
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_second_consecutive_limit_waits_longer (test_publish_findings.RateLimitTest.test_second_consecutive_limit_waits_longer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 451, in test_second_consecutive_limit_waits_longer
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_stop_after_three_failed_retries_leaves_the_table_consistent (test_publish_findings.RateLimitTest.test_stop_after_three_failed_retries_leaves_the_table_consistent)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 471, in test_stop_after_three_failed_retries_leaves_the_table_consistent
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_wait_is_the_longer_of_retry_after_and_backoff (test_publish_findings.RateLimitTest.test_wait_is_the_longer_of_retry_after_and_backoff) (hint='Retry-After: 90')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 463, in test_wait_is_the_longer_of_retry_after_and_backoff
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_wait_is_the_longer_of_retry_after_and_backoff (test_publish_findings.RateLimitTest.test_wait_is_the_longer_of_retry_after_and_backoff) (hint='Retry-After: 10')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 463, in test_wait_is_the_longer_of_retry_after_and_backoff
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_wait_is_the_longer_of_retry_after_and_backoff (test_publish_findings.RateLimitTest.test_wait_is_the_longer_of_retry_after_and_backoff) (hint='retry-after: 500')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 463, in test_wait_is_the_longer_of_retry_after_and_backoff
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_wait_is_the_longer_of_retry_after_and_backoff (test_publish_findings.RateLimitTest.test_wait_is_the_longer_of_retry_after_and_backoff) (hint='X-RateLimit-Reset: 1700000300')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 463, in test_wait_is_the_longer_of_retry_after_and_backoff
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_wait_is_the_longer_of_retry_after_and_backoff (test_publish_findings.RateLimitTest.test_wait_is_the_longer_of_retry_after_and_backoff) (hint='no hint at all')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 463, in test_wait_is_the_longer_of_retry_after_and_backoff
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_an_empty_user_name_does_not_flag_everything (test_publish_findings.ScanTest.test_an_empty_user_name_does_not_flag_everything)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 687, in test_an_empty_user_name_does_not_flag_everything
+    self.assertEqual(pf.scan_text("ordinary text", ""), [])
+                     ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 51, in scan_text
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='fixed in commit f82daf20123456789abcdef0123456789abcdef0')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 671, in test_clean_text_is_not_flagged
+    self.assertEqual(pf.scan_text(text, USER), [])
+                     ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 51, in scan_text
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='commits abc1234, f82daf20123456789abcdef0123456789abcdef0 and 1234567')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 671, in test_clean_text_is_not_flagged
+    self.assertEqual(pf.scan_text(text, USER), [])
+                     ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 51, in scan_text
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='commit abc1234')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 671, in test_clean_text_is_not_flagged
+    self.assertEqual(pf.scan_text(text, USER), [])
+                     ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 51, in scan_text
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='Commit `a144ad2`')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 671, in test_clean_text_is_not_flagged
+    self.assertEqual(pf.scan_text(text, USER), [])
+                     ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 51, in scan_text
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='AethelgardPrototype/scripts/ui/MainMenu2.gd:120')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 671, in test_clean_text_is_not_flagged
+    self.assertEqual(pf.scan_text(text, USER), [])
+                     ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 51, in scan_text
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='res://assets/art_sources/oakhaven_village_background_layer_far_01.png')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 671, in test_clean_text_is_not_flagged
+    self.assertEqual(pf.scan_text(text, USER), [])
+                     ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 51, in scan_text
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='docs/art_pipeline/real_comfyui_generation_requirements.md')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 671, in test_clean_text_is_not_flagged
+    self.assertEqual(pf.scan_text(text, USER), [])
+                     ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 51, in scan_text
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='@export var speed := 4  # @onready')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 671, in test_clean_text_is_not_flagged
+    self.assertEqual(pf.scan_text(text, USER), [])
+                     ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 51, in scan_text
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='https://github.com/Bhaskar-Bahukhandi/Ultimate-project/issues')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 671, in test_clean_text_is_not_flagged
+    self.assertEqual(pf.scan_text(text, USER), [])
+                     ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 51, in scan_text
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='highs_score and ghost_mode')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 671, in test_clean_text_is_not_flagged
+    self.assertEqual(pf.scan_text(text, USER), [])
+                     ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 51, in scan_text
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='Y1-P0 Stabilize')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 671, in test_clean_text_is_not_flagged
+    self.assertEqual(pf.scan_text(text, USER), [])
+                     ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 51, in scan_text
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) (text='AethelgardPrototype/scripts/combat/EnemyAttackPatternController/phase_two_helper.gd')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 671, in test_clean_text_is_not_flagged
+    self.assertEqual(pf.scan_text(text, USER), [])
+                     ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 51, in scan_text
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='windows path', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='windows path', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='windows path forward slashes', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='windows path forward slashes', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='mac path', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='mac path', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='windows user name', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='windows user name', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='e-mail', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='e-mail', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='ghp token', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='ghp token', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='fine-grained token', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='fine-grained token', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='40-hex without commit', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='40-hex without commit', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='64-hex', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='64-hex', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='base64 run', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='base64 run', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='hash on another line than the word commit', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='64-hex after commit', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='64-hex after commit', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 629, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_scan_rules_are_named (test_publish_findings.ScanTest.test_scan_rules_are_named)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 676, in test_scan_rules_are_named
+    rules[label] = {hit[0] for hit in pf.scan_text(planted, USER)}
+                                      ~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 51, in scan_text
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_secret_in_any_phase_refuses_before_the_first_call (test_publish_findings.ScanTest.test_secret_in_any_phase_refuses_before_the_first_call)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 647, in test_secret_in_any_phase_refuses_before_the_first_call
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_missing_gh_is_a_clear_result_not_a_crash (test_publish_findings.SubprocessGhTest.test_missing_gh_is_a_clear_result_not_a_crash)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 702, in test_missing_gh_is_a_clear_result_not_a_crash
+    with mock.patch("publish_findings.subprocess.run", side_effect=FileNotFoundError()):
+         ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<home>\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py", line 1481, in __enter__
+    self.target = self.getter()
+                  ~~~~~~~~~~~^^
+  File "<home>\AppData\Local\Programs\Python\Python313\Lib\pkgutil.py", line 528, in resolve_name
+    result = getattr(result, p)
+AttributeError: module 'publish_findings' has no attribute 'subprocess'. Did you mean: 'SubprocessGh'?
+
+======================================================================
+ERROR: test_runs_gh_without_a_shell_and_without_reading_a_token (test_publish_findings.SubprocessGhTest.test_runs_gh_without_a_shell_and_without_reading_a_token)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 693, in test_runs_gh_without_a_shell_and_without_reading_a_token
+    with mock.patch("publish_findings.subprocess.run", return_value=done) as run:
+         ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<home>\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py", line 1481, in __enter__
+    self.target = self.getter()
+                  ~~~~~~~~~~~^^
+  File "<home>\AppData\Local\Programs\Python\Python313\Lib\pkgutil.py", line 528, in resolve_name
+    result = getattr(result, p)
+AttributeError: module 'publish_findings' has no attribute 'subprocess'. Did you mean: 'SubprocessGh'?
+
+======================================================================
+ERROR: test_body_goes_through_body_file_not_the_command_line (test_publish_findings.WriteBackTest.test_body_goes_through_body_file_not_the_command_line)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 412, in test_body_goes_through_body_file_not_the_command_line
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_failed_replace_leaves_table_untouched_and_no_temp_file (test_publish_findings.WriteBackTest.test_failed_replace_leaves_table_untouched_and_no_temp_file)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 399, in test_failed_replace_leaves_table_untouched_and_no_temp_file
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_number_is_written_right_after_each_create_and_adopt (test_publish_findings.WriteBackTest.test_number_is_written_right_after_each_create_and_adopt)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 369, in test_number_is_written_right_after_each_create_and_adopt
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_write_is_atomic_and_keeps_crlf_unicode_and_other_columns (test_publish_findings.WriteBackTest.test_write_is_atomic_and_keeps_crlf_unicode_and_other_columns)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 385, in test_write_is_atomic_and_keeps_crlf_unicode_and_other_columns
+    self.approve()
+    ~~~~~~~~~~~~^^
+  File "<repo>\tools\github\test_publish_findings.py", line 131, in approve
+    self.approval.write_text(pf.table_hash(self.table) + "\n", encoding="utf-8")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>\tools\github\publish_findings.py", line 35, in table_hash
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+FAIL: test_garbage_approval_refuses (test_publish_findings.ApprovalTest.test_garbage_approval_refuses)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 565, in test_garbage_approval_refuses
+    self.assertEqual(self.cli("issues", stub=stub)[0], pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 99 != 2
+
+======================================================================
+FAIL: test_missing_approval_refuses_before_any_call (test_publish_findings.ApprovalTest.test_missing_approval_refuses_before_any_call) (phase='labels')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 545, in test_missing_approval_refuses_before_any_call
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 99 != 2
+
+======================================================================
+FAIL: test_missing_approval_refuses_before_any_call (test_publish_findings.ApprovalTest.test_missing_approval_refuses_before_any_call) (phase='issues')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 545, in test_missing_approval_refuses_before_any_call
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 99 != 2
+
+======================================================================
+FAIL: test_missing_approval_refuses_before_any_call (test_publish_findings.ApprovalTest.test_missing_approval_refuses_before_any_call) (phase='priorities')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 545, in test_missing_approval_refuses_before_any_call
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 99 != 2
+
+======================================================================
+FAIL: test_constants (test_publish_findings.ConstantsTest.test_constants)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 151, in test_constants
+    self.assertEqual(pf.BATCH_SIZE, 50)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 50
+
+======================================================================
+FAIL: test_dry_run_prints_scan_result_and_works_without_approval (test_publish_findings.DryRunTest.test_dry_run_prints_scan_result_and_works_without_approval)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 252, in test_dry_run_prints_scan_result_and_works_without_approval
+    self.assertEqual(code, pf.EXIT_OK)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: 99 != 0
+
+======================================================================
+FAIL: test_hash_subcommand_prints_the_hash (test_publish_findings.HashTest.test_hash_subcommand_prints_the_hash)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 200, in test_hash_subcommand_prints_the_hash
+    self.assertEqual(code, pf.EXIT_OK)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: 99 != 0
+
+----------------------------------------------------------------------
+Ran 45 tests in 0.186s
+
+FAILED (failures=7, errors=93)

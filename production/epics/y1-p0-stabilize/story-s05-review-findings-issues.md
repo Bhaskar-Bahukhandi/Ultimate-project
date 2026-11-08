@@ -2,13 +2,13 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-S05 (`production/plan/_source/Y1-P0.json#Y1-P0-S05`; sprint plan row Y1-P0-S05)
-> **Status**: Ready
+> **Status**: Complete
 > **Layer**: Production tooling
 > **Type**: Integration
 > **Estimate**: 3 days (sprint row: 3). Day 1 the findings table and its status column; day 2 the publish script and
 > its tests, then labels, milestones and issues with the user's OK per step; day 3 links back, triage, templates.
 > **Manifest Version**: N/A — `docs/architecture/control-manifest.md` does not exist
-> **Last Updated**: 2026-11-07
+> **Last Updated**: 2026-11-08
 
 ## Context
 
@@ -230,4 +230,48 @@ replaced in Year 1 keeps its group's milestone above and can be moved at a later
 
 ## Completion Notes
 
-(empty until /story-done)
+**Completed**: 2026-11-08
+
+**Criteria**: 7/7 met, with AC-7's "CI green" DEFERRED to the push (the new CI step has not run yet).
+
+**Result**: `production/findings/findings.csv` 265 rows: 172 open, 87 fixed, 6 duplicate. Every fixed row was confirmed
+by a second reader (seeded hand check of 20: 5 PARTIAL; strict re-check of the other 75: 3 PARTIAL; all 8 reopened).
+Published 2026-11-08 to the public repo, each step after the user's OK: 28 labels, 7 milestones, issues #2-#173;
+`api_check.py` 15/15 PASS through the public API (one issue per open row, `[id]` unique, none closed, milestones, labels
+and priorities match). A scan of every published body found no local path, user name, e-mail or token. 19 Y1-P0
+priorities set (P1 #39). ROADMAP §11 (20 rows) and the register (45 open TD rows) carry the issue numbers. Bug and
+playtest issue forms added.
+
+**Deviations** (advisory, user decisions):
+- AC-2: the single 20-row re-draw was replaced by a strict re-check of every fixed row (8 partial fixes found and
+  reopened).
+- AC-3: three approvals (the table as is; TD-048..054 added; the Y1-P0 priorities), each recorded in the evidence README
+  and `publish-approval.txt`. The approval hash is taken with the `issue` column emptied so the script's write-back does
+  not stale it. Changelog rows carry `severity:medium-low` (AC-1's list has no changelog value).
+- AC-4: a plain HTTP 403 counts as a rate limit only when its text says so; the commit-hash exemption in the body scan
+  was removed (the hex rule starts at 32 characters, so short hashes never match).
+- AC-6: triage in the table (Claude proposed, the user approved), not `/bug-triage`, which reads only
+  `production/qa/bugs/`.
+- Scope added: seven new findings seen during the re-check became TD-048..TD-054 (register, table, issues #167-#173).
+- Beyond the story: `check_findings.py` gained `--strict`; unreachable commit hashes (19 of 24 cited hashes are not yet
+  on `main`), register-header drift and changelog-marker counts are warnings by default so a squash merge or an ordinary
+  doc edit cannot turn CI red; always-on offline checks (leak scan of every cell, open-row/issue pairing, register `#N`,
+  approval hash) and 20 tests of its own; a second CI unittest line runs them.
+
+**Test Evidence**: Integration: `tools/github/test_publish_findings.py` (48 tests),
+`production/findings/test_check_findings.py` (20 tests), `production/findings/check_findings.py`, and
+`production/qa/evidence/2026-11-findings/` (README with the AC map and the recorded approvals). Run result: N/A, no game
+change; the issues on GitHub and the API check are the observation.
+
+**Code Review**: Complete. /code-review round 1 CHANGES REQUIRED (scan path and user-name misses; two-way TD check;
+commit the tools with the CI change), fixed, then APPROVED WITH SUGGESTIONS. /story-done gates: QL-TEST-COVERAGE GAPS
+and LP-CODE-REVIEW CONCERNS, acted on (README/CHANGELOG refreshed, dry runs re-saved on the final table, check_findings
+hardened and tested).
+
+**Open suggestions and known gaps** (not logged as debt): long or complex functions in one-shot tooling (`_run`,
+`check_findings.main`, `parse_review`, `validate_rows`); the AC-4 first failing run failed on stubs, so it shows the
+tests reach the code but not that each assertion catches its bug (no mutation check); `label create --force` resets
+existing label colour and description; `priorities` does not write back progress; `extract_findings.py` would raise a
+KeyError on TD-048..054 if re-run on an unpublished table (guarded: it refuses once issues exist); the issue forms'
+rendering on GitHub and the ROADMAP §11 link accuracy are checked by hand only (no screenshot kept); on Linux CI the
+user-name leak rule is not applied (announced as a warning).

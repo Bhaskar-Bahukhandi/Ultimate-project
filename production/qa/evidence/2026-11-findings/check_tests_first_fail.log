@@ -1,0 +1,358 @@
+test_approval_with_wrong_hash_fails (test_check_findings.CheckFindingsTest.test_approval_with_wrong_hash_fails)
+An approval file whose first line is another hash fails against the real table. ... ERROR
+test_bad_status_fails (test_check_findings.CheckFindingsTest.test_bad_status_fails)
+A status outside open/fixed/obsolete/duplicate fails. ... ERROR
+test_changelog_marker_missing_warns_not_assessed (test_check_findings.CheckFindingsTest.test_changelog_marker_missing_warns_not_assessed)
+A changelog marker found 0 times warns, reports its section NOT ASSESSED, and fails with --strict. ... ERROR
+test_closed_row_with_issue_fails (test_check_findings.CheckFindingsTest.test_closed_row_with_issue_fails)
+A non-open row that holds an issue number fails. ... ERROR
+test_duplicate_of_nowhere_fails (test_check_findings.CheckFindingsTest.test_duplicate_of_nowhere_fails)
+A duplicate_of naming no row fails. ... ERROR
+test_id_gap_fails (test_check_findings.CheckFindingsTest.test_id_gap_fails)
+Removing a middle row of an id family leaves a gap and fails. ... ERROR
+test_malformed_commit_hash_fails_without_strict (test_check_findings.CheckFindingsTest.test_malformed_commit_hash_fails_without_strict)
+A too-short hash after 'commit' fails even without --strict. ... ERROR
+test_off_list_area_fails (test_check_findings.CheckFindingsTest.test_off_list_area_fails)
+An area that is not on the list fails. ... ERROR
+test_off_list_milestone_fails (test_check_findings.CheckFindingsTest.test_off_list_milestone_fails)
+A milestone that is not on the list fails. ... ERROR
+test_open_row_without_issue_fails_after_publish (test_check_findings.CheckFindingsTest.test_open_row_without_issue_fails_after_publish)
+Once issue numbers exist, an open row without one fails. ... ERROR
+test_planted_local_path_in_evidence_fails (test_check_findings.CheckFindingsTest.test_planted_local_path_in_evidence_fails)
+A local Windows path in an evidence cell fails the leak scan, and the text is not echoed. ... ERROR
+test_planted_user_name_part_fails (test_check_findings.CheckFindingsTest.test_planted_user_name_part_fails)
+A part of the (injected) user name in any cell fails the leak scan. ... ERROR
+test_real_files_pass_with_no_warnings (test_check_findings.CheckFindingsTest.test_real_files_pass_with_no_warnings)
+Today's table, register, changelog and approval pass, with and without --strict. ... ERROR
+test_register_header_drift_warns_then_strict_fails (test_check_findings.CheckFindingsTest.test_register_header_drift_warns_then_strict_fails)
+A register header whose total disagrees with its body warns by default and fails with --strict. ... ERROR
+test_register_issue_number_mismatch_fails (test_check_findings.CheckFindingsTest.test_register_issue_number_mismatch_fails)
+An Open register row whose GitHub #N differs from the table's issue fails. ... ERROR
+test_repeated_id_fails (test_check_findings.CheckFindingsTest.test_repeated_id_fails)
+A row that appears twice fails. ... ERROR
+test_source_count_mismatch_fails (test_check_findings.CheckFindingsTest.test_source_count_mismatch_fails)
+Removing the last row of a family (no gap) still fails on the section count. ... ERROR
+test_stale_approval_fails (test_check_findings.CheckFindingsTest.test_stale_approval_fails)
+The real approval file no longer matches once any non-issue cell is edited. ... ERROR
+test_table_before_publishing_passes_pairing (test_check_findings.CheckFindingsTest.test_table_before_publishing_passes_pairing)
+With no issue number anywhere (and a register citing none), open rows without issues pass. ... ERROR
+test_unreachable_commit_warns_then_strict_fails (test_check_findings.CheckFindingsTest.test_unreachable_commit_warns_then_strict_fails)
+A well-formed hash git cannot find is a WARNING by default and a failure with --strict. ... ERROR
+
+======================================================================
+ERROR: test_approval_with_wrong_hash_fails (test_check_findings.CheckFindingsTest.test_approval_with_wrong_hash_fails)
+An approval file whose first line is another hash fails against the real table.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 213, in test_approval_with_wrong_hash_fails
+    self.assert_fails("does not equal the table's approval hash", "--approval", str(approval))
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 87, in assert_fails
+    else run_check(*args)
+         ~~~~~~~~~^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 36, in run_check
+    code = check_findings.main(list(args) + TEST_USER)
+TypeError: main() takes 0 positional arguments but 1 was given
+
+======================================================================
+ERROR: test_bad_status_fails (test_check_findings.CheckFindingsTest.test_bad_status_fails)
+A status outside open/fixed/obsolete/duplicate fails.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 130, in test_bad_status_fails
+    self.assert_fails("status 'closed' not in",
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      "--csv", self.table(lambda rows: first(rows, status="fixed").update(status="closed")))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 86, in assert_fails
+    code, out = run_check(*args, "--approval", self.no_approval) if "--approval" not in args \
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 36, in run_check
+    code = check_findings.main(list(args) + TEST_USER)
+TypeError: main() takes 0 positional arguments but 1 was given
+
+======================================================================
+ERROR: test_changelog_marker_missing_warns_not_assessed (test_check_findings.CheckFindingsTest.test_changelog_marker_missing_warns_not_assessed)
+A changelog marker found 0 times warns, reports its section NOT ASSESSED, and fails with --strict.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 234, in test_changelog_marker_missing_warns_not_assessed
+    self.assert_warns_then_strict_fails("changelog marker", "--changelog", changelog)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 95, in assert_warns_then_strict_fails
+    code, out = run_check(*args)
+                ~~~~~~~~~^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 36, in run_check
+    code = check_findings.main(list(args) + TEST_USER)
+TypeError: main() takes 0 positional arguments but 1 was given
+
+======================================================================
+ERROR: test_closed_row_with_issue_fails (test_check_findings.CheckFindingsTest.test_closed_row_with_issue_fails)
+A non-open row that holds an issue number fails.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 179, in test_closed_row_with_issue_fails
+    self.assert_fails("is fixed but has issue number",
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      "--csv", self.table(lambda rows: first(rows, status="fixed").update(issue="9999")))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 86, in assert_fails
+    code, out = run_check(*args, "--approval", self.no_approval) if "--approval" not in args \
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 36, in run_check
+    code = check_findings.main(list(args) + TEST_USER)
+TypeError: main() takes 0 positional arguments but 1 was given
+
+======================================================================
+ERROR: test_duplicate_of_nowhere_fails (test_check_findings.CheckFindingsTest.test_duplicate_of_nowhere_fails)
+A duplicate_of naming no row fails.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 135, in test_duplicate_of_nowhere_fails
+    self.assert_fails("duplicate_of 'CR-X99' names no other row", "--csv",
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      self.table(lambda rows: first(rows, status="duplicate").update(duplicate_of="CR-X99")))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 86, in assert_fails
+    code, out = run_check(*args, "--approval", self.no_approval) if "--approval" not in args \
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 36, in run_check
+    code = check_findings.main(list(args) + TEST_USER)
+TypeError: main() takes 0 positional arguments but 1 was given
+
+======================================================================
+ERROR: test_id_gap_fails (test_check_findings.CheckFindingsTest.test_id_gap_fails)
+Removing a middle row of an id family leaves a gap and fails.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 140, in test_id_gap_fails
+    self.assert_fails("id family CR-V: numbers run to",
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      "--csv", self.table(lambda rows: rows.remove(first(rows, id="CR-V02"))))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 86, in assert_fails
+    code, out = run_check(*args, "--approval", self.no_approval) if "--approval" not in args \
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 36, in run_check
+    code = check_findings.main(list(args) + TEST_USER)
+TypeError: main() takes 0 positional arguments but 1 was given
+
+======================================================================
+ERROR: test_malformed_commit_hash_fails_without_strict (test_check_findings.CheckFindingsTest.test_malformed_commit_hash_fails_without_strict)
+A too-short hash after 'commit' fails even without --strict.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 170, in test_malformed_commit_hash_fails_without_strict
+    self.assert_fails("malformed commit hash '12ab3'", "--csv", self.table(plant))
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 86, in assert_fails
+    code, out = run_check(*args, "--approval", self.no_approval) if "--approval" not in args \
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 36, in run_check
+    code = check_findings.main(list(args) + TEST_USER)
+TypeError: main() takes 0 positional arguments but 1 was given
+
+======================================================================
+ERROR: test_off_list_area_fails (test_check_findings.CheckFindingsTest.test_off_list_area_fails)
+An area that is not on the list fails.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 120, in test_off_list_area_fails
+    self.assert_fails("area 'graphics' not on the list",
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      "--csv", self.table(lambda rows: rows[0].update(area="graphics")))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 86, in assert_fails
+    code, out = run_check(*args, "--approval", self.no_approval) if "--approval" not in args \
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 36, in run_check
+    code = check_findings.main(list(args) + TEST_USER)
+TypeError: main() takes 0 positional arguments but 1 was given
+
+======================================================================
+ERROR: test_off_list_milestone_fails (test_check_findings.CheckFindingsTest.test_off_list_milestone_fails)
+A milestone that is not on the list fails.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 125, in test_off_list_milestone_fails
+    self.assert_fails("milestone 'Y9 Someday' not on the list",
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      "--csv", self.table(lambda rows: rows[0].update(milestone="Y9 Someday")))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 86, in assert_fails
+    code, out = run_check(*args, "--approval", self.no_approval) if "--approval" not in args \
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 36, in run_check
+    code = check_findings.main(list(args) + TEST_USER)
+TypeError: main() takes 0 positional arguments but 1 was given
+
+======================================================================
+ERROR: test_open_row_without_issue_fails_after_publish (test_check_findings.CheckFindingsTest.test_open_row_without_issue_fails_after_publish)
+Once issue numbers exist, an open row without one fails.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 174, in test_open_row_without_issue_fails_after_publish
+    self.assert_fails("is open but has no issue number",
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      "--csv", self.table(lambda rows: first(rows, status="open").update(issue="")))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 86, in assert_fails
+    code, out = run_check(*args, "--approval", self.no_approval) if "--approval" not in args \
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 36, in run_check
+    code = check_findings.main(list(args) + TEST_USER)
+TypeError: main() takes 0 positional arguments but 1 was given
+
+======================================================================
+ERROR: test_planted_local_path_in_evidence_fails (test_check_findings.CheckFindingsTest.test_planted_local_path_in_evidence_fails)
+A local Windows path in an evidence cell fails the leak scan, and the text is not echoed.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 157, in test_planted_local_path_in_evidence_fails
+    out = self.assert_fails("column evidence: local-path hit", "--csv", self.table(plant))
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 86, in assert_fails
+    code, out = run_check(*args, "--approval", self.no_approval) if "--approval" not in args \
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 36, in run_check
+    code = check_findings.main(list(args) + TEST_USER)
+TypeError: main() takes 0 positional arguments but 1 was given
+
+======================================================================
+ERROR: test_planted_user_name_part_fails (test_check_findings.CheckFindingsTest.test_planted_user_name_part_fails)
+A part of the (injected) user name in any cell fails the leak scan.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 162, in test_planted_user_name_part_fails
+    self.assert_fails("column code_refs: windows-user hit",
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      "--csv", self.table(lambda rows: rows[3].update(code_refs="see vremlo's notes")))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 86, in assert_fails
+    code, out = run_check(*args, "--approval", self.no_approval) if "--approval" not in args \
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 36, in run_check
+    code = check_findings.main(list(args) + TEST_USER)
+TypeError: main() takes 0 positional arguments but 1 was given
+
+======================================================================
+ERROR: test_real_files_pass_with_no_warnings (test_check_findings.CheckFindingsTest.test_real_files_pass_with_no_warnings)
+Today's table, register, changelog and approval pass, with and without --strict.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 107, in test_real_files_pass_with_no_warnings
+    code, out = run_check(*extra)
+                ~~~~~~~~~^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 36, in run_check
+    code = check_findings.main(list(args) + TEST_USER)
+TypeError: main() takes 0 positional arguments but 1 was given
+
+======================================================================
+ERROR: test_register_header_drift_warns_then_strict_fails (test_check_findings.CheckFindingsTest.test_register_header_drift_warns_then_strict_fails)
+A register header whose total disagrees with its body warns by default and fails with --strict.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 229, in test_register_header_drift_warns_then_strict_fails
+    self.assert_warns_then_strict_fails("register header says", "--register", register)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 95, in assert_warns_then_strict_fails
+    code, out = run_check(*args)
+                ~~~~~~~~~^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 36, in run_check
+    code = check_findings.main(list(args) + TEST_USER)
+TypeError: main() takes 0 positional arguments but 1 was given
+
+======================================================================
+ERROR: test_register_issue_number_mismatch_fails (test_check_findings.CheckFindingsTest.test_register_issue_number_mismatch_fails)
+An Open register row whose GitHub #N differs from the table's issue fails.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 200, in test_register_issue_number_mismatch_fails
+    self.assert_fails("cites GitHub #99999", "--register", register)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 86, in assert_fails
+    code, out = run_check(*args, "--approval", self.no_approval) if "--approval" not in args \
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 36, in run_check
+    code = check_findings.main(list(args) + TEST_USER)
+TypeError: main() takes 0 positional arguments but 1 was given
+
+======================================================================
+ERROR: test_repeated_id_fails (test_check_findings.CheckFindingsTest.test_repeated_id_fails)
+A row that appears twice fails.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 116, in test_repeated_id_fails
+    self.assert_fails("repeats", "--csv", self.table(lambda rows: rows.append(dict(first(rows, status="fixed")))))
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 86, in assert_fails
+    code, out = run_check(*args, "--approval", self.no_approval) if "--approval" not in args \
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 36, in run_check
+    code = check_findings.main(list(args) + TEST_USER)
+TypeError: main() takes 0 positional arguments but 1 was given
+
+======================================================================
+ERROR: test_source_count_mismatch_fails (test_check_findings.CheckFindingsTest.test_source_count_mismatch_fails)
+Removing the last row of a family (no gap) still fails on the section count.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 148, in test_source_count_mismatch_fails
+    out = self.assert_fails("review §5: source has", "--csv", self.table(drop_last_v))
+          ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 86, in assert_fails
+    code, out = run_check(*args, "--approval", self.no_approval) if "--approval" not in args \
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 36, in run_check
+    code = check_findings.main(list(args) + TEST_USER)
+TypeError: main() takes 0 positional arguments but 1 was given
+
+======================================================================
+ERROR: test_stale_approval_fails (test_check_findings.CheckFindingsTest.test_stale_approval_fails)
+The real approval file no longer matches once any non-issue cell is edited.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 207, in test_stale_approval_fails
+    self.assert_fails("does not equal the table's approval hash", "--csv", table, "--approval", str(approval))
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 87, in assert_fails
+    else run_check(*args)
+         ~~~~~~~~~^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 36, in run_check
+    code = check_findings.main(list(args) + TEST_USER)
+TypeError: main() takes 0 positional arguments but 1 was given
+
+======================================================================
+ERROR: test_table_before_publishing_passes_pairing (test_check_findings.CheckFindingsTest.test_table_before_publishing_passes_pairing)
+With no issue number anywhere (and a register citing none), open rows without issues pass.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 191, in test_table_before_publishing_passes_pairing
+    code, out = run_check("--csv", self.table(blank), "--register", str(register),
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                          "--approval", self.no_approval)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 36, in run_check
+    code = check_findings.main(list(args) + TEST_USER)
+TypeError: main() takes 0 positional arguments but 1 was given
+
+======================================================================
+ERROR: test_unreachable_commit_warns_then_strict_fails (test_check_findings.CheckFindingsTest.test_unreachable_commit_warns_then_strict_fails)
+A well-formed hash git cannot find is a WARNING by default and a failure with --strict.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 221, in test_unreachable_commit_warns_then_strict_fails
+    self.assert_warns_then_strict_fails("commit deadbee1 not found by git cat-file -e",
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                        "--csv", self.table(plant))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 95, in assert_warns_then_strict_fails
+    code, out = run_check(*args)
+                ~~~~~~~~~^^^^^^^
+  File "C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\production\findings\test_check_findings.py", line 36, in run_check
+    code = check_findings.main(list(args) + TEST_USER)
+TypeError: main() takes 0 positional arguments but 1 was given
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.135s
+
+FAILED (errors=20)

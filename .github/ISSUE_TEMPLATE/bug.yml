@@ -1,0 +1,58 @@
+name: Bug report
+description: Something in the game behaves wrongly, crashes, softlocks or loses progress.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. One bug per issue, please. Do not paste save files that hold personal data,
+        and never paste passwords, tokens or keys.
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: From a known start (New Game, a named save, or a scene), the exact steps.
+      placeholder: |
+        1. New Game
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+      description: What should have happened.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual
+      description: What happened instead. Include any error text shown.
+    validations:
+      required: true
+  - type: input
+    id: build
+    attributes:
+      label: Build
+      description: Commit hash or build name, and platform (e.g. Windows export, editor 4.6.3).
+    validations:
+      required: true
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: How often
+      options:
+        - Every time
+        - Sometimes
+        - Once
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Screenshots, a short clip, or log lines. Drag files here.
+    validations:
+      required: false

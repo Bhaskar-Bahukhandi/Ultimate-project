@@ -435,26 +435,26 @@ storyline completable, performance budgets met.
 
 | Review item | Fixed in | How it stays fixed |
 |---|---|---|
-| **C1–C19** (all critical) | Y1 Months 1–2 (Phase 0) | Spine re-implements them (Months 3–6). Bot plus a regression test per C-item. |
-| **R1** no owner for pause/time/state/input | Months 3–4 ContextStack | Lint: no direct `paused =` or `time_scale =` outside the service. |
-| **R2** fire-and-forget coroutines | Months 5–6 state machines, fixed tick | Lint: no `create_timer` in gameplay code; pause-safety tests. |
-| **R3** string flags, meta hand-offs | Months 3–4 StoryGraph, FlagRegistry, TravelContext | Boot validation; reachability test. |
-| **R4** silent save rejection | Months 3–4 SaveService | Round-trip, corruption and migration tests. |
-| **R5** dialogue never closes; skip answers choices | Months 1–2 fix → Months 3–4 DialogueRunner | Test: after every scene, `is_active == false`. |
-| **R6** world built from ColorRects | Months 7–12 authored and streamed chunks, PAE pipeline | Rule: no gameplay geometry built in code. |
-| **R7** duplicated systems | Months 3–6 replacements; Y2-Q3/Q4 deletion pass | One owner per concern (ADRs). |
-| **R8** no tests, CI or playtests | Months 1–2 CI and bot → forever | Gates require test and playtest evidence. |
-| §4.1 save/state highs | Months 3–4 SaveService, RewardLedger, Stats model | Tests per item. |
-| §4.2 pause/input/menus | Months 3–4 ContextStack; Months 10–12 authored menus | UI focus tests; gamepad-only playtest. |
-| §4.3 economy (item loss, double gold, craft arbitrage, paused potions, 3 item DBs) | Months 7–9 ItemDB, Market v1; Y2 economy design | Headless economy simulation in CI. |
-| §4.4 player combat | Months 5–6 | Input-replay tests. |
-| §4.5 enemies/bosses | Months 5–6 | Spawn tests; stat invariants across phases and retries. |
-| §4.6 story/progression | Months 1–2 critical; Y2 route architecture; Y6 endings | Bot over every storyline and timing branch; missables signposted. |
-| §4.7 effects/camera/audio | Months 5–9 FeelService and audio; Months 10–12 cutscene timelines | Export-build smoke test in CI. |
-| §5 audit re-verification | Months 1–2 | Covered by the tests above. |
-| §6 PAE pipeline items 1–10 | Months 7–9 | Importer tests; import-settings lint. |
-| Appendix medium/low | When the owning system is replaced; the rest in the Y2-Q3/Q4 cleanup | One GitHub Issue per item. |
-| Tooling/repo/docs | Months 1–4; Y2 cleanup | CI plus a hygiene checklist at every gate. |
+| **C1–C19** (all critical) | Y1 Months 1–2 (Phase 0) | Spine re-implements them (Months 3–6). Bot plus a regression test per C-item. GitHub issues: #9. |
+| **R1** no owner for pause/time/state/input | Months 3–4 ContextStack | Lint: no direct `paused =` or `time_scale =` outside the service. GitHub issues: #2. |
+| **R2** fire-and-forget coroutines | Months 5–6 state machines, fixed tick | Lint: no `create_timer` in gameplay code; pause-safety tests. GitHub issues: #3. |
+| **R3** string flags, meta hand-offs | Months 3–4 StoryGraph, FlagRegistry, TravelContext | Boot validation; reachability test. GitHub issues: #4. |
+| **R4** silent save rejection | Months 3–4 SaveService | Round-trip, corruption and migration tests. GitHub issues: #5. |
+| **R5** dialogue never closes; skip answers choices | Months 1–2 fix → Months 3–4 DialogueRunner | Test: after every scene, `is_active == false`. GitHub issues: none open (fixed; see `production/findings/findings.csv`). |
+| **R6** world built from ColorRects | Months 7–12 authored and streamed chunks, PAE pipeline | Rule: no gameplay geometry built in code. GitHub issues: #6. |
+| **R7** duplicated systems | Months 3–6 replacements; Y2-Q3/Q4 deletion pass | One owner per concern (ADRs). GitHub issues: #7. |
+| **R8** no tests, CI or playtests | Months 1–2 CI and bot → forever | Gates require test and playtest evidence. GitHub issues: #8. |
+| §4.1 save/state highs | Months 3–4 SaveService, RewardLedger, Stats model | Tests per item. GitHub issues: #10–#15. |
+| §4.2 pause/input/menus | Months 3–4 ContextStack; Months 10–12 authored menus | UI focus tests; gamepad-only playtest. GitHub issues: #16–#19. |
+| §4.3 economy (item loss, double gold, craft arbitrage, paused potions, 3 item DBs) | Months 7–9 ItemDB, Market v1; Y2 economy design | Headless economy simulation in CI. GitHub issues: #20–#24. |
+| §4.4 player combat | Months 5–6 | Input-replay tests. GitHub issues: #25–#26. |
+| §4.5 enemies/bosses | Months 5–6 | Spawn tests; stat invariants across phases and retries. GitHub issues: #27–#34. |
+| §4.6 story/progression | Months 1–2 critical; Y2 route architecture; Y6 endings | Bot over every storyline and timing branch; missables signposted. GitHub issues: #35–#41. |
+| §4.7 effects/camera/audio | Months 5–9 FeelService and audio; Months 10–12 cutscene timelines | Export-build smoke test in CI. GitHub issues: #42–#49. |
+| §5 audit re-verification | Months 1–2 | Covered by the tests above. GitHub issues: #50–#59. |
+| §6 PAE pipeline items 1–10 | Months 7–9 | Importer tests; import-settings lint. GitHub issues: #60–#69. |
+| Appendix medium/low | When the owning system is replaced; the rest in the Y2-Q3/Q4 cleanup | One GitHub Issue per item. GitHub issues: #70–#118. |
+| Tooling/repo/docs | Months 1–4; Y2 cleanup | CI plus a hygiene checklist at every gate. GitHub issues: #119–#124. |
 
 ---
 

@@ -1,0 +1,41 @@
+# publish_findings labels: DRY RUN (no gh call is made); table production/findings/findings.csv; 265 rows, 172 open
+# body scan: 172 issue title+body pair(s) checked; rules: local-path, windows-user, email, token-prefix, hex-run, base64-run
+# body scan: PASS (0 hits)
+# approval OK (table hash 31cc973ee56f9ed186c6a9052e2502d1b0f82aa2cf3ca2873257ff7289e09369)
+# labels phase: 28 labels, 7 milestone(s) from the open rows
+gh label create area:save --color 1d76db --description 'Area: save' --force
+gh label create area:input --color 1d76db --description 'Area: input' --force
+gh label create area:ui --color 1d76db --description 'Area: ui' --force
+gh label create area:economy --color 1d76db --description 'Area: economy' --force
+gh label create area:combat --color 1d76db --description 'Area: combat' --force
+gh label create area:enemies --color 1d76db --description 'Area: enemies' --force
+gh label create area:encounters --color 1d76db --description 'Area: encounters' --force
+gh label create area:story --color 1d76db --description 'Area: story' --force
+gh label create area:regions --color 1d76db --description 'Area: regions' --force
+gh label create area:effects --color 1d76db --description 'Area: effects' --force
+gh label create area:audio --color 1d76db --description 'Area: audio' --force
+gh label create area:art --color 1d76db --description 'Area: art' --force
+gh label create area:tooling --color 1d76db --description 'Area: tooling' --force
+gh label create area:core --color 1d76db --description 'Area: core' --force
+gh label create severity:root-cause --color b60205 --description 'Review severity: root-cause' --force
+gh label create severity:critical --color b60205 --description 'Review severity: critical' --force
+gh label create severity:high --color b60205 --description 'Review severity: high' --force
+gh label create severity:medium-low --color b60205 --description 'Review severity: medium-low' --force
+gh label create severity:audit-check --color b60205 --description 'Review severity: audit-check' --force
+gh label create severity:pipeline --color b60205 --description 'Review severity: pipeline' --force
+gh label create severity:tech-debt --color b60205 --description 'Review severity: tech-debt' --force
+gh label create source:code-review --color 5319e7 --description 'Source: code review' --force
+gh label create source:changelog --color 5319e7 --description 'Source: changelog' --force
+gh label create source:tech-debt --color 5319e7 --description 'Source: tech debt' --force
+gh label create priority:P1 --color fbca04 --description 'Triage priority P1' --force
+gh label create priority:P2 --color fbca04 --description 'Triage priority P2' --force
+gh label create priority:P3 --color fbca04 --description 'Triage priority P3' --force
+gh label create priority:P4 --color fbca04 --description 'Triage priority P4' --force
+gh api --method POST 'repos/{owner}/{repo}/milestones' -f 'title=Y1-P1 Spine' -f state=open -f 'description=Findings milestone (story Y1-P0-S05)'
+gh api --method POST 'repos/{owner}/{repo}/milestones' -f 'title=Y1-P2 Combat foundation' -f state=open -f 'description=Findings milestone (story Y1-P0-S05)'
+gh api --method POST 'repos/{owner}/{repo}/milestones' -f 'title=Y1-P3 Art pipeline + Pillar Slice' -f state=open -f 'description=Findings milestone (story Y1-P0-S05)'
+gh api --method POST 'repos/{owner}/{repo}/milestones' -f 'title=Y1-P0 Stabilize' -f state=open -f 'description=Findings milestone (story Y1-P0-S05)'
+gh api --method POST 'repos/{owner}/{repo}/milestones' -f 'title=Y2-PP Pre-production' -f state=open -f 'description=Findings milestone (story Y1-P0-S05)'
+gh api --method POST 'repos/{owner}/{repo}/milestones' -f 'title=Y1-P4 Open-world tech + tools' -f state=open -f 'description=Findings milestone (story Y1-P0-S05)'
+gh api --method POST 'repos/{owner}/{repo}/milestones' -f title=Backlog -f state=open -f 'description=Findings milestone (story Y1-P0-S05)'
+# dry run complete: 35 call(s) planned, none made

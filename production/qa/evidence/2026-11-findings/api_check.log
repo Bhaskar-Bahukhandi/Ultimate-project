@@ -1,0 +1,18 @@
+# 173 items from the issues endpoint, 1 pull request(s) excluded, 172 issues; 172 open rows in the table
+PASS  every open row holds an issue number
+PASS  no fixed / obsolete / duplicate row holds an issue number
+PASS  one issue per open row (172 issues, 172 rows)
+PASS  each [<id>] title prefix is unique
+PASS  no issue is closed
+PASS  each row's issue number points at its [<id>] issue []
+PASS  each issue is on its row's milestone []
+PASS  each issue carries its row's area, severity and source labels []
+PASS  each issue's priority:* labels equal its row's priority column (19 rows with a priority, none on the others) []
+PASS  milestone 'Backlog': 45 open issues, table has 45
+PASS  milestone 'Y1-P0 Stabilize': 19 open issues, table has 19
+PASS  milestone 'Y1-P1 Spine': 20 open issues, table has 20
+PASS  milestone 'Y1-P2 Combat foundation': 44 open issues, table has 44
+PASS  milestone 'Y1-P3 Art pipeline + Pillar Slice': 30 open issues, table has 30
+PASS  milestone 'Y1-P4 Open-world tech + tools': 3 open issues, table has 3
+PASS  milestone 'Y2-PP Pre-production': 11 open issues, table has 11
+RESULT: PASS (0 failing check(s))

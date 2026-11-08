@@ -1,0 +1,39 @@
+register body: 47 TD rows, 38 Open
+
+source section                            source   table
+review §2                                      8       8
+review §3                                     19      19
+review §4.1                                    8       8
+review §4.2                                    8       8
+review §4.3                                    6       6
+review §4.4                                    9       9
+review §4.5                                    9       9
+review §4.6                                    9       9
+review §4.7                                   12      12
+review §5                                     15      15
+review §6 items                               10      10
+appendix Core (11 + 2 split)                  13      13
+appendix UI (7 + 1 split)                      8       8
+appendix Combat                               11      11
+appendix Enemies                               9       9
+appendix Encounters (5 + 1 split)              6       6
+appendix Cutscenes / camera / VFX              8       8
+appendix Audio                                 6       6
+appendix Background / shaders                  7       7
+appendix Regions                               8       8
+appendix Chapters                              9       9
+appendix Tooling / repo (8 + 1 split)          9       9
+changelog CL-1004-D                            9       9
+changelog CL-1006-S                            4       4
+register Open TD rows                         38      38
+total                                        258     258
+
+rows per source file:
+    13  AethelgardPrototype/CHANGELOG.md
+   207  AethelgardPrototype/CODE_REVIEW_2026-10-04.md
+    38  docs/tech-debt-register.md
+rows per status:
+   258  (empty)
+
+PASS: 258 rows reconcile with their sources (pending statuses allowed)
+exit=0

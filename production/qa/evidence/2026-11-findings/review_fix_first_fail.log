@@ -1,0 +1,349 @@
+# Y1-P0-S05 review fixes: new tests run BEFORE the implementation (only the no-op 'home' parameter stub exists).
+# command: python -I -m unittest discover -s tools/github -v   (2026-11-08T08:02Z)
+test_existing_id_title_is_adopted_not_created (test_publish_findings.AdoptTest.test_existing_id_title_is_adopted_not_created) ... ok
+test_truncated_issue_list_is_not_trusted (test_publish_findings.AdoptTest.test_truncated_issue_list_is_not_trusted) ... ok
+test_approval_file_accepts_sha256sum_style_line (test_publish_findings.ApprovalTest.test_approval_file_accepts_sha256sum_style_line) ... ok
+test_approval_survives_the_scripts_own_issue_write_backs (test_publish_findings.ApprovalTest.test_approval_survives_the_scripts_own_issue_write_backs) ... ok
+test_duplicate_id_refuses (test_publish_findings.ApprovalTest.test_duplicate_id_refuses) ... ok
+test_garbage_approval_refuses (test_publish_findings.ApprovalTest.test_garbage_approval_refuses) ... ok
+test_invalid_table_refuses (test_publish_findings.ApprovalTest.test_invalid_table_refuses) ... ok
+test_missing_approval_refuses_before_any_call (test_publish_findings.ApprovalTest.test_missing_approval_refuses_before_any_call) ... ok
+test_stale_approval_refuses (test_publish_findings.ApprovalTest.test_stale_approval_refuses) ... ok
+test_constants (test_publish_findings.ConstantsTest.test_constants) ... ok
+test_label_scheme (test_publish_findings.ConstantsTest.test_label_scheme) ... ok
+test_title_and_body_format (test_publish_findings.ConstantsTest.test_title_and_body_format) ... ok
+test_dry_run_calls_nothing_and_equals_real_issue_call_log (test_publish_findings.DryRunTest.test_dry_run_calls_nothing_and_equals_real_issue_call_log) ... ok
+test_dry_run_equals_real_label_and_milestone_call_log (test_publish_findings.DryRunTest.test_dry_run_equals_real_label_and_milestone_call_log) ... ok
+test_dry_run_equals_real_priority_call_log (test_publish_findings.DryRunTest.test_dry_run_equals_real_priority_call_log) ... ok
+test_dry_run_prints_scan_result_and_works_without_approval (test_publish_findings.DryRunTest.test_dry_run_prints_scan_result_and_works_without_approval) ... ok
+test_hash_ignores_issue_column_and_line_endings_but_not_content (test_publish_findings.HashTest.test_hash_ignores_issue_column_and_line_endings_but_not_content) ... ok
+test_hash_subcommand_prints_the_hash (test_publish_findings.HashTest.test_hash_subcommand_prints_the_hash) ... ok
+test_batch_size_option_and_pause_between_batches (test_publish_findings.PlanTest.test_batch_size_option_and_pause_between_batches) ... ok
+test_batches (test_publish_findings.PlanTest.test_batches) ... ok
+test_non_open_rows_never_get_an_issue (test_publish_findings.PlanTest.test_non_open_rows_never_get_an_issue) ... ok
+test_only_open_rows_are_planned (test_publish_findings.PlanTest.test_only_open_rows_are_planned) ... ok
+test_priorities_honour_batches_like_issues (test_publish_findings.PlanTest.test_priorities_honour_batches_like_issues) ... FAIL
+test_priorities_only_for_open_rows_with_an_issue_and_a_priority (test_publish_findings.PlanTest.test_priorities_only_for_open_rows_with_an_issue_and_a_priority) ... ok
+test_priorities_pause_between_batches (test_publish_findings.PlanTest.test_priorities_pause_between_batches) ... ok
+test_resume_skips_rows_with_an_issue_number (test_publish_findings.PlanTest.test_resume_skips_rows_with_an_issue_number) ... ok
+test_existing_milestone_is_tolerated (test_publish_findings.RateLimitTest.test_existing_milestone_is_tolerated) ... ok
+test_other_failures_are_not_retried (test_publish_findings.RateLimitTest.test_other_failures_are_not_retried) ... ok
+test_parse_server_wait (test_publish_findings.RateLimitTest.test_parse_server_wait) ... ok
+test_plain_403_is_not_a_rate_limit (test_publish_findings.RateLimitTest.test_plain_403_is_not_a_rate_limit) ... ok
+test_rate_limit_detection (test_publish_findings.RateLimitTest.test_rate_limit_detection) ... ok
+test_rate_limit_waits_the_backoff_then_continues (test_publish_findings.RateLimitTest.test_rate_limit_waits_the_backoff_then_continues) ... ok
+test_second_consecutive_limit_waits_longer (test_publish_findings.RateLimitTest.test_second_consecutive_limit_waits_longer) ... ok
+test_stop_after_three_failed_retries_leaves_the_table_consistent (test_publish_findings.RateLimitTest.test_stop_after_three_failed_retries_leaves_the_table_consistent) ... ok
+test_wait_is_the_longer_of_retry_after_and_backoff (test_publish_findings.RateLimitTest.test_wait_is_the_longer_of_retry_after_and_backoff) ... ok
+test_an_empty_user_name_does_not_flag_everything (test_publish_findings.ScanTest.test_an_empty_user_name_does_not_flag_everything) ... ok
+test_clean_text_is_not_flagged (test_publish_findings.ScanTest.test_clean_text_is_not_flagged) ... ok
+test_home_folder_name_is_read_from_the_environment_when_not_injected (test_publish_findings.ScanTest.test_home_folder_name_is_read_from_the_environment_when_not_injected) ... FAIL
+test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) ... 
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='40-hex after commit', field='evidence') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='40-hex after commit', field='title') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='40-hex among short commit hashes', field='evidence') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='40-hex among short commit hashes', field='title') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='wsl path', field='evidence') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='wsl path', field='title') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='unc path', field='evidence') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='unc path', field='title') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='path without drive', field='evidence') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='path without drive', field='title') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='linux home', field='evidence') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='linux home', field='title') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='first part of the user name', field='evidence') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='first part of the user name', field='title') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='last part of the user name', field='evidence') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='last part of the user name', field='title') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='home folder name', field='evidence') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='home folder name', field='title') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='aws access key', field='evidence') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='aws access key', field='title') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='anthropic key', field='evidence') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='anthropic key', field='title') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='40+ lower-case run', field='evidence') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='40+ lower-case run', field='title') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='40+ upper-case run', field='evidence') ... FAIL
+  test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='40+ upper-case run', field='title') ... FAIL
+test_scan_rules_are_named (test_publish_findings.ScanTest.test_scan_rules_are_named) ... FAIL
+test_secret_in_any_phase_refuses_before_the_first_call (test_publish_findings.ScanTest.test_secret_in_any_phase_refuses_before_the_first_call) ... ok
+test_user_name_parts_shorter_than_three_are_ignored (test_publish_findings.ScanTest.test_user_name_parts_shorter_than_three_are_ignored) ... ok
+test_missing_gh_is_a_clear_result_not_a_crash (test_publish_findings.SubprocessGhTest.test_missing_gh_is_a_clear_result_not_a_crash) ... ok
+test_runs_gh_without_a_shell_and_without_reading_a_token (test_publish_findings.SubprocessGhTest.test_runs_gh_without_a_shell_and_without_reading_a_token) ... ok
+test_body_goes_through_body_file_not_the_command_line (test_publish_findings.WriteBackTest.test_body_goes_through_body_file_not_the_command_line) ... ok
+test_failed_replace_leaves_table_untouched_and_no_temp_file (test_publish_findings.WriteBackTest.test_failed_replace_leaves_table_untouched_and_no_temp_file) ... ok
+test_number_is_written_right_after_each_create_and_adopt (test_publish_findings.WriteBackTest.test_number_is_written_right_after_each_create_and_adopt) ... ok
+test_write_is_atomic_and_keeps_crlf_unicode_and_other_columns (test_publish_findings.WriteBackTest.test_write_is_atomic_and_keeps_crlf_unicode_and_other_columns) ... ok
+
+======================================================================
+FAIL: test_priorities_honour_batches_like_issues (test_publish_findings.PlanTest.test_priorities_honour_batches_like_issues)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 350, in test_priorities_honour_batches_like_issues
+    self.assertEqual([a[2] for a in stub.argvs], ["20", "21"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['20', '21', '22', '23', '24'] != ['20', '21']
+
+First list contains 3 additional elements.
+First extra element 2:
+'22'
+
+- ['20', '21', '22', '23', '24']
++ ['20', '21']
+
+======================================================================
+FAIL: test_home_folder_name_is_read_from_the_environment_when_not_injected (test_publish_findings.ScanTest.test_home_folder_name_is_read_from_the_environment_when_not_injected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 747, in test_home_folder_name_is_read_from_the_environment_when_not_injected
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='40-hex after commit', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='40-hex after commit', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='40-hex among short commit hashes', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='40-hex among short commit hashes', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='wsl path', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='wsl path', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='unc path', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='unc path', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='path without drive', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='path without drive', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='linux home', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='linux home', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='first part of the user name', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='first part of the user name', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='last part of the user name', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='last part of the user name', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='home folder name', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='home folder name', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='aws access key', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='aws access key', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='anthropic key', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='anthropic key', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='40+ lower-case run', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='40+ lower-case run', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='40+ upper-case run', field='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_planted_secret_refuses_in_dry_and_real_runs (test_publish_findings.ScanTest.test_planted_secret_refuses_in_dry_and_real_runs) (case='40+ upper-case run', field='title')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 667, in test_planted_secret_refuses_in_dry_and_real_runs
+    self.assertEqual(code, pf.EXIT_REFUSED)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_scan_rules_are_named (test_publish_findings.ScanTest.test_scan_rules_are_named)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\tools\github\test_publish_findings.py", line 715, in test_scan_rules_are_named
+    self.assertTrue(rules[label], label)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+AssertionError: set() is not true : 40-hex after commit
+
+----------------------------------------------------------------------
+Ran 48 tests in 3.132s
+
+FAILED (failures=29)

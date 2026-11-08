@@ -1,0 +1,21 @@
+# seed 20261108, random.sample of the 95 fixed rows, 20 drawn
+CL-1004-D1
+CL-1004-D4
+CL-1004-D5
+CR-A-audio-02
+CR-A-combat-01
+CR-A-core-02b
+CR-A-core-05
+CR-A-core-10
+CR-A-cutscenes-05
+CR-A-ui-03
+CR-A-ui-06
+CR-C09
+CR-C12
+CR-H4.4-01
+CR-H4.4-08
+CR-H4.6-03
+CR-H4.7-03
+CR-H4.7-08
+CR-R4
+CR-R5

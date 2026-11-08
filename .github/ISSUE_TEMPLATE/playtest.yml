@@ -1,0 +1,43 @@
+name: Playtest notes
+description: Notes from a play session (pacing, confusion, fun, friction), not a single bug.
+title: "[Playtest] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Write what you felt and where. File clear bugs separately with the Bug report form.
+  - type: input
+    id: build
+    attributes:
+      label: Build
+      description: Commit hash or build name, and platform.
+    validations:
+      required: true
+  - type: input
+    id: route
+    attributes:
+      label: Route
+      description: Where you started and stopped, and the main choices taken (e.g. New Game to Ironhold gate, option 0).
+    validations:
+      required: true
+  - type: input
+    id: length
+    attributes:
+      label: Session length
+      description: About how long you played.
+    validations:
+      required: false
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: In order of play, with the scene or place for each note.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Screenshots or clips, if any.
+    validations:
+      required: false

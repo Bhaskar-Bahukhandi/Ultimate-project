@@ -1,0 +1,26 @@
+# publish_findings priorities: REAL RUN; table production/findings/findings.csv; 265 rows, 172 open
+# body scan: 172 issue title+body pair(s) checked; rules: local-path, windows-user, email, token-prefix, hex-run, base64-run
+# body scan: PASS (0 hits)
+# approval OK (table hash 31cc973ee56f9ed186c6a9052e2502d1b0f82aa2cf3ca2873257ff7289e09369)
+# priorities phase: 19 issue(s) get a priority label; 153 open row(s) skipped (no issue number yet or no priority)
+gh issue edit 8 --add-label priority:P2 --remove-label priority:P1 --remove-label priority:P3 --remove-label priority:P4 --repo Bhaskar-Bahukhandi/Ultimate-project
+gh issue edit 9 --add-label priority:P2 --remove-label priority:P1 --remove-label priority:P3 --remove-label priority:P4 --repo Bhaskar-Bahukhandi/Ultimate-project
+gh issue edit 39 --add-label priority:P1 --remove-label priority:P2 --remove-label priority:P3 --remove-label priority:P4 --repo Bhaskar-Bahukhandi/Ultimate-project
+gh issue edit 50 --add-label priority:P2 --remove-label priority:P1 --remove-label priority:P3 --remove-label priority:P4 --repo Bhaskar-Bahukhandi/Ultimate-project
+gh issue edit 51 --add-label priority:P3 --remove-label priority:P1 --remove-label priority:P2 --remove-label priority:P4 --repo Bhaskar-Bahukhandi/Ultimate-project
+gh issue edit 52 --add-label priority:P3 --remove-label priority:P1 --remove-label priority:P2 --remove-label priority:P4 --repo Bhaskar-Bahukhandi/Ultimate-project
+gh issue edit 53 --add-label priority:P2 --remove-label priority:P1 --remove-label priority:P3 --remove-label priority:P4 --repo Bhaskar-Bahukhandi/Ultimate-project
+gh issue edit 54 --add-label priority:P3 --remove-label priority:P1 --remove-label priority:P2 --remove-label priority:P4 --repo Bhaskar-Bahukhandi/Ultimate-project
+gh issue edit 55 --add-label priority:P2 --remove-label priority:P1 --remove-label priority:P3 --remove-label priority:P4 --repo Bhaskar-Bahukhandi/Ultimate-project
+gh issue edit 56 --add-label priority:P2 --remove-label priority:P1 --remove-label priority:P3 --remove-label priority:P4 --repo Bhaskar-Bahukhandi/Ultimate-project
+gh issue edit 57 --add-label priority:P3 --remove-label priority:P1 --remove-label priority:P2 --remove-label priority:P4 --repo Bhaskar-Bahukhandi/Ultimate-project
+gh issue edit 58 --add-label priority:P3 --remove-label priority:P1 --remove-label priority:P2 --remove-label priority:P4 --repo Bhaskar-Bahukhandi/Ultimate-project
+gh issue edit 59 --add-label priority:P4 --remove-label priority:P1 --remove-label priority:P2 --remove-label priority:P3 --repo Bhaskar-Bahukhandi/Ultimate-project
+gh issue edit 119 --add-label priority:P4 --remove-label priority:P1 --remove-label priority:P2 --remove-label priority:P3 --repo Bhaskar-Bahukhandi/Ultimate-project
+gh issue edit 120 --add-label priority:P4 --remove-label priority:P1 --remove-label priority:P2 --remove-label priority:P3 --repo Bhaskar-Bahukhandi/Ultimate-project
+gh issue edit 121 --add-label priority:P4 --remove-label priority:P1 --remove-label priority:P2 --remove-label priority:P3 --repo Bhaskar-Bahukhandi/Ultimate-project
+gh issue edit 122 --add-label priority:P4 --remove-label priority:P1 --remove-label priority:P2 --remove-label priority:P3 --repo Bhaskar-Bahukhandi/Ultimate-project
+gh issue edit 123 --add-label priority:P4 --remove-label priority:P1 --remove-label priority:P2 --remove-label priority:P3 --repo Bhaskar-Bahukhandi/Ultimate-project
+gh issue edit 124 --add-label priority:P4 --remove-label priority:P1 --remove-label priority:P2 --remove-label priority:P3 --repo Bhaskar-Bahukhandi/Ultimate-project
+# done: created 0, adopted 0, labels 0, milestones 0, priority edits 19
+table consistent: 172 of 172 open rows hold an issue number; every number written so far is in the file; run the same command again to resume

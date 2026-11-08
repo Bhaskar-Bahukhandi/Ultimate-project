@@ -1,0 +1,45 @@
+test_approval_with_wrong_hash_fails (test_check_findings.CheckFindingsTest.test_approval_with_wrong_hash_fails)
+An approval file whose first line is another hash fails against the real table. ... ok
+test_bad_status_fails (test_check_findings.CheckFindingsTest.test_bad_status_fails)
+A status outside open/fixed/obsolete/duplicate fails. ... ok
+test_changelog_marker_missing_warns_not_assessed (test_check_findings.CheckFindingsTest.test_changelog_marker_missing_warns_not_assessed)
+A changelog marker found 0 times warns, reports its section NOT ASSESSED, and fails with --strict. ... ok
+test_closed_row_with_issue_fails (test_check_findings.CheckFindingsTest.test_closed_row_with_issue_fails)
+A non-open row that holds an issue number fails. ... ok
+test_duplicate_of_nowhere_fails (test_check_findings.CheckFindingsTest.test_duplicate_of_nowhere_fails)
+A duplicate_of naming no row fails. ... ok
+test_id_gap_fails (test_check_findings.CheckFindingsTest.test_id_gap_fails)
+Removing a middle row of an id family leaves a gap and fails. ... ok
+test_malformed_commit_hash_fails_without_strict (test_check_findings.CheckFindingsTest.test_malformed_commit_hash_fails_without_strict)
+A too-short hash after 'commit' fails even without --strict. ... ok
+test_off_list_area_fails (test_check_findings.CheckFindingsTest.test_off_list_area_fails)
+An area that is not on the list fails. ... ok
+test_off_list_milestone_fails (test_check_findings.CheckFindingsTest.test_off_list_milestone_fails)
+A milestone that is not on the list fails. ... ok
+test_open_row_without_issue_fails_after_publish (test_check_findings.CheckFindingsTest.test_open_row_without_issue_fails_after_publish)
+Once issue numbers exist, an open row without one fails. ... ok
+test_planted_local_path_in_evidence_fails (test_check_findings.CheckFindingsTest.test_planted_local_path_in_evidence_fails)
+A local Windows path in an evidence cell fails the leak scan, and the text is not echoed. ... ok
+test_planted_user_name_part_fails (test_check_findings.CheckFindingsTest.test_planted_user_name_part_fails)
+A part of the (injected) user name in any cell fails the leak scan. ... ok
+test_real_files_pass_with_no_warnings (test_check_findings.CheckFindingsTest.test_real_files_pass_with_no_warnings)
+Today's table, register, changelog and approval pass, with and without --strict. ... ok
+test_register_header_drift_warns_then_strict_fails (test_check_findings.CheckFindingsTest.test_register_header_drift_warns_then_strict_fails)
+A register header whose total disagrees with its body warns by default and fails with --strict. ... ok
+test_register_issue_number_mismatch_fails (test_check_findings.CheckFindingsTest.test_register_issue_number_mismatch_fails)
+An Open register row whose GitHub #N differs from the table's issue fails. ... ok
+test_repeated_id_fails (test_check_findings.CheckFindingsTest.test_repeated_id_fails)
+A row that appears twice fails. ... ok
+test_source_count_mismatch_fails (test_check_findings.CheckFindingsTest.test_source_count_mismatch_fails)
+Removing the last row of a family (no gap) still fails on the section count. ... ok
+test_stale_approval_fails (test_check_findings.CheckFindingsTest.test_stale_approval_fails)
+The real approval file no longer matches once any non-issue cell is edited. ... ok
+test_table_before_publishing_passes_pairing (test_check_findings.CheckFindingsTest.test_table_before_publishing_passes_pairing)
+With no issue number anywhere (and a register citing none), open rows without issues pass. ... ok
+test_unreachable_commit_warns_then_strict_fails (test_check_findings.CheckFindingsTest.test_unreachable_commit_warns_then_strict_fails)
+A well-formed hash git cannot find is a WARNING by default and a failure with --strict. ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 2.653s
+
+OK

@@ -3,6 +3,19 @@
 Notable changes to the game. Newest first. Earlier history (Feb–Sep 2026) is in the per-phase
 reports under `docs/` and in git history.
 
+## 2026-11-08 — Every open review finding and tech-debt row is a GitHub Issue (Y1-P0-S05)
+
+- **chore:** `production/findings/findings.csv` lists every item of the 2026-10-04 code review, the changelog's
+  open items and the open tech-debt rows (265 rows), each with a status checked against today's code: 172 open,
+  87 fixed (each confirmed by a second reader), 6 duplicates. `production/findings/check_findings.py` reconciles
+  the table with its sources and runs in CI.
+- **chore:** the 172 open rows are issues #2-#173 on GitHub, on 7 milestones (the plan's phases plus Backlog) with
+  `area:*`, `severity:*`, `source:*` and, for Phase 0, `priority:*` labels. Published by
+  `tools/github/publish_findings.py` (dry run, resumable, body scan for local paths and secrets, refuses without
+  the user's recorded approval; 48 unit tests, run by a new CI step). ROADMAP §11 and the tech-debt register carry the issue
+  numbers. Bug and playtest issue forms in `.github/ISSUE_TEMPLATE/`.
+- **docs:** seven new findings seen while re-checking became TD-048..TD-054.
+
 ## 2026-11-07 — The playthrough bot plays New Game to the credits (Y1-P0-T14b)
 
 - **test:** the playthrough bot (`tests/integration/playthrough/full_playthrough_test.gd`) now starts from a real New

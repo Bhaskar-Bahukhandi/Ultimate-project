@@ -1,0 +1,42 @@
+# publish_findings labels: REAL RUN; table production/findings/findings.csv; 265 rows, 172 open
+# body scan: 172 issue title+body pair(s) checked; rules: local-path, windows-user, email, token-prefix, hex-run, base64-run
+# body scan: PASS (0 hits)
+# approval OK (table hash 6be5f0759a56ee892dedee8bc124fb4d7fa893ce571832ca397c97a3bd32b9e9)
+# labels phase: 28 labels, 7 milestone(s) from the open rows
+gh label create area:save --color 1d76db --description 'Area: save' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create area:input --color 1d76db --description 'Area: input' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create area:ui --color 1d76db --description 'Area: ui' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create area:economy --color 1d76db --description 'Area: economy' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create area:combat --color 1d76db --description 'Area: combat' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create area:enemies --color 1d76db --description 'Area: enemies' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create area:encounters --color 1d76db --description 'Area: encounters' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create area:story --color 1d76db --description 'Area: story' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create area:regions --color 1d76db --description 'Area: regions' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create area:effects --color 1d76db --description 'Area: effects' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create area:audio --color 1d76db --description 'Area: audio' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create area:art --color 1d76db --description 'Area: art' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create area:tooling --color 1d76db --description 'Area: tooling' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create area:core --color 1d76db --description 'Area: core' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create severity:root-cause --color b60205 --description 'Review severity: root-cause' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create severity:critical --color b60205 --description 'Review severity: critical' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create severity:high --color b60205 --description 'Review severity: high' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create severity:medium-low --color b60205 --description 'Review severity: medium-low' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create severity:audit-check --color b60205 --description 'Review severity: audit-check' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create severity:pipeline --color b60205 --description 'Review severity: pipeline' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create severity:tech-debt --color b60205 --description 'Review severity: tech-debt' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create source:code-review --color 5319e7 --description 'Source: code review' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create source:changelog --color 5319e7 --description 'Source: changelog' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create source:tech-debt --color 5319e7 --description 'Source: tech debt' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create priority:P1 --color fbca04 --description 'Triage priority P1' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create priority:P2 --color fbca04 --description 'Triage priority P2' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create priority:P3 --color fbca04 --description 'Triage priority P3' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh label create priority:P4 --color fbca04 --description 'Triage priority P4' --force --repo Bhaskar-Bahukhandi/Ultimate-project
+gh api --method POST repos/Bhaskar-Bahukhandi/Ultimate-project/milestones -f 'title=Y1-P1 Spine' -f state=open -f 'description=Findings milestone (story Y1-P0-S05)'
+gh api --method POST repos/Bhaskar-Bahukhandi/Ultimate-project/milestones -f 'title=Y1-P2 Combat foundation' -f state=open -f 'description=Findings milestone (story Y1-P0-S05)'
+gh api --method POST repos/Bhaskar-Bahukhandi/Ultimate-project/milestones -f 'title=Y1-P3 Art pipeline + Pillar Slice' -f state=open -f 'description=Findings milestone (story Y1-P0-S05)'
+gh api --method POST repos/Bhaskar-Bahukhandi/Ultimate-project/milestones -f 'title=Y1-P0 Stabilize' -f state=open -f 'description=Findings milestone (story Y1-P0-S05)'
+gh api --method POST repos/Bhaskar-Bahukhandi/Ultimate-project/milestones -f 'title=Y2-PP Pre-production' -f state=open -f 'description=Findings milestone (story Y1-P0-S05)'
+gh api --method POST repos/Bhaskar-Bahukhandi/Ultimate-project/milestones -f 'title=Y1-P4 Open-world tech + tools' -f state=open -f 'description=Findings milestone (story Y1-P0-S05)'
+gh api --method POST repos/Bhaskar-Bahukhandi/Ultimate-project/milestones -f title=Backlog -f state=open -f 'description=Findings milestone (story Y1-P0-S05)'
+# done: created 0, adopted 0, labels 28, milestones 7, priority edits 0
+table consistent: 0 of 172 open rows hold an issue number; every number written so far is in the file; run the same command again to resume

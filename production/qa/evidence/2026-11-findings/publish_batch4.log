@@ -1,0 +1,53 @@
+# publish_findings issues: REAL RUN; table production/findings/findings.csv; 265 rows, 172 open
+# body scan: 172 issue title+body pair(s) checked; rules: local-path, windows-user, email, token-prefix, hex-run, base64-run
+# body scan: PASS (0 hits)
+# approval OK (table hash 6be5f0759a56ee892dedee8bc124fb4d7fa893ce571832ca397c97a3bd32b9e9)
+# issues phase: 172 open rows, 150 already numbered, 22 pending; this run: 22 row(s) in 1 batch(es) of up to 50; 0 left for later
+gh issue list --state all --limit 1000 --json number,title --repo Bhaskar-Bahukhandi/Ultimate-project
+#   150 issue(s) in the repo, 150 with a [<id>] title
+gh issue create --title '[TD-032] T13a story-fight test gaps (pause, pad win inputs)' --body-file <body 459 chars sha256:521d482a9b29> --label area:tooling --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #152 for TD-032
+gh issue create --title '[TD-033] Tests read arena private state; arena sets player invulnerability by timer' --body-file <body 516 chars sha256:41cf28d5c74c> --label area:tooling --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #153 for TD-033
+gh issue create --title '[TD-034] Arena slime colour and visuals do not match the Elara meeting' --body-file <body 483 chars sha256:55a141ca7c12> --label area:art --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #154 for TD-034
+gh issue create --title '[TD-035] Unexplained native crash once in about 70 story_fight_test runs' --body-file <body 466 chars sha256:d1578d49c61d> --label area:combat --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #155 for TD-035
+gh issue create --title '[TD-036] Windows test runner picks the newest Godot in the folder, not the pinned 4.6.3' --body-file <body 429 chars sha256:24bf6da16318> --label area:tooling --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #156 for TD-036
+gh issue create --title '[TD-037] combat_arena encounter and boss start functions exceed the 40-line rule' --body-file <body 400 chars sha256:bdc016bb3d7f> --label area:combat --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #157 for TD-037
+gh issue create --title '[TD-039] Story-fight row checks for return scene, enemy name and non-Dictionary rows untested' --body-file <body 467 chars sha256:0c50ed793d8e> --label area:tooling --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #158 for TD-039
+gh issue create --title '[TD-040] Story backdrop validator near complexity limit; move schema out of the arena' --body-file <body 415 chars sha256:fe04dff6e05a> --label area:combat --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #159 for TD-040
+gh issue create --title '[TD-041] Broken Mile guardian AI likely throttled to every third frame off-screen' --body-file <body 413 chars sha256:468275fa83a0> --label area:enemies --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #160 for TD-041
+gh issue create --title '[TD-042] Hits on enemies that take no damage still show damage numbers and hitstop' --body-file <body 445 chars sha256:ca05d0840831> --label area:combat --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #161 for TD-042
+gh issue create --title '[TD-043] Five scenes change scene with the dialogue box still up' --body-file <body 478 chars sha256:a1f505f06a6d> --label area:ui --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #162 for TD-043
+gh issue create --title '[TD-044] Idle Tutorial Knight scene started a random encounter' --body-file <body 409 chars sha256:ad8593843d45> --label area:encounters --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #163 for TD-044
+gh issue create --title '[TD-045] enemy_base.gd:923 get_meta flash_tween without default logs an error' --body-file <body 478 chars sha256:725b660e73f8> --label area:enemies --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #164 for TD-045
+gh issue create --title '[TD-046] Playthrough scene drivers copied across four test files' --body-file <body 377 chars sha256:5f284a5b40fb> --label area:tooling --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #165 for TD-046
+gh issue create --title '[TD-047] Story-fight enemy AI runs during the arena fade-in' --body-file <body 383 chars sha256:564423927a73> --label area:combat --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #166 for TD-047
+gh issue create --title '[TD-048] Tutorial-mode arena can pay the victory reward twice' --body-file <body 416 chars sha256:62f8f4c87ff2> --label area:combat --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #167 for TD-048
+gh issue create --title '[TD-049] Encounter NPC temp_defense bonus is erased by the next stat recompute' --body-file <body 405 chars sha256:b17ee3e6be87> --label area:encounters --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #168 for TD-049
+gh issue create --title '[TD-050] Ironhold arena menu modes and bracket are ignored; arena always runs top tier' --body-file <body 433 chars sha256:9806410c1a57> --label area:combat --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #169 for TD-050
+gh issue create --title '[TD-051] SOVEREIGN phase 5 adds corruption with no cap' --body-file <body 427 chars sha256:7cea16b14665> --label area:enemies --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #170 for TD-051
+gh issue create --title '[TD-052] Wastes storm deals damage while the player is held by its warning' --body-file <body 406 chars sha256:1a1ef119c0f4> --label area:regions --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #171 for TD-052
+gh issue create --title '[TD-053] Overlapping slow-mo moments share one id, so the first ends the second early' --body-file <body 393 chars sha256:bc8b32d3a2ab> --label area:effects --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #172 for TD-053
+gh issue create --title '[TD-054] Clock Tower defeat flash is drawn in world space, a strip at the boss floor' --body-file <body 398 chars sha256:a064137eba8b> --label area:effects --label severity:tech-debt --label source:tech-debt --milestone Backlog --repo Bhaskar-Bahukhandi/Ultimate-project
+#   created #173 for TD-054
+# done: created 22, adopted 0, labels 0, milestones 0, priority edits 0
+table consistent: 172 of 172 open rows hold an issue number; every number written so far is in the file; run the same command again to resume
