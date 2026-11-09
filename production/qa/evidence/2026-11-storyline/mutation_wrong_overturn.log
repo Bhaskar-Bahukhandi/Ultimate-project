@@ -1,0 +1,8 @@
+# Mutation 'wrong_overturn' on a temp copy (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\claude\8fa830b671f9d755\38742c26-a8d5-4ddd-be96-9bff07452637\scratchpad\mutations\storyline-axes.wrong_overturn.md
+gdd:   C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\claude\8fa830b671f9d755\38742c26-a8d5-4ddd-be96-9bff07452637\scratchpad\mutations\storyline-axes.wrong_overturn.md
+bible: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:  C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [seed map] line 185 (ch1_aldric_kill_owned): overturnable 'no' for pushes 'authority:YOU', expected until:lock:authority
+RESULT: FAIL (1 problems)
+exit code: 1

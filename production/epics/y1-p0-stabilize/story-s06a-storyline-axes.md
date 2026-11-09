@@ -2,7 +2,7 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-S06a (`production/plan/_source/Y1-P0.json#Y1-P0-S06`, days 1–2; sprint plan row Y1-P0-S06)
-> **Status**: Ready
+> **Status**: In Progress
 > **Layer**: Foundation (design)
 > **Type**: Integration
 > **Estimate**: 2 days (the plan's S06 days 1–2). Day 1 the 27-row table, the families and the Act 1 seed map; day 2

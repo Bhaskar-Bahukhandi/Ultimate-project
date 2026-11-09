@@ -142,6 +142,9 @@ where they contradict their expected stance.
 
 ### Endings: who authorizes the change
 
+**Decided (2026-11-08, Y1-P0-S06a):** the four-family model below is adopted; the storyline axes, the 24 + 3
+storyline IDs and the composer input are specified in `design/gdd/storyline-axes.md`.
+
 **Proposed (2026-10-05):**
 - **Four ending families carry the depth.** Each one gets its own God King phase, final scene and
   Story+ arc.

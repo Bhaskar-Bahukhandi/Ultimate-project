@@ -1,0 +1,7 @@
+# Real GDD and Story Bible (expected PASS)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
+gdd:   C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
+bible: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:  C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+RESULT: PASS (0 problems)
+exit code: 0
