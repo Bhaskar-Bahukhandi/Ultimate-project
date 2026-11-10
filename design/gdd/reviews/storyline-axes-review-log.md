@@ -90,3 +90,43 @@ Findings:
 - [RECOMMENDED] Detailed Design (27-row table): cite each route's "Primary danger" line (24 exist, e.g. PM:9731) as its authored loss; invariant + T17 AC
 Reviewed-Content-Hash: design/gdd/storyline-axes.md 1751765248a5a7151249bf7937431c06bbaaaa69
 Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285
+
+## Review — 2026-11-10 — Verdict: MAJOR REVISION NEEDED
+Scope signal: L (borderline XL)
+Specialists: game-designer, systems-designer, narrative-director, qa-lead, creative-director (synthesis)
+Blocking items: 6 | Recommended: 12
+Summary: The static core (axes, R1-R3, 27 rows, seed map, arcs, invalid/family, counts 27/24/25 and 8/9/7) is ready
+and stays. The round-3 tripwire fired: the lifecycle still has state-machine holes, and its crisis model contradicts
+canon (PM:7143 resolves the crisis at C8-S16; C8-S17 onward assumes a named coalition). Next revision: user decisions,
+then the GDD keeps the static core plus lifecycle invariants and a new Y2-PP-T17 contract
+(`design/gdd/storyline-lifecycle.md`) takes the transitions, scenes and runtime ACs.
+Prior verdict resolved: Partly (round-3 citations, retraction table, gate paths, Consent executor split applied);
+the lifecycle rewrite opened the cluster below.
+Decisions taken by the user (2026-11-10): B1 crisis resolves inside C8-S16, except R1 with the Witness signpost may
+"defer to the witnesses" (provisional coalition; invocation at C9-S19, fallback at the gate); red lines become one
+value-phrased line at C8-S15 from the faction one choice away (replaces the S13/S14 triple voicing); post-boss
+reconsideration cut to a reserved Open Question (PM:8791); SEVEN_WITNESSES_AVAILABLE set at C9-S19 per PM, a separate
+secret_invoked_WITNESS is I; Consent narrows Kaelen's YOU commitment on the record (family-keyed scene variants, no
+permanent Root ownership, Kaelen may be a witness but not also executor per PM:8704); P3 sign-off: 1.0 ships 25, arcs
+05/08/09 get a visible epilogue line; contract lives at design/gdd/storyline-lifecycle.md; checker pins rule bodies.
+Findings:
+- [BLOCKING] Detailed Design (Core Rules 5-7): crisis persists past C8-S16 against PM:7143/7153 and C8-S17+ canon; Witness is a blind irreversible bet (WITNESS_SEATS after S16); no content or price between S16 and the gate
+- [BLOCKING] Detailed Design (Core Rule 11): SL-SECRET-WITNESS keeps YOU-keyed scenes (PM:7034, 7059, 8408, 8638-8645) unspecified under Consent
+- [BLOCKING] Citations: PM:8704 "Kaelen may be one but cannot fill multiple roles" cited as excluding Kaelen
+- [BLOCKING] States and Transitions / Tuning Knobs: knob preamble vs reconsideration_triggers; invalid_combinations knob vs fixed transform/counts; R2-removal patch soft-locks a mid-crisis save; FIXED/FINAL re-entry undefined; T3/T4 guard with an UNSET axis; "loading fires no transition" vs the load path
+- [BLOCKING] Core Rule 10: reconsideration contradicts Faction/Deleted boss phases (PM:8611-8614)
+- [BLOCKING] Acceptance Criteria: storyline_id() has no args (AC5-8); no axis observable; AC12 minus-fixtures impossible; EC6 vs game_manager.gd; undefined out-of-scene returns; 19 lifecycle mutations survive the checker
+- [RECOMMENDED] Composer record: derive storyline_state from axes + stored ID
+- [RECOMMENDED] States and Transitions: guard T12; NG+ reset list; family enum RESERVED/none
+- [RECOMMENDED] Tuning Knobs: faction_negotiation_allowed has one safe value
+- [RECOMMENDED] Core Rule 3: lock_pass invisible to the player; ledger Variants/Policies unused (PM:7569-7582)
+- [RECOMMENDED] Detailed Design (seed map): YOU has 4 + seeds vs 1 each for SHARED/NONE
+- [RECOMMENDED] Core Rule 7: signpost persists after the route is dead
+- [RECOMMENDED] Core Rule 11: witness composition (Quest 09 needs Nema witness state, Seven free-person status, PM:7518)
+- [RECOMMENDED] Core Rule 12: Kaelthas PM:7533 conditioned on Faction=ARCHIVE; companion reactions unhooked (PM:7534-7537, 11229-11236)
+- [RECOMMENDED] Core Rule 6: PM:7021 is not a charter; retractions carry no authored price
+- [RECOMMENDED] Core Rule 6: the two R2<->R3 Faction swaps are trap offers
+- [RECOMMENDED] Acceptance Criteria (checker): pin rule bodies, transitions, writers, knob defaults
+- [RECOMMENDED] Player Fantasy / Counts: explicit P3 sign-off for 25 storylines in 1.0
+Reviewed-Content-Hash: design/gdd/storyline-axes.md 2fa718542f3c4bb8c944e420661f79de78bd0ddf
+Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285
