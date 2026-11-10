@@ -155,3 +155,27 @@ Findings:
 - [RECOMMENDED] Edge Cases (16): damaged-record list partial (ID with UNSET axis, ID not matching axes, axis_revised without lock_negotiated)
 Reviewed-Content-Hash: design/gdd/storyline-axes.md 1a55a672fb9e3dcda4b535ac5e4308bee16fc291
 Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285
+
+## Review — 2026-11-10 — Verdict: NEEDS REVISION
+Scope signal: S
+Specialists: game-designer, systems-designer, narrative-director, qa-lead, creative-director (synthesis)
+Blocking items: 3 | Recommended: 4
+Summary: The static core holds for a sixth round and stays frozen; checker PASS. Remaining blockers are local: a
+damaged-first phase derivation, damaged-record rules for the three new record fields (retraction_log, beats_played,
+witness_mandate), and cutting the clean-vs-negotiated promise to what Q1c delivers. Next revision: these items only,
+confirmed by the checker plus one reviewer.
+Prior verdict resolved: Yes (round-5 items fixed); revision 5 added record fields beyond "no new rules", accepted by CD
+Decisions taken by the user (2026-11-10, with the lifecycle round 2): a FAILED witness vote is not executed (Kaelen
+stands down at the final authorization; ID and family unchanged); T14 legacy catch-up cut to a dev-fixture migration;
+the Witness deferral stays in 1.0 on probation (any further state defect in T6-T9 / S5-S7 moves it post-1.0); the
+witness threshold is fixed at 5 (data-defined), the player's part being the choice of witnesses in Secret Quest 09.
+Findings:
+- [BLOCKING] Formulas (storyline_phase): FINAL tested before "ID stored"; INSIDE/FINAL with nothing stored classify as FINAL/CRISIS; damaged-first, explicit DAMAGED
+- [BLOCKING] Edge Cases (16): no damaged-record rules for witness_mandate, retraction_log, beats_played, deferral/invoke beats, witness_deferred with UNSET axis, EC6 double-flag save
+- [BLOCKING] Overview / Player Fantasy: clean vs negotiated still promised as perceptible; Q1c delivers only sole_dissent
+- [RECOMMENDED] Detailed Design (Interactions): record authoritative, AXIS*/axis_revised_*/lock_negotiated_* flags derived mirrors
+- [RECOMMENDED] Citations: PM:7144 is not "provisional coalition"; "never the combination" is a house rule; Kaelen exclusion cites the 2026-11-10 decision + PM:11219, not PM:8704
+- [RECOMMENDED] Core Rule 4: anchor the R1 red line on PM:7114
+- [RECOMMENDED] Acceptance Criteria: AC14 "scene" undefined, maybe unsatisfiable; AC15 vacuous; AC13 SOLE-via-renegotiation fixtures; AC7 true side; Kaelthas-on-ARCHIVE uncovered
+Reviewed-Content-Hash: design/gdd/storyline-axes.md cb5f0c2ae12dbc19ed8c0cc6d8ccabb0c90d442f
+Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285

@@ -37,3 +37,40 @@ Findings:
 - [RECOMMENDED] S4/T6: deferral may be a trap when an Act 2 prerequisite is already missable
 Reviewed-Content-Hash: design/gdd/storyline-lifecycle.md 854a645aaf420b8a28d5d7698253c2b99c98936f
 Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285
+
+## Review — 2026-11-10 — Verdict: NEEDS REVISION
+Scope signal: L (M once T14 is cut)
+Specialists: game-designer, systems-designer, narrative-director, qa-lead, creative-director (synthesis)
+Blocking items: 8 | Recommended: 7
+Summary: T1-T13 are sound. The round-1 tripwire fired on T14, the author-added legacy catch-up (legacy code already
+sets its own ch8/ch10 storyline flags: ch8_revolt_crisis.gd:127-128, game_manager.gd:371-401), which is cut to a
+dev-fixture migration. The deferral stays in 1.0 on probation once the gate guard, the offer disclosure and the save
+window are fixed; the FAILED vote needs an S8 guard, persisted threshold/dissenters, an assent source and a rename;
+ACs need fail-capable assertions, a gate-invocation AC and Visual/UI evidence.
+Prior verdict resolved: Partly (Q1-Q4 implemented; Consent list, record fields, beats, signpost order addressed); the
+author's own additions (T14, C9-S19 window, FAILED vote) opened the cluster below.
+Tripwire ruling (CD, user-confirmed): fired on T14, not the deferral; any further state defect in T6-T9 / S5-S7 moves
+the deferral post-1.0 without debate.
+Decisions taken by the user (2026-11-10): (1) a FAILED witness vote is not executed: restoration does not happen,
+Kaelen stands down at S8 (FINAL, not executed), ID and family unchanged; (2) T14 cut to a dev-fixture migration, saves
+past Chapter 8 declared unsupported (valid while no player-facing build has such saves); (3) deferral kept in 1.0 on
+probation; (4) witness_threshold fixed at 5, data-defined; the player's part (PM:8707) is choosing the witnesses in
+Secret Quest 09, which drives dissent.
+Findings:
+- [BLOCKING] States and Transitions (T14) / Legacy saves: completed legacy saves stranded (never FINAL), faction picked against played branch, C8-S15 skipped, T10/T14 overlap, impossible L-AC9 cells, L-AC20 disjunction
+- [BLOCKING] S6/S7 (gate invoke guard): needs SEVEN_WITNESSES_AVAILABLE, set only by C9-S19; invoke on prereqs_met and set the flag at the gate
+- [BLOCKING] S4 / Edge Case 1 / L-AC5: save window defined three ways; one atomic checkpoint at the commit
+- [BLOCKING] S4 (deferral offer): blind bet; disclose YOU narrowing, Act 3 as Hearth, gate retcon
+- [BLOCKING] S8/S9 (FAILED vote): no assent source, threshold and dissenters not saved, confirm_execution unguarded, "authorized over dissent" misnamed
+- [BLOCKING] Acceptance Criteria: L-AC8/10/13 offers()-empty cannot fail; no gate-invocation AC; L-AC19 order on a set; route-bot pass rule undefined for 41/66 runs; world_map cells
+- [BLOCKING] Acceptance Criteria: no Visual/UI evidence or sign-off for player-observable beats and screens; no content-completeness test
+- [BLOCKING] Scope: ~27 beats + 70 Tier B lines + rare-path modules; cut order and producer sign-off
+- [RECOMMENDED] S4: offers voiced as the faction's demand break canon voices (PM:7102-7106, 7141); voice as conceding or brokered
+- [RECOMMENDED] S4 retraction table: Faction retraction withdraws the charter (PM:7003) vs "steps down and stays in"; PM:7409 analogy only
+- [RECOMMENDED] S3: witness clause is Kaelen's PM:8411 line; reword in Hearth's voice
+- [RECOMMENDED] S7: LAST_CHANCE delegates absent (remote link, PM:8393); unlimited re-entry plays as a menu
+- [RECOMMENDED] S5/S7: Chapter 9 axis-reading scenes (PM:7958, 8021-8025, 8133); Consent variants miss PM:8475, 8457-8459
+- [RECOMMENDED] S5/Consent: deferral_c8s20 hook to H-S04 PM:7280; B22 to combat; companion reactions 4 templated + 4 specific
+- [RECOMMENDED] Formulas/Invariants: signpost HIDDEN vs CLOSED with ID stored; I5 wording while DEFERRED; retract_R1_* context; NG+ previous-record location
+Reviewed-Content-Hash: design/gdd/storyline-lifecycle.md 285b8aa5c31a29c1ace0805b96a56cef0fc7ec6c
+Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285
