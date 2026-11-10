@@ -1,29 +1,34 @@
 # Mutation 'm2_rule_label_swap' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-axes.m2_rule_label_swap.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-axes.m2_rule_label_swap.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c37fd8f6-b344-40c1-b2c3-61fc960b0116\scratchpad\mutations\storyline-axes.m2_rule_label_swap.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c37fd8f6-b344-40c1-b2c3-61fc960b0116\scratchpad\mutations\storyline-axes.m2_rule_label_swap.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [secrets] line 284 (SL-SECRET-WITNESS): R1 is NAL, not YHR
-FAIL [secrets] line 286 (SL-SECRET-CROWNLESS): R2 is YHR, not NAL
-FAIL [formulas] line 425: transform() map {'R1': 'WITNESS', 'R2': 'CROWNLESS', 'R3': 'FIRSTWAKE'} != {'R2': 'WITNESS', 'R1': 'CROWNLESS', 'R3': 'FIRSTWAKE'} (rules table and PM:8784)
-FAIL [core rules] line 107: Core Rule 4 lacks the pinned sentence 'Hearth when YOU and HEARTH are locked (R2'
-FAIL [core rules] line 107: Core Rule 4 lacks the pinned sentence 'Archive when NONE and ARCHIVE are locked (R1'
-FAIL [counts] axes line 538: 'the six renegotiations', but R1 has five offers
-FAIL [counts] axes line 560: 'the six R1 renegotiations', but R1 has five offers
-FAIL [red lines] line 63 (R1): pair 'YOU + HEARTH', expected 'NONE + ARCHIVE' (the rule's combination)
-FAIL [red lines] line 63 (R1): speaker 'Hearth delegate', expected 'Archive delegate'
-FAIL [red lines] line 64 (R2): pair 'NONE + ARCHIVE', expected 'YOU + HEARTH' (the rule's combination)
-FAIL [red lines] line 64 (R2): speaker 'Archive delegate', expected 'Hearth delegate'
-FAIL [crisis offers] line 78: R1 combination YOU-HEARTH-RESTORE != rules table NONE-ARCHIVE-RELEASE
-FAIL [crisis offers] line 78 (R1): offers ['revise:authority:NONE', 'revise:authority:SHARED', 'revise:deleted:CHOOSE', 'revise:deleted:RELEASE', 'revise:faction:ARCHIVE', 'revise:faction:CONTINUITY'] != crisis_offers ['revise:authority:SHARED', 'revise:authority:YOU', 'revise:deleted:CHOOSE', 'revise:deleted:RESTORE', 'revise:faction:HEARTH']
-FAIL [crisis offers] line 79: R2 combination NONE-ARCHIVE-RELEASE != rules table YOU-HEARTH-RESTORE
-FAIL [crisis offers] line 79 (R2): offers ['revise:authority:SHARED', 'revise:authority:YOU', 'revise:deleted:CHOOSE', 'revise:deleted:RESTORE', 'revise:faction:HEARTH'] != crisis_offers ['revise:authority:NONE', 'revise:authority:SHARED', 'revise:deleted:CHOOSE', 'revise:deleted:RELEASE', 'revise:faction:ARCHIVE', 'revise:faction:CONTINUITY']
+FAIL [secrets] line 293 (SL-SECRET-WITNESS): R1 is NAL, not YHR
+FAIL [secrets] line 295 (SL-SECRET-CROWNLESS): R2 is YHR, not NAL
+FAIL [formulas] line 437: transform() map {'R1': 'WITNESS', 'R2': 'CROWNLESS', 'R3': 'FIRSTWAKE'} != {'R2': 'WITNESS', 'R1': 'CROWNLESS', 'R3': 'FIRSTWAKE'} (rules table and PM:8784)
+FAIL [core rules] line 112: Core Rule 4 lacks the pinned sentence 'Hearth when YOU and HEARTH are locked (R2'
+FAIL [core rules] line 112: Core Rule 4 lacks the pinned sentence 'Archive when NONE and ARCHIVE are locked (R1'
+FAIL [red lines] line 69 (R1): pair 'YOU + HEARTH', expected 'NONE + ARCHIVE' (the rule's combination)
+FAIL [red lines] line 69 (R1): speaker 'Hearth delegate', expected 'Archive delegate'
+FAIL [red lines] line 70 (R2): pair 'NONE + ARCHIVE', expected 'YOU + HEARTH' (the rule's combination)
+FAIL [red lines] line 70 (R2): speaker 'Archive delegate', expected 'Hearth delegate'
+FAIL [crisis offers] line 87: R1 combination YOU-HEARTH-RESTORE != rules table NONE-ARCHIVE-RELEASE
+FAIL [crisis offers] line 87 (R1): offers ['revise:authority:NONE', 'revise:authority:SHARED', 'revise:deleted:CHOOSE', 'revise:deleted:RELEASE', 'revise:faction:ARCHIVE', 'revise:faction:CONTINUITY'] != crisis_offers ['revise:authority:SHARED', 'revise:authority:YOU', 'revise:deleted:CHOOSE', 'revise:deleted:RESTORE', 'revise:faction:HEARTH']
+FAIL [crisis offers] line 88: R2 combination NONE-ARCHIVE-RELEASE != rules table YOU-HEARTH-RESTORE
+FAIL [crisis offers] line 88 (R2): offers ['revise:authority:SHARED', 'revise:authority:YOU', 'revise:deleted:CHOOSE', 'revise:deleted:RESTORE', 'revise:faction:HEARTH'] != crisis_offers ['revise:authority:NONE', 'revise:authority:SHARED', 'revise:deleted:CHOOSE', 'revise:deleted:RELEASE', 'revise:faction:ARCHIVE', 'revise:faction:CONTINUITY']
+FAIL [crisis offers] Retractions do not say 'R2 and R3 share two offers' (derived from invalid())
+FAIL [crisis offers] gate retcon beats ['gate_retcon_authority_NONE', 'gate_retcon_authority_SHARED', 'gate_retcon_deleted_CHOOSE', 'gate_retcon_deleted_RELEASE', 'gate_retcon_faction_ARCHIVE', 'gate_retcon_faction_CONTINUITY'] != one per R1 renegotiation ['gate_retcon_authority_SHARED', 'gate_retcon_authority_YOU', 'gate_retcon_deleted_CHOOSE', 'gate_retcon_deleted_RESTORE', 'gate_retcon_faction_HEARTH']
+FAIL [crisis offers] gate retcon paragraph does not say '(five beats:'
 FAIL [lifecycle formulas] offer counts sentence is not '|crisis_offers| is 5 for R1 (6 with the deferral), 6 for R2 and R3, so 16 renegotiation offers in all; |last_chance_offers| is 5 or 6.'
-FAIL [counts] lifecycle line 111: 'the six R1 renegotiations', but R1 has five offers
-FAIL [counts] lifecycle line 136: 'the six R1 offers', but R1 has five offers
-FAIL [counts] lifecycle line 173: 'the six renegotiations', but R1 has five offers
-FAIL [counts] lifecycle line 276: 'the six R1 renegotiations', but R1 has five offers
-FAIL [counts] lifecycle line 285: 'the six renegotiations', but R1 has five offers
-RESULT: FAIL (21 problems)
+FAIL [lifecycle acceptance] L-AC19 lacks 'for each of the five R1 offers at LAST_CHANCE' (derived)
+FAIL [lifecycle acceptance] Validation note terms [24, 1, 16, 1, 6, 18] != derived [24, 1, 16, 1, 5, 18] (valid rows, 1.0 secret routes, offers, gate invocations, gate renegotiations, paths × storable phases)
+FAIL [lifecycle acceptance] Validation note total 66 != 65 (sum of its terms 66)
+FAIL [counts] lifecycle line 145: 'the six R1 renegotiations', but R1 has five offers
+FAIL [counts] lifecycle line 216: 'the six R1 offers', but R1 has five offers
+FAIL [counts] lifecycle line 274: 'the six renegotiations', but R1 has five offers
+FAIL [counts] lifecycle line 391: 'the six R1 renegotiations', but R1 has five offers
+FAIL [counts] lifecycle line 402: 'the six renegotiations', but R1 has five offers
+FAIL [counts] lifecycle line 435: 'the six R1 offers', but R1 has five offers
+RESULT: FAIL (26 problems)
 exit code: 1

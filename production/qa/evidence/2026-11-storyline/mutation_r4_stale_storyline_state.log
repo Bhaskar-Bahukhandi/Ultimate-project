@@ -1,11 +1,11 @@
 # Mutation 'r4_stale_storyline_state' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-lifecycle.r4_stale_storyline_state.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c37fd8f6-b344-40c1-b2c3-61fc960b0116\scratchpad\mutations\storyline-lifecycle.r4_stale_storyline_state.md
 gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
-lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-lifecycle.r4_stale_storyline_state.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c37fd8f6-b344-40c1-b2c3-61fc960b0116\scratchpad\mutations\storyline-lifecycle.r4_stale_storyline_state.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
 FAIL [lifecycle record] Inputs field 'storyline_state' is not a composer record field
-FAIL [lifecycle record] NG+ reset fields ['authority', 'axis_revised', 'deleted', 'faction', 'lock_negotiated', 'root_phase', 'secret_invoked', 'storyline_id', 'witness_deferred'] != Inputs fields ['authority', 'axis_revised', 'deleted', 'faction', 'lock_negotiated', 'root_phase', 'secret_invoked', 'storyline_id', 'storyline_state', 'witness_deferred']
-FAIL [stale] lifecycle line 42: revision-3 vocabulary 'storyline_state' present
+FAIL [lifecycle record] NG+ reset fields ['authority', 'axis_revised', 'beats_played', 'deleted', 'faction', 'lock_negotiated', 'retraction_log', 'root_phase', 'secret_invoked', 'storyline_id', 'witness_deferred', 'witness_mandate'] != Inputs fields ['authority', 'axis_revised', 'beats_played', 'deleted', 'faction', 'lock_negotiated', 'retraction_log', 'root_phase', 'secret_invoked', 'storyline_id', 'storyline_state', 'witness_deferred', 'witness_mandate']
+FAIL [stale] lifecycle line 47: revision-3 vocabulary 'storyline_state' present
 RESULT: FAIL (3 problems)
 exit code: 1

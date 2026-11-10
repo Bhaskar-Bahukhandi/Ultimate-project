@@ -130,3 +130,28 @@ Findings:
 - [RECOMMENDED] Player Fantasy / Counts: explicit P3 sign-off for 25 storylines in 1.0
 Reviewed-Content-Hash: design/gdd/storyline-axes.md 2fa718542f3c4bb8c944e420661f79de78bd0ddf
 Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285
+
+## Review — 2026-11-10 — Verdict: NEEDS REVISION
+Scope signal: L
+Specialists: game-designer, systems-designer, narrative-director, qa-lead, creative-director (synthesis)
+Blocking items: 6 | Recommended: 6
+Summary: The static core (axes, R1-R3, 27 rows, counts 24/25 and 8/9/7, invalid/family/lock_pass, seed map, arcs)
+holds for the fifth round and is frozen. The blockers are cross-document drift with the new lifecycle contract
+(T8 record vs Edge Case 16, signpost wording), the C10-S15 gate, protected touchpoints and a seed count. Next
+revision is confined to these items, with no new rules; confirm with the checker plus one reviewer.
+Prior verdict resolved: Yes (round-4 decisions implemented; lifecycle split out to storyline-lifecycle.md)
+Findings:
+- [BLOCKING] Edge Cases (16): lifecycle T8 (deferral then gate renegotiation) leaves witness_deferred on a non-R1 row, which EC16 calls damaged; restate as stored ID != f(axes, secret_invoked)
+- [BLOCKING] Edge Cases (13): signpost "closes" vs lifecycle EC4/L-AC11 HIDDEN
+- [BLOCKING] Core Rule 6/10: C10-S15 is gated on SEVEN_WITNESSES_AVAILABLE (PM:8693), set on every storyline at C9-S19; gate it on storyline_id == SL-SECRET-WITNESS
+- [BLOCKING] Dependencies: AGENTS.md also protects save/load schema, story progression, true ending, NG+; only world map flagged
+- [BLOCKING] Open Questions (10): YOU has three + seeds, not four
+- [BLOCKING] Core Rule 10 / Edge Cases 2, 10, 13, 15: scene behaviour duplicated from the lifecycle contract; cut and point to it
+- [RECOMMENDED] Overview / Player Fantasy: clean vs negotiated promised as perceptible, Rule 3 says no scene reads it in 1.0 (user Q1)
+- [RECOMMENDED] Side storylines: tracking AC that the nine 1.0 arcs' flags are mapped before T17 closes (P5)
+- [RECOMMENDED] Acceptance Criteria: no AC for the P3 test (>=3 scenes, own ending and Story+)
+- [RECOMMENDED] Overview / Core Rules 6, 10: witness convening point stated three ways (Chapter 9, C9-S19, C10-S15)
+- [RECOMMENDED] Acceptance Criteria: AC5 feeds I=true where I is defined false; AC12 misses reserved-route-enabled and WITNESS-disabled boot errors
+- [RECOMMENDED] Edge Cases (16): damaged-record list partial (ID with UNSET axis, ID not matching axes, axis_revised without lock_negotiated)
+Reviewed-Content-Hash: design/gdd/storyline-axes.md 1a55a672fb9e3dcda4b535ac5e4308bee16fc291
+Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285

@@ -1,9 +1,9 @@
 # Mutation 'r4_phase_branch_order' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-axes.r4_phase_branch_order.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-axes.r4_phase_branch_order.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c37fd8f6-b344-40c1-b2c3-61fc960b0116\scratchpad\mutations\storyline-axes.r4_phase_branch_order.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c37fd8f6-b344-40c1-b2c3-61fc960b0116\scratchpad\mutations\storyline-axes.r4_phase_branch_order.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [formulas] line 482: storyline_phase body differs from the pinned body: 'if witness_deferred → DEFERRED' (expected 'if A, F or D is UNSET → PARTLY_LOCKED')
+FAIL [formulas] line 494: storyline_phase body differs from the pinned body: 'if witness_deferred → DEFERRED' (expected 'if A, F or D is UNSET → PARTLY_LOCKED')
 RESULT: FAIL (1 problems)
 exit code: 1

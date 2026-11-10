@@ -1,9 +1,9 @@
 # Mutation 'm1_formula_invalid_set' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-axes.m1_formula_invalid_set.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-axes.m1_formula_invalid_set.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c37fd8f6-b344-40c1-b2c3-61fc960b0116\scratchpad\mutations\storyline-axes.m1_formula_invalid_set.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c37fd8f6-b344-40c1-b2c3-61fc960b0116\scratchpad\mutations\storyline-axes.m1_formula_invalid_set.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [formulas] line 455: invalid() set [('NONE', 'ARCHIVE', 'RELEASE'), ('YOU', 'HEARTH', 'RELEASE'), ('YOU', 'HEARTH', 'RESTORE')] != rules table [('NONE', 'ARCHIVE', 'RELEASE'), ('NONE', 'CONTINUITY', 'RELEASE'), ('YOU', 'HEARTH', 'RESTORE')]
+FAIL [formulas] line 467: invalid() set [('NONE', 'ARCHIVE', 'RELEASE'), ('YOU', 'HEARTH', 'RELEASE'), ('YOU', 'HEARTH', 'RESTORE')] != rules table [('NONE', 'ARCHIVE', 'RELEASE'), ('NONE', 'CONTINUITY', 'RELEASE'), ('YOU', 'HEARTH', 'RESTORE')]
 RESULT: FAIL (1 problems)
 exit code: 1

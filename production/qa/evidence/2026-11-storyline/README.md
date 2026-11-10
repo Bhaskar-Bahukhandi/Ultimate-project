@@ -171,3 +171,43 @@ Research input: `research_draft.md` (narrative-director, sources cited per row).
   L-ACs (`lock_negotiated`, `axis_revised`, `witness_deferred`, `secret_invoked`) — only `name(` calls are checked
   against the Observables table; and, as before, the comment-stripping in `flag_exists`. Pinned writers and
   sentences make harmless rewording FAIL: that is intended (a change is a design decision), not a defect.
+
+## Design review round 5 (axes) and round 1 (lifecycle), 2026-11-10: revision 5 checks
+
+- Revision 5 of `storyline-axes.md` keeps the static core unchanged (27 rows, R1-R3, counts, seed map, arcs, the
+  five formula bodies, invariants I1-I8, phase table, knobs); the lifecycle document got its revision 1. The
+  round-4 checker failed on them with 21 problems, every one a pin the review asked to change (composer fields,
+  Edge Case 16, AC count, T5/T7/T8 effects, T14, the lifecycle Formulas block and two pinned sentences, Edge Case
+  count, the Validation note terms). It also caught one real error in the draft: the lifecycle said R2 and R3
+  "share four offers"; computed from `invalid()` they share five (four beat ids collided under the old
+  `retract_<axis>_<old>_<new>` format because the Faction swap's old value differs). Fixed in the document.
+- **New or changed checks**:
+  - axes: composer record now 20 rows (`retraction_log`, `beats_played`, `witness_mandate` with
+    UNDECIDED/MET/FAILED); Edge Case 16's seven damaged records pinned, plus the "compares and never rewrites,
+    reads no knob" and "T8 history is not damage" sentences; Core Rule 3 (`sole_dissent`, user Q1), Rule 6
+    (Chapter 10 secret scene only on `SL-SECRET-T`) and Rule 10 (C10-S15 only on `SL-SECRET-WITNESS`; the vote can
+    fail; ID and family unchanged, user Q2) key sentences; AC1-AC15 contiguous; a new `check_protected`: the
+    Dependencies' protected-touchpoints table names exactly the areas the "Do not modify ..." line of
+    `AethelgardPrototype/AGENTS.md` lists (read from that file, not pinned here).
+  - lifecycle: T1-T14 pinned (T14 = legacy-save catch-up; T5/T7/T8 effects name their beats); the Formulas block
+    with the `crisis_offers` domain guard, the reordered `signpost` (HIDDEN only for no lead or a reserved
+    disabled route; CLOSED for disabled, other ID stored, or an unreachable lead) and `witness_mandate`; derived
+    beat checks: `retract_<rule>_<axis>_<new>` gives 16 distinct ids, "R2 and R3 share five offers" computed, the
+    six `gate_retcon_*` ids equal the Witness row's renegotiations (user Q3); pinned sentences for the red-line
+    witness clause (user Q4), S9's gate on the stored ID and its two limits, the gate keeping all six
+    renegotiations, the history rule, the NG+ "new record" statement, the saved retractions and beats, and the
+    T14 exception to "loading fires no transition"; NG+ reset default `witness_mandate` → UNDECIDED; Edge Cases
+    1-11; L-AC19's "six R1 offers" derived; the Validation note is now 24 + 1 + 16 + 1 + 6 + 18 = 66 (gate
+    invocation and one gate run per R1 renegotiation added) and must compare the expected *triple* (phase, ID,
+    gate outcome).
+- `run_mutations.py`: 10 round-4 mutations retargeted to revision-5 text (same name, same intent):
+  `r4_t5_effect_dropped`, `r4_edge_case_16_deleted`, `r4_crisis_r3_defer`, `r4_ng_reset_field_dropped`,
+  `r4_life_number_word`, `r4_lac_no_blocked_by`, `r4_lac_unknown_observable`, `r4_validation_total`,
+  `r4_validation_term_consistent`, `r4_validation_matrix`. 33 new `r5_*` mutations, one per new pin or derived
+  check; each was confirmed to fail on the check it targets, not incidentally.
+- **Result** (2026-11-10): real docs `RESULT: PASS (0 problems)`; 157 mutations, all FAIL as expected; 1 control
+  PASS; 0 unexpected. All logs in this folder were refreshed by this run (`check_pass.log`, every
+  `mutation_*.log` named in `run_mutations.py`); the two retired round-3 logs are unchanged.
+- **Still NOT checked** (in addition to the round-4 list): the Consent variants table's rows and the S5 deferral
+  scope table (prose tables, not pinned); the PM line numbers cited in prose; the gate retcon history-rule flag
+  list; the `witness_threshold` range; the L-AC14/L-AC17/L-AC20 bodies beyond call names.

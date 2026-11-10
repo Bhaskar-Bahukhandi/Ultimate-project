@@ -1,6 +1,6 @@
 """Run the storyline checker on the real GDDs and on mutated copies; write one log per run.
 
-Design review rounds 2-4 (2026-11-10). Every mutation must make the checker FAIL; every control must PASS; the real
+Design review rounds 2-5 (2026-11-10; round 5 is also the lifecycle document's round 1). Every mutation must make the checker FAIL; every control must PASS; the real
 documents must PASS. Mutated copies go to <scratch_dir>/mutations (outside the repo); logs go to --log-dir
 (default: next to this script).
 
@@ -101,7 +101,7 @@ MUTATIONS = {
     "r4_t13_to_leaning": [(L, "| the final authorization scene is playing | FINAL |", "| the final authorization scene is playing | LEANING |")],
     "r4_t7_event_changed": [(L, "the invocation is confirmed (C9-S19 or the gate)", "the invocation is confirmed (C9-S19 only)")],
     "r4_t6_guard_dropped": [(L, "| R1; WITNESS enabled; signpost OPEN | DEFERRED |", "| R1 | DEFERRED |")],
-    "r4_t5_effect_dropped": [(L, "gain it; retraction recorded; ID stored", "gain it; ID stored")],
+    "r4_t5_effect_dropped": [(L, "gain it; retraction recorded; retraction beat played; ID stored", "gain it; ID stored")],
     "r4_t14_backward_added": [(L, "| `root_phase` FINAL |\n", "| `root_phase` FINAL |\n| T14 | VALIDATED | a knob changes | WITNESS disabled | CRISIS | ID cleared |\n")],
     "r4_t8_knob_guard": [(L, "| one of the six R1 offers |", "| one of the six R1 offers; WITNESS enabled |")],
     "r4_no_other_transition": [(L, "No other transition exists:", "Other transitions may exist:")],
@@ -133,7 +133,7 @@ MUTATIONS = {
     # invariants, edge cases (axes)
     "r4_invariant_deleted": [("| I5 | No soft-lock under any knob value or patch: every state without a stored ID either is before the locks or offers a renegotiation that reaches a valid row | 5, 8 |\n", "")],
     "r4_invariant_rule_ref": [("| I7 | A valid row is held to its word | 7 |", "| I7 | A valid row is held to its word | 8 |")],
-    "r4_edge_case_16_deleted": [("16. **A damaged record** (a debug or edited save). `SEVEN_WITNESSES_AVAILABLE` alone changes nothing: it is set\n    whenever C9-S19 plays. A record that contradicts the phase table — `secret_invoked` holding a route whose row is\n    not the record's, `secret_invoked` with no ID stored, `witness_deferred` on a row other than R1, `root_phase`\n    INSIDE or FINAL with nothing stored — is reported by SaveService as a data error on load, as for Edge Case 6.\n", "")],
+    "r4_edge_case_16_deleted": [("16. **A damaged record** (a debug or edited save). `SEVEN_WITNESSES_AVAILABLE` alone changes nothing: it is set\n", "")],  # retargeted in revision 5
     "r4_edge_case_16_item_dropped": [("`secret_invoked` with no ID stored, ", "")],
     # formula bodies (axes)
     "r4_prereqs_met_dropped": [("    if I and enabled(T) and prereqs_met(T)       →", "    if I and enabled(T)                          →")],
@@ -156,7 +156,7 @@ MUTATIONS = {
     # crisis offers and red lines (lifecycle)
     "r4_crisis_r2_gains_offer": [(L, "| R2 NONE-ARCHIVE-RELEASE | `revise:authority:YOU`,", "| R2 NONE-ARCHIVE-RELEASE | `revise:faction:CONTINUITY`, `revise:authority:YOU`,")],
     "r4_crisis_r1_loses_offer": [(L, "`revise:faction:CONTINUITY`, `revise:deleted:RELEASE`", "`revise:deleted:RELEASE`")],
-    "r4_crisis_r3_defer": [(L, "`revise:deleted:CHOOSE` |\n\n**Retractions", "`revise:deleted:CHOOSE`; plus `defer:WITNESS` when WITNESS is enabled and its signpost is OPEN |\n\n**Retractions")],
+    "r4_crisis_r3_defer": [(L, "`revise:deleted:CHOOSE` |\n\nA Faction offer", "`revise:deleted:CHOOSE`; plus `defer:WITNESS` when WITNESS is enabled and its signpost is OPEN |\n\nA Faction offer")],
     "r4_red_line_pair": [(L, "| NONE + ARCHIVE | Archive delegate | R2 |", "| SHARED + ARCHIVE | Archive delegate | R2 |")],
     "r4_red_line_speaker": [(L, "| NONE + CONTINUITY | Continuity delegate |", "| NONE + CONTINUITY | Archive delegate |")],
     "r4_red_line_extra_row": [(L, "| any other pair | — | — | no red line |", "| SHARED + HEARTH | Hearth delegate | R1 | no shared compulsion |\n| any other pair | — | — | no red line |")],
@@ -168,24 +168,60 @@ MUTATIONS = {
     "r4_life_s8_reconsideration": [(L, "offers no\nreconsideration", "offers one\nreconsideration")],
     "r4_life_own_knob": [(L, "None of its own. It reads", "One of its own, `crisis_retry_limit` (default 3). It reads")],
     "r4_ng_reset_default": [(L, "`witness_deferred` → false", "`witness_deferred` → true")],
-    "r4_ng_reset_field_dropped": [(L, "`secret_invoked`, `axis_revised`, `lock_negotiated` →", "`axis_revised`, `lock_negotiated` →")],
-    "r4_life_number_word": [(L, "gate's LAST_CHANCE offers the six renegotiations only", "gate's LAST_CHANCE offers the five renegotiations only")],
+    "r4_ng_reset_field_dropped": [(L, "OUTSIDE; `secret_invoked`, `axis_revised`, `lock_negotiated`,\n", "OUTSIDE; `axis_revised`, `lock_negotiated`,\n")],
+    "r4_life_number_word": [(L, "LAST_CHANCE offers the six renegotiations only (I5, I6)", "LAST_CHANCE offers the five renegotiations only (I5, I6)")],
     "r4_life_edge_case_gap": [(L, "8. **A save in DEFERRED", "9. **A save in DEFERRED")],
     "r4_life_heading": [(L, "## Tuning Knobs\n\nNone of its own", "## Knobs\n\nNone of its own")],
     # L-ACs and the Validation note (lifecycle)
-    "r4_lac_no_blocked_by": [(L, "`offers()` empty. *Blocked by:* Y2-PP-T17.", "`offers()` empty.")],
-    "r4_lac_unknown_observable": [(L, "makes `signpost(WITNESS)` HIDDEN", "makes `route_state(WITNESS)` HIDDEN")],
+    "r4_lac_no_blocked_by": [(L, "exactly the six renegotiations. *Blocked by:* Y2-PP-T17.", "exactly the six renegotiations.")],
+    "r4_lac_unknown_observable": [(L, "makes `signpost(WITNESS)` CLOSED", "makes `route_state(WITNESS)` CLOSED")],
     "r4_lac_axes_observable": [(L, "after C8-S16, `storyline_phase()` VALIDATED", "after C8-S16, `phase_of()` VALIDATED")],
     "r4_lac_unknown_story": [(L, "*Blocked by:* Y2-PP-T17, NG+ design.", "*Blocked by:* Y2-PP-T99, NG+ design.")],
     "r4_lac_number_gap": [(L, "- **L-AC18 NG+ reset.**", "- **L-AC19 NG+ reset.**")],
     "r4_lac6_runs": [(L, "its offers (16 runs)", "its offers (15 runs)")],
-    "r4_validation_total": [(L, "— 61 runs", "— 62 runs")],
-    "r4_validation_term_consistent": [(L, "renegotiation offer (16)", "renegotiation offer (15)"), (L, "— 61 runs", "— 60 runs")],
-    "r4_validation_matrix": [(L, "3 paths × 6 storable phases (18)", "3 paths × 7 storable phases (21)"), (L, "— 61 runs", "— 64 runs")],
+    "r4_validation_total": [(L, "— 66 runs", "— 67 runs")],
+    "r4_validation_term_consistent": [(L, "renegotiation offer at C8-S16 (16)", "renegotiation offer at C8-S16 (15)"), (L, "— 66 runs", "— 65 runs")],
+    "r4_validation_matrix": [(L, "3 paths × 6 storable phases (18)", "3 paths × 7 storable phases (21)"), (L, "— 66 runs", "— 69 runs")],
     # stale revision-3 vocabulary
     "r4_stale_storyline_state": [(L, "(fields `authority`,", "(fields `storyline_state`, `authority`,")],
     "r4_stale_storyline_state_axes": [("implements `storyline_id`, `storyline_phase`,", "implements `storyline_id`, `storyline_state`,")],
     "r4_stale_gate_crisis": [(L, "There is no limit and no penalty.", "There is no limit and no penalty (no GATE_CRISIS).")],
+    # --- review round 5 (axes) + round 1 (lifecycle): one per new pin or derived check
+    # axes: composer record, Edge Case 16, protected touchpoints, Core Rules 3/6/10, ACs
+    "r5_composer_mandate_vocab": [("| witness_mandate | enum | UNDECIDED, MET, FAILED |", "| witness_mandate | enum | MET, FAILED |")],
+    "r5_composer_retraction_log_dropped": [("| retraction_log | list | entries {axis, old, new, withdrawn_item, scene}, oldest first | every renegotiation; a confirmed invocation |\n", "")],
+    "r5_ec16_old_item": [("`witness_deferred` with nothing stored on a row\n    other than R1", "`witness_deferred` on a row\n    other than R1")],
+    "r5_ec16_t8_history_dropped": [("non-empty is the history of a deferral broken at the gate, not damage.", "non-empty is damaged too.")],
+    "r5_ec16_rewrites_id": [("a check that compares and never\n    rewrites the stored ID", "a check that compares and then\n    rewrites the stored ID")],
+    "r5_protected_area_dropped": [("| NG+ | the reset of the record and the axis, secret and unlock flags | Edge Case 9; lifecycle NG+ reset |\n", "")],
+    "r5_protected_area_bogus": [("| collision, hitboxes | none | — |", "| collision, hitboxes, lighting | none | — |")],
+    "r5_rule10_c10s15_flag_gate": [("and vote at C10-S15, which plays only on `SL-SECRET-WITNESS`", "and vote at C10-S15, which plays when `SEVEN_WITNESSES_AVAILABLE` is set")],
+    "r5_rule10_threshold_cannot_fail": [("The vote can fall short\n    of the threshold", "The vote cannot fall short\n    of the threshold")],
+    "r5_rule6_chapter10_flag": [("plays only when the stored ID is `SL-SECRET-T`.", "plays when the unlock flag is set.")],
+    "r5_rule3_sole_dissent_optional": [("the ending plays `sole_dissent`", "the ending may play `sole_dissent`")],
+    "r5_ac_number_gap": [("15. Pillar P5 tracking", "16. Pillar P5 tracking")],
+    "r5_ac14_unknown_observable": [("`scene_variants()` differ", "`scenes()` differ")],
+    # lifecycle: transitions, formulas, pinned sentences, derived beats, L-ACs, Validation note
+    "r5_t14_dropped": [(L, "| T14 | LEANING or PARTLY_LOCKED | a save loads | its story position is past the lock scene of an UNSET axis | unchanged | lock catch-up: the missing lock scenes play in order, then T1-T6 as usual |\n", "")],
+    "r5_t8_retcon_dropped": [(L, "| as T5; gate retcon beat played |", "| as T5 |")],
+    "r5_formula_domain_guard_dropped": [(L, "crisis_offers(row) = {} if row is not R1, R2 or R3; otherwise", "crisis_offers(row) = for every row:")],
+    "r5_signpost_hidden_first": [(L, "HIDDEN  if none of T's offer prerequisites is set, or T is reserved (post-1.0) and disabled", "HIDDEN  if T is disabled or none of T's offer prerequisites is set")],
+    "r5_mandate_unanimity": [(L, "MET     if 7 − dissent ≥ witness_threshold", "MET     if dissent = 0")],
+    "r5_red_line_clause_dropped": [(L, 'adds the clause "unless the affected themselves authorize it"', 'adds no clause')],
+    "r5_gate_keeps_authority_only": [(L, "LAST_CHANCE keeps all six R1 renegotiations.", "LAST_CHANCE keeps the Authority renegotiations only.")],
+    "r5_retcon_beat_missing": [(L, "`gate_retcon_deleted_RELEASE`, `gate_retcon_deleted_CHOOSE`; written by", "`gate_retcon_deleted_RELEASE`; written by")],
+    "r5_retract_id_without_rule": [(L, "`retract_<rule>_<axis>_<new>`, e.g. `retract_R2_authority_YOU`", "`retract_<axis>_<old>_<new>`, e.g. `retract_authority_NONE_YOU`")],
+    "r5_shared_offer_count": [(L, "R2 and R3 share five offers", "R2 and R3 share four offers")],
+    "r5_history_as_current": [(L, "never as the current axis value.", "and as the current axis value.")],
+    "r5_s9_flag_gate": [(L, "Plays only on `SL-SECRET-WITNESS`: the source's", "Plays whenever `SEVEN_WITNESSES_AVAILABLE` is set: the source's")],
+    "r5_s9_failed_changes_id": [(L, "witnesses' place, and nothing changes the", "witnesses' place, and the vote may change the")],
+    "r5_ng_transition": [(L, "NG+ starts a new record, not a transition of this table", "NG+ is transition T15 of this table")],
+    "r5_ng_mandate_default": [(L, "`witness_mandate` → UNDECIDED", "`witness_mandate` → MET")],
+    "r5_loading_fires": [(L, "apart from\nthe T14 catch-up it fires no transition", "it may fire\nany transition")],
+    "r5_lac19_count": [(L, "each of the six R1 offers at LAST_CHANCE", "each of the five R1 offers at LAST_CHANCE")],
+    "r5_validation_pass_pair": [(L, "equals\nthe expected triple", "equals\nthe expected pair")],
+    "r5_validation_gate_terms": [(L, "per R1 renegotiation (6), and", "per R1 renegotiation (5), and"), (L, "— 66 runs", "— 65 runs")],
+    "r5_life_edge_case_gap": [(L, "11. **All seven witnesses dissent.**", "12. **All seven witnesses dissent.**")],
 }
 # Controls: edits the checker must accept (expected PASS).
 CONTROLS = {
