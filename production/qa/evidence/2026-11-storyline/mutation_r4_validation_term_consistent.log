@@ -1,0 +1,10 @@
+# Mutation 'r4_validation_term_consistent' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-lifecycle.r4_validation_term_consistent.md
+gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-lifecycle.r4_validation_term_consistent.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [lifecycle acceptance] Validation note terms [24, 1, 15, 2, 18] != derived [24, 1, 16, 2, 18] (valid rows, 1.0 secret routes, offers, 2 per deferral route, paths × storable phases)
+FAIL [lifecycle acceptance] Validation note total 60 != 61 (sum of its terms 60)
+RESULT: FAIL (2 problems)
+exit code: 1

@@ -1,9 +1,15 @@
-# Mutation 'missing_heading' on a temp copy (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\2e03922c-3aad-4f03-add8-36cf7c4b0612\scratchpad\r3\mutations\storyline-axes.missing_heading.md
-gdd:   C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\2e03922c-3aad-4f03-add8-36cf7c4b0612\scratchpad\r3\mutations\storyline-axes.missing_heading.md
-bible: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
-root:  C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [headings] line 577: unexpected H2 heading 'Tuning Values'
+# Mutation 'missing_heading' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-axes.missing_heading.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-axes.missing_heading.md
+lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [headings] line 601: unexpected H2 heading 'Tuning Values'
 FAIL [headings] missing heading '## Tuning Knobs'
-RESULT: FAIL (2 problems)
+FAIL [tuning knobs] Tuning Knobs 'Not knobs' list lacks 'the invalid set R1-R3'
+FAIL [tuning knobs] Tuning Knobs 'Not knobs' list lacks 'the family mapping'
+FAIL [tuning knobs] Tuning Knobs 'Not knobs' list lacks 'the lock_pass test'
+FAIL [tuning knobs] Tuning Knobs 'Not knobs' list lacks 'the rule that the final authorization changes nothing'
+FAIL [tuning knobs] Tuning Knobs 'Not knobs' list lacks 'the rule that every lock scene offers all three values'
+RESULT: FAIL (7 problems)
 exit code: 1

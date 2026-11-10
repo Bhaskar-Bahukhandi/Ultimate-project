@@ -1,18 +1,9 @@
-# Mutation 'r3_deleted_core_rule_3' on a temp copy (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\2e03922c-3aad-4f03-add8-36cf7c4b0612\scratchpad\r3\mutations\storyline-axes.r3_deleted_core_rule_3.md
-gdd:   C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\2e03922c-3aad-4f03-add8-36cf7c4b0612\scratchpad\r3\mutations\storyline-axes.r3_deleted_core_rule_3.md
-bible: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
-root:  C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [lifecycle] Core Rules numbered [1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], expected 1-13
-FAIL [lifecycle] line 101: Core Rule 4 title 'Red lines (new content).', expected 'Lock scenes resolve, clean or negotiated.'
-FAIL [lifecycle] line 106: Core Rule 5 title 'An invalid combination is a political crisis, not a fail state.', expected 'Red lines (new content).'
-FAIL [lifecycle] line 111: Core Rule 6 title 'Renegotiation.', expected 'An invalid combination is a political crisis, not a fail state.'
-FAIL [lifecycle] line 126: Core Rule 7 title 'Secret invocation and signposts.', expected 'Renegotiation.'
-FAIL [lifecycle] line 144: Core Rule 8 title 'A valid row is held to its word.', expected 'Secret invocation and signposts.'
-FAIL [lifecycle] line 147: Core Rule 9 title 'Storyline ID and the ID-lock gate.', expected 'A valid row is held to its word.'
-FAIL [lifecycle] line 154: Core Rule 10 title 'Final authorization and reconsideration.', expected 'Storyline ID and the ID-lock gate.'
-FAIL [lifecycle] line 165: Core Rule 11 title 'Ending family', expected 'Final authorization and reconsideration.'
-FAIL [lifecycle] line 179: Core Rule 12 title 'Companions are independent of the axes.', expected 'Ending family'
-FAIL [lifecycle] line 183: Core Rule 13 title 'Timing is a modifier.', expected 'Companions are independent of the axes.'
-RESULT: FAIL (11 problems)
+# Mutation 'r3_deleted_core_rule_3' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-axes.r3_deleted_core_rule_3.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-axes.r3_deleted_core_rule_3.md
+lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [core rules] Core Rules numbered [1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12], expected 1-12
+RESULT: FAIL (1 problems)
 exit code: 1

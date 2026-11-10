@@ -1,0 +1,11 @@
+# Mutation 'r4_red_line_extra_row' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-lifecycle.r4_red_line_extra_row.md
+gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-lifecycle.r4_red_line_extra_row.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [red lines] red-line rules ['R1', 'R2', 'R3', 'R1'] != ['R1', 'R2', 'R3']
+FAIL [red lines] line 66 (R1): pair 'SHARED + HEARTH', expected 'YOU + HEARTH' (the rule's combination)
+FAIL [red lines] line 66 (R1): value voiced 'no shared compulsion' differs from the pinned value
+RESULT: FAIL (3 problems)
+exit code: 1

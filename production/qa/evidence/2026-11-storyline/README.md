@@ -81,3 +81,93 @@ Research input: `research_draft.md` (narrative-director, sources cited per row).
 - `run_mutations.py` now takes `--gdd` and passes `--root` / `--bible` explicitly (so it can test a draft outside the
   repo). Evidence: `check_pass.log` (PASS) and 51 `mutation_*.log` (24 retargeted from rounds 1-2, 27 `r3_*`), all
   FAIL as expected.
+
+## Design review round 4 (2026-11-10): checker rework
+
+- `storyline-axes.md` revision 4 keeps the static core byte-identical and moves the lifecycle to the new
+  `design/gdd/storyline-lifecycle.md`. The round-3 checker failed on revision 4 (12 problems: `storyline_state`,
+  `final_reconsidered`, Core Rules 1-13, States/T1-T12, `renegotiations*`, and `secret_invoked`, which was a
+  round-2 stale string and is now a composer field again). A QA review also found 19 lifecycle mutations the old
+  checker let through, because it pinned names, not bodies.
+- **What is checked now** (`check_storyline_axes.py`, new `--lifecycle PATH`; derived = computed by the checker,
+  pinned = a constant in the checker, so a change is a design decision):
+  - axes AC1-AC2: as before, plus the seed map's "(26 flags)".
+  - axes AC3: as before, plus the composer record has exactly its 17 rows, each with pinned type, allowed values
+    (derived from the vocabularies: phases, axes + UNSET, families + RESERVED/NO_FAMILY, secret routes, the three
+    `act1_pace_*` timing seeds) and writer (axis writers built from the lock scene per axis + "Never the final
+    authorization").
+  - axes AC4: pinned bodies of `storyline_id`, `prereqs_met`, `lock_pass`, `storyline_phase`, `family`; the shape
+    of `invalid()` (`∈`); the results `storyline_phase` and `family` can return equal the record's vocabularies;
+    the `lock_pass` and `storyline_phase` examples recomputed (seed map / phase semantics); Core Rules 1-12 titles
+    and pinned key sentences (Rule 4's three red-line pairs and Rule 5's "six for R1, five for R2 or R3" derived from
+    the rules table); no `may/can/could/might` in Rules 7 and 9; invariants I1-I8 pinned row by row; the phase table
+    pinned; Tuning Knobs exactly the four knobs, enable defaults derived from the secret table scopes, none of
+    `invalid_combinations` / `reconsideration_triggers` / `faction_negotiation_allowed` / `reconsider_targets`, and
+    the pinned "Not knobs" items; Counts incl. `renegotiation_offers = 6 + 5 + 5 = 16` (each term computed from
+    `invalid()` per rule); Edge Cases 1-16 and Edge Case 16's four damaged records; AC1-AC12 contiguous; runtime
+    AC5-AC12 call only the axes Observables table; AC5's 64/128/24/37/3 derived.
+  - lifecycle document-level AC: headings; T1-T13 pinned cell by cell (from, event, guard, to, effects), every
+    from/to a phase of the axes table, no transition from VALIDATED/FIXED/FINAL to an earlier phase or to
+    CRISIS/DEFERRED, every phase reachable from LEANING, CRISIS and DEFERRED each have a knob-free way to VALIDATED
+    (I5), the gate event starts from every phase except CRISIS exactly once (I4); the crisis offer table equals
+    `crisis_offers` computed from `invalid()`, `defer:WITNESS` only on the row Witness transforms; the red-line table
+    names exactly R1-R3 with pair and speaker derived from each combination; the gate outcome table derived from the
+    axes phase table's gate column, its `(Tn)` references matching the transitions; the Formulas block pinned and
+    its offer-count sentence derived; "16 beats" and the retraction table's axes; the Inputs fields and the NG+
+    reset (same field set, defaults derived from the field types); pinned sentences (crisis cannot be left; no
+    reconsideration; no other transition; no knobs of its own); Edge Cases 1-8; L-AC1-L-AC18 contiguous, each with
+    known blocking stories and only lifecycle observables; L-AC3/4/6/16 numbers derived; the Validation note's
+    24 + 1 + 16 + 2 + 18 = 61 with every term derived (valid rows, 1.0 secret routes, offers, 2 per deferral route,
+    S7's paths × storable phases).
+  - both docs: every "the six (R1) renegotiations/offers" phrase states the computed R1 count; old stale strings
+    (C8-S17 exempt in the lifecycle doc, where it is the real Revolution Name scene, PM:7155); revision-3 vocabulary
+    (`storyline_state`, `final_reconsidered`, `reconsider_targets`, `reconsideration_triggers`, `GATE_CRISIS`,
+    `crisis_endured`, `renegotiations_valid`, `faction_negotiation_allowed`, `invalid_combinations`) everywhere
+    except `storyline-axes.md` Open Questions.
+- `run_mutations.py`: edits may target the lifecycle doc (`("life", old, new)`), controls (expected PASS) are
+  supported, and `--lifecycle` / `--log-dir` were added.
+- **Result** (2026-11-10): real docs `RESULT: PASS (0 problems)`; 124 mutations, all FAIL as expected; 1 control
+  PASS as expected; 0 unexpected. Reproduce with
+  `python -I -B run_mutations.py <repo_root> <scratch_dir>` (absolute `<repo_root>`).
+- **Round-4 mutations** (75, all FAIL; logs `mutation_r4_*.log`). QA survivors re-expressed: `r4_t4_to_validated`,
+  `r4_t13_to_leaning`, `r4_rule7_inverted`, `r4_rule9_reconsideration`, `r4_composer_authority_final_auth`,
+  `r4_knob_reconsideration_triggers`, `r4_knob_faction_negotiation`, `r4_validated_gate_turns_back`,
+  `r4_edge_case_16_deleted`, `r4_crisis_r2_gains_offer`, `r4_prereqs_met_dropped`, `r4_not_invalid_inverted`,
+  `r4_lock_pass_swapped`, `r4_phase_branch_order`, `r4_lac_no_blocked_by`, `r4_lac_unknown_observable`,
+  `r4_validation_total`, `r4_red_line_pair`, `r4_invariant_deleted`, `r4_stale_storyline_state`. One per new
+  check: transitions `r4_t7_event_changed`, `r4_t6_guard_dropped`, `r4_t5_effect_dropped`, `r4_t14_backward_added`,
+  `r4_t8_knob_guard`, `r4_no_other_transition`; Core Rules `r4_rule7_exception_appended`, `r4_rule9_offers_one`,
+  `r4_rule5_scene_may_end`, `r4_rule5_offer_count`, `r4_rule3_counts_seeds`, `r4_rule4_pair_swapped`; composer
+  `r4_composer_deferred_cleared`, `r4_composer_family_vocab`, `r4_composer_final_reconsidered`; knobs
+  `r4_knob_default_flip`, `r4_knob_dropped`, `r4_not_knobs_lock_pass_dropped`; phases / gate `r4_phase_row_deleted`,
+  `r4_gate_outcome_wrong`, `r4_gate_t_ref_wrong`; invariants / edge cases `r4_invariant_rule_ref`,
+  `r4_edge_case_16_item_dropped`; formulas `r4_family_reserved_changed`, `r4_invalid_not_member`,
+  `r4_lock_pass_example_wrong`, `r4_phase_example_wrong`; counts / ACs `r4_counts_offers_wrong`,
+  `r4_counts_offers_terms`, `r4_ac5_case_count`, `r4_seed_intro_count`, `r4_ac8_lifecycle_observable`; lifecycle
+  `r4_crisis_r1_loses_offer`, `r4_crisis_r3_defer`, `r4_red_line_speaker`, `r4_red_line_extra_row`,
+  `r4_retraction_beats`, `r4_life_formula_invalid_dropped`, `r4_life_offer_count_sentence`,
+  `r4_life_crisis_leavable`, `r4_life_s8_reconsideration`, `r4_life_own_knob`, `r4_ng_reset_default`,
+  `r4_ng_reset_field_dropped`, `r4_life_number_word`, `r4_life_edge_case_gap`, `r4_life_heading`,
+  `r4_lac_axes_observable`, `r4_lac_unknown_story`, `r4_lac_number_gap`, `r4_lac6_runs`,
+  `r4_validation_term_consistent`, `r4_validation_matrix`, `r4_stale_storyline_state_axes`, `r4_stale_gate_crisis`.
+  Control: `r4_control_open_questions_vocab` (revision-3 words in axes Open Questions) PASS.
+- **Kept from rounds 1-3**: 49. Retargeted to revision-4 text (same name, same intent): `r3_counts_false_chain`,
+  `r3_counts_line_dropped` (Counts alignment), `r3_deleted_core_rule_8` (the rule is now number 7),
+  `r3_core_rule_retitled` (Rule 6), `r3_state_renamed` (phase table), `r3_transition_unknown_state` (lifecycle T13),
+  `r3_transition_dropped` (lifecycle T9), `r3_composer_state_vocab` (`storyline_phase`), `r3_composer_field_dropped`,
+  `r3_ac_blocked_unknown` (AC8), `r3_ac_unknown_observable` (AC10), `r3_ac_number_gap` (AC12).
+- **Retired** (target removed structure): `r3_counts_wrong_value` (`renegotiations_valid` no longer exists; replaced
+  by `r4_counts_offers_wrong`), `r3_stale_secret_invoked` (`secret_invoked` is a legitimate field in revision 4).
+  Their old logs are left in place, unrefreshed.
+- **Logs not refreshed this round**: `check_pass.log` and the 51 round-1-3 `mutation_*.log` still show revision 3;
+  this round only wrote new `mutation_r4_*.log` (the full run's logs went to a scratch dir via `--log-dir`).
+  Re-running without `--log-dir` refreshes them.
+- **Still NOT checked**: prose outside the pinned sentences (Overview, Player Fantasy, Terms, scene contracts
+  S1-S3/S5/S6, Consent variants, the retraction table's withdrawn items and sources); Edge Case bodies other than
+  axes 16 (numbering only); L-AC bodies beyond blocking stories, call names and the derived numbers; the
+  observables' return descriptions; Dependencies and Cross-References; PM line references in prose (only table
+  source cells are resolved); the seven `storyline_id` and the `family` examples (not recomputed); the lifecycle
+  `signpost` / `last_chance_offers` formulas are pinned, not executed; backticked record fields read directly in
+  L-ACs (`lock_negotiated`, `axis_revised`, `witness_deferred`, `secret_invoked`) — only `name(` calls are checked
+  against the Observables table; and, as before, the comment-stripping in `flag_exists`. Pinned writers and
+  sentences make harmless rewording FAIL: that is intended (a change is a design decision), not a defect.

@@ -1,0 +1,9 @@
+# Mutation 'r4_crisis_r1_loses_offer' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-lifecycle.r4_crisis_r1_loses_offer.md
+gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-lifecycle.r4_crisis_r1_loses_offer.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [crisis offers] line 78 (R1): offers ['revise:authority:NONE', 'revise:authority:SHARED', 'revise:deleted:CHOOSE', 'revise:deleted:RELEASE', 'revise:faction:ARCHIVE'] != crisis_offers ['revise:authority:NONE', 'revise:authority:SHARED', 'revise:deleted:CHOOSE', 'revise:deleted:RELEASE', 'revise:faction:ARCHIVE', 'revise:faction:CONTINUITY']
+RESULT: FAIL (1 problems)
+exit code: 1

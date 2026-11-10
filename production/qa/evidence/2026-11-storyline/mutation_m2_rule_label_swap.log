@@ -1,10 +1,29 @@
-# Mutation 'm2_rule_label_swap' on a temp copy (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\2e03922c-3aad-4f03-add8-36cf7c4b0612\scratchpad\r3\mutations\storyline-axes.m2_rule_label_swap.md
-gdd:   C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\2e03922c-3aad-4f03-add8-36cf7c4b0612\scratchpad\r3\mutations\storyline-axes.m2_rule_label_swap.md
-bible: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
-root:  C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [secrets] line 277 (SL-SECRET-WITNESS): R1 is NAL, not YHR
-FAIL [secrets] line 279 (SL-SECRET-CROWNLESS): R2 is YHR, not NAL
-FAIL [formulas] line 412: transform() map {'R1': 'WITNESS', 'R2': 'CROWNLESS', 'R3': 'FIRSTWAKE'} != {'R2': 'WITNESS', 'R1': 'CROWNLESS', 'R3': 'FIRSTWAKE'} (rules table and PM:8784)
-RESULT: FAIL (3 problems)
+# Mutation 'm2_rule_label_swap' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-axes.m2_rule_label_swap.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-axes.m2_rule_label_swap.md
+lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [secrets] line 284 (SL-SECRET-WITNESS): R1 is NAL, not YHR
+FAIL [secrets] line 286 (SL-SECRET-CROWNLESS): R2 is YHR, not NAL
+FAIL [formulas] line 425: transform() map {'R1': 'WITNESS', 'R2': 'CROWNLESS', 'R3': 'FIRSTWAKE'} != {'R2': 'WITNESS', 'R1': 'CROWNLESS', 'R3': 'FIRSTWAKE'} (rules table and PM:8784)
+FAIL [core rules] line 107: Core Rule 4 lacks the pinned sentence 'Hearth when YOU and HEARTH are locked (R2'
+FAIL [core rules] line 107: Core Rule 4 lacks the pinned sentence 'Archive when NONE and ARCHIVE are locked (R1'
+FAIL [counts] axes line 538: 'the six renegotiations', but R1 has five offers
+FAIL [counts] axes line 560: 'the six R1 renegotiations', but R1 has five offers
+FAIL [red lines] line 63 (R1): pair 'YOU + HEARTH', expected 'NONE + ARCHIVE' (the rule's combination)
+FAIL [red lines] line 63 (R1): speaker 'Hearth delegate', expected 'Archive delegate'
+FAIL [red lines] line 64 (R2): pair 'NONE + ARCHIVE', expected 'YOU + HEARTH' (the rule's combination)
+FAIL [red lines] line 64 (R2): speaker 'Archive delegate', expected 'Hearth delegate'
+FAIL [crisis offers] line 78: R1 combination YOU-HEARTH-RESTORE != rules table NONE-ARCHIVE-RELEASE
+FAIL [crisis offers] line 78 (R1): offers ['revise:authority:NONE', 'revise:authority:SHARED', 'revise:deleted:CHOOSE', 'revise:deleted:RELEASE', 'revise:faction:ARCHIVE', 'revise:faction:CONTINUITY'] != crisis_offers ['revise:authority:SHARED', 'revise:authority:YOU', 'revise:deleted:CHOOSE', 'revise:deleted:RESTORE', 'revise:faction:HEARTH']
+FAIL [crisis offers] line 79: R2 combination NONE-ARCHIVE-RELEASE != rules table YOU-HEARTH-RESTORE
+FAIL [crisis offers] line 79 (R2): offers ['revise:authority:SHARED', 'revise:authority:YOU', 'revise:deleted:CHOOSE', 'revise:deleted:RESTORE', 'revise:faction:HEARTH'] != crisis_offers ['revise:authority:NONE', 'revise:authority:SHARED', 'revise:deleted:CHOOSE', 'revise:deleted:RELEASE', 'revise:faction:ARCHIVE', 'revise:faction:CONTINUITY']
+FAIL [lifecycle formulas] offer counts sentence is not '|crisis_offers| is 5 for R1 (6 with the deferral), 6 for R2 and R3, so 16 renegotiation offers in all; |last_chance_offers| is 5 or 6.'
+FAIL [counts] lifecycle line 111: 'the six R1 renegotiations', but R1 has five offers
+FAIL [counts] lifecycle line 136: 'the six R1 offers', but R1 has five offers
+FAIL [counts] lifecycle line 173: 'the six renegotiations', but R1 has five offers
+FAIL [counts] lifecycle line 276: 'the six R1 renegotiations', but R1 has five offers
+FAIL [counts] lifecycle line 285: 'the six renegotiations', but R1 has five offers
+RESULT: FAIL (21 problems)
 exit code: 1

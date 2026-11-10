@@ -1,0 +1,10 @@
+# Mutation 'r4_family_reserved_changed' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-axes.r4_family_reserved_changed.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\a891c051-01e7-4e1f-b417-a1b97c514457\scratchpad\verify2\mutations\storyline-axes.r4_family_reserved_changed.md
+lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [formulas] line 498: family body differs from the pinned body: 'SL-SECRET-CROWNLESS, SL-SECRET-FIRSTWAKE → NO_FAMILY (unreachable while their routes are disabled)' (expected 'SL-SECRET-CROWNLESS, SL-SECRET-FIRSTWAKE → RESERVED (unreachable while their routes are disabled)')
+FAIL [formulas] family() returns ['BOUND', 'CONSENT', 'NONE_AUTH', 'NO_FAMILY', 'SOLE'], expected ['BOUND', 'CONSENT', 'NONE_AUTH', 'NO_FAMILY', 'RESERVED', 'SOLE']
+RESULT: FAIL (2 problems)
+exit code: 1
