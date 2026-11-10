@@ -1,12 +1,16 @@
 # Mutation 'deleted_row' on a temp copy (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\4f9c4b5a-4ff5-473f-b53b-332ffbbb1fa1\scratchpad\mutations\storyline-axes.deleted_row.md
-gdd:   C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\4f9c4b5a-4ff5-473f-b53b-332ffbbb1fa1\scratchpad\mutations\storyline-axes.deleted_row.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\2e03922c-3aad-4f03-add8-36cf7c4b0612\scratchpad\r3\mutations\storyline-axes.deleted_row.md
+gdd:   C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\2e03922c-3aad-4f03-add8-36cf7c4b0612\scratchpad\r3\mutations\storyline-axes.deleted_row.md
 bible: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:  C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
 FAIL [combinations] combination table has 26 rows, expected 27
 FAIL [combinations] missing combination SHARED-ARCHIVE-CHOOSE
-FAIL [combinations] line 156: valid_count: 24 but the table has 23 valid rows
-FAIL [combinations] line 156: family split {'SOLE': 8, 'BOUND': 9, 'NONE_AUTH': 7} but the table has {'SOLE': 8, 'BOUND': 8, 'NONE_AUTH': 7}
-FAIL [secrets] line 386: reachable_1_0: 25, expected 23 + 1
-RESULT: FAIL (5 problems)
+FAIL [combinations] line 231: valid_count: 24 but the table has 23 valid rows
+FAIL [combinations] line 231: family split {'SOLE': 8, 'BOUND': 9, 'NONE_AUTH': 7} but the table has {'SOLE': 8, 'BOUND': 8, 'NONE_AUTH': 7}
+FAIL [secrets] line 490: reachable_1_0: 25, expected 23 + 1
+FAIL [counts] line 494: valid_count = 24, but the tables give 23
+FAIL [counts] line 496: design_storylines = 27, but the tables give 26
+FAIL [counts] line 497: reachable_1_0 = 25, but the tables give 24
+FAIL [counts] line 499: family_BOUND = 9, but the tables give 8
+RESULT: FAIL (9 problems)
 exit code: 1

@@ -1,0 +1,13 @@
+# Mutation 'r3_deleted_core_rule_8' on a temp copy (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\2e03922c-3aad-4f03-add8-36cf7c4b0612\scratchpad\r3\mutations\storyline-axes.r3_deleted_core_rule_8.md
+gdd:   C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\2e03922c-3aad-4f03-add8-36cf7c4b0612\scratchpad\r3\mutations\storyline-axes.r3_deleted_core_rule_8.md
+bible: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:  C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [lifecycle] Core Rules numbered [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13], expected 1-13
+FAIL [lifecycle] line 147: Core Rule 9 title 'Storyline ID and the ID-lock gate.', expected 'A valid row is held to its word.'
+FAIL [lifecycle] line 154: Core Rule 10 title 'Final authorization and reconsideration.', expected 'Storyline ID and the ID-lock gate.'
+FAIL [lifecycle] line 165: Core Rule 11 title 'Ending family', expected 'Final authorization and reconsideration.'
+FAIL [lifecycle] line 179: Core Rule 12 title 'Companions are independent of the axes.', expected 'Ending family'
+FAIL [lifecycle] line 183: Core Rule 13 title 'Timing is a modifier.', expected 'Companions are independent of the axes.'
+RESULT: FAIL (6 problems)
+exit code: 1

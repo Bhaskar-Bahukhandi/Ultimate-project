@@ -1,0 +1,8 @@
+# Mutation 'r3_counts_wrong_value' on a temp copy (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\2e03922c-3aad-4f03-add8-36cf7c4b0612\scratchpad\r3\mutations\storyline-axes.r3_counts_wrong_value.md
+gdd:   C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\2e03922c-3aad-4f03-add8-36cf7c4b0612\scratchpad\r3\mutations\storyline-axes.r3_counts_wrong_value.md
+bible: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:  C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [counts] line 503: renegotiations_valid = 17, but the tables give 16
+RESULT: FAIL (1 problems)
+exit code: 1

@@ -1,9 +1,10 @@
 # Mutation 'm2_rule_label_swap' on a temp copy (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\4f9c4b5a-4ff5-473f-b53b-332ffbbb1fa1\scratchpad\mutations\storyline-axes.m2_rule_label_swap.md
-gdd:   C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\4f9c4b5a-4ff5-473f-b53b-332ffbbb1fa1\scratchpad\mutations\storyline-axes.m2_rule_label_swap.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\2e03922c-3aad-4f03-add8-36cf7c4b0612\scratchpad\r3\mutations\storyline-axes.m2_rule_label_swap.md
+gdd:   C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\2e03922c-3aad-4f03-add8-36cf7c4b0612\scratchpad\r3\mutations\storyline-axes.m2_rule_label_swap.md
 bible: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:  C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [secrets] line 200 (SL-SECRET-WITNESS): R1 is NAL, not YHR
-FAIL [secrets] line 202 (SL-SECRET-CROWNLESS): R2 is YHR, not NAL
-RESULT: FAIL (2 problems)
+FAIL [secrets] line 277 (SL-SECRET-WITNESS): R1 is NAL, not YHR
+FAIL [secrets] line 279 (SL-SECRET-CROWNLESS): R2 is YHR, not NAL
+FAIL [formulas] line 412: transform() map {'R1': 'WITNESS', 'R2': 'CROWNLESS', 'R3': 'FIRSTWAKE'} != {'R2': 'WITNESS', 'R1': 'CROWNLESS', 'R3': 'FIRSTWAKE'} (rules table and PM:8784)
+RESULT: FAIL (3 problems)
 exit code: 1

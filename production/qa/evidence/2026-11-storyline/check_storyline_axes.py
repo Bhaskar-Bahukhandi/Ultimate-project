@@ -15,9 +15,12 @@ problem it finds:
    ``until:lock:<axis>``, modifiers ``no``, timing ``0`` and ``no``);
 5. the side-storyline table (arcs 01-12, cell vocabularies, pm_line on an "Axis effect:" line, in arc order);
 6. the composer input record (required fields, non-empty cells, axis vocabularies plus UNSET, secret routes);
-7. the ``storyline_id`` signature (exactly ``A, F, D, I``: no timing or companion input);
-8. the dated decision line in the Story Bible;
-9. none of the stale strings removed by the review revisions.
+7. the ``storyline_id`` signature (exactly ``A, F, D, I``) and body (no timing, pace or companion input), the
+   ``transform()`` map, the family map (Core Rule 11 and ``family()``) and the Counts block's arithmetic;
+8. the lifecycle structure: Core Rules 1-13 with their titles, the States table and the transition table T1-T12;
+9. the runtime acceptance criteria: each names its blocking stories and uses only listed observables;
+10. the dated decision line in the Story Bible;
+11. none of the stale strings removed by the review revisions.
 
 Usage (from anywhere; defaults point at the real files)::
 
@@ -106,8 +109,25 @@ SIDE_ARCS = tuple(f"{n:02d}" for n in range(1, 13))
 POST_1_0_ARCS = frozenset({"05", "08", "09"})
 SCOPES = ("1.0", "post-1.0")
 
-COMPOSER_FIELDS = ("authority", "faction", "deleted", "secret_route", "axis_revised", "final_reconsidered",
-                   "companions_present", "regions_completed", "timing_flags", "act1_pace")
+COMPOSER_FIELDS = ("storyline_state", "storyline_id", "authority", "faction", "deleted", "secret_route", "family",
+                   "axis_revised", "lock_negotiated", "final_reconsidered", "companions_present", "regions_completed",
+                   "timing_flags", "act1_pace")
+AXIS_SET_FIELDS = ("axis_revised", "lock_negotiated")  # sets whose allowed values are exactly the three axes
+FAMILIES = frozenset({"SOLE", "BOUND", "NONE_AUTH", "CONSENT"})
+
+# Revision 3 (design review round 3): the lifecycle. A change here is a design decision.
+CORE_RULE_TITLES = (
+    "Three axes, one value each.", "Seeds are arguments, never gates.", "Lock scenes resolve, clean or negotiated.",
+    "Red lines (new content).", "An invalid combination is a political crisis, not a fail state.", "Renegotiation.",
+    "Secret invocation and signposts.", "A valid row is held to its word.", "Storyline ID and the ID-lock gate.",
+    "Final authorization and reconsideration.", "Ending family", "Companions are independent of the axes.",
+    "Timing is a modifier.")
+STATES = ("LEANING", "PARTLY_LOCKED", "CRISIS", "VALIDATED", "FIXED", "FINAL")
+TRANSITIONS = tuple(f"T{n}" for n in range(1, 13))
+# Identifiers that would make the storyline ID depend on timing or companions (GDD AC-4, Core Rule 13).
+FORBIDDEN_ID_INPUTS = re.compile(r"pace|timing|companion|bridge|medicine|act[1-4]_|ch[0-9]+_|has_", re.IGNORECASE)
+KNOWN_STORIES = frozenset({"Y2-PP-T17", "Y1-P1-T05", "Y1-P1-T03", "Y1-P0-S06b"})
+FIRST_RUNTIME_AC = 5
 
 STORYLINE_ID_PARAMS = ("A", "F", "D", "I")  # GDD AC-4: no timing or companion input
 
@@ -117,17 +137,22 @@ OPTIONAL_HEADINGS = frozenset({"Summary", "Cross-References", "Open Questions"})
 
 # Removed by review revision 1 (2026-11-09) and revision 2 (2026-11-10); must not reappear.
 STALE_STRINGS = ("PM:3615", "C8-S17", "ch8_choice_made", "S = T", "Kaelen only executes", "PM:8735",
-                 "final authorization, before")
+                 "final authorization, before", "secret_invoked", "PM:7118", "Kaelen may be one witness",
+                 "at the final confrontation, to dismantle", "PM:7062-7070")
 
 BIBLE_DECISION_PREFIX = "**Decided (2026-11-08, Y1-P0-S06a):**"
 
 # Table headers, matched exactly (after stripping cells and backticks).
-H_COMBO = ("id", "authority", "faction", "deleted", "status", "family", "rule", "source", "companions_possible")
+H_COMBO = ("id", "authority", "faction", "deleted", "status", "family", "rule", "source", "danger",
+           "companions_possible")
 H_RULES = ("rule", "combination", "contradiction", "source")
 H_SECRET = ("id", "route", "family", "scope", "source")
 H_SEED = ("flag", "pushes", "direction", "overturnable", "source")
 H_SIDE = ("arc", "title", "primary", "secondary", "scope", "pm_line")
 H_COMPOSER = ("field", "type", "allowed", "writer")
+H_STATES = ("State", "storyline_state", "Live ID", "Gate", "Behavior")
+H_TRANSITIONS = ("#", "from", "event", "guard", "to", "effects")
+H_OBSERVABLES = ("observable", "returns")
 
 # Source files cited by bare name, resolved under the repo root.
 SOURCE_ALIASES = {
@@ -335,7 +360,8 @@ def check_combinations(lines: list[str], src: SourceResolver, probs: Problems) -
     family_counts = {family: 0 for family in FAMILY_BY_AUTHORITY.values()}
     valid_rows = 0
     invalid_triples: list[tuple[str, str, str]] = []
-    for lineno, (sl_id, auth, fac, dele, status, family, rule, source, comps) in rows:
+    pm = src.pm() or []
+    for lineno, (sl_id, auth, fac, dele, status, family, rule, source, danger, comps) in rows:
         where = f"line {lineno} ({sl_id})"
         if sl_id in seen_ids:
             probs.add(area, f"{where}: duplicate id {sl_id} (first at line {seen_ids[sl_id]})")
@@ -363,6 +389,17 @@ def check_combinations(lines: list[str], src: SourceResolver, probs: Problems) -
             heading = f"# STORYLINE {abbreviation(triple)} "
             if cited is not None and not cited.startswith(heading):
                 probs.add(area, f"{where}: source {source} is not the '{heading.strip()}' heading")
+            elif cited is not None:
+                # The route's own "Primary danger:" line: the first one after its heading, before the next heading.
+                start = int(source.rsplit(":", 1)[1])
+                first = next((i + 1 for i in range(start, len(pm)) if pm[i].startswith(("Primary danger:", "# "))),
+                             None)
+                want = None
+                if first is not None and pm[first - 1].startswith("Primary danger:"):
+                    want = f"{PM_PATH.rsplit('/', 1)[1]}:{first}"
+                if want is None or danger != want:
+                    probs.add(area, f"{where}: danger '{danger}' is not the route's first 'Primary danger:' line "
+                                    f"({want})")
         elif status == "invalid":
             if not is_dash(family):
                 probs.add(area, f"{where}: invalid row family '{family}', expected —")
@@ -373,6 +410,8 @@ def check_combinations(lines: list[str], src: SourceResolver, probs: Problems) -
                 probs.add(area, f"{where}: invalid row cites {rule}, whose combination is {' + '.join(rules[rule])}")
             if cited is not None and not cited.startswith("Invalid V"):
                 probs.add(area, f"{where}: source {source} is not an 'Invalid V' line")
+            if not is_dash(danger):
+                probs.add(area, f"{where}: invalid row danger '{danger}', expected —")
         else:
             probs.add(area, f"{where}: status '{status}' not in valid/invalid")
         present = {c.strip() for c in comps.split(",") if c.strip() and not is_dash(c.strip())}
@@ -413,7 +452,11 @@ def check_combinations(lines: list[str], src: SourceResolver, probs: Problems) -
         stated = {"SOLE": int(m[1]), "BOUND": int(m[2]), "NONE_AUTH": int(m[3])}
         if stated != family_counts:
             probs.add(area, f"line {lineno}: family split {stated} but the table has {family_counts}")
+    LAST["family_counts"] = family_counts
     return rules, valid_rows
+
+
+LAST: dict[str, object] = {"family_counts": {}, "shipped": 0}  # values derived by one check, read by check_counts
 
 
 # --- 3. Secret storylines ------------------------------------------------------------------------------------------
@@ -473,6 +516,7 @@ def check_secrets(lines: list[str], src: SourceResolver, rules: dict[str, tuple[
         elif abbreviation(rules[m[1]]) != foundation:
             probs.add(area, f"{where}: {m[1]} is {abbreviation(rules[m[1]])}, not {foundation}")
 
+    LAST["shipped"] = shipped
     # reachable_1_0 = valid rows + secret rows shipped in 1.0
     reach = [(n, int(m[1])) for n, line in enumerate(lines, 1) for m in re.finditer(r"reachable_1_0:\s*(\d+)", line)]
     if not reach:
@@ -487,16 +531,33 @@ def check_secrets(lines: list[str], src: SourceResolver, rules: dict[str, tuple[
     if len(knob) != 1:
         probs.add(area, f"expected one secret_prerequisites knob row, found {len(knob)}")
         return
-    stated = {m[1]: re.findall(r"`([A-Z0-9_]+)`", m[2])
-              for m in re.finditer(r"(WITNESS|CROWNLESS|FIRSTWAKE): ((?:`[A-Z0-9_]+`(?:,\s*)?)+)", knob[0])}
+    unlock = [line for line in lines if line.lstrip().startswith("| `secret_unlock_flag[")]
+    if len(unlock) != 1:
+        probs.add(area, f"expected one secret_unlock_flag knob row, found {len(unlock)}")
+        return
+    # Read only the Default cell, so flags named in the Safe range cell are not taken for the default list.
+    route_re = r"(WITNESS|CROWNLESS|FIRSTWAKE): ((?:`[A-Z0-9_]+`(?:,\s*)?)+)"
+    stated = {m[1]: re.findall(r"[A-Z0-9_]+", m[2]) for m in re.finditer(route_re, knob[0].split("|")[2])}
+    unlocks = {m[1]: re.findall(r"[A-Z0-9_]+", m[2]) for m in re.finditer(route_re, unlock[0].split("|")[2])}
     expected = pm_required_flags(pm) if pm is not None else {}
+    seen: dict[str, str] = {}
     for route in SECRET_ROUTES:
-        if route not in stated:
-            probs.add(area, f"secret_prerequisites lists no flags for {route}")
-        elif route not in expected:
+        if route not in stated or route not in unlocks:
+            probs.add(area, f"secret_prerequisites / secret_unlock_flag lists no flags for {route}")
+            continue
+        if len(unlocks[route]) != 1:
+            probs.add(area, f"secret_unlock_flag {route} has {len(unlocks[route])} flags, expected 1")
+        if len(stated[route]) < 2:
+            probs.add(area, f"secret_prerequisites {route} has {len(stated[route])} flags, expected at least 2")
+        for flag in stated[route]:
+            if flag in seen:
+                probs.add(area, f"secret_prerequisites flag {flag} is listed for {seen[flag]} and {route}")
+            seen[flag] = route
+        if route not in expected:
             probs.add(area, f"production master has no SEC block for {route}")
-        elif stated[route] != expected[route]:
-            probs.add(area, f"secret_prerequisites {route} {stated[route]} != production master {expected[route]}")
+        elif stated[route] + unlocks[route] != expected[route]:
+            probs.add(area, f"secret_prerequisites + secret_unlock_flag {route} {stated[route] + unlocks[route]} "
+                            f"!= production master {expected[route]}")
 
 
 # --- 4. Act 1 seed map ---------------------------------------------------------------------------------------------
@@ -623,8 +684,12 @@ def check_composer(lines: list[str], probs: Problems) -> None:
             probs.add(area, f"line {lineno} ({field}): allowed {sorted(allowed)} != {[UNSET, *AXES[field]]}")
         if field == "secret_route" and (missing := SECRET_ROUTE_ALLOWED - allowed):
             probs.add(area, f"line {lineno} (secret_route): allowed lacks {sorted(missing)}")
-        if field == "axis_revised" and allowed != set(AXES):
-            probs.add(area, f"line {lineno} (axis_revised): allowed {sorted(allowed)} != {sorted(AXES)}")
+        if field in AXIS_SET_FIELDS and allowed != set(AXES):
+            probs.add(area, f"line {lineno} ({field}): allowed {sorted(allowed)} != {sorted(AXES)}")
+        if field == "storyline_state" and allowed != set(STATES):
+            probs.add(area, f"line {lineno} (storyline_state): allowed {sorted(allowed)} != {sorted(STATES)}")
+        if field == "family" and allowed != FAMILIES:
+            probs.add(area, f"line {lineno} (family): allowed {sorted(allowed)} != {sorted(FAMILIES)}")
 
 
 # --- 7. storyline_id signature -------------------------------------------------------------------------------------
@@ -637,16 +702,178 @@ def check_signature(lines: list[str], probs: Problems) -> None:
         params = tuple(p.strip() for p in m[1].split(","))
         if params != STORYLINE_ID_PARAMS:
             probs.add("formulas", f"line {lineno}: storyline_id{params} != storyline_id{STORYLINE_ID_PARAMS}")
+        # The body runs to the end of the code fence; it may not read timing, pace or companion state.
+        for n in range(lineno, len(lines)):
+            if lines[n].lstrip().startswith("```"):
+                break
+            code = lines[n].split("#", 1)[0]
+            if (hit := FORBIDDEN_ID_INPUTS.search(code)) is not None:
+                probs.add("formulas", f"line {n + 1}: storyline_id body reads '{hit[0]}' (timing/companion input)")
 
 
-# --- 8. Story Bible ------------------------------------------------------------------------------------------------
+def check_maps(lines: list[str], rules: dict[str, tuple[str, ...]], probs: Problems) -> None:
+    """transform() maps each rule to the route PM:8784 gives its combination; both family maps are the fixed one."""
+    area = "formulas"
+    defs = [(n, line) for n, line in enumerate(lines, 1) if line.lstrip().startswith("transform(A, F, D) =")]
+    if len(defs) != 1:
+        probs.add(area, f"expected one 'transform(A, F, D) =' definition, found {len(defs)}")
+    else:
+        lineno, line = defs[0]
+        stated = dict(re.findall(r"(R\d+) → ([A-Z]+)", line))
+        want = {rule: next((r for r, f in SECRET_FOUNDATION.items() if f == abbreviation(triple)), "?")
+                for rule, triple in rules.items()}
+        if stated != want:
+            probs.add(area, f"line {lineno}: transform() map {stated} != {want} (rules table and PM:8784)")
+    maps = [(n, m) for n, line in enumerate(lines, 1)
+            for m in re.finditer(r"YOU → (\w+), SHARED → (\w+), NONE → (\w+)", line)]
+    if len(maps) < 2:
+        probs.add(area, f"expected the family map in Core Rule 11 and in family(), found {len(maps)}")
+    for lineno, m in maps:
+        stated = {"YOU": m[1], "SHARED": m[2], "NONE": m[3]}
+        if stated != FAMILY_BY_AUTHORITY:
+            probs.add(area, f"line {lineno}: family map {stated} != {FAMILY_BY_AUTHORITY}")
+    witness = [n for n, line in enumerate(lines, 1) if re.match(r"\s*SL-SECRET-WITNESS\s+→ CONSENT\s*$", line)]
+    if len(witness) != 1:
+        probs.add(area, "family() does not map SL-SECRET-WITNESS → CONSENT exactly once")
+
+
+def eval_arith(expr: str) -> int | None:
+    """Evaluate an integer expression of digits, ×, −, + and spaces; None if it holds anything else."""
+    expr = expr.replace("×", "*").replace("−", "-").strip()
+    if not re.fullmatch(r"[\d\s*+-]+", expr):
+        return None
+    total, sign = 0, 1
+    for term in re.split(r"\s*([+-])\s*", expr):
+        if term in ("+", "-"):
+            sign = 1 if term == "+" else -1
+            continue
+        product = 1
+        for factor in term.split("*"):
+            product *= int(factor)
+        total += sign * product
+    return total
+
+
+def check_counts(lines: list[str], rules: dict[str, tuple[str, ...]], valid_rows: int, family_counts: dict[str, int],
+                 secret_rows: int, shipped: int, probs: Problems) -> None:
+    """Every 'name = a = b' line of the Counts block is arithmetically true and equals the value derived here."""
+    area = "counts"
+    try:
+        start = lines.index("### Counts")
+    except ValueError:
+        probs.add(area, "no '### Counts' section")
+        return
+    invalid = set(rules.values())
+    renegotiations = len(rules) * sum(len(values) - 1 for values in AXES.values())
+    to_invalid = sum(1 for triple in invalid for axis, values in enumerate(AXES.values()) for v in values
+                     if v != triple[axis] and tuple(v if i == axis else x for i, x in enumerate(triple)) in invalid)
+    want = {"combinations": len(AUTHORITY) * len(FACTION) * len(DELETED), "valid_count": valid_rows,
+            "secret_storylines": secret_rows, "design_storylines": valid_rows + secret_rows,
+            "reachable_1_0": valid_rows + shipped, "family_SOLE": family_counts.get("SOLE"),
+            "family_BOUND": family_counts.get("BOUND"), "family_NONE_AUTH": family_counts.get("NONE_AUTH"),
+            "renegotiations": renegotiations, "renegotiations_valid": renegotiations - to_invalid}
+    seen = set()
+    for n in range(start + 1, len(lines)):
+        if lines[n].startswith("## "):
+            break
+        m = re.match(r"^(\w+)\s*=\s*(.+)$", lines[n])
+        if not m or m[1] not in want:
+            continue
+        seen.add(m[1])
+        values = [eval_arith(part) for part in m[2].split("=")]
+        if None in values or len(set(values)) != 1:
+            probs.add(area, f"line {n + 1}: '{lines[n].strip()}' is not a true chain of equal integers")
+        elif values[-1] != want[m[1]]:
+            probs.add(area, f"line {n + 1}: {m[1]} = {values[-1]}, but the tables give {want[m[1]]}")
+    for name in sorted(set(want) - seen):
+        probs.add(area, f"Counts block has no '{name} = ...' line")
+
+
+# --- 8. Lifecycle structure ----------------------------------------------------------------------------------------
+def check_lifecycle(lines: list[str], probs: Problems) -> None:
+    """Core Rules 1-13 in order with their titles; States table = STATES; transitions T1-T12 over those states."""
+    area = "lifecycle"
+    try:
+        start = lines.index("### Core Rules")
+        end = lines.index("### States and Transitions", start)
+    except ValueError:
+        probs.add(area, "no '### Core Rules' / '### States and Transitions' sections")
+        return
+    rules = [(n + 1, m) for n in range(start, end) if (m := re.match(r"^(\d+)\. \*\*(.+?)\*\*", lines[n]))]
+    numbers = [int(m[1]) for _, m in rules]
+    if numbers != list(range(1, len(CORE_RULE_TITLES) + 1)):
+        probs.add(area, f"Core Rules numbered {numbers}, expected 1-{len(CORE_RULE_TITLES)}")
+    for (lineno, m), title in zip(rules, CORE_RULE_TITLES):
+        if m[2] != title:
+            probs.add(area, f"line {lineno}: Core Rule {m[1]} title '{m[2]}', expected '{title}'")
+    states = [cells[1] for _, cells in get_table(lines, H_STATES, area, probs)]
+    if tuple(states) != STATES:
+        probs.add(area, f"States table storyline_state values {states} != {list(STATES)}")
+    rows = get_table(lines, H_TRANSITIONS, area, probs)
+    if tuple(cells[0] for _, cells in rows) != TRANSITIONS:
+        probs.add(area, f"transition ids {[cells[0] for _, cells in rows]} != T1-T12 in order")
+    for lineno, cells in rows:
+        for name, cell in (("from", cells[1]), ("to", cells[4])):
+            if name == "to" and cell == "unchanged":
+                continue
+            named = re.findall(r"[A-Z][A-Z_]{3,}", cell)
+            if not named or any(s not in STATES for s in named):
+                probs.add(area, f"line {lineno} ({cells[0]}): '{name}' cell '{cell}' names no state or an unknown one")
+
+
+# --- 9. Runtime acceptance criteria ---------------------------------------------------------------------------------
+def check_runtime_acs(lines: list[str], probs: Problems) -> None:
+    """Each runtime AC names known blocking stories and only calls observables listed in the Observables table."""
+    area = "acceptance"
+    observed: set[str] = set()
+    for _, cells in get_table(lines, H_OBSERVABLES, area, probs):
+        observed.update(re.findall(r"(\w+)\(", cells[0]))
+    try:
+        start = lines.index("## Acceptance Criteria")
+    except ValueError:
+        return
+    acs: dict[int, list[str]] = {}
+    current = None
+    for n in range(start + 1, len(lines)):
+        line = lines[n]
+        if line.startswith("## ") or line.startswith("**Validation note"):
+            break
+        if m := re.match(r"^(\d+)\. ", line):
+            current = int(m[1])
+            acs[current] = [line]
+        elif current is not None and line.startswith("   "):
+            acs[current].append(line)
+        else:
+            current = None
+    runtime = {k: " ".join(v) for k, v in acs.items() if k >= FIRST_RUNTIME_AC}
+    if not runtime:
+        probs.add(area, "no runtime acceptance criteria found")
+    numbers = sorted(acs)
+    if numbers != list(range(1, len(numbers) + 1)):
+        probs.add(area, f"acceptance criteria numbered {numbers}, expected 1-{len(numbers)}")
+    allowed_calls = observed | {"storyline_id", "family", "reconsider_targets", "lock_pass", "prereqs_met"}
+    for number, text in sorted(runtime.items()):
+        m = re.search(r"\*Blocked by:\*\s*(.+)$", text)
+        if m is None:
+            probs.add(area, f"AC {number}: no '*Blocked by:*' tag")
+        else:
+            named = set(re.findall(r"Y\d-[A-Za-z0-9]+-[A-Za-z0-9]+", m[1]))
+            if not named or named - KNOWN_STORIES:
+                probs.add(area, f"AC {number}: blocked-by names {sorted(named)}, expected stories from "
+                                f"{sorted(KNOWN_STORIES)}")
+        for call in re.findall(r"`(\w+)\(", text):
+            if call not in allowed_calls:
+                probs.add(area, f"AC {number}: uses '{call}()', which the Observables table does not list")
+
+
+# --- 10. Story Bible ------------------------------------------------------------------------------------------------
 def check_bible(bible_lines: list[str], probs: Problems) -> None:
     """The Story Bible holds the dated S06a decision line."""
     if not any(line.startswith(BIBLE_DECISION_PREFIX) for line in bible_lines):
         probs.add("story bible", f"no line starting '{BIBLE_DECISION_PREFIX}'")
 
 
-# --- 9. Stale strings ---------------------------------------------------------------------------------------------
+# --- 11. Stale strings ---------------------------------------------------------------------------------------------
 def check_stale(lines: list[str], probs: Problems) -> None:
     """None of the strings the review revisions removed may reappear in the GDD."""
     for lineno, line in enumerate(lines, 1):
@@ -684,6 +911,10 @@ def main(argv: list[str] | None = None) -> int:
     check_side_arcs(gdd, src, probs)
     check_composer(gdd, probs)
     check_signature(gdd, probs)
+    check_maps(gdd, rules, probs)
+    check_counts(gdd, rules, valid_rows, LAST["family_counts"], len(SECRET_EXPECTED), LAST["shipped"], probs)
+    check_lifecycle(gdd, probs)
+    check_runtime_acs(gdd, probs)
     check_bible(bible, probs)
     check_stale(gdd, probs)
     for item in probs.items:

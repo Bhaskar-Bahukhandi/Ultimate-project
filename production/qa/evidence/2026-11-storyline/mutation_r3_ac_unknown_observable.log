@@ -1,0 +1,8 @@
+# Mutation 'r3_ac_unknown_observable' on a temp copy (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\2e03922c-3aad-4f03-add8-36cf7c4b0612\scratchpad\r3\mutations\storyline-axes.r3_ac_unknown_observable.md
+gdd:   C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\2e03922c-3aad-4f03-add8-36cf7c4b0612\scratchpad\r3\mutations\storyline-axes.r3_ac_unknown_observable.md
+bible: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:  C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [acceptance] AC 10: uses 'offers_now()', which the Observables table does not list
+RESULT: FAIL (1 problems)
+exit code: 1

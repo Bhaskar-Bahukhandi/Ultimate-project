@@ -1,0 +1,9 @@
+# Mutation 'r3_prereq_overlap' on a temp copy (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\2e03922c-3aad-4f03-add8-36cf7c4b0612\scratchpad\r3\mutations\storyline-axes.r3_prereq_overlap.md
+gdd:   C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\2e03922c-3aad-4f03-add8-36cf7c4b0612\scratchpad\r3\mutations\storyline-axes.r3_prereq_overlap.md
+bible: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:  C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [secrets] secret_prerequisites flag WITNESS_SEATS is listed for WITNESS and CROWNLESS
+FAIL [secrets] secret_prerequisites + secret_unlock_flag CROWNLESS ['WITNESS_SEATS', 'CROWN_COORDINATES', 'EMPTY_THRONE_FOUND', 'CROWN_SNAPSHOT_FOUND', 'NO_CROWN_CHARTER', 'CROWNLESS_AVAILABLE'] != production master ['CROWN_COORDINATES', 'EMPTY_THRONE_FOUND', 'CROWN_SNAPSHOT_FOUND', 'NO_CROWN_CHARTER', 'CROWNLESS_AVAILABLE']
+RESULT: FAIL (2 problems)
+exit code: 1

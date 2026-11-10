@@ -1,9 +1,9 @@
 # Mutation 'duplicate_id' on a temp copy (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\4f9c4b5a-4ff5-473f-b53b-332ffbbb1fa1\scratchpad\mutations\storyline-axes.duplicate_id.md
-gdd:   C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\4f9c4b5a-4ff5-473f-b53b-332ffbbb1fa1\scratchpad\mutations\storyline-axes.duplicate_id.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\2e03922c-3aad-4f03-add8-36cf7c4b0612\scratchpad\r3\mutations\storyline-axes.duplicate_id.md
+gdd:   C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\2e03922c-3aad-4f03-add8-36cf7c4b0612\scratchpad\r3\mutations\storyline-axes.duplicate_id.md
 bible: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:  C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [combinations] line 164 (SL-YOU-HEARTH-RELEASE): duplicate id SL-YOU-HEARTH-RELEASE (first at line 163)
-FAIL [combinations] line 164 (SL-YOU-HEARTH-RELEASE): id does not match columns (expected SL-YOU-HEARTH-CHOOSE)
+FAIL [combinations] line 241 (SL-YOU-HEARTH-RELEASE): duplicate id SL-YOU-HEARTH-RELEASE (first at line 240)
+FAIL [combinations] line 241 (SL-YOU-HEARTH-RELEASE): id does not match columns (expected SL-YOU-HEARTH-CHOOSE)
 RESULT: FAIL (2 problems)
 exit code: 1

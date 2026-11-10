@@ -58,3 +58,26 @@ Research input: `research_draft.md` (narrative-director, sources cited per row).
   and one per new check), all FAIL as expected. Reproduce with
   `python -I -B run_mutations.py <repo_root> <scratch_dir>` (mutated copies go to the scratch dir).
 - Not mutation-tested: the comment-stripping in `flag_exists` (needs a mutated game tree, not a mutated GDD).
+
+## Design review round 3 (2026-11-10)
+
+- Verdict NEEDS REVISION (10 blocking, 8 recommended, all in the lifecycle layer); log entry in
+  `design/gdd/reviews/storyline-axes-review-log.md`.
+- User decisions for revision 3: reconsideration option c (Faction or Deleted only, never Authority; family never
+  changes); the seed clean-vs-negotiated pass as a boolean flag test (`lock_pass`, `lock_negotiated_<axis>`);
+  Consent: Kaelen keeps technical execution only, any later Root act needs the witnesses again.
+- Approved with the changeset ("Yes, the whole set"), as derived calls: the ID is stored when the coalition holds
+  (snapshot, so knob patches cannot flip it); `SEVEN_WITNESSES_AVAILABLE` (and each route's last "Required flag")
+  is the invocation record, split into `secret_unlock_flag`; C8-S16 never offers an invocation (last offer
+  prerequisite is PM:7586-7588); Story+ follows a reconsidered ID; Kaelen is the executor, not a witness.
+- Revision 3: Core Rules 1-13 rewritten around the lifecycle; `storyline_state` with States T1-T12; gate check on
+  every entry path; per-axis retraction table; red lines labelled new content; `danger` column (each route's
+  "Primary danger" line); Observables table; runtime ACs 5-21 with *Blocked by:* tags; citation fixes.
+- Checker hardening: `danger` column; prerequisites + unlock flag = the PM "Required flag" list, ≥ 2 offer
+  prerequisites, disjoint lists; `transform()` map and both family maps; `storyline_id` body reads no timing, pace or
+  companion input; the Counts block's arithmetic and values; Core Rules 1-13 with their titles; States table and
+  T1-T12 over known states; composer `storyline_state`, `family`, `lock_negotiated` vocabularies; each runtime AC
+  has known blocking stories and uses only listed observables; AC numbering contiguous; more stale strings.
+- `run_mutations.py` now takes `--gdd` and passes `--root` / `--bible` explicitly (so it can test a draft outside the
+  repo). Evidence: `check_pass.log` (PASS) and 51 `mutation_*.log` (24 retargeted from rounds 1-2, 27 `r3_*`), all
+  FAIL as expected.
