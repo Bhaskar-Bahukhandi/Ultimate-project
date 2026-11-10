@@ -179,3 +179,30 @@ Findings:
 - [RECOMMENDED] Acceptance Criteria: AC14 "scene" undefined, maybe unsatisfiable; AC15 vacuous; AC13 SOLE-via-renegotiation fixtures; AC7 true side; Kaelthas-on-ARCHIVE uncovered
 Reviewed-Content-Hash: design/gdd/storyline-axes.md cb5f0c2ae12dbc19ed8c0cc6d8ccabb0c90d442f
 Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285
+
+## Review — 2026-11-10 — Verdict: NEEDS REVISION
+Scope signal: L
+Specialists: none (--review lean, single-session analysis; the senior creative-director pass did not run)
+Blocking items: 2 | Recommended: 8
+Summary: The static core holds for a seventh round and the checker passed on revision 6. Both blockers are fallout of
+the round-6 fixes: damaged-first left phase_of unable to return CRISIS and DAMAGED for the D9 record, and the new D13
+exposed that the WITNESS_SEATS flag was never tied to seven saved seats. Both were fixed in revision 7 in the same
+session (checker PASS, 233/233 mutations FAIL, 1 control PASS); a fresh re-review is still owed.
+Prior verdict resolved: Yes (round-6 blockers: damaged-first phase, record fields D10-D14, perceptibility cut); the fixes opened the two blockers below
+Decisions taken by the user (2026-11-10): the seven-seats guard is not a tripwire event (the deferral stays in 1.0 on
+probation); phase_of and storyline_phase take a `loaded` argument; fold in the D2/D3 labels with the D16 precondition,
+the record-authoritative rule, and AC14's baseline with the concept cut order (AC14's reading awaits confirmation,
+Open Question 13).
+Findings:
+- [BLOCKING] Formulas / AC9 / Observables: phase_of(record) cannot return CRISIS for the CRISIS fixture and DAMAGED for the D9 fixture, which is the same record; no loaded-or-in-play argument (fixed: loaded argument)
+- [BLOCKING] Core Rules 6 and 10 / Edge Case 16 D13 / T7: WITNESS_SEATS flag not tied to seven saved seats, so an invocation could store SL-SECRET-WITNESS with a short table that D13 then refuses on load (fixed: mirror rule, prereqs_met and T7 guard, AC6 and L-AC21 cases)
+- [RECOMMENDED] Core Rule 3 / Interactions: record versus AXIS*/axis_revised_*/lock_negotiated_* flags had no stated authority (fixed)
+- [RECOMMENDED] Core Rule 8 / Edge Cases 8 and 16: the save-refusal precondition "no player-facing build has such saves" lived only in the lifecycle (fixed)
+- [RECOMMENDED] Acceptance Criteria 14: all-pairs 3-scene test is stronger than the P3 test and not shown feasible (fixed: shared-variant baseline, pairwise reported; user to confirm)
+- [RECOMMENDED] Core Rule 2 / Player Fantasy / seed map: side-storyline and companion seeds claimed but only 26 Act 1 flags are mapped; lock-argument lines missing from the lifecycle content scope (open)
+- [RECOMMENDED] Cross-document game-concept.md: "storylines 27→18" cut order has no mechanism in this design (logged as Open Question 13)
+- [RECOMMENDED] Tuning Knobs / Open Question 7: labels D2 and D3 undefined and colliding with Edge Case 16 (fixed: removed, original definitions not recoverable)
+- [RECOMMENDED] Core Rule 5: renegotiation offers voiced as the refusing faction's demand (lifecycle round-2 recommendation, still deferred)
+- [RECOMMENDED] Counts and registry: design/registry/entities.yaml has no entry for this system (open)
+Reviewed-Content-Hash: design/gdd/storyline-axes.md 0cdf9866eb4a0709015ef8d5d82550456aedcc96 (revision 6 as reviewed, HEAD a1cf409; revision 7 differs, so the next run re-reviews in full)
+Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285
