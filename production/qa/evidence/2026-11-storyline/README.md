@@ -35,3 +35,26 @@ Research input: `research_draft.md` (narrative-director, sources cited per row).
 - Verdict NEEDS REVISION (game-designer, systems-designer, narrative-director, qa-lead; creative-director synthesis); log `design/gdd/reviews/storyline-axes-review-log.md`.
 - User decisions for the revision: Aldric "Purge Hearth+, spare neutral, kill Hearth−" (re-approval of the misread row); Authority seeds "All five as proposed"; overturnable "Lock tokens"; extras: Data Wraith remap, arcs 12 and 03, warning + 27 wording, drop the tie-break.
 - The seed map is now 26 flags; `until:lock:<axis>` tokens replace `until:<flag>` (deviation from the story's AC-3/AC-7 wording, approved).
+
+## Design review round 2 (2026-11-10)
+
+- Verdict NEEDS REVISION (same four specialists; creative-director synthesis); log entry with findings in
+  `design/gdd/reviews/storyline-axes-review-log.md`.
+- User decisions for revision 2: include the PM:8791 post-boss reconsideration (one axis, valid rows only, at most
+  once, never for a secret storyline, only when a data-defined trigger holds — empty by default); renegotiation sets
+  a composer-read `axis_revised_<axis>` flag, no weight; in-fiction faction red lines replace the system warning;
+  a valid row cannot be renegotiated; P5 met in 1.0 by nine arcs (stated in the GDD); Aldric purge/kill seeds kept
+  as approved and marked (J) with the inference stated; `ch2_seraphina_cautious` → direction `0` (no trust change
+  in `command_hall.dlg`), `kill_unsure` / `wraith_destroyed` kept, objections in Open Question 10.
+- Changeset approved ("Yes, the whole set"): GDD revision 2 (all sections touched; ACs 13 → 15), hardened checker,
+  this section, the logs below.
+- Checker hardening: rule text on its PM line; Formulas `invalid()` set = rules table; valid-row sources are their
+  own `# STORYLINE` heading; prose family split and `reachable_1_0`; secret foundations per PM:8784 and
+  prerequisites = the PM "Required flag" lists; seed pushes/direction pinned to the approved values (a change is a
+  design decision); timing rows `0`; seed sources resolve (`.dlg` allowed); flags must occur outside `#` comments;
+  every row lists all four companions; side-arc `pm_line` in arc order; composer axis fields allow UNSET;
+  `storyline_id(A, F, D, I)` signature; family counts and invalid-row count derived instead of hard-coded.
+- Evidence: `check_pass.log` (real GDD, PASS) and 24 `mutation_*.log` (8 re-run from revision 1, qa-lead M1-M3,
+  and one per new check), all FAIL as expected. Reproduce with
+  `python -I -B run_mutations.py <repo_root> <scratch_dir>` (mutated copies go to the scratch dir).
+- Not mutation-tested: the comment-stripping in `flag_exists` (needs a mutated game tree, not a mutated GDD).

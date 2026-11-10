@@ -1,0 +1,8 @@
+# Mutation 'stale_s_equals_t' on a temp copy (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\4f9c4b5a-4ff5-473f-b53b-332ffbbb1fa1\scratchpad\mutations\storyline-axes.stale_s_equals_t.md
+gdd:   C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\4f9c4b5a-4ff5-473f-b53b-332ffbbb1fa1\scratchpad\mutations\storyline-axes.stale_s_equals_t.md
+bible: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:  C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [stale] line 323: stale string 'S = T' present
+RESULT: FAIL (1 problems)
+exit code: 1

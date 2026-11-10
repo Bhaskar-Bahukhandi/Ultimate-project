@@ -1,10 +1,13 @@
 # Mutation 'wrong_invalid' on a temp copy (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\claude\8fa830b671f9d755\38742c26-a8d5-4ddd-be96-9bff07452637\scratchpad\mutations\storyline-axes.wrong_invalid.md
-gdd:   C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\claude\8fa830b671f9d755\38742c26-a8d5-4ddd-be96-9bff07452637\scratchpad\mutations\storyline-axes.wrong_invalid.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\4f9c4b5a-4ff5-473f-b53b-332ffbbb1fa1\scratchpad\mutations\storyline-axes.wrong_invalid.md
+gdd:   C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\4f9c4b5a-4ff5-473f-b53b-332ffbbb1fa1\scratchpad\mutations\storyline-axes.wrong_invalid.md
 bible: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:  C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [combinations] line 122 (SL-YOU-HEARTH-RELEASE): invalid row cites R1, whose combination is YOU + HEARTH + RESTORE
-FAIL [combinations] invalid row YOU-HEARTH-RELEASE matches no rule combination
+FAIL [combinations] line 162 (SL-YOU-HEARTH-RESTORE): source PRODUCTION_MASTER_2.1.md:713 is not the '# STORYLINE YHR' heading
+FAIL [combinations] 2 invalid rows, but the rules table has 3 rules
 FAIL [combinations] rule combination YOU-HEARTH-RESTORE is not an invalid row
-RESULT: FAIL (3 problems)
+FAIL [combinations] line 156: valid_count: 24 but the table has 25 valid rows
+FAIL [combinations] line 156: family split {'SOLE': 8, 'BOUND': 9, 'NONE_AUTH': 7} but the table has {'SOLE': 9, 'BOUND': 9, 'NONE_AUTH': 7}
+FAIL [secrets] line 387: reachable_1_0: 25, expected 25 + 1
+RESULT: FAIL (6 problems)
 exit code: 1
