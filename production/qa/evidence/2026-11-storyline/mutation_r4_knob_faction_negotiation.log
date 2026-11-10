@@ -1,12 +1,12 @@
 # Mutation 'r4_knob_faction_negotiation' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c37fd8f6-b344-40c1-b2c3-61fc960b0116\scratchpad\mutations\storyline-axes.r4_knob_faction_negotiation.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c37fd8f6-b344-40c1-b2c3-61fc960b0116\scratchpad\mutations\storyline-axes.r4_knob_faction_negotiation.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-axes.r4_knob_faction_negotiation.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-axes.r4_knob_faction_negotiation.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
 FAIL [tuning knobs] knobs ['secret_route_enabled.WITNESS', 'secret_route_enabled.CROWNLESS, .FIRSTWAKE', 'secret_prerequisites[route] (list of flags)', 'secret_unlock_flag[route]', 'faction_negotiation_allowed'] != the pinned ['secret_route_enabled.WITNESS', 'secret_route_enabled.CROWNLESS, .FIRSTWAKE', 'secret_prerequisites[route] (list of flags)', 'secret_unlock_flag[route]']
-FAIL [tuning knobs] line 646: 'faction_negotiation_allowed' is fixed by design, not a knob
+FAIL [tuning knobs] line 684: 'faction_negotiation_allowed' is fixed by design, not a knob
 FAIL [tuning knobs] Tuning Knobs section names 'faction_negotiation_allowed'
-FAIL [stale] axes line 646: revision-3 vocabulary 'faction_negotiation_allowed' present
+FAIL [stale] axes line 684: revision-3 vocabulary 'faction_negotiation_allowed' present
 RESULT: FAIL (4 problems)
 exit code: 1

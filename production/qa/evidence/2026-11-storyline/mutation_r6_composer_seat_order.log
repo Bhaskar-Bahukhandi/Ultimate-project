@@ -1,0 +1,9 @@
+# Mutation 'r6_composer_seat_order' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-axes.r6_composer_seat_order.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-axes.r6_composer_seat_order.md
+lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [composer] line 404 (witness_seats): allowed 'seat → identity for the seats active_region, deleted, nonhuman, infrastructure, local_community, archive, rotating (PM:8697-8703); never Kaelen', expected 'seat → identity for the seats active_region, deleted, nonhuman, infrastructure, archive, local_community, rotating (PM:8697-8703); never Kaelen'
+RESULT: FAIL (1 problems)
+exit code: 1

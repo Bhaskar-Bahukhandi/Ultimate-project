@@ -211,3 +211,46 @@ Research input: `research_draft.md` (narrative-director, sources cited per row).
 - **Still NOT checked** (in addition to the round-4 list): the Consent variants table's rows and the S5 deferral
   scope table (prose tables, not pinned); the PM line numbers cited in prose; the gate retcon history-rule flag
   list; the `witness_threshold` range; the L-AC14/L-AC17/L-AC20 bodies beyond call names.
+
+## Design review round 6 (axes) and round 2 (lifecycle), 2026-11-10: revision 6 / lifecycle revision 2 checks
+
+Scope: the blocking findings of both review logs' latest entries plus the user's decisions D1-D4 (FAILED vote not
+executed, Kaelen stands down; T14 cut to a dev-fixture migration; deferral kept on probation; `witness_threshold`
+fixed at 5, the player choosing the witnesses in Secret Quest 09, stances shown). Round-6 RECOMMENDED items were
+not applied; they are listed in `storyline-lifecycle.md` Open Question 7.
+
+- `check_storyline_axes.py`:
+  - axes: the phase table and `PHASES` gain DAMAGED (never gated, never a transition's source or target); FINAL's
+    meaning covers the stand-down; the `storyline_phase` body is damaged-first, FINAL and FIXED need a stored ID;
+    `py_phase` returns DAMAGED for the D4/D8/D9 records decidable from six fields, and the doc must give a DAMAGED
+    example; Edge Case 16 is pinned as items D1-D16 (text and numbering), with derived cross-references (Edge
+    Case 6 cites the exclusive-group item D15, Edge Case 8 and Core Rule 8 the pre-axes item D16, AC9 covers
+    "(D1-D16)" and names D9 for the CRISIS fixture); Edge Case 8's "is unsupported and does not load" pinned; the
+    composer record gains `witness_seats` (seat vocabulary pinned in PM:8697-8703 order) and `witness_dissenters`,
+    and `root_phase`'s writer covers the stand-down; Core Rules 3, 6, 8, 9 and 10 gain pinned sentences; an
+    over-promise guard: four sentences required, five phrases ("colours ally lines", ...) forbidden.
+  - lifecycle: T6 (disclosures), T7 (no `SEVEN_WITNESSES_AVAILABLE` guard; sets it), T13 (guard on
+    `witness_mandate`) and the new T14 stand-down pinned; the gate DEFERRED outcome; the Formulas block with
+    `witness_threshold = 5`, `witness_dissenters` and the gate invocation without the unlock flag; 18 new pinned
+    sentences (the C9-S19 window, the save window and checkpoint, no runtime catch-up, the stand-down, the seats,
+    stances and content rule, the vote written once, the threshold, the cut order); the S5 and Consent variants
+    tables pinned row by row; the four disclosure ids in order; the S9 seats equal the record's; the legacy flags
+    must be listed in the Dependencies row and occur in the code lines it cites (read from the files); L-AC key
+    phrases for L-AC5, 7-10, 13-16 and 19-24; L-AC14's MET/FAILED split derived from the threshold; L-AC23's beat
+    counts derived; L-AC7's deferral beats equal the S5 table's; "offers() is empty" / "offers nothing" forbidden
+    in the L-ACs (they cannot fail); Edge Cases 1-12; the Validation note is 24 + 1 + 16 + 1 + 6 + 12 = 60 with the
+    `world_map` path's 6 cells blocked and uncounted, and its pass rule pinned for every run, including the
+    refused `load` cells; stale strings `consent_failed_mandate`, `failed-mandate`, `authorized over dissent` and
+    the catch-up wording.
+- `run_mutations.py`: 23 earlier mutations retargeted to the revised text (same name, same intent); 60 new `r6_*`
+  mutations: qa-lead's round-6 survivors re-expressed (`r6_qa_*`: threshold range and prose, L-AC14 inequality and
+  range, the S6 window, L-AC20, L-AC9's DEFERRED outcome, L-AC15 WITHDRAWN, a Consent row deleted, a `deferral_*`
+  id renamed, S9 stripped of `witness_mandate`, L-AC19's retcon beat, Core Rule 8 "is stranded", Edge Case 8's
+  body) and one per new pin or derived check. Each was confirmed to fail on the check it targets, not
+  incidentally (first FAIL line of every `mutation_r6_*.log`).
+- **Result** (2026-11-10): real docs `RESULT: PASS (0 problems)`; 217 mutations, all FAIL as expected; 1 control
+  PASS; 0 unexpected. `check_pass.log` and every `mutation_*.log` named in `run_mutations.py` were refreshed.
+- **Still NOT checked**: the PM line numbers cited in prose (other than the tables the checker resolves); the
+  witness candidate data and the S9 content rule (data that does not exist yet, Y2-PP-T17); the cut order's effect
+  on the ACs; producer sign-off (pending, a person's decision); the gate retcon history-rule flag list; L-AC17's
+  body.

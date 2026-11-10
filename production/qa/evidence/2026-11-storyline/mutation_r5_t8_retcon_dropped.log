@@ -1,9 +1,9 @@
 # Mutation 'r5_t8_retcon_dropped' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c37fd8f6-b344-40c1-b2c3-61fc960b0116\scratchpad\mutations\storyline-lifecycle.r5_t8_retcon_dropped.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-lifecycle.r5_t8_retcon_dropped.md
 gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
-lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c37fd8f6-b344-40c1-b2c3-61fc960b0116\scratchpad\mutations\storyline-lifecycle.r5_t8_retcon_dropped.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-lifecycle.r5_t8_retcon_dropped.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [transitions] line 216 (T8): effects 'as T5', pinned 'as T5; gate retcon beat played'
+FAIL [transitions] line 292 (T8): effects 'as T5', pinned 'as T5; gate retcon beat played'
 RESULT: FAIL (1 problems)
 exit code: 1

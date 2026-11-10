@@ -1,0 +1,9 @@
+# Mutation 'r6_qa_lac9_deferred_outcome' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-lifecycle.r6_qa_lac9_deferred_outcome.md
+gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-lifecycle.r6_qa_lac9_deferred_outcome.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [lifecycle acceptance] L-AC9 lacks the pinned phrase 'DEFERRED → LAST_CHANCE with offers() exactly the six R1 renegotiations plus invoke:WITNESS when WITNESS is enabled and its prerequisites are met (with and without flag_set(SEVEN_WITNESSES_AVAILABLE))'
+RESULT: FAIL (1 problems)
+exit code: 1

@@ -1,0 +1,10 @@
+# Mutation 'r6_qa_deferral_id_renamed' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-lifecycle.r6_qa_deferral_id_renamed.md
+gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-lifecycle.r6_qa_deferral_id_renamed.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [lifecycle acceptance] L-AC7 deferral beats ['deferral_act3_end', 'deferral_branch_h', 'deferral_c8s17', 'deferral_c8s20'] != the S5 table's ['deferral_act3_end', 'deferral_branch_h', 'deferral_c8_s20', 'deferral_c8s17']
+FAIL [lifecycle revision 2] S5 deferral scope table differs from the pinned table at row 4: ('C8-S20 The Human Patch Door', 'PM:7414-7432', 'beat deferral_c8_s20: Kaelen signs the expedition (PM:7424-7426) and the Hearth delegates witness it without co-signing')
+RESULT: FAIL (2 problems)
+exit code: 1

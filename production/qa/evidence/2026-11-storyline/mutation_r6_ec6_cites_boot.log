@@ -1,0 +1,9 @@
+# Mutation 'r6_ec6_cites_boot' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-axes.r6_ec6_cites_boot.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-axes.r6_ec6_cites_boot.md
+lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [edge cases] Edge Case 6 does not cite '(Edge Case 16, D15)', the exclusive-group item
+RESULT: FAIL (1 problems)
+exit code: 1

@@ -1,10 +1,10 @@
 # Mutation 'r5_validation_gate_terms' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c37fd8f6-b344-40c1-b2c3-61fc960b0116\scratchpad\mutations\storyline-lifecycle.r5_validation_gate_terms.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-lifecycle.r5_validation_gate_terms.md
 gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
-lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c37fd8f6-b344-40c1-b2c3-61fc960b0116\scratchpad\mutations\storyline-lifecycle.r5_validation_gate_terms.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-lifecycle.r5_validation_gate_terms.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [lifecycle acceptance] Validation note terms [24, 1, 16, 1, 5, 18] != derived [24, 1, 16, 1, 6, 18] (valid rows, 1.0 secret routes, offers, gate invocations, gate renegotiations, paths × storable phases)
-FAIL [lifecycle acceptance] Validation note total 65 != 66 (sum of its terms 65)
+FAIL [lifecycle acceptance] Validation note terms [24, 1, 16, 1, 5, 12] != derived [24, 1, 16, 1, 6, 12] (valid rows, 1.0 secret routes, offers, gate invocations, gate renegotiations, paths × storable phases)
+FAIL [lifecycle acceptance] Validation note total 59 != 60 (sum of its terms 59)
 RESULT: FAIL (2 problems)
 exit code: 1

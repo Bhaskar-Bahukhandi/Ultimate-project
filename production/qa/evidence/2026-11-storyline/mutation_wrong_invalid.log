@@ -1,22 +1,22 @@
 # Mutation 'wrong_invalid' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c37fd8f6-b344-40c1-b2c3-61fc960b0116\scratchpad\mutations\storyline-axes.wrong_invalid.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c37fd8f6-b344-40c1-b2c3-61fc960b0116\scratchpad\mutations\storyline-axes.wrong_invalid.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-axes.wrong_invalid.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-axes.wrong_invalid.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [combinations] line 255 (SL-YOU-HEARTH-RESTORE): source PRODUCTION_MASTER_2.1.md:713 is not the '# STORYLINE YHR' heading
+FAIL [combinations] line 264 (SL-YOU-HEARTH-RESTORE): source PRODUCTION_MASTER_2.1.md:713 is not the '# STORYLINE YHR' heading
 FAIL [combinations] 2 invalid rows, but the rules table has 3 rules
 FAIL [combinations] rule combination YOU-HEARTH-RESTORE is not an invalid row
-FAIL [combinations] line 247: valid_count: 24 but the table has 25 valid rows
-FAIL [combinations] line 247: family split {'SOLE': 8, 'BOUND': 9, 'NONE_AUTH': 7} but the table has {'SOLE': 9, 'BOUND': 9, 'NONE_AUTH': 7}
-FAIL [secrets] line 521: reachable_1_0: 25, expected 25 + 1
-FAIL [counts] line 527: valid_count = 24, but the tables give 25
-FAIL [counts] line 529: design_storylines = 27, but the tables give 28
-FAIL [counts] line 530: reachable_1_0 = 25, but the tables give 26
-FAIL [counts] line 531: family_SOLE = 8, but the tables give 9
+FAIL [combinations] line 256: valid_count: 24 but the table has 25 valid rows
+FAIL [combinations] line 256: family split {'SOLE': 8, 'BOUND': 9, 'NONE_AUTH': 7} but the table has {'SOLE': 9, 'BOUND': 9, 'NONE_AUTH': 7}
+FAIL [secrets] line 538: reachable_1_0: 25, expected 25 + 1
+FAIL [counts] line 544: valid_count = 24, but the tables give 25
+FAIL [counts] line 546: design_storylines = 27, but the tables give 28
+FAIL [counts] line 547: reachable_1_0 = 25, but the tables give 26
+FAIL [counts] line 548: family_SOLE = 8, but the tables give 9
 FAIL [acceptance] AC 5 lacks 'the 25 valid triples' (derived from the vocabularies and the table)
 FAIL [lifecycle acceptance] L-AC4 lacks 'For each of the 25 valid rows' (derived)
-FAIL [lifecycle acceptance] Validation note terms [24, 1, 16, 1, 6, 18] != derived [25, 1, 16, 1, 6, 18] (valid rows, 1.0 secret routes, offers, gate invocations, gate renegotiations, paths × storable phases)
-FAIL [lifecycle acceptance] Validation note total 66 != 67 (sum of its terms 66)
+FAIL [lifecycle acceptance] Validation note terms [24, 1, 16, 1, 6, 12] != derived [25, 1, 16, 1, 6, 12] (valid rows, 1.0 secret routes, offers, gate invocations, gate renegotiations, paths × storable phases)
+FAIL [lifecycle acceptance] Validation note total 60 != 61 (sum of its terms 60)
 RESULT: FAIL (14 problems)
 exit code: 1

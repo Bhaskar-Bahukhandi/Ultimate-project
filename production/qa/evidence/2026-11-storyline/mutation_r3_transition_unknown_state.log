@@ -1,11 +1,10 @@
 # Mutation 'r3_transition_unknown_state' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c37fd8f6-b344-40c1-b2c3-61fc960b0116\scratchpad\mutations\storyline-lifecycle.r3_transition_unknown_state.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-lifecycle.r3_transition_unknown_state.md
 gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
-lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c37fd8f6-b344-40c1-b2c3-61fc960b0116\scratchpad\mutations\storyline-lifecycle.r3_transition_unknown_state.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-lifecycle.r3_transition_unknown_state.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [transitions] line 221 (T13): to 'DONE', pinned 'FINAL'
-FAIL [transitions] line 221 (T13): 'DONE' is not a phase of storyline-axes.md
-FAIL [transitions] phases unreachable from LEANING: ['FINAL']
-RESULT: FAIL (3 problems)
+FAIL [transitions] line 297 (T13): to 'DONE', pinned 'FINAL'
+FAIL [transitions] line 297 (T13): 'DONE' is not a phase of storyline-axes.md
+RESULT: FAIL (2 problems)
 exit code: 1
