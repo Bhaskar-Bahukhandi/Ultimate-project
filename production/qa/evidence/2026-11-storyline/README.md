@@ -254,3 +254,32 @@ not applied; they are listed in `storyline-lifecycle.md` Open Question 7.
   witness candidate data and the S9 content rule (data that does not exist yet, Y2-PP-T17); the cut order's effect
   on the ACs; producer sign-off (pending, a person's decision); the gate retcon history-rule flag list; L-AC17's
   body.
+
+## Design review round 7 (axes, lean mode), 2026-11-10: revision 7 / lifecycle revision 3 checks
+
+Scope: the two blocking findings of the round-7 review plus three recommended items the user folded in (user
+decisions 2026-11-10: the seven-seats guard is not a tripwire event; `phase_of` takes a `loaded` argument; fold in
+the D2/D3 labels with the D16 precondition, the record-authoritative rule, and AC14's baseline with the concept cut
+order). No specialists ran (`--review lean`). The other round-7 RECOMMENDED items are logged in the axes review log.
+
+- `check_storyline_axes.py`:
+  - the `storyline_phase` body is pinned as `storyline_phase(record, loaded)` / `damaged(record, loaded)`; `py_phase`
+    takes `loaded` and applies D9 only when it is true; the phase examples are read per "Example(s) (...):" label
+    (`loaded` true by default, `loaded false` for the in-play example) and an in-play CRISIS example is required;
+  - T7's guard is pinned as "WITNESS enabled; prerequisites met, seven seats saved";
+  - new pinned sentences: Core Rule 3 (the record is authoritative, flags are mirrors), Core Rule 6 (`WITNESS_SEATS`
+    is set in the step that saves the seventh seat; `prereqs_met(WITNESS)` also needs seven seats), Core Rule 8 and
+    Edge Case 8 (the save refusal's precondition), Edge Case 16 (the D16 precondition), L-AC21 (six seats);
+  - `check_revision7` pins the AC9 wording, the Observables row `phase_of(record, loaded)`, the `prereqs_met` seats
+    clause, AC6's six-seat case, AC14's baseline and Open Question 13, and forbids the old all-pairs AC14 and the
+    undefined labels `D2` and `D3` in Tuning Knobs and Open Question 7.
+- `run_mutations.py`: 3 mutations retargeted to the revised text (`r5_ac14_unknown_observable`,
+  `r6_phase_final_before_damaged`, `r6_t7_guard_needs_flag`); the log of `r6_phase_example_crisis_loadable` was
+  refreshed because its failure message now names `loaded`; 16 new `r7_*` mutations, one per new pin (first FAIL line of each `mutation_r7_*.log` names the check it targets).
+- **Result** (2026-11-10): real docs `RESULT: PASS (0 problems)`; 233 mutations, all FAIL as expected; 1 control
+  PASS; 0 unexpected. `check_pass.log`, the four retargeted logs and the 16 `mutation_r7_*.log` files were refreshed;
+  the other logs were not regenerated (their verdicts are unchanged in the run).
+- **Still NOT checked**: whether Secret Quest 09 is actually authored to set `WITNESS_SEATS` with the seventh seat
+  (a Y2-PP-T17 content fact); the mirror rule for the `AXIS*`, `axis_revised_*` and `lock_negotiated_*` flags has no
+  divergence test until FlagRegistry exists; AC14's baseline reading is an interpretation awaiting the user's
+  confirmation (Open Question 13).

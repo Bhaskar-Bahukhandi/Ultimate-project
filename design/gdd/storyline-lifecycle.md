@@ -1,6 +1,6 @@
 # Storyline Lifecycle
 
-> **Status**: Draft (revision 2, after design review round 2 of this document, 2026-11-10)
+> **Status**: Draft (revision 3: revision 2 plus the cross-document fixes from design review round 7 of `storyline-axes.md`, 2026-11-10)
 > **Author**: Claude with the project lead
 > **Last Updated**: 2026-11-10
 > **Implements**: the invariants I1-I8 of `design/gdd/storyline-axes.md`; contract for Y2-PP-T17 (ending composer /
@@ -210,7 +210,8 @@ scene on the stored ID. It is the Crown phase's route interaction (PM:8617-8618)
 re-entering Root of Heaven or restarting the boss never replays it.
 
 *Seats and stances (user decisions 2026-11-10).* The seven witnesses are the ones the player seats in Secret Quest
-09, one identity per seat, saved in `witness_seats`: `active_region`, `deleted`, `nonhuman`, `infrastructure`,
+09, one identity per seat, saved in `witness_seats` (the quest sets `WITNESS_SEATS` in the step that saves the
+seventh seat, a mirror of the record, `storyline-axes.md` Core Rule 6): `active_region`, `deleted`, `nonhuman`, `infrastructure`,
 `archive`, `local_community`, `rotating` (PM:8697-8703). Kaelen sits in none: a design narrowing of PM:8704
 decided by the user on 2026-11-10, so that execution and authorization stay separate (PM:11219). If no nonhuman
 person is available (Seven has not consented, PM:8051), the `nonhuman` seat takes a second Assembly pick from the
@@ -288,7 +289,7 @@ The phases are `storyline-axes.md`'s phase table. Transitions:
 | T4 | PARTLY_LOCKED | C8-S16 resolves | faction and authority set; the row is invalid | CRISIS | deleted set; `lock_negotiated` per `lock_pass`; the refusing faction breaks the coalition |
 | T5 | CRISIS | a renegotiation is taken | the offer is in the row's offer set | VALIDATED | the axis changed; `axis_revised`, `lock_negotiated` gain it; retraction recorded; retraction beat played; ID stored |
 | T6 | CRISIS | the deferral is taken | R1; WITNESS enabled; signpost OPEN; the four disclosures shown | DEFERRED | `witness_deferred` set |
-| T7 | DEFERRED | the invocation is confirmed (C9-S19 or the gate) | WITNESS enabled; prerequisites met | VALIDATED | `secret_invoked` gains WITNESS; `SL-SECRET-WITNESS` stored; `SEVEN_WITNESSES_AVAILABLE` set if unset; narrowing retraction recorded; `invoke_witness` played |
+| T7 | DEFERRED | the invocation is confirmed (C9-S19 or the gate) | WITNESS enabled; prerequisites met, seven seats saved | VALIDATED | `secret_invoked` gains WITNESS; `SL-SECRET-WITNESS` stored; `SEVEN_WITNESSES_AVAILABLE` set if unset; narrowing retraction recorded; `invoke_witness` played |
 | T8 | DEFERRED | a renegotiation is taken at the gate | one of the six R1 offers | VALIDATED | as T5; gate retcon beat played |
 | T9 | DEFERRED | Root of Heaven entry, any path | — | DEFERRED | LAST_CHANCE scene; leaving returns the player outside |
 | T10 | LEANING or PARTLY_LOCKED | Root of Heaven entry, any path | — | unchanged | TURNED_BACK |
@@ -377,7 +378,7 @@ Counts: |crisis_offers| is 6 for R1 (7 with the deferral), 5 for R2 and R3, so 1
 
 | System | Direction | What flows | Status |
 |---|---|---|---|
-| Storyline axes (`design/gdd/storyline-axes.md`) | this ← axes | values, formulas, record, invariants I1-I8, knobs | revision 6 |
+| Storyline axes (`design/gdd/storyline-axes.md`) | this ← axes | values, formulas, record, invariants I1-I8, knobs | revision 7 |
 | SaveService (Y1-P1-T05) | this → save | record writes, including `retraction_log`, `beats_played`, `witness_seats`, `witness_dissenters`, `witness_mandate`; autosave suppression in C8-S16 and the commit checkpoint; the damaged-record check and load refusal | no GDD |
 | FlagRegistry / StoryGraph (Y1-P1-T03) | this ← registry | flags; scene order check at boot; `unreachable(flag)`; the story position for Edge Case 16 D16 | no GDD |
 | World map / free travel (protected) | this → world map | the gate check on the `world_map` path | no GDD — needs the user's approval when implemented |
@@ -409,7 +410,7 @@ observables from the table below.
 
 | observable | returns | outside its scene |
 |---|---|---|
-| `storyline_phase()` | the derived phase of the current record | — |
+| `storyline_phase()` | the derived phase of the current record (`loaded` false; after a load that passed the check the value is the same either way) | — |
 | `storyline_id()` | the stored ID | empty string when nothing is stored |
 | `axis(name)` | the record's `authority`, `faction` or `deleted` | — |
 | `gate_open()` | true exactly when an ID is stored (the gate check passes; the path to the gate is story progression) | — |
@@ -559,7 +560,9 @@ is tested as: `take()` of each of the eight is false and `record_hash()` is unch
   `invoke:WITNESS`; `take(invoke:WITNESS)` gives VALIDATED, `storyline_id()` `SL-SECRET-WITNESS`,
   `flag_set(SEVEN_WITNESSES_AVAILABLE)` true, a `retraction_log()` entry (authority, YOU, YOU, "final permission",
   LAST_CHANCE) and `invoke_witness` in `beats_played()`. With one prerequisite unset, `take(invoke:WITNESS)` is false
-  with `record_hash()` unchanged. *Blocked by:* Y2-PP-T17, Y1-P1-T03.
+  with `record_hash()` unchanged. The same holds with all three set and `record_field(witness_seats)` holding six of
+  the seven seats (a synthetic record: play sets `WITNESS_SEATS` only with the seventh seat), and `offers()` then
+  lacks `invoke:WITNESS`. *Blocked by:* Y2-PP-T17, Y1-P1-T03.
 - **L-AC22 Stand-down.** On `SL-SECRET-WITNESS` in FIXED after the boss with `witness_mandate` FAILED:
   `confirm_execution()` is false with `record_hash()` unchanged; `route_lines()` is empty; `stand_down()` gives
   FINAL with `storyline_id()` and each `axis()` unchanged; `ending_modules()` contains `consent_unauthorized`. With

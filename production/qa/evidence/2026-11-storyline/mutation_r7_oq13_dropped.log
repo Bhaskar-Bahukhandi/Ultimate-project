@@ -1,0 +1,9 @@
+# Mutation 'r7_oq13_dropped' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\84ebb77d-b2f4-454b-a904-8225ed1c5c56\scratchpad\mutations\storyline-axes.r7_oq13_dropped.md --lifecycle ..\..\..\..\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\84ebb77d-b2f4-454b-a904-8225ed1c5c56\scratchpad\mutations\storyline-axes.r7_oq13_dropped.md
+lifecycle: ..\..\..\..\design\gdd\storyline-lifecycle.md
+bible:     ..\..\..\..\AethelgardPrototype\story\STORY_BIBLE.md
+root:      ..\..\..\..
+FAIL [revision 7] storyline-axes.md lacks 'P3 baseline and the storyline cut order'
+RESULT: FAIL (1 problems)
+exit code: 1

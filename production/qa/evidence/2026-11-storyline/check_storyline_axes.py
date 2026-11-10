@@ -209,6 +209,9 @@ CORE_RULE_KEYS: dict[int, tuple[str, ...]] = {
         "clean when at least one seed for the backed value is set with direction + and none with direction −; "
         "otherwise negotiated, and lock_negotiated_<axis> is set",
         "The test reads only which flags are set: no count, no weight.", "it never changes a value or the ID.",
+        "The composer input record is authoritative: these flags, axis_revised_<axis>, lock_negotiated_<axis> and "
+        "WITNESS_SEATS are mirrors, written in the same step as the record field, never read in its place and "
+        "cleared with it.",
         "on a SOLE storyline whose lock_negotiated holds authority, the ending plays sole_dissent",
         "Nothing else in 1.0 reads lock_negotiated (no scene variant, ally line or slide)"),
     4: ("states its red line as a value, never as a combination",
@@ -218,13 +221,17 @@ CORE_RULE_KEYS: dict[int, tuple[str, ...]] = {
         "(PM:7586-7588), after C8-S16.", "never the combination it transforms", "it cannot be undone",
         "until they ship, their rows can only be renegotiated at C8-S16, offer no deferral, and show no signpost.",
         "plays only when the stored ID is SL-SECRET-T.",
-        "an invocation there also sets T's unlock flag if the invocation scene did not"),
+        "an invocation there also sets T's unlock flag if the invocation scene did not",
+        "WITNESS_SEATS mirrors the record (Core Rule 3): Secret Quest 09 sets it in the same step that saves the "
+        "seventh seat of witness_seats, so the flag never stands without seven saved seats, and prereqs_met(WITNESS) "
+        "also requires the seven seats"),
     7: ("nothing offers a renegotiation, a deferral or an invocation, and the ID never changes.",),
     8: ("Before that nothing is stored.", "A stored ID is never recomputed from flags or knobs",
         "Every entry and re-entry into Root of Heaven runs the gate check",
         "before the three locks it turns the player back in the fiction",
         "is unsupported and does not load (Edge Case 16, D{legacy}; user decision 2026-11-10); no runtime catch-up "
-        "exists, so no loaded state is stranded."),
+        "exists, so no loaded state is stranded.",
+        "The refusal holds only while no player-facing build has such saves"),
     9: ("It changes no axis and no ID.", "this design offers none",
         "Kaelen stands down instead and nothing is executed (Core Rule 10)"),
     10: ("or CONSENT for Witness Protocol", "Kaelen executes and does not authorize",
@@ -271,9 +278,9 @@ LOCK_PASS_BODY = (
     "otherwise → NEGOTIATED",
     "renegotiation vote → NEGOTIATED",
 )
-STORYLINE_PHASE_BODY = (  # revision 6: damaged-first; FINAL and FIXED need a stored ID
-    "storyline_phase(record):",
-    "if damaged(record) → DAMAGED",
+STORYLINE_PHASE_BODY = (  # revision 6: damaged-first; FINAL and FIXED need a stored ID; revision 7: the loaded argument
+    "storyline_phase(record, loaded):",
+    "if damaged(record, loaded) → DAMAGED",
     "if storyline_id is stored and root_phase is FINAL → FINAL",
     "if storyline_id is stored and root_phase is INSIDE → FIXED",
     "if storyline_id is stored → VALIDATED",
@@ -332,7 +339,9 @@ EC16_CRISIS = 9  # the D-number of the saved-crisis item (cited by AC9)
 EC16_KEYS = ("The check compares and never rewrites the stored ID, and reads no knob, so a patch never damages a save.",
              "SaveService's load check reports each item below as a data error on load and refuses the load",
              "witness_deferred on a stored valid row with axis_revised non-empty is the history of a deferral broken "
-             "at the gate, not damage.")
+             "at the gate, not damage.",
+             "D16 holds only while no player-facing build has such saves; if one ships before these fields do, the "
+             "decision is reopened")
 # Round 6 blocker 3: the clean/negotiated difference is promised only as far as sole_dissent delivers it.
 NO_OVERPROMISE_KEYS = (
     "in 1.0 only a Sole ending makes that record audible (Core Rule 3)",
@@ -371,7 +380,8 @@ TRANSITIONS = {  # id -> (from, event, guard, to, effects), backticks removed
     "T6": ("CRISIS", "the deferral is taken", "R1; WITNESS enabled; signpost OPEN; the four disclosures shown",
            "DEFERRED", "witness_deferred set"),
     # Lifecycle round 2: the gate invokes on prereqs_met and sets the unlock flag itself.
-    "T7": ("DEFERRED", "the invocation is confirmed (C9-S19 or the gate)", "WITNESS enabled; prerequisites met",
+    "T7": ("DEFERRED", "the invocation is confirmed (C9-S19 or the gate)",
+           "WITNESS enabled; prerequisites met, seven seats saved",
            "VALIDATED", "secret_invoked gains WITNESS; SL-SECRET-WITNESS stored; SEVEN_WITNESSES_AVAILABLE set if "
            "unset; narrowing retraction recorded; invoke_witness played"),
     "T8": ("DEFERRED", "a renegotiation is taken at the gate", "one of the six R1 offers", "VALIDATED",
@@ -533,7 +543,9 @@ LAC_KEYS: dict[int, tuple[str, ...]] = {
     20: ("on load load_errors() names D{legacy}, current_scene() stays load_menu, and no lock scene plays.",),
     21: ("once after decline() at C9-S19 and once with C9-S19 never played",
          '(authority, YOU, YOU, "final permission", LAST_CHANCE)',
-         "With one prerequisite unset, take(invoke:WITNESS) is false with record_hash() unchanged."),
+         "With one prerequisite unset, take(invoke:WITNESS) is false with record_hash() unchanged.",
+         "The same holds with all three set and record_field(witness_seats) holding six of the seven seats",
+         "offers() then lacks invoke:WITNESS"),
     22: ("confirm_execution() is false with record_hash() unchanged; route_lines() is empty; stand_down() gives FINAL "
          "with storyline_id() and each axis() unchanged; ending_modules() contains consent_unauthorized",
          "With witness_mandate MET, stand_down() is false and confirm_execution() gives FINAL."),
@@ -811,16 +823,16 @@ def py_lock_pass(axis: str, value: str, flags: set[str]) -> str:
 
 
 def py_phase(a: str, f: str, d: str, stored: bool, deferred: bool, root: str,
-             deferral_row: tuple[str, ...] = ("YOU", "HEARTH", "RESTORE")) -> str:
-    """The phase of a loaded record: the Edge Case 16 items decidable from these six fields first (D4, D8, D9), then
-    FINAL > FIXED > VALIDATED (each needing a stored ID) > unlocked > deferred."""
+             deferral_row: tuple[str, ...] = ("YOU", "HEARTH", "RESTORE"), loaded: bool = True) -> str:
+    """The phase of a record: the Edge Case 16 items decidable from these six fields first (D4, D8, and D9 only when
+    ``loaded``), then FINAL > FIXED > VALIDATED (each needing a stored ID) > unlocked > deferred."""
     unset = [v == UNSET for v in (a, f, d)]
     if not stored and root in ("INSIDE", "FINAL"):
         return "DAMAGED"  # D8
     if deferred and (any(unset) or (not stored and (a, f, d) != deferral_row)):
         return "DAMAGED"  # D4
-    if not stored and not any(unset) and not deferred:
-        return "DAMAGED"  # D9 (a loaded record)
+    if loaded and not stored and not any(unset) and not deferred:
+        return "DAMAGED"  # D9 (a loaded record only: in play this record is the crisis inside C8-S16)
     if stored:
         return "FINAL" if root == "FINAL" else "FIXED" if root == "INSIDE" else "VALIDATED"
     if all(unset):
@@ -1281,7 +1293,7 @@ def check_formulas(lines: list[str], rules: dict[str, tuple[str, ...]], probs: P
     if [norm_code(p) for p in prereq] != [PREREQS_MET_LINE]:
         probs.add(area, f"prereqs_met definition {[norm_code(p) for p in prereq]} != ['{PREREQS_MET_LINE}']")
     lock_line, _ = pin_body(lines, "lock_pass(X, v):", LOCK_PASS_BODY, area, probs)
-    phase_line, phase_body = pin_body(lines, "storyline_phase(record):", STORYLINE_PHASE_BODY, area, probs)
+    phase_line, phase_body = pin_body(lines, "storyline_phase(record, loaded):", STORYLINE_PHASE_BODY, area, probs)
     _, family_body = pin_body(lines, "family(id):", FAMILY_BODY, area, probs)
 
     # The results each body can return must be exactly the vocabulary the record allows.
@@ -1315,10 +1327,12 @@ def check_formulas(lines: list[str], rules: dict[str, tuple[str, ...]], probs: P
     # storyline_phase examples, recomputed (revision 6: "Examples (loaded records):", DAMAGED examples included).
     if phase_line:
         text = paragraph_after_fence(lines, phase_line)
-        parts = re.split(r"Examples[^:]*:", text, maxsplit=1)
-        examples = parts[1] if len(parts) == 2 else ""
-        want = (f"damaged(record) is true when the record holds an item D1-D{len(EC16_ITEMS)} of Edge Case 16; "
-                f"D{EC16_CRISIS} is tested on a loaded record only")
+        # Revision 7: each "Example(s) (...):" label says whether its examples are loaded records or the live record.
+        segments = re.split(r"(Examples?[^:]*):", text)
+        labelled = [(label.replace("`", ""), body) for label, body in zip(segments[1::2], segments[2::2])]
+        examples = " ".join(body for _, body in labelled)
+        want = (f"damaged(record, loaded) is true when the record holds an item D1-D{len(EC16_ITEMS)} of Edge Case 16; "
+                f"D{EC16_CRISIS} is tested on a loaded record only (loaded true)")
         if want not in norm(text):
             probs.add(area, f"storyline_phase paragraph lacks '{want}'")
         if "FINAL and FIXED need a stored ID" not in norm(text):
@@ -1326,18 +1340,23 @@ def check_formulas(lines: list[str], rules: dict[str, tuple[str, ...]], probs: P
         deferral_row = rules.get(CTX.get("route_rule", {}).get("WITNESS", "R1"), ("YOU", "HEARTH", "RESTORE"))
         if not any(r == "DAMAGED" for _, r in re.findall(r"\(([^()]*)\) → ([A-Z_]+)", examples.replace("`", ""))):
             probs.add(area, "storyline_phase has no DAMAGED example")
-        found = re.findall(r"\(([^()]*)\) → ([A-Z_]+)", examples.replace("`", ""))
+        found = [(fields, stated, "loaded false" not in label)
+                 for label, body in labelled
+                 for fields, stated in re.findall(r"\(([^()]*)\) → ([A-Z_]+)", body.replace("`", ""))]
         if len(found) < 3:
             probs.add(area, f"storyline_phase has {len(found)} parseable examples, expected at least 3")
-        for fields, stated in found:
+        if not any(not is_loaded and stated == "CRISIS" for _, stated, is_loaded in found):
+            probs.add(area, "storyline_phase has no in-play (loaded false) CRISIS example")
+        for fields, stated, is_loaded in found:
             parts = [p.strip() for p in fields.split(",")]
             if len(parts) != 6:
                 probs.add(area, f"storyline_phase example '({fields})' does not have 6 fields")
                 continue
             a, f, d, sid, deferred, root = parts
-            got = py_phase(a, f, d, sid != "nothing stored", deferred == "true", root, deferral_row)
+            got = py_phase(a, f, d, sid != "nothing stored", deferred == "true", root, deferral_row, is_loaded)
             if got != stated:
-                probs.add(area, f"storyline_phase example '({fields})' states {stated}, the phase table gives {got}")
+                probs.add(area, f"storyline_phase example '({fields})' (loaded {str(is_loaded).lower()}) states "
+                                f"{stated}, the phase table gives {got}")
 
 
 def check_maps(lines: list[str], rules: dict[str, tuple[str, ...]], probs: Problems) -> None:
@@ -1569,6 +1588,9 @@ def check_axes_edge_cases(lines: list[str], probs: Problems) -> None:
         probs.add(area, f"Edge Case 8 does not cite 'Edge Case 16, D{EC16_LEGACY}', the pre-axes save item")
     if "is unsupported and does not load" not in ec.get(8, ""):
         probs.add(area, "Edge Case 8 no longer says a pre-axes save past a lock scene 'is unsupported and does not load'")
+    if "holds only while no player-facing build has a save past Chapter 8" not in ec.get(8, ""):
+        probs.add(area, "Edge Case 8 lost the precondition 'holds only while no player-facing build has a save past "
+                        "Chapter 8' (design review round 7)")
     # Round 6 blocker 3: the over-promise guard on clean/negotiated.
     whole = norm(" ".join(lines))
     for key in NO_OVERPROMISE_KEYS:
@@ -1582,6 +1604,40 @@ def check_axes_edge_cases(lines: list[str], probs: Problems) -> None:
         probs.add(area, f"no acceptance criterion covers '(D1-D{len(EC16_ITEMS)})' (AC9)")
     if f"except CRISIS, for which it names D{EC16_CRISIS}" not in whole:
         probs.add(area, f"AC9 does not say the CRISIS fixture's load_check names D{EC16_CRISIS}")
+
+
+REVISION7_AXES_KEYS = (  # design review round 7 (2026-11-10): the loaded argument, the seven-seats guard, AC14's baseline
+    "| phase_of(record, loaded) | the Formulas' storyline_phase |",
+    "called with loaded false for CRISIS and true for the others",
+    "phase_of of the CRISIS fixture with loaded true is DAMAGED",
+    "phase_of(record, true) is DAMAGED",
+    "for WITNESS also false unless witness_seats holds seven seats",
+    "seats holding six of the seven seats",
+    'The baseline for "changes" is the shared variant of a scene (the one every storyline plays)',
+    "The smallest number of scenes in which two distinct IDs differ is reported, with no threshold (Open Question 13)",
+    "P3 baseline and the storyline cut order",
+    "`loaded` is true for a record just read from a save and false for the live record in play.".replace("`", ""),
+)
+REVISION7_AXES_FORBIDDEN = ("for every pair of distinct IDs", "(D2)", "D2;", "(D3)")
+REVISION7_LIFE_KEYS = (
+    "the quest sets WITNESS_SEATS in the step that saves the seventh seat, a mirror of the record",
+    "loaded false; after a load that passed the check the value is the same either way",
+)
+
+
+def check_revision7(gdd: list[str], life: list[str], probs: Problems) -> None:
+    """Design review round 7: the loaded argument, the seven-seats guard, the D-label cleanup, AC14's baseline."""
+    area = "revision 7"
+    whole, life_whole = norm(" ".join(gdd)), norm(" ".join(life))
+    for key in REVISION7_AXES_KEYS:
+        if key not in whole:
+            probs.add(area, f"storyline-axes.md lacks '{key}'")
+    for bad in REVISION7_AXES_FORBIDDEN:
+        if bad in whole:
+            probs.add(area, f"storyline-axes.md still has '{bad}'")
+    for key in REVISION7_LIFE_KEYS:
+        if key not in life_whole:
+            probs.add(area, f"storyline-lifecycle.md lacks '{key}'")
 
 
 def check_protected(lines: list[str], root: Path, probs: Problems) -> None:
@@ -2161,6 +2217,7 @@ def main(argv: list[str] | None = None) -> int:
     gates = check_phases(gdd, probs)
     check_knobs(gdd, probs)
     check_axes_edge_cases(gdd, probs)
+    check_revision7(gdd, life, probs)
     check_protected(gdd, args.root, probs)
     check_axes_acs(gdd, valid_rows, rules, probs)
     check_number_words(gdd, "axes", rules, probs)

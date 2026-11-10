@@ -1,9 +1,9 @@
 # Mutation 'r5_ac14_unknown_observable' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-axes.r5_ac14_unknown_observable.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-axes.r5_ac14_unknown_observable.md
-lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
-root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\84ebb77d-b2f4-454b-a904-8225ed1c5c56\scratchpad\mutations\storyline-axes.r5_ac14_unknown_observable.md --lifecycle ..\..\..\..\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\84ebb77d-b2f4-454b-a904-8225ed1c5c56\scratchpad\mutations\storyline-axes.r5_ac14_unknown_observable.md
+lifecycle: ..\..\..\..\design\gdd\storyline-lifecycle.md
+bible:     ..\..\..\..\AethelgardPrototype\story\STORY_BIBLE.md
+root:      ..\..\..\..
 FAIL [acceptance] AC 14: uses 'scenes()', which its Observables table does not list
 RESULT: FAIL (1 problems)
 exit code: 1

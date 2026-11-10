@@ -1,0 +1,9 @@
+# Mutation 'r7_d16_precondition_dropped' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\84ebb77d-b2f4-454b-a904-8225ed1c5c56\scratchpad\mutations\storyline-axes.r7_d16_precondition_dropped.md --lifecycle ..\..\..\..\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\84ebb77d-b2f4-454b-a904-8225ed1c5c56\scratchpad\mutations\storyline-axes.r7_d16_precondition_dropped.md
+lifecycle: ..\..\..\..\design\gdd\storyline-lifecycle.md
+bible:     ..\..\..\..\AethelgardPrototype\story\STORY_BIBLE.md
+root:      ..\..\..\..
+FAIL [edge cases] line 622: Edge Case 16 lacks the pinned sentence 'D16 holds only while no player-facing build has such saves; if one ships before these fields do, the decision is reopened'
+RESULT: FAIL (1 problems)
+exit code: 1

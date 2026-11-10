@@ -199,7 +199,7 @@ MUTATIONS = {
     "r5_rule6_chapter10_flag": [("plays only when the stored ID is `SL-SECRET-T`.", "plays when the unlock flag is set.")],
     "r5_rule3_sole_dissent_optional": [("the ending plays `sole_dissent`", "the ending may play `sole_dissent`")],
     "r5_ac_number_gap": [("15. Pillar P5 tracking", "16. Pillar P5 tracking")],
-    "r5_ac14_unknown_observable": [("`scene_variants()` differ", "`scenes()` differ")],
+    "r5_ac14_unknown_observable": [("`scene_variants(id)` holds at least 3", "`scenes(id)` holds at least 3")],
     # lifecycle: transitions, formulas, pinned sentences, derived beats, L-ACs, Validation note
     "r5_t14_dropped": [(L, "| T14 | FIXED | Kaelen stands down | the final authorization scene is playing; `witness_mandate` FAILED | FINAL | `root_phase` FINAL; nothing executed |\n", "")],
     "r5_t8_retcon_dropped": [(L, "| as T5; gate retcon beat played |", "| as T5 |")],
@@ -239,8 +239,8 @@ MUTATIONS = {
     "r6_qa_ec8_body": [("one\n   positioned past a lock scene (chapters 9 and 10 exist in the code today) is unsupported and does not load (Edge",
                         "one\n   positioned past a lock scene (chapters 9 and 10 exist in the code today) replays the lock scenes (Edge")],
     # axes blocker 1: the damaged-first phase function
-    "r6_phase_final_before_damaged": [("    if damaged(record)                                 → DAMAGED\n    if storyline_id is stored and root_phase is FINAL  → FINAL\n",
-                                       "    if storyline_id is stored and root_phase is FINAL  → FINAL\n    if damaged(record)                                 → DAMAGED\n")],
+    "r6_phase_final_before_damaged": [("    if damaged(record, loaded)                         → DAMAGED\n    if storyline_id is stored and root_phase is FINAL  → FINAL\n",
+                                       "    if storyline_id is stored and root_phase is FINAL  → FINAL\n    if damaged(record, loaded)                         → DAMAGED\n")],
     "r6_phase_final_without_id": [("    if storyline_id is stored and root_phase is FINAL  → FINAL", "    if root_phase is FINAL                             → FINAL")],
     "r6_phase_example_damaged_wrong": [("UNSET, nothing stored, false, FINAL) → DAMAGED", "UNSET, nothing stored, false, FINAL) → FINAL")],
     "r6_phase_example_crisis_loadable": [("(NONE, ARCHIVE, RELEASE, nothing stored, false, OUTSIDE) → DAMAGED", "(NONE, ARCHIVE, RELEASE, nothing stored, false, OUTSIDE) → CRISIS")],
@@ -265,7 +265,7 @@ MUTATIONS = {
     "r6_rule6_gate_needs_flag": [("an invocation there also sets T's unlock\n     flag if the invocation scene did not", "an invocation there needs T's unlock\n     flag")],
     # lifecycle blocker 2: the gate invocation guard
     "r6_gate_formula_needs_flag": [(L, '∪ { "invoke:WITNESS" : enabled(WITNESS), prereqs_met(WITNESS) }', '∪ { "invoke:WITNESS" : SEVEN_WITNESSES_AVAILABLE set, enabled(WITNESS), prereqs_met(WITNESS) }')],
-    "r6_t7_guard_needs_flag": [(L, "| WITNESS enabled; prerequisites met |", "| `SEVEN_WITNESSES_AVAILABLE` set; WITNESS enabled; prerequisites met |")],
+    "r6_t7_guard_needs_flag": [(L, "| WITNESS enabled; prerequisites met, seven seats saved |", "| `SEVEN_WITNESSES_AVAILABLE` set; WITNESS enabled; prerequisites met, seven seats saved |")],
     "r6_gate_table_needs_flag": [(L, "when WITNESS is enabled and its prerequisites are met, invoke:WITNESS;", "when SEVEN_WITNESSES_AVAILABLE is set, WITNESS is enabled and its prerequisites are met, invoke:WITNESS;")],
     "r6_lac21_scene_wrong": [(L, 'YOU, "final permission",\n  LAST_CHANCE)', 'YOU, "final permission",\n  C9-S19)')],
     # lifecycle blocker 3: the save window
@@ -295,6 +295,24 @@ MUTATIONS = {
     "r6_lac23_count": [(L, "the 4 `deferral_*`", "the 3 `deferral_*`")],
     "r6_lac24_no_signoff": [(L, "`production/qa/evidence/`, with lead sign-off\n  recorded beside them", "`production/qa/evidence/`")],
     "r6_validation_load_cells": [(L, "which pass when the load is refused", "which pass when TURNED_BACK")],
+    # --- review round 7 (axes revision 7 / lifecycle revision 3): the loaded argument, the seven-seats guard, the
+    # save precondition, the record-versus-flags rule, AC14's baseline
+    "r7_phase_loaded_dropped": [("storyline_phase(record, loaded):\n    if damaged(record, loaded)", "storyline_phase(record):\n    if damaged(record)")],
+    "r7_d9_example_in_play": [("(NONE, ARCHIVE, RELEASE, nothing stored, false, OUTSIDE) → CRISIS; the same", "(NONE, ARCHIVE, RELEASE, nothing stored, false, OUTSIDE) → DAMAGED; the same")],
+    "r7_inplay_example_dropped": [(" Example (the live record in play, `loaded`\nfalse): (NONE, ARCHIVE, RELEASE, nothing stored, false, OUTSIDE) → CRISIS; the same record with `loaded` true is the\nlast DAMAGED example above.", "")],
+    "r7_loaded_label_flipped": [("Examples (loaded records, `loaded` true):", "Examples (loaded records, `loaded` false):")],
+    "r7_ac9_loaded_dropped": [("called with `loaded` false for CRISIS and true for the others", "called with the same arguments for each")],
+    "r7_seats_prereq_dropped": [("see above; for WITNESS also false unless `witness_seats` holds seven seats", "see above")],
+    "r7_t7_seats_guard_dropped": [(L, "prerequisites met, seven seats saved", "prerequisites met")],
+    "r7_mirror_timing_changed": [("Secret Quest 09 sets it in the same step that saves the seventh", "Secret Quest 09 sets it when the quest starts, before the seventh")],
+    "r7_lac21_six_seats_dropped": [(L, "The same holds with all three set and `record_field(witness_seats)` holding six of", "The same holds with all three set and `record_field(witness_seats)` holding any of")],
+    "r7_d16_precondition_dropped": [("\n\n    D16 holds only while no player-facing build has such saves; if one ships before these fields do, the decision is\n    reopened (`storyline-lifecycle.md` Legacy saves).", "")],
+    "r7_ec8_precondition_dropped": [("The refusal holds only while no player-facing\n   build has a save past Chapter 8", "The refusal always holds for any\n   build with a save past Chapter 8")],
+    "r7_rule8_precondition_dropped": [(" The refusal holds only while no player-facing build has such saves\n   (`storyline-lifecycle.md` Legacy saves).", "")],
+    "r7_record_not_authoritative": [("The composer input record is authoritative: these flags,", "The flags are authoritative: these flags,")],
+    "r7_ac14_pairwise_restored": [('The baseline for "changes" is the shared variant of a scene (the one every storyline plays): over the 25', "For every pair of distinct IDs `scene_variants()` differ in at least 3 scenes: over the 25")],
+    "r7_oq13_dropped": [("**P3 baseline and the storyline cut order.**", "**P3 baseline.**")],
+    "r7_decision_label_back": [("`/map-systems` creates it later.", "`/map-systems` creates it later (D3).")],
 }
 # Controls: edits the checker must accept (expected PASS).
 CONTROLS = {

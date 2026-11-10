@@ -1,6 +1,6 @@
 # Storyline Axes
 
-> **Status**: Draft (revision 6, after design review round 6; static core unchanged since revision 4)
+> **Status**: Draft (revision 7, after design review round 7; static core unchanged since revision 4)
 > **Author**: Claude (narrative-director research) with the project lead
 > **Last Updated**: 2026-11-10
 > **Last Verified**: 2026-11-10
@@ -101,7 +101,9 @@ with, and whether the deleted are brought back, let go, or asked.
    renegotiation does ("This sets Faction Axis if vote passes.", PM:6989). The sources define no axis score.
 3. **Lock scenes resolve, clean or negotiated.** Faction → `AXIS2_HEARTH` / `_ARCHIVE` / `_CONTINUITY`; Authority →
    `AXIS1_YOU` / `_SHARED` / `_NONE`; Deleted → `AXIS3_RESTORE` / `_RELEASE` / `_CHOOSE`. These flags are not in the
-   code yet (owner: Y2-PP-T17). A lock vote always passes for the proposal the player backs (PM:6990-6991; a fixed
+   code yet (owner: Y2-PP-T17). The composer input record is authoritative: these flags, `axis_revised_<axis>`,
+   `lock_negotiated_<axis>` and `WITNESS_SEATS` are mirrors, written in the same step as the record field, never
+   read in its place and cleared with it. A lock vote always passes for the proposal the player backs (PM:6990-6991; a fixed
    rule, not a knob), so no vote leaves an axis UNSET. How it passes is recorded (`lock_pass`, Formulas): **clean**
    when at least one seed for the backed value is set with direction `+` and none with direction `−`; otherwise
    **negotiated**, and `lock_negotiated_<axis>` is set ("If player lacks support choice may still be possible
@@ -158,6 +160,11 @@ with, and whether the deleted are brought back, let go, or asked.
    - **Chapter 10.** Because the unlock flag is set on every storyline, T's Chapter 10 scene (C10-S15 for Witness
      Protocol, whose source guard is the flag, PM:8693) plays only when the stored ID is `SL-SECRET-T`.
 
+   `WITNESS_SEATS` mirrors the record (Core Rule 3): Secret Quest 09 sets it in the same step that saves the seventh
+   seat of `witness_seats`, so the flag never stands without seven saved seats, and `prereqs_met(WITNESS)` also
+   requires the seven seats, so a flag set by any other means cannot store `SL-SECRET-WITNESS` with a short table
+   (Edge Case 16, D13).
+
    Witness Protocol is in 1.0; Crownless and First Wake are reserved (post-1.0): until they ship, their rows can
    only be renegotiated at C8-S16, offer no deferral, and show no signpost.
 7. **A valid row is held to its word.** Once an ID is stored — a valid row at C8-S16, a renegotiation, or an
@@ -170,7 +177,8 @@ with, and whether the deleted are brought back, let go, or asked.
    (`storyline-lifecycle.md` S7); before the three locks it turns the player back in the fiction (the Assembly has
    not decided). A save positioned past a lock scene with that axis UNSET (one made before these fields existed)
    is unsupported and does not load (Edge Case 16, D16; user decision 2026-11-10); no runtime catch-up exists, so
-   no loaded state is stranded.
+   no loaded state is stranded. The refusal holds only while no player-facing build has such saves
+   (`storyline-lifecycle.md` Legacy saves).
 9. **Final authorization.** The post-boss scene displays the stored structure, with no generic menu
    (PM:8788-8789), and the player confirms execution; on `SL-SECRET-WITNESS` after a FAILED witness vote, Kaelen
    stands down instead and nothing is executed (Core Rule 10). It changes no axis and no ID. The source's "one last lawful
@@ -416,7 +424,8 @@ owned by Y2-PP-T17 and specified in `storyline-lifecycle.md`; no other code writ
   this record and keep invariants I1-I8.
 - **FlagRegistry / StoryGraph (Y1-P1-T03):** owns the seed flags and, later, the `AXIS*`, `axis_revised_*`,
   `lock_negotiated_*` flags and the secret routes' prerequisite and unlock flags; validates exclusive groups and
-  the secret-route knobs at boot; this GDD names them, it does not write them.
+  the secret-route knobs at boot; this GDD names them, it does not write them. The `AXIS*`, `axis_revised_*`,
+  `lock_negotiated_*` and `WITNESS_SEATS` flags are mirrors of the record (Core Rule 3), which stays authoritative.
 - **SaveService (Y1-P1-T05):** stores the composer input record; a stored ID is never recomputed; loading restores
   the record and derives the phase.
 - **Time model (S06b):** supplies pace values per act and the timing flags the composer reads.
@@ -456,7 +465,7 @@ prereqs_met(T) = secret_prerequisites[T] has at least two flags and every one of
 | D | enum | RESTORE, RELEASE, CHOOSE, UNSET | `deleted` field | The deleted |
 | I | bool | true, false | in play, `secret_invoked` contains `transform(A, F, D)` (false when the row is valid or an axis is UNSET); as a formula input it is free, and the body reads it only on an invalid row | The player confirmed the invocation of the route that transforms this row |
 | enabled(T) | bool | `secret_route_enabled.T` (Tuning Knobs) | data | Whether route T ships |
-| prereqs_met(T) | bool | see above | data | e.g. WITNESS: PM:11215-11217 |
+| prereqs_met(T) | bool | see above; for WITNESS also false unless `witness_seats` holds seven seats | data | e.g. WITNESS: PM:11215-11217 |
 
 The formula gives the live value while no ID is stored. The value stored when the coalition holds is the formula's
 result at that moment; afterwards the stored ID is read, never recomputed (Core Rule 8). The unlock flag
@@ -498,8 +507,8 @@ NEGOTIATED; YOU with `ch1_root_first_edit` set → CLEAN.
 ### Storyline phase
 
 ```
-storyline_phase(record):
-    if damaged(record)                                 → DAMAGED
+storyline_phase(record, loaded):
+    if damaged(record, loaded)                         → DAMAGED
     if storyline_id is stored and root_phase is FINAL  → FINAL
     if storyline_id is stored and root_phase is INSIDE → FIXED
     if storyline_id is stored                          → VALIDATED
@@ -509,16 +518,20 @@ storyline_phase(record):
     otherwise                                          → CRISIS
 ```
 
-`damaged(record)` is true when the record holds an item D1-D16 of Edge Case 16; D9 is tested on a loaded record
-only, because inside C8-S16 an invalid row with nothing stored is the crisis itself. The check runs first, so a
+`loaded` is true for a record just read from a save and false for the live record in play.
+`damaged(record, loaded)` is true when the record holds an item D1-D16 of Edge Case 16; D9 is tested on a loaded
+record only (`loaded` true), because inside C8-S16 an invalid row with nothing stored is the crisis itself. For a
+record that passed the load check the two calls agree. The check runs first, so a
 record that contradicts the phase table is never classified as a playable phase: FINAL and FIXED need a stored ID,
 and a loaded record that would read CRISIS is DAMAGED, because a crisis is never saved. A valid row is stored in the
 same step that sets its last axis, so "three axes set, nothing stored, not deferred" is, in play, always an invalid
-row inside C8-S16. Examples (loaded records):
+row inside C8-S16. Examples (loaded records, `loaded` true):
 (YOU, HEARTH, UNSET, nothing stored, false, OUTSIDE) → PARTLY_LOCKED; (YOU, HEARTH, RESTORE, nothing stored, true,
 OUTSIDE) → DEFERRED; (SHARED, ARCHIVE, CHOOSE, `SL-SHARED-ARCHIVE-CHOOSE`, false, INSIDE) → FIXED; (YOU, HEARTH,
 UNSET, nothing stored, false, FINAL) → DAMAGED; (SHARED, ARCHIVE, CHOOSE, nothing stored, true, OUTSIDE) → DAMAGED;
-(NONE, ARCHIVE, RELEASE, nothing stored, false, OUTSIDE) → DAMAGED.
+(NONE, ARCHIVE, RELEASE, nothing stored, false, OUTSIDE) → DAMAGED. Example (the live record in play, `loaded`
+false): (NONE, ARCHIVE, RELEASE, nothing stored, false, OUTSIDE) → CRISIS; the same record with `loaded` true is the
+last DAMAGED example above.
 
 ### Ending family
 
@@ -583,7 +596,8 @@ renegotiations, R2 and R3 five each (the Faction swap between them is not offere
    inside C8-S16. A save with no axis data positioned before C8-S13 loads LEANING with all axes UNSET; one
    positioned past a lock scene (chapters 9 and 10 exist in the code today) is unsupported and does not load (Edge
    Case 16, D16; the project's own fixture saves are migrated once, `storyline-lifecycle.md` Legacy saves). A save
-   made after the coalition holds reloads its stored ID unchanged.
+   made after the coalition holds reloads its stored ID unchanged. The refusal holds only while no player-facing
+   build has a save past Chapter 8; if one ships before these fields do, the decision is reopened.
 9. **NG+.** Whether axis leanings or the previous storyline carry into a new cycle is not decided here (Open
    Questions); until decided, NG+ starts LEANING with the reset list in `storyline-lifecycle.md`.
 10. **Reaching Root of Heaven without a stored ID.** Every path runs the gate check (Core Rule 8); DEFERRED meets
@@ -636,11 +650,14 @@ renegotiations, R2 and R3 five each (the Faction swap between them is not offere
     `witness_deferred` on a stored valid row with `axis_revised` non-empty is the history of a deferral broken at
     the gate, not damage.
 
+    D16 holds only while no player-facing build has such saves; if one ships before these fields do, the decision is
+    reopened (`storyline-lifecycle.md` Legacy saves).
+
 ## Dependencies
 
 | System | Direction | What flows | Status of its design doc |
 |---|---|---|---|
-| Storyline lifecycle (`design/gdd/storyline-lifecycle.md`, Y2-PP-T17) | this → lifecycle | the axes, formulas, record and invariants I1-I8 the scenes must keep | revision 2 after its second design review; needs re-review |
+| Storyline lifecycle (`design/gdd/storyline-lifecycle.md`, Y2-PP-T17) | this → lifecycle | the axes, formulas, record and invariants I1-I8 the scenes must keep | revision 3 (revision 2 plus the T7 seven-seats guard); needs re-review |
 | Time model (`design/gdd/time-model.md`, Y1-P0-S06b) | this ← time model | per-act pace values (`act1_pace_*` exists; acts 2-4 named there), timing flags | not written yet — S06b must list this GDD as a dependent |
 | FlagRegistry / StoryGraph (Y1-P1-T03) | this ← registry | seed flags, the future `AXIS*`, `axis_revised_*`, `lock_negotiated_*` flags, secret prerequisite and unlock flags, exclusive-group and secret-knob validation | no GDD (an ADR/tech design later) — must cite this GDD's seed map |
 | SaveService (Y1-P1-T05) | this → save | the composer input record, saved and versioned; the damaged-record check | no GDD — must store the fields in the composer record |
@@ -677,8 +694,8 @@ FlagRegistry checks the secret-route knobs at boot; a failure is a boot error na
 
 | Knob | Default | Safe range | What it affects | Rationale / source |
 |---|---|---|---|---|
-| `secret_route_enabled.WITNESS` | true | true for 1.0 | whether R1 offers the deferral and can transform into Witness Protocol | D2; Story Bible §5 (Consent family in 1.0) |
-| `secret_route_enabled.CROWNLESS`, `.FIRSTWAKE` | false | false until their post-1.0 content ships and their family is designed (never enabled while `family` would be RESERVED) | whether R2 / R3 can transform | D2; Story Bible §5 "post-1.0 candidates" |
+| `secret_route_enabled.WITNESS` | true | true for 1.0 | whether R1 offers the deferral and can transform into Witness Protocol | Story Bible §5 (Consent family in 1.0); P3 sign-off, user, 2026-11-10 (Counts) |
+| `secret_route_enabled.CROWNLESS`, `.FIRSTWAKE` | false | false until their post-1.0 content ships and their family is designed (never enabled while `family` would be RESERVED) | whether R2 / R3 can transform | Story Bible §5 "post-1.0 candidates"; P3 sign-off, user, 2026-11-10 (Counts) |
 | `secret_prerequisites[route]` (list of flags) | WITNESS: `WITNESS_PROTOCOL_FOUND`, `OLD_WITNESS_SIGNATURE`, `WITNESS_SEATS` (PM:11215-11217); CROWNLESS: `CROWN_COORDINATES`, `EMPTY_THRONE_FOUND`, `CROWN_SNAPSHOT_FOUND`, `NO_CROWN_CHARTER` (PM:11242-11245); FIRSTWAKE: `OLD_HOME_MESSAGE`, `FOURTH_HYMN_FOUND`, `EXTERNAL_PING_FOUND`, `EXTERNAL_CARRIER` (PM:11270-11273) | ≥ 2 flags per route ("multiple secret quests"); the three lists disjoint; every flag known to FlagRegistry; no unlock flag in any list | how hard a secret route is to reach; when its signpost and invocation scene appear | PM:706; the production master's "Required flag" lines |
 | `secret_unlock_flag[route]` | WITNESS: `SEVEN_WITNESSES_AVAILABLE` (PM:11218); CROWNLESS: `CROWNLESS_AVAILABLE` (PM:11246); FIRSTWAKE: `FIRST_WAKE_AVAILABLE` (PM:11274) | the route's last "Required flag"; set when the route's invocation scene plays | which flag records that the invocation scene played | PM:8055; PM:8199-8201 (Chapter 9 ledger "Secret unlock" lines) |
 
@@ -743,13 +760,13 @@ scenes and renegotiations (PM:6987-6989).
 
 | observable | returns |
 |---|---|
-| `formula_id(A, F, D, I, knobs, flags)` | the Formulas' `storyline_id` for those inputs (no record, no stored ID) |
-| `prereqs_met(T, knobs, flags)` | the Formulas' `prereqs_met` |
+| `formula_id(A, F, D, I, knobs, flags, seats)` | the Formulas' `storyline_id` for those inputs (no record, no stored ID); `seats` is the saved `witness_seats` map |
+| `prereqs_met(T, knobs, flags, seats)` | the Formulas' `prereqs_met` |
 | `family(id)` | the Formulas' `family` |
-| `phase_of(record)` | the Formulas' `storyline_phase` |
+| `phase_of(record, loaded)` | the Formulas' `storyline_phase` |
 | `axis(record, name)` | the record's value for `authority`, `faction` or `deleted` |
 | `composer_modules(record)` | the module ids the composer selects (ids defined by Y2-PP-T17) |
-| `scene_variants(id)` | the (scene, variant) pairs the route data plays for a storyline ID |
+| `scene_variants(id)` | the (scene, variant) pairs the route data plays for a storyline ID; a variant is shared when the route data plays it for every storyline |
 | `ending_sequence(id)` | the ending-sequence id the route data plays for a storyline ID |
 | `story_plus_state(id)` | the Story+ state id the route data creates for a storyline ID |
 | `boot_errors(knobs, flags)` | the data errors FlagRegistry finds at boot |
@@ -758,23 +775,26 @@ scenes and renegotiations (PM:6987-6989).
 **Runtime — each criterion names the stories that must land before it can run:**
 
 5. For every (A, F, D) over {its three values, UNSET} (64 triples) and I ∈ {false, true} as a free formula input
-   (128 cases), with the default knobs and every offer prerequisite set: `formula_id` is `SL-A-F-D` for the 24
+   (128 cases), with the default knobs, every offer prerequisite set and seven witness seats saved: `formula_id` is `SL-A-F-D` for the 24
    valid triples whatever I;
    PENDING for the 37 triples with an UNSET axis whatever I; CRISIS for the 3 invalid triples with I false; with I
    true `SL-SECRET-WITNESS` for (YOU, HEARTH, RESTORE) and CRISIS for the other two. *Blocked by:* Y2-PP-T17
    (unit-testable before the scenes exist).
 6. For (YOU, HEARTH, RESTORE), I true, WITNESS enabled: each of the three single-flag-missing subsets of
    `WITNESS_PROTOCOL_FOUND`, `OLD_WITNESS_SIGNATURE`, `WITNESS_SEATS` → CRISIS; all three set with WITNESS disabled →
-   CRISIS. *Blocked by:* Y2-PP-T17, Y1-P1-T03.
+   CRISIS; all three set with WITNESS enabled and `seats` holding six of the seven seats (a synthetic record: play
+   sets `WITNESS_SEATS` only with the seventh seat) → CRISIS. *Blocked by:* Y2-PP-T17, Y1-P1-T03.
 7. `prereqs_met` is false for a route whose list has fewer than two flags (including none), with every flag set.
    *Blocked by:* Y2-PP-T17, Y1-P1-T03.
 8. `family(id)` over every id: the 24 valid IDs per the family map; `SL-SECRET-WITNESS` → CONSENT;
    `SL-SECRET-CROWNLESS` and `SL-SECRET-FIRSTWAKE` → RESERVED; PENDING, CRISIS, the 3 invalid-row ids and the empty
    string → NO_FAMILY. *Blocked by:* Y2-PP-T17.
-9. `phase_of` returns the stated phase for each Formulas example and for one fixture per phase other than DAMAGED
-   (LEANING, PARTLY_LOCKED, CRISIS, DEFERRED, VALIDATED, FIXED, FINAL); `load_check(record)` is empty for each of
-   those seven fixtures except CRISIS, for which it names D9. For one fixture per Edge Case 16 item (D1-D16)
-   `phase_of` is DAMAGED and `load_check(record)` names that item. *Blocked by:* Y2-PP-T17, Y1-P1-T05, Y1-P1-T03.
+9. `phase_of(record, loaded)` returns the stated phase for each Formulas example with its stated `loaded`, and for
+   one fixture per phase other than DAMAGED (LEANING, PARTLY_LOCKED, CRISIS, DEFERRED, VALIDATED, FIXED, FINAL),
+   called with `loaded` false for CRISIS and true for the others; `load_check(record)` is empty for each of those
+   seven fixtures except CRISIS, for which it names D9, and `phase_of` of the CRISIS fixture with `loaded` true is
+   DAMAGED. For one fixture per Edge Case 16 item (D1-D16) `phase_of(record, true)` is DAMAGED and
+   `load_check(record)` names that item. *Blocked by:* Y2-PP-T17, Y1-P1-T05, Y1-P1-T03.
 10. Seeds never lock: a record holding any one of the 26 seed flags, or one flag from each exclusive group, with no
     lock scene played, has `axis()` UNSET for all three axes and `phase_of` LEANING. *Blocked by:* Y2-PP-T17,
     Y1-P1-T03.
@@ -790,9 +810,10 @@ scenes and renegotiations (PM:6987-6989).
     without it, `composer_modules()` contains `sole_dissent` exactly for the SOLE fixture with `authority` held;
     `storyline_id` and `family()` are the same in both. *Blocked by:* Y2-PP-T17.
 14. Pillar P3 (ROADMAP §2: a storyline changes ≥ 3 story scenes, has its own ending sequence and its own Story+
-    state): over the 25 storylines reachable in 1.0, for every pair of distinct IDs `scene_variants()` differ in at
-    least 3 scenes, and `ending_sequence()` and `story_plus_state()` are distinct for every ID. *Blocked by:*
-    Y2-PP-T17.
+    state). The baseline for "changes" is the shared variant of a scene (the one every storyline plays): over the 25
+    storylines reachable in 1.0, `scene_variants(id)` holds at least 3 scenes whose variant is not shared, and
+    `ending_sequence()` and `story_plus_state()` are distinct for every ID. The smallest number of scenes in which
+    two distinct IDs differ is reported, with no threshold (Open Question 13). *Blocked by:* Y2-PP-T17.
 15. Pillar P5 tracking: before Y2-PP-T17 closes, every flag the nine 1.0 side arcs set is a row of the Act 1 seed
     map (or of its successor table) with a `pushes` target and a direction, and the checker's flag list includes
     it. *Blocked by:* Y2-PP-T17.
@@ -815,7 +836,7 @@ variants, saves, the route bot) are `storyline-lifecycle.md` L-AC1 onward.
    master also lets Nema, Seven, Rook and Kaito stay or leave on any route (PM:7534-7537), with per-companion
    secret-route reactions (PM:11229-11236). This GDD uses the 4; `companions_present` grows when the others are
    confirmed.
-7. **Systems index:** `design/gdd/systems-index.md` does not exist; `/map-systems` creates it later (D3).
+7. **Systems index:** `design/gdd/systems-index.md` does not exist; `/map-systems` creates it later.
 8. **Story Bible §5** gives the Consent family the God King "loses its health bar" fight, which the production
    master gives to Crownless (PM:11247); a separate Story Bible fix.
 9. **Truth strategy** (Seraphina's disclosure) is its own composer module in the production master (PM:8739); owner
@@ -838,3 +859,11 @@ variants, saves, the route bot) are `storyline-lifecycle.md` L-AC1 onward.
     stands down) and never changes the stored ID or the family (Core Rule 10); the threshold is fixed at 5, and the
     player's part in defining it ("Player previously helped define threshold", PM:8707) is choosing the witnesses in
     Secret Quest 09.
+13. **P3 baseline and the storyline cut order.** (a) AC14 reads "a storyline changes ≥ 3 scenes" as "≥ 3 scenes whose
+    variant is not the shared one" and only reports the pairwise minimum; the earlier all-pairs test (every two IDs
+    differ in ≥ 3 scenes) was dropped because the design never shows that a single Faction or Deleted value touches
+    three scenes. Confirm the reading, or set a pairwise threshold once Y2-PP-T17 counts the scenes each axis value
+    varies. (b) `design/gdd/game-concept.md` lists "storylines 27→18" in the cut order and "~6 storylines" for the
+    smaller game. The axes, their values and R1-R3 are not knobs here, so neither cut has a mechanism: collapsing one
+    Deleted value would give 3 × 3 × 2 = 18 combinations but changes R1-R3, `transform()` and every count. Decide the
+    mechanism, or drop the cut, before a budget cut can invoke it.
