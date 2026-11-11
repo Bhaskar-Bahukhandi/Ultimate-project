@@ -206,3 +206,56 @@ Findings:
 - [RECOMMENDED] Counts and registry: design/registry/entities.yaml has no entry for this system (open)
 Reviewed-Content-Hash: design/gdd/storyline-axes.md 0cdf9866eb4a0709015ef8d5d82550456aedcc96 (revision 6 as reviewed, HEAD a1cf409; revision 7 differs, so the next run re-reviews in full)
 Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285
+
+## Review — 2026-11-10 — Verdict: NEEDS REVISION
+Scope signal: L
+Specialists: none (--review lean, single-session analysis; the senior creative-director pass did not run)
+Blocking items: 1 | Recommended: 7
+Summary: The static core holds for an eighth round; the checker passed on revision 7 and the round-7 fixes landed. The one
+blocker is a cross-document guard mismatch: lifecycle T13 admitted FINAL on SL-SECRET-WITNESS with witness_mandate
+UNDECIDED, a record Edge Case 16 D11 refuses on load. It and four recommended items were fixed in revision 8 in the same
+session (checker PASS, 235/235 mutations FAIL, 1 control PASS); a fresh re-review is still owed.
+Prior verdict resolved: Yes (round-7 blockers: phase_of loaded argument, WITNESS_SEATS mirror rule)
+Decisions taken by the user (2026-11-10): T13 requires MET on SL-SECRET-WITNESS; Player Fantasy and Core Rule 2 re-scoped to
+the mapped Act 1 flags (arc and companion seeds join with AC15); AC14 becomes a module-list and unlock-case test.
+Findings:
+- [BLOCKING] Lifecycle T13 / L-AC13 vs Edge Case 16 D11: guard "not FAILED" admits FINAL with witness_mandate UNDECIDED on SL-SECRET-WITNESS (fixed: T13 needs MET on that ID; S8 offers neither confirm nor stand-down on UNDECIDED; L-AC13 synthetic cell)
+- [RECOMMENDED] Edge Case 16: out-of-order lock sets (an axis set while the axis before it is UNSET, or before its lock scene) load as PARTLY_LOCKED and no lock scene can play (fixed: D17, fixtures in AC9 and L-AC16)
+- [RECOMMENDED] Player Fantasy / Core Rule 2: side-storyline and companion seeds claimed but only 26 Act 1 flags mapped (fixed: re-scoped; the lifecycle content scope still lacks the seed-argument texts, open)
+- [RECOMMENDED] Acceptance Criteria 14: "own ending and Story+ state" met by distinct id strings (fixed: module-list and unlock-case test; pairwise scene minimum stays report-only, Open Question 13)
+- [RECOMMENDED] Core Rule 5 vs lifecycle S4: Faction offers are voiced as stepping down, not as a demand (fixed)
+- [RECOMMENDED] Overview: "Twelve side storylines push the axes" vs arcs 05, 08, 09 pushing none in 1.0 (fixed)
+- [RECOMMENDED] design/registry/entities.yaml still has no entry for this system; systems-index.md does not exist (open)
+- [RECOMMENDED] Witness deferral: authored scope (4 deferral beats, 6 gate retcons, 4 disclosures, invoke_witness, R1 clause, 7 candidates with stances, 6 Consent scenes, 70 Tier B lines) against a route few players reach, no success measure, producer sign-off still pending (open)
+Reviewed-Content-Hash: design/gdd/storyline-axes.md 01ae4c8eff6a18ee6fa9096f49c770a1c32b2bfb (revision 7 as reviewed, HEAD 084ccb0; revision 8 differs, so the next run re-reviews in full)
+Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285
+
+## Review — 2026-11-11 — Verdict: MAJOR REVISION NEEDED
+Scope signal: L (M with Witness Protocol post-1.0)
+Specialists: game-designer, systems-designer, narrative-director, qa-lead, creative-director (synthesis)
+Blocking items: 5 | Recommended: 9
+Summary: The static core (axes, R1-R3, 27 rows, counts, family, lock_pass) holds for a ninth round; checker PASS on
+revision 8. The process is the problem: each prose revision of the state layer opened the next round's defect, and the
+checker pins text rather than proving the state machine. Round 9 found a missing save-atomicity rule inside T7/T8, so the
+Witness deferral probation tripwire fires. Next: a scope decision, a short revision of blockers 2-4, a non-shipping
+reference model with a transition walk, then a lean round 10 against the model's output.
+Prior verdict resolved: Yes (round-8 T13 guard fixed); a new state defect opened inside the probation list
+Decisions taken by the user (2026-11-11): Witness Protocol moves post-1.0 (all three secret routes ship post-1.0 as one
+mechanism; R1 resolves by renegotiation only); revise now.
+Findings:
+- [BLOCKING] Lifecycle T7/T8 / probation: multi-field writes with no atomic save rule; an autosave mid-transition writes a save that D3/D6/D7/D14 refuse (tripwire fires)
+- [BLOCKING] Lifecycle save window: atomic checkpoint defined only for C8-S16; C10-S15 and checkpoints inside C8-S13/S14 after the axis write are uncovered (neither D16 nor D17 catches them)
+- [BLOCKING] Acceptance Criteria (Observables, AC9): phase_of/load_check cannot evaluate D15-D17 (flags, story position not inputs); AC9 passes a load_check that returns every item
+- [BLOCKING] Acceptance Criteria (AC14): satisfiable by per-ID module ids with no content difference; pairwise minimum report-only
+- [BLOCKING] Core Rule 10 / lifecycle S8, S9 (if Witness stays): PM:7519 Assembly names the witnesses; route-specific final-authorization lines (PM:8990); UNDECIDED soft-lock past S8; signpost CLOSED precedence; mandate formula hardcodes 7
+- [RECOMMENDED] Acceptance Criteria: no comprehension/playtest criterion that players link lock arguments to their Act 1 choices
+- [RECOMMENDED] Acceptance Criteria 1-4: the checker is document lint (text pins), not correctness evidence; build a reference model
+- [RECOMMENDED] Acceptance Criteria: AC10 tautological; AC7 no boundary at 2; transform() R2/R3 never run; AC12 no build input; AC13 SOLE-via-renegotiation and AC11 Kaelthas trust fixtures (open since round 6); AC15 self-contradictory
+- [RECOMMENDED] Acceptance Criteria: no screenshot evidence planned for lock scenes, family endings, Story+
+- [RECOMMENDED] Overview: "Nine of the twelve side storylines push the axes" overstates a seed map with no side-arc flags
+- [RECOMMENDED] Invariant I8 / lifecycle OQ7: Consent variants table incomplete; NG+ previous-cycle record unstated
+- [RECOMMENDED] Core Rule 10 (Consent): 5-of-7 can override the deleted seat (partly answered by PM:7093); Story+ after stand-down undefined
+- [RECOMMENDED] Lifecycle S9: witness vote is a solved puzzle (stances visible at seating)
+- [RECOMMENDED] Registry entry missing; S06b must name this GDD
+Reviewed-Content-Hash: design/gdd/storyline-axes.md 8c45d3d240ebe1dbec12adcce983487ff86e2e40
+Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285
