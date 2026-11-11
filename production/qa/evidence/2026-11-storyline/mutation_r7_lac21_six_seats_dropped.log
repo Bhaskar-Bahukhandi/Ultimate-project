@@ -1,7 +1,7 @@
 # Mutation 'r7_lac21_six_seats_dropped' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd ..\..\..\..\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\84ebb77d-b2f4-454b-a904-8225ed1c5c56\scratchpad\mutations\storyline-lifecycle.r7_lac21_six_seats_dropped.md
+$ python -I -B check_storyline_axes.py --gdd ..\..\..\..\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\f4232427-4446-4677-92bf-f86ac72444a7\scratchpad\mut\mutations\storyline-lifecycle.r7_lac21_six_seats_dropped.md
 gdd:       ..\..\..\..\design\gdd\storyline-axes.md
-lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\84ebb77d-b2f4-454b-a904-8225ed1c5c56\scratchpad\mutations\storyline-lifecycle.r7_lac21_six_seats_dropped.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\f4232427-4446-4677-92bf-f86ac72444a7\scratchpad\mut\mutations\storyline-lifecycle.r7_lac21_six_seats_dropped.md
 bible:     ..\..\..\..\AethelgardPrototype\story\STORY_BIBLE.md
 root:      ..\..\..\..
 FAIL [lifecycle acceptance] L-AC21 lacks the pinned phrase 'The same holds with all three set and record_field(witness_seats) holding six of the seven seats'

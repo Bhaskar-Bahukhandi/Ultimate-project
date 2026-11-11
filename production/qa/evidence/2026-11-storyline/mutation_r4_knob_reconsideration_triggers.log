@@ -1,12 +1,11 @@
 # Mutation 'r4_knob_reconsideration_triggers' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-axes.r4_knob_reconsideration_triggers.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-axes.r4_knob_reconsideration_triggers.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-axes.r4_knob_reconsideration_triggers.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-axes.r4_knob_reconsideration_triggers.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
 FAIL [tuning knobs] knobs ['secret_route_enabled.WITNESS', 'secret_route_enabled.CROWNLESS, .FIRSTWAKE', 'secret_prerequisites[route] (list of flags)', 'secret_unlock_flag[route]', 'reconsideration_triggers'] != the pinned ['secret_route_enabled.WITNESS', 'secret_route_enabled.CROWNLESS, .FIRSTWAKE', 'secret_prerequisites[route] (list of flags)', 'secret_unlock_flag[route]']
-FAIL [tuning knobs] line 684: 'reconsideration_triggers' is fixed by design, not a knob
 FAIL [tuning knobs] Tuning Knobs section names 'reconsideration_triggers'
-FAIL [stale] axes line 684: revision-3 vocabulary 'reconsideration_triggers' present
-RESULT: FAIL (4 problems)
+FAIL [stale] axes line 659: revision-3 vocabulary 'reconsideration_triggers' present
+RESULT: FAIL (3 problems)
 exit code: 1

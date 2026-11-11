@@ -1,9 +1,9 @@
 # Mutation 'r7_ac9_loaded_dropped' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\84ebb77d-b2f4-454b-a904-8225ed1c5c56\scratchpad\mutations\storyline-axes.r7_ac9_loaded_dropped.md --lifecycle ..\..\..\..\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\84ebb77d-b2f4-454b-a904-8225ed1c5c56\scratchpad\mutations\storyline-axes.r7_ac9_loaded_dropped.md
-lifecycle: ..\..\..\..\design\gdd\storyline-lifecycle.md
-bible:     ..\..\..\..\AethelgardPrototype\story\STORY_BIBLE.md
-root:      ..\..\..\..
-FAIL [revision 7] storyline-axes.md lacks 'called with loaded false for CRISIS and true for the others'
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-axes.r7_ac9_loaded_dropped.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-axes.r7_ac9_loaded_dropped.md
+lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [acceptance] AC 9 lacks 'called with loaded false for CRISIS and true for the others'
 RESULT: FAIL (1 problems)
 exit code: 1

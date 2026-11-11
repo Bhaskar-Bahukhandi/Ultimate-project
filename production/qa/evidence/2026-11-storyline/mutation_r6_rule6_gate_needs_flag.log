@@ -1,9 +1,9 @@
 # Mutation 'r6_rule6_gate_needs_flag' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-axes.r6_rule6_gate_needs_flag.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-axes.r6_rule6_gate_needs_flag.md
-lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
-root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [core rules] line 142: Core Rule 6 lacks the pinned sentence 'an invocation there also sets T's unlock flag if the invocation scene did not'
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\f4232427-4446-4677-92bf-f86ac72444a7\scratchpad\mut\mutations\storyline-axes.r6_rule6_gate_needs_flag.md --lifecycle ..\..\..\..\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\f4232427-4446-4677-92bf-f86ac72444a7\scratchpad\mut\mutations\storyline-axes.r6_rule6_gate_needs_flag.md
+lifecycle: ..\..\..\..\design\gdd\storyline-lifecycle.md
+bible:     ..\..\..\..\AethelgardPrototype\story\STORY_BIBLE.md
+root:      ..\..\..\..
+FAIL [core rules] line 147: Core Rule 6 lacks the pinned sentence 'an invocation there also sets T's unlock flag if the invocation scene did not'
 RESULT: FAIL (1 problems)
 exit code: 1

@@ -1,11 +1,11 @@
 # Mutation 'r3_state_renamed' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-axes.r3_state_renamed.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-axes.r3_state_renamed.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-axes.r3_state_renamed.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-axes.r3_state_renamed.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [phases] phase table ['LEANING', 'PARTLY_LOCKED', 'CRISIS', 'DEFERRED', 'VALIDATED', 'FIX', 'FINAL', 'DAMAGED'] != ['LEANING', 'PARTLY_LOCKED', 'CRISIS', 'DEFERRED', 'VALIDATED', 'FIXED', 'FINAL', 'DAMAGED']
-FAIL [gate] line 169 (FIXED): outcome 'ROOT_OF_HEAVEN', but the axes phase table's gate 'None' means None
-FAIL [gate] gate table covers ['LEANING', 'PARTLY_LOCKED', 'DEFERRED', 'VALIDATED', 'FIXED', 'FINAL'], expected each gated phase once: ['LEANING', 'PARTLY_LOCKED', 'DEFERRED', 'VALIDATED', 'FINAL']
+FAIL [phases] phase table ['LEANING', 'PARTLY_LOCKED', 'CRISIS', 'VALIDATED', 'FIX', 'FINAL', 'DAMAGED'] != ['LEANING', 'PARTLY_LOCKED', 'CRISIS', 'VALIDATED', 'FIXED', 'FINAL', 'DAMAGED']
+FAIL [gate] line 133 (FIXED): outcome 'ROOT_OF_HEAVEN', but the axes phase table's gate 'None' means None
+FAIL [gate] gate table covers ['LEANING', 'PARTLY_LOCKED', 'VALIDATED', 'FIXED', 'FINAL'], expected each gated phase once: ['LEANING', 'PARTLY_LOCKED', 'VALIDATED', 'FINAL']
 RESULT: FAIL (3 problems)
 exit code: 1

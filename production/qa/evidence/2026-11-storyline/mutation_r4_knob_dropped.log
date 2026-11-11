@@ -1,9 +1,10 @@
 # Mutation 'r4_knob_dropped' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-axes.r4_knob_dropped.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\de0d2362-3d8f-4afc-b2f8-4e783eb33a20\scratchpad\mutations\storyline-axes.r4_knob_dropped.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-axes.r4_knob_dropped.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-axes.r4_knob_dropped.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
 FAIL [tuning knobs] knobs ['secret_route_enabled.WITNESS', 'secret_route_enabled.CROWNLESS', 'secret_prerequisites[route] (list of flags)', 'secret_unlock_flag[route]'] != the pinned ['secret_route_enabled.WITNESS', 'secret_route_enabled.CROWNLESS, .FIRSTWAKE', 'secret_prerequisites[route] (list of flags)', 'secret_unlock_flag[route]']
-RESULT: FAIL (1 problems)
+FAIL [tuning knobs] secret_route_enabled rows cover ['CROWNLESS', 'WITNESS'], expected ['CROWNLESS', 'FIRSTWAKE', 'WITNESS']
+RESULT: FAIL (2 problems)
 exit code: 1

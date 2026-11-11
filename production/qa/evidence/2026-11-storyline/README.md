@@ -283,3 +283,78 @@ order). No specialists ran (`--review lean`). The other round-7 RECOMMENDED item
   (a Y2-PP-T17 content fact); the mirror rule for the `AXIS*`, `axis_revised_*` and `lock_negotiated_*` flags has no
   divergence test until FlagRegistry exists; AC14's baseline reading is an interpretation awaiting the user's
   confirmation (Open Question 13).
+
+## Design review round 9 (2026-11-11): axes revision 9 / lifecycle revision 5 checks
+
+Revision 8 (round 8: T13 guard, Edge Case 16 D17) was never committed and had no README section; its two checker
+pins carried into this round. User decisions 2026-11-11:
+
+- Witness Protocol moves post-1.0 with Crownless and First Wake; the three are designed later as one mechanism
+  (axes Open Question 15). Removed: the R1 deferral, DEFERRED and LAST_CHANCE, gate renegotiation, the invocation,
+  the witness vote (threshold, seats, dissenters, mandate), the stand-down, the Consent variants, the deferral
+  disclosures, the R1 red-line witness clause, and the `gate_retcon_*` / `deferral_*` / `invoke_witness` beats. Record
+  fields `witness_deferred`, `secret_invoked`, `witness_seats`, `witness_dissenters`, `witness_mandate` are gone.
+- `secret_route_enabled.WITNESS` defaults to false; `family()` maps all three `SL-SECRET-*` ids to RESERVED (no
+  CONSENT in 1.0); `reachable_1_0 = 24 + 0 = 24`. New invariant I9 (one atomic checkpoint per transition).
+- Lifecycle: T1-T9 with checkpoints, a 3-row gate table, S1-S7, 6 edge cases, L-AC1-L-AC18. Axes: AC1-AC16 (AC16 is a
+  playtest), Observables table changed, Edge Case 16 with D2-D5 and D10-D13 retired as single entries.
+- Process: the next review runs against a non-shipping reference model (axes Open Question 16).
+
+**What the checker is.** Document lint (Config/Data, advisory): it proves that the text matches constants pinned in
+the checker or values it derives from other parts of the text. It does not show that the state machine is correct;
+that is the reference model of axes Open Question 16.
+
+**Checks removed** (their material no longer exists): the deferral row, DEFERRED/LAST_CHANCE phase and gate rows,
+T6-T14 (old numbering), the S5 deferral-scope and Consent-variant tables, the disclosure ids, the S9 seats, the
+witness threshold and vote arithmetic (L-AC14), the gate-retcon beats, the stand-down line, the old L-AC5-L-AC24 key
+phrases, Core Rule 5/6/9/10 witness sentences, Edge Case 16 D2-D5 and D10-D13 bodies, the seven-seats `prereqs_met`
+clause.
+
+**Checks replaced** (same property, new form): no deferral offer → every crisis-offer row holds only `revise:*`
+offers and Core Rule 5 says no secret-route offer exists in 1.0; enable defaults derived from scopes → plus every
+enable knob is false, covers all three routes and is "never enabled while `family` would be RESERVED";
+`family()` → CONSENT → all three secret ids → RESERVED, CONSENT neither in `family()` nor in the composer vocabulary;
+the secret table → each row post-1.0 with a pinned reserved family cell; invariants I1-I8 → I1-I9; phase table,
+composer record (17 rows), formula bodies (`storyline_phase(record, loaded, flags, position)`), Core Rules 5-10 and
+Edge Case 16 → re-pinned to revision 9; `py_phase` → five fields, also decides D1 and D17's lock-order clause; AC9's
+"(D1-D16)" → its active-item list and multi-clause list, derived from Edge Case 16; R1's offer count is derived from
+`invalid()` (`odd_rule`), no longer from the Witness route.
+
+**Checks added**: AC3's field list = the composer record; AC1-AC16 with each runtime AC's blocking stories pinned
+(AC11: Y2-PP-T17; AC15: Y1-P1-T03); the axes and lifecycle Observables tables pinned row by row; AC4's I1-I9 / 1-12 /
+four knobs derived; AC5's per-route rows derived from the secret table; AC14 and AC16 key phrases; the document-level
+AC label; every "I1-In" in both docs names the invariant count; each doc's Dependencies row names the other's
+revision; lifecycle Inputs = the fields the axes doc says the record stores; the checkpoint set (I9) equal in the
+transition table, the commit and save rule and L-AC6, T4 "no checkpoint"; the commit and save sentences; the gate
+table has exactly its 3 rows; the content-scope counts (16, 3, 1, 3) derived; S5's unlock flags and lifecycle Edge
+Case 5's Witness leads derived from the axes knobs; L-AC2's Faction fixtures recomputed with `lock_pass`; the
+Validation note 24 + 16 + 10 = 50; the removed identifiers (`witness_*`, `secret_invoked`, `LAST_CHANCE`, `DEFERRED`,
+`defer:`, `invoke:`, `gate_retcon`, `deferral_`, `stand_down`, `consent_unauthorized`, `scene_variants`, ...) are
+forbidden everywhere in both docs, Open Questions included.
+
+**One explicit exception**: axes AC5 names `transform()` ("so a swapped `transform()` fails"), a formula, not an
+observable. The checker accepts that exact phrase only (and requires it); reported to the author as a doc nit.
+
+- `run_mutations.py`: 54 mutations retired (they targeted removed material: the deferral, invocation, witness vote,
+  seats, stand-down, Consent tables, disclosures, gate retcon, `witness_*` fields and the old T13/T14 guards):
+  `r3_consent_family`, `r4_composer_deferred_cleared`, `r5_composer_mandate_vocab`, `r5_ec16_old_item`,
+  `r5_ec16_t8_history_dropped`, `r5_rule10_c10s15_flag_gate`, `r5_rule10_threshold_cannot_fail`, `r5_t14_dropped`,
+  `r5_t8_retcon_dropped`, `r5_signpost_hidden_first`, `r5_mandate_unanimity`, `r5_red_line_clause_dropped`,
+  `r5_gate_keeps_authority_only`, `r5_retcon_beat_missing`, `r5_history_as_current`, `r5_s9_flag_gate`,
+  `r5_s9_failed_changes_id`, `r5_ng_mandate_default`, `r5_lac19_count`, `r5_validation_gate_terms`, the ten
+  `r6_qa_*` threshold/window/vote/Consent/deferral/seat/retcon mutations, `r6_ec16_d10_inverted`,
+  `r6_composer_seats_dropped`, `r6_composer_seat_order`, `r6_composer_dissenters_writer`, `r6_rule9_executes_anyway`,
+  `r6_rule10_failed_executed`, `r6_rule6_gate_needs_flag`, `r6_gate_formula_needs_flag`, `r6_t7_guard_needs_flag`,
+  `r6_gate_table_needs_flag`, `r6_lac21_scene_wrong`, `r6_disclosure_dropped`, `r6_disclosure_optional`,
+  `r8_t13_guard_reverted`, `r6_standdown_executes`, `r6_kaelen_seated`, `r6_stances_hidden`,
+  `r6_content_rule_dropped`, `r6_seat_order_s9`, `r6_old_module_name`, `r7_seats_prereq_dropped`,
+  `r7_t7_seats_guard_dropped`, `r7_mirror_timing_changed`, `r7_lac21_six_seats_dropped`. As in round 4, their old
+  logs are left in place, unrefreshed. 69 mutations retargeted to revision-9 text (same name, same intent, e.g.
+  `r4_t13_to_leaning` now moves T9, `r6_ac9_dlist_short` shortens AC9's active list, `r8_d17_dropped` drops the new
+  D17 text). 31 new `r9_*` mutations, one per new or replaced check.
+- **Result** (2026-11-11): checker `RESULT: PASS (0 problems)`; `run_mutations.py`: "212 mutations, 1 controls; 0
+  unexpected results" (every mutation FAILs, the control PASSes). `check_pass.log` and every `mutation_*.log` named in
+  `run_mutations.py` were refreshed by the run.
+- **Still NOT checked**: whether the docs' state machine is sound (Open Question 16's reference model); prose outside
+  the pinned sentences; PM line numbers cited in prose; the L-AC bodies beyond their pinned phrases; whether the
+  retired Edge Case 16 numbers are ever reused by a later revision (only the current list is pinned).

@@ -1,0 +1,10 @@
+# Mutation 'r9_ec16_retired_reactivated' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-axes.r9_ec16_retired_reactivated.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-axes.r9_ec16_retired_reactivated.md
+lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [edge cases] line 585: Edge Case 16 D2-D5 'a stored ID on a row other than R1' differs from the pinned 'retired (revision 9): they checked the Witness record fields, which 1.0 no longer stores'
+FAIL [edge cases] line 585: Edge Case 16 D2-D5: only a range entry may be retired, and it must be
+RESULT: FAIL (2 problems)
+exit code: 1

@@ -1,45 +1,54 @@
 """Document checker for the storyline GDDs (story Y1-P0-S06a, AC-7): storyline-axes.md AC1-AC4 and the
-document-level criteria of storyline-lifecycle.md (revision 6 / lifecycle revision 2, design review round 6 / 2;
-revision 5 added three composer fields, the protected-touchpoints check and the beat-id derivations; revision 6 adds
-the DAMAGED phase, Edge Case 16 items D1-D16, the witness seats and dissenters, the stand-down transition, and pins
-for the claims qa-lead found unpinned in round 6: the threshold, the C9-S19 window, the L-AC bodies, the S5 and
-Consent tables, the deferral disclosures, the save window and the legacy-flag citations).
+document-level criteria of storyline-lifecycle.md (axes revision 9 / lifecycle revision 5, design review round 9,
+user decisions 2026-11-11: Witness Protocol moved post-1.0 with the other two secret routes, so the deferral,
+invocation, witness vote, stand-down and Consent variants are gone; invariant I9, one atomic checkpoint per
+transition; transitions T1-T9; Edge Case 16 with D2-D5 and D10-D13 retired and D17 added; AC16).
+
+This is document lint: it proves that the text matches constants pinned here (or values derived here from other
+parts of the text), not that the state machine is correct. The reference model that would show the latter is
+storyline-axes.md Open Question 16.
 
 Parses ``design/gdd/storyline-axes.md``, ``design/gdd/storyline-lifecycle.md``, the Story Bible and the production
-master, and reports every structural problem it finds. Revision 4 pins *bodies*, not only names:
+master, and reports every structural problem it finds. It pins *bodies*, not only names:
 
 storyline-axes.md
 1. the 8 required H2 headings in order (other H2s: Summary, Cross-References, Open Questions only);
 2. the 27-row combination table, the rules table (each quoted contradiction on its cited line), the Formulas'
    ``invalid()`` set and shape, the ``valid_count:`` / family-split statements and the Counts block (values derived
    here, including ``renegotiation_offers`` computed from ``invalid()`` per rule);
-3. the secret table, the ``secret_prerequisites`` / ``secret_unlock_flag`` knobs against the production master's
-   "Required flag" lists, ``reachable_1_0``, ``transform()`` and both family maps;
+3. the secret table (every route post-1.0, family reserved), the ``secret_prerequisites`` / ``secret_unlock_flag``
+   knobs against the production master's "Required flag" lists, ``reachable_1_0``, ``transform()`` and both family
+   maps; ``family()`` maps all three secret ids to RESERVED and never returns CONSENT;
 4. the Act 1 seed map and the side-storyline table;
-5. the composer record: exactly the AC3 fields, each with its pinned type, allowed values (derived where possible)
-   and writer;
+5. the composer record: exactly the AC3 fields (and AC3's own list), each with its pinned type, allowed values
+   (derived where possible) and writer;
 6. the formula bodies of ``storyline_id``, ``prereqs_met``, ``lock_pass``, ``storyline_phase`` and ``family``, the
    ``lock_pass`` and ``storyline_phase`` examples re-computed here, and the results each body can return;
 7. Core Rules 1-12 with titles and pinned key sentences (some derived from the rules table), no modal verb in
-   Rules 7 and 9, the invariants table I1-I8, the phase table, the Tuning Knobs table (exactly four knobs, defaults
-   from the secret table's scopes, no forbidden knob), Edge Case numbering and Edge Case 16's damaged-record list;
-8. the acceptance criteria: AC1-AC15 contiguous, each runtime AC names known blocking stories and calls only the
-   Observables table; AC5's case counts derived;
+   Rules 7 and 9, the invariants table I1-I9, the phase table, the Tuning Knobs table (exactly four knobs, every
+   enable default false as the secret table's scopes give), Edge Case numbering and Edge Case 16's item list
+   (active and retired entries, cross-references derived);
+8. the acceptance criteria: AC1-AC16 contiguous, each runtime AC names its pinned blocking stories and calls only
+   the pinned Observables table; AC5's case counts derived; AC9's active-item list derived from Edge Case 16;
 storyline-lifecycle.md
-9. headings; the Inputs field list and the NG+ reset (fields and defaults derived from the composer record);
+9. headings; the Inputs field list (= the fields the axes doc says the record stores) and the NG+ reset (fields and
+   defaults derived from the composer record);
 10. the red-line table (exactly R1-R3, pairs and speakers derived from the rules table), the crisis offer table
-    (= ``crisis_offers`` computed from ``invalid()``), the retraction table's axes and beat count;
+    (= ``crisis_offers`` computed from ``invalid()``, no secret-route offer on any row), the retraction table's axes
+    and beat count, the content-scope counts;
 11. the gate outcome table (outcomes derived from the axes phase table, T references matching the transitions);
-12. transitions T1-T14 pinned cell by cell, phases only from the axes phase table, no transition back from a
-    stored ID, every phase reachable, no soft-lock, the gate on every gated phase;
-13. the Formulas block, its offer counts, the no-knob Tuning Knobs section, pinned scene sentences;
-14. L-AC1..n contiguous, each with known blocking stories and only this doc's observables; derived numbers in
-    L-AC3/4/6/16/19; the Validation note's run arithmetic and pass rule;
+12. transitions T1-T9 pinned cell by cell, phases only from the axes phase table, no transition back from a stored
+    ID, every phase reachable, no soft-lock, the gate on every gated phase; the checkpoint set (I9) equal in the
+    table, the commit and save rule and L-AC6;
+13. the Formulas block, its offer counts, the no-knob Tuning Knobs section, pinned scene sentences; S5's unlock
+    flags and Edge Case 5's Witness leads derived from the axes knobs;
+14. L-AC1-L-AC18 contiguous, each with known blocking stories and only the pinned observables; derived numbers and
+    key phrases; L-AC2's lock-pass fixtures recomputed; the Validation note's run arithmetic and pass rule;
 both
-15. the dated decision line in the Story Bible; no stale strings or revision-3 vocabulary in normative sections;
-16. (revision 6) the over-promise guard on clean/negotiated, the D-item cross-references between the two documents,
-    the legacy storyline flags against the code lines the lifecycle cites, the L-AC key phrases and the forbidden
-    non-failing assertions.
+15. the dated decision line in the Story Bible; no stale strings, revision-3 vocabulary or revision-8 secret-route
+    identifiers; every "I1-In" names the invariant count; each doc's Dependencies row names the other's revision;
+16. the over-promise guard on clean/negotiated and the legacy storyline flags against the code lines the lifecycle
+    cites; the forbidden non-failing assertions.
 
 Usage (from anywhere; defaults point at the real files)::
 
@@ -68,19 +77,19 @@ FAMILY_BY_AUTHORITY = {"YOU": "SOLE", "SHARED": "BOUND", "NONE": "NONE_AUTH"}
 ABBR = {"YOU": "Y", "SHARED": "S", "NONE": "N", "HEARTH": "H", "ARCHIVE": "A", "CONTINUITY": "C",
         "RESTORE": "R", "RELEASE": "L", "CHOOSE": "C"}
 COMPANIONS = frozenset({"Elara", "Seraphina", "Lyra", "Kaelthas"})
-# Companions each ending family requires. Story Bible §5: no family needs one.
+# Companions each ending family requires. Story Bible §5: no family needs one. (Revision 9: no CONSENT in 1.0.)
 FAMILY_NEEDS: dict[str, frozenset[str]] = {
-    "SOLE": frozenset(), "BOUND": frozenset(), "NONE_AUTH": frozenset(), "CONSENT": frozenset(),
+    "SOLE": frozenset(), "BOUND": frozenset(), "NONE_AUTH": frozenset(),
 }
 DASHES = ("—", "-", "–")
 NUMBER_WORDS = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine",
                 10: "ten"}
 
 SECRET_ROUTES = ("WITNESS", "FIRSTWAKE", "CROWNLESS")
-SECRET_EXPECTED = {  # id -> (required family or None, scope)
-    "SL-SECRET-WITNESS": ("CONSENT", "1.0"),
-    "SL-SECRET-FIRSTWAKE": (None, "post-1.0"),
-    "SL-SECRET-CROWNLESS": (None, "post-1.0"),
+SECRET_EXPECTED = {  # id -> (family cell, scope). Revision 9 (user, 2026-11-11): all three post-1.0, family reserved.
+    "SL-SECRET-WITNESS": ("— (reserved; CONSENT when designed)", "post-1.0"),
+    "SL-SECRET-FIRSTWAKE": ("— (reserved)", "post-1.0"),
+    "SL-SECRET-CROWNLESS": ("— (reserved)", "post-1.0"),
 }
 # PRODUCTION_MASTER_2.1.md:8784, canonical association of secret route and the invalid row it transforms.
 SECRET_FOUNDATION = {"WITNESS": "YHR", "CROWNLESS": "NAL", "FIRSTWAKE": "NCL"}
@@ -126,62 +135,54 @@ POST_1_0_ARCS = ("05", "08", "09")
 SCOPES = ("1.0", "post-1.0")
 
 # --- Revision 4 (design review round 4): the static core and its invariants. A change is a design decision. -----
-PHASES = ("LEANING", "PARTLY_LOCKED", "CRISIS", "DEFERRED", "VALIDATED", "FIXED", "FINAL", "DAMAGED")
+# Revision 9: DEFERRED is gone (no deferral in 1.0).
+PHASES = ("LEANING", "PARTLY_LOCKED", "CRISIS", "VALIDATED", "FIXED", "FINAL", "DAMAGED")
 # Phases no gate runs from and no transition reaches: CRISIS exists only inside C8-S16, DAMAGED is never loaded.
 UNGATED_PHASES = ("CRISIS", "DAMAGED")
 PHASE_TABLE = {  # phase -> (meaning, gate), backticks removed
     "LEANING": ("every axis UNSET", "turns the player back"),
     "PARTLY_LOCKED": ("one or two axes locked", "turns the player back"),
-    "CRISIS": ("three axes locked on an invalid row, nothing stored, not deferred: exists only inside C8-S16, "
-               "never saved", "— (inside C8-S16)"),
-    "DEFERRED": ("R1, witness_deferred, nothing stored", "plays the last-chance scene"),
-    "VALIDATED": ("an ID stored, outside Root of Heaven", "open"),
-    "FIXED": ("an ID stored, inside Root of Heaven", "open (re-entry)"),
-    "FINAL": ("the final authorization concluded: execution confirmed, or Kaelen stood down after a FAILED witness "
-              "vote", "open (Story+)"),
+    "CRISIS": ("three axes locked on an invalid row, nothing stored: exists only inside C8-S16, never saved",
+               "— (inside C8-S16)"),
+    "VALIDATED": ("an ID stored, root_phase OUTSIDE", "open"),
+    "FIXED": ("an ID stored, root_phase INSIDE (first entered Root of Heaven; stays INSIDE if the player leaves)",
+              "open (re-entry)"),
+    "FINAL": ("the final authorization concluded: execution confirmed", "open (Story+)"),
     "DAMAGED": ("the record holds an item of Edge Case 16: never saved by play; a load that yields it is refused",
                 "— (never loaded)"),
 }
 # The gate outcome each axes-doc gate phrase means in the lifecycle doc's gate table.
-GATE_OUTCOME = {"turns the player back": "TURNED_BACK", "plays the last-chance scene": "LAST_CHANCE"}
-FAMILIES = frozenset({"SOLE", "BOUND", "NONE_AUTH", "CONSENT"})
+GATE_OUTCOME = {"turns the player back": "TURNED_BACK"}
+# Revision 9: the 1.0 families. CONSENT is post-1.0 and must not be a value family() can return.
+FAMILIES = frozenset(FAMILY_BY_AUTHORITY.values())
+POST_1_0_FAMILY = "CONSENT"
 ID_FAMILY_EXTRA = frozenset({"RESERVED", "NO_FAMILY"})
 LOCK_SCENE = {"faction": "C8-S13", "authority": "C8-S14", "deleted": "C8-S16"}
 ROOT_PHASES = ("OUTSIDE", "INSIDE", "FINAL")
-WITNESS_MANDATES = ("UNDECIDED", "MET", "FAILED")  # first value is the default (NG+ reset, new game)
-# The seven seats of PM:8697-8703, in source order (user decision D4: the player fills them in Secret Quest 09).
-WITNESS_SEATS = ("active_region", "deleted", "nonhuman", "infrastructure", "archive", "local_community", "rotating")
-WITNESS_THRESHOLD = 5  # user decision D4 (2026-11-10): fixed, data-defined, not a knob
+# The storyline_phase signature (Formulas), the composer writer and the Observables row all use it.
+PHASE_SIGNATURE = "storyline_phase(record, loaded, flags, position)"
+DAMAGED_SIGNATURE = "damaged(record, loaded, flags, position)"
 
 # Composer record (GDD AC3): field -> (type, allowed, writer). ``allowed`` is a frozenset (compared as a set of
 # comma-separated values) or a str (compared exactly). Derived values come from the vocabularies above.
+# Revision 9: witness_deferred, secret_invoked, witness_seats, witness_dissenters and witness_mandate are removed.
 COMPOSER: dict[str, tuple[str, frozenset[str] | str, str]] = {
-    "storyline_phase": ("enum", frozenset(PHASES),
-                        "derived: storyline_phase(record) (Formulas); never stored"),
+    "storyline_phase": ("enum", frozenset(PHASES), f"derived: {PHASE_SIGNATURE} (Formulas); never stored"),
     "storyline_id": ("string", "a storyline ID, or empty while nothing is stored",
-                     "C8-S16 on a valid row; a renegotiation (C8-S16 or the gate); a confirmed invocation; nothing else"),
-    "witness_deferred": ("bool", frozenset({"true", "false"}), "the C8-S16 deferral sets it; nothing clears it"),
+                     "C8-S16 on a valid row; a renegotiation at C8-S16; nothing else"),
     "root_phase": ("enum", frozenset(ROOT_PHASES),
-                   "the gate check on entry with an ID stored (INSIDE); the final authorization concluding, by "
-                   "confirmed execution or a stand-down (FINAL)"),
+                   "the gate check on entry with an ID stored (INSIDE); the final authorization concluding by "
+                   "confirmed execution (FINAL)"),
     **{axis: ("enum", frozenset({UNSET, *values}), f"{LOCK_SCENE[axis]} lock; a renegotiation. Never the final "
                                                     "authorization") for axis, values in AXES.items()},
     "secret_route": ("enum", frozenset({"NO_SECRET", *SECRET_ROUTES}),
                      "derived from storyline_id (SL-SECRET-T → T, else NO_SECRET); never stored"),
     "family": ("enum", FAMILIES | ID_FAMILY_EXTRA, "derived: family(storyline_id); never stored"),
-    "secret_invoked": ("set", frozenset(SECRET_ROUTES), "a confirmed invocation"),
     "axis_revised": ("set", frozenset(AXES), "a renegotiation"),
     "lock_negotiated": ("set", frozenset(AXES), "the lock scenes by lock_pass; every renegotiation"),
-    # Revision 5 (lifecycle review round 1): the retractions, beats and witness vote are saved, not derived.
-    "retraction_log": ("list", "entries {axis, old, new, withdrawn_item, scene}, oldest first",
-                       "every renegotiation; a confirmed invocation"),
-    "beats_played": ("set", "the lifecycle's authored beat ids (retract_*, gate_retcon_*, deferral_*, invoke_witness)",
-                     "the scene that plays the beat"),
-    # Revision 6 (lifecycle round 2, user decisions D1/D4): the seats the player chose and who dissented are saved.
-    "witness_seats": ("map", f"seat → identity for the seats {', '.join(WITNESS_SEATS)} (PM:8697-8703); never Kaelen",
-                      "Secret Quest 09"),
-    "witness_dissenters": ("set", "seats of witness_seats", "C10-S15"),
-    "witness_mandate": ("enum", frozenset(WITNESS_MANDATES), "C10-S15"),
+    # Revision 5 (lifecycle review round 1): the retractions and beats are saved, not derived.
+    "retraction_log": ("list", "entries {axis, old, new, withdrawn_item, scene}, oldest first", "every renegotiation"),
+    "beats_played": ("set", "the lifecycle's authored beat ids (retract_*)", "the scene that plays the beat"),
     "companions_present": ("set", COMPANIONS,
                            "AethelgardPrototype/scripts/game_manager.gd (has_elara, exclusive flag groups); "
                            "AethelgardPrototype/dialogue/ch2/fragment_two.dlg"),
@@ -196,11 +197,13 @@ COMPOSER: dict[str, tuple[str, frozenset[str] | str, str]] = {
 CORE_RULE_TITLES = (
     "Three axes, one value each.", "Seeds are arguments, never gates.", "Lock scenes resolve, clean or negotiated.",
     "Red lines (new content), as values.", "An invalid combination is a political crisis, resolved at C8-S16.",
-    "Secret routes: signposts and invocation.", "A valid row is held to its word.",
+    "Secret routes are reserved (post-1.0).", "A valid row is held to its word.",
     "Storyline ID and the ID-lock gate.", "Final authorization.", "Ending family",
     "Companions are independent of the axes.", "Timing is a modifier.")
 # Key sentences per Core Rule (normalized: backticks and ** removed, whitespace collapsed). Rules 4 and 5 also get
-# sentences derived from the rules table in check_core_rules.
+# sentences derived from the rules table in check_core_rules. Revision 9 rewrote Rules 5-10 around the post-1.0
+# secret routes: the deferral, invocation, witness vote and stand-down sentences are gone; the replacements below
+# pin the property each guarded (no secret-route offer, routes closed, family reserved).
 CORE_RULE_KEYS: dict[int, tuple[str, ...]] = {
     1: ("each starts UNSET", "Once a storyline ID is stored, each axis holds exactly one value"),
     2: ("Every lock scene always offers all three values; no seed adds or removes an option.",
@@ -209,36 +212,37 @@ CORE_RULE_KEYS: dict[int, tuple[str, ...]] = {
         "clean when at least one seed for the backed value is set with direction + and none with direction −; "
         "otherwise negotiated, and lock_negotiated_<axis> is set",
         "The test reads only which flags are set: no count, no weight.", "it never changes a value or the ID.",
-        "The composer input record is authoritative: these flags, axis_revised_<axis>, lock_negotiated_<axis> and "
-        "WITNESS_SEATS are mirrors, written in the same step as the record field, never read in its place and "
-        "cleared with it.",
+        "The composer input record is authoritative: these flags, axis_revised_<axis>, lock_negotiated_<axis> are "
+        "mirrors, written in the same step as the record field, never read in its place and cleared with it.",
         "on a SOLE storyline whose lock_negotiated holds authority, the ending plays sole_dissent",
         "Nothing else in 1.0 reads lock_negotiated (no scene variant, ally line or slide)"),
     4: ("states its red line as a value, never as a combination",
         "No other pair voices a red line, C8-S13 and C8-S14 voice none, and there is no system warning."),
-    5: ("the scene does not end until the coalition holds", "Deferring stores no ID and sets witness_deferred"),
-    6: ("For all three routes the last offer prerequisite is set in the Act 3 ledger at the end of Chapter 8 "
-        "(PM:7586-7588), after C8-S16.", "never the combination it transforms", "it cannot be undone",
-        "until they ship, their rows can only be renegotiated at C8-S16, offer no deferral, and show no signpost.",
-        "plays only when the stored ID is SL-SECRET-T.",
-        "an invocation there also sets T's unlock flag if the invocation scene did not",
-        "WITNESS_SEATS mirrors the record (Core Rule 3): Secret Quest 09 sets it in the same step that saves the "
-        "seventh seat of witness_seats, so the flag never stands without seven saved seats, and prereqs_met(WITNESS) "
-        "also requires the seven seats"),
-    7: ("nothing offers a renegotiation, a deferral or an invocation, and the ID never changes.",),
+    5: ("the scene does not end until the coalition holds",
+        "(the Faction swap between R2 and R3 would break the coalition again and is not offered)",
+        "Each is voiced as the refusing faction's demand, except a Faction offer, which is voiced as that faction "
+        "stepping down and staying",
+        "is post-1.0: no secret-route offer exists in 1.0 (Core Rule 6)."),
+    6: ("together, in that order, they are the production master's \"Required flag\" list for T",
+        "All three routes — Witness Protocol, Crownless, First Wake — are disabled in 1.0 (user decision 2026-11-11",
+        "While T is disabled: its invalid row can only be renegotiated at C8-S16; the journal shows no signpost or "
+        "hint for it; its invocation scene does not unlock it",
+        "and its unlock flag is never set",
+        "plays only when the stored ID is SL-SECRET-T, which no 1.0 record holds",
+        "the prerequisite flags that content sets are kept and transform nothing.",
+        "When the routes ship they are designed together as one mechanism"),
+    7: ("nothing offers a renegotiation, and the ID never changes.",),
     8: ("Before that nothing is stored.", "A stored ID is never recomputed from flags or knobs",
         "Every entry and re-entry into Root of Heaven runs the gate check",
         "before the three locks it turns the player back in the fiction",
         "is unsupported and does not load (Edge Case 16, D{legacy}; user decision 2026-11-10); no runtime catch-up "
         "exists, so no loaded state is stranded.",
         "The refusal holds only while no player-facing build has such saves"),
-    9: ("It changes no axis and no ID.", "this design offers none",
-        "Kaelen stands down instead and nothing is executed (Core Rule 10)"),
-    10: ("or CONSENT for Witness Protocol", "Kaelen executes and does not authorize",
-         "the seven are seven other identities", "which plays only on SL-SECRET-WITNESS",
-         "The vote can fall short of the threshold", "the stored ID and the family are unchanged",
-         "the act is not executed, because Kaelen stands down at the final authorization",
-         f"(fixed at {WITNESS_THRESHOLD},", "the ending plays consent_unauthorized"),
+    9: ("It changes no axis and no ID.", "this design offers none", "and the player confirms execution."),
+    10: ("the secret storylines' families are reserved until their routes ship",
+         "Consent (post-1.0): seven affected witnesses authorize one irreversible act",
+         "Its rules are designed with the secret routes (Open Question 15)",
+         "Faction and Deleted are modifiers"),
     11: ("a companion leaves through relationship flags (Edge Case 1), never through an axis.",
          "The axis can only waive a trust test, never remove a companion."),
     12: ("change scenes, NPC fates, market events and ending slides through the composer, not the storyline ID",),
@@ -249,17 +253,19 @@ MODAL_RE = re.compile(r"\b(may|can|could|might)\b", re.IGNORECASE)
 INVARIANTS = {  # id -> (invariant, rules), backticks removed
     "I1": ("Axis values come only from lock scenes and renegotiations; never from seeds, flags, knobs or the final "
            "authorization", "2, 3, 5, 9"),
-    "I2": ("No crisis outlasts C8-S16; only a deferral does, and only on R1 while Witness Protocol is enabled", "5"),
+    "I2": ("No crisis outlasts C8-S16", "5"),
     "I3": ("The ID is stored the moment the coalition holds, is never recomputed, and never changes once stored",
            "7, 8"),
     "I4": ("Every entry and re-entry into Root of Heaven runs the gate check, on every path", "8"),
     "I5": ("No soft-lock under any knob value or patch: every state without a stored ID either is before the locks or "
            "offers a renegotiation that reaches a valid row", "5, 8"),
-    "I6": ("Nothing important is lost silently: a closed route's signpost shows it closed; arcs "
+    "I6": ("Nothing important is lost silently: no hint points at an unshipped route; arcs "
            f"{', '.join(POST_1_0_ARCS)} get a visible epilogue line in 1.0", "6"),
     "I7": ("A valid row is held to its word", "7"),
-    "I8": ("Family = the Authority value, or CONSENT on SL-SECRET-WITNESS, where Authority-reading scenes play their "
-           "Consent variant", "10"),
+    "I8": ("Family = the Authority value; a secret storyline's family is RESERVED until its route ships", "10"),
+    # Revision 9 (design review round 9): one atomic checkpoint per transition.
+    "I9": ("Every transition commits its record writes and its beat id as one atomic checkpoint; no save exists "
+           "inside a lock scene, the crisis or the final authorization before its commit", "3, 5, 8, 9"),
 }
 
 # Formula bodies, normalized (whitespace collapsed per line; blank lines dropped).
@@ -278,21 +284,20 @@ LOCK_PASS_BODY = (
     "otherwise → NEGOTIATED",
     "renegotiation vote → NEGOTIATED",
 )
-STORYLINE_PHASE_BODY = (  # revision 6: damaged-first; FINAL and FIXED need a stored ID; revision 7: the loaded argument
-    "storyline_phase(record, loaded):",
-    "if damaged(record, loaded) → DAMAGED",
+STORYLINE_PHASE_BODY = (  # revision 6: damaged-first; revision 7: loaded; revision 9: flags, position, no DEFERRED
+    f"{PHASE_SIGNATURE}:",
+    f"if {DAMAGED_SIGNATURE} → DAMAGED",
     "if storyline_id is stored and root_phase is FINAL → FINAL",
     "if storyline_id is stored and root_phase is INSIDE → FIXED",
     "if storyline_id is stored → VALIDATED",
     "if A, F and D are all UNSET → LEANING",
     "if A, F or D is UNSET → PARTLY_LOCKED",
-    "if witness_deferred → DEFERRED",
     "otherwise → CRISIS",
 )
-FAMILY_BODY = (
+FAMILY_BODY = (  # revision 9: all three secret ids are RESERVED; no CONSENT
     "family(id):",
-    "SL-SECRET-WITNESS → CONSENT",
-    "SL-SECRET-CROWNLESS, SL-SECRET-FIRSTWAKE → RESERVED (unreachable while their routes are disabled)",
+    "SL-SECRET-WITNESS, SL-SECRET-CROWNLESS, SL-SECRET-FIRSTWAKE → RESERVED (unreachable while their routes are "
+    "disabled)",
     '"SL-" + A + "-" + F + "-" + D, not invalid(A, F, D) → { YOU → SOLE, SHARED → BOUND, NONE → NONE_AUTH }[A]',
     "PENDING, CRISIS, an invalid-row id, anything else → NO_FAMILY (not a storyline ID)",
 )
@@ -308,38 +313,45 @@ NOT_KNOB_KEYS = ("the invalid set R1-R3", "the family mapping", "the lock_pass t
                  "the rule that the final authorization changes nothing",
                  "the rule that every lock scene offers all three values")
 
-# Revision 6: Edge Case 16 is a numbered list D1-D16 (normalized, backticks removed). The D-numbers are cited from
-# Core Rule 8, Edge Cases 6 and 8, AC9 and the lifecycle, so a renumbering is caught by the derived checks below.
-EC16_ITEMS = (
-    "a stored ID that is not the one its axes and secret_invoked name (SL-A-F-D on a valid row, SL-SECRET-T on an "
-    "invalid row whose route T is in secret_invoked)",
-    "secret_invoked holding a route whose row is not the record's",
-    "secret_invoked with no ID stored",
-    "witness_deferred with an UNSET axis, or with nothing stored on a row other than R1",
-    "witness_deferred on a stored valid row with axis_revised empty",
-    "axis_revised holding an axis that lock_negotiated lacks",
-    "axis_revised holding an axis that no retraction_log entry names",
-    "root_phase INSIDE or FINAL with nothing stored",
-    "three axes set with nothing stored and witness_deferred false (tested on load only)",
-    "witness_mandate MET or FAILED, or witness_dissenters non-empty, while the stored ID is not SL-SECRET-WITNESS",
-    "witness_mandate UNDECIDED on SL-SECRET-WITNESS with root_phase FINAL",
-    "witness_mandate other than the value storyline-lifecycle.md's formula gives for witness_dissenters, or "
-    "witness_dissenters non-empty while witness_mandate is UNDECIDED",
-    "witness_seats seating Kaelen or one identity in two seats, a dissenter that is not one of its seats, or fewer "
-    "than seven seats on SL-SECRET-WITNESS",
-    "a deferral_* beat in beats_played while witness_deferred is false, or invoke_witness while secret_invoked lacks "
-    "WITNESS",
-    "two flags of one exclusive group (Edge Case 6)",
-    "a story position past the lock scene of an UNSET axis (a save made past Chapter 8 before these fields existed; "
-    "unsupported, user decision 2026-11-10)",
+# Edge Case 16 entries (normalized, backticks removed): (first D-number, last D-number, text). Revision 9 retired
+# D2-D5 and D10-D13 as single entries, so the numbering stays stable for every cross-reference. The D-numbers are
+# cited from Core Rule 8, Edge Cases 6 and 8, AC9 and the lifecycle; the derived checks below catch a renumbering.
+EC16_RETIRED_PREFIX = "retired (revision 9):"
+EC16_ENTRIES = (
+    (1, 1, "a stored ID that is not SL-A-F-D for its axes on a valid row: any other ID, an ID with an UNSET axis, the "
+           "ID of an invalid row, or any SL-SECRET-* ID (no 1.0 play stores one)"),
+    (2, 5, "retired (revision 9): they checked the Witness record fields, which 1.0 no longer stores"),
+    (6, 6, "axis_revised holding an axis that lock_negotiated lacks"),
+    (7, 7, "axis_revised holding an axis that no retraction_log entry names, or more than one axis, or a "
+           "retraction_log entry whose new value is not the record's value for its axis"),
+    (8, 8, "root_phase INSIDE or FINAL with nothing stored"),
+    (9, 9, "three axes set with nothing stored (tested on load only)"),
+    (10, 13, "retired (revision 9): they checked the witness vote fields"),
+    (14, 14, "a retract_* beat in beats_played with no matching retraction_log entry, or a retraction_log entry whose "
+             "beat is not in beats_played, or a beat id the lifecycle does not define"),
+    (15, 15, "two flags of one exclusive group (Edge Case 6)"),
+    (16, 16, "a story position past the lock scene of an UNSET axis (a save made past Chapter 8 before these fields "
+             "existed; unsupported, user decision 2026-11-10)"),
+    # Revision 8 (design review round 8), clarified in revision 9: out-of-order lock sets are damaged.
+    (17, 17, "the set axes are not a prefix of the lock order (Faction, then Authority, then Deleted), or an axis is "
+             "set while the story position is before its lock scene's commit: no lock scene could play from it (S1 "
+             "needs every axis UNSET, S2 needs Faction set, S4 needs Faction and Authority set), so loading it would "
+             "strand the player. A position inside a lock scene before its commit counts as before it (no save "
+             "exists there, I9); the commit checkpoint counts as past it"),
 )
+EC16_LAST = EC16_ENTRIES[-1][1]
+EC16_ACTIVE = tuple(lo for lo, hi, text in EC16_ENTRIES if not text.startswith(EC16_RETIRED_PREFIX))
+EC16_TEXT = {lo: text for lo, hi, text in EC16_ENTRIES if lo == hi}
 EC16_EXCLUSIVE = 15  # the D-number of the exclusive-group item (cited by Edge Case 6)
 EC16_LEGACY = 16  # the D-number of the pre-axes save item (cited by Core Rule 8, Edge Case 8, the lifecycle)
 EC16_CRISIS = 9  # the D-number of the saved-crisis item (cited by AC9)
-EC16_KEYS = ("The check compares and never rewrites the stored ID, and reads no knob, so a patch never damages a save.",
+EC16_ORDER = 17  # the D-number of the lock-order item (the record alone cannot show D15-D17)
+EC16_KEYS = ("it compares and never rewrites the stored ID or the save, and reads no knob, so a patch never damages "
+             "a save.",
              "SaveService's load check reports each item below as a data error on load and refuses the load",
-             "witness_deferred on a stored valid row with axis_revised non-empty is the history of a deferral broken "
-             "at the gate, not damage.",
+             "play never writes one, because every transition is one atomic checkpoint, I9",
+             "A secret unlock flag alone changes nothing.",
+             "The check reads the record, the saved flags and the story position (load_check(record, flags, position))",
              "D16 holds only while no player-facing build has such saves; if one ships before these fields do, the "
              "decision is reopened")
 # Round 6 blocker 3: the clean/negotiated difference is promised only as far as sole_dissent delivers it.
@@ -352,7 +364,7 @@ NO_OVERPROMISE_KEYS = (
 OVERPROMISE_STRINGS = ("colours ally lines", "already with them or has to be negotiated", "otherwise it changes ally",
                        "costs a voice in the room", "elsewhere it colours")
 AXES_EDGE_CASES = 16
-LIFE_EDGE_CASES = 12
+LIFE_EDGE_CASES = 6  # lifecycle revision 5
 # AethelgardPrototype/AGENTS.md's protected list; the axes Dependencies must name each one (round 5).
 PROTECTED_RE = re.compile(r"Do not modify (.+?) unless the prompt explicitly allows it")
 H_PROTECTED = ("protected area", "what this design needs there", "where specified")
@@ -362,196 +374,177 @@ FORBIDDEN_ID_INPUTS = re.compile(r"pace|timing|companion|bridge|medicine|act[1-4
 KNOWN_STORIES = frozenset({"Y2-PP-T17", "Y1-P1-T05", "Y1-P1-T03", "Y1-P0-S06b"})
 STORY_RE = re.compile(r"Y\d-[A-Za-z0-9]+-[A-Za-z0-9]+")
 FIRST_RUNTIME_AC = 5
-AXES_AC_COUNT = 15
+AXES_AC_COUNT = 16  # revision 9: AC16 is the playtest comprehension criterion
 STORYLINE_ID_PARAMS = ("A", "F", "D", "I")
+# Revision 9: each runtime AC's blocking stories are pinned (a change is a planning decision).
+AXES_AC_BLOCKED = {
+    5: {"Y2-PP-T17"}, 6: {"Y2-PP-T17", "Y1-P1-T03"}, 7: {"Y2-PP-T17", "Y1-P1-T03"}, 8: {"Y2-PP-T17"},
+    9: {"Y2-PP-T17", "Y1-P1-T05", "Y1-P1-T03"}, 10: {"Y2-PP-T17", "Y1-P1-T03"}, 11: {"Y2-PP-T17"},
+    12: {"Y2-PP-T17", "Y1-P1-T03"}, 13: {"Y2-PP-T17"}, 14: {"Y2-PP-T17"}, 15: {"Y1-P1-T03"}, 16: {"Y2-PP-T17"},
+}
+# Revision 9: the axes Observables table's first column, in order (scene_variants and ending_sequence removed;
+# module_keys, scene_render, ending_render added; phase_of / load_check take flags and position).
+AXES_OBSERVABLES = (
+    "formula_id(A, F, D, I, knobs, flags)", "prereqs_met(T, knobs, flags)", "family(id)",
+    "phase_of(record, loaded, flags, position)", "axis(record, name)", "composer_modules(record, flags)",
+    "module_keys(flag)", "scene_render(id)", "ending_render(id)", "story_plus_state(id)",
+    "boot_errors(knobs, flags, build)", "load_check(record, flags, position)",
+)
+# A runtime AC may name a formula (not an observable) only in this exact phrase: AC5 states which defect its cases
+# detect. Reported to the author as a doc nit (storyline-axes.md AC5); the phrase itself is pinned in AC5.
+AC5_FORMULA_MENTION = "so a swapped `transform()` fails"
+# Key phrases of the axes ACs (normalized). {reach} is the 1.0-reachable count, derived.
+AXES_AC_KEYS: dict[int, tuple[str, ...]] = {
+    5: ("with one route enabled at a time (synthetic knobs, formula level only)",
+        "so a swapped transform() fails"),
+    9: ("called with loaded false for CRISIS and true for the others",
+        "phase_of of the CRISIS fixture with loaded true is DAMAGED",
+        "gives phase_of(…, true) DAMAGED and load_check() exactly {that item}",
+        "load_check() gives the same result with every knob flipped"),
+    12: ("or any secret route is enabled in a 1.0 build; with the default knobs and build 1.0 it is empty",),
+    14: ("over the {reach} storylines reachable in 1.0, by rendered text, not by ids",
+         "for every ID at least 3 scenes of scene_render(id) differ from that scene's shared hash",
+         "for every pair of distinct IDs at least 1 scene of scene_render() differs",
+         "(different module ids with the same text do not count)",
+         "a pairwise threshold above 1 is Open Question 13"),
+    16: ("with at least 5 testers", "at least 70% of testers", "The report is retained in production/qa/"),
+}
+AXES_DOC_AC_KEYS = (
+    "Document-level (document lint, Config/Data, advisory)",
+    "it shows the document is internally consistent and unchanged where pinned, not that the state machine is "
+    "correct",
+    "starting with a non-shipping reference model of the Formulas and a walk of the lifecycle transitions (Open "
+    "Question 16)",
+    "reachable_1_0 equals the valid rows plus the 1.0 secret rows (none)",
+)
 
 # --- storyline-lifecycle.md -----------------------------------------------------------------------------------
-TRANSITIONS = {  # id -> (from, event, guard, to, effects), backticks removed
-    "T1": ("LEANING", "C8-S13 resolves", "—", "PARTLY_LOCKED", "faction set; lock_negotiated per lock_pass"),
+TRANSITIONS = {  # id -> (from, event, guard, to, effects), backticks removed. Lifecycle revision 5: T1-T9.
+    "T1": ("LEANING", "C8-S13 resolves", "—", "PARTLY_LOCKED", "faction set; lock_negotiated per lock_pass; checkpoint"),
     "T2": ("PARTLY_LOCKED", "C8-S14 resolves", "faction set, authority UNSET", "PARTLY_LOCKED",
-           "authority set; lock_negotiated per lock_pass"),
+           "authority set; lock_negotiated per lock_pass; checkpoint"),
     "T3": ("PARTLY_LOCKED", "C8-S16 resolves", "faction and authority set; the row is valid", "VALIDATED",
-           "deleted set; lock_negotiated per lock_pass; ID stored"),
+           "deleted set; lock_negotiated per lock_pass; ID stored; checkpoint"),
     "T4": ("PARTLY_LOCKED", "C8-S16 resolves", "faction and authority set; the row is invalid", "CRISIS",
-           "deleted set; lock_negotiated per lock_pass; the refusing faction breaks the coalition"),
+           "deleted set; lock_negotiated per lock_pass; the refusing faction breaks the coalition; no checkpoint"),
     "T5": ("CRISIS", "a renegotiation is taken", "the offer is in the row's offer set", "VALIDATED",
            "the axis changed; axis_revised, lock_negotiated gain it; retraction recorded; retraction beat played; "
-           "ID stored"),
-    "T6": ("CRISIS", "the deferral is taken", "R1; WITNESS enabled; signpost OPEN; the four disclosures shown",
-           "DEFERRED", "witness_deferred set"),
-    # Lifecycle round 2: the gate invokes on prereqs_met and sets the unlock flag itself.
-    "T7": ("DEFERRED", "the invocation is confirmed (C9-S19 or the gate)",
-           "WITNESS enabled; prerequisites met, seven seats saved",
-           "VALIDATED", "secret_invoked gains WITNESS; SL-SECRET-WITNESS stored; SEVEN_WITNESSES_AVAILABLE set if "
-           "unset; narrowing retraction recorded; invoke_witness played"),
-    "T8": ("DEFERRED", "a renegotiation is taken at the gate", "one of the six R1 offers", "VALIDATED",
-           "as T5; gate retcon beat played"),
-    "T9": ("DEFERRED", "Root of Heaven entry, any path", "—", "DEFERRED",
-           "LAST_CHANCE scene; leaving returns the player outside"),
-    "T10": ("LEANING or PARTLY_LOCKED", "Root of Heaven entry, any path", "—", "unchanged", "TURNED_BACK"),
-    "T11": ("VALIDATED", "Root of Heaven entry, any path", "—", "FIXED", "root_phase INSIDE"),
-    "T12": ("FIXED or FINAL", "Root of Heaven entry, any path", "—", "unchanged", "open"),
-    "T13": ("FIXED", "execution confirmed", "the final authorization scene is playing; witness_mandate is not FAILED",
-            "FINAL", "root_phase FINAL"),
-    # Lifecycle revision 2: the T14 legacy catch-up is cut (user decision D2); T14 is the stand-down (D1).
-    "T14": ("FIXED", "Kaelen stands down", "the final authorization scene is playing; witness_mandate FAILED", "FINAL",
-            "root_phase FINAL; nothing executed"),
+           "ID stored; checkpoint"),
+    "T6": ("LEANING or PARTLY_LOCKED", "Root of Heaven entry, any path", "—", "unchanged", "TURNED_BACK"),
+    "T7": ("VALIDATED", "Root of Heaven entry, any path", "—", "FIXED", "root_phase INSIDE; checkpoint"),
+    "T8": ("FIXED or FINAL", "Root of Heaven entry, any path", "—", "unchanged", "open"),
+    "T9": ("FIXED", "execution confirmed", "the final authorization scene is playing", "FINAL",
+           "root_phase FINAL; checkpoint"),
 }
 GATE_EVENT = "Root of Heaven entry, any path"
 STORED_PHASES = ("VALIDATED", "FIXED", "FINAL")
-GATE_TABLE = {  # phases cell -> outcome cell, backticks removed
+CHECKPOINT = "checkpoint"
+NO_CHECKPOINT = "no checkpoint"
+GATE_TABLE = {  # phases cell -> outcome cell, backticks removed (lifecycle revision 5: three rows)
     "LEANING, PARTLY_LOCKED": "TURNED_BACK: the Assembly has not decided",
-    "DEFERRED": "LAST_CHANCE: offers the six R1 renegotiations and, when WITNESS is enabled and its prerequisites are "
-                "met, invoke:WITNESS; leaving returns the player outside, still DEFERRED",
-    "VALIDATED": "ROOT_OF_HEAVEN; root_phase becomes INSIDE (T11)",
-    "FIXED, FINAL": "ROOT_OF_HEAVEN; nothing changes (T12)",
+    "VALIDATED": "ROOT_OF_HEAVEN; root_phase becomes INSIDE (T7)",
+    "FIXED, FINAL": "ROOT_OF_HEAVEN; nothing changes (T8)",
 }
 RED_LINE_VALUES = {"R1": "no one hand compels the deleted back",
                    "R2": "no release that destroys unresolved memory appeals",
                    "R3": "no irreversible release while emergency Root is abolished"}
-DEFER_CONDITION = "plus defer:{route} when {route} is enabled and its signpost is OPEN"
-# Revision 5: crisis_offers has a domain guard; signpost tests CLOSED before falling through to OPEN and hides only a
-# reserved, disabled route (I6); the witness vote is a formula.
+# Lifecycle revision 5: crisis_offers keeps its domain guard; signpost is HIDDEN for every disabled route; the
+# deferral, last-chance and witness-vote formulas are gone.
 LIFE_FORMULAS = (
     "crisis_offers(row) = {} if row is not R1, R2 or R3; otherwise",
     '{ "revise:" + axis + ":" + v : axis locked, v ≠ row[axis], not invalid(row with axis = v) }',
-    '∪ { "defer:WITNESS" : row = R1, enabled(WITNESS), signpost(WITNESS) = OPEN }',
-    'last_chance_offers = crisis_offers(R1) without "defer:WITNESS"',
-    '∪ { "invoke:WITNESS" : enabled(WITNESS), prereqs_met(WITNESS) }',
-    "signpost(T) = HIDDEN if none of T's offer prerequisites is set, or T is reserved (post-1.0) and disabled",
-    'CLOSED if T is disabled, an ID is stored and it is not "SL-SECRET-" + T,',
-    "or an unset offer prerequisite of T is unreachable",
-    "OPEN otherwise",
-    f"witness_threshold = {WITNESS_THRESHOLD}",
-    "witness_dissenters = { seat in witness_seats : the seated witness's assent condition is false at C10-S15 }",
-    "witness_mandate = MET if 7 − |witness_dissenters| ≥ witness_threshold",
-    "FAILED otherwise",
+    "signpost(T) = HIDDEN while T is disabled (every secret route in 1.0)",
 )
 LIFE_KEYS = (  # normalized sentences the lifecycle doc must keep
     "The crisis cannot be left, skipped or saved until an offer is taken",
-    "confirming (T7) is irreversible. Declining keeps the deferral.",
-    "displays the stored structure, offers no reconsideration, and confirm_execution sets root_phase FINAL (T13); "
+    "displays the stored structure, offers no reconsideration, and confirm_execution sets root_phase FINAL (T9); "
     "nothing else changes.",
-    "No other transition exists: nothing leads from VALIDATED, FIXED or FINAL to an earlier phase or to DEFERRED or "
-    "CRISIS — not a knob change, not a flag, not loading.",
+    "No other transition exists: nothing leads from VALIDATED, FIXED or FINAL to an earlier phase or to CRISIS — not "
+    "a knob change, not a flag, not loading.",
     "Loading restores the record, runs the damaged-record check (a DAMAGED record does not load), and derives the "
     "phase; it fires no transition by itself",
+    "The story graph never starts C8-S14 before C8-S13 resolves or C8-S16 before C8-S14 resolves",
     "None of its own.",
-    "Not knobs: the scene order, the offer sets (derived from invalid), the rule that C8-S16 cannot be left with a "
-    "crisis open, and the rule that a stored ID never changes.",
-    # Revision 5 (lifecycle review round 1 and the user's Q1-Q4)
+    "Not knobs: the scene order, the offer sets (derived from invalid), the commit and save rule, the rule that "
+    "C8-S16 cannot be left with a crisis open, and the rule that a stored ID never changes.",
     "Every field is saved, so a reload restores the retractions and beats exactly.",
-    "Plays only on SL-SECRET-WITNESS",
-    "Kaelen does not authorize in the witnesses' place, and nothing changes the stored ID, the family or the axes.",
-    'the Hearth delegate\'s line adds the clause "unless the affected themselves authorize it"',
-    "with the signpost HIDDEN or CLOSED the line has no clause.",
-    "LAST_CHANCE keeps all six R1 renegotiations.",
-    "is read by the composer as what the provisional coalition did, never as the current axis value.",
     "never as it demanding its own replacement",
     "NG+ starts a new record, not a transition of this table",
-    # Revision 2 (lifecycle round 2 and the user's D1-D4); qa-lead's round-6 survivors are pinned here and in the
-    # derived checks of check_life_revision2.
-    "Available from its slot in Chapter 9 until the Chapter 9 end: it plays once, at the first point in that window "
-    "at which every Witness offer prerequisite is set",
-    "After the Chapter 9 end it cannot play, so a prerequisite still unset then is unreachable and the signpost shows "
-    "CLOSED.",
-    "the gate offers the invocation and sets the unlock flag itself (S7).",
-    "The gate's invoke:WITNESS does not need SEVEN_WITNESSES_AVAILABLE (round 2): the invocation sets it.",
-    "Until all four have been shown, defer:WITNESS cannot be taken.",
-    "No save exists between the start of C8-S16 and its commit.",
-    "as one atomic checkpoint before the beat plays",
-    "a reload from the checkpoint resumes at the start of the committed beat, and the offer never replays.",
     "There is no runtime catch-up.",
-    "On SL-SECRET-WITNESS with witness_mandate FAILED, confirm_execution is not offered",
-    "stand_down sets root_phase FINAL (T14) with nothing executed. The restoration does not happen, and the stored "
-    "ID, the family and the axes are unchanged.",
-    "Kaelen sits in none",
-    "the player sees each seated witness's current stance (would assent or would dissent, and why)",
-    "Content rule: the candidate data never lets a playthrough seat seven witnesses whose conditions cannot fail",
-    "C10-S15 evaluates each seated witness's condition once, writes witness_dissenters and witness_mandate (Formulas) "
-    "once, and names every dissenter",
-    f"witness_threshold is fixed at {WITNESS_THRESHOLD} (user decision 2026-11-10): it is data-defined in the route "
-    "data, not a knob and not a player choice",
-    f"witness_threshold is not a knob either: it is fixed at {WITNESS_THRESHOLD} (Formulas).",
     "Cut order, first cut first. A cut never removes an invariant, a transition, a record field or an id",
+    # Scene order guards (the lock-order item of Edge Case 16 relies on them).
+    "Plays only with every axis UNSET.", "Plays only with Faction set and Authority UNSET.",
+    "Plays with Faction and Authority set.",
+    "a speaker other than Kaelen",
+    # Revision 5: the secret routes stay closed; this replaces the deferral, invocation and witness-vote pins.
+    "play no part in this contract beyond staying closed",
+    "No line names a secret route or the institution one needs",
+    "The source's line that a secret route \"may create alternative constitutional mechanism later\" (PM:7144) is "
+    "not offered in 1.0.",
+    "C9-S18 plays only its incomplete form",
+    "C9-S19 and C9-S20 do not play",
+    "C10-S13, C10-S14 and C10-S15 play only when the stored ID is their route's, which no 1.0 record holds.",
+    "Secret prerequisite flags that content sets are kept and transform nothing, and the journal shows no signpost "
+    "for any route",
+    # Revision 5: the commit and save rule (I9).
+    "commits all of its effects — every field it writes and the id of the beat it plays — together with an autosave, "
+    "as one atomic checkpoint before that beat plays.",
+    "autosave and manual save are suppressed from the start of C8-S13, C8-S14 and C8-S16 until the commit, and from "
+    "the start of the final authorization until T9.",
+    "a reload from the checkpoint resumes at the start of the committed beat, and no offer or vote replays.",
+    "T4 has no checkpoint of its own: the crisis it opens is part of C8-S16, and its writes are committed with the T5 "
+    "that closes it.",
+    "So no save ever holds a record that is half of a transition, and no save is positioned inside a lock scene.",
+    # The gate.
+    "The load path never meets LEANING or PARTLY_LOCKED",
+    "CRISIS never reaches the gate: it exists only inside C8-S16.",
+    "Lint shows the text matches its pins; it is not evidence that the state machine is correct",
 )
-# The four deferral disclosures (lifecycle round 2, blocker 4): ids, in the order S4 states them.
-DISCLOSURES = ("leads_open", "you_narrowed", "act3_as_hearth", "gate_retcon")
-# S5 deferral scope table (content, source, under DEFERRED), backticks removed: qa-lead found it unpinned.
-S5_ROWS = (
-    ("C8-S17 Revolution Name", "PM:7155-7163",
-     "beat deferral_c8s17: Hearth joins the naming and says what it has not endorsed"),
-    ("C8-S18, C8-S19 Siege (B20)", "PM:7165-7218", "unchanged; the boss reads YOU, HEARTH, RESTORE as locked"),
-    ("Act 3 Branch A — Hearth Compact, H-S01 to H-S04, The Steward (B21H)", "PM:7220-7281",
-     "beat deferral_branch_h in H-S01: home settlements ask why Hearth has not endorsed; the rest unchanged"),
-    ("C8-S20 The Human Patch Door", "PM:7414-7432",
-     "beat deferral_c8s20: Kaelen signs the expedition (PM:7424-7426) and the Hearth delegates witness it without "
-     "co-signing"),
-    ("Secret Quest 09 Witness Seats", "PM:7517-7519", "the player seats the seven witnesses (S9); unchanged otherwise"),
-    ("Act 3 ending", "PM:7539-7564",
-     "beat deferral_act3_end: the Assembly approves the expedition with Hearth's endorsement still withheld"),
-    ("Chapter 9: C9-S01 to C9-S17, the three truth routes, C9-S18, C9-S20, the optional rooms and side quests",
-     "PM:7661-8187", "unchanged: the expedition is away from the Assembly; C9-S19 is S6"),
+# Lifecycle revision 5: the scene-level Observables table's first column, in order.
+LIFE_OBSERVABLES = (
+    "storyline_phase()", "storyline_id()", "axis(name)", "gate_open()", "enter_root_of_heaven(path)",
+    "current_scene()", "current_beat()", "lock_options(axis)", "lock_arguments(axis)", "red_lines_voiced(scene)",
+    "offers()", "take(offer)", "record_hash()", "try_save()", "retraction_log()", "beats_played()", "beat_text(id)",
+    "beat_speaker(id)", "signpost(route)", "quoted_commitment()", "route_lines()", "ending_modules()",
+    "confirm_execution()", "load_errors()", "save_bytes(slot)", "epilogue_lines()", "record_field(name)",
+    "flag_set(name)",
 )
-H_S5 = ("content", "source", "under DEFERRED")
-# Consent variants table (scene, source, Consent variant), backticks removed: feeds L-AC14.
-CONSENT_ROWS = (
-    ('C10-S06 Axis One Argument, "If AXIS1_YOU"', "PM:8347-8352", "new content"),
-    ("C10-S09 Last Offer, Kaelen's answer", "PM:8408 → PM:8411", 'the source\'s "Secret Witness" line'),
-    ("B22 SOVEREIGN, axis-specific tools", "PM:8438", 'new content (no "direct Root clashes")'),
-    ("C10-S11 The Empty Role", "PM:8495", "new content (the role is not written as KAELEN)"),
-    ("B23 God King, AXIS1 YOU route mechanics", "PM:8533-8543",
-     "the SEC-01 distinction: the God King tries to collapse the witnesses into Kaelen as executor (PM:11219)"),
-    ("B23 base phase 4 Final Permission and its YOU dialogue", "PM:8615-8616, PM:8638-8645",
-     "the witnesses authorize, Kaelen executes"),
-    ("B23 base phase 5 Crown, ending route interaction", "PM:8617-8618", "S9"),
-    ("SOVEREIGN's quote of the commitment", "PM:7059", "quoted as narrowed"),
-    ("Final authorization, Authority route line", "PM:8797", "new content (S8)"),
-    ('Tier B NPC reactions, "Reaction AXIS1_YOU" (70 NPCs)', "PM:12483-14779", "new content, one line per NPC"),
-    ("Companion secret-route reactions", "PM:11229-11236", "the source's lines"),
-)
-H_CONSENT = ("scene", "source", "Consent variant")
-# Key phrases of the L-AC bodies (normalized). qa-lead (round 6) found the bodies mutable beyond their call names.
+LIFE_AC_COUNT = 18  # lifecycle revision 5
+# Key phrases of the L-AC bodies (normalized); {legacy} and {total} are filled in from derived values.
 LAC_KEYS: dict[int, tuple[str, ...]] = {
-    5: ("Before the commit current_scene() stays C8-S16 and try_save() is false.",
-        "reloading it gives the committed record_hash(), replays the committed beat from its start, and take() of "
-        "every offer of that row is false."),
-    7: ("before the offer has shown its disclosures take(defer:WITNESS) is false and record_hash() is unchanged",
-        "With the signpost HIDDEN or CLOSED, or WITNESS disabled, and on R2 and R3, take(defer:WITNESS) is false and "
-        "record_hash() is unchanged."),
-    8: ('(authority, YOU, YOU, "final permission", C9-S19)',
-        "and take(invoke:WITNESS) there is false with record_hash() unchanged"),
-    9: ("LEANING and PARTLY_LOCKED on the story path → TURNED_BACK",
+    5: ("with every secret prerequisite flag set and with none",),
+    6: ("from the start of its scene until its commit try_save() is false and current_scene() stays that scene",
+        "a quit before the commit and a reload give the record_hash() of the last save before the scene",
+        "reloading it gives the committed record_hash(), current_beat() the committed beat at its start, and take() of "
+        "every offer of that row false",
+        "For T5 the crisis (T4) is inside the window: try_save() is false throughout."),
+    7: ("and the {total} runs yield {total} distinct beat ids",
+        "take() of a value not offered (the same value; the other invalid row) is false and record_hash() is "
+        "unchanged"),
+    8: ("LEANING and PARTLY_LOCKED on the story path → TURNED_BACK",
         "on the load path the load is refused with load_errors() naming D{legacy} and no gate entry",
-        "DEFERRED → LAST_CHANCE with offers() exactly the six R1 renegotiations plus invoke:WITNESS when WITNESS is "
-        "enabled and its prerequisites are met (with and without flag_set(SEVEN_WITNESSES_AVAILABLE))",
         "VALIDATED → ROOT_OF_HEAVEN and FIXED; FIXED and FINAL → ROOT_OF_HEAVEN, phase unchanged"),
-    10: ("take() of each of the eight offer strings is false with record_hash() unchanged",),
-    13: ("take() of each of the eight offer strings is false with record_hash() unchanged",
-         "stand_down() is false; confirm_execution() gives FINAL with storyline_id() unchanged"),
-    14: ("record_field(witness_dissenters) is exactly the seats whose condition is false",
-         "dissent_named() is exactly their identities",
-         "ending_modules() contains consent_unauthorized exactly when it is FAILED",
-         "C10-S15 does not become current_scene() again"),
-    15: ("YOU locked at C8-S14 and never revised → STATED, the C8-S14 commitment",
-         "YOU reached by a renegotiation (from R2 or R3) → STATED, that scene's commitment",
-         "YOU withdrawn by a renegotiation from R1 at C8-S16 or at the gate → WITHDRAWN",
+    9: ("take() of each of the {total} renegotiation offers is false with record_hash() unchanged",
+        "after setting every secret prerequisite flag and flipping every knob, storyline_id() and storyline_phase() "
+        "are unchanged"),
+    10: ("With every secret prerequisite flag set and the default knobs",
+         "C9-S19, C9-S20, C10-S13, C10-S14 and C10-S15 never become current_scene()",
+         "C9-S18 plays its incomplete form", "signpost() is HIDDEN for all three routes"),
+    11: ("take() of each renegotiation offer is false with record_hash() unchanged",
+         "confirm_execution() gives FINAL with storyline_id() unchanged",
+         "confirm_execution() anywhere else is false with record_hash() unchanged."),
+    12: ("YOU locked at C8-S14 and never revised → STATED, the C8-S14 commitment",
+         "YOU kept through any other R1 renegotiation (Faction or Deleted) → STATED, the C8-S14 commitment",
          "Authority never YOU → NONE"),
-    16: ("(D1-D{ec16})", "and the load is refused (current_scene() stays load_menu)"),
-    19: ("beats_played() contains both retract_R1_<axis>_<new> and gate_retcon_<axis>_<new>",
-         "retraction_log() gains an entry with scene LAST_CHANCE"),
-    20: ("on load load_errors() names D{legacy}, current_scene() stays load_menu, and no lock scene plays.",),
-    21: ("once after decline() at C9-S19 and once with C9-S19 never played",
-         '(authority, YOU, YOU, "final permission", LAST_CHANCE)',
-         "With one prerequisite unset, take(invoke:WITNESS) is false with record_hash() unchanged.",
-         "The same holds with all three set and record_field(witness_seats) holding six of the seven seats",
-         "offers() then lacks invoke:WITNESS"),
-    22: ("confirm_execution() is false with record_hash() unchanged; route_lines() is empty; stand_down() gives FINAL "
-         "with storyline_id() and each axis() unchanged; ending_modules() contains consent_unauthorized",
-         "With witness_mandate MET, stand_down() is false and confirm_execution() gives FINAL."),
-    23: ("beat_text(id) is non-empty and beat_speaker(id) is non-empty",
+    13: ("a save with no axis data positioned before C8-S13 loads LEANING with load_errors() empty",
+         "each damaged-record fixture of storyline-axes.md AC9 gives load_errors() exactly its item, the load is "
+         "refused (current_scene() stays load_menu), and save_bytes() of its slot is unchanged."),
+    14: ("on every 1.0 storyline, and contains none of them with no flag set",),
+    15: ("flag_set() false for every secret prerequisite and unlock flag",),
+    16: ("texts are pairwise distinct except where the cut order shares them",
          "for every retract_* id beat_speaker(id) is not Kaelen"),
-    24: ("one retained screenshot each in production/qa/evidence/, with lead sign-off recorded beside them",),
+    17: ("on load load_errors() names D{legacy}, current_scene() stays load_menu, and no lock scene plays.",),
+    18: ("one retained screenshot each in production/qa/evidence/, with lead sign-off recorded beside them",),
 }
 # Assertions that cannot fail (offers() is empty in every non-offer scene): forbidden in the L-ACs (round 2).
 NON_FAILING = ("offers() is empty", "offers nothing", "offers() there is empty")
@@ -560,7 +553,8 @@ NON_FAILING = ("offers() is empty", "offers nothing", "offers() there is empty")
 LEGACY_FLAGS = ("ch8_revolt_led", "ch8_council_formed", "ch8_witness_network_created", "ending_route_ch8_lead",
                 "ending_route_ch8_council", "ending_route_ch8_witness", "ch10_destroy_sovereign",
                 "ch10_rewrite_sovereign", "true_ending_seen", "ng_plus_unlocked")
-LIFE_REQUIRED_PATHS = 3  # cross-checked against the S7 path list and the Validation note
+LIFE_REQUIRED_PATHS = 3  # cross-checked against the S6 path list and the Validation note
+H_CONTENT = ("content", "count", "plays on")
 
 REQUIRED_HEADINGS = (("Overview",), ("Player Fantasy",), ("Detailed Rules", "Detailed Design"), ("Formulas",),
                      ("Edge Cases",), ("Dependencies",), ("Tuning Knobs",), ("Acceptance Criteria",))
@@ -580,6 +574,12 @@ STALE_LIFECYCLE_EXEMPT = frozenset({"C8-S17"})
 STALE_VOCAB = ("storyline_state", "final_reconsidered", "reconsider_targets", "reconsideration_triggers",
                "GATE_CRISIS", "crisis_endured", "renegotiations_valid", "faction_negotiation_allowed",
                "invalid_combinations")
+# Revision 9 (user decisions 2026-11-11): the identifiers of the removed Witness deferral, invocation, vote and
+# stand-down. Forbidden everywhere in both documents (the Open Questions describe the removed design in prose).
+STALE_SECRET_VOCAB = ("witness_deferred", "secret_invoked", "witness_seats", "witness_dissenters", "witness_mandate",
+                      "witness_threshold", "LAST_CHANCE", "DEFERRED", "defer:", "invoke:", "last_chance_offers",
+                      "gate_retcon", "deferral_", "invoke_witness", "stand_down", "consent_unauthorized",
+                      "dissent_named", "decline(", "scene_variants", "ending_sequence")
 
 BIBLE_DECISION_PREFIX = "**Decided (2026-11-08, Y1-P0-S06a):**"
 
@@ -822,27 +822,62 @@ def py_lock_pass(axis: str, value: str, flags: set[str]) -> str:
     return "CLEAN" if plus and not minus else "NEGOTIATED"
 
 
-def py_phase(a: str, f: str, d: str, stored: bool, deferred: bool, root: str,
-             deferral_row: tuple[str, ...] = ("YOU", "HEARTH", "RESTORE"), loaded: bool = True) -> str:
-    """The phase of a record: the Edge Case 16 items decidable from these six fields first (D4, D8, and D9 only when
-    ``loaded``), then FINAL > FIXED > VALIDATED (each needing a stored ID) > unlocked > deferred."""
-    unset = [v == UNSET for v in (a, f, d)]
+NOTHING_STORED = "nothing stored"
+
+
+def py_phase(a: str, f: str, d: str, sid: str, root: str, invalid: set[tuple[str, ...]], loaded: bool = True) -> str:
+    """The phase of a record (authority, faction, deleted, stored ID, root_phase): first the Edge Case 16 items
+    decidable from these five fields (D1, D8, the lock-order clause of D17, and D9 only when ``loaded``), then
+    FINAL > FIXED > VALIDATED (each needing a stored ID) > LEANING > PARTLY_LOCKED > CRISIS."""
+    stored = sid != NOTHING_STORED
+    is_set = [v != UNSET for v in (f, a, d)]  # in lock order: Faction, Authority, Deleted
+    if is_set != sorted(is_set, reverse=True):
+        return "DAMAGED"  # D17: the set axes are not a prefix of the lock order
+    if stored and (not all(is_set) or (a, f, d) in invalid or sid != f"SL-{a}-{f}-{d}"):
+        return "DAMAGED"  # D1
     if not stored and root in ("INSIDE", "FINAL"):
         return "DAMAGED"  # D8
-    if deferred and (any(unset) or (not stored and (a, f, d) != deferral_row)):
-        return "DAMAGED"  # D4
-    if loaded and not stored and not any(unset) and not deferred:
+    if loaded and not stored and all(is_set):
         return "DAMAGED"  # D9 (a loaded record only: in play this record is the crisis inside C8-S16)
     if stored:
         return "FINAL" if root == "FINAL" else "FIXED" if root == "INSIDE" else "VALIDATED"
-    if all(unset):
+    if not any(is_set):
         return "LEANING"
-    if any(unset):
+    if not all(is_set):
         return "PARTLY_LOCKED"
-    return "DEFERRED" if deferred else "CRISIS"
+    return "CRISIS"
+
+
+def odd_rule(rules: dict[str, tuple[str, ...]]) -> tuple[str, list[str]]:
+    """The rule whose renegotiation-offer count differs from the others' (R1: six vs five), and the other rules.
+
+    Revision 9 decouples this from Witness Protocol: R1 is distinguished by its offer count, not by a route."""
+    offers = crisis_offers(rules)
+    for rule in rules:
+        others = [r for r in rules if r != rule]
+        if others and len({len(offers[r]) for r in others}) == 1 and len(offers[rule]) != len(offers[others[0]]):
+            return rule, others
+    first = next(iter(rules), "R1")
+    return first, [r for r in rules if r != first]
 
 
 CTX: dict[str, object] = {}  # values derived by one check and read by a later one
+
+
+def compress_items(numbers: tuple[int, ...] | list[int]) -> str:
+    """Edge Case 16 numbers as the docs write them: (1, 6, 7, 8, 9) -> 'D1, D6-D9'."""
+    runs: list[list[int]] = []
+    for n in numbers:
+        if runs and n == runs[-1][-1] + 1:
+            runs[-1].append(n)
+        else:
+            runs.append([n])
+    return ", ".join(f"D{r[0]}" if len(r) == 1 else f"D{r[0]}-D{r[-1]}" for r in runs)
+
+
+def join_and(items: list[str]) -> str:
+    """'a', 'a and b', 'a, b and c'."""
+    return items[0] if len(items) == 1 else f"{', '.join(items[:-1])} and {items[-1]}" if items else ""
 
 
 # --- 1. Headings ---------------------------------------------------------------------------------------------------
@@ -1014,6 +1049,7 @@ def check_combinations(lines: list[str], src: SourceResolver, probs: Problems) -
         if stated != family_counts:
             probs.add(area, f"line {lineno}: family split {stated} but the table has {family_counts}")
     CTX["family_counts"] = family_counts
+    CTX["rules"] = rules
     return rules, valid_rows
 
 
@@ -1057,8 +1093,8 @@ def check_secrets(lines: list[str], src: SourceResolver, rules: dict[str, tuple[
         where = f"line {lineno} ({sl_id})"
         want_family, want_scope = SECRET_EXPECTED[sl_id]
         shipped += scope == "1.0"
-        if want_family is not None and family != want_family:
-            probs.add(area, f"{where}: family '{family}', expected {want_family}")
+        if family != want_family:
+            probs.add(area, f"{where}: family '{family}', expected '{want_family}' (reserved until the route ships)")
         if scope != want_scope:
             probs.add(area, f"{where}: scope '{scope}', expected {want_scope}")
         if (err := src.check(source)) is not None:
@@ -1099,6 +1135,8 @@ def check_secrets(lines: list[str], src: SourceResolver, rules: dict[str, tuple[
     stated = {m[1]: re.findall(r"[A-Z0-9_]+", m[2]) for m in re.finditer(route_re, knob[0].split("|")[2])}
     unlocks = {m[1]: re.findall(r"[A-Z0-9_]+", m[2]) for m in re.finditer(route_re, unlock[0].split("|")[2])}
     expected = pm_required_flags(pm) if pm is not None else {}
+    CTX["prerequisites"] = stated
+    CTX["unlock_flags"] = [flag for route in SECRET_ROUTES for flag in unlocks.get(route, [])]
     seen: dict[str, str] = {}
     for route in SECRET_ROUTES:
         if route not in stated or route not in unlocks:
@@ -1253,6 +1291,12 @@ def check_composer(lines: list[str], probs: Problems) -> None:
                             f"{sorted(want_allowed)}")
         if writer != want_writer:
             probs.add(area, f"{where}: writer '{writer}', expected '{want_writer}'")
+    # Revision 9: AC3's own field list names exactly the pinned fields (it lost five Witness fields this round).
+    want_names = {name.strip() for key in COMPOSER for name in key.split(",")}
+    m = re.search(r"the composer record has exactly the fields (.+?), each with its pinned", norm(" ".join(lines)))
+    named = set(re.split(r",\s*|\s+and\s+|/", m[1])) if m else set()
+    if named != want_names:
+        probs.add(area, f"AC3's field list {sorted(named)} != the composer record {sorted(want_names)}")
 
 
 # --- 6. Formulas ---------------------------------------------------------------------------------------------------
@@ -1293,7 +1337,7 @@ def check_formulas(lines: list[str], rules: dict[str, tuple[str, ...]], probs: P
     if [norm_code(p) for p in prereq] != [PREREQS_MET_LINE]:
         probs.add(area, f"prereqs_met definition {[norm_code(p) for p in prereq]} != ['{PREREQS_MET_LINE}']")
     lock_line, _ = pin_body(lines, "lock_pass(X, v):", LOCK_PASS_BODY, area, probs)
-    phase_line, phase_body = pin_body(lines, "storyline_phase(record, loaded):", STORYLINE_PHASE_BODY, area, probs)
+    phase_line, phase_body = pin_body(lines, f"{PHASE_SIGNATURE}:", STORYLINE_PHASE_BODY, area, probs)
     _, family_body = pin_body(lines, "family(id):", FAMILY_BODY, area, probs)
 
     # The results each body can return must be exactly the vocabulary the record allows.
@@ -1331,13 +1375,14 @@ def check_formulas(lines: list[str], rules: dict[str, tuple[str, ...]], probs: P
         segments = re.split(r"(Examples?[^:]*):", text)
         labelled = [(label.replace("`", ""), body) for label, body in zip(segments[1::2], segments[2::2])]
         examples = " ".join(body for _, body in labelled)
-        want = (f"damaged(record, loaded) is true when the record holds an item D1-D{len(EC16_ITEMS)} of Edge Case 16; "
-                f"D{EC16_CRISIS} is tested on a loaded record only (loaded true)")
-        if want not in norm(text):
-            probs.add(area, f"storyline_phase paragraph lacks '{want}'")
-        if "FINAL and FIXED need a stored ID" not in norm(text):
-            probs.add(area, "storyline_phase paragraph no longer says 'FINAL and FIXED need a stored ID'")
-        deferral_row = rules.get(CTX.get("route_rule", {}).get("WITNESS", "R1"), ("YOU", "HEARTH", "RESTORE"))
+        # Revision 9: damaged() also takes the saved flags and the story position, for D15-D17.
+        for want in (f"{DAMAGED_SIGNATURE} is true when the inputs hold an item of Edge Case 16; D{EC16_CRISIS} is "
+                     "tested on a loaded record only (loaded true)",
+                     f"the record alone cannot show D{EC16_EXCLUSIVE}-D{EC16_ORDER}, so the check takes them",
+                     "FINAL and FIXED need a stored ID"):
+            if want not in norm(text):
+                probs.add(area, f"storyline_phase paragraph lacks '{want}'")
+        invalid = set(rules.values())
         if not any(r == "DAMAGED" for _, r in re.findall(r"\(([^()]*)\) → ([A-Z_]+)", examples.replace("`", ""))):
             probs.add(area, "storyline_phase has no DAMAGED example")
         found = [(fields, stated, "loaded false" not in label)
@@ -1349,11 +1394,11 @@ def check_formulas(lines: list[str], rules: dict[str, tuple[str, ...]], probs: P
             probs.add(area, "storyline_phase has no in-play (loaded false) CRISIS example")
         for fields, stated, is_loaded in found:
             parts = [p.strip() for p in fields.split(",")]
-            if len(parts) != 6:
-                probs.add(area, f"storyline_phase example '({fields})' does not have 6 fields")
+            if len(parts) != 5:
+                probs.add(area, f"storyline_phase example '({fields})' does not have 5 fields")
                 continue
-            a, f, d, sid, deferred, root = parts
-            got = py_phase(a, f, d, sid != "nothing stored", deferred == "true", root, deferral_row, is_loaded)
+            a, f, d, sid, root = parts
+            got = py_phase(a, f, d, sid, root, invalid, is_loaded)
             if got != stated:
                 probs.add(area, f"storyline_phase example '({fields})' (loaded {str(is_loaded).lower()}) states "
                                 f"{stated}, the phase table gives {got}")
@@ -1380,9 +1425,18 @@ def check_maps(lines: list[str], rules: dict[str, tuple[str, ...]], probs: Probl
         stated = {"YOU": m[1], "SHARED": m[2], "NONE": m[3]}
         if stated != FAMILY_BY_AUTHORITY:
             probs.add(area, f"line {lineno}: family map {stated} != {FAMILY_BY_AUTHORITY}")
-    witness = [n for n, line in enumerate(lines, 1) if re.match(r"\s*SL-SECRET-WITNESS\s+→ CONSENT\s*$", line)]
-    if len(witness) != 1:
-        probs.add(area, "family() does not map SL-SECRET-WITNESS → CONSENT exactly once")
+    # Revision 9: family() maps every secret id to RESERVED and never returns CONSENT (post-1.0).
+    found = code_body(lines, "family(id):")
+    body = found[1] if found else []
+    reserved = [m for line in body for m in [re.match(r"(SL-SECRET-[A-Z, -]+?)\s*→ RESERVED\b", line)] if m]
+    ids = sorted(i.strip() for m in reserved for i in m[1].split(","))
+    if ids != sorted(f"SL-SECRET-{r}" for r in SECRET_ROUTES):
+        probs.add(area, f"family() maps {ids} → RESERVED, expected every secret id once "
+                        f"{sorted(f'SL-SECRET-{r}' for r in SECRET_ROUTES)}")
+    if any(POST_1_0_FAMILY in line for line in body):
+        probs.add(area, f"family() names {POST_1_0_FAMILY}, a post-1.0 family (revision 9)")
+    if POST_1_0_FAMILY in COMPOSER["family"][1]:
+        probs.add(area, f"the pinned composer family vocabulary holds {POST_1_0_FAMILY}")
 
 
 def eval_arith(expr: str) -> int | None:
@@ -1454,19 +1508,15 @@ def check_core_rules(lines: list[str], rules: dict[str, tuple[str, ...]], probs:
     if numbers != list(range(1, len(CORE_RULE_TITLES) + 1)):
         probs.add(area, f"Core Rules numbered {numbers}, expected 1-{len(CORE_RULE_TITLES)}")
     offers = crisis_offers(rules)
-    route_rule = CTX.get("route_rule", {})
-    witness_rule = route_rule.get("WITNESS", "?")
     keys = {n: [k.replace("{legacy}", str(EC16_LEGACY)) for k in v] for n, v in CORE_RULE_KEYS.items()}
     # Rule 4: each rule's red line is voiced by its faction when its Authority and Faction are locked.
     for rule, (a, f, _) in rules.items():
         keys[4].append(f"{f.capitalize()} when {a} and {f} are locked ({rule}")
-    # Rule 5: offer counts and the deferral row, derived from invalid() and the secret table.
-    others = [r for r in rules if r != witness_rule]
-    if witness_rule in offers and others and len({len(offers[r]) for r in others}) == 1:
-        keys[5].append(f"{NUMBER_WORDS[len(offers[witness_rule])]} for {witness_rule}, "
+    # Rule 5: offer counts derived from invalid() (revision 9: no deferral row).
+    first, others = odd_rule(rules)
+    if first in offers and others:
+        keys[5].append(f"{NUMBER_WORDS[len(offers[first])]} for {first}, "
                        f"{NUMBER_WORDS[len(offers[others[0]])]} for {' or '.join(others)}")
-    keys[5].append(f"Deferral to the witnesses: only on {witness_rule}, only while Witness Protocol is enabled and "
-                   "its signpost shows")
     for lineno, num, title, text in items:
         if 1 <= num <= len(CORE_RULE_TITLES) and title != CORE_RULE_TITLES[num - 1]:
             probs.add(area, f"line {lineno}: Core Rule {num} title '{title}', expected '{CORE_RULE_TITLES[num - 1]}'")
@@ -1529,13 +1579,24 @@ def check_knobs(lines: list[str], probs: Problems) -> None:
     if tuple(knobs) != KNOBS:
         probs.add(area, f"knobs {knobs} != the pinned {list(KNOBS)}")
     scope_of = {sl.removeprefix("SL-SECRET-"): scope for sl, (_, scope) in SECRET_EXPECTED.items()}
+    enable_routes: list[str] = []
     for lineno, cells in rows:
         knob, default = cells[0], cells[1]
         if m := re.match(r"secret_route_enabled\.(\w+)", knob):
             routes = [m[1], *re.findall(r",\s*\.(\w+)", knob)]
+            enable_routes += routes
             want = {"true" if scope_of.get(r) == "1.0" else "false" for r in routes}
             if len(want) != 1 or default != want.pop():
                 probs.add(area, f"line {lineno} ({knob}): default '{default}' does not follow the secret table scopes")
+            # Revision 9: no secret route ships in 1.0, so every enable knob defaults to false and may not be
+            # enabled while its family is still reserved (I8).
+            if default != "false":
+                probs.add(area, f"line {lineno} ({knob}): default '{default}'; every secret route is disabled in 1.0")
+            if "never enabled while family would be RESERVED" not in cells[2]:
+                probs.add(area, f"line {lineno} ({knob}): safe range lacks 'never enabled while family would be "
+                                "RESERVED'")
+    if sorted(enable_routes) != sorted(SECRET_ROUTES):
+        probs.add(area, f"secret_route_enabled rows cover {sorted(enable_routes)}, expected {sorted(SECRET_ROUTES)}")
         for name in FORBIDDEN_KNOBS:
             if name in " ".join(cells):
                 probs.add(area, f"line {lineno}: '{name}' is fixed by design, not a knob")
@@ -1567,20 +1628,29 @@ def check_axes_edge_cases(lines: list[str], probs: Problems) -> None:
         probs.add(area, "Edge Case 16 'A damaged record' missing")
         return
     lineno, _, _, text = ec16[0]
-    found = re.findall(r"- D(\d+) (.+?)(?= - D\d+ | witness_deferred on a stored valid row with axis_revised "
-                       r"non-empty|$)", text)
-    numbers = [int(n) for n, _ in found]
-    if numbers != list(range(1, len(EC16_ITEMS) + 1)):
-        probs.add(area, f"line {lineno}: Edge Case 16 items numbered {numbers}, expected D1-D{len(EC16_ITEMS)}")
-    for (num, item), want in zip(found, EC16_ITEMS):
-        if item.strip() != want:
-            probs.add(area, f"line {lineno}: Edge Case 16 D{num} '{item.strip()}' differs from the pinned '{want}'")
+    # Revision 9: an entry is "- D<n> text" or a retired range "- D<a>-D<b> retired (revision 9): ...".
+    found = re.findall(r"- D(\d+)(?:-D(\d+))? (.+?)(?= - D\d+[ -]| D\d+ holds only while|$)", text)
+    got = [(int(lo), int(hi or lo), item.strip()) for lo, hi, item in found]
+    if [(lo, hi) for lo, hi, _ in got] != [(lo, hi) for lo, hi, _ in EC16_ENTRIES]:
+        probs.add(area, f"line {lineno}: Edge Case 16 entries {[(lo, hi) for lo, hi, _ in got]} != the pinned "
+                        f"{[(lo, hi) for lo, hi, _ in EC16_ENTRIES]}")
+    covered = [n for lo, hi, _ in got for n in range(lo, hi + 1)]
+    if covered != list(range(1, EC16_LAST + 1)):
+        probs.add(area, f"line {lineno}: Edge Case 16 numbering {covered} is not D1-D{EC16_LAST} without gaps")
+    for (lo, hi, item), (_, _, want) in zip(got, EC16_ENTRIES):
+        label = f"D{lo}" if lo == hi else f"D{lo}-D{hi}"
+        if item != want:
+            probs.add(area, f"line {lineno}: Edge Case 16 {label} '{item}' differs from the pinned '{want}'")
+        if (lo != hi) != item.startswith(EC16_RETIRED_PREFIX):
+            probs.add(area, f"line {lineno}: Edge Case 16 {label}: only a range entry may be retired, and it must be")
     for key in EC16_KEYS:
         if key not in text:
             probs.add(area, f"line {lineno}: Edge Case 16 lacks the pinned sentence '{key}'")
-    # Cross-references: the items cited by number must be the ones meant.
-    if "exclusive group" not in EC16_ITEMS[EC16_EXCLUSIVE - 1] or "story position" not in EC16_ITEMS[EC16_LEGACY - 1]:
-        probs.add(area, "EC16_EXCLUSIVE / EC16_LEGACY do not point at the exclusive-group / story-position items")
+    # Cross-references: the items cited by number must be the ones meant, and active.
+    if ("exclusive group" not in EC16_TEXT.get(EC16_EXCLUSIVE, "") or "story position past"
+            not in EC16_TEXT.get(EC16_LEGACY, "") or "nothing stored" not in EC16_TEXT.get(EC16_CRISIS, "")
+            or "lock order" not in EC16_TEXT.get(EC16_ORDER, "")):
+        probs.add(area, "EC16_EXCLUSIVE / _LEGACY / _CRISIS / _ORDER do not point at their active items")
     ec = {num: t for _, num, _, t in items}
     if f"(Edge Case 16, D{EC16_EXCLUSIVE})" not in ec.get(6, ""):
         probs.add(area, f"Edge Case 6 does not cite '(Edge Case 16, D{EC16_EXCLUSIVE})', the exclusive-group item")
@@ -1599,34 +1669,60 @@ def check_axes_edge_cases(lines: list[str], probs: Problems) -> None:
     for bad in OVERPROMISE_STRINGS:
         if bad in whole:
             probs.add("over-promise", f"storyline-axes.md promises more than sole_dissent: '{bad}'")
-    # AC9 and the composer's seats agree with the D-list and the seat vocabulary.
-    if f"(D1-D{len(EC16_ITEMS)})" not in whole:
-        probs.add(area, f"no acceptance criterion covers '(D1-D{len(EC16_ITEMS)})' (AC9)")
-    if f"except CRISIS, for which it names D{EC16_CRISIS}" not in whole:
-        probs.add(area, f"AC9 does not say the CRISIS fixture's load_check names D{EC16_CRISIS}")
+    # AC9 covers exactly the active items, one fixture per clause for the items with several clauses (derived).
+    multi = [lo for lo in EC16_ACTIVE if ", or " in EC16_TEXT[lo]]
+    want = (f"For each active Edge Case 16 item ({compress_items(EC16_ACTIVE)}; "
+            f"{join_and([f'D{n}' for n in multi])} one fixture per clause)")
+    if want not in whole:
+        probs.add(area, f"AC9 lacks '{want}' (derived from Edge Case 16)")
+    playable = [p for p in PHASES if p != "DAMAGED"]
+    for want in (f"for one fixture per phase other than DAMAGED ({', '.join(playable)})",
+                 f"load_check() is empty for each of those {NUMBER_WORDS[len(playable)]} fixtures except CRISIS, for "
+                 f"which it is exactly {{D{EC16_CRISIS}}}"):
+        if want not in whole:
+            probs.add(area, f"AC9 lacks '{want}' (derived)")
+    # Edge Cases 2, 13 and 15 (revision 9): the Witness leads change nothing; enabling needs the post-1.0 design.
+    rules = CTX.get("rules", {})
+    first, _ = odd_rule(rules) if rules else ("R1", [])
+    n_first = NUMBER_WORDS.get(len(crisis_offers(rules).get(first, ())), "?") if rules else "six"
+    witness_unlock = (CTX.get("unlock_flags") or ["?"])[0]  # SECRET_ROUTES order: WITNESS first
+    for num, key in ((2, f"{first} at C8-S16 offers only its {n_first} renegotiations, C9-S19 does not play, "
+                         f"{witness_unlock} is never set"),
+                     (11, "In 1.0 this changes nothing (all routes reserved)"),
+                     (13, "a 1.0 build that enables one fails boot validation (AC12)"),
+                     (15, "No save exists there before the commit (I9)")):
+        if key not in ec.get(num, ""):
+            probs.add(area, f"Edge Case {num} lacks '{key}'")
 
 
-REVISION7_AXES_KEYS = (  # design review round 7 (2026-11-10): the loaded argument, the seven-seats guard, AC14's baseline
-    "| phase_of(record, loaded) | the Formulas' storyline_phase |",
-    "called with loaded false for CRISIS and true for the others",
-    "phase_of of the CRISIS fixture with loaded true is DAMAGED",
-    "phase_of(record, true) is DAMAGED",
-    "for WITNESS also false unless witness_seats holds seven seats",
-    "seats holding six of the seven seats",
-    'The baseline for "changes" is the shared variant of a scene (the one every storyline plays)',
-    "The smallest number of scenes in which two distinct IDs differ is reported, with no threshold (Open Question 13)",
+REVISION7_AXES_KEYS = (  # design review round 7 (2026-11-10): the loaded argument, the cut-order question
+    # (round 9 removed the seven-seats guard with the Witness route and replaced AC14's baseline; see AXES_AC_KEYS)
     "P3 baseline and the storyline cut order",
     "`loaded` is true for a record just read from a save and false for the live record in play.".replace("`", ""),
 )
-REVISION7_AXES_FORBIDDEN = ("for every pair of distinct IDs", "(D2)", "D2;", "(D3)")
+REVISION7_AXES_FORBIDDEN = ("(D2)", "D2;", "(D3)")
 REVISION7_LIFE_KEYS = (
-    "the quest sets WITNESS_SEATS in the step that saves the seventh seat, a mirror of the record",
     "loaded false; after a load that passed the check the value is the same either way",
+)
+# Design review round 9 (2026-11-11): pinned sentences of axes revision 9 outside the Core Rules and Edge Cases.
+REVISION9_AXES_KEYS = (
+    "The secret routes are post-1.0, so 1.0 ships the 24 and every contradiction is renegotiated.",
+    "are post-1.0 and will be designed together as one mechanism (user decision 2026-11-11)",
+    "1.0 shows no hint of a door it does not ship",
+    "of the lifecycle fields the record stores the axes, storyline_id, root_phase, axis_revised, lock_negotiated, "
+    "retraction_log and beats_played",
+    "in 1.0 always false: no route is enabled and the record holds no invocation",
+    "with the default knobs it never fires.",
+    "With the default knobs no secret route is enabled: reachable_1_0: 24.",
+    "1.0 ships the 24 valid storylines in three families, and the three secret storylines follow post-1.0 (Open "
+    "Question 14)",
+    "false until the post-1.0 secret-route design ships",
+    "Reference model (round 9 process decision).",
 )
 
 
 def check_revision7(gdd: list[str], life: list[str], probs: Problems) -> None:
-    """Design review round 7: the loaded argument, the seven-seats guard, the D-label cleanup, AC14's baseline."""
+    """Design review round 7 pins that survive round 9: the loaded argument, the D-label cleanup, Open Question 13."""
     area = "revision 7"
     whole, life_whole = norm(" ".join(gdd)), norm(" ".join(life))
     for key in REVISION7_AXES_KEYS:
@@ -1638,6 +1734,52 @@ def check_revision7(gdd: list[str], life: list[str], probs: Problems) -> None:
     for key in REVISION7_LIFE_KEYS:
         if key not in life_whole:
             probs.add(area, f"storyline-lifecycle.md lacks '{key}'")
+
+
+def doc_revision(lines: list[str]) -> str | None:
+    """The revision number in the document's '> **Status**: Draft (revision N' header line."""
+    for line in lines[:12]:
+        if m := re.match(r"> \*\*Status\*\*: Draft \(revision (\d+)", line):
+            return m[1]
+    return None
+
+
+def check_revision9(gdd: list[str], life: list[str], valid_rows: int, probs: Problems) -> None:
+    """Design review round 9: pinned axes sentences; the invariant range everywhere; each doc's Dependencies row
+    names the other's current revision; the lifecycle Inputs equal the fields the axes doc says are stored."""
+    area = "revision 9"
+    whole, life_whole = norm(" ".join(gdd)), norm(" ".join(life))
+    for key in REVISION9_AXES_KEYS:
+        key = key.replace("reachable_1_0: 24", f"reachable_1_0: {valid_rows + CTX.get('shipped', 0)}")
+        if key not in whole:
+            probs.add(area, f"storyline-axes.md lacks '{key}'")
+    for doc, text in (("axes", whole), ("lifecycle", life_whole)):
+        for m in re.finditer(r"\bI1-I(\d+)\b", text):
+            if int(m[1]) != len(INVARIANTS):
+                probs.add(area, f"{doc} names 'I1-I{m[1]}', but the invariants table has I1-I{len(INVARIANTS)}")
+        if not re.search(rf"\bI1-I{len(INVARIANTS)}\b", text):
+            probs.add(area, f"{doc} never names the invariants 'I1-I{len(INVARIANTS)}'")
+    m = re.search(r"of the lifecycle fields the record stores the axes, (.+?); the phase depends", whole)
+    stored = set(AXES) | set(re.findall(r"\w+", m[1].replace(" and ", ", "))) if m else set()
+    bounds = section(life, "### Inputs and outputs")
+    fields = re.search(r"\(fields (.+?)\)", " ".join(life[bounds[0]:bounds[1]])) if bounds else None
+    inputs = set(re.findall(r"`(\w+)`", fields[1])) if fields else set()
+    if stored != inputs:
+        probs.add(area, f"lifecycle Inputs fields {sorted(inputs)} != the fields storyline-axes.md says the record "
+                        f"stores {sorted(stored)}")
+    axes_rev, life_rev = doc_revision(gdd), doc_revision(life)
+    if axes_rev is None or life_rev is None:
+        probs.add(area, "a document has no '> **Status**: Draft (revision N' line")
+        return
+    header = ("System", "Direction", "What flows")
+    axes_row = [cells for _, cells in get_table(gdd, (*header, "Status of its design doc"), area, probs)
+                if cells[0].startswith("Storyline lifecycle")]
+    life_row = [cells for _, cells in get_table(life, (*header, "Status"), area, probs)
+                if cells[0].startswith("Storyline axes")]
+    if not axes_row or not axes_row[0][3].startswith(f"revision {life_rev} "):
+        probs.add(area, f"axes Dependencies does not give the lifecycle's revision {life_rev}")
+    if not life_row or life_row[0][3] != f"revision {axes_rev}":
+        probs.add(area, f"lifecycle Dependencies does not give the axes revision {axes_rev}")
 
 
 def check_protected(lines: list[str], root: Path, probs: Problems) -> None:
@@ -1716,9 +1858,39 @@ def check_axes_acs(lines: list[str], valid_rows: int, rules: dict[str, tuple[str
     if numbers != list(range(1, AXES_AC_COUNT + 1)):
         probs.add(area, f"acceptance criteria numbered {numbers}, expected 1-{AXES_AC_COUNT}")
     texts = {k: " ".join(v) for k, v in acs.items()}
+    # Revision 9: the Observables table is pinned row by row (first column).
+    obs = [cells[0] for _, cells in get_table(lines, H_OBSERVABLES, area, probs)]
+    if tuple(obs) != AXES_OBSERVABLES:
+        probs.add(area, f"Observables table {obs} != the pinned {list(AXES_OBSERVABLES)}")
     for number, text in sorted(texts.items()):
         if number >= FIRST_RUNTIME_AC:
-            check_blocked_and_calls(f"AC {number}", text, allowed, area, probs)
+            # AC5 may name the formula its cases detect, in the one pinned phrase (see AC5_FORMULA_MENTION).
+            scan = text.replace(AC5_FORMULA_MENTION, "") if number == 5 else text
+            check_blocked_and_calls(f"AC {number}", scan, allowed, area, probs)
+            m = re.search(r"\*Blocked by:\*\s*(.+)$", text)
+            named = set(STORY_RE.findall(m[1])) if m else set()
+            if number in AXES_AC_BLOCKED and named != AXES_AC_BLOCKED[number]:
+                probs.add(area, f"AC {number}: blocked by {sorted(named)}, pinned {sorted(AXES_AC_BLOCKED[number])}")
+    reach = valid_rows + CTX.get("shipped", 0)
+    for number, keys in AXES_AC_KEYS.items():
+        for key in keys:
+            key = key.replace("{reach}", str(reach))
+            if key not in norm(texts.get(number, "")):
+                probs.add(area, f"AC {number} lacks '{key}'")
+    route_rule = CTX.get("route_rule", {})
+    want = "(" + ", ".join(f"{route} on {rule}" for route, rule in sorted(route_rule.items(), key=lambda x: x[1])) + ")"
+    if want not in norm(texts.get(5, "")):
+        probs.add(area, f"AC 5 lacks '{want}' (derived from the secret table)")
+    bounds = section(lines, "## Acceptance Criteria")
+    header = norm(" ".join(lines[bounds[0]:bounds[1]])) if bounds else ""
+    for key in AXES_DOC_AC_KEYS:
+        if key not in header:
+            probs.add(area, f"Acceptance Criteria lack '{key}'")
+    for key in (f"the invariants table has rows I1-I{len(INVARIANTS)} as pinned",
+                f"the Core Rules are numbered 1-{len(CORE_RULE_TITLES)}",
+                f"the Tuning Knobs table has exactly the {NUMBER_WORDS[len(KNOBS)]} pinned knobs"):
+        if key not in norm(texts.get(4, "")):
+            probs.add(area, f"AC 4 lacks '{key}' (derived)")
     # AC5's case counts, from the axis vocabularies and the table.
     triples = (len(AUTHORITY) + 1) ** 3
     want5 = (f"({triples} triples)", f"({triples * 2} cases)", f"the {valid_rows} valid triples",
@@ -1766,7 +1938,7 @@ def check_life_record(life: list[str], probs: Problems) -> None:
             continue
         typ, allowed, _ = COMPOSER[field]
         want = ("UNSET" if field in AXES else ROOT_PHASES[0] if field == "root_phase"
-                else WITNESS_MANDATES[0] if field == "witness_mandate" else "false" if typ == "bool" else "empty")
+                else "false" if typ == "bool" else "empty")
         if default != want:
             probs.add(area, f"NG+ reset {field} → '{default}', expected '{want}'")
     if set(stated) != set(inputs):
@@ -1796,10 +1968,9 @@ def check_red_lines(life: list[str], rules: dict[str, tuple[str, ...]], probs: P
 
 
 def check_offer_table(life: list[str], rules: dict[str, tuple[str, ...]], probs: Problems) -> None:
-    """The crisis offer table equals crisis_offers computed from invalid(); the deferral only on the Witness row."""
+    """The crisis offer table equals crisis_offers computed from invalid(); no secret-route offer on any row."""
     area = "crisis offers"
     offers = crisis_offers(rules)
-    witness_rule = CTX.get("route_rule", {}).get("WITNESS")
     rows = get_table(life, H_OFFERS, area, probs)
     seen = []
     for lineno, (row, cell) in rows:
@@ -1816,13 +1987,11 @@ def check_offer_table(life: list[str], rules: dict[str, tuple[str, ...]], probs:
         revise = {o for o in stated if o.startswith("revise:")}
         if revise != offers[rule] or len(revise) != sum(o.startswith("revise:") for o in stated):
             probs.add(area, f"line {lineno} ({rule}): offers {sorted(revise)} != crisis_offers {sorted(offers[rule])}")
-        defers = [o for o in stated if not o.startswith("revise:")]
-        want_defer = ["defer:WITNESS"] if rule == witness_rule else []
-        if defers != want_defer:
-            probs.add(area, f"line {lineno} ({rule}): non-renegotiation offers {defers}, expected {want_defer}")
-        if want_defer and DEFER_CONDITION.format(route="WITNESS") not in cell:
-            probs.add(area, f"line {lineno} ({rule}): deferral condition is not "
-                            f"'{DEFER_CONDITION.format(route='WITNESS')}'")
+        # Revision 9: the secret routes are post-1.0, so no row offers a deferral or an invocation.
+        if defers := [o for o in stated if not o.startswith("revise:")]:
+            probs.add(area, f"line {lineno} ({rule}): non-renegotiation offers {defers}; 1.0 offers renegotiations only")
+        if re.sub(r"`?revise:\w+:\w+`?|,|\s", "", cell):
+            probs.add(area, f"line {lineno} ({rule}): offers cell holds more than the renegotiation offers: '{cell}'")
     if sorted(seen) != sorted(rules) or len(seen) != len(set(seen)):
         probs.add(area, f"crisis offer rows {seen} != {sorted(rules)}")
     total = sum(len(v) for v in offers.values())
@@ -1838,21 +2007,20 @@ def check_offer_table(life: list[str], rules: dict[str, tuple[str, ...]], probs:
     ids = {f"retract_{rule}_{o.split(':')[1]}_{o.split(':')[2]}" for rule, v in offers.items() for o in v}
     if len(ids) != total:
         probs.add(area, f"retract_<rule>_<axis>_<new> gives {len(ids)} ids for {total} offers")
-    others = [r for r in rules if r != witness_rule]
+    _, others = odd_rule(rules)
     if len(others) == 2:
         shared = len(offers[others[0]] & offers[others[1]])
         want = f"{others[0]} and {others[1]} share {NUMBER_WORDS[shared]} offers"
         if want not in text:
             probs.add(area, f"Retractions do not say '{want}' (derived from invalid())")
-    # The six gate retcon beats are exactly the Witness row's renegotiations (user Q3, 2026-11-10).
-    if witness_rule in offers:
-        want_retcon = {f"gate_retcon_{o.split(':')[1]}_{o.split(':')[2]}" for o in offers[witness_rule]}
-        got_retcon = set(re.findall(r"gate_retcon_[a-z]+_[A-Z]+", text))
-        if got_retcon != want_retcon:
-            probs.add(area, f"gate retcon beats {sorted(got_retcon)} != one per {witness_rule} renegotiation "
-                            f"{sorted(want_retcon)}")
-        if f"({NUMBER_WORDS[len(want_retcon)]} beats:" not in text:
-            probs.add(area, f"gate retcon paragraph does not say '({NUMBER_WORDS[len(want_retcon)]} beats:'")
+    # Revision 5: the content-scope table's counts are derived (beats, red lines, epilogue lines).
+    want_counts = {"retraction beats retract_*": str(total), "red lines": str(len(rules)), "sole_dissent": "1",
+                   "arc epilogue lines": str(len(POST_1_0_ARCS))}
+    got_counts = {cells[0]: cells[1] for _, cells in get_table(life, H_CONTENT, area, probs)}
+    if got_counts != want_counts:
+        probs.add(area, f"content scope table counts {got_counts} != derived {want_counts}")
+    if f"one shared text per (axis, new value) behind the {total} ids" not in text:
+        probs.add(area, f"cut order does not say 'one shared text per (axis, new value) behind the {total} ids'")
 
 
 def check_gate_table(life: list[str], gates: dict[str, str], probs: Problems) -> None:
@@ -1878,6 +2046,8 @@ def check_gate_table(life: list[str], gates: dict[str, str], probs: Problems) ->
             frm = TRANSITIONS.get(ref, ("",))[0]
             if sorted(re.findall(r"[A-Z_]{4,}", frm)) != sorted(phases):
                 probs.add(area, f"line {lineno}: cites {ref}, whose from-phases are '{frm}', not {phases_cell}")
+    if sorted(cells[0] for _, cells in rows) != sorted(GATE_TABLE):
+        probs.add(area, f"gate table rows {[cells[0] for _, cells in rows]} != the pinned {list(GATE_TABLE)}")
     gated = [p for p in PHASES if gate_outcome(gates.get(p, "")) is not None]
     if sorted(covered) != sorted(gated):
         probs.add(area, f"gate table covers {covered}, expected each gated phase once: {gated}")
@@ -1910,7 +2080,7 @@ def check_transitions(life: list[str], probs: Problems) -> None:
             if phase in STORED_PHASES and target in order and order[target] < order[phase]:
                 probs.add(area, f"line {lineno} ({tid}): leads back from {phase} to {target} (a stored ID never "
                                 f"returns to an earlier phase)")
-            if phase in STORED_PHASES and target in ("CRISIS", "DEFERRED"):
+            if phase in STORED_PHASES and target == "CRISIS":
                 probs.add(area, f"line {lineno} ({tid}): leads from {phase} to {target}")
         if cells[2] == GATE_EVENT:
             entry_from += frm
@@ -1929,13 +2099,30 @@ def check_transitions(life: list[str], probs: Problems) -> None:
     if missing := [p for p in PHASES if p not in reached and p != "DAMAGED"]:
         probs.add(area, f"phases unreachable from LEANING: {missing}")
     # No soft-lock (I5): each unresolved post-lock phase has a knob-free way to VALIDATED.
-    for phase in ("CRISIS", "DEFERRED"):
+    for phase in ("CRISIS",):
         if not any(frm == phase and to == "VALIDATED" and "enabled" not in guard for _, frm, to, guard in edges):
             probs.add(area, f"{phase} has no transition to VALIDATED that holds under every knob value (I5)")
     # The gate runs from every phase except the one that exists only inside C8-S16 (I4), once each.
     gated = [p for p in PHASES if p not in UNGATED_PHASES]
     if sorted(entry_from) != sorted(gated):
         probs.add(area, f"'{GATE_EVENT}' transitions start from {entry_from}, expected each of {gated} once")
+    # Revision 9 (I9): every record-writing transition states its checkpoint; the checkpoint set is the same in the
+    # table, the commit and save rule's list and L-AC6.
+    ckpt = []
+    for lineno, cells in rows:
+        effects = cells[5]
+        if effects in ("TURNED_BACK", "open"):
+            continue
+        if not effects.endswith(CHECKPOINT):
+            probs.add(area, f"line {lineno} ({cells[0]}): writes the record but states no checkpoint (I9)")
+        elif not effects.endswith(NO_CHECKPOINT):
+            ckpt.append(cells[0])
+    CTX["checkpoints"] = ckpt
+    text = norm(" ".join(life))
+    m = re.search(r"Every transition of the table below that ends a scene's open state \(([^)]*)\)", text)
+    if m is None or [t.strip() for t in m[1].split(",")] != ckpt:
+        probs.add(area, f"the commit and save rule's transition list {m[1] if m else None} != the table's checkpoint "
+                        f"transitions {ckpt}")
 
 
 def check_life_formulas(life: list[str], rules: dict[str, tuple[str, ...]], probs: Problems) -> None:
@@ -1949,13 +2136,12 @@ def check_life_formulas(life: list[str], rules: dict[str, tuple[str, ...]], prob
         probs.add(area, f"Formulas block differs from the pinned block at its line {diff + 1}: "
                         f"'{body[diff] if diff < len(body) else '<missing>'}'")
     offers = crisis_offers(rules)
-    witness_rule = CTX.get("route_rule", {}).get("WITNESS", "R1")
-    others = [r for r in rules if r != witness_rule]
-    c1 = len(offers.get(witness_rule, ()))
+    first, others = odd_rule(rules)
+    c1 = len(offers.get(first, ()))
     c2 = len(offers[others[0]]) if others else 0
     total = sum(len(v) for v in offers.values())
-    want = (f"|crisis_offers| is {c1} for {witness_rule} ({c1 + 1} with the deferral), {c2} for "
-            f"{' and '.join(others)}, so {total} renegotiation offers in all; |last_chance_offers| is {c1} or {c1 + 1}.")
+    want = (f"|crisis_offers| is {c1} for {first} and {c2} for {' and '.join(others)}, so {total} renegotiation "
+            "offers in all; |crisis_offers| is 0 for every valid row.")
     if want not in norm(" ".join(life)):
         probs.add(area, f"offer counts sentence is not '{want}'")
 
@@ -1977,7 +2163,7 @@ def check_life_keys(life: list[str], probs: Problems) -> None:
 def check_number_words(lines: list[str], doc: str, rules: dict[str, tuple[str, ...]], probs: Problems) -> None:
     """Every 'the <n> (R1) renegotiations/offers' phrase states the Witness row's offer count."""
     offers = crisis_offers(rules)
-    witness_rule = CTX.get("route_rule", {}).get("WITNESS", "R1")
+    witness_rule, _ = odd_rule(rules)
     want = NUMBER_WORDS.get(len(offers.get(witness_rule, ())))
     words = "|".join(NUMBER_WORDS.values())
     for lineno, line in enumerate(lines, 1):
@@ -1987,9 +2173,12 @@ def check_number_words(lines: list[str], doc: str, rules: dict[str, tuple[str, .
 
 
 def check_life_acs(life: list[str], valid_rows: int, rules: dict[str, tuple[str, ...]], probs: Problems) -> None:
-    """L-AC1..n contiguous; Blocked by; only this doc's observables; derived numbers; the Validation note."""
+    """L-AC1-L-AC18 contiguous; Blocked by; only the pinned observables; derived numbers; the Validation note."""
     area = "lifecycle acceptance"
     allowed = observables(life, H_LIFE_OBSERVABLES, area, probs)
+    obs = [cells[0] for _, cells in get_table(life, H_LIFE_OBSERVABLES, area, probs)]
+    if tuple(obs) != LIFE_OBSERVABLES:
+        probs.add(area, f"scene-level Observables {obs} != the pinned {list(LIFE_OBSERVABLES)}")
     bounds = section(life, "## Acceptance Criteria")
     if bounds is None:
         probs.add(area, "no '## Acceptance Criteria' section")
@@ -2017,35 +2206,41 @@ def check_life_acs(life: list[str], valid_rows: int, rules: dict[str, tuple[str,
             acs[current].append(line)
         else:
             current = None
-    if not order or order != list(range(1, len(order) + 1)):
-        probs.add(area, f"L-ACs numbered {order}, expected 1-{len(order)}")
+    if order != list(range(1, LIFE_AC_COUNT + 1)):
+        probs.add(area, f"L-ACs numbered {order}, expected 1-{LIFE_AC_COUNT}")
     texts = {k: norm(" ".join(v)) for k, v in acs.items()}
     raw = {k: " ".join(v) for k, v in acs.items()}
     for number in order:
         check_blocked_and_calls(f"L-AC{number}", raw[number], allowed, area, probs)
-    # Derived numbers.
+    # Derived numbers and lists.
+    offers = crisis_offers(rules)
     pairs = len(AUTHORITY) * len(FACTION)
-    total = sum(len(v) for v in crisis_offers(rules).values())
+    total = sum(len(v) for v in offers.values())
     storable = [p for p in PHASES if "never saved" not in PHASE_TABLE[p][0]]
-    witness_rule = CTX.get("route_rule", {}).get("WITNESS", "R1")
-    c1 = len(crisis_offers(rules).get(witness_rule, ()))
-    derived = {3: f"each of the other {NUMBER_WORDS[pairs - len(rules)]} pairs",
-               4: f"For each of the {valid_rows} valid rows", 6: f"({total} runs)",
-               16: f"each storable phase ({', '.join(storable)})",
-               19: f"for each of the {NUMBER_WORDS[c1]} {witness_rule} offers at LAST_CHANCE"}
-    # Revision 2: the vote's arithmetic, derived from the threshold.
-    met = [k for k in range(len(WITNESS_SEATS) + 1) if len(WITNESS_SEATS) - k >= WITNESS_THRESHOLD]
-    derived[14] = (f"MET for {', '.join(map(str, met[:-1]))} and {met[-1]} dissenters and FAILED for {met[-1] + 1} to "
-                   f"{len(WITNESS_SEATS)} ({len(WITNESS_SEATS)} − dissenters ≥ {WITNESS_THRESHOLD})")
-    deferral_ids = sorted({b for _, cells in find_table(life, H_S5) or [] for b in re.findall(r"deferral_\w+",
-                                                                                              " ".join(cells))})
-    derived[23] = (f"the {total} retract_*, the {c1} gate_retcon_*, the {len(deferral_ids)} deferral_*")
-    for number, key in derived.items():
-        if key not in texts.get(number, ""):
-            probs.add(area, f"L-AC{number} lacks '{key}' (derived)")
+    ckpt = CTX.get("checkpoints", [])
+    you_to = [r for r in rules if f"revise:authority:YOU" in offers[r]]
+    you_from = [(r, sorted(o for o in offers[r] if o.startswith("revise:authority:"))) for r in rules
+                if rules[r][0] == "YOU"]
+    families = list(dict.fromkeys(FAMILY_BY_AUTHORITY.values()))
+    derived = {3: [f"each of the other {NUMBER_WORDS[pairs - len(rules)]} pairs"],
+               4: [f"For each of the {valid_rows} valid rows"],
+               6: [f"For each record-writing transition ({', '.join(ckpt)})"],
+               7: [f"for each of its offers ({total} runs)"],
+               8: [f"each storable phase ({', '.join(storable)})"],
+               12: [f"YOU reached by a renegotiation (from {' or '.join(you_to)}) → STATED, that scene's commitment"]
+               + [f"YOU withdrawn by a renegotiation from {r} ({', '.join(sorted(o, key=lambda x: AUTHORITY.index(x.split(':')[2])))}) → WITHDRAWN"
+                  for r, o in you_from],
+               13: [f"A save in each storable phase ({', '.join(storable)})"],
+               14: [f"With the completion flags of arcs {join_and(list(POST_1_0_ARCS))} set"],
+               16: [f"the {total} retract_*, {', '.join(f'red_line_{r}' for r in rules)}, sole_dissent"],
+               18: [f"one ending per family ({', '.join(families)})"]}
+    for number, keys in derived.items():
+        for key in keys:
+            if key not in texts.get(number, ""):
+                probs.add(area, f"L-AC{number} lacks '{key}' (derived)")
     for number, keys in LAC_KEYS.items():
         for key in keys:
-            key = key.replace("{legacy}", str(EC16_LEGACY)).replace("{ec16}", str(len(EC16_ITEMS)))
+            key = key.replace("{legacy}", str(EC16_LEGACY)).replace("{total}", str(total))
             if key not in texts.get(number, ""):
                 probs.add(area, f"L-AC{number} lacks the pinned phrase '{key}'")
     for number in order:
@@ -2053,35 +2248,47 @@ def check_life_acs(life: list[str], valid_rows: int, rules: dict[str, tuple[str,
             if bad in texts[number]:
                 probs.add(area, f"L-AC{number} asserts '{bad}', which cannot fail; assert take() false and "
                                 "record_hash() unchanged")
-    # L-AC7 names exactly the disclosures, and the deferral run gains exactly the S5 table's beats.
-    if set(re.findall(r"\b(" + "|".join(DISCLOSURES) + r")\b", texts.get(7, ""))) != set(DISCLOSURES):
-        probs.add(area, f"L-AC7 does not name the disclosures {list(DISCLOSURES)}")
-    if sorted(set(re.findall(r"deferral_\w+", texts.get(7, "")))) != deferral_ids:
-        probs.add(area, f"L-AC7 deferral beats {sorted(set(re.findall(r'deferral_\w+', texts.get(7, ''))))} != the "
-                        f"S5 table's {deferral_ids}")
-    # The Validation note: (valid rows) + (1.0 secret routes) + (offers) + (2 per 1.0 deferral route) + paths × phases.
+    # L-AC10 checks exactly the axes doc's unlock flags (derived from the secret_unlock_flag knob).
+    unlock = CTX.get("unlock_flags", [])
+    m = re.search(r"flag_set\(\) is false for (.+?), and signpost", texts.get(10, ""))
+    if m is None or sorted(re.findall(r"[A-Z_]{4,}", m[1])) != sorted(unlock):
+        probs.add(area, f"L-AC10's flag_set() list is not the unlock flags {unlock}")
+    # L-AC2: the Faction lock-pass fixtures, recomputed over the seed map.
+    m = re.search(r"Faction backing (\w+), (\w+) fixtures: (.+?)\. In each", texts.get(2, ""))
+    if m is None:
+        probs.add(area, "L-AC2 has no 'Faction backing <value>, <n> fixtures: ...' list")
+    else:
+        clauses = [c for c in m[3].split(";") if "→" in c]
+        if NUMBER_WORDS.get(len(clauses)) != m[2]:
+            probs.add(area, f"L-AC2 says '{m[2]} fixtures' but lists {len(clauses)}")
+        for clause in clauses:
+            flags = {f for f in re.findall(r"[a-z0-9_]+", clause.split("→")[0]) if f in SEED_EXPECTED}
+            want = "NEGOTIATED" if py_lock_pass("faction", m[1], flags) == "NEGOTIATED" else "CLEAN"
+            got = "NEGOTIATED" if "contains" in clause.split("→")[1] else "CLEAN"
+            if want != got:
+                probs.add(area, f"L-AC2 fixture '{clause.strip()}' states {got}, lock_pass gives {want}")
+    # The Validation note: (valid rows) + (offers) + counted paths × storable phases.
     text = norm(" ".join(note))
     if not text:
         probs.add(area, "no Validation note")
         return
-    s7_start = next((n for n, line in enumerate(life) if line.startswith("**S7")), len(life))
-    s7 = []
-    for line in life[s7_start:]:
+    s6_start = next((n for n, line in enumerate(life) if line.startswith("**S6")), len(life))
+    s6 = []
+    for line in life[s6_start:]:
         if not line.strip():
             break
-        s7.append(line)
-    paths = re.findall(r"`(\w+)` \(", " ".join(s7))
+        s6.append(line)
+    paths = re.findall(r"`(\w+)` \(", " ".join(s6))
     if len(paths) != LIFE_REQUIRED_PATHS:
-        probs.add(area, f"S7 names paths {paths}, expected {LIFE_REQUIRED_PATHS}")
-    shipped = CTX.get("shipped", 0)
-    # Revision 5: every R1 renegotiation is also run at LAST_CHANCE (user Q3), one per offer of the Witness row.
+        probs.add(area, f"S6 names paths {paths}, expected {LIFE_REQUIRED_PATHS}")
     # Lifecycle revision 2: the protected world_map path is blocked and not counted until its change is approved.
+    # Revision 5: no secret-route runs (no route ships in 1.0).
     counted = [p for p in paths if p != "world_map"]
-    want_terms = [valid_rows, shipped, total, shipped, shipped * c1, len(counted) * len(storable)]
+    want_terms = [valid_rows, total, len(counted) * len(storable)]
     terms = [int(t) for t in re.findall(r"\((\d+)\)", text)]
     if terms != want_terms:
-        probs.add(area, f"Validation note terms {terms} != derived {want_terms} (valid rows, 1.0 secret routes, "
-                        f"offers, gate invocations, gate renegotiations, paths × storable phases)")
+        probs.add(area, f"Validation note terms {terms} != derived {want_terms} (valid rows, offers, "
+                        f"paths × storable phases)")
     for key in ("equal the expected triple", "every run other than a gate-matrix cell ends with one story-path gate "
                 "entry from its own record",
                 f"which pass when the load is refused with load_errors() naming D{EC16_LEGACY} and no gate entry "
@@ -2100,30 +2307,22 @@ def check_life_acs(life: list[str], valid_rows: int, rules: dict[str, tuple[str,
                         f"(sum of its terms {sum(terms)})")
 
 
-def check_life_revision2(life: list[str], root: Path, probs: Problems) -> None:
-    """Lifecycle revision 2 pins: the S5 and Consent tables, the disclosures, the seats, the legacy-flag citations."""
-    area = "lifecycle revision 2"
-    for header, want, name in ((H_S5, S5_ROWS, "S5 deferral scope"), (H_CONSENT, CONSENT_ROWS, "Consent variants")):
-        rows = [tuple(cells) for _, cells in get_table(life, header, area, probs)]
-        if rows != list(want):
-            diff = next((i for i, (a, b) in enumerate(zip(rows, want)) if a != b), min(len(rows), len(want)))
-            probs.add(area, f"{name} table differs from the pinned table at row {diff + 1}: "
-                            f"{rows[diff] if diff < len(rows) else '<missing>'}")
+def check_life_derived(life: list[str], rules: dict[str, tuple[str, ...]], root: Path, probs: Problems) -> None:
+    """Lifecycle values derived from the axes doc (unlock flags, Witness leads, D-numbers, offer counts) and the
+    legacy-flag citations (lifecycle round 2, kept)."""
+    area = "lifecycle derived"
     text = norm(" ".join(life))
-    # The disclosure paragraph names the four ids, in order, and says "four".
-    para = next((norm(line) for line in [" ".join(life[n:n + 9]) for n, line in enumerate(life)
-                                         if line.startswith("**Deferral disclosure")]), "")
-    got = re.findall(r"\((" + "|".join(DISCLOSURES) + r")\)", para)
-    if tuple(got) != DISCLOSURES:
-        probs.add(area, f"Deferral disclosure ids {got} != {list(DISCLOSURES)} in order")
-    if f"the offer states {NUMBER_WORDS[len(DISCLOSURES)]} things in the fiction" not in para:
-        probs.add(area, f"Deferral disclosure does not say 'the offer states {NUMBER_WORDS[len(DISCLOSURES)]} things'")
-    # The seats in S9 are the record's seats, in order.
-    s9 = next((n for n, line in enumerate(life) if line.startswith("*Seats and stances")), None)
-    seats = re.findall(r"`(\w+)`", " ".join(life[s9:s9 + 4])) if s9 is not None else []
-    seats = [x for x in seats if x in WITNESS_SEATS or x == "witness_seats"]
-    if [x for x in seats if x != "witness_seats"] != list(WITNESS_SEATS):
-        probs.add(area, f"S9 seats {seats} != {list(WITNESS_SEATS)} (PM:8697-8703 order)")
+    unlock = CTX.get("unlock_flags", [])
+    m = re.search(r"no secret unlock flag \(([^)]*)\) is set", text)
+    if m is None or sorted(re.findall(r"[A-Z_]{4,}", m[1])) != sorted(unlock):
+        probs.add(area, f"S5's unlock flags {m[1] if m else None} != the axes secret_unlock_flag knob {unlock}")
+    leads = CTX.get("prerequisites", {}).get("WITNESS", [])
+    first, _ = odd_rule(rules)
+    n_first = NUMBER_WORDS.get(len(crisis_offers(rules).get(first, ())), "?")
+    for key in (f"{join_and(leads)} stay set", f"{first} at C8-S16 offers only its {n_first} renegotiations (S5)",
+                f"(storyline-axes.md Edge Case 16, D{EC16_LEGACY})", f"Edge Case 16 D{EC16_LEGACY}-D{EC16_ORDER}"):
+        if key not in text:
+            probs.add(area, f"lacks '{key}' (derived from storyline-axes.md)")
     # Legacy flags: listed in the Dependencies row and present in the code lines it cites.
     rows = [cells for _, cells in get_table(life, ("System", "Direction", "What flows", "Status"), area, probs)
             if cells[0].startswith("Legacy storyline flags")]
@@ -2151,8 +2350,6 @@ def check_life_revision2(life: list[str], root: Path, probs: Problems) -> None:
         covered |= here
     if missing := [f for f in LEGACY_FLAGS if f not in covered]:
         probs.add(area, f"legacy flags {missing} occur in none of the cited code lines")
-    if "the stand-down line (line id stand_down_line" not in text:
-        probs.add(area, "S8 does not define the line id stand_down_line")
 
 
 # --- 15. Story Bible and stale strings ------------------------------------------------------------------------------
@@ -2175,6 +2372,11 @@ def check_stale(lines: list[str], doc: str, probs: Problems, exempt_section: str
         for word in STALE_VOCAB:
             if word in line:
                 probs.add("stale", f"{doc} line {lineno}: revision-3 vocabulary '{word}' present")
+    # Revision 9: the removed secret-route identifiers, everywhere (no exempt section).
+    for lineno, line in enumerate(lines, 1):
+        for word in STALE_SECRET_VOCAB:
+            if word in line.replace("`", ""):
+                probs.add("stale", f"{doc} line {lineno}: removed secret-route identifier '{word}' present (revision 9)")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -2218,6 +2420,7 @@ def main(argv: list[str] | None = None) -> int:
     check_knobs(gdd, probs)
     check_axes_edge_cases(gdd, probs)
     check_revision7(gdd, life, probs)
+    check_revision9(gdd, life, valid_rows, probs)
     check_protected(gdd, args.root, probs)
     check_axes_acs(gdd, valid_rows, rules, probs)
     check_number_words(gdd, "axes", rules, probs)
@@ -2232,7 +2435,7 @@ def main(argv: list[str] | None = None) -> int:
     check_life_keys(life, probs)
     check_edge_cases(life, LIFE_EDGE_CASES, "lifecycle edge cases", probs)
     check_life_acs(life, valid_rows, rules, probs)
-    check_life_revision2(life, args.root, probs)
+    check_life_derived(life, rules, args.root, probs)
     check_number_words(life, "lifecycle", rules, probs)
     # both
     check_bible(bible, probs)

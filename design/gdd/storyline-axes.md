@@ -1,9 +1,10 @@
 # Storyline Axes
 
-> **Status**: Draft (revision 7, after design review round 7; static core unchanged since revision 4)
+> **Status**: Draft (revision 9, after design review round 9: the secret routes move post-1.0; static core unchanged
+> since revision 4 except the 1.0 scope of the secret storylines)
 > **Author**: Claude (narrative-director research) with the project lead
-> **Last Updated**: 2026-11-10
-> **Last Verified**: 2026-11-10
+> **Last Updated**: 2026-11-11
+> **Last Verified**: 2026-11-11
 > **Implements Pillar**: P3 (24 storylines + 3 secret from three story axes), P5 (side storylines feed the main
 > story), P8 (Story+, a playable after-story per storyline) — DESIGN_PILLARS.md, ROADMAP §12.2
 
@@ -11,7 +12,9 @@
 
 Three story axes — who holds Root (Authority), which society Kaelen backs (Faction), and what happens to the
 deleted (Deleted) — combine into 27 configurations; 24 are valid storylines, 3 are contradictions that only a
-secret route can transform. Four ending families carry the depth; Faction and Deleted modify them. Every save
+secret route can transform. The secret routes are post-1.0, so 1.0 ships the 24 and every contradiction is
+renegotiated. Ending families carry the depth (three in 1.0, a fourth with the secret routes); Faction and Deleted
+modify them. Every save
 tracks one stable storyline ID, stored the moment the coalition holds and required at the entry to Root of Heaven;
 the ending composer builds the ending from that ID plus companions, regions and timing. This GDD owns the static
 model and the invariants; `design/gdd/storyline-lifecycle.md` owns the scenes and transitions that keep them.
@@ -25,19 +28,18 @@ three axes: **Authority** (Kaelen alone, shared and auditable, or abolished), **
 Covenant or Continuity League) and **the Deleted** (restore them, release them, or let each person choose). The
 three locked values name one of 24 valid storylines (`SL-AUTHORITY-FACTION-DELETED`); three combinations break the
 coalition (PM:710-723). A broken coalition is a political crisis that resolves inside the scene where it breaks,
-C8-S16: the player renegotiates one axis ("Player must change one axis before final lock.", PM:7143) or, on the one
-row Witness Protocol can transform and only once its signpost shows, defers to the witnesses — a provisional
-coalition (PM:7144) that lasts until the player invokes the protocol at C9-S19 or at the gate, or renegotiates at
-the gate; the seven witnesses then vote on the act at C10-S15. Witness Protocol ships in 1.0;
-Crownless and First Wake are post-1.0. The storyline ID is stored the moment the coalition holds, and the **ID-lock
-gate** at Root of Heaven stays closed until it is. After the boss, the **final authorization** (PM:8786-8794)
-displays the stored structure and the player confirms it (after a failed witness vote, Kaelen stands down
-instead); nothing changes it there. The Authority value picks one
-of four ending families (Sole, Bound, No Authority; Consent for Witness Protocol), each with its own God King
-phase, final scene and Story+ arc; Faction and Deleted change a boss phase, ally lines, epilogue slides and which
-Story+ cases unlock. Act 1 flags seed the arguments each lock scene voices and record whether a lock vote passed
-clean or by negotiation; in 1.0 only a Sole ending makes that record audible (Core Rule 3). Twelve side storylines
-push the axes, and timing changes scenes and slides without ever changing the storyline ID — so authored cost stays additive.
+C8-S16: the player renegotiates one axis ("Player must change one axis before final lock.", PM:7143). The three
+secret routes that can transform an invalid row — Witness Protocol, Crownless and First Wake — are post-1.0 and will
+be designed together as one mechanism (user decision 2026-11-11). The storyline ID is stored the moment the
+coalition holds, and the **ID-lock gate** at Root of Heaven stays closed until it is. After the boss, the **final
+authorization** (PM:8786-8794) displays the stored structure and the player confirms it; nothing changes it there.
+The Authority value picks one of three ending families in 1.0 (Sole, Bound, No Authority; Consent follows with
+Witness Protocol), each with its own God King phase, final scene and Story+ arc; Faction and Deleted change a boss
+phase, ally lines, epilogue slides and which Story+ cases unlock. Act 1 flags seed the arguments each lock scene
+voices and record whether a lock vote passed clean or by negotiation; in 1.0 only a Sole ending makes that record
+audible (Core Rule 3). Nine of the twelve side storylines are to push the axes in 1.0 once Y2-PP-T17 maps their
+flags (AC15; the seed map holds none yet; arcs 05, 08 and 09 feed post-1.0 routes), and timing changes scenes and
+slides without ever changing the storyline ID — so authored cost stays additive.
 
 ## Player Fantasy
 
@@ -48,8 +50,9 @@ with, and whether the deleted are brought back, let go, or asked.
 
 - **Authorship, not a menu.** Each lock is a vote between proposals, never a picker of labels ("Options are
   proposals not Kaelen menu labels", PM:6983), and the scene argues with the player's own history: the Act 1
-  choices and side storylines they may not have read as political come back as the arguments for and against each
-  proposal, so the storyline at the end feels arrived at. Whether a vote passed clean or by negotiation is
+  choices they may not have read as political come back as the arguments for and against each proposal, so the
+  storyline at the end feels arrived at. In 1.0 only the mapped Act 1 flags voice arguments; side-storyline and
+  companion seeds join once Y2-PP-T17 maps them (AC15). Whether a vote passed clean or by negotiation is
   recorded, but the lock scene plays the same either way. In 1.0 the player hears the difference in exactly one
   place: a player who keeps Root alone after a negotiated Authority vote hears the Assembly members who never
   endorsed it named in the Sole ending (`sole_dissent`); no other 1.0 content reads it.
@@ -62,9 +65,10 @@ with, and whether the deleted are brought back, let go, or asked.
   vanish because the player picked a faction.
 - **The world goes on without a perfect answer.** The ending family (who authorized the change) carries the weight;
   Faction and Deleted colour what that authority built; Story+ lets the player walk around in the result.
-- **Hidden doors are earned, then signposted.** A secret route appears only after its first prerequisite is found,
-  then is signposted by the institution it needs, never by the answer (PM:697-707); a door that has closed is shown
-  closed (ROADMAP §12.2 "nothing important is lost silently").
+- **Hidden doors (post-1.0).** When the secret routes ship, a route appears only after its first prerequisite is
+  found and is signposted by the institution it needs, never by the answer (PM:697-707). 1.0 shows no hint of a
+  door it does not ship, and what the player did on the arcs that feed one is acknowledged in an epilogue line
+  (ROADMAP §12.2 "nothing important is lost silently").
 
 ## Detailed Design
 
@@ -76,10 +80,9 @@ with, and whether the deleted are brought back, let go, or asked.
 - **Clean / negotiated**: how a lock vote passes (Core Rule 3).
 - **Crisis scene**: C8-S16 when the third lock completes an invalid row (PM:7138-7153). The crisis resolves inside
   it (Core Rule 5); no crisis outlasts the scene and none is ever saved.
-- **Deferral**: on R1 only, the provisional coalition formed when the player defers to the witnesses at C8-S16
-  (Core Rule 5). It stores no ID and ends with an invocation or a renegotiation.
-- **Invocation scene**: a secret route's Chapter 9 scene, which plays when the route's prerequisites are complete:
-  First Wake C9-S18 (PM:8027-8043), Witness Protocol C9-S19 (PM:8045-8055), Crownless C9-S20 (PM:8057-8064).
+- **Invocation scene**: a secret route's Chapter 9 scene, which in the source plays when the route's prerequisites
+  are complete: First Wake C9-S18 (PM:8027-8043), Witness Protocol C9-S19 (PM:8045-8055), Crownless C9-S20
+  (PM:8057-8064). None unlocks a route in 1.0 (Core Rule 6).
 - **ID-lock gate**: every entry and re-entry into Root of Heaven (Chapter 10) — the story graph after the Chapter 9
   end, world-map or free travel, and loading a save positioned inside Root of Heaven. It opens only when a
   storyline ID is stored. The stored-ID check is this GDD's mechanism for the sources' "must revise one axis before
@@ -94,15 +97,16 @@ with, and whether the deleted are brought back, let go, or asked.
    Deleted ∈ {RESTORE, RELEASE, CHOOSE}; each starts UNSET (SaveService writes UNSET for a new game and for a save
    with no axis data). Once a storyline ID is stored, each axis holds exactly one value (PM:7522-7524, "Axis
    validation").
-2. **Seeds are arguments, never gates.** Act 1 seeds, side storylines, companion persuasion and faction support
-   are leanings: each axis seed makes its lock scene voice an argument for (`+`) or against (`−`) its value
+2. **Seeds are arguments, never gates.** Act 1 seeds are the leanings mapped for 1.0 (the 26 flags below);
+   side storylines, companion persuasion and faction support become leanings the same way once Y2-PP-T17 maps their
+   flags (AC15): each axis seed makes its lock scene voice an argument for (`+`) or against (`−`) its value
    ("Player influence can back one. Companion persuasion and side quests matter.", PM:6987-6988). Every lock scene
    always offers all three values; no seed adds or removes an option. No seed sets a value; only a lock scene or a
    renegotiation does ("This sets Faction Axis if vote passes.", PM:6989). The sources define no axis score.
 3. **Lock scenes resolve, clean or negotiated.** Faction → `AXIS2_HEARTH` / `_ARCHIVE` / `_CONTINUITY`; Authority →
    `AXIS1_YOU` / `_SHARED` / `_NONE`; Deleted → `AXIS3_RESTORE` / `_RELEASE` / `_CHOOSE`. These flags are not in the
    code yet (owner: Y2-PP-T17). The composer input record is authoritative: these flags, `axis_revised_<axis>`,
-   `lock_negotiated_<axis>` and `WITNESS_SEATS` are mirrors, written in the same step as the record field, never
+   `lock_negotiated_<axis>` are mirrors, written in the same step as the record field, never
    read in its place and cleared with it. A lock vote always passes for the proposal the player backs (PM:6990-6991; a fixed
    rule, not a knob), so no vote leaves an axis UNSET. How it passes is recorded (`lock_pass`, Formulas): **clean**
    when at least one seed for the backed value is set with direction `+` and none with direction `−`; otherwise
@@ -126,88 +130,56 @@ with, and whether the deleted are brought back, let go, or asked.
    invalid row (R1-R3), the refusing faction breaks the coalition at C8-S16 (PM:7138-7153), "presented as a
    political crisis rather than a menu error" (PM:723), and the scene does not end until the coalition holds
    ("Player must change one axis before final lock.", PM:7143; "No invalid route waits until ending screen to
-   fail.", PM:7153). It offers:
-   - **Renegotiations**: each locked axis's other values that form a valid row — six for R1, five for R2 or R3 (the
-     Faction swap between R2 and R3 would break the coalition again and is not offered). Each is voiced as the
-     refusing faction's demand. Taking one: Kaelen withdraws the superseded position on the record, the Assembly
-     votes again, the vote passes negotiated, `axis_revised_<axis>` and `lock_negotiated_<axis>` are set, and the
-     withdrawal costs an authored beat (the retraction table and costs are in `storyline-lifecycle.md`).
-   - **Deferral to the witnesses**: only on R1, only while Witness Protocol is enabled and its signpost shows (Core
-     Rule 6). Deferring stores no ID and sets `witness_deferred`: a provisional coalition in which Hearth takes part
-     in the rest of Act 3 but withholds endorsement of the final act (new content; the source says only "Secret
-     SEVEN_WITNESSES may create alternative constitutional mechanism later.", PM:7144). It ends with the invocation
-     (Core Rule 6) or with a renegotiation at the gate (Core Rule 8); its scenes and beats are
-     `storyline-lifecycle.md` S5-S7.
+   fail.", PM:7153). It offers **renegotiations**: each locked axis's other values that form a valid row — six for
+   R1, five for R2 or R3 (the Faction swap between R2 and R3 would break the coalition again and is not offered).
+   Each is voiced as the refusing faction's demand, except a Faction offer, which is voiced as that faction stepping
+   down and staying (`storyline-lifecycle.md` S4). Taking one: Kaelen withdraws the superseded position on the
+   record, the Assembly votes again, the vote passes negotiated, `axis_revised_<axis>` and `lock_negotiated_<axis>`
+   are set, and the withdrawal costs an authored beat (the retraction table and costs are in
+   `storyline-lifecycle.md`). The source's "Secret SEVEN_WITNESSES may create alternative constitutional mechanism
+   later." (PM:7144) is post-1.0: no secret-route offer exists in 1.0 (Core Rule 6).
 
    When a renegotiation reaches YOU, Kaelen states his commitment in that scene, and that is the answer SOVEREIGN
    later quotes (PM:7059); a withdrawn commitment is quoted only as withdrawn.
-6. **Secret routes: signposts and invocation.** Each secret route T has offer prerequisites
+6. **Secret routes are reserved (post-1.0).** Each secret route T has offer prerequisites
    (`secret_prerequisites[T]`) and an unlock flag (`secret_unlock_flag[T]`); together, in that order, they are the
-   production master's "Required flag" list for T (PM:11215-11218, PM:11242-11246, PM:11270-11274). For all three
-   routes the last offer prerequisite is set in the Act 3 ledger at the end of Chapter 8 (PM:7586-7588), after
-   C8-S16. While T is enabled:
-   - **Signpost.** When the first of T's offer prerequisites is set, the journal gains T's signpost: the remaining
-     prerequisites as in-fiction leads and the institution the route needs (for Witness Protocol, seven independent
-     affected witnesses), never the combination it transforms (PM:707; PM:11214; PM:11306). Once a storyline ID is
-     stored that is not `SL-SECRET-T`, the signpost shows the route as closed.
-   - **Invocation scene.** T's invocation scene plays when every offer prerequisite is set ("If secret
-     prerequisites complete.", PM:8047) and sets T's unlock flag on every storyline, as the source does (PM:8055;
-     Chapter 9 ledger, PM:8200): it "unlocks secret path but does not force ending" (PM:8042). If the player
-     deferred (Witness Protocol only), the scene also offers the invocation. After an in-fiction confirm it adds T
-     to `secret_invoked` and stores `SL-SECRET-T`; it cannot be undone. Declined, or never reached, the deferral
-     continues, and the gate's last-chance scene offers the invocation; an invocation there also sets T's unlock
-     flag if the invocation scene did not (`storyline-lifecycle.md` S6, S7).
-   - **Chapter 10.** Because the unlock flag is set on every storyline, T's Chapter 10 scene (C10-S15 for Witness
-     Protocol, whose source guard is the flag, PM:8693) plays only when the stored ID is `SL-SECRET-T`.
-
-   `WITNESS_SEATS` mirrors the record (Core Rule 3): Secret Quest 09 sets it in the same step that saves the seventh
-   seat of `witness_seats`, so the flag never stands without seven saved seats, and `prereqs_met(WITNESS)` also
-   requires the seven seats, so a flag set by any other means cannot store `SL-SECRET-WITNESS` with a short table
-   (Edge Case 16, D13).
-
-   Witness Protocol is in 1.0; Crownless and First Wake are reserved (post-1.0): until they ship, their rows can
-   only be renegotiated at C8-S16, offer no deferral, and show no signpost.
-7. **A valid row is held to its word.** Once an ID is stored — a valid row at C8-S16, a renegotiation, or an
-   invocation — nothing offers a renegotiation, a deferral or an invocation, and the ID never changes.
+   production master's "Required flag" list for T (PM:11215-11218, PM:11242-11246, PM:11270-11274). All three
+   routes — Witness Protocol, Crownless, First Wake — are disabled in 1.0 (user decision 2026-11-11, design review
+   round 9; Witness Protocol was in 1.0 until then). While T is disabled: its invalid row can only be renegotiated
+   at C8-S16; the journal shows no signpost or hint for it; its invocation scene does not unlock it (C9-S18 plays
+   only its incomplete form, PM:8043; C9-S19 and C9-S20 do not play) and its unlock flag is never set; its Chapter
+   10 scene (C10-S13 to C10-S15) plays only when the stored ID is `SL-SECRET-T`, which no 1.0 record holds; and the
+   prerequisite flags that content sets are kept and transform nothing. When the routes ship they are designed
+   together as one mechanism, in a GDD revision that defines the signposts, where an invocation is offered (in the
+   source each route's last prerequisite is set after C8-S16, PM:7586-7588) and the Consent family (Open Question
+   15).
+7. **A valid row is held to its word.** Once an ID is stored — a valid row at C8-S16 or a renegotiation — nothing
+   offers a renegotiation, and the ID never changes.
 8. **Storyline ID and the ID-lock gate.** The moment the coalition holds, the live ID (Formulas) is stored:
    `SL-{authority}-{faction}-{deleted}` or `SL-SECRET-{route}`. Before that nothing is stored. A stored ID is never
    recomputed from flags or knobs ("Every route must save a stable storyline ID.", PM:11303) and is final once
    the final authorization concludes. Every entry and re-entry into Root of Heaven runs the gate check: with an ID stored the
-   gate is open (also after the boss and in Story+); while deferred it plays the last-chance scene
-   (`storyline-lifecycle.md` S7); before the three locks it turns the player back in the fiction (the Assembly has
-   not decided). A save positioned past a lock scene with that axis UNSET (one made before these fields existed)
+   gate is open (also after the boss and in Story+); before the three locks it turns the player back in the fiction
+   (the Assembly has not decided; `storyline-lifecycle.md` S6). A save positioned past a lock scene with that axis UNSET (one made before these fields existed)
    is unsupported and does not load (Edge Case 16, D16; user decision 2026-11-10); no runtime catch-up exists, so
    no loaded state is stranded. The refusal holds only while no player-facing build has such saves
    (`storyline-lifecycle.md` Legacy saves).
 9. **Final authorization.** The post-boss scene displays the stored structure, with no generic menu
-   (PM:8788-8789), and the player confirms execution; on `SL-SECRET-WITNESS` after a FAILED witness vote, Kaelen
-   stands down instead and nothing is executed (Core Rule 10). It changes no axis and no ID. The source's "one last lawful
+   (PM:8788-8789), and the player confirms execution. It changes no axis and no ID. The source's "one last lawful
    reconsideration" (PM:8791) is reserved (Open Questions): this design offers none, because boss phases 2-4
    already read Faction, Deleted and Authority (PM:8611-8616).
-10. **Ending family** = the Authority value (YOU → SOLE, SHARED → BOUND, NONE → NONE_AUTH), or CONSENT for Witness
-    Protocol (Story Bible §5). **Bound** is a standing institution: Kaelen gives up unilateral final commit to a
-    seven-signature protocol with rotating seats and public audit (PM:7064-7069). **No Authority**: the Assembly
-    adopts abolition at C8-S14; Kaelen uses the Key once, after the final crisis, to dismantle permanent Root
-    capability, and it cannot execute before the final confrontation (PM:7036-7038). **Consent**: seven affected
-    witnesses authorize one irreversible restoration (PM:705, PM:8047-8054, PM:11213); "It is a temporary legitimacy
-    mechanism" (PM:8054), so Consent differs from Bound (one act, not a standing protocol) and from No Authority
-    (Root is not abolished, but no one owns it permanently, PM:705). Story+ builds a rotating witness institution
-    from it (PM:11220). Kaelen executes and does not authorize: execution and authorization stay mechanically
-    separate (PM:11219), and since a person "cannot fill multiple roles" (PM:8704, which lets Kaelen be a witness in
-    principle), the seven are seven other identities. They follow C9-S19's rules — not all Kaelen's friends, a
-    deleted citizen, a nonhuman person if Seven consents, regional representatives (PM:8049-8052) — are chosen by
-    the player in Secret Quest 09 (PM:7517-7519), one per seat (`witness_seats`), and vote at C10-S15, which plays
-    only on `SL-SECRET-WITNESS` (Core Rule 6): the protocol needs a threshold, not unanimity (fixed at 5,
-    `storyline-lifecycle.md` Formulas), and the scene names dissent (PM:8705-8708). The vote can fall short of the
-    threshold (user decisions 2026-11-10): the act is not executed, because Kaelen stands down at the final
-    authorization; the stored ID and the family are unchanged; and the ending plays `consent_unauthorized`
-    (`storyline-lifecycle.md` S8, S9). For `SL-SECRET-WITNESS` the axes keep their locked
-    values (YOU, HEARTH, RESTORE), but the invocation **narrows Kaelen's YOU commitment on the record**: he keeps
-    execution, not final permission (a recorded retraction of "final permission remains Kaelen", PM:7034-7040).
-    Every scene that reads the Authority value as YOU after the invocation plays its Consent variant on
-    `SL-SECRET-WITNESS` (the list is `storyline-lifecycle.md`'s Consent variants table). The route's authored cost
-    ("Secret route has unique costs.", PM:11222) is owned by Y2-PP-T17. Faction and Deleted are modifiers: a boss
-    phase, ally lines, epilogue slides, Story+ cases.
+10. **Ending family** = the Authority value (YOU → SOLE, SHARED → BOUND, NONE → NONE_AUTH); the secret storylines'
+    families are reserved until their routes ship (Story Bible §5 names CONSENT for Witness Protocol). **Bound** is
+    a standing institution: Kaelen gives up unilateral final commit to a seven-signature protocol with rotating
+    seats and public audit (PM:7064-7069). **No Authority**: the Assembly adopts abolition at C8-S14; Kaelen uses
+    the Key once, after the final crisis, to dismantle permanent Root capability, and it cannot execute before the
+    final confrontation (PM:7036-7038). **Consent (post-1.0)**: seven affected witnesses authorize one irreversible
+    act (PM:705, PM:8047-8054, PM:11213), "a temporary legitimacy mechanism" (PM:8054). Its rules are designed with
+    the secret routes (Open Question 15), including the points design review round 9 raised: the Assembly names the
+    witnesses (PM:7519); whether the deleted seat can refuse a restoration it dissents from (PM:714, PM:7093,
+    PM:11235); who holds Root after the act (PM:705); the threshold the player helped define (PM:8707); and what a
+    vote that falls short leaves to Story+. Faction and Deleted are modifiers: a boss phase, ally lines, epilogue
+    slides, Story+ cases.
 11. **Companions are independent of the axes.** Every storyline can include every surviving companion
     (PM:7529-7537, PM:11302); a companion leaves through relationship flags (Edge Case 1), never through an axis.
     The one axis read: Kaelthas "can remain companion outside Archive if trust supports it" (PM:7533), so on a
@@ -224,28 +196,27 @@ keep these invariants; a contract that breaks one is wrong, not this GDD:
 | # | invariant | rules |
 |---|---|---|
 | I1 | Axis values come only from lock scenes and renegotiations; never from seeds, flags, knobs or the final authorization | 2, 3, 5, 9 |
-| I2 | No crisis outlasts C8-S16; only a deferral does, and only on R1 while Witness Protocol is enabled | 5 |
+| I2 | No crisis outlasts C8-S16 | 5 |
 | I3 | The ID is stored the moment the coalition holds, is never recomputed, and never changes once stored | 7, 8 |
 | I4 | Every entry and re-entry into Root of Heaven runs the gate check, on every path | 8 |
 | I5 | No soft-lock under any knob value or patch: every state without a stored ID either is before the locks or offers a renegotiation that reaches a valid row | 5, 8 |
-| I6 | Nothing important is lost silently: a closed route's signpost shows it closed; arcs 05, 08, 09 get a visible epilogue line in 1.0 | 6 |
+| I6 | Nothing important is lost silently: no hint points at an unshipped route; arcs 05, 08, 09 get a visible epilogue line in 1.0 | 6 |
 | I7 | A valid row is held to its word | 7 |
-| I8 | Family = the Authority value, or CONSENT on `SL-SECRET-WITNESS`, where Authority-reading scenes play their Consent variant | 10 |
+| I8 | Family = the Authority value; a secret storyline's family is RESERVED until its route ships | 10 |
+| I9 | Every transition commits its record writes and its beat id as one atomic checkpoint; no save exists inside a lock scene, the crisis or the final authorization before its commit | 3, 5, 8, 9 |
 
 `storyline_phase` is derived, never stored (Formulas), as are `secret_route` and `family`; of the lifecycle fields
-the record stores the axes, `storyline_id`, `witness_deferred`, `root_phase`, `secret_invoked`, `axis_revised`,
-`lock_negotiated`, `retraction_log`, `beats_played`, `witness_seats`, `witness_dissenters` and `witness_mandate`;
-the phase depends on the first four, after the Edge Case 16 check.
+the record stores the axes, `storyline_id`, `root_phase`, `axis_revised`, `lock_negotiated`, `retraction_log` and
+`beats_played`; the phase depends on the first three, after the Edge Case 16 check.
 
 | phase | meaning | gate |
 |---|---|---|
 | LEANING | every axis UNSET | turns the player back |
 | PARTLY_LOCKED | one or two axes locked | turns the player back |
-| CRISIS | three axes locked on an invalid row, nothing stored, not deferred: exists only inside C8-S16, never saved | — (inside C8-S16) |
-| DEFERRED | R1, `witness_deferred`, nothing stored | plays the last-chance scene |
-| VALIDATED | an ID stored, outside Root of Heaven | open |
-| FIXED | an ID stored, inside Root of Heaven | open (re-entry) |
-| FINAL | the final authorization concluded: execution confirmed, or Kaelen stood down after a FAILED witness vote | open (Story+) |
+| CRISIS | three axes locked on an invalid row, nothing stored: exists only inside C8-S16, never saved | — (inside C8-S16) |
+| VALIDATED | an ID stored, `root_phase` OUTSIDE | open |
+| FIXED | an ID stored, `root_phase` INSIDE (first entered Root of Heaven; stays INSIDE if the player leaves) | open (re-entry) |
+| FINAL | the final authorization concluded: execution confirmed | open (Story+) |
 | DAMAGED | the record holds an item of Edge Case 16: never saved by play; a load that yields it is refused | — (never loaded) |
 
 ### The 27 combinations
@@ -259,7 +230,7 @@ Invalidity rules (each removes one combination; quoted from PRODUCTION_MASTER_2.
 | R3 | NONE + CONTINUITY + RELEASE | "Continuity will not support simultaneous abolition of emergency root and irreversible mass release." | PRODUCTION_MASTER_2.1.md:718 |
 
 27 combinations: 24 valid and 3 invalid; each invalid one can become one of the 3 secret storylines, so the design
-has 24 + 3 = 27 storylines in all, of which 25 are reachable in 1.0 (Counts).
+has 24 + 3 = 27 storylines in all, of which 24 are reachable in 1.0 (Counts).
 
 `valid_count: 24`, as the source states (PM:711-712, PM:8728); the family split (SOLE 8, BOUND 9, NONE_AUTH 7) is
 derived (Counts). For a valid row `source` is its route heading in the production master's route matrix and
@@ -307,7 +278,7 @@ PM:8783-8784).
 
 | id | route | family | scope | source |
 |---|---|---|---|---|
-| SL-SECRET-WITNESS | Witness Protocol (PM "SEVEN WITNESSES"; SEC-01 "Authorized by the Living"; transforms R1 / YHR) | CONSENT | 1.0 | PRODUCTION_MASTER_2.1.md:11211 |
+| SL-SECRET-WITNESS | Witness Protocol (PM "SEVEN WITNESSES"; SEC-01 "Authorized by the Living"; transforms R1 / YHR) | — (reserved; CONSENT when designed) | post-1.0 | PRODUCTION_MASTER_2.1.md:11211 |
 | SL-SECRET-FIRSTWAKE | First Wake (SEC-03 "Hello From Outside"; transforms R3 / NCL) | — (reserved) | post-1.0 | PRODUCTION_MASTER_2.1.md:11266 |
 | SL-SECRET-CROWNLESS | Crownless (SEC-02 "No Throne in Heaven"; transforms R2 / NAL) | — (reserved) | post-1.0 | PRODUCTION_MASTER_2.1.md:11238 |
 
@@ -367,9 +338,11 @@ Arc 13 onward are not among the 12 (PM:5837). Arc 12's secondary `deleted:CHOOSE
 of arc 06 ("Continuity or Hearth", PM:2695) are judgement calls (J).
 
 **Pillar P5 in 1.0.** Arcs 05, 08 and 09 feed only the post-1.0 secret routes; in 1.0 they push no axis. P5
-("side storylines feed the main story") is met in 1.0 by the other nine arcs; arcs 05, 08 and 09 feed their routes
-when those ship. Their flags are kept and never transform a row; no hint points at an unshipped route (Edge Case 3),
-but each of the three arcs gets one visible epilogue line in 1.0 acknowledging what the player did (owner
+("side storylines feed the main story") is to be met in 1.0 by the other nine arcs, once Y2-PP-T17 maps their flags
+into the seed map (AC15); today the seed map holds no side-arc flag, so P5 is planned, not yet covered. Arc 12 ships
+in 1.0 and pushes `deleted:CHOOSE`; its Witness Protocol feed waits for that route. Flags of arcs 05, 08, 09 and of
+arc 12's Witness feed are kept and never transform a row; no hint points at an unshipped route (Edge Case 3), but
+each of arcs 05, 08 and 09 gets one visible epilogue line in 1.0 acknowledging what the player did (owner
 Y2-PP-T17), so nothing is lost silently (invariant I6).
 
 | arc | title | primary | secondary | scope | pm_line |
@@ -390,28 +363,23 @@ Y2-PP-T17), so nothing is lost silently (invariant I6).
 ### Composer input record
 
 SaveService (Y1-P1-T05) stores the record and owns serialisation, the schema version and the defaults for a new
-game or a save without these fields (UNSET, empty, false, OUTSIDE, UNDECIDED). Every writer named below is a scene
+game or a save without these fields (UNSET, empty, OUTSIDE). Every writer named below is a scene
 owned by Y2-PP-T17 and specified in `storyline-lifecycle.md`; no other code writes these fields.
 
 | field | type | allowed | writer |
 |---|---|---|---|
-| storyline_phase | enum | LEANING, PARTLY_LOCKED, CRISIS, DEFERRED, VALIDATED, FIXED, FINAL, DAMAGED | derived: `storyline_phase(record)` (Formulas); never stored |
-| storyline_id | string | a storyline ID, or empty while nothing is stored | C8-S16 on a valid row; a renegotiation (C8-S16 or the gate); a confirmed invocation; nothing else |
-| witness_deferred | bool | true, false | the C8-S16 deferral sets it; nothing clears it |
-| root_phase | enum | OUTSIDE, INSIDE, FINAL | the gate check on entry with an ID stored (INSIDE); the final authorization concluding, by confirmed execution or a stand-down (FINAL) |
+| storyline_phase | enum | LEANING, PARTLY_LOCKED, CRISIS, VALIDATED, FIXED, FINAL, DAMAGED | derived: `storyline_phase(record, loaded, flags, position)` (Formulas); never stored |
+| storyline_id | string | a storyline ID, or empty while nothing is stored | C8-S16 on a valid row; a renegotiation at C8-S16; nothing else |
+| root_phase | enum | OUTSIDE, INSIDE, FINAL | the gate check on entry with an ID stored (INSIDE); the final authorization concluding by confirmed execution (FINAL) |
 | authority | enum | UNSET, YOU, SHARED, NONE | C8-S14 lock; a renegotiation. Never the final authorization |
 | faction | enum | UNSET, HEARTH, ARCHIVE, CONTINUITY | C8-S13 lock; a renegotiation. Never the final authorization |
 | deleted | enum | UNSET, RESTORE, RELEASE, CHOOSE | C8-S16 lock; a renegotiation. Never the final authorization |
 | secret_route | enum | NO_SECRET, WITNESS, FIRSTWAKE, CROWNLESS | derived from `storyline_id` (`SL-SECRET-T` → T, else NO_SECRET); never stored |
-| family | enum | SOLE, BOUND, NONE_AUTH, CONSENT, RESERVED, NO_FAMILY | derived: `family(storyline_id)`; never stored |
-| secret_invoked | set | WITNESS, FIRSTWAKE, CROWNLESS | a confirmed invocation |
+| family | enum | SOLE, BOUND, NONE_AUTH, RESERVED, NO_FAMILY | derived: `family(storyline_id)`; never stored |
 | axis_revised | set | faction, authority, deleted | a renegotiation |
 | lock_negotiated | set | faction, authority, deleted | the lock scenes by `lock_pass`; every renegotiation |
-| retraction_log | list | entries {axis, old, new, withdrawn_item, scene}, oldest first | every renegotiation; a confirmed invocation |
-| beats_played | set | the lifecycle's authored beat ids (`retract_*`, `gate_retcon_*`, `deferral_*`, `invoke_witness`) | the scene that plays the beat |
-| witness_seats | map | seat → identity for the seats active_region, deleted, nonhuman, infrastructure, archive, local_community, rotating (PM:8697-8703); never Kaelen | Secret Quest 09 |
-| witness_dissenters | set | seats of `witness_seats` | C10-S15 |
-| witness_mandate | enum | UNDECIDED, MET, FAILED | C10-S15 |
+| retraction_log | list | entries {axis, old, new, withdrawn_item, scene}, oldest first | every renegotiation |
+| beats_played | set | the lifecycle's authored beat ids (`retract_*`) | the scene that plays the beat |
 | companions_present | set | Elara, Seraphina, Lyra, Kaelthas | `AethelgardPrototype/scripts/game_manager.gd` (`has_elara`, exclusive flag groups); `AethelgardPrototype/dialogue/ch2/fragment_two.dlg` |
 | regions_completed | set | ids of the eight regions | owner story Y2-PP-T17 (no writer in the code today) |
 | timing_flags | set of flags | `ch1_bridge_saved` / `_evacuated` / `_fell`, `ch2_medicine_early` / `_on_time` / `_late` | `AethelgardPrototype/dialogue/ch1/north_field.dlg`; `AethelgardPrototype/dialogue/ch2/act1_end.dlg` |
@@ -421,17 +389,17 @@ owned by Y2-PP-T17 and specified in `storyline-lifecycle.md`; no other code writ
 ### Interactions with Other Systems
 
 - **Storyline lifecycle (`design/gdd/storyline-lifecycle.md`, Y2-PP-T17):** the scenes and transitions that write
-  this record and keep invariants I1-I8.
+  this record and keep invariants I1-I9.
 - **FlagRegistry / StoryGraph (Y1-P1-T03):** owns the seed flags and, later, the `AXIS*`, `axis_revised_*`,
   `lock_negotiated_*` flags and the secret routes' prerequisite and unlock flags; validates exclusive groups and
-  the secret-route knobs at boot; this GDD names them, it does not write them. The `AXIS*`, `axis_revised_*`,
-  `lock_negotiated_*` and `WITNESS_SEATS` flags are mirrors of the record (Core Rule 3), which stays authoritative.
+  the secret-route knobs at boot; supplies the story position the load check reads; this GDD names them, it does not
+  write them. The `AXIS*`, `axis_revised_*` and `lock_negotiated_*` flags are mirrors of the record (Core Rule 3),
+  which stays authoritative.
 - **SaveService (Y1-P1-T05):** stores the composer input record; a stored ID is never recomputed; loading restores
-  the record and derives the phase.
+  the record, runs the load check and derives the phase; one atomic checkpoint per transition (I9).
 - **Time model (S06b):** supplies pace values per act and the timing flags the composer reads.
 - **Ending composer / route data model (owner Y2-PP-T17):** implements `storyline_id`, `storyline_phase`,
-  `lock_pass` and `family` (Formulas), the modules, the Consent variants and the epilogue lines; authored cost
-  additive.
+  `lock_pass` and `family` (Formulas), the modules and the epilogue lines; authored cost additive.
 - **World map / free travel:** must run the gate check on entry to Root of Heaven (Core Rule 8). World-map and
   free-travel logic is protected (`AethelgardPrototype/AGENTS.md`): that change needs the user's explicit approval
   when it is implemented.
@@ -463,22 +431,23 @@ prereqs_met(T) = secret_prerequisites[T] has at least two flags and every one of
 | A | enum | YOU, SHARED, NONE, UNSET | `authority` field | Authority |
 | F | enum | HEARTH, ARCHIVE, CONTINUITY, UNSET | `faction` field | Faction |
 | D | enum | RESTORE, RELEASE, CHOOSE, UNSET | `deleted` field | The deleted |
-| I | bool | true, false | in play, `secret_invoked` contains `transform(A, F, D)` (false when the row is valid or an axis is UNSET); as a formula input it is free, and the body reads it only on an invalid row | The player confirmed the invocation of the route that transforms this row |
-| enabled(T) | bool | `secret_route_enabled.T` (Tuning Knobs) | data | Whether route T ships |
-| prereqs_met(T) | bool | see above; for WITNESS also false unless `witness_seats` holds seven seats | data | e.g. WITNESS: PM:11215-11217 |
+| I | bool | true, false | in 1.0 always false: no route is enabled and the record holds no invocation (the post-1.0 secret-route design adds its source); as a formula input it is free, and the body reads it only on an invalid row | The player confirmed the invocation of the route that transforms this row |
+| enabled(T) | bool | `secret_route_enabled.T` (Tuning Knobs) | data | Whether route T ships; false for all three in 1.0 |
+| prereqs_met(T) | bool | see above | data | e.g. WITNESS: PM:11215-11217 |
 
 The formula gives the live value while no ID is stored. The value stored when the coalition holds is the formula's
-result at that moment; afterwards the stored ID is read, never recomputed (Core Rule 8). The unlock flag
-(`SEVEN_WITNESSES_AVAILABLE`) is not an input: it is set whenever C9-S19 plays, and by an invocation at the gate
-(Core Rule 6).
+result at that moment; afterwards the stored ID is read, never recomputed (Core Rule 8). The unlock flags
+(`SEVEN_WITNESSES_AVAILABLE` and the others) are not inputs; no 1.0 scene sets one (Core Rule 6). The secret branch
+is kept so the post-1.0 routes need no change to this formula; with the default knobs it never fires.
 
-Examples:
+Examples (default knobs unless stated):
 - (SHARED, ARCHIVE, CHOOSE, false) → `SL-SHARED-ARCHIVE-CHOOSE`.
 - (SHARED, ARCHIVE, CHOOSE, true) → `SL-SHARED-ARCHIVE-CHOOSE` (a secret never applies to a valid row).
 - (YOU, HEARTH, RESTORE, false) → CRISIS.
-- (YOU, HEARTH, RESTORE, true), WITNESS enabled, all three offer prerequisites set → `SL-SECRET-WITNESS`.
-- (YOU, HEARTH, RESTORE, true), two of the three set → CRISIS (in play the invocation is not offered, so I stays
-  false; the formula still returns CRISIS).
+- (YOU, HEARTH, RESTORE, true), all three offer prerequisites set → CRISIS: WITNESS is disabled, so the row can
+  only be renegotiated.
+- (YOU, HEARTH, RESTORE, true), WITNESS enabled (a post-1.0 knob value), all three offer prerequisites set →
+  `SL-SECRET-WITNESS`; with two of the three set → CRISIS.
 - (NONE, CONTINUITY, RELEASE, true), FIRSTWAKE disabled → CRISIS: the row can only be renegotiated.
 - (UNSET, HEARTH, CHOOSE, false) → PENDING.
 
@@ -507,38 +476,36 @@ NEGOTIATED; YOU with `ch1_root_first_edit` set → CLEAN.
 ### Storyline phase
 
 ```
-storyline_phase(record, loaded):
-    if damaged(record, loaded)                         → DAMAGED
+storyline_phase(record, loaded, flags, position):
+    if damaged(record, loaded, flags, position)        → DAMAGED
     if storyline_id is stored and root_phase is FINAL  → FINAL
     if storyline_id is stored and root_phase is INSIDE → FIXED
     if storyline_id is stored                          → VALIDATED
     if A, F and D are all UNSET                        → LEANING
     if A, F or D is UNSET                              → PARTLY_LOCKED
-    if witness_deferred                                → DEFERRED
     otherwise                                          → CRISIS
 ```
 
-`loaded` is true for a record just read from a save and false for the live record in play.
-`damaged(record, loaded)` is true when the record holds an item D1-D16 of Edge Case 16; D9 is tested on a loaded
-record only (`loaded` true), because inside C8-S16 an invalid row with nothing stored is the crisis itself. For a
-record that passed the load check the two calls agree. The check runs first, so a
-record that contradicts the phase table is never classified as a playable phase: FINAL and FIXED need a stored ID,
-and a loaded record that would read CRISIS is DAMAGED, because a crisis is never saved. A valid row is stored in the
-same step that sets its last axis, so "three axes set, nothing stored, not deferred" is, in play, always an invalid
-row inside C8-S16. Examples (loaded records, `loaded` true):
-(YOU, HEARTH, UNSET, nothing stored, false, OUTSIDE) → PARTLY_LOCKED; (YOU, HEARTH, RESTORE, nothing stored, true,
-OUTSIDE) → DEFERRED; (SHARED, ARCHIVE, CHOOSE, `SL-SHARED-ARCHIVE-CHOOSE`, false, INSIDE) → FIXED; (YOU, HEARTH,
-UNSET, nothing stored, false, FINAL) → DAMAGED; (SHARED, ARCHIVE, CHOOSE, nothing stored, true, OUTSIDE) → DAMAGED;
-(NONE, ARCHIVE, RELEASE, nothing stored, false, OUTSIDE) → DAMAGED. Example (the live record in play, `loaded`
-false): (NONE, ARCHIVE, RELEASE, nothing stored, false, OUTSIDE) → CRISIS; the same record with `loaded` true is the
-last DAMAGED example above.
+`loaded` is true for a record just read from a save and false for the live record in play. `flags` is the set of
+story flags saved with the record and `position` the story position of the save (owned by Y1-P1-T03 and Y1-P1-T05);
+the record alone cannot show D15-D17, so the check takes them. `damaged(record, loaded, flags, position)` is true when
+the inputs hold an item of Edge Case 16; D9 is tested on a loaded record only (`loaded` true), because inside C8-S16
+an invalid row with nothing stored is the crisis itself. For a record that passed the load check the two calls agree.
+The check runs first, so a record that contradicts the phase table is never classified as a playable phase: FINAL
+and FIXED need a stored ID, and a loaded record that would read CRISIS is DAMAGED, because a crisis is never saved. A
+valid row is stored in the same step that sets its last axis, so "three axes set, nothing stored" is, in play, always
+an invalid row inside C8-S16. Examples (loaded records, `loaded` true, consistent flags and position; a record is
+written (authority, faction, deleted, stored ID, `root_phase`)): (YOU, HEARTH, UNSET, nothing stored, OUTSIDE) →
+PARTLY_LOCKED; (SHARED, ARCHIVE, CHOOSE, `SL-SHARED-ARCHIVE-CHOOSE`, INSIDE) → FIXED; (YOU, HEARTH, UNSET, nothing
+stored, FINAL) → DAMAGED; (NONE, ARCHIVE, RELEASE, nothing stored, OUTSIDE) → DAMAGED. Example (the live record in
+play, `loaded` false): (NONE, ARCHIVE, RELEASE, nothing stored, OUTSIDE) → CRISIS; the same record with `loaded` true
+is the last DAMAGED example above.
 
 ### Ending family
 
 ```
 family(id):
-    SL-SECRET-WITNESS                          → CONSENT
-    SL-SECRET-CROWNLESS, SL-SECRET-FIRSTWAKE   → RESERVED   (unreachable while their routes are disabled)
+    SL-SECRET-WITNESS, SL-SECRET-CROWNLESS, SL-SECRET-FIRSTWAKE → RESERVED   (unreachable while their routes are disabled)
     "SL-" + A + "-" + F + "-" + D, not invalid(A, F, D) → { YOU → SOLE, SHARED → BOUND, NONE → NONE_AUTH }[A]
     PENDING, CRISIS, an invalid-row id, anything else    → NO_FAMILY (not a storyline ID)
 ```
@@ -548,16 +515,16 @@ Example: `SL-NONE-HEARTH-CHOOSE` → NONE_AUTH; `SL-YOU-HEARTH-RESTORE` → NO_F
 ### Counts
 
 Per family the split is derived, not stated by the source; the design total follows ROADMAP §12.2 and
-PM:8728-8729. With the default knobs only Witness Protocol is enabled: `reachable_1_0: 25`. **P3 sign-off (user,
-2026-11-10):** P3's "24 + 3" is the design total; 1.0 ships 25 storylines (24 valid + Witness Protocol), Crownless
-and First Wake follow post-1.0.
+PM:8728-8729. With the default knobs no secret route is enabled: `reachable_1_0: 24`. **P3 scope (user,
+2026-11-11, superseding the 2026-11-10 sign-off of 25):** P3's "24 + 3" is the design total; 1.0 ships the 24 valid
+storylines in three families, and the three secret storylines follow post-1.0 (Open Question 14).
 
 ```
 combinations         = 3 × 3 × 3 = 27
 valid_count          = 27 − 3 = 24
 secret_storylines    = 3
 design_storylines    = 24 + 3 = 27
-reachable_1_0        = 24 + 1 = 25
+reachable_1_0        = 24 + 0 = 24
 family_SOLE          = 9 − 1 = 8
 family_BOUND         = 9
 family_NONE_AUTH     = 9 − 2 = 7
@@ -575,13 +542,12 @@ renegotiations, R2 and R3 five each (the Faction swap between them is not offere
    `_challenged`, his betrayal (PM:788), or, outside the Archive, too little trust (PM:7533; Core Rule 11). The
    storyline is unchanged: no ending family needs a companion (Story Bible §5), so every valid storyline stays
    reachable with any companion — or none — present; the composer omits that companion's modules.
-2. **Deferring with a secret route half-met.** Allowed while every missing lead can still be completed ("Secret
-   routes require multiple secret quests", PM:706); if one is never completed, the gate offers the renegotiations
-   (invariant I5). Scenes and offers: `storyline-lifecycle.md` S5-S7 and its Edge Case 2.
-3. **R2 or R3 before Crownless / First Wake ship.** Those secret routes are reserved (post-1.0): their invalid rows
-   can only be renegotiated at C8-S16 and offer no deferral. Any flags their side arcs set (05, 08, 09) are kept but
-   never transform a row, and no signpost or hint for an unshipped route is shown; the arcs' epilogue lines still
-   play (invariant I6).
+2. **Every Witness Protocol lead found in 1.0.** The route is reserved (Core Rule 6): R1 at C8-S16 offers only its
+   six renegotiations, C9-S19 does not play, `SEVEN_WITNESSES_AVAILABLE` is never set, and the lead flags stay set
+   and transform nothing (`storyline-lifecycle.md` S5 and its Edge Case 5).
+3. **Any invalid row before the secret routes ship.** R1, R2 and R3 can only be renegotiated at C8-S16. Any flags
+   their side arcs set (05, 08, 09, and arc 12's Witness feed) are kept but never transform a row, and no signpost or
+   hint for an unshipped route is shown; the epilogue lines of arcs 05, 08 and 09 still play (invariant I6).
 4. **No support for the value the player wants.** The vote still passes, negotiated (PM:6990; Core Rule 3); no
    faction becomes unavailable without warning (PM:6991). The same holds for every lock and renegotiation vote.
 5. **Contradictory seeds** (e.g. `act1_report_local` with `ch1_knight_killed`). Both arguments are voiced; the lock
@@ -591,8 +557,8 @@ renegotiations, R2 and R3 five each (the Faction swap between them is not offere
    damaged: SaveService's load check reports it (Edge Case 16, D15); this system defines no tie-break.
 7. **Timing that goes badly** (`ch1_bridge_fell`, `act1_pace_late`). The storyline ID never changes; the composer
    picks different scene and slide modules (Core Rule 12).
-8. **A save from before the coalition holds** (every save today). It loads LEANING, PARTLY_LOCKED or DEFERRED with
-   nothing stored; seeds already in the save are read as they are. No save is made in CRISIS: the crisis resolves
+8. **A save from before the coalition holds** (every save today). It loads LEANING or PARTLY_LOCKED with nothing
+   stored; seeds already in the save are read as they are. No save is made in CRISIS: the crisis resolves
    inside C8-S16. A save with no axis data positioned before C8-S13 loads LEANING with all axes UNSET; one
    positioned past a lock scene (chapters 9 and 10 exist in the code today) is unsupported and does not load (Edge
    Case 16, D16; the project's own fixture saves are migrated once, `storyline-lifecycle.md` Legacy saves). A save
@@ -600,55 +566,47 @@ renegotiations, R2 and R3 five each (the Faction swap between them is not offere
    build has a save past Chapter 8; if one ships before these fields do, the decision is reopened.
 9. **NG+.** Whether axis leanings or the previous storyline carry into a new cycle is not decided here (Open
    Questions); until decided, NG+ starts LEANING with the reset list in `storyline-lifecycle.md`.
-10. **Reaching Root of Heaven without a stored ID.** Every path runs the gate check (Core Rule 8); DEFERRED meets
-    the last-chance scene and LEANING or PARTLY_LOCKED is turned back. Outcomes per path and phase:
-    `storyline-lifecycle.md` S7.
-11. **Prerequisites met before the locks.** Not possible for any route: each route's last offer prerequisite is set
-    after C8-S16, in the Act 3 ledger (PM:7586-7588). C8-S16 never offers the invocation; on R1 it offers the
-    deferral. If a later change moved a prerequisite earlier, the invocation would still wait for the route's
-    invocation scene or the gate.
+10. **Reaching Root of Heaven without a stored ID.** Every path runs the gate check (Core Rule 8); LEANING or
+    PARTLY_LOCKED is turned back, and no other phase lacks an ID outside C8-S16. Outcomes per path and phase:
+    `storyline-lifecycle.md` S6.
+11. **Secret prerequisites and the locks.** In the source each route's last offer prerequisite is set after C8-S16,
+    in the Act 3 ledger (PM:7586-7588), so no route could be invoked at the crisis. In 1.0 this changes nothing (all
+    routes reserved); the post-1.0 design must decide where an invocation is offered (Open Question 15).
 12. **A renegotiation to the same value, or to the other invalid row.** Neither is offered: a renegotiation offers
     only other values that form a valid row.
-13. **A knob changes mid-playthrough** (e.g. a patch disables WITNESS). Knobs are read only at C8-S16, the
-    invocation scenes and the gate. With an ID stored, nothing changes (Core Rule 8). If WITNESS is disabled while a
-    player is deferred (a 1.0 build that does it fails boot validation), the signpost shows the route closed (CLOSED,
-    never hidden: invariant I6) and the renegotiations remain; flags already set are kept
-    (`storyline-lifecycle.md` Edge Case 4). Content for a stored secret storyline must stay shippable (a risk logged
-    for Y2-PP-T17).
+13. **A knob changes mid-playthrough** (e.g. a patch). Knobs are read only at C8-S16 and the gate. With an ID
+    stored, nothing changes (Core Rule 8). Enabling a secret route needs the post-1.0 GDD revision (Core Rule 6); a
+    1.0 build that enables one fails boot validation (AC12).
 14. **The final authorization.** It displays the stored structure and the player confirms (PM:8788-8790); it
     offers no reconsideration and changes no field except `root_phase` (Core Rule 9).
-15. **The player declines the invocation.** The deferral continues and the gate offers the invocation again;
-    `storyline-lifecycle.md` S6 and its Edge Case 3.
-16. **A damaged record** (a debug or edited save, or one made before these fields existed; play never writes one).
-    `SEVEN_WITNESSES_AVAILABLE` alone changes nothing: it is set whenever C9-S19 plays or the gate invokes the
-    protocol. The check compares and never rewrites the stored ID, and reads no knob, so a patch never damages a
-    save. SaveService's load check reports each item below as a data error on load and refuses the load
-    (`storyline_phase` DAMAGED): the player returns to the load menu, no transition fires and no gate runs.
-    - D1 a stored ID that is not the one its axes and `secret_invoked` name (`SL-A-F-D` on a valid row,
-      `SL-SECRET-T` on an invalid row whose route T is in `secret_invoked`)
-    - D2 `secret_invoked` holding a route whose row is not the record's
-    - D3 `secret_invoked` with no ID stored
-    - D4 `witness_deferred` with an UNSET axis, or with nothing stored on a row other than R1
-    - D5 `witness_deferred` on a stored valid row with `axis_revised` empty
+15. **A crash or quit inside a lock scene, the crisis or the final authorization.** No save exists there before the
+    commit (I9): the player reloads the last save before the scene and it replays from its start; after the commit
+    the checkpoint resumes at the committed beat (`storyline-lifecycle.md` commit and save rule).
+16. **A damaged record** (a debug or edited save, or one made before these fields existed; play never writes one,
+    because every transition is one atomic checkpoint, I9). A secret unlock flag alone changes nothing. The check
+    reads the record, the saved flags and the story position (`load_check(record, flags, position)`); it compares
+    and never rewrites the stored ID or the save, and reads no knob, so a patch never damages a save. SaveService's
+    load check reports each item below as a data error on load and refuses the load (`storyline_phase` DAMAGED):
+    the player returns to the load menu, no transition fires and no gate runs.
+    - D1 a stored ID that is not `SL-A-F-D` for its axes on a valid row: any other ID, an ID with an UNSET axis,
+      the ID of an invalid row, or any `SL-SECRET-*` ID (no 1.0 play stores one)
+    - D2-D5 retired (revision 9): they checked the Witness record fields, which 1.0 no longer stores
     - D6 `axis_revised` holding an axis that `lock_negotiated` lacks
-    - D7 `axis_revised` holding an axis that no `retraction_log` entry names
+    - D7 `axis_revised` holding an axis that no `retraction_log` entry names, or more than one axis, or a
+      `retraction_log` entry whose `new` value is not the record's value for its axis
     - D8 `root_phase` INSIDE or FINAL with nothing stored
-    - D9 three axes set with nothing stored and `witness_deferred` false (tested on load only)
-    - D10 `witness_mandate` MET or FAILED, or `witness_dissenters` non-empty, while the stored ID is not
-      `SL-SECRET-WITNESS`
-    - D11 `witness_mandate` UNDECIDED on `SL-SECRET-WITNESS` with `root_phase` FINAL
-    - D12 `witness_mandate` other than the value `storyline-lifecycle.md`'s formula gives for
-      `witness_dissenters`, or `witness_dissenters` non-empty while `witness_mandate` is UNDECIDED
-    - D13 `witness_seats` seating Kaelen or one identity in two seats, a dissenter that is not one of its seats, or
-      fewer than seven seats on `SL-SECRET-WITNESS`
-    - D14 a `deferral_*` beat in `beats_played` while `witness_deferred` is false, or `invoke_witness` while
-      `secret_invoked` lacks WITNESS
+    - D9 three axes set with nothing stored (tested on load only)
+    - D10-D13 retired (revision 9): they checked the witness vote fields
+    - D14 a `retract_*` beat in `beats_played` with no matching `retraction_log` entry, or a `retraction_log` entry
+      whose beat is not in `beats_played`, or a beat id the lifecycle does not define
     - D15 two flags of one exclusive group (Edge Case 6)
     - D16 a story position past the lock scene of an UNSET axis (a save made past Chapter 8 before these fields
       existed; unsupported, user decision 2026-11-10)
-
-    `witness_deferred` on a stored valid row with `axis_revised` non-empty is the history of a deferral broken at
-    the gate, not damage.
+    - D17 the set axes are not a prefix of the lock order (Faction, then Authority, then Deleted), or an axis is set
+      while the story position is before its lock scene's commit: no lock scene could play from it (S1 needs every
+      axis UNSET, S2 needs Faction set, S4 needs Faction and Authority set), so loading it would strand the player.
+      A position inside a lock scene before its commit counts as before it (no save exists there, I9); the commit
+      checkpoint counts as past it
 
     D16 holds only while no player-facing build has such saves; if one ships before these fields do, the decision is
     reopened (`storyline-lifecycle.md` Legacy saves).
@@ -657,15 +615,15 @@ renegotiations, R2 and R3 five each (the Faction swap between them is not offere
 
 | System | Direction | What flows | Status of its design doc |
 |---|---|---|---|
-| Storyline lifecycle (`design/gdd/storyline-lifecycle.md`, Y2-PP-T17) | this → lifecycle | the axes, formulas, record and invariants I1-I8 the scenes must keep | revision 3 (revision 2 plus the T7 seven-seats guard); needs re-review |
+| Storyline lifecycle (`design/gdd/storyline-lifecycle.md`, Y2-PP-T17) | this → lifecycle | the axes, formulas, record and invariants I1-I9 the scenes must keep | revision 5 (secret routes removed, commit and save rule); needs re-review |
 | Time model (`design/gdd/time-model.md`, Y1-P0-S06b) | this ← time model | per-act pace values (`act1_pace_*` exists; acts 2-4 named there), timing flags | not written yet — S06b must list this GDD as a dependent |
 | FlagRegistry / StoryGraph (Y1-P1-T03) | this ← registry | seed flags, the future `AXIS*`, `axis_revised_*`, `lock_negotiated_*` flags, secret prerequisite and unlock flags, exclusive-group and secret-knob validation | no GDD (an ADR/tech design later) — must cite this GDD's seed map |
 | SaveService (Y1-P1-T05) | this → save | the composer input record, saved and versioned; the damaged-record check | no GDD — must store the fields in the composer record |
-| Ending composer / route data model (Y2-PP-T17) | this → composer | the composer input record, the family map, the Consent variants, the epilogue lines | not designed — consumes this GDD and the lifecycle contract |
+| Ending composer / route data model (Y2-PP-T17) | this → composer | the composer input record, the family map, `sole_dissent`, the epilogue lines | not designed — consumes this GDD and the lifecycle contract |
 | World map / free travel (protected, `AethelgardPrototype/AGENTS.md`) | this → world map | the gate check on entry to Root of Heaven | no GDD — implementation needs the user's explicit approval |
 | Companion presence (relationship flags) | this ← companions | `companions_present` | no GDD — must never remove a companion by axis (Core Rule 11) |
 | Side storylines (arcs 01-12, `story/source/PRODUCTION_MASTER_2.1.md`) | this ← arcs | seeds into axes, modifiers, secret routes | authored in the production master; S09 (arc 04) and Y1-P1-S04/S05 write into this table |
-| Story Bible §5 (`AethelgardPrototype/story/STORY_BIBLE.md`) | both | axes, families, timing table | records the four-family decision (AC-6 line) |
+| Story Bible §5 (`AethelgardPrototype/story/STORY_BIBLE.md`) | both | axes, families, timing table | records the four-family decision (AC-6 line); its 1.0 scope (three families) is Open Question 14 |
 | Difficulty profiles (Y1-P0-S06c) | none | — | deadline leniency belongs to the time model, not here |
 
 Bidirectional rule: each doc above that is written later must name `design/gdd/storyline-axes.md` in its own
@@ -678,10 +636,10 @@ the story that implements it:
 
 | protected area | what this design needs there | where specified |
 |---|---|---|
-| save/load schema | the composer record fields, defaults, the damaged-record check and load refusal, the dev-fixture migration | Composer input record; Edge Cases 8, 16; lifecycle Legacy saves |
-| story progression | the lock-scene order, the C8-S16 crisis, the deferral beats, the gate on the `story` path, C10-S15 gated on the stored ID, the stand-down after a FAILED vote, the superseded legacy Chapter 8 and Chapter 10 flags | Core Rules 3-10; lifecycle S1-S9, Dependencies |
-| world-map / free-travel logic | the gate check on the `world_map` path | Core Rule 8; lifecycle S7 |
-| combat | the Consent variants of the SOVEREIGN and God King fights; C10-S15 inside the Crown phase | Core Rule 10; lifecycle Consent variants, S9 |
+| save/load schema | the composer record fields, defaults, the damaged-record check and load refusal, one atomic checkpoint per transition and save suppression inside lock scenes, the dev-fixture migration | Composer input record; Edge Cases 8, 15, 16; I9; lifecycle commit and save rule, Legacy saves |
+| story progression | the lock-scene order, the C8-S16 crisis, the gate on the `story` path, the secret-route scenes kept closed (C9-S18 incomplete form; C9-S19, C9-S20, C10-S13 to C10-S15 gated on the stored ID), the superseded legacy Chapter 8 and Chapter 10 flags | Core Rules 3-9; lifecycle S1-S7, Dependencies |
+| world-map / free-travel logic | the gate check on the `world_map` path | Core Rule 8; lifecycle S6 |
+| combat | none beyond the source: boss phases read the stored axes (PM:8611-8616); the re-entry rule | Core Rule 9; lifecycle Edge Case 2 |
 | NG+ | the reset of the record and the axis, secret and unlock flags | Edge Case 9; lifecycle NG+ reset |
 | true ending | none: no storyline is called the true ending ("Secret route is not called true ending.", PM:11221); the family endings and modules are new composer content | Core Rule 10 |
 | Source Key logic | none expected: the final authorization confirms execution and changes no Source Key rule; if Y2-PP-T17 routes it through Source Key code, that needs approval | Core Rule 9 |
@@ -689,13 +647,13 @@ the story that implements it:
 
 ## Tuning Knobs
 
-Knobs are read only at C8-S16, the invocation scenes and the gate, and never once an ID is stored (Core Rule 8).
-FlagRegistry checks the secret-route knobs at boot; a failure is a boot error naming the route (Y1-P1-T03).
+Knobs are read only at C8-S16 and the gate, and never once an ID is stored (Core Rule 8). FlagRegistry checks the
+secret-route knobs at boot; a failure is a boot error naming the route (Y1-P1-T03).
 
 | Knob | Default | Safe range | What it affects | Rationale / source |
 |---|---|---|---|---|
-| `secret_route_enabled.WITNESS` | true | true for 1.0 | whether R1 offers the deferral and can transform into Witness Protocol | Story Bible §5 (Consent family in 1.0); P3 sign-off, user, 2026-11-10 (Counts) |
-| `secret_route_enabled.CROWNLESS`, `.FIRSTWAKE` | false | false until their post-1.0 content ships and their family is designed (never enabled while `family` would be RESERVED) | whether R2 / R3 can transform | Story Bible §5 "post-1.0 candidates"; P3 sign-off, user, 2026-11-10 (Counts) |
+| `secret_route_enabled.WITNESS` | false | false until the post-1.0 secret-route design ships (a GDD revision; never enabled while `family` would be RESERVED) | whether R1 can transform into Witness Protocol | user decision 2026-11-11, design review round 9 (Counts) |
+| `secret_route_enabled.CROWNLESS`, `.FIRSTWAKE` | false | false until their post-1.0 content ships and their family is designed (never enabled while `family` would be RESERVED) | whether R2 / R3 can transform | Story Bible §5 "post-1.0 candidates"; user decision 2026-11-11 (Counts) |
 | `secret_prerequisites[route]` (list of flags) | WITNESS: `WITNESS_PROTOCOL_FOUND`, `OLD_WITNESS_SIGNATURE`, `WITNESS_SEATS` (PM:11215-11217); CROWNLESS: `CROWN_COORDINATES`, `EMPTY_THRONE_FOUND`, `CROWN_SNAPSHOT_FOUND`, `NO_CROWN_CHARTER` (PM:11242-11245); FIRSTWAKE: `OLD_HOME_MESSAGE`, `FOURTH_HYMN_FOUND`, `EXTERNAL_PING_FOUND`, `EXTERNAL_CARRIER` (PM:11270-11273) | ≥ 2 flags per route ("multiple secret quests"); the three lists disjoint; every flag known to FlagRegistry; no unlock flag in any list | how hard a secret route is to reach; when its signpost and invocation scene appear | PM:706; the production master's "Required flag" lines |
 | `secret_unlock_flag[route]` | WITNESS: `SEVEN_WITNESSES_AVAILABLE` (PM:11218); CROWNLESS: `CROWNLESS_AVAILABLE` (PM:11246); FIRSTWAKE: `FIRST_WAKE_AVAILABLE` (PM:11274) | the route's last "Required flag"; set when the route's invocation scene plays | which flag records that the invocation scene played | PM:8055; PM:8199-8201 (Chapter 9 ledger "Secret unlock" lines) |
 
@@ -725,7 +683,11 @@ scenes and renegotiations (PM:6987-6989).
 
 ## Acceptance Criteria
 
-**Document-level — checked today by `production/qa/evidence/2026-11-storyline/check_storyline_axes.py`:**
+**Document-level (document lint, Config/Data, advisory) — checked today by
+`production/qa/evidence/2026-11-storyline/check_storyline_axes.py`.** The checker compares the text with constants
+pinned by the same author; it shows the document is internally consistent and unchanged where pinned, not that the
+state machine is correct. Correctness evidence is runtime ACs 5-16, starting with a non-shipping reference model of
+the Formulas and a walk of the lifecycle transitions (Open Question 16).
 
 1. The 27-row table's (authority, faction, deleted) set equals the 3×3×3 product; each id is
    `SL-{authority}-{faction}-{deleted}`; the invalid rows are exactly the rules table's combinations, and the
@@ -743,16 +705,14 @@ scenes and renegotiations (PM:6987-6989).
    equals the production master's "Required flag" list for it; the family map in Core Rule 10 and in `family()`
    equals {YOU → SOLE, SHARED → BOUND, NONE → NONE_AUTH}; the side-storyline table has arcs 01-12, each `pm_line` an
    "Axis effect:" line, in arc order; the composer record has exactly the fields storyline_phase, storyline_id,
-   witness_deferred, root_phase, authority, faction, deleted, secret_route, family, secret_invoked, axis_revised,
-   lock_negotiated, retraction_log, beats_played, witness_seats, witness_dissenters, witness_mandate,
-   companions_present, regions_completed,
-   timing_flags, act1_pace and act2_pace/act3_pace/act4_pace,
+   root_phase, authority, faction, deleted, secret_route, family, axis_revised, lock_negotiated, retraction_log,
+   beats_played, companions_present, regions_completed, timing_flags, act1_pace and act2_pace/act3_pace/act4_pace,
    each with its pinned allowed values and writer; `storyline_phase` allows exactly the phase table's values;
-   `reachable_1_0` equals the valid rows plus the 1.0 secret rows.
+   `reachable_1_0` equals the valid rows plus the 1.0 secret rows (none).
 4. The Formulas define `storyline_id(A, F, D, I)` with exactly those four inputs and its pinned body, which names no
    timing, pace or companion input; `invalid`, `lock_pass`, `storyline_phase` and `family` match their pinned
    bodies; the Core Rules are numbered 1-12 with their titles and pinned key sentences; the invariants table has
-   rows I1-I8 as pinned; the Tuning Knobs table has exactly the four pinned knobs and defaults; every runtime
+   rows I1-I9 as pinned; the Tuning Knobs table has exactly the four pinned knobs and defaults; every runtime
    criterion below names its blocking stories and uses only observables from the Observables table.
 
 **Runtime observables** — pure functions over a composer record; the scene-level observables are in
@@ -760,66 +720,86 @@ scenes and renegotiations (PM:6987-6989).
 
 | observable | returns |
 |---|---|
-| `formula_id(A, F, D, I, knobs, flags, seats)` | the Formulas' `storyline_id` for those inputs (no record, no stored ID); `seats` is the saved `witness_seats` map |
-| `prereqs_met(T, knobs, flags, seats)` | the Formulas' `prereqs_met` |
+| `formula_id(A, F, D, I, knobs, flags)` | the Formulas' `storyline_id` for those inputs (no record, no stored ID) |
+| `prereqs_met(T, knobs, flags)` | the Formulas' `prereqs_met` |
 | `family(id)` | the Formulas' `family` |
-| `phase_of(record, loaded)` | the Formulas' `storyline_phase` |
+| `phase_of(record, loaded, flags, position)` | the Formulas' `storyline_phase` |
 | `axis(record, name)` | the record's value for `authority`, `faction` or `deleted` |
-| `composer_modules(record)` | the module ids the composer selects (ids defined by Y2-PP-T17) |
-| `scene_variants(id)` | the (scene, variant) pairs the route data plays for a storyline ID; a variant is shared when the route data plays it for every storyline |
-| `ending_sequence(id)` | the ending-sequence id the route data plays for a storyline ID |
-| `story_plus_state(id)` | the Story+ state id the route data creates for a storyline ID |
-| `boot_errors(knobs, flags)` | the data errors FlagRegistry finds at boot |
-| `load_check(record)` | the data errors SaveService's load check reports for the record (Edge Case 16) |
+| `composer_modules(record, flags)` | the module ids the composer selects (ids defined by Y2-PP-T17) |
+| `module_keys(flag)` | the module ids the route data keys to a flag |
+| `scene_render(id)` | for a storyline ID, each story scene the route data plays (a production-master Scene ID `C<n>-S<m>` or boss id `B<n>`) mapped to a hash of its rendered text; a scene's shared hash is the one it has for every storyline |
+| `ending_render(id)` | the ordered (ending module id, rendered-text hash) pairs the route data plays for a storyline ID |
+| `story_plus_state(id)` | the set of Story+ unlock cases the route data creates for a storyline ID |
+| `boot_errors(knobs, flags, build)` | the data errors FlagRegistry finds at boot for a build (`1.0` or later) |
+| `load_check(record, flags, position)` | the data errors SaveService's load check reports for a save's record, flags and story position (Edge Case 16) |
 
 **Runtime — each criterion names the stories that must land before it can run:**
 
 5. For every (A, F, D) over {its three values, UNSET} (64 triples) and I ∈ {false, true} as a free formula input
-   (128 cases), with the default knobs, every offer prerequisite set and seven witness seats saved: `formula_id` is `SL-A-F-D` for the 24
-   valid triples whatever I;
-   PENDING for the 37 triples with an UNSET axis whatever I; CRISIS for the 3 invalid triples with I false; with I
-   true `SL-SECRET-WITNESS` for (YOU, HEARTH, RESTORE) and CRISIS for the other two. *Blocked by:* Y2-PP-T17
-   (unit-testable before the scenes exist).
-6. For (YOU, HEARTH, RESTORE), I true, WITNESS enabled: each of the three single-flag-missing subsets of
-   `WITNESS_PROTOCOL_FOUND`, `OLD_WITNESS_SIGNATURE`, `WITNESS_SEATS` → CRISIS; all three set with WITNESS disabled →
-   CRISIS; all three set with WITNESS enabled and `seats` holding six of the seven seats (a synthetic record: play
-   sets `WITNESS_SEATS` only with the seventh seat) → CRISIS. *Blocked by:* Y2-PP-T17, Y1-P1-T03.
-7. `prereqs_met` is false for a route whose list has fewer than two flags (including none), with every flag set.
-   *Blocked by:* Y2-PP-T17, Y1-P1-T03.
-8. `family(id)` over every id: the 24 valid IDs per the family map; `SL-SECRET-WITNESS` → CONSENT;
-   `SL-SECRET-CROWNLESS` and `SL-SECRET-FIRSTWAKE` → RESERVED; PENDING, CRISIS, the 3 invalid-row ids and the empty
-   string → NO_FAMILY. *Blocked by:* Y2-PP-T17.
-9. `phase_of(record, loaded)` returns the stated phase for each Formulas example with its stated `loaded`, and for
-   one fixture per phase other than DAMAGED (LEANING, PARTLY_LOCKED, CRISIS, DEFERRED, VALIDATED, FIXED, FINAL),
-   called with `loaded` false for CRISIS and true for the others; `load_check(record)` is empty for each of those
-   seven fixtures except CRISIS, for which it names D9, and `phase_of` of the CRISIS fixture with `loaded` true is
-   DAMAGED. For one fixture per Edge Case 16 item (D1-D16) `phase_of(record, true)` is DAMAGED and
-   `load_check(record)` names that item. *Blocked by:* Y2-PP-T17, Y1-P1-T05, Y1-P1-T03.
-10. Seeds never lock: a record holding any one of the 26 seed flags, or one flag from each exclusive group, with no
-    lock scene played, has `axis()` UNSET for all three axes and `phase_of` LEANING. *Blocked by:* Y2-PP-T17,
-    Y1-P1-T03.
-11. Companions and timing: for one VALIDATED record per family, the records with no companion and with all four,
-    crossed with the timing sets {`act1_pace_early`, `ch1_bridge_saved`} and {`act1_pace_late`,
-    `ch1_bridge_fell`}, keep `storyline_id` and `family()` unchanged; `composer_modules()` holds no module of an
-    absent companion and differs between the two timing sets. *Blocked by:* Y2-PP-T17, Y1-P0-S06b.
-12. Boot validation: `boot_errors()` names the route when a `secret_prerequisites` list has fewer than two flags,
-    two lists share a flag, a flag is unknown to FlagRegistry, an unlock flag appears in a prerequisites list, a
-    reserved route (CROWNLESS, FIRSTWAKE) is enabled while its `family()` is RESERVED, or WITNESS is disabled in a
-    1.0 build; with the default knobs it is empty. *Blocked by:* Y2-PP-T17, Y1-P1-T03.
-13. Sole dissent (Core Rule 3): for one VALIDATED fixture per family, with `lock_negotiated` holding `authority` and
-    without it, `composer_modules()` contains `sole_dissent` exactly for the SOLE fixture with `authority` held;
-    `storyline_id` and `family()` are the same in both. *Blocked by:* Y2-PP-T17.
+   (128 cases), with every offer prerequisite set: with the default knobs, `formula_id` is `SL-A-F-D` for the 24
+   valid triples whatever I, PENDING for the 37 triples with an UNSET axis whatever I, and CRISIS for the 3 invalid
+   triples whatever I; with one route enabled at a time (synthetic knobs, formula level only), I true gives
+   `SL-SECRET-<route>` for that route's own row (WITNESS on R1, CROWNLESS on R2, FIRSTWAKE on R3) and CRISIS for the
+   other two invalid rows, so a swapped `transform()` fails. *Blocked by:* Y2-PP-T17 (unit-testable before the
+   scenes exist).
+6. For each invalid row with its route T enabled (synthetic knobs) and I true: each single-flag-missing subset of
+   `secret_prerequisites[T]` → CRISIS; all set → `SL-SECRET-T`; all set with T disabled → CRISIS. *Blocked by:*
+   Y2-PP-T17, Y1-P1-T03.
+7. `prereqs_met` is false for a route whose list has fewer than two flags (including none) with every flag set, true
+   for a list of exactly two flags with both set, and false for that list with one unset. *Blocked by:* Y2-PP-T17,
+   Y1-P1-T03.
+8. `family(id)` over every id: the 24 valid IDs per the family map; `SL-SECRET-WITNESS`, `SL-SECRET-CROWNLESS` and
+   `SL-SECRET-FIRSTWAKE` → RESERVED; PENDING, CRISIS, the 3 invalid-row ids, the empty string, `SL-SECRET-BOGUS`, a
+   lower-case valid id and a valid id with trailing characters → NO_FAMILY. *Blocked by:* Y2-PP-T17.
+9. `phase_of(record, loaded, flags, position)` returns the stated phase for each Formulas example with its stated
+   `loaded`, and for one fixture per phase other than DAMAGED (LEANING, PARTLY_LOCKED, CRISIS, VALIDATED, FIXED,
+   FINAL), called with `loaded` false for CRISIS and true for the others; `load_check()` is empty for each of those
+   six fixtures except CRISIS, for which it is exactly {D9}, and `phase_of` of the CRISIS fixture with `loaded` true
+   is DAMAGED. For each active Edge Case 16 item (D1, D6-D9, D14-D17; D1, D7, D14 and D17 one fixture per clause) a
+   fixture that differs from a valid fixture by exactly that one defect gives `phase_of(…, true)` DAMAGED and
+   `load_check()` exactly {that item}; `load_check()` gives the same result with every knob flipped. *Blocked by:*
+   Y2-PP-T17, Y1-P1-T05, Y1-P1-T03.
+10. Seeds never lock: a record holding any one of the 26 seed flags in `flags`, or one flag from each exclusive group,
+    positioned before C8-S13 with no lock scene played, has `axis()` UNSET for all three axes and `phase_of` LEANING;
+    no input of `phase_of` or `axis()` but the record's own fields sets an axis (the scene-level counterpart, a lock
+    vote keeping the backed value whatever seeds are set, is `storyline-lifecycle.md` L-AC2). *Blocked by:*
+    Y2-PP-T17, Y1-P1-T03.
+11. Companions and timing: for one VALIDATED record per 1.0 family, the records with no companion and with all four,
+    crossed with the timing sets {`act1_pace_early`, `ch1_bridge_saved`} and {`act1_pace_late`, `ch1_bridge_fell`},
+    keep `storyline_id` and `family()` unchanged; `composer_modules()` holds no module of an absent companion; and
+    the symmetric difference of `composer_modules()` between the two timing sets equals the union of
+    `module_keys()` of the four timing flags. Kaelthas (Core Rule 11): with his trust condition false he is present
+    on an ARCHIVE record and absent on a HEARTH and a CONTINUITY record; with it true he is present on all three.
+    *Blocked by:* Y2-PP-T17.
+12. Boot validation: `boot_errors(knobs, flags, build)` names the route when a `secret_prerequisites` list has fewer
+    than two flags, two lists share a flag, a flag is unknown to FlagRegistry, an unlock flag appears in a
+    prerequisites list, or any secret route is enabled in a `1.0` build; with the default knobs and build `1.0` it is
+    empty. *Blocked by:* Y2-PP-T17, Y1-P1-T03.
+13. Sole dissent (Core Rule 3): for one VALIDATED fixture per 1.0 family, each with `lock_negotiated` = {authority},
+    {faction, deleted} and {}, and one SOLE fixture reached by renegotiation to YOU (`axis_revised` and
+    `lock_negotiated` = {authority}): `composer_modules()` contains `sole_dissent` exactly for the SOLE fixtures whose
+    `lock_negotiated` holds `authority`; `storyline_id` and `family()` are the same across a family's fixtures.
+    *Blocked by:* Y2-PP-T17.
 14. Pillar P3 (ROADMAP §2: a storyline changes ≥ 3 story scenes, has its own ending sequence and its own Story+
-    state). The baseline for "changes" is the shared variant of a scene (the one every storyline plays): over the 25
-    storylines reachable in 1.0, `scene_variants(id)` holds at least 3 scenes whose variant is not shared, and
-    `ending_sequence()` and `story_plus_state()` are distinct for every ID. The smallest number of scenes in which
-    two distinct IDs differ is reported, with no threshold (Open Question 13). *Blocked by:* Y2-PP-T17.
-15. Pillar P5 tracking: before Y2-PP-T17 closes, every flag the nine 1.0 side arcs set is a row of the Act 1 seed
-    map (or of its successor table) with a `pushes` target and a direction, and the checker's flag list includes
-    it. *Blocked by:* Y2-PP-T17.
+    state), over the 24 storylines reachable in 1.0, by rendered text, not by ids: for every ID at least 3 scenes of
+    `scene_render(id)` differ from that scene's shared hash; for every pair of distinct IDs at least 1 scene of
+    `scene_render()` differs, `ending_render()` differs in at least one rendered-text hash (different module ids with
+    the same text do not count), and `story_plus_state()` differs. The smallest number of scenes in which two
+    distinct IDs differ is reported; a pairwise threshold above 1 is Open Question 13. *Blocked by:* Y2-PP-T17.
+15. Pillar P5 tracking (a closing condition of Y2-PP-T17): Y2-PP-T17 lists every flag the nine 1.0 side arcs set
+    in a `side_arc_flags` table (arc, flag, source line); the set of those flags minus the flags of the seed map (or
+    its successor table) is empty, each such row has a `pushes` target and a direction, and the checker's flag list
+    includes it. *Blocked by:* Y1-P1-T03 (the arc flags exist in FlagRegistry).
+16. Comprehension (Player Fantasy, "Authorship, not a menu"; playtest, Integration): in a blind playtest of
+    Chapter 8 with at least 5 testers, each starting from a fixture save with a different set of Act 1 seeds, at
+    least 70% of testers, asked after each lock scene, name the earlier choice that at least one voiced argument
+    referred to; and at least 70% of testers who meet the C8-S16 crisis say in their own words which faction refused
+    and what it would not accept. The report is retained in `production/qa/` with the fixture list. The 70% bar
+    follows the concept's Gate 1 test style; below it, the seed arguments or red lines are revised, not the bar.
+    *Blocked by:* Y2-PP-T17.
 
-The scene-level criteria (locks, red lines, crisis, deferral, invocation, gate, final authorization, Consent
-variants, saves, the route bot) are `storyline-lifecycle.md` L-AC1 onward.
+The scene-level criteria (locks, red lines, crisis, the commit and save rule, renegotiation, gate, secret routes
+closed, final authorization, saves, visual evidence, the route bot) are `storyline-lifecycle.md` L-AC1 onward.
 
 ## Open Questions
 
@@ -846,24 +826,40 @@ variants, saves, the route bot) are `storyline-lifecycle.md` L-AC1 onward.
     destruction while RELEASE ends involuntary preservation (PM:686, PM:7094); `ch1_root_purge` is a non-consensual
     rewrite that could argue for YOU instead of Hearth; `ch2_data_wraith_absorbed` → CHOOSE is unilateral and held
     in Kaelen's own Root layer (PM:2468), which could argue for YOU. YOU also has three `+` seeds against one each
-    for SHARED and NONE, so YOU passes clean most easily. Revisit in a narrative pass.
+    for SHARED and NONE, so YOU passes clean most easily, and `sole_dissent` (the one audible negotiated result)
+    is the least likely case. Round 9 (narrative-director): `ch1_root_purge` → HEARTH contradicts its own source
+    (PM:663, "if he survives with agency intact"), and `ch1_knight_spared` fits it better. Revisit in a narrative
+    pass, with the AC16 playtest as evidence.
 11. **Reserved: post-boss reconsideration.** PM:8791 allows "one last lawful reconsideration" if final circumstances
     changed drastically. Cut from this design (user decision 2026-11-10) because boss phases 2-4 already read every
     axis (PM:8611-8616). If Y2-PP-T17 ever authors a trigger, it needs a GDD revision, and can change at most the
     epilogue and Story+ state.
-12. **Deferred to Y2-PP-T17:** the Story+ rotating witness institution (PM:11220); the signpost texts; the
-    witness candidates, their assent conditions and stance texts (`storyline-lifecycle.md` S9); the `sole_dissent`
-    and `consent_unauthorized` module texts and the stand-down line; whether the ledger Variants and Policies
-    (PM:7569-7582) later make `lock_negotiated` visible beyond `sole_dissent`; Witness Protocol's authored cost
-    (PM:11222). Decided 2026-11-10: C10-S15 can fall short of the threshold; a FAILED vote is not executed (Kaelen
-    stands down) and never changes the stored ID or the family (Core Rule 10); the threshold is fixed at 5, and the
-    player's part in defining it ("Player previously helped define threshold", PM:8707) is choosing the witnesses in
-    Secret Quest 09.
-13. **P3 baseline and the storyline cut order.** (a) AC14 reads "a storyline changes ≥ 3 scenes" as "≥ 3 scenes whose
-    variant is not the shared one" and only reports the pairwise minimum; the earlier all-pairs test (every two IDs
-    differ in ≥ 3 scenes) was dropped because the design never shows that a single Faction or Deleted value touches
-    three scenes. Confirm the reading, or set a pairwise threshold once Y2-PP-T17 counts the scenes each axis value
-    varies. (b) `design/gdd/game-concept.md` lists "storylines 27→18" in the cut order and "~6 storylines" for the
+12. **Deferred to Y2-PP-T17:** the `sole_dissent` module text; whether the ledger Variants and Policies
+    (PM:7569-7582) later make `lock_negotiated` visible beyond `sole_dissent`. The Witness items of revision 8 (the
+    witness institution, signposts, candidates, the vote, the stand-down) moved to Open Question 15.
+13. **P3 baseline and the storyline cut order.** (a) AC14 now tests rendered text: ≥ 3 non-shared scenes per ID and
+    a pairwise minimum of 1 scene (round 9). The all-pairs ≥ 3 test stays dropped because the design never shows that
+    a single Faction or Deleted value touches three scenes; set a higher pairwise threshold once Y2-PP-T17 counts the
+    scenes each axis value varies (PM:8975 promises five changes per route). (b) `design/gdd/game-concept.md` lists "storylines 27→18" in the cut order and "~6 storylines" for the
     smaller game. The axes, their values and R1-R3 are not knobs here, so neither cut has a mechanism: collapsing one
     Deleted value would give 3 × 3 × 2 = 18 combinations but changes R1-R3, `transform()` and every count. Decide the
     mechanism, or drop the cut, before a budget cut can invoke it.
+14. **1.0 scope of the families and P3 (user decision 2026-11-11).** 1.0 ships 24 storylines in three families;
+    the Story Bible §5 decision line ("the four-family model below is adopted; ... the 24 + 3 storyline IDs") and
+    P3's "24 + 3" stay the design total. Whether the Story Bible and `DESIGN_PILLARS.md` should say that Consent and
+    the secret storylines are post-1.0 is a separate edit for the user (not made in revision 9).
+15. **Secret routes, post-1.0, designed as one mechanism.** Revision 8's Witness design (the R1 deferral, the
+    invocation at C9-S19 or the gate, the witness vote at C10-S15 with threshold 5, the stand-down, the Consent
+    variants) was removed in revision 9 after design review round 9 found a further state defect in it (git commit
+    084ccb0 holds it). The post-1.0 design must answer, for all three routes at once: where an invocation is offered,
+    given that each route's last prerequisite is set after C8-S16 (PM:7586-7588) — moving Secret Quest 09's
+    prerequisites before C8-S16 would let the crisis offer the invocation directly; whether a provisional coalition
+    can hold without the refusing faction (PM:7144, PM:7153); who names the witnesses (PM:7519: the Assembly) and the
+    player's part in the threshold (PM:8707); whether the deleted seat can refuse a restoration (PM:714, PM:7093,
+    PM:11235); who holds Root after a Consent act (PM:705); what a vote that falls short leaves to Story+ (PM:11220);
+    and how a witness vote avoids being a solved puzzle when stances are visible.
+16. **Reference model (round 9 process decision).** Before the next design review, a non-shipping reference model of
+    `formula_id`, `lock_pass`, `phase_of`, `load_check` and `crisis_offers`, with a breadth-first walk of the
+    lifecycle transitions, asserts that every reachable save passes `load_check` and every non-final reachable state
+    has a way forward. Owner and location to be set (proposed: Y1, under `production/qa/evidence/2026-11-storyline/`).
+    Round 10 then runs lean against its output.

@@ -1,0 +1,9 @@
+# Mutation 'r8_t13_guard_reverted' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd ..\..\..\..\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\f4232427-4446-4677-92bf-f86ac72444a7\scratchpad\mut\mutations\storyline-lifecycle.r8_t13_guard_reverted.md
+gdd:       ..\..\..\..\design\gdd\storyline-axes.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\f4232427-4446-4677-92bf-f86ac72444a7\scratchpad\mut\mutations\storyline-lifecycle.r8_t13_guard_reverted.md
+bible:     ..\..\..\..\AethelgardPrototype\story\STORY_BIBLE.md
+root:      ..\..\..\..
+FAIL [transitions] line 300 (T13): guard 'the final authorization scene is playing; witness_mandate is not FAILED', pinned 'the final authorization scene is playing; witness_mandate is MET, or the stored ID is not SL-SECRET-WITNESS'
+RESULT: FAIL (1 problems)
+exit code: 1
