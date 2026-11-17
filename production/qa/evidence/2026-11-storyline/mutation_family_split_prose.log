@@ -1,9 +1,9 @@
 # Mutation 'family_split_prose' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-axes.family_split_prose.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-axes.family_split_prose.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-axes.family_split_prose.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-axes.family_split_prose.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [combinations] line 235: family split {'SOLE': 9, 'BOUND': 9, 'NONE_AUTH': 6} but the table has {'SOLE': 8, 'BOUND': 9, 'NONE_AUTH': 7}
+FAIL [combinations] line 242: family split {'SOLE': 9, 'BOUND': 9, 'NONE_AUTH': 6} but the table has {'SOLE': 8, 'BOUND': 9, 'NONE_AUTH': 7}
 RESULT: FAIL (1 problems)
 exit code: 1

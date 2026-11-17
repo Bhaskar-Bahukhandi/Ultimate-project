@@ -1,11 +1,11 @@
 # Mutation 'r4_red_line_extra_row' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-lifecycle.r4_red_line_extra_row.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-lifecycle.r4_red_line_extra_row.md
 gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
-lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-lifecycle.r4_red_line_extra_row.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-lifecycle.r4_red_line_extra_row.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
 FAIL [red lines] red-line rules ['R1', 'R2', 'R3', 'R1'] != ['R1', 'R2', 'R3']
-FAIL [red lines] line 70 (R1): pair 'SHARED + HEARTH', expected 'YOU + HEARTH' (the rule's combination)
-FAIL [red lines] line 70 (R1): value voiced 'no shared compulsion' differs from the pinned value
+FAIL [red lines] line 71 (R1): pair 'SHARED + HEARTH', expected 'YOU + HEARTH' (the rule's combination)
+FAIL [red lines] line 71 (R1): value voiced 'no shared compulsion' differs from the pinned value
 RESULT: FAIL (3 problems)
 exit code: 1

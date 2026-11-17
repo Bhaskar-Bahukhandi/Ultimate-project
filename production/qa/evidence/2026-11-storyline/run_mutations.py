@@ -207,7 +207,7 @@ MUTATIONS = {
     # qa-lead's round-6 survivors, re-expressed against the revised text (they PASSED revision 5's checker)
     "r6_qa_lac20_replays": [(L, "`current_scene()` stays `load_menu`, and no lock scene plays.", "`current_scene()` becomes C8-S13, and the lock scenes replay.")],
     "r6_qa_lac15_withdrawn_stated": [(L, "`revise:authority:NONE`) → WITHDRAWN", "`revise:authority:NONE`) → STATED")],
-    "r6_qa_rule8_stranded": [("no runtime catch-up exists, so\n   no loaded state is stranded.", "the save\n   is stranded.")],
+    "r6_qa_rule8_stranded": [("Every save that play writes loads (I9)", "Every save that play writes is stranded (I9)")],
     "r6_qa_ec8_body": [("one\n   positioned past a lock scene (chapters 9 and 10 exist in the code today) is unsupported and does not load (Edge",
                         "one\n   positioned past a lock scene (chapters 9 and 10 exist in the code today) replays the lock scenes (Edge")],
     # axes blocker 1: the damaged-first phase function
@@ -215,11 +215,11 @@ MUTATIONS = {
     "r6_phase_final_without_id": [("    if storyline_id is stored and root_phase is FINAL  → FINAL", "    if root_phase is FINAL                             → FINAL")],
     "r6_phase_example_damaged_wrong": [("stored, FINAL) → DAMAGED", "stored, FINAL) → FINAL")],
     "r6_phase_example_crisis_loadable": [("(NONE, ARCHIVE, RELEASE, nothing stored, OUTSIDE) → DAMAGED", "(NONE, ARCHIVE, RELEASE, nothing stored, OUTSIDE) → CRISIS")],
-    "r6_phase_row_damaged_dropped": [("| DAMAGED | the record holds an item of Edge Case 16: never saved by play; a load that yields it is refused | — (never loaded) |\n", "")],
+    "r6_phase_row_damaged_dropped": [("| DAMAGED | the record holds an item of Edge Case 16: never saved by play; a load that yields it is refused | a loaded record never reaches the gate; a live one is turned back (lifecycle S6) |\n", "")],
     "r6_phase_final_meaning_old": [("| FINAL | the final authorization concluded: execution confirmed |", "| FINAL | execution confirmed |")],
     # axes blocker 2: Edge Case 16
     "r6_ec16_d16_dropped": [("    - D16 a story position past the lock scene of an UNSET axis (a save made past Chapter 8 before these fields\n      existed; unsupported, user decision 2026-11-10)\n", "")],
-    "r6_ec16_d7_dropped": [("    - D7 `axis_revised` holding an axis that no `retraction_log` entry names, or more than one axis, or a\n      `retraction_log` entry whose `new` value is not the record's value for its axis\n", "    - D7 `axis_revised` holding an axis\n")],
+    "r6_ec16_d7_dropped": [("    - D7 `axis_revised` holding an axis that no `retraction_log` entry names, or a `retraction_log` entry whose\n      axis is not in `axis_revised` (the composer reads `axis_revised`), or more than one axis, or a\n      `retraction_log` entry whose `new` value is not the record's value for its axis\n", "    - D7 `axis_revised` holding an axis\n")],
     "r6_ec6_cites_boot": [("damaged: SaveService's load check reports it (Edge Case 16, D15)", "damaged: FlagRegistry boot validation (Y1-P1-T03) reports it")],
     "r6_ac9_dlist_short": [("(D1, D6-D9, D14-D17;", "(D1, D6-D9, D14-D16;")],
     # axes blocker 3: the over-promise guard
@@ -236,7 +236,7 @@ MUTATIONS = {
     # lifecycle blocker 5: the FAILED vote
     "r6_t13_unguarded": [(L, "| the final authorization scene is playing | FINAL |", "| — | FINAL |")],
     # Revision 8 (design review round 8): the T13 guard and the D17 item are pinned.
-    "r8_d17_dropped": [("    - D17 the set axes are not a prefix of the lock order (Faction, then Authority, then Deleted), or an axis is set\n      while the story position is before its lock scene's commit: no lock scene could play from it (S1 needs every\n      axis UNSET, S2 needs Faction set, S4 needs Faction and Authority set), so loading it would strand the player.\n      A position inside a lock scene before its commit counts as before it (no save exists there, I9); the commit\n      checkpoint counts as past it\n", "")],
+    "r8_d17_dropped": [("    - D17 a lock-order defect, in two clauses. (a) *Before commit (load only):* an axis is set while the story\n      position is before its lock scene's commit: no lock scene could play from it (S1 needs every axis UNSET, S2\n      needs Faction set, S4 needs Faction and Authority set), so loading it would strand the player. A position\n      inside a lock scene before its commit counts as before it (no save exists there, I9); the commit checkpoint\n      counts as past it. (b) *Prefix:* the set axes are not a prefix of the lock order (Faction, then Authority,\n      then Deleted). For a loaded record (b) is implied by D16 and (a) (the reference model checked 64 axis triples\n      at 15 positions and found none that fires (b) alone), so it is kept as documentation and has no fixture of its\n      own (AC9)\n", "")],
     "r6_t14_executes": [(L, "| `root_phase` FINAL; checkpoint |", "| `root_phase` FINAL; restoration executed |")],
     "r6_lac22_confirm_on_failed": [(L, "else is false with `record_hash()` unchanged. *Blocked", "else gives FINAL. *Blocked")],
     # lifecycle blocker 1: the legacy saves
@@ -279,7 +279,7 @@ MUTATIONS = {
     "r9_commit_list": [(L, "(T1, T2, T3, T5, T7, T9) commits", "(T1, T2, T3, T5, T9) commits")],
     "r9_lac6_list": [(L, "For each record-writing transition (T1, T2, T3, T5, T7, T9)", "For each record-writing transition (T1, T2, T3, T5)")],
     "r9_ec16_retired_reactivated": [("    - D2-D5 retired (revision 9): they checked the Witness record fields, which 1.0 no longer stores", "    - D2-D5 a stored ID on a row other than R1")],
-    "r9_ac9_clause_list": [("D1, D7, D14 and D17 one fixture per clause", "D1 and D7 one fixture per clause")],
+    "r9_ac9_clause_list": [("D1, D7 and\n   D14 one fixture per clause;", "D1 and D7 one fixture per clause;")],
     "r9_phase_example_lock_order": [("(YOU, HEARTH, UNSET, nothing stored, OUTSIDE) →", "(UNSET, HEARTH, CHOOSE, nothing stored, OUTSIDE) →")],
     "r9_observable_old_name": [("| `scene_render(id)` |", "| `scene_variants(id)` |")],
     "r9_ac15_blocked": [("*Blocked by:* Y1-P1-T03 (the arc flags exist in FlagRegistry).", "*Blocked by:* Y2-PP-T17, Y1-P1-T03 (the arc flags exist in FlagRegistry).")],
@@ -289,12 +289,26 @@ MUTATIONS = {
     "r9_ac5_formula_mention": [("so a swapped `transform()` fails", "so `transform()` is covered")],
     "r9_lac2_fixture_wrong": [(L, "`act1_report_local` → not;", "`act1_report_local` → contains;")],
     "r9_s5_unlock_flag": [(L, "`SEVEN_WITNESSES_AVAILABLE`, `CROWNLESS_AVAILABLE`, `FIRST_WAKE_AVAILABLE`) is set", "`SEVEN_WITNESSES_AVAILABLE`, `FIRST_WAKE_AVAILABLE`) is set")],
-    "r9_dependency_revision": [(L, "| revision 9 |", "| revision 8 |")],
+    "r9_dependency_revision": [(L, "| revision 10 |", "| revision 8 |")],
     "r9_content_scope_count": [(L, "| red lines | 3 |", "| red lines | 4 |")],
     "r9_gate_row_dropped": [(L, "| FIXED, FINAL | ROOT_OF_HEAVEN; nothing changes (T8) |\n", "")],
     "r9_life_formula_signpost": [(L, "= HIDDEN while T is disabled", "= OPEN while T is disabled")],
     "r9_ec2_offer_count": [("R1 at C8-S16 offers only its\n   six renegotiations", "R1 at C8-S16 offers only its\n   seven renegotiations")],
     "r9_red_line_names_route": [(L, "No line names a secret route or the institution\none needs", "The R1 line names the witnesses")],
+    # --- design review round 10 (2026-11-17): the reference model's findings F1-F9 as pinned text.
+    "r10_ac9_crisis_d9_only": [("which sits inside C8-S16 and so reports exactly {D9, D17}", "which reports exactly {D9}")],
+    "r10_d17_prefix_fixture": [("D17 one fixture, for its before-commit clause,", "D17 one fixture per clause,")],
+    "r10_live_d17_applies": [("Two items are tested on a loaded record only", "One item is tested on a loaded record only")],
+    "r10_d9_load_only_unmarked": [("three axes set with nothing stored *(load only)*", "three axes set with nothing stored")],
+    "r10_d14_matching_dropped": [(" A beat matches an entry\n      exactly when its id is `retract_<rule>_<axis>_<new>`, rebuilt from the entry (`rule` is the invalid row R1-R3\n      that the record's axes form with the entry's axis set back to `old`)", "")],
+    "r10_d7_reverse_dropped": [("or a `retraction_log` entry whose\n      axis is not in `axis_revised` (the composer reads `axis_revised`), ", "")],
+    "r10_rule8_stranded_restored": [("no runtime\n   catch-up exists. Every save", "no runtime\n   catch-up exists, so no loaded state is stranded. Every save")],
+    "r10_rule8_best_effort_dropped": [("Beyond Edge Case 16's list the check is best-effort", "Beyond Edge Case 16's list the check is complete")],
+    "r10_ec16_not_checked_dropped": [("    Not checked (best-effort, edited or debug saves only; user decision 2026-11-17, Open Question 17):", "    Checked:")],
+    "r10_gate_damaged_row_dropped": [(L, "| DAMAGED (a live record) | TURNED_BACK: logged as a data error, no transition |\n", "")],
+    "r10_gate_damaged_outcome_wrong": [(L, "| TURNED_BACK: logged as a data error", "| ROOT_OF_HEAVEN: logged as a data error")],
+    "r10_lac8_injection_dropped": [(L, "they run on a live record that the test injects at the gate, and are reported as synthetic", "they run from synthetic fixture saves and are reported as synthetic")],
+    "r10_t6_defence_dropped": [(L, "T6 and the\nDAMAGED row are therefore defence in depth", "T6 and the\nDAMAGED row are therefore live paths")],
 }
 # Controls: edits the checker must accept (expected PASS).
 CONTROLS = {

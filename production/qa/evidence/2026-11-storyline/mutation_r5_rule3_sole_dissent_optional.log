@@ -1,9 +1,9 @@
 # Mutation 'r5_rule3_sole_dissent_optional' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-axes.r5_rule3_sole_dissent_optional.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-axes.r5_rule3_sole_dissent_optional.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-axes.r5_rule3_sole_dissent_optional.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-axes.r5_rule3_sole_dissent_optional.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [core rules] line 106: Core Rule 3 lacks the pinned sentence 'on a SOLE storyline whose lock_negotiated holds authority, the ending plays sole_dissent'
+FAIL [core rules] line 107: Core Rule 3 lacks the pinned sentence 'on a SOLE storyline whose lock_negotiated holds authority, the ending plays sole_dissent'
 RESULT: FAIL (1 problems)
 exit code: 1

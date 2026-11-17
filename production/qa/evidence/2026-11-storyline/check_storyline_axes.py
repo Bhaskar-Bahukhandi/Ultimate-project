@@ -149,10 +149,14 @@ PHASE_TABLE = {  # phase -> (meaning, gate), backticks removed
               "open (re-entry)"),
     "FINAL": ("the final authorization concluded: execution confirmed", "open (Story+)"),
     "DAMAGED": ("the record holds an item of Edge Case 16: never saved by play; a load that yields it is refused",
-                "— (never loaded)"),
+                "a loaded record never reaches the gate; a live one is turned back (lifecycle S6)"),
 }
 # The gate outcome each axes-doc gate phrase means in the lifecycle doc's gate table.
 GATE_OUTCOME = {"turns the player back": "TURNED_BACK"}
+# Revision 10 (design review round 10, reference model F9): a live DAMAGED record at the gate is turned back as a data
+# error (defence in depth). The lifecycle gate table lists it as "DAMAGED (a live record)"; no transition fires.
+LIVE_GATED = {"DAMAGED": "a live one is turned back"}
+LIVE_QUALIFIER = " (a live record)"
 # Revision 9: the 1.0 families. CONSENT is post-1.0 and must not be a value family() can return.
 FAMILIES = frozenset(FAMILY_BY_AUTHORITY.values())
 POST_1_0_FAMILY = "CONSENT"
@@ -236,7 +240,11 @@ CORE_RULE_KEYS: dict[int, tuple[str, ...]] = {
         "Every entry and re-entry into Root of Heaven runs the gate check",
         "before the three locks it turns the player back in the fiction",
         "is unsupported and does not load (Edge Case 16, D{legacy}; user decision 2026-11-10); no runtime catch-up "
-        "exists, so no loaded state is stranded.",
+        "exists.",
+        # Revision 10 (round 10, F5/F7/F10): the promise is every save that play writes, not every loaded state.
+        "In 1.0 that turn-back is defence in depth",
+        "Every save that play writes loads (I9)",
+        "Beyond Edge Case 16's list the check is best-effort",
         "The refusal holds only while no player-facing build has such saves"),
     9: ("It changes no axis and no ID.", "this design offers none", "and the player confirms execution."),
     10: ("the secret storylines' families are reserved until their routes ship",
@@ -322,22 +330,32 @@ EC16_ENTRIES = (
            "ID of an invalid row, or any SL-SECRET-* ID (no 1.0 play stores one)"),
     (2, 5, "retired (revision 9): they checked the Witness record fields, which 1.0 no longer stores"),
     (6, 6, "axis_revised holding an axis that lock_negotiated lacks"),
-    (7, 7, "axis_revised holding an axis that no retraction_log entry names, or more than one axis, or a "
-           "retraction_log entry whose new value is not the record's value for its axis"),
+    # Revision 10 (round 10, F6): D7 also runs the other way (the composer reads axis_revised).
+    (7, 7, "axis_revised holding an axis that no retraction_log entry names, or a retraction_log entry whose axis is "
+           "not in axis_revised (the composer reads axis_revised), or more than one axis, or a retraction_log entry "
+           "whose new value is not the record's value for its axis"),
     (8, 8, "root_phase INSIDE or FINAL with nothing stored"),
-    (9, 9, "three axes set with nothing stored (tested on load only)"),
+    (9, 9, "three axes set with nothing stored *(load only)*"),
     (10, 13, "retired (revision 9): they checked the witness vote fields"),
+    # Revision 10 (round 10, F4): 'matching' is defined, so a changed entry value is also a beat mismatch.
     (14, 14, "a retract_* beat in beats_played with no matching retraction_log entry, or a retraction_log entry whose "
-             "beat is not in beats_played, or a beat id the lifecycle does not define"),
+             "beat is not in beats_played, or a beat id the lifecycle does not define. A beat matches an entry "
+             "exactly when its id is retract_<rule>_<axis>_<new>, rebuilt from the entry (rule is the invalid row "
+             "R1-R3 that the record's axes form with the entry's axis set back to old)"),
     (15, 15, "two flags of one exclusive group (Edge Case 6)"),
     (16, 16, "a story position past the lock scene of an UNSET axis (a save made past Chapter 8 before these fields "
              "existed; unsupported, user decision 2026-11-10)"),
     # Revision 8 (design review round 8), clarified in revision 9: out-of-order lock sets are damaged.
-    (17, 17, "the set axes are not a prefix of the lock order (Faction, then Authority, then Deleted), or an axis is "
-             "set while the story position is before its lock scene's commit: no lock scene could play from it (S1 "
-             "needs every axis UNSET, S2 needs Faction set, S4 needs Faction and Authority set), so loading it would "
-             "strand the player. A position inside a lock scene before its commit counts as before it (no save "
-             "exists there, I9); the commit checkpoint counts as past it"),
+    # Revision 10 (round 10, F1/F3): clause (a) is load-only (the live crisis is set before its commit); clause (b) is
+    # implied for a loaded record, so it is documentation with no fixture of its own.
+    (17, 17, "a lock-order defect, in two clauses. (a) *Before commit (load only):* an axis is set while the story "
+             "position is before its lock scene's commit: no lock scene could play from it (S1 needs every axis "
+             "UNSET, S2 needs Faction set, S4 needs Faction and Authority set), so loading it would strand the "
+             "player. A position inside a lock scene before its commit counts as before it (no save exists there, "
+             "I9); the commit checkpoint counts as past it. (b) *Prefix:* the set axes are not a prefix of the lock "
+             "order (Faction, then Authority, then Deleted). For a loaded record (b) is implied by D16 and (a) (the "
+             "reference model checked 64 axis triples at 15 positions and found none that fires (b) alone), so it is "
+             "kept as documentation and has no fixture of its own (AC9)"),
 )
 EC16_LAST = EC16_ENTRIES[-1][1]
 EC16_ACTIVE = tuple(lo for lo, hi, text in EC16_ENTRIES if not text.startswith(EC16_RETIRED_PREFIX))
@@ -353,7 +371,12 @@ EC16_KEYS = ("it compares and never rewrites the stored ID or the save, and read
              "A secret unlock flag alone changes nothing.",
              "The check reads the record, the saved flags and the story position (load_check(record, flags, position))",
              "D16 holds only while no player-facing build has such saves; if one ships before these fields do, the "
-             "decision is reopened")
+             "decision is reopened",
+             # Revision 10 (round 10): which items run on a live record, and what the check does not promise.
+             "load_check always tests a loaded record, so it runs every item.",
+             "storyline_phase runs the same items on the live record, except the two marked *(load only)*",
+             "so the CRISIS fixture of AC9 reports {D9, D17}.",
+             "Not checked (best-effort, edited or debug saves only; user decision 2026-11-17, Open Question 17)")
 # Round 6 blocker 3: the clean/negotiated difference is promised only as far as sole_dissent delivers it.
 NO_OVERPROMISE_KEYS = (
     "in 1.0 only a Sole ending makes that record audible (Core Rule 3)",
@@ -440,8 +463,9 @@ GATE_EVENT = "Root of Heaven entry, any path"
 STORED_PHASES = ("VALIDATED", "FIXED", "FINAL")
 CHECKPOINT = "checkpoint"
 NO_CHECKPOINT = "no checkpoint"
-GATE_TABLE = {  # phases cell -> outcome cell, backticks removed (lifecycle revision 5: three rows)
+GATE_TABLE = {  # phases cell -> outcome cell, backticks removed (lifecycle revision 6: four rows)
     "LEANING, PARTLY_LOCKED": "TURNED_BACK: the Assembly has not decided",
+    "DAMAGED (a live record)": "TURNED_BACK: logged as a data error, no transition",
     "VALIDATED": "ROOT_OF_HEAVEN; root_phase becomes INSIDE (T7)",
     "FIXED, FINAL": "ROOT_OF_HEAVEN; nothing changes (T8)",
 }
@@ -496,7 +520,11 @@ LIFE_KEYS = (  # normalized sentences the lifecycle doc must keep
     "that closes it.",
     "So no save ever holds a record that is half of a transition, and no save is positioned inside a lock scene.",
     # The gate.
-    "The load path never meets LEANING or PARTLY_LOCKED",
+    "The load path never meets LEANING, PARTLY_LOCKED or DAMAGED",
+    # Revision 10 (round 10, F9): T6 never fires in play; it and the DAMAGED row are defence in depth.
+    "T6 and the DAMAGED row are therefore defence in depth against a story-graph defect",
+    "A VALIDATED save positioned inside Root of Heaven cannot be written by play (T7 is atomic) but loads, and the "
+    "load-path gate then runs T7.",
     "CRISIS never reaches the gate: it exists only inside C8-S16.",
     "Lint shows the text matches its pins; it is not evidence that the state machine is correct",
 )
@@ -523,7 +551,11 @@ LAC_KEYS: dict[int, tuple[str, ...]] = {
         "unchanged"),
     8: ("LEANING and PARTLY_LOCKED on the story path → TURNED_BACK",
         "on the load path the load is refused with load_errors() naming D{legacy} and no gate entry",
-        "VALIDATED → ROOT_OF_HEAVEN and FIXED; FIXED and FINAL → ROOT_OF_HEAVEN, phase unchanged"),
+        "VALIDATED → ROOT_OF_HEAVEN and FIXED; FIXED and FINAL → ROOT_OF_HEAVEN, phase unchanged",
+        "they run on a live record that the test injects at the gate, and are reported as synthetic",
+        "The same injection with a live DAMAGED record → TURNED_BACK, record_hash() unchanged and a data error logged",
+        "A VALIDATED fixture save positioned inside Root of Heaven loads, and the load-path gate gives "
+        "ROOT_OF_HEAVEN and FIXED"),
     9: ("take() of each of the {total} renegotiation offers is false with record_hash() unchanged",
         "after setting every secret prerequisite flag and flipping every knob, storyline_id() and storyline_phase() "
         "are unchanged"),
@@ -1376,8 +1408,11 @@ def check_formulas(lines: list[str], rules: dict[str, tuple[str, ...]], probs: P
         labelled = [(label.replace("`", ""), body) for label, body in zip(segments[1::2], segments[2::2])]
         examples = " ".join(body for _, body in labelled)
         # Revision 9: damaged() also takes the saved flags and the story position, for D15-D17.
-        for want in (f"{DAMAGED_SIGNATURE} is true when the inputs hold an item of Edge Case 16; D{EC16_CRISIS} is "
-                     "tested on a loaded record only (loaded true)",
+        # Revision 10 (round 10, F1): two items are load-only; every other item applies to the live record too.
+        for want in (f"{DAMAGED_SIGNATURE} is true when the inputs hold an item of Edge Case 16. Two items are tested "
+                     f"on a loaded record only (loaded true): D{EC16_CRISIS} and the before-commit clause of "
+                     f"D{EC16_ORDER}",
+                     "Every other item applies to the live record too (Edge Case 16 marks each item)",
                      f"the record alone cannot show D{EC16_EXCLUSIVE}-D{EC16_ORDER}, so the check takes them",
                      "FINAL and FIXED need a stored ID"):
             if want not in norm(text):
@@ -1671,14 +1706,19 @@ def check_axes_edge_cases(lines: list[str], probs: Problems) -> None:
             probs.add("over-promise", f"storyline-axes.md promises more than sole_dissent: '{bad}'")
     # AC9 covers exactly the active items, one fixture per clause for the items with several clauses (derived).
     multi = [lo for lo in EC16_ACTIVE if ", or " in EC16_TEXT[lo]]
+    # Revision 10 (round 10, F3): D17 has two clauses but one fixture (its prefix clause is documentation).
+    multi = [lo for lo in multi if lo != EC16_ORDER]
     want = (f"For each active Edge Case 16 item ({compress_items(EC16_ACTIVE)}; "
-            f"{join_and([f'D{n}' for n in multi])} one fixture per clause)")
+            f"{join_and([f'D{n}' for n in multi])} one fixture per clause; D{EC16_ORDER} one fixture, for its "
+            "before-commit clause, because its prefix clause is documentation)")
     if want not in whole:
         probs.add(area, f"AC9 lacks '{want}' (derived from Edge Case 16)")
     playable = [p for p in PHASES if p != "DAMAGED"]
+    # Revision 10 (round 10, F2): the CRISIS fixture sits inside C8-S16, so D17 fires with D9.
     for want in (f"for one fixture per phase other than DAMAGED ({', '.join(playable)})",
-                 f"load_check() is empty for each of those {NUMBER_WORDS[len(playable)]} fixtures except CRISIS, for "
-                 f"which it is exactly {{D{EC16_CRISIS}}}"):
+                 f"load_check() is empty for each of those {NUMBER_WORDS[len(playable)]} fixtures except CRISIS, "
+                 f"which sits inside C8-S16 and so reports exactly {{D{EC16_CRISIS}, D{EC16_ORDER}}}",
+                 "a defect may change the several fields that keep the other items satisfied"):
         if want not in whole:
             probs.add(area, f"AC9 lacks '{want}' (derived)")
     # Edge Cases 2, 13 and 15 (revision 9): the Witness leads change nothing; enabling needs the post-1.0 design.
@@ -2029,12 +2069,19 @@ def check_gate_table(life: list[str], gates: dict[str, str], probs: Problems) ->
     rows = get_table(life, H_GATE, area, probs)
     covered: list[str] = []
     for lineno, (phases_cell, outcome) in rows:
-        phases = [p.strip() for p in phases_cell.split(",")]
+        phases = [p.strip().removesuffix(LIVE_QUALIFIER) for p in phases_cell.split(",")]
         covered += phases
         token = re.match(r"[A-Z_]+", outcome)
         for phase in phases:
             if phase not in PHASES:
                 probs.add(area, f"line {lineno}: '{phase}' is not a phase of storyline-axes.md")
+                continue
+            if phase in LIVE_GATED:  # revision 10: only a live record reaches the gate in this phase
+                if LIVE_QUALIFIER not in phases_cell or LIVE_GATED[phase] not in gates.get(phase, ""):
+                    probs.add(area, f"line {lineno} ({phase}): the gate row needs '{LIVE_QUALIFIER.strip()}' and the "
+                                    f"axes phase table gate '{LIVE_GATED[phase]}', got '{gates.get(phase)}'")
+                if token is None or token[0] != "TURNED_BACK":
+                    probs.add(area, f"line {lineno} ({phase}): a live record at the gate is TURNED_BACK")
                 continue
             want = gate_outcome(gates.get(phase, ""))
             if token is None or token[0] != want:
@@ -2048,7 +2095,7 @@ def check_gate_table(life: list[str], gates: dict[str, str], probs: Problems) ->
                 probs.add(area, f"line {lineno}: cites {ref}, whose from-phases are '{frm}', not {phases_cell}")
     if sorted(cells[0] for _, cells in rows) != sorted(GATE_TABLE):
         probs.add(area, f"gate table rows {[cells[0] for _, cells in rows]} != the pinned {list(GATE_TABLE)}")
-    gated = [p for p in PHASES if gate_outcome(gates.get(p, "")) is not None]
+    gated = [p for p in PHASES if gate_outcome(gates.get(p, "")) is not None or p in LIVE_GATED]
     if sorted(covered) != sorted(gated):
         probs.add(area, f"gate table covers {covered}, expected each gated phase once: {gated}")
 

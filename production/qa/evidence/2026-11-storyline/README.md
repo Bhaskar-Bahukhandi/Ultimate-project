@@ -393,3 +393,25 @@ observable. The checker accepts that exact phrase only (and requires it); report
 - **Not modelled**: side-arc flags (AC15), the secret routes (all disabled; formula level only), NG+ carry-over,
   scene content (P3/AC14, L-AC16), the time model. The model's positions are coarse (Chapter 9 is one position, the
   boss one event). Modelling choices M1-M9 are listed in the log.
+
+## Round 10 sync (axes rev 10 / lifecycle rev 6, 2026-11-17)
+
+- User decisions (2026-11-17, design review round 10): keep T6 as defence in depth with a DAMAGED gate row; narrow the
+  load-check promise to "every save play writes loads" (F5, F7, F10 stay best-effort, axes Open Question 17); define
+  D14 "matching" strictly and keep D7's new-value clause with a coordinated two-field fixture; edit both GDDs and sync
+  this folder.
+- `check_storyline_axes.py`: pins updated for Core Rule 8, the phase table's DAMAGED gate cell, the Formulas
+  `storyline_phase` paragraph, Edge Case 16 (D7, D9, D14, D17 and the "load only" and "Not checked" sentences), AC9,
+  the lifecycle gate table (a fourth row, `DAMAGED (a live record)`, via `LIVE_GATED`) and L-AC8. Result: `RESULT: PASS
+  (0 problems)`.
+- `run_mutations.py`: six mutations re-aimed at the changed text (`r6_qa_rule8_stranded`,
+  `r6_phase_row_damaged_dropped`, `r6_ec16_d7_dropped`, `r8_d17_dropped`, `r9_ac9_clause_list`,
+  `r9_dependency_revision`) and 13 added (`r10_*`). Result: "225 mutations, 1 controls; 0 unexpected results". Every
+  `mutation_*.log` was rewritten by the run, so the diff is large and mostly the header lines.
+- `reference_model.py`: the current text is `REV10`; the revision 9 text is kept as `LITERAL`, a regression that must
+  still fail (F1 as A8, the AC9 CRISIS fixture and L-AC8). New: D7's reverse clause, the gate's DAMAGED row, the
+  coordinated D7 fixture (the entry's `new` and its beat renamed), L-AC8's injected live cells and its VALIDATED-on-load
+  cell. F5, F7 and F10 are reported, not asserted. The log is regenerated; the revision 9 log is in git (3c1bffb).
+- New finding F11 (axes Open Question 18): with D9 and D17's before-commit clause exempt for every live record, a live
+  CRISIS record positioned past C8-S16 reads CRISIS and reaches a gate with no CRISIS row. No play path produces it
+  (I2). Not changed in revision 10; the candidate is to exempt only a live record positioned inside C8-S16.

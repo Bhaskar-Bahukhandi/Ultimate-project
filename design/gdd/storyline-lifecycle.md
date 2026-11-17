@@ -1,10 +1,11 @@
 # Storyline Lifecycle
 
-> **Status**: Draft (revision 5: design review round 9 of `storyline-axes.md`, 2026-11-11 — Witness Protocol moved
-> post-1.0 with the other secret routes; the deferral, invocation, witness vote, stand-down and Consent variants
-> removed; one commit-and-save rule for every transition)
+> **Status**: Draft (revision 6: design review round 10 of `storyline-axes.md`, 2026-11-17 — the gate gets a row for
+> a live DAMAGED record, T6 is documented as defence in depth, L-AC8 matches what the reference model can set up;
+> revision 5: Witness Protocol moved post-1.0 with the other secret routes; one commit-and-save rule for every
+> transition)
 > **Author**: Claude with the project lead
-> **Last Updated**: 2026-11-11
+> **Last Updated**: 2026-11-17
 > **Implements**: the invariants I1-I9 of `design/gdd/storyline-axes.md`; contract for Y2-PP-T17 (ending composer /
 > route data model)
 > **Implements Pillar**: P3, P5, P8 (through `storyline-axes.md`)
@@ -129,12 +130,19 @@ path only once Root of Heaven is on the map. Outcome by phase:
 | phase | outcome |
 |---|---|
 | LEANING, PARTLY_LOCKED | TURNED_BACK: the Assembly has not decided |
+| DAMAGED (a live record) | TURNED_BACK: logged as a data error, no transition |
 | VALIDATED | ROOT_OF_HEAVEN; `root_phase` becomes INSIDE (T7) |
 | FIXED, FINAL | ROOT_OF_HEAVEN; nothing changes (T8) |
 
-The `load` path never meets LEANING or PARTLY_LOCKED: a save positioned inside Root of Heaven with an UNSET axis is
-past Chapter 8 and is refused on load (`storyline-axes.md` Edge Case 16, D16). CRISIS never reaches the gate: it
-exists only inside C8-S16.
+The `load` path never meets LEANING, PARTLY_LOCKED or DAMAGED: a save positioned inside Root of Heaven with an UNSET
+axis is past Chapter 8 and is refused on load (`storyline-axes.md` Edge Case 16, D16). Neither does the `story` path
+in play: Root of Heaven is entered only after the Chapter 9 end, so every record at the gate is positioned past C8-S16
+and, with an UNSET axis, is DAMAGED (D16 applies to a live record too), not LEANING or PARTLY_LOCKED. T6 and the
+DAMAGED row are therefore defence in depth against a story-graph defect that FlagRegistry's boot check should
+already have caught; the reference model's walk never fires T6. They are kept so the gate has an outcome for every
+phase (invariant I5) and for the source's "intercepted before final boss" (PM:11305). CRISIS never reaches the
+gate: it exists only inside C8-S16. A VALIDATED save positioned inside Root of Heaven cannot be written by play (T7
+is atomic) but loads, and the load-path gate then runs T7.
 
 **Legacy saves (user decision 2026-11-10).** There is no runtime catch-up. A save positioned past a lock scene with
 that axis UNSET (any save made past Chapter 8 before these fields exist) is unsupported: the load check reports it
@@ -230,7 +238,7 @@ when a route's invocation is offered, belong to the post-1.0 secret-route design
 
 | System | Direction | What flows | Status |
 |---|---|---|---|
-| Storyline axes (`design/gdd/storyline-axes.md`) | this ← axes | values, formulas, record, invariants I1-I9, knobs | revision 9 |
+| Storyline axes (`design/gdd/storyline-axes.md`) | this ← axes | values, formulas, record, invariants I1-I9, knobs | revision 10 |
 | SaveService (Y1-P1-T05) | this → save | record writes, including `retraction_log` and `beats_played`; save suppression inside lock scenes, the crisis and the final authorization; one atomic checkpoint per transition; the damaged-record check and load refusal | no GDD |
 | FlagRegistry / StoryGraph (Y1-P1-T03) | this ← registry | flags; scene order check at boot; the story position for Edge Case 16 D16-D17 | no GDD |
 | World map / free travel (protected) | this → world map | the gate check on the `world_map` path | no GDD — needs the user's approval when implemented |
@@ -329,9 +337,14 @@ the table below. Lint shows the text matches its pins; it is not evidence that t
 - **L-AC8 The gate.** For the `story` and `load` paths and each storable phase (LEANING, PARTLY_LOCKED, VALIDATED,
   FIXED, FINAL): LEANING and PARTLY_LOCKED on the `story` path → TURNED_BACK; on the `load` path the load is refused
   with `load_errors()` naming D16 and no gate entry; VALIDATED → ROOT_OF_HEAVEN and FIXED; FIXED and FINAL →
-  ROOT_OF_HEAVEN, phase unchanged. Cells impossible in play (the `story` cells of LEANING and PARTLY_LOCKED) run from
-  synthetic fixture saves and are reported as synthetic. The `world_map` path repeats the `story` cells once the
-  protected world-map change is approved. *Blocked by:* Y2-PP-T17, Y1-P1-T03, Y1-P1-T05.
+  ROOT_OF_HEAVEN, phase unchanged. The `story` cells of LEANING and PARTLY_LOCKED are impossible in play and cannot
+  come from a fixture save (a save positioned past C8-S16 with an UNSET axis is refused on load, D16, and a live one
+  reads DAMAGED): they run on a live record that the test injects at the gate, and are reported as synthetic. The
+  same injection with a live DAMAGED record → TURNED_BACK, `record_hash()` unchanged and a data error logged. The
+  LEANING and PARTLY_LOCKED cells inject the record before C8-S16; injected past it, an UNSET axis reads DAMAGED
+  (D16) and the DAMAGED case applies. A VALIDATED fixture save positioned inside Root of Heaven loads, and the load-path gate gives ROOT_OF_HEAVEN and
+  FIXED. The `world_map` path repeats the `story` cells once the protected world-map change is approved.
+  *Blocked by:* Y2-PP-T17, Y1-P1-T03, Y1-P1-T05.
 - **L-AC9 Held to its word.** From VALIDATED records reached by T3 and T5 and from FIXED and FINAL records: at the gate
   on the `story` and `load` paths, `take()` of each of the 16 renegotiation offers is false with `record_hash()`
   unchanged, and `enter_root_of_heaven()` is ROOT_OF_HEAVEN; after setting every secret prerequisite flag and flipping
@@ -383,8 +396,9 @@ than a gate-matrix cell ends with one `story`-path gate entry from its own recor
 scripted scene to the Chapter 9 end with the record unchanged) and passes when the observed `storyline_phase()` after
 that entry, `storyline_id()` and `enter_root_of_heaven()` outcome equal the expected triple. A gate-matrix cell
 passes on the same triple from its fixture, except the `load` cells of LEANING and PARTLY_LOCKED, which pass when the
-load is refused with `load_errors()` naming D16 and no gate entry happens. Cells impossible in play run from
-synthetic fixtures, count, and are listed as synthetic in the run report. The bot is a smoke check of the phase, the
+load is refused with `load_errors()` naming D16 and no gate entry happens. Cells impossible in play (the `story`
+cells of LEANING and PARTLY_LOCKED) run on an injected live record, count, and are listed as synthetic in the run
+report; the live-DAMAGED and VALIDATED-on-load checks of L-AC8 are unit-level, outside the 10 counted cells. The bot is a smoke check of the phase, the
 ID and the gate; the retractions, beats and saves are evidenced by L-AC6, L-AC7 and L-AC13 to L-AC18.
 
 ## Open Questions

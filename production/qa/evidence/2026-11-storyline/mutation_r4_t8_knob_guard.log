@@ -1,10 +1,10 @@
 # Mutation 'r4_t8_knob_guard' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-lifecycle.r4_t8_knob_guard.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-lifecycle.r4_t8_knob_guard.md
 gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
-lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-lifecycle.r4_t8_knob_guard.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-lifecycle.r4_t8_knob_guard.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [transitions] line 180 (T5): guard 'the offer is in the row's offer set; WITNESS enabled', pinned 'the offer is in the row's offer set'
+FAIL [transitions] line 188 (T5): guard 'the offer is in the row's offer set; WITNESS enabled', pinned 'the offer is in the row's offer set'
 FAIL [transitions] CRISIS has no transition to VALIDATED that holds under every knob value (I5)
 RESULT: FAIL (2 problems)
 exit code: 1

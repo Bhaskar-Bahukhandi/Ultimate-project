@@ -1,9 +1,9 @@
 # Mutation 'r4_stale_storyline_state_axes' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-axes.r4_stale_storyline_state_axes.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-axes.r4_stale_storyline_state_axes.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-axes.r4_stale_storyline_state_axes.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-axes.r4_stale_storyline_state_axes.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [stale] axes line 401: revision-3 vocabulary 'storyline_state' present
+FAIL [stale] axes line 408: revision-3 vocabulary 'storyline_state' present
 RESULT: FAIL (1 problems)
 exit code: 1

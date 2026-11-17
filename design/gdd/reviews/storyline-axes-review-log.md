@@ -259,3 +259,25 @@ Findings:
 - [RECOMMENDED] Registry entry missing; S06b must name this GDD
 Reviewed-Content-Hash: design/gdd/storyline-axes.md 8c45d3d240ebe1dbec12adcce983487ff86e2e40
 Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285
+
+## Review — 2026-11-17 — Verdict: NEEDS REVISION
+Scope signal: L
+Specialists: none (--review lean, single-session analysis against production/qa/evidence/2026-11-storyline/reference_model.log; the senior creative-director pass did not run)
+Blocking items: 3 | Recommended: 7
+Summary: Round 10 ran against the non-shipping reference model (Open Question 16). The static core holds for a tenth round, and the round-9 atomic-checkpoint fix holds (A1-A14 pass under the repaired reading). The three blockers were text defects the model exposed: two acceptance criteria that could not pass and a dead transition with no gate row. All were fixed in revision 10 (lifecycle revision 6) in the same session and verified: checker PASS, 225 mutations / 1 control / 0 unexpected, model RESULT PASS with the rev 9 text still failing as a regression. A fresh re-review is still owed.
+Prior verdict resolved: Yes (round-9 blockers: I9 atomic checkpoint, save windows, phase_of/load_check inputs, AC14, Witness scope); the AC9 rewrite re-opened as F2
+Decisions taken by the user (2026-11-17): keep T6 as defence in depth with a DAMAGED gate row; narrow the load-check promise to saves play writes (F5, F7, F10 best-effort, Open Question 17); strict D14 matching with a coordinated two-field D7 fixture; sync the checker, mutations and model.
+Findings:
+- [BLOCKING] Formulas storyline_phase / Edge Case 16 D17: before-commit clause applied to live records made every live crisis DAMAGED (F1) (fixed: D9 and D17(a) load-only, each item marked)
+- [BLOCKING] Acceptance Criteria 9: CRISIS fixture expected {D9}, but the fixture sits inside C8-S16 so D17 fires too (F2) (fixed: {D9, D17})
+- [BLOCKING] Lifecycle T6 / S6 gate table / L-AC8: T6 dead in play, no gate row for a live DAMAGED record, L-AC8 story cells could not be set up (F9) (fixed: DAMAGED row, T6 as defence in depth, injected live cells)
+- [RECOMMENDED] Edge Case 16 D14: "matching" undefined, D7 new-value clause not isolatable by one field (F4) (fixed: strict match, coordinated fixture)
+- [RECOMMENDED] Edge Case 16 D7: one-directional (F6) (fixed: reverse clause)
+- [RECOMMENDED] Edge Case 16 D17: prefix clause never fires alone (F3) (fixed: documentation, no fixture)
+- [RECOMMENDED] Core Rule 8: "no loaded state is stranded" unproven for edited saves; rests on modelling choice M8 (F5, F7, F10) (fixed: promise narrowed, Open Question 17)
+- [RECOMMENDED] Lifecycle L-AC8: no VALIDATED-on-load cell (F8) (fixed)
+- [RECOMMENDED] Acceptance Criteria 14: rendered-text hash passes on an interpolated token difference (open)
+- [RECOMMENDED] Registry entry and systems-index.md still missing (open)
+- New during the fix: F11, a live CRISIS record positioned past C8-S16 reaches a gate with no CRISIS row (Open Question 18, not changed)
+Reviewed-Content-Hash: design/gdd/storyline-axes.md 4e1de86eea4481976742f9ffba10284177ecd941 (revision 9 as reviewed, HEAD 3c1bffb; revision 10 differs, so the next run re-reviews in full)
+Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285

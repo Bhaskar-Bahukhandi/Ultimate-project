@@ -1,7 +1,7 @@
 """Non-shipping reference model of the storyline axes and lifecycle (storyline-axes.md Open Question 16).
 
 Implements, independently of the GDD text (it parses nothing), the Formulas of design/gdd/storyline-axes.md
-(rev 9) and storyline-lifecycle.md (rev 5): formula_id, prereqs_met, family, lock_pass, phase_of, load_check
+(rev 10) and storyline-lifecycle.md (rev 6): formula_id, prereqs_met, family, lock_pass, phase_of, load_check
 (Edge Case 16: D1, D6-D9, D14-D17) and crisis_offers; then walks the lifecycle transitions T1-T9 breadth-first
 for every seed context the game code allows, and asserts:
 
@@ -25,12 +25,14 @@ plus the unit tables of axes AC5-AC9 and lifecycle L-AC2/L-AC3/L-AC5/L-AC8, a cl
 AC9 one-defect fixtures, a probe for records load_check accepts that play never writes, and negative controls
 (defects seeded into the model; each must make at least one assertion fail).
 
-Where the spec is ambiguous the model takes the literal reading and reports it under FINDINGS (user decision
-2026-11-17: "pick + report"). Findings are observations for design review round 10, not verdicts.
+Revision 10 (design review round 10, 2026-11-17): the model implements the rev 10 text (REV10) and keeps the
+rev 9 text (LITERAL) as a regression that must still fail (F1, F2, F9). The residuals F5, F7 and F10 are
+best-effort by decision (axes Open Question 17): they are reported, not asserted.
 
 Usage: python -I -B reference_model.py [--quick]
-Exit status: 0 when every assertion and unit check passes under the literal reading and every negative control
-is caught; 1 otherwise.
+Exit status: 0 when every assertion and unit check passes under the rev 10 text, the rev 9 text still fails as
+expected, every negative control is caught and every AC9 clause is isolatable (D17's prefix clause is documentation
+only); 1 otherwise.
 """
 import argparse
 import itertools
@@ -200,16 +202,20 @@ def red_line(authority, faction):
 
 
 class Reading:
-    """Interpretation switches. `literal` is the text as written; others are candidate repairs to report."""
+    """Which text the model implements. REV10 is the current text (design review round 10); LITERAL is the revision 9
+    text, kept as a regression: the model must still find F1, F2 and F9 in it."""
 
-    def __init__(self, name, d17_before_commit_live=True, d14_match="strict"):
+    def __init__(self, name, d17_before_commit_live=True, d14_match="strict", d7_reverse=False,
+                 gate_damaged_row=False):
         self.name = name
-        self.d17_before_commit_live = d17_before_commit_live   # literal: D17 clause 2 also tested on live records
+        self.d17_before_commit_live = d17_before_commit_live   # rev 9: D17 clause (a) also tested on live records
         self.d14_match = d14_match                             # strict: beat id must equal beat_for_entry()
+        self.d7_reverse = d7_reverse                           # rev 10: a log entry whose axis is not in axis_revised
+        self.gate_damaged_row = gate_damaged_row               # rev 10: a live DAMAGED record at the gate is turned back
 
 
-LITERAL = Reading("literal")
-REPAIRED = Reading("repaired: D17 before-commit clause tested on loaded records only", d17_before_commit_live=False)
+LITERAL = Reading("rev 9 text, literal")
+REV10 = Reading("rev 10 text", d17_before_commit_live=False, d7_reverse=True, gate_damaged_row=True)
 
 
 def load_check_tags(rec, flags, pos, loaded, reading=LITERAL):
@@ -238,6 +244,8 @@ def load_check_tags(rec, flags, pos, loaded, reading=LITERAL):
         tags.add("D7.multi")
     if any(e.new != getattr(rec, e.axis) for e in rec.retraction_log):
         tags.add("D7.new_mismatch")
+    if reading.d7_reverse and any(e.axis not in rec.axis_revised for e in rec.retraction_log):
+        tags.add("D7.reverse")
     # D8
     if rec.root_phase in ("INSIDE", "FINAL") and not sid:
         tags.add("D8")
@@ -352,6 +360,8 @@ def gate(rec, flags, pos, target, kind_prefix, defects, reading):
         return [(kind_prefix + ":ROOT_OF_HEAVEN", "T7", new, target, True)]
     if ph in ("FIXED", "FINAL"):
         return [(kind_prefix + ":ROOT_OF_HEAVEN", "T8", rec, target, False)]
+    if ph == "DAMAGED" and reading.gate_damaged_row:   # rev 10, lifecycle S6: a data error, no transition
+        return [(kind_prefix + ":TURNED_BACK:DAMAGED", "GATE_DAMAGED", rec, pos, False)]
     return [(kind_prefix + ":GATE_ERROR:" + ph, "GATE_ERROR", rec, pos, False)]
 
 
@@ -722,47 +732,56 @@ def unit_checks(reading):
     for ph, (r_, loaded, pos) in fx.items():
         got = phase_of(r_, loaded, frozenset(), pos, reading)
         lc = load_check(r_, frozenset(), pos, reading)
-        exp_lc = {"D9"} if ph == "CRISIS" else set()
+        # rev 10 (F2): the CRISIS fixture sits inside C8-S16, so D17's before-commit clause fires with D9
+        exp_lc = {"D9", "D17"} if ph == "CRISIS" else set()
         chk(f"AC9 fixture {ph}: phase_of(loaded={loaded}) {ph}, load_check {sorted(exp_lc) or '{}'}",
             got == ph and lc == exp_lc, f"phase {got}, load_check {sorted(lc)}")
     cr = fx["CRISIS"][0]
     chk("AC9 CRISIS fixture with loaded=true is DAMAGED",
         phase_of(cr, True, frozenset(), "S16_OPEN", reading) == "DAMAGED")
-    # L-AC8 gate matrix (story and load paths x storable phases)
+    # L-AC8 gate matrix (story and load paths x storable phases), revision 10. The story cells of LEANING and
+    # PARTLY_LOCKED run on a live record injected before C8-S16 (T6); the same record injected past C8-S16 reads
+    # DAMAGED (D16) and a live DAMAGED record is turned back by the gate's DAMAGED row; a VALIDATED save positioned
+    # inside Root of Heaven loads and the load-path gate runs T7 (F8).
     gm = []
-    storable = {"LEANING": EMPTY, "PARTLY_LOCKED": fx["PARTLY_LOCKED"][0], "VALIDATED": fx["VALIDATED"][0],
-                "FIXED": fx["FIXED"][0], "FINAL": fx["FINAL"][0]}
-    for ph, r_ in storable.items():
-        story = gate(r_, frozenset(), "CH9", "ROOT", "story", frozenset(), reading)[0]
+    storable = {"LEANING": (EMPTY, "PRE_C8"), "PARTLY_LOCKED": (fx["PARTLY_LOCKED"][0], "S13_DONE"),
+                "VALIDATED": (fx["VALIDATED"][0], "CH9"), "FIXED": (fx["FIXED"][0], "CH9"),
+                "FINAL": (fx["FINAL"][0], "CH9")}
+    for ph, (r_, spos) in storable.items():
+        story = gate(r_, frozenset(), spos, "ROOT", "story", frozenset(), reading)[0]
         exp = "TURNED_BACK" if ph in ("LEANING", "PARTLY_LOCKED") else "ROOT_OF_HEAVEN"
         exp_kind = {"VALIDATED": "T7", "FIXED": "T8", "FINAL": "T8"}.get(ph, "T6")
-        if not story[0].endswith(exp) or story[1] != exp_kind:
+        if exp not in story[0] or story[1] != exp_kind:
             gm.append(("story", ph, story[0]))
         lpos = "ROOT_STORY_PLUS" if ph == "FINAL" else "ROOT"
         lc = load_check(r_, frozenset(), lpos, reading)
         if ph in ("LEANING", "PARTLY_LOCKED"):
+            past = gate(r_, frozenset(), "CH9", "ROOT", "story", frozenset(), reading)[0]
+            if ":TURNED_BACK" not in past[0] or past[2] != r_:
+                gm.append(("story, injected past C8-S16", ph, past[0]))
             if "D16" not in lc:
                 gm.append(("load", ph, sorted(lc)))
-        elif ph == "VALIDATED":
-            # a VALIDATED record positioned inside Root of Heaven: play never writes one (T7 is atomic)
-            res_ = gate(r_, frozenset(), lpos, lpos, "load", frozenset(), reading)[0] if not lc else None
-            gm.append(("load", ph, f"accepted, gate -> {res_[1] if res_ else lc}")) if not lc else None
         else:
-            res_ = gate(r_, frozenset(), lpos, lpos, "load", frozenset(), reading)[0]
-            if lc or res_[1] != "T8":
-                gm.append(("load", ph, sorted(lc), res_[1]))
-    gm_real = [g for g in gm if not (g[1] == "VALIDATED" and g[0] == "load")]
-    chk("L-AC8 gate matrix, story and load paths (load of LEANING/PARTLY_LOCKED refused with D16)",
-        not gm_real, str(gm))
-    return res, [g for g in gm if g[1] == "VALIDATED"]
+            res_ = gate(r_, frozenset(), lpos, lpos, "load", frozenset(), reading)[0] if not lc else None
+            want_kind = "T7" if ph == "VALIDATED" else "T8"
+            if lc or res_[1] != want_kind:
+                gm.append(("load", ph, sorted(lc), res_[1] if res_ else None))
+    damaged_live = rec("YOU", "HEARTH", UNSET, root="FINAL")   # FINAL with nothing stored: D8 (and D16), live too
+    dres = gate(damaged_live, frozenset(), "CH9", "ROOT", "story", frozenset(), reading)[0]
+    if ":TURNED_BACK" not in dres[0] or dres[1] != "GATE_DAMAGED" or dres[2] != damaged_live:
+        gm.append(("story, live DAMAGED", "DAMAGED", dres[0]))
+    chk("L-AC8 gate matrix: story cells (injected live records), live DAMAGED turned back, load cells "
+        "(LEANING/PARTLY_LOCKED refused with D16, VALIDATED runs T7)", not gm, str(gm))
+    return res
 
 
 # ---------------------------------------------------------------------------------------------------------------
 # Clause isolation and the accepted-but-unreachable probe
 # ---------------------------------------------------------------------------------------------------------------
 ALL_CLAUSES = ("D1.secret", "D1.unset_axis", "D1.invalid_row", "D1.other_id", "D6", "D7.unnamed", "D7.multi",
-               "D7.new_mismatch", "D8", "D9", "D14.undefined", "D14.no_entry", "D14.not_played", "D15", "D16",
-               "D17.prefix", "D17.before_commit")
+               "D7.new_mismatch", "D7.reverse", "D8", "D9", "D14.undefined", "D14.no_entry", "D14.not_played", "D15",
+               "D16", "D17.prefix", "D17.before_commit")
+DOCUMENTATION_ONLY = ("D17.prefix",)   # rev 10: AC9 has no fixture of its own for D17's prefix clause
 
 
 def mutations(rec, pos, flags):
@@ -782,10 +801,17 @@ def mutations(rec, pos, flags):
     for i, e in enumerate(rec.retraction_log):
         log = list(rec.retraction_log)
         yield "retraction entry dropped", rec._replace(retraction_log=tuple(log[:i] + log[i + 1:])), pos, flags
+        b_old = beat_for_entry(rec, e)
         for v in VALUES[e.axis]:
             if v != e.new:
                 yield "retraction new", rec._replace(retraction_log=tuple(log[:i] + [e._replace(new=v)]
                                                                            + log[i + 1:])), pos, flags
+                # the coordinated two-field edit of AC9's D7 new-value fixture: the entry's `new` and its beat
+                b_new = beat_for_entry(rec, e._replace(new=v))
+                if b_new in DEFINED_BEATS and b_old in rec.beats_played:
+                    yield "retraction new + beat renamed", rec._replace(
+                        retraction_log=tuple(log[:i] + [e._replace(new=v)] + log[i + 1:]),
+                        beats_played=frozenset((rec.beats_played - {b_old}) | {b_new})), pos, flags
             if v != e.old:
                 yield "retraction old", rec._replace(retraction_log=tuple(log[:i] + [e._replace(old=v)]
                                                                            + log[i + 1:])), pos, flags
@@ -951,25 +977,22 @@ def main():
     t0 = time.time()
     contexts = list(seed_contexts())
     sigs = {signature(c) for c in contexts}
-    print("Storyline reference model (storyline-axes.md OQ16) — axes rev 9, lifecycle rev 5")
+    print("Storyline reference model (storyline-axes.md OQ16) — axes rev 10, lifecycle rev 6")
     print(f"Seed contexts: {len(contexts)} (13 axis seeds; one Data Wraith flag at most), "
           f"{len(sigs)} distinct lock_pass signatures walked")
     print(f"Positions: {', '.join(POSITIONS)}; suppression windows: {', '.join(sorted(SPEC_WINDOWS))}")
     print()
     overall_ok = True
-    findings = []
 
-    print("== Unit tables (literal reading) ==")
-    units, validated_load = unit_checks(LITERAL)
+    print("== Unit tables (" + REV10.name + ") ==")
+    units = unit_checks(REV10)
     for cid, ok, detail in units:
         print(f"  [{'PASS' if ok else 'FAIL'}] {cid}" + (f"  — {detail}" if detail and not ok else ""))
         overall_ok &= ok
-    if validated_load:
-        print(f"  note: L-AC8 extra cell {validated_load}")
     print()
 
-    print("== Walk, literal reading (default knobs, no defects) ==")
-    fails, stats, sig_fails, saves_by_sig, rep_by_sig = run_suite(contexts, LITERAL, collect=True)
+    print("== Walk, " + REV10.name + " (default knobs, no defects) ==")
+    fails, stats, sig_fails, saves_by_sig, rep_by_sig = run_suite(contexts, REV10, collect=True)
     print(f"  states {stats['states']}, edges {stats['edges']}, saves {stats['saves']} "
           f"(summed over {len(sig_fails)} signatures)")
     print(f"  stored IDs reachable: {len(stats['ids'])} (by T3: {len(stats['ids_t3'])}, by T5: "
@@ -978,7 +1001,7 @@ def main():
     print(f"  lock_negotiated sets seen in saves: {len(stats['lock_negotiated_sets'])}; sole_dissent reachable: "
           f"{sorted(stats['sole_dissent']) or 'no'}")
     print(f"  transition kinds fired: {', '.join(sorted(stats['kinds']))}"
-          f"{'' if 'T6' in stats['kinds'] else '  (T6 TURNED_BACK never fires)'}")
+          f"{'' if 'T6' in stats['kinds'] else '  (T6 TURNED_BACK never fires in play: defence in depth, lifecycle S6)'}")
     if fails:
         overall_ok = False
         print(f"  [FAIL] {len(fails)} violation(s) in {sum(1 for v in sig_fails.values() if v)} signature(s):")
@@ -987,22 +1010,27 @@ def main():
         print("  [PASS] A1-A14 hold in every signature")
     print()
 
-    print("== Walk, repaired reading (" + REPAIRED.name + ") ==")
-    rfails, rstats, rsig, _, _ = run_suite(contexts, REPAIRED)
-    runits, _ = unit_checks(REPAIRED)
-    rbad = [u for u in runits if not u[1]]
-    if rfails:
-        print("\n".join(summarize_fails(rfails)))
-    print(f"  [{'PASS' if not rfails else 'FAIL'}] A1-A14 ({len(rfails)} violation(s)); unit tables: "
-          f"{len(runits) - len(rbad)}/{len(runits)} pass" + (f"; failing: {[u[0] for u in rbad]}" if rbad else ""))
+    print("== Regression: the " + LITERAL.name + " (what design review round 10 found; must still fail) ==")
+    lfails, _, _, _, _ = run_suite(contexts, LITERAL)
+    lbad = [u[0] for u in unit_checks(LITERAL) if not u[1]]
+    if lfails:
+        print("\n".join(summarize_fails(lfails)))
+    print(f"  unit tables failing on the rev 9 text: {len(lbad)}")
+    for u in lbad:
+        print(f"      {u}")
+    regression_ok = bool(lfails) and any(u.startswith("AC9 fixture CRISIS") for u in lbad) \
+        and any(u.startswith("L-AC8") for u in lbad)
+    print(f"  [{'CAUGHT' if regression_ok else 'MISSED'}] the model still finds F1 (A8), F2/F1 (AC9 CRISIS fixture) "
+          "and F9 (L-AC8) on the rev 9 text")
+    overall_ok &= regression_ok
     print()
 
-    print("== Negative controls (each seeded defect must fail at least one assertion; literal reading) ==")
-    lit_codes = {c for c, _ in fails}
+    print("== Negative controls (each seeded defect must fail at least one assertion; " + REV10.name + ") ==")
+    base_codes = {c for c, _ in fails}
     all_caught = True
     for name, desc in DEFECTS.items():
-        dfails, *_ = run_suite(contexts, LITERAL, frozenset({name}))
-        codes = sorted({c for c, _ in dfails} - lit_codes, key=lambda c: int(c[1:]))
+        dfails, *_ = run_suite(contexts, REV10, frozenset({name}))
+        codes = sorted({c for c, _ in dfails} - base_codes, key=lambda c: int(c[1:]))
         caught = bool(codes)
         all_caught &= caught
         print(f"  [{'CAUGHT' if caught else 'MISSED'}] {name}: {desc} -> {', '.join(codes) or 'no new failure'}")
@@ -1010,173 +1038,86 @@ def main():
     print()
 
     print("== Clause isolation (AC9: one fixture per clause with load_check exactly {that item}) ==")
-    exact, alone, accepted, accepted_states = (probe(rep_by_sig, saves_by_sig, LITERAL) if not args.quick
+    exact, alone, accepted, accepted_states = (probe(rep_by_sig, saves_by_sig, REV10) if not args.quick
                                                else ({}, {}, {}, {}))
+    redund = []
     if args.quick:
         print("  skipped (--quick)")
     else:
         for c in ALL_CLAUSES:
-            st = "exact" if c in exact else "NOT ISOLATABLE"
+            st = "exact" if c in exact else ("documentation only" if c in DOCUMENTATION_ONLY else "NOT ISOLATABLE")
             print(f"  [{st}] {c}" + (f"  — {exact[c]}" if c in exact else "")
                   + ("" if c in alone or c not in exact else "  (never the only clause firing)"))
+        missing = [c for c in ALL_CLAUSES if c not in exact and c not in DOCUMENTATION_ONLY]
+        overall_ok &= not missing
         redund = d17_prefix_redundancy()
         print(f"  D17.prefix without D16 or D17.before_commit, exhaustive over 64 axis triples x "
               f"{len(POSITIONS)} positions: {len(redund)} case(s)")
+        overall_ok &= not redund
     print()
 
-    print("== Records load_check accepts that no play in that seed context writes (single-field changes "
-          "of reachable saves) ==")
-    n_live, stranded = 0, {}
+    print("== Residual: records load_check accepts that no play in that seed context writes (single-field changes "
+          "of reachable saves; best-effort by design, Open Question 17: reported, not asserted) ==")
+    stranded = {}
+    n_live = 0
     if not args.quick:
         for k, (n, ex, pairs) in sorted(accepted.items(), key=lambda kv: -kv[1][0]):
             print(f"  {n:7d}  {k}  e.g. {ex}")
             if pairs:
                 top = sorted(pairs.items(), key=lambda kv: (-kv[1], kv[0]))
                 print(f"           {len(top)} from->to pairs: " + ", ".join(p for p, _ in top))
-        n_live, stranded = liveness_of_accepted(accepted_states, LITERAL)
+        n_live, stranded = liveness_of_accepted(accepted_states, REV10)
         n_str = sum(len(v) for v in stranded.values())
-        print(f"  [{'PASS' if not n_str else 'FAIL'}] Core Rule 8 'no loaded state is stranded': from each of "
-              f"{n_live} distinct accepted records (load-path gate inside Root of Heaven, then forward walk), "
-              f"FINAL is reachable; {n_str} stranded")
+        print(f"  [INFO] from each of {n_live} distinct accepted records (load-path gate inside Root of Heaven, then "
+              f"forward walk), FINAL is reachable except {n_str} (modelling choice M8: no route back to the final "
+              "authorization from Story+)")
         for k, v in stranded.items():
             print(f"      {k}: {len(v)}, e.g. {v[0]}")
-        where = defaultdict(int)
-        for v in stranded.values():
-            for s in v:
-                where[s.split(" at ")[-1]] += 1
-        for w, n in sorted(where.items(), key=lambda kv: -kv[1]):
-            print(f"      {n:6d} at {w}")
-        overall_ok &= not n_str
     else:
         print("  skipped (--quick)")
     print()
 
-    # ---- Findings (observations for round 10) ----
-    lit_fail_codes = {c for c, _ in fails}
-    if "A8" in lit_fail_codes and not rfails:
-        findings.append(
-            "F1 (contradiction). Edge Case 16 D17's second clause ('an axis is set while the story position is before "
-            "its lock scene's commit'; a position inside a lock scene counts as before it) is not limited to loaded "
-            "records, unlike D9. The live crisis record — Deleted set by T4, nothing stored, position inside C8-S16 — "
-            "therefore satisfies D17, and storyline_phase() returns DAMAGED instead of CRISIS for every live crisis "
-            "(the Formulas' own example '(NONE, ARCHIVE, RELEASE, nothing stored, OUTSIDE) -> CRISIS' with loaded "
-            "false fails). Candidate repair (the 'repaired' run above, all assertions PASS): test D17's "
-            "before-commit clause on a loaded record only, like D9.")
-    crisis_unit = [u for u in units if u[0].startswith("AC9 fixture CRISIS")]
-    if crisis_unit and not crisis_unit[0][1]:
-        findings.append(
-            "F2 (AC wording). Axes AC9 expects load_check() of the CRISIS fixture to be exactly {D9}. The fixture "
-            "must be positioned inside C8-S16 (the only place a crisis exists), so D17 fires too: "
-            f"{crisis_unit[0][2]}. This holds under either reading (load_check always tests a loaded record). "
-            "Candidate: AC9 says {D9, D17} for the CRISIS fixture.")
-    if not args.quick:
-        if "D17.prefix" not in alone:
-            findings.append(
-                "F3 (redundant clause). D17's prefix clause never fires alone: whenever the set axes are not a "
-                "prefix of the lock order, either an UNSET axis sits behind the position (D16) or a set axis is "
-                "ahead of it (D17 before-commit); the exhaustive check above found "
-                f"{len(d17_prefix_redundancy())} counter-example(s). AC9's 'one fixture per clause' can only "
-                "isolate it in combination with D17's other clause (same item, so 'exactly {D17}' still passes). "
-                "Candidate: drop the prefix clause or keep it as documentation.")
-        missing = [c for c in ALL_CLAUSES if c not in exact]
-        if missing:
-            # does the looser D14 reading ('matching' by axis only) isolate D7.new_mismatch?
-            loose = Reading("d14 axis matching", d14_match="axis")
-            iso_loose = False
-            for sig, flags in rep_by_sig.items():
-                hit = next(((rec, pos) for rec, pos in saves_by_sig[sig] if rec.retraction_log), None)
-                if hit:
-                    rec, pos = hit
-                    e = rec.retraction_log[0]
-                    alt = [v for v in VALUES[e.axis] if v != e.new][0]
-                    iso_loose = load_check(rec._replace(retraction_log=(e._replace(new=alt),)), flags, pos,
-                                           loose) == {"D7"}
-                    break
-            findings.append(
-                "F4 (AC9 fixtures). No single-field defect of a reachable save gives load_check exactly {item} for: "
-                + ", ".join(missing) + ". " +
-                ("D7.new_mismatch: changing a retraction entry's `new` also breaks the beat it implies (D14 under "
-                 "the model's strict 'matching': beat id = retract_<rule of the row before>_<axis>_<new>), and "
-                 "changing the record's axis value breaks the ID (D1). D14 does not define 'matching'. Under a "
-                 "looser reading (a beat matches an entry with the same axis) the same fixture gives exactly {D7}: "
-                 f"{'confirmed' if iso_loose else 'NOT confirmed'} by the model. Decide 'matching', or let AC9's "
-                 "D7 fixture also report D14. " if "D7.new_mismatch" in missing else "")
-                + "AC9 asks for one fixture per clause.")
+    def acc(k):
+        return accepted.get(k, [0])[0]
 
-        def acc(k):
-            return accepted.get(k, [0])[0]
-        n_str = sum(len(v) for v in stranded.values())
-        unchecked = [k for k in ("retraction old", "retraction withdrawn_item", "retraction scene",
-                                 "lock_negotiated toggle", "seed flag toggle", "axis faction", "axis authority")
-                     if acc(k)]
-        if unchecked:
-            n_str = sum(len(stranded.get(k, [])) for k in unchecked)
-            findings.append(
-                "F5 (load-check gaps; debug or edited saves only). load_check accepts records no play writes "
-                "(counts are single-field changes summed over signatures): "
-                + "; ".join(f"{k} {acc(k)}" for k in unchecked) +
-                ". Nothing compares `lock_negotiated` with lock_pass() of the saved seeds (an edited save can turn "
-                "sole_dissent on or off, and a changed Faction or Authority value before C8-S16 keeps the old "
-                "lock_negotiated), and nothing compares a retraction entry's withdrawn item or scene with the "
-                "retraction table. "
-                + ("None of these records strands the player (forward walk above), so they are "
-                   "content-integrity gaps, not soft-locks. " if not n_str else
-                   f"{n_str} of these records strand the player (see above). ")
-                + "Edge Case 16 does not claim to catch them; decide whether that is acceptable or add D-items.")
-        if acc("axis_revised toggle"):
-            findings.append(
-                "F6 (D7 is one-directional). A record with a retraction_log entry (and its beat) but an empty "
-                "axis_revised passes load_check: D7 requires every revised axis to be named by an entry, not every "
-                f"entry's axis to be revised ({acc('axis_revised toggle')} such records accepted). The composer reads "
-                "axis_revised. Candidate: D7 clause 'a retraction_log entry whose axis is not in axis_revised'.")
-        n_str = sum(len(v) for v in stranded.values())
-        if acc("position") or acc("root_phase"):
-            win = sorted({p.split("->")[1] for p in accepted.get("position", [0, None, {}])[2]} & SPEC_WINDOWS)
-            findings.append(
-                "F7 (position vs root_phase). No Edge Case 16 item ties root_phase to the story position: "
-                f"{acc('position')} position changes and {acc('root_phase')} root_phase changes of reachable saves "
-                "load, e.g. an INSIDE record positioned in Chapter 9, a FINAL record positioned before the boss, "
-                "an OUTSIDE (VALIDATED) record inside Root of Heaven"
-                + (f", and records positioned inside a suppression window ({', '.join(win)}): load_check does not "
-                   "enforce I9's 'no save is positioned inside a lock scene'" if win else "")
-                + ". " + ("None strands the player (forward walk above); the load-path gate runs T7 on a VALIDATED "
-                          "record inside Root of Heaven. Observation only." if not n_str else
-                          "Some strand the player (see above)."))
-    if validated_load:
-        findings.append(
-            "F8 (L-AC8 coverage). L-AC8's load path lists LEANING, PARTLY_LOCKED, FIXED and FINAL outcomes but no "
-            "VALIDATED cell; a VALIDATED save positioned inside Root of Heaven cannot be written by play (T7 is "
-            "atomic) yet passes load_check, and the load-path gate then runs T7. The model treats this as "
-            "acceptable; the lifecycle could say so.")
-    gm_unit = [u for u in units if u[0].startswith("L-AC8")]
-    if gm_unit and "GATE_ERROR:DAMAGED" in gm_unit[0][2] and "T6" not in stats["kinds"]:
-        findings.append(
-            "F9 (dead transition). T6 (TURNED_BACK) can never fire. The story path reaches the gate only after the "
-            "Chapter 9 end and the world-map path only once Root of Heaven is on the map, so every record at the "
-            "gate is positioned past C8-S16; with an UNSET axis that position satisfies D16, and "
-            "storyline_phase() (which runs the damaged-record check first, on live records too) returns DAMAGED, not "
-            "LEANING or PARTLY_LOCKED. The walk never fires T6, and L-AC8's synthetic story-path cells for LEANING "
-            "and PARTLY_LOCKED cannot be set up: a fixture save there is refused on load (D16), and a live record "
-            "there meets the gate as DAMAGED, a phase the gate table has no row for. Candidates: (a) keep T6 as a "
-            "defensive row and give the gate a DAMAGED row (TURNED_BACK, or a data error), with L-AC8 testing it "
-            "by injecting a live record; or (b) drop T6 and the two L-AC8 cells, since D16 already guarantees "
-            "them unreachable.")
-    if not args.quick and stranded:
-        post = {"FINAL_DONE", "STORY_PLUS", "ROOT_STORY_PLUS"}
-        all_post = all(s.split(" at ")[-1].split(" ")[0] in post for v in stranded.values() for s in v)
-        findings.append(
-            f"F10 (load check vs Story+; edited saves only). {sum(len(v) for v in stranded.values())} accepted "
-            "records cannot reach FINAL" + (", all of them a record whose root_phase is not FINAL positioned after "
-                                            "the final authorization's commit (FINAL_DONE, Story+)" if all_post
-                                            else "") +
-            ". load_check accepts them (no item ties root_phase to the position, F7), and once in Story+ the model "
-            "has no route back to the final authorization (modelling choice M8), so the ending is never "
-            "confirmed. Play never writes them (T9 commits root_phase FINAL with its checkpoint). Candidate D-item: "
-            "'root_phase is not FINAL at a position past the final authorization's commit, or FINAL before it'.")
-    print("== FINDINGS (observations for design review round 10) ==")
-    for f_ in findings or ["none"]:
-        print("  " + f_)
+    print("== ROUND-10 FINDINGS: status under the rev 10 text ==")
+    ac9_crisis = next((u[1] for u in units if u[0].startswith("AC9 fixture CRISIS")), False)
+    lac8 = next((u[1] for u in units if u[0].startswith("L-AC8")), False)
+    formula_crisis = next((u[1] for u in units if "loaded=False at S16_OPEN -> CRISIS" in u[0]), False)
+    st = []
+    st.append(("F1", "resolved" if "A8" in {c for c, _ in lfails} and not fails and formula_crisis else "OPEN",
+               "D17's before-commit clause is load-only; the live crisis is CRISIS again"))
+    st.append(("F2", "resolved" if ac9_crisis else "OPEN", "AC9's CRISIS fixture reports {D9, D17}"))
+    st.append(("F3", "documented" if not args.quick and not redund else "UNVERIFIED",
+               "D17's prefix clause never fires alone; kept as documentation, no fixture"))
+    st.append(("F4", "resolved" if "D7.new_mismatch" in exact else "OPEN" if not args.quick else "UNVERIFIED",
+               "strict 'matching' plus the coordinated two-field fixture isolates D7's new-value clause"))
+    st.append(("F5", "open, best-effort (OQ17)",
+               "; ".join(f"{k} {acc(k)}" for k in ("retraction withdrawn_item", "retraction scene",
+                                                   "lock_negotiated toggle", "seed flag toggle", "axis faction",
+                                                   "axis authority") if acc(k)) or "none accepted"))
+    st.append(("F6", "resolved" if "D7.reverse" in exact and not acc("axis_revised toggle")
+               else "OPEN" if not args.quick else "UNVERIFIED",
+               f"D7 runs both ways; accepted axis_revised toggles: {acc('axis_revised toggle')}"))
+    st.append(("F7", "open, best-effort (OQ17)",
+               f"{acc('position')} position and {acc('root_phase')} root_phase changes accepted; none is promised"))
+    st.append(("F8", "resolved" if lac8 else "OPEN", "L-AC8 has a VALIDATED-on-load cell (T7)"))
+    st.append(("F9", "resolved" if lac8 else "OPEN",
+               "T6 kept as defence in depth, a DAMAGED gate row, injected live cells in L-AC8"))
+    st.append(("F10", "open, best-effort (OQ17)",
+               f"{sum(len(v) for v in stranded.values())} accepted records cannot reach FINAL (rests on M8)"))
+    # F11 (new in round 10, from the F1 repair): D9 and D17(a) are exempt for every live record, so a live record
+    # with an invalid row and nothing stored, positioned past C8-S16, reads CRISIS and reaches a gate with no row.
+    crisis_gate = gate(EMPTY._replace(authority="NONE", faction="ARCHIVE", deleted="RELEASE"), frozenset(), "CH9",
+                       "ROOT", "story", frozenset(), REV10)[0][0]
+    st.append(("F11", "new, open (OQ18)" if "GATE_ERROR" in crisis_gate else "none",
+               f"a live crisis record past C8-S16 at the story gate: {crisis_gate}"))
+    for fid, status, note in st:
+        print(f"  {fid}: {status} — {note}")
+        if status == "OPEN":
+            overall_ok = False
     print()
+
     print("== Modelling choices (where the GDDs leave the model a reading) ==")
     for m in (
         "M1 Seed contexts hold the 13 axis-seed flags only: modifier and timing rows are not read by lock_pass or "
@@ -1190,8 +1131,9 @@ def main():
         "before the Chapter 9 end Root of Heaven is not on the map (lifecycle S6).",
         "M5 Positions are coarse: Chapter 9 is one position; the boss is one event (ROOT -> final authorization). "
         "A crisis-time save would sit at S16_OPEN.",
-        "M6 D14 'matching' = the beat id retract_<rule of the row before the renegotiation>_<axis>_<new>; D1's "
-        "four clauses are tagged in the order secret, UNSET axis, invalid row, other ID.",
+        "M6 D14 'matching' = the beat id retract_<rule of the row before the renegotiation>_<axis>_<new>, now "
+        "stated in Edge Case 16 (rev 10); D1's four clauses are tagged in the order secret, UNSET axis, invalid row, "
+        "other ID.",
         "M7 In 1.0 the invocation input I is always false (no source exists); every knob is false. Knob values "
         "are read only by formula_id at C8-S16 and the gate, so A6 also covers a mid-play knob patch.",
         "M8 Story+ (after T9) offers no route back to the boss or the final authorization; re-entering Root of "
@@ -1199,11 +1141,14 @@ def main():
         "(lifecycle Open Question 2).",
         "M9 The accepted-record probe applies one field change to every reachable save (both readings' saves are "
         "the same); 'accepted' means load_check is empty and no play in the mutated seed signature writes that "
-        "(record, position).",
+        "(record, position). The D7 new-value fixture is the one two-field edit (the entry's `new` and its beat).",
+        "M10 A live DAMAGED record at the gate is TURNED_BACK by the gate's DAMAGED row and is not a transition "
+        "(kind GATE_DAMAGED); the walk never produces one (A8), so L-AC8's cells inject it.",
     ):
         print("  " + m)
     print()
-    print(f"RESULT: {'PASS' if overall_ok else 'FAIL'} (literal reading; {len(findings)} finding(s)); "
+    print(f"RESULT: {'PASS' if overall_ok else 'FAIL'} ({REV10.name}; the rev 9 text still fails as expected: "
+          f"{'yes' if regression_ok else 'NO'}; best-effort residuals F5, F7, F10 reported, not asserted); "
           f"{time.time() - t0:.1f} s")
     return 0 if overall_ok else 1
 

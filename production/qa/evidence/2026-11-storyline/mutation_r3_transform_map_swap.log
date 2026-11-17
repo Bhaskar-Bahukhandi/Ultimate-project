@@ -1,9 +1,9 @@
 # Mutation 'r3_transform_map_swap' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-axes.r3_transform_map_swap.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-axes.r3_transform_map_swap.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-axes.r3_transform_map_swap.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-axes.r3_transform_map_swap.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [formulas] line 425: transform() map {'R1': 'WITNESS', 'R2': 'FIRSTWAKE', 'R3': 'CROWNLESS'} != {'R1': 'WITNESS', 'R2': 'CROWNLESS', 'R3': 'FIRSTWAKE'} (rules table and PM:8784)
+FAIL [formulas] line 432: transform() map {'R1': 'WITNESS', 'R2': 'FIRSTWAKE', 'R3': 'CROWNLESS'} != {'R1': 'WITNESS', 'R2': 'CROWNLESS', 'R3': 'FIRSTWAKE'} (rules table and PM:8784)
 RESULT: FAIL (1 problems)
 exit code: 1

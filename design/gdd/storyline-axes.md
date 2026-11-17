@@ -1,9 +1,10 @@
 # Storyline Axes
 
-> **Status**: Draft (revision 9, after design review round 9: the secret routes move post-1.0; static core unchanged
-> since revision 4 except the 1.0 scope of the secret storylines)
+> **Status**: Draft (revision 10, after design review round 10 against the reference model: Edge Case 16 items marked
+> load-only or live, AC9 and the gate reconciled with the model, the load-check promise narrowed; static core
+> unchanged since revision 4 except the 1.0 scope of the secret storylines)
 > **Author**: Claude (narrative-director research) with the project lead
-> **Last Updated**: 2026-11-11
+> **Last Updated**: 2026-11-17
 > **Last Verified**: 2026-11-11
 > **Implements Pillar**: P3 (24 storylines + 3 secret from three story axes), P5 (side storylines feed the main
 > story), P8 (Story+, a playable after-story per storyline) — DESIGN_PILLARS.md, ROADMAP §12.2
@@ -160,9 +161,15 @@ with, and whether the deleted are brought back, let go, or asked.
    recomputed from flags or knobs ("Every route must save a stable storyline ID.", PM:11303) and is final once
    the final authorization concludes. Every entry and re-entry into Root of Heaven runs the gate check: with an ID stored the
    gate is open (also after the boss and in Story+); before the three locks it turns the player back in the fiction
-   (the Assembly has not decided; `storyline-lifecycle.md` S6). A save positioned past a lock scene with that axis UNSET (one made before these fields existed)
-   is unsupported and does not load (Edge Case 16, D16; user decision 2026-11-10); no runtime catch-up exists, so
-   no loaded state is stranded. The refusal holds only while no player-facing build has such saves
+   (the Assembly has not decided; `storyline-lifecycle.md` S6). In 1.0 that turn-back is defence in depth: Root of
+   Heaven is entered only after the Chapter 9 end, so a record at the gate with an UNSET axis is already refused on
+   load (D16), and a live one is a story-graph defect that the gate turns back as well (lifecycle T6; the reference
+   model's walk never fires it). A save positioned past a lock scene with that axis UNSET (one made before these
+   fields existed) is unsupported and does not load (Edge Case 16, D16; user decision 2026-11-10); no runtime
+   catch-up exists. Every save that play writes loads (I9), and the load check keeps a loaded record consistent with
+   the lock order (D16, D17). Beyond Edge Case 16's list the check is best-effort: the integrity of an edited save and
+   the coupling of `root_phase` to the story position are not promised until the story positions exist (Y1-P1-T03;
+   Open Question 17; user decision 2026-11-17). The refusal holds only while no player-facing build has such saves
    (`storyline-lifecycle.md` Legacy saves).
 9. **Final authorization.** The post-boss scene displays the stored structure, with no generic menu
    (PM:8788-8789), and the player confirms execution. It changes no axis and no ID. The source's "one last lawful
@@ -217,7 +224,7 @@ the record stores the axes, `storyline_id`, `root_phase`, `axis_revised`, `lock_
 | VALIDATED | an ID stored, `root_phase` OUTSIDE | open |
 | FIXED | an ID stored, `root_phase` INSIDE (first entered Root of Heaven; stays INSIDE if the player leaves) | open (re-entry) |
 | FINAL | the final authorization concluded: execution confirmed | open (Story+) |
-| DAMAGED | the record holds an item of Edge Case 16: never saved by play; a load that yields it is refused | — (never loaded) |
+| DAMAGED | the record holds an item of Edge Case 16: never saved by play; a load that yields it is refused | a loaded record never reaches the gate; a live one is turned back (lifecycle S6) |
 
 ### The 27 combinations
 
@@ -489,8 +496,10 @@ storyline_phase(record, loaded, flags, position):
 `loaded` is true for a record just read from a save and false for the live record in play. `flags` is the set of
 story flags saved with the record and `position` the story position of the save (owned by Y1-P1-T03 and Y1-P1-T05);
 the record alone cannot show D15-D17, so the check takes them. `damaged(record, loaded, flags, position)` is true when
-the inputs hold an item of Edge Case 16; D9 is tested on a loaded record only (`loaded` true), because inside C8-S16
-an invalid row with nothing stored is the crisis itself. For a record that passed the load check the two calls agree.
+the inputs hold an item of Edge Case 16. Two items are tested on a loaded record only (`loaded` true): D9 and the
+before-commit clause of D17, because inside C8-S16 the live record is the crisis itself: an invalid row with its
+Deleted value set and nothing stored, before the commit. Every other item applies to the live record too (Edge Case
+16 marks each item). For a record that passed the load check the two calls agree.
 The check runs first, so a record that contradicts the phase table is never classified as a playable phase: FINAL
 and FIXED need a stored ID, and a loaded record that would read CRISIS is DAMAGED, because a crisis is never saved. A
 valid row is stored in the same step that sets its last axis, so "three axes set, nothing stored" is, in play, always
@@ -566,9 +575,9 @@ renegotiations, R2 and R3 five each (the Faction swap between them is not offere
    build has a save past Chapter 8; if one ships before these fields do, the decision is reopened.
 9. **NG+.** Whether axis leanings or the previous storyline carry into a new cycle is not decided here (Open
    Questions); until decided, NG+ starts LEANING with the reset list in `storyline-lifecycle.md`.
-10. **Reaching Root of Heaven without a stored ID.** Every path runs the gate check (Core Rule 8); LEANING or
-    PARTLY_LOCKED is turned back, and no other phase lacks an ID outside C8-S16. Outcomes per path and phase:
-    `storyline-lifecycle.md` S6.
+10. **Reaching Root of Heaven without a stored ID.** Every path runs the gate check (Core Rule 8); LEANING,
+    PARTLY_LOCKED or a live DAMAGED record is turned back (defence in depth: no play path reaches these, Core Rule
+    8), and no other phase lacks an ID outside C8-S16. Outcomes per path and phase: `storyline-lifecycle.md` S6.
 11. **Secret prerequisites and the locks.** In the source each route's last offer prerequisite is set after C8-S16,
     in the Act 3 ledger (PM:7586-7588), so no route could be invoked at the crisis. In 1.0 this changes nothing (all
     routes reserved); the post-1.0 design must decide where an invocation is offered (Open Question 15).
@@ -587,35 +596,50 @@ renegotiations, R2 and R3 five each (the Faction swap between them is not offere
     reads the record, the saved flags and the story position (`load_check(record, flags, position)`); it compares
     and never rewrites the stored ID or the save, and reads no knob, so a patch never damages a save. SaveService's
     load check reports each item below as a data error on load and refuses the load (`storyline_phase` DAMAGED):
-    the player returns to the load menu, no transition fires and no gate runs.
+    the player returns to the load menu, no transition fires and no gate runs. `load_check` always tests a loaded
+    record, so it runs every item. `storyline_phase` runs the same items on the live record, except the two marked
+    *(load only)*: inside C8-S16 the live record is the crisis, an invalid row with its Deleted value set before the
+    commit (Formulas, Storyline phase). A position inside a lock scene counts as before the commit, so the CRISIS
+    fixture of AC9 reports {D9, D17}.
     - D1 a stored ID that is not `SL-A-F-D` for its axes on a valid row: any other ID, an ID with an UNSET axis,
       the ID of an invalid row, or any `SL-SECRET-*` ID (no 1.0 play stores one)
     - D2-D5 retired (revision 9): they checked the Witness record fields, which 1.0 no longer stores
     - D6 `axis_revised` holding an axis that `lock_negotiated` lacks
-    - D7 `axis_revised` holding an axis that no `retraction_log` entry names, or more than one axis, or a
+    - D7 `axis_revised` holding an axis that no `retraction_log` entry names, or a `retraction_log` entry whose
+      axis is not in `axis_revised` (the composer reads `axis_revised`), or more than one axis, or a
       `retraction_log` entry whose `new` value is not the record's value for its axis
     - D8 `root_phase` INSIDE or FINAL with nothing stored
-    - D9 three axes set with nothing stored (tested on load only)
+    - D9 three axes set with nothing stored *(load only)*
     - D10-D13 retired (revision 9): they checked the witness vote fields
     - D14 a `retract_*` beat in `beats_played` with no matching `retraction_log` entry, or a `retraction_log` entry
-      whose beat is not in `beats_played`, or a beat id the lifecycle does not define
+      whose beat is not in `beats_played`, or a beat id the lifecycle does not define. A beat matches an entry
+      exactly when its id is `retract_<rule>_<axis>_<new>`, rebuilt from the entry (`rule` is the invalid row R1-R3
+      that the record's axes form with the entry's axis set back to `old`)
     - D15 two flags of one exclusive group (Edge Case 6)
     - D16 a story position past the lock scene of an UNSET axis (a save made past Chapter 8 before these fields
       existed; unsupported, user decision 2026-11-10)
-    - D17 the set axes are not a prefix of the lock order (Faction, then Authority, then Deleted), or an axis is set
-      while the story position is before its lock scene's commit: no lock scene could play from it (S1 needs every
-      axis UNSET, S2 needs Faction set, S4 needs Faction and Authority set), so loading it would strand the player.
-      A position inside a lock scene before its commit counts as before it (no save exists there, I9); the commit
-      checkpoint counts as past it
+    - D17 a lock-order defect, in two clauses. (a) *Before commit (load only):* an axis is set while the story
+      position is before its lock scene's commit: no lock scene could play from it (S1 needs every axis UNSET, S2
+      needs Faction set, S4 needs Faction and Authority set), so loading it would strand the player. A position
+      inside a lock scene before its commit counts as before it (no save exists there, I9); the commit checkpoint
+      counts as past it. (b) *Prefix:* the set axes are not a prefix of the lock order (Faction, then Authority,
+      then Deleted). For a loaded record (b) is implied by D16 and (a) (the reference model checked 64 axis triples
+      at 15 positions and found none that fires (b) alone), so it is kept as documentation and has no fixture of its
+      own (AC9)
 
     D16 holds only while no player-facing build has such saves; if one ships before these fields do, the decision is
     reopened (`storyline-lifecycle.md` Legacy saves).
+
+    Not checked (best-effort, edited or debug saves only; user decision 2026-11-17, Open Question 17):
+    `lock_negotiated` against `lock_pass` of the saved seeds, a retraction entry's `withdrawn_item` and `scene`
+    against the lifecycle's retraction table, and the coupling of `root_phase` to the story position (a FINAL record
+    before the boss, a non-FINAL record after it).
 
 ## Dependencies
 
 | System | Direction | What flows | Status of its design doc |
 |---|---|---|---|
-| Storyline lifecycle (`design/gdd/storyline-lifecycle.md`, Y2-PP-T17) | this → lifecycle | the axes, formulas, record and invariants I1-I9 the scenes must keep | revision 5 (secret routes removed, commit and save rule); needs re-review |
+| Storyline lifecycle (`design/gdd/storyline-lifecycle.md`, Y2-PP-T17) | this → lifecycle | the axes, formulas, record and invariants I1-I9 the scenes must keep | revision 6 (gate row for a live DAMAGED record, L-AC8 reconciled with the reference model); needs re-review |
 | Time model (`design/gdd/time-model.md`, Y1-P0-S06b) | this ← time model | per-act pace values (`act1_pace_*` exists; acts 2-4 named there), timing flags | not written yet — S06b must list this GDD as a dependent |
 | FlagRegistry / StoryGraph (Y1-P1-T03) | this ← registry | seed flags, the future `AXIS*`, `axis_revised_*`, `lock_negotiated_*` flags, secret prerequisite and unlock flags, exclusive-group and secret-knob validation | no GDD (an ADR/tech design later) — must cite this GDD's seed map |
 | SaveService (Y1-P1-T05) | this → save | the composer input record, saved and versioned; the damaged-record check | no GDD — must store the fields in the composer record |
@@ -754,10 +778,13 @@ the Formulas and a walk of the lifecycle transitions (Open Question 16).
 9. `phase_of(record, loaded, flags, position)` returns the stated phase for each Formulas example with its stated
    `loaded`, and for one fixture per phase other than DAMAGED (LEANING, PARTLY_LOCKED, CRISIS, VALIDATED, FIXED,
    FINAL), called with `loaded` false for CRISIS and true for the others; `load_check()` is empty for each of those
-   six fixtures except CRISIS, for which it is exactly {D9}, and `phase_of` of the CRISIS fixture with `loaded` true
-   is DAMAGED. For each active Edge Case 16 item (D1, D6-D9, D14-D17; D1, D7, D14 and D17 one fixture per clause) a
-   fixture that differs from a valid fixture by exactly that one defect gives `phase_of(…, true)` DAMAGED and
-   `load_check()` exactly {that item}; `load_check()` gives the same result with every knob flipped. *Blocked by:*
+   six fixtures except CRISIS, which sits inside C8-S16 and so reports exactly {D9, D17}, and `phase_of` of the
+   CRISIS fixture with `loaded` true is DAMAGED. For each active Edge Case 16 item (D1, D6-D9, D14-D17; D1, D7 and
+   D14 one fixture per clause; D17 one fixture, for its before-commit clause, because its prefix clause is
+   documentation) a fixture that differs from a valid fixture by exactly that one defect (a defect may change the
+   several fields that keep the other items satisfied: the D7 new-value fixture changes a retraction entry's `new`
+   and renames its beat to match) gives `phase_of(…, true)` DAMAGED and `load_check()` exactly {that item};
+   `load_check()` gives the same result with every knob flipped. *Blocked by:*
    Y2-PP-T17, Y1-P1-T05, Y1-P1-T03.
 10. Seeds never lock: a record holding any one of the 26 seed flags in `flags`, or one flag from each exclusive group,
     positioned before C8-S13 with no lock scene played, has `axis()` UNSET for all three axes and `phase_of` LEANING;
@@ -858,8 +885,24 @@ closed, final authorization, saves, visual evidence, the route bot) are `storyli
     player's part in the threshold (PM:8707); whether the deleted seat can refuse a restoration (PM:714, PM:7093,
     PM:11235); who holds Root after a Consent act (PM:705); what a vote that falls short leaves to Story+ (PM:11220);
     and how a witness vote avoids being a solved puzzle when stances are visible.
-16. **Reference model (round 9 process decision).** Before the next design review, a non-shipping reference model of
-    `formula_id`, `lock_pass`, `phase_of`, `load_check` and `crisis_offers`, with a breadth-first walk of the
-    lifecycle transitions, asserts that every reachable save passes `load_check` and every non-final reachable state
-    has a way forward. Owner and location to be set (proposed: Y1, under `production/qa/evidence/2026-11-storyline/`).
-    Round 10 then runs lean against its output.
+16. **Reference model (round 9 process decision).** Built 2026-11-17 (non-shipping,
+    `production/qa/evidence/2026-11-storyline/reference_model.py`, log `reference_model.log`): `formula_id`,
+    `lock_pass`, `phase_of`, `load_check` and `crisis_offers`, with a breadth-first walk of the lifecycle transitions.
+    Round 10 ran lean against its output (findings F1-F10; F1, F2, F3, F4, F6 and F9 are reflected in revision 10).
+    Still open: the owner of re-running it (proposed: Y1, the story that lands SaveService's load check), a fixture
+    for the coordinated D7 new-value edit, and a seeded defect for each item added since the log.
+17. **Load-check scope (user decision 2026-11-17).** The load check promises that every save play writes loads and
+    that a loaded record is consistent with the lock order (D16, D17). Not promised: edited-save integrity (reference
+    model F5: `lock_negotiated` against `lock_pass`, a retraction entry's `withdrawn_item` and `scene`) and the
+    coupling of `root_phase` to the story position (F7). The model found 61,440 accepted records that cannot reach
+    FINAL (a record whose `root_phase` is not FINAL, positioned after the final authorization), but that count rests
+    on its modelling choice M8 (Story+ has no route back to the final authorization), which is lifecycle Open
+    Question 2. Revisit when Y1-P1-T03 defines real story positions and combat settles Story+ replay: then decide
+    whether a `root_phase`-versus-position item (candidate D18) is worth its fixtures.
+18. **A live CRISIS record outside C8-S16 (reference model, found while repairing F1).** `storyline_phase` exempts
+    D9 and D17's before-commit clause from every live record, so a live record with an invalid row, nothing stored
+    and a story position past C8-S16 reads CRISIS, not DAMAGED, and reaches the gate, whose table has no CRISIS row
+    (the model returns a gate error). No play path produces it (I2: the crisis cannot be left), so it is the same
+    defence-in-depth class as T6. Decide whether the exemption should read "a live record positioned inside C8-S16"
+    instead of "a live record", so that such a record is DAMAGED and the gate's DAMAGED row turns it back. Not
+    changed in revision 10.

@@ -1,10 +1,10 @@
 # Mutation 'r9_gate_row_dropped' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-lifecycle.r9_gate_row_dropped.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-lifecycle.r9_gate_row_dropped.md
 gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
-lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\cfa1dce1-6e5b-4dbe-95d3-5a6236e8c4e9\scratchpad\mut\mutations\storyline-lifecycle.r9_gate_row_dropped.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-lifecycle.r9_gate_row_dropped.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [gate] gate table rows ['LEANING, PARTLY_LOCKED', 'VALIDATED'] != the pinned ['LEANING, PARTLY_LOCKED', 'VALIDATED', 'FIXED, FINAL']
-FAIL [gate] gate table covers ['LEANING', 'PARTLY_LOCKED', 'VALIDATED'], expected each gated phase once: ['LEANING', 'PARTLY_LOCKED', 'VALIDATED', 'FIXED', 'FINAL']
+FAIL [gate] gate table rows ['LEANING, PARTLY_LOCKED', 'DAMAGED (a live record)', 'VALIDATED'] != the pinned ['LEANING, PARTLY_LOCKED', 'DAMAGED (a live record)', 'VALIDATED', 'FIXED, FINAL']
+FAIL [gate] gate table covers ['LEANING', 'PARTLY_LOCKED', 'DAMAGED', 'VALIDATED'], expected each gated phase once: ['LEANING', 'PARTLY_LOCKED', 'VALIDATED', 'FIXED', 'FINAL', 'DAMAGED']
 RESULT: FAIL (2 problems)
 exit code: 1
