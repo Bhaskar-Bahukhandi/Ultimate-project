@@ -1,10 +1,10 @@
 # Mutation 'stale_s_equals_t' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-axes.stale_s_equals_t.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-axes.stale_s_equals_t.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-axes.stale_s_equals_t.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-axes.stale_s_equals_t.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [formulas] line 429: storyline_id body differs from the pinned body: 'if S = T and enabled(T) and prereqs_met(T) → "SL-SECRET-" + T' (expected 'if I and enabled(T) and prereqs_met(T) → "SL-SECRET-" + T')
-FAIL [stale] axes line 429: stale string 'S = T' present
+FAIL [formulas] line 436: storyline_id body differs from the pinned body: 'if S = T and enabled(T) and prereqs_met(T) → "SL-SECRET-" + T' (expected 'if I and enabled(T) and prereqs_met(T) → "SL-SECRET-" + T')
+FAIL [stale] axes line 436: stale string 'S = T' present
 RESULT: FAIL (2 problems)
 exit code: 1

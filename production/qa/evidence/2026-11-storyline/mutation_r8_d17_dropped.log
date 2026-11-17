@@ -1,10 +1,10 @@
 # Mutation 'r8_d17_dropped' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-axes.r8_d17_dropped.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-axes.r8_d17_dropped.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-axes.r8_d17_dropped.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-axes.r8_d17_dropped.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [edge cases] line 594: Edge Case 16 entries [(1, 1), (2, 5), (6, 6), (7, 7), (8, 8), (9, 9), (10, 13), (14, 14), (15, 15), (16, 16)] != the pinned [(1, 1), (2, 5), (6, 6), (7, 7), (8, 8), (9, 9), (10, 13), (14, 14), (15, 15), (16, 16), (17, 17)]
-FAIL [edge cases] line 594: Edge Case 16 numbering [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] is not D1-D17 without gaps
+FAIL [edge cases] line 609: Edge Case 16 entries [(0, 0), (1, 1), (2, 5), (6, 6), (7, 7), (8, 8), (9, 9), (10, 13), (14, 14), (15, 15), (16, 16)] != the pinned [(0, 0), (1, 1), (2, 5), (6, 6), (7, 7), (8, 8), (9, 9), (10, 13), (14, 14), (15, 15), (16, 16), (17, 17)]
+FAIL [edge cases] line 609: Edge Case 16 numbering [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] is not D0-D17 without gaps
 RESULT: FAIL (2 problems)
 exit code: 1

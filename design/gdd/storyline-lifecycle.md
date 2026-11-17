@@ -1,6 +1,8 @@
 # Storyline Lifecycle
 
-> **Status**: Draft (revision 6: design review round 10 of `storyline-axes.md`, 2026-11-17 — the gate gets a row for
+> **Status**: Draft (revision 7: design review round 11 of `storyline-axes.md`, 2026-11-17 — C9-S18 plays its decrypted
+> form when the First Wake leads are complete, the DAMAGED turn-back gets a dev assert and a reload prompt, L-AC8 gets
+> the live-crisis cell; revision 6: design review round 10 — the gate gets a row for
 > a live DAMAGED record, T6 is documented as defence in depth, L-AC8 matches what the reference model can set up;
 > revision 5: Witness Protocol moved post-1.0 with the other secret routes; one commit-and-save rule for every
 > transition)
@@ -115,8 +117,10 @@ passes negotiated.
 When a renegotiation reaches YOU, Kaelen states his commitment in that scene, and that becomes the quoted one.
 
 **S5 — Secret-route scenes in 1.0.** Every secret route is disabled (`storyline-axes.md` Tuning Knobs), so: C9-S18
-plays only its incomplete form ("If prerequisites incomplete packet remains noise.", PM:8043); C9-S19 and C9-S20 do
-not play; no secret unlock flag (`SEVEN_WITNESSES_AVAILABLE`, `CROWNLESS_AVAILABLE`, `FIRST_WAKE_AVAILABLE`) is set;
+keeps the source's condition: with every FIRSTWAKE offer prerequisite set it plays its decrypted form and ends with
+the signal logged, not answered (`c9s18_logged`, new content), and otherwise the packet remains noise ("If
+prerequisites incomplete packet remains noise.", PM:8043); either way it sets no flag and offers nothing; C9-S19
+and C9-S20 do not play; no secret unlock flag (`SEVEN_WITNESSES_AVAILABLE`, `CROWNLESS_AVAILABLE`, `FIRST_WAKE_AVAILABLE`) is set;
 C10-S13, C10-S14 and C10-S15 play only when the stored ID is their route's, which no 1.0 record holds. Secret
 prerequisite flags that content sets are kept and transform nothing, and the journal shows no signpost for any route
 (`storyline-axes.md` Edge Cases 2-3).
@@ -130,7 +134,7 @@ path only once Root of Heaven is on the map. Outcome by phase:
 | phase | outcome |
 |---|---|
 | LEANING, PARTLY_LOCKED | TURNED_BACK: the Assembly has not decided |
-| DAMAGED (a live record) | TURNED_BACK: logged as a data error, no transition |
+| DAMAGED (a live record) | TURNED_BACK: a data error, no transition; a dev build asserts; the player sees a system-voice prompt (not the Assembly line) to reload the last save that passes the load check |
 | VALIDATED | ROOT_OF_HEAVEN; `root_phase` becomes INSIDE (T7) |
 | FIXED, FINAL | ROOT_OF_HEAVEN; nothing changes (T8) |
 
@@ -141,7 +145,11 @@ and, with an UNSET axis, is DAMAGED (D16 applies to a live record too), not LEAN
 DAMAGED row are therefore defence in depth against a story-graph defect that FlagRegistry's boot check should
 already have caught; the reference model's walk never fires T6. They are kept so the gate has an outcome for every
 phase (invariant I5) and for the source's "intercepted before final boss" (PM:11305). CRISIS never reaches the
-gate: it exists only inside C8-S16. A VALIDATED save positioned inside Root of Heaven cannot be written by play (T7
+gate: `storyline_phase` returns it only for a live record inside C8-S16 before its commit (`live_crisis`), and a
+live invalid-row record with nothing stored anywhere else reads DAMAGED (`storyline-axes.md` Open Question 18). The
+DAMAGED turn-back repairs nothing: the last save that passes the load check is before C8-S16 (I9), so reloading
+replays the lock scenes; the gate check runs as a predicate before the scene change, never from Root of Heaven's
+own scene. A VALIDATED save positioned inside Root of Heaven cannot be written by play (T7
 is atomic) but loads, and the load-path gate then runs T7.
 
 **Legacy saves (user decision 2026-11-10).** There is no runtime catch-up. A save positioned past a lock scene with
@@ -167,6 +175,7 @@ Authored content this contract asks of Y2-PP-T17 beyond the source scenes:
 | retraction beats `retract_*` | 16 | every renegotiation at C8-S16 |
 | red lines | 3 | C8-S15 |
 | `sole_dissent` | 1 | a SOLE ending after a negotiated Authority vote |
+| `c9s18_logged` | 1 | C9-S18 with every FIRSTWAKE offer prerequisite set |
 | arc epilogue lines | 3 | arcs 05, 08, 09 |
 
 Cut order, first cut first. A cut never removes an invariant, a transition, a record field or an id: it replaces
@@ -238,7 +247,7 @@ when a route's invocation is offered, belong to the post-1.0 secret-route design
 
 | System | Direction | What flows | Status |
 |---|---|---|---|
-| Storyline axes (`design/gdd/storyline-axes.md`) | this ← axes | values, formulas, record, invariants I1-I9, knobs | revision 10 |
+| Storyline axes (`design/gdd/storyline-axes.md`) | this ← axes | values, formulas, record, invariants I1-I9, knobs | revision 11 |
 | SaveService (Y1-P1-T05) | this → save | record writes, including `retraction_log` and `beats_played`; save suppression inside lock scenes, the crisis and the final authorization; one atomic checkpoint per transition; the damaged-record check and load refusal | no GDD |
 | FlagRegistry / StoryGraph (Y1-P1-T03) | this ← registry | flags; scene order check at boot; the story position for Edge Case 16 D16-D17 | no GDD |
 | World map / free travel (protected) | this → world map | the gate check on the `world_map` path | no GDD — needs the user's approval when implemented |
@@ -342,7 +351,9 @@ the table below. Lint shows the text matches its pins; it is not evidence that t
   reads DAMAGED): they run on a live record that the test injects at the gate, and are reported as synthetic. The
   same injection with a live DAMAGED record → TURNED_BACK, `record_hash()` unchanged and a data error logged. The
   LEANING and PARTLY_LOCKED cells inject the record before C8-S16; injected past it, an UNSET axis reads DAMAGED
-  (D16) and the DAMAGED case applies. A VALIDATED fixture save positioned inside Root of Heaven loads, and the load-path gate gives ROOT_OF_HEAVEN and
+  (D16) and the DAMAGED case applies. A live invalid-row record with nothing stored, injected past C8-S16 (in
+  Chapter 9), reads DAMAGED with `load_check` {D9} and gives TURNED_BACK, `record_hash()` unchanged and a data error
+  naming D9, not a gate error (synthetic, outside the 10 counted cells). A VALIDATED fixture save positioned inside Root of Heaven loads, and the load-path gate gives ROOT_OF_HEAVEN and
   FIXED. The `world_map` path repeats the `story` cells once the protected world-map change is approved.
   *Blocked by:* Y2-PP-T17, Y1-P1-T03, Y1-P1-T05.
 - **L-AC9 Held to its word.** From VALIDATED records reached by T3 and T5 and from FIXED and FINAL records: at the gate
@@ -351,7 +362,7 @@ the table below. Lint shows the text matches its pins; it is not evidence that t
   every knob, `storyline_id()` and `storyline_phase()` are unchanged. *Blocked by:* Y2-PP-T17.
 - **L-AC10 Secret routes closed.** With every secret prerequisite flag set and the default knobs: through Chapter 9
   and 10 on one record per family, C9-S19, C9-S20, C10-S13, C10-S14 and C10-S15 never become `current_scene()`,
-  C9-S18 plays its incomplete form, `flag_set()` is false for `SEVEN_WITNESSES_AVAILABLE`, `CROWNLESS_AVAILABLE` and
+  C9-S18 plays `c9s18_logged` (and, on a second record with one FIRSTWAKE prerequisite unset, its noise form), `flag_set()` is false for `SEVEN_WITNESSES_AVAILABLE`, `CROWNLESS_AVAILABLE` and
   `FIRST_WAKE_AVAILABLE`, and `signpost()` is HIDDEN for all three routes. *Blocked by:* Y2-PP-T17, Y1-P1-T03.
 - **L-AC11 Final authorization.** In FIXED after the boss: `take()` of each renegotiation offer is false with
   `record_hash()` unchanged; `route_lines()` is the stored row's Authority, Deleted and Faction lines
@@ -375,18 +386,20 @@ the table below. Lint shows the text matches its pins; it is not evidence that t
   the reset fields at their defaults, and `flag_set()` false for every secret prerequisite and unlock flag.
   *Blocked by:* Y2-PP-T17.
 - **L-AC16 Content completeness.** For every id this contract defines — the 16 `retract_*`, `red_line_R1`,
-  `red_line_R2`, `red_line_R3`, `sole_dissent` — `beat_text(id)` and `beat_speaker(id)` are non-empty and the text is
+  `red_line_R2`, `red_line_R3`, `sole_dissent`, `c9s18_logged` — `beat_text(id)` and `beat_speaker(id)` are non-empty and the text is
   not the route data's placeholder token; texts are pairwise distinct except where the cut order shares them; for
   every `retract_*` id `beat_speaker(id)` is not Kaelen. *Blocked by:* Y2-PP-T17.
 - **L-AC17 Unsupported legacy saves.** A save with no axis data positioned in Chapter 9, and one positioned inside
   Root of Heaven: on load `load_errors()` names D16, `current_scene()` stays `load_menu`, and no lock scene plays.
   *Blocked by:* Y2-PP-T17, Y1-P1-T03, Y1-P1-T05.
 - **L-AC18 Visual and UI evidence.** These beats and screens are player-observable (Visual/Feel and UI, BLOCKING in
-  the project's Testing Standards): one retained screenshot each in `production/qa/evidence/`, with lead sign-off
+  the project's Testing Standards): one retained live Godot viewport screenshot each (not a headless or dummy-renderer
+  capture) in `production/qa/evidence/`, with lead sign-off
   recorded beside them (narrative-director for beats and lines, ux-designer for screens). The items are each lock
   scene with at least one voiced argument; the C8-S15 red line on R1, R2 and R3; the C8-S16 crisis screen for each
   invalid row; one retraction beat per axis; the final authorization; one ending per family (SOLE, BOUND, NONE_AUTH)
-  and `sole_dissent`; one Story+ screen per family; and the three arc epilogue lines. *Blocked by:* Y2-PP-T17.
+  and `sole_dissent`; one Story+ screen per family; the three arc epilogue lines; C9-S18's logged form; and the S6
+  turn-back prompt for a live DAMAGED record (from an injected record in a dev build). *Blocked by:* Y2-PP-T17.
 
 **Validation note:** the route bot of ROADMAP §12.4 starts from Chapter 8 fixture saves once the locks exist (owner
 Y2-PP-T17): one run per valid row through C8-S16 (24), one per renegotiation offer at C8-S16 (16), and the gate

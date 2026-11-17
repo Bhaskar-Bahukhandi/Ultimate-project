@@ -1,11 +1,11 @@
 # Mutation 'r4_phase_row_deleted' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-axes.r4_phase_row_deleted.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-axes.r4_phase_row_deleted.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-axes.r4_phase_row_deleted.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-axes.r4_phase_row_deleted.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
 FAIL [phases] phase table ['PARTLY_LOCKED', 'CRISIS', 'VALIDATED', 'FIXED', 'FINAL', 'DAMAGED'] != ['LEANING', 'PARTLY_LOCKED', 'CRISIS', 'VALIDATED', 'FIXED', 'FINAL', 'DAMAGED']
-FAIL [gate] line 132 (LEANING): outcome 'TURNED_BACK', but the axes phase table's gate 'None' means None
+FAIL [gate] line 136 (LEANING): outcome 'TURNED_BACK', but the axes phase table's gate 'None' means None
 FAIL [gate] gate table covers ['LEANING', 'PARTLY_LOCKED', 'DAMAGED', 'VALIDATED', 'FIXED', 'FINAL'], expected each gated phase once: ['PARTLY_LOCKED', 'VALIDATED', 'FIXED', 'FINAL', 'DAMAGED']
 RESULT: FAIL (3 problems)
 exit code: 1

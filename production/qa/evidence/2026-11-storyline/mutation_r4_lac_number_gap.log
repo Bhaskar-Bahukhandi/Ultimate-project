@@ -1,11 +1,12 @@
 # Mutation 'r4_lac_number_gap' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-lifecycle.r4_lac_number_gap.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-lifecycle.r4_lac_number_gap.md
 gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
-lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-lifecycle.r4_lac_number_gap.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-lifecycle.r4_lac_number_gap.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
 FAIL [lifecycle acceptance] L-ACs numbered [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19], expected 1-18
 FAIL [lifecycle acceptance] L-AC18 lacks 'one ending per family (SOLE, BOUND, NONE_AUTH)' (derived)
-FAIL [lifecycle acceptance] L-AC18 lacks the pinned phrase 'one retained screenshot each in production/qa/evidence/, with lead sign-off recorded beside them'
-RESULT: FAIL (3 problems)
+FAIL [lifecycle acceptance] L-AC18 lacks the pinned phrase 'one retained live Godot viewport screenshot each (not a headless or dummy-renderer capture) in production/qa/evidence/, with lead sign-off recorded beside them'
+FAIL [lifecycle acceptance] L-AC18 lacks the pinned phrase 'the S6 turn-back prompt for a live DAMAGED record'
+RESULT: FAIL (4 problems)
 exit code: 1

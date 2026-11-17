@@ -415,3 +415,23 @@ observable. The checker accepts that exact phrase only (and requires it); report
 - New finding F11 (axes Open Question 18): with D9 and D17's before-commit clause exempt for every live record, a live
   CRISIS record positioned past C8-S16 reads CRISIS and reaches a gate with no CRISIS row. No play path produces it
   (I2). Not changed in revision 10; the candidate is to exempt only a live record positioned inside C8-S16.
+
+## Round 11 sync (axes rev 11 / lifecycle rev 7, 2026-11-17)
+
+Design review round 11 (full: game-designer, systems-designer, qa-lead, narrative-director, godot-specialist,
+creative-director) gave NEEDS REVISION with 9 blockers; the user settled Open Questions 17 and 18, chose C9-S18 option
+(b), the Kaelthas allied-flag trust condition and the full AC16 playtest. All 9 were fixed in the same session.
+
+- `check_storyline_axes.py`: re-pinned to rev 11 / rev 7 (live_crisis wording, D0, D7 clause ids and duplicate clause,
+  inclusion rule, I5, arcs 05/08/09 scope, AC9/AC14/AC16/AC17, observables `scene_lines`, C9-S18, S6 DAMAGED copy,
+  L-AC8/L-AC10/L-AC18). `py_phase` takes the live-crisis window, parsed from each Formulas example's position.
+  Result: PASS (`check_pass.log`).
+- `run_mutations.py`: 28 mutations retargeted to the rev 11 text, 22 round-11 mutations added (`r11_*`).
+  Result: 247 mutations FAIL, 1 control PASS, 0 unexpected.
+- `reference_model.py`: REV11 reading (`live_crisis` scoping, `D7.duplicate`); AC9 bounded-live-crisis and non-goal
+  fixtures; L-AC8 live-crisis cell; hand-built fixtures for D7.unnamed, D14.no_entry, D14.not_played, D7.duplicate;
+  D7.multi and D17.prefix listed as documentation (equivalent mutants); residual categories asserted against a pinned
+  list. The rev 10 text is a unit-level regression (must still fail on F11), the rev 9 text a walk-level one.
+  Result: PASS in 328.9 s (`reference_model.log`). D0 (shape) is not modelled (typed records; SaveService tests it).
+- Still not evidence of: the composer, the scenes, SaveService's save suppression and refusal path (routed to
+  Y1-P1-T05), or anything a player sees.

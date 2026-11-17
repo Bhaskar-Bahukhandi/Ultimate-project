@@ -1,6 +1,6 @@
 """Run the storyline checker on the real GDDs and on mutated copies; write one log per run.
 
-Design review rounds 2-9 (2026-11-10 to 2026-11-11; round 5 is also the lifecycle document's round 1, round 6 its
+Design review rounds 2-11 (2026-11-10 to 2026-11-17; round 5 is also the lifecycle document's round 1, round 6 its
 round 2). Round 9 retired the mutations aimed at the removed Witness design (listed in README.md); their old logs
 are left in place, unrefreshed. Every mutation must make the checker FAIL; every control must PASS; the real
 documents must PASS. Mutated copies go to <scratch_dir>/mutations (outside the repo); logs go to --log-dir
@@ -131,7 +131,7 @@ MUTATIONS = {
     "r4_gate_outcome_wrong": [(L, "| VALIDATED | ROOT_OF_HEAVEN; `root_phase` becomes INSIDE (T7) |", "| VALIDATED | TURNED_BACK; `root_phase` becomes INSIDE (T7) |")],
     "r4_gate_t_ref_wrong": [(L, "becomes INSIDE (T7)", "becomes INSIDE (T8)")],
     # invariants, edge cases (axes)
-    "r4_invariant_deleted": [("| I5 | No soft-lock under any knob value or patch: every state without a stored ID either is before the locks or offers a renegotiation that reaches a valid row | 5, 8 |\n", "")],
+    "r4_invariant_deleted": [('| I5 | No soft-lock under any knob value or patch: every state without a stored ID either is before the locks, offers a renegotiation that reaches a valid row, or is a data error refused at the gate (a DAMAGED record, which play never writes) | 5, 8 |\n', '')],
     "r4_invariant_rule_ref": [("| I7 | A valid row is held to its word | 7 |", "| I7 | A valid row is held to its word | 8 |")],
     "r4_edge_case_16_deleted": [("16. **A damaged record** (a debug or edited save, or one made before these fields existed; play never writes one,\n", "")],
     "r4_edge_case_16_item_dropped": [("    - D6 `axis_revised` holding an axis that `lock_negotiated` lacks\n", "")],
@@ -187,14 +187,14 @@ MUTATIONS = {
     "r4_stale_gate_crisis": [(L, "Knobs are read only at C8-S16 and the gate.", "Knobs are read only at C8-S16 and the gate (no GATE_CRISIS).")],
     # --- review round 5 (axes) + round 1 (lifecycle): one per new pin or derived check
     # axes: composer record, Edge Case 16, protected touchpoints, Core Rules 3/6/10, ACs
-    "r5_composer_retraction_log_dropped": [("| retraction_log | list | entries {axis, old, new, withdrawn_item, scene}, oldest first | every renegotiation |\n", "")],
+    "r5_composer_retraction_log_dropped": [('| retraction_log | list | at most one entry {axis, old, new, withdrawn_item, scene}; `withdrawn_item` and `scene` are opaque display text that no code branches on | every renegotiation |\n', '')],
     "r5_ec16_rewrites_id": [("and never rewrites the stored ID or the save", "and then rewrites the stored ID or the save")],
     "r5_protected_area_dropped": [("| NG+ | the reset of the record and the axis, secret and unlock flags | Edge Case 9; lifecycle NG+ reset |\n", "")],
     "r5_protected_area_bogus": [("| collision, hitboxes | none | — |", "| collision, hitboxes, lighting | none | — |")],
     "r5_rule6_chapter10_flag": [("plays only when the stored ID is `SL-SECRET-T`, which no 1.0 record holds", "plays when the unlock flag is set")],
     "r5_rule3_sole_dissent_optional": [("the ending plays `sole_dissent`", "the ending may play `sole_dissent`")],
     "r5_ac_number_gap": [("15. Pillar P5 tracking", "16. Pillar P5 tracking")],
-    "r5_ac14_unknown_observable": [("`scene_render(id)` differ", "`scenes(id)` differ")],
+    "r5_ac14_unknown_observable": [('`scene_lines()` of that scene differs', '`scenes()` of that scene differs')],
     # lifecycle: transitions, formulas, pinned sentences, derived beats, L-ACs, Validation note
     "r5_formula_domain_guard_dropped": [(L, "crisis_offers(row) = {} if row is not R1, R2 or R3; otherwise", "crisis_offers(row) = for every row:")],
     "r5_retract_id_without_rule": [(L, "`retract_<rule>_<axis>_<new>`, e.g. `retract_R2_authority_YOU`", "`retract_<axis>_<old>_<new>`, e.g. `retract_authority_NONE_YOU`")],
@@ -213,15 +213,15 @@ MUTATIONS = {
     # axes blocker 1: the damaged-first phase function
     "r6_phase_final_before_damaged": [("    if damaged(record, loaded, flags, position)        → DAMAGED\n    if storyline_id is stored and root_phase is FINAL  → FINAL\n", "    if storyline_id is stored and root_phase is FINAL  → FINAL\n    if damaged(record, loaded, flags, position)        → DAMAGED\n")],
     "r6_phase_final_without_id": [("    if storyline_id is stored and root_phase is FINAL  → FINAL", "    if root_phase is FINAL                             → FINAL")],
-    "r6_phase_example_damaged_wrong": [("stored, FINAL) → DAMAGED", "stored, FINAL) → FINAL")],
-    "r6_phase_example_crisis_loadable": [("(NONE, ARCHIVE, RELEASE, nothing stored, OUTSIDE) → DAMAGED", "(NONE, ARCHIVE, RELEASE, nothing stored, OUTSIDE) → CRISIS")],
-    "r6_phase_row_damaged_dropped": [("| DAMAGED | the record holds an item of Edge Case 16: never saved by play; a load that yields it is refused | a loaded record never reaches the gate; a live one is turned back (lifecycle S6) |\n", "")],
+    "r6_phase_example_damaged_wrong": [('nothing stored, FINAL) →\nDAMAGED', 'nothing stored, FINAL) → FINAL')],
+    "r6_phase_example_crisis_loadable": [('OUTSIDE) → DAMAGED in Chapter 9;', 'OUTSIDE) → CRISIS in Chapter 9;')],
+    "r6_phase_row_damaged_dropped": [('| DAMAGED | the record holds an item of Edge Case 16: never saved by play; a load that yields it is refused | a loaded record never reaches the gate; a live one is turned back as a data error with a reload prompt (lifecycle S6) |\n', '')],
     "r6_phase_final_meaning_old": [("| FINAL | the final authorization concluded: execution confirmed |", "| FINAL | execution confirmed |")],
     # axes blocker 2: Edge Case 16
     "r6_ec16_d16_dropped": [("    - D16 a story position past the lock scene of an UNSET axis (a save made past Chapter 8 before these fields\n      existed; unsupported, user decision 2026-11-10)\n", "")],
-    "r6_ec16_d7_dropped": [("    - D7 `axis_revised` holding an axis that no `retraction_log` entry names, or a `retraction_log` entry whose\n      axis is not in `axis_revised` (the composer reads `axis_revised`), or more than one axis, or a\n      `retraction_log` entry whose `new` value is not the record's value for its axis\n", "    - D7 `axis_revised` holding an axis\n")],
+    "r6_ec16_d7_dropped": [("    - D7 `axis_revised` holding an axis that no `retraction_log` entry names (`D7.unnamed`), or a `retraction_log`\n      entry whose axis is not in `axis_revised` (`D7.reverse`; the composer reads `axis_revised`), or more than one\n      axis (`D7.multi`), or a `retraction_log` entry whose `new` value is not the record's value for its axis\n      (`D7.new_mismatch`), or more than one `retraction_log` entry (`D7.duplicate`: play takes at most one\n      renegotiation, Core Rule 7, and a second entry would play the cost beat twice). `D7.multi` cannot fire while D1\n      and D14 hold (no valid row admits two consistent retractions) and is kept as documentation\n", '    - D7 `axis_revised` holding an axis\n')],
     "r6_ec6_cites_boot": [("damaged: SaveService's load check reports it (Edge Case 16, D15)", "damaged: FlagRegistry boot validation (Y1-P1-T03) reports it")],
-    "r6_ac9_dlist_short": [("(D1, D6-D9, D14-D17;", "(D1, D6-D9, D14-D16;")],
+    "r6_ac9_dlist_short": [('(D0, D1, D6-D9, D14-D17)', '(D0, D1, D6-D9, D14-D16)')],
     # axes blocker 3: the over-promise guard
     "r6_overpromise_fantasy": [("no other 1.0 content reads it.", "elsewhere it colours ally lines and slides.")],
     "r6_overpromise_overview": [("in 1.0 only a Sole ending makes that record\naudible (Core Rule 3)", "a Sole ending names the dissent and ally lines colour it (Core Rule 3)")],
@@ -236,7 +236,7 @@ MUTATIONS = {
     # lifecycle blocker 5: the FAILED vote
     "r6_t13_unguarded": [(L, "| the final authorization scene is playing | FINAL |", "| — | FINAL |")],
     # Revision 8 (design review round 8): the T13 guard and the D17 item are pinned.
-    "r8_d17_dropped": [("    - D17 a lock-order defect, in two clauses. (a) *Before commit (load only):* an axis is set while the story\n      position is before its lock scene's commit: no lock scene could play from it (S1 needs every axis UNSET, S2\n      needs Faction set, S4 needs Faction and Authority set), so loading it would strand the player. A position\n      inside a lock scene before its commit counts as before it (no save exists there, I9); the commit checkpoint\n      counts as past it. (b) *Prefix:* the set axes are not a prefix of the lock order (Faction, then Authority,\n      then Deleted). For a loaded record (b) is implied by D16 and (a) (the reference model checked 64 axis triples\n      at 15 positions and found none that fires (b) alone), so it is kept as documentation and has no fixture of its\n      own (AC9)\n", "")],
+    "r8_d17_dropped": [("    - D17 a lock-order defect, in two clauses. (a) *Before commit (not for the live crisis):* an axis is set while the story\n      position is before its lock scene's commit: no lock scene could play from it (S1 needs every axis UNSET, S2\n      needs Faction set, S4 needs Faction and Authority set), so loading it would strand the player. A position\n      inside a lock scene before its commit counts as before it (no save exists there, I9); the commit checkpoint\n      counts as past it. (b) *Prefix:* the set axes are not a prefix of the lock order (Faction, then Authority,\n      then Deleted). For a loaded record (b) is implied by D16 and (a) (the reference model checked 64 axis triples\n      at 15 positions and found none that fires (b) alone), so it is kept as documentation and has no fixture of its\n      own (AC9)\n\n", '')],
     "r6_t14_executes": [(L, "| `root_phase` FINAL; checkpoint |", "| `root_phase` FINAL; restoration executed |")],
     "r6_lac22_confirm_on_failed": [(L, "else is false with `record_hash()` unchanged. *Blocked", "else gives FINAL. *Blocked")],
     # lifecycle blocker 1: the legacy saves
@@ -252,15 +252,15 @@ MUTATIONS = {
     # --- review round 7 (axes revision 7 / lifecycle revision 3): the loaded argument, the seven-seats guard, the
     # save precondition, the record-versus-flags rule, AC14's baseline
     "r7_phase_loaded_dropped": [("storyline_phase(record, loaded, flags, position):\n    if damaged(record, loaded, flags, position)", "storyline_phase(record, loaded):\n    if damaged(record, loaded)")],
-    "r7_d9_example_in_play": [("(NONE, ARCHIVE, RELEASE, nothing stored, OUTSIDE) → CRISIS; the same", "(NONE, ARCHIVE, RELEASE, nothing stored, OUTSIDE) → DAMAGED; the same")],
-    "r7_inplay_example_dropped": [(" Example (the live record in\nplay, `loaded` false): (NONE, ARCHIVE, RELEASE, nothing stored, OUTSIDE) → CRISIS; the same record with `loaded` true\nis the last DAMAGED example above.", "")],
-    "r7_loaded_label_flipped": [("Examples (loaded records, `loaded` true,", "Examples (loaded records, `loaded` false,")],
+    "r7_d9_example_in_play": [('OUTSIDE) → CRISIS inside C8-S16 before its\ncommit;', 'OUTSIDE) → DAMAGED inside C8-S16 before its commit;')],
+    "r7_inplay_example_dropped": [(' Examples (the live\nrecord in play, `loaded` false): (NONE, ARCHIVE, RELEASE, nothing stored, OUTSIDE) → CRISIS inside C8-S16 before its\ncommit; (NONE, ARCHIVE, RELEASE, nothing stored, OUTSIDE) → DAMAGED in Chapter 9 (D9), which the gate turns back;\n(SHARED, ARCHIVE, CHOOSE, nothing stored, OUTSIDE) → DAMAGED inside C8-S16 before its commit (D9).', '')],
+    "r7_loaded_label_flipped": [('Examples (loaded records, `loaded` true,', 'Examples (loaded records, `loaded` false,')],
     "r7_ac9_loaded_dropped": [("called with `loaded` false for CRISIS and true for the others", "called with the same arguments for each")],
     "r7_d16_precondition_dropped": [("\n\n    D16 holds only while no player-facing build has such saves; if one ships before these fields do, the decision is\n    reopened (`storyline-lifecycle.md` Legacy saves).", "")],
     "r7_ec8_precondition_dropped": [("The refusal holds only while no player-facing\n   build has a save past Chapter 8", "The refusal always holds for any\n   build with a save past Chapter 8")],
-    "r7_rule8_precondition_dropped": [(" The refusal holds only while no player-facing build has such saves\n   (`storyline-lifecycle.md` Legacy saves).", "")],
+    "r7_rule8_precondition_dropped": [(' The refusal holds only while no player-facing build has such\n   saves (`storyline-lifecycle.md` Legacy saves).', '')],
     "r7_record_not_authoritative": [("The composer input record is authoritative: these flags,", "The flags are authoritative: these flags,")],
-    "r7_ac14_pairwise_restored": [("for every pair of distinct IDs at least 1 scene of\n    `scene_render()` differs", "for every pair of distinct IDs at least 3 scenes of\n    `scene_render()` differ")],
+    "r7_ac14_pairwise_restored": [('for every pair of distinct IDs at least 2\n    scenes differ', 'for every pair of distinct IDs at least 3 scenes differ')],
     "r7_oq13_dropped": [("**P3 baseline and the storyline cut order.**", "**P3 baseline.**")],
     "r7_decision_label_back": [("`/map-systems` creates it later.", "`/map-systems` creates it later (D3).")],
     # --- design review round 9 (axes revision 9 / lifecycle revision 5): one per new or replaced check
@@ -279,36 +279,59 @@ MUTATIONS = {
     "r9_commit_list": [(L, "(T1, T2, T3, T5, T7, T9) commits", "(T1, T2, T3, T5, T9) commits")],
     "r9_lac6_list": [(L, "For each record-writing transition (T1, T2, T3, T5, T7, T9)", "For each record-writing transition (T1, T2, T3, T5)")],
     "r9_ec16_retired_reactivated": [("    - D2-D5 retired (revision 9): they checked the Witness record fields, which 1.0 no longer stores", "    - D2-D5 a stored ID on a row other than R1")],
-    "r9_ac9_clause_list": [("D1, D7 and\n   D14 one fixture per clause;", "D1 and D7 one fixture per clause;")],
+    "r9_ac9_clause_list": [('for each clause of each active Edge Case 16 item (D0, D1,', 'for each active Edge Case 16 item (D1,')],
     "r9_phase_example_lock_order": [("(YOU, HEARTH, UNSET, nothing stored, OUTSIDE) →", "(UNSET, HEARTH, CHOOSE, nothing stored, OUTSIDE) →")],
-    "r9_observable_old_name": [("| `scene_render(id)` |", "| `scene_variants(id)` |")],
+    "r9_observable_old_name": [('| `scene_lines(id, scene)` |', '| `scene_variants(id)` |')],
     "r9_ac15_blocked": [("*Blocked by:* Y1-P1-T03 (the arc flags exist in FlagRegistry).", "*Blocked by:* Y2-PP-T17, Y1-P1-T03 (the arc flags exist in FlagRegistry).")],
-    "r9_ac11_blocked": [("on all three.\n    *Blocked by:* Y2-PP-T17.", "on all three.\n    *Blocked by:* Y2-PP-T17, Y1-P1-T03.")],
-    "r9_ac16_testers": [("with at least 5 testers", "with at least 3 testers")],
+    "r9_ac11_blocked": [('(Edge Case 1).\n    *Blocked by:* Y2-PP-T17.', '(Edge Case 1).\n    *Blocked by:* Y2-PP-T17, Y1-P1-T03.')],
+    "r9_ac16_testers": [('with at least 12 testers', 'with at least 3 testers')],
     "r9_doc_ac_label": [("(document lint, Config/Data, advisory)", "(Config/Data, advisory)")],
     "r9_ac5_formula_mention": [("so a swapped `transform()` fails", "so `transform()` is covered")],
     "r9_lac2_fixture_wrong": [(L, "`act1_report_local` → not;", "`act1_report_local` → contains;")],
     "r9_s5_unlock_flag": [(L, "`SEVEN_WITNESSES_AVAILABLE`, `CROWNLESS_AVAILABLE`, `FIRST_WAKE_AVAILABLE`) is set", "`SEVEN_WITNESSES_AVAILABLE`, `FIRST_WAKE_AVAILABLE`) is set")],
-    "r9_dependency_revision": [(L, "| revision 10 |", "| revision 8 |")],
+    "r9_dependency_revision": [(L, '| revision 11 |', '| revision 8 |')],
     "r9_content_scope_count": [(L, "| red lines | 3 |", "| red lines | 4 |")],
     "r9_gate_row_dropped": [(L, "| FIXED, FINAL | ROOT_OF_HEAVEN; nothing changes (T8) |\n", "")],
     "r9_life_formula_signpost": [(L, "= HIDDEN while T is disabled", "= OPEN while T is disabled")],
     "r9_ec2_offer_count": [("R1 at C8-S16 offers only its\n   six renegotiations", "R1 at C8-S16 offers only its\n   seven renegotiations")],
     "r9_red_line_names_route": [(L, "No line names a secret route or the institution\none needs", "The R1 line names the witnesses")],
     # --- design review round 10 (2026-11-17): the reference model's findings F1-F9 as pinned text.
-    "r10_ac9_crisis_d9_only": [("which sits inside C8-S16 and so reports exactly {D9, D17}", "which reports exactly {D9}")],
-    "r10_d17_prefix_fixture": [("D17 one fixture, for its before-commit clause,", "D17 one fixture per clause,")],
-    "r10_live_d17_applies": [("Two items are tested on a loaded record only", "One item is tested on a loaded record only")],
-    "r10_d9_load_only_unmarked": [("three axes set with nothing stored *(load only)*", "three axes set with nothing stored")],
+    "r10_ac9_crisis_d9_only": [('reports exactly the items {D9, D17}', 'reports exactly the items {D9}')],
+    "r10_d17_prefix_fixture": [('(`D7.multi`, `D17.prefix`)', '(`D7.multi`)')],
+    "r10_live_d17_applies": [('are tested on every record except a `live_crisis` one', 'are tested on a loaded record only')],
+    "r10_d9_load_only_unmarked": [('three axes set with nothing stored *(not for the live crisis)*', 'three axes set with nothing stored')],
     "r10_d14_matching_dropped": [(" A beat matches an entry\n      exactly when its id is `retract_<rule>_<axis>_<new>`, rebuilt from the entry (`rule` is the invalid row R1-R3\n      that the record's axes form with the entry's axis set back to `old`)", "")],
-    "r10_d7_reverse_dropped": [("or a `retraction_log` entry whose\n      axis is not in `axis_revised` (the composer reads `axis_revised`), ", "")],
+    "r10_d7_reverse_dropped": [('or a `retraction_log`\n      entry whose axis is not in `axis_revised` (`D7.reverse`; the composer reads `axis_revised`), ', '')],
     "r10_rule8_stranded_restored": [("no runtime\n   catch-up exists. Every save", "no runtime\n   catch-up exists, so no loaded state is stranded. Every save")],
-    "r10_rule8_best_effort_dropped": [("Beyond Edge Case 16's list the check is best-effort", "Beyond Edge Case 16's list the check is complete")],
-    "r10_ec16_not_checked_dropped": [("    Not checked (best-effort, edited or debug saves only; user decision 2026-11-17, Open Question 17):", "    Checked:")],
-    "r10_gate_damaged_row_dropped": [(L, "| DAMAGED (a live record) | TURNED_BACK: logged as a data error, no transition |\n", "")],
-    "r10_gate_damaged_outcome_wrong": [(L, "| TURNED_BACK: logged as a data error", "| ROOT_OF_HEAVEN: logged as a data error")],
+    "r10_rule8_best_effort_dropped": [('Open Question 17): it never promises edited-save integrity', 'Open Question 17): it promises edited-save integrity')],
+    "r10_ec16_not_checked_dropped": [('Not checked, by the inclusion rule (edited or debug saves only; user decision 2026-11-17, Open Question 17):', 'Checked:')],
+    "r10_gate_damaged_row_dropped": [(L, '| DAMAGED (a live record) | TURNED_BACK: a data error, no transition; a dev build asserts; the player sees a system-voice prompt (not the Assembly line) to reload the last save that passes the load check |\n', '')],
+    "r10_gate_damaged_outcome_wrong": [(L, '| TURNED_BACK: a data error, no transition;', '| ROOT_OF_HEAVEN: a data error, no transition;')],
     "r10_lac8_injection_dropped": [(L, "they run on a live record that the test injects at the gate, and are reported as synthetic", "they run from synthetic fixture saves and are reported as synthetic")],
     "r10_t6_defence_dropped": [(L, "T6 and the\nDAMAGED row are therefore defence in depth", "T6 and the\nDAMAGED row are therefore live paths")],
+    # Round 11 (2026-11-17): Open Questions 17 and 18, C9-S18, AC9/AC14/AC16/AC17, Kaelthas trust.
+    "r11_live_crisis_unscoped": [('CRISIS is returned only for `live_crisis`.', 'CRISIS is returned for a live record.')],
+    "r11_live_crisis_outside_window": [('OUTSIDE) → DAMAGED in Chapter 9 (D9)', 'OUTSIDE) → CRISIS in Chapter 9 (D9)')],
+    "r11_live_valid_row_crisis": [('(SHARED, ARCHIVE, CHOOSE, nothing stored, OUTSIDE) → DAMAGED inside C8-S16', '(SHARED, ARCHIVE, CHOOSE, nothing stored, OUTSIDE) → CRISIS inside C8-S16')],
+    "r11_loaded_inside_c8s16_crisis": [('OUTSIDE) → DAMAGED inside C8-S16 before its commit (no save exists there', 'OUTSIDE) → CRISIS inside C8-S16 before its commit (no save exists there')],
+    "r11_ec16_d0_dropped": [('    - D0 a record whose shape is wrong: a field missing or of the wrong type, an enum string outside its allowed\n      values, a set or list element of the wrong type, or a list longer than its maximum (`retraction_log` one entry,\n      `beats_played` sixteen). D0 is tested first; when it fires no other item runs, so `load_check` reports exactly\n      {D0}. It exists so that no later item and no composer read meets a value of the wrong type; it is not an\n      integrity check\n', '')],
+    "r11_d7_duplicate_dropped": [(', or more than one `retraction_log` entry (`D7.duplicate`: play takes at most one\n      renegotiation, Core Rule 7, and a second entry would play the cost beat twice)', '')],
+    "r11_inclusion_rule_iii_dropped": [(' (iii) it cannot refuse a record that play writes.', '')],
+    "r11_refusal_as_corruption": [('A refusal is never handled as file corruption', 'A refusal is handled as file corruption')],
+    "r11_tripwire_dropped": [('Tripwires: the reference model asserts that the categories of accepted records play does not write equal a\n    pinned list', 'The reference model reports accepted records')],
+    "r11_i5_gate_refusal_dropped": [(', or is a data error refused at the gate (a DAMAGED record, which play never writes)', '')],
+    "r11_kaelthas_trust_dropped": [('The trust condition is `ch3_kaelthas_allied` set and `ch3_kaelthas_betrayed` unset', 'The trust condition is left to Y2-PP-T17')],
+    "r11_arc_scope_post": [('| 05 | The Flight List | secret:FIRSTWAKE | — | 1.0 (feeds post-1.0) |', '| 05 | The Flight List | secret:FIRSTWAKE | — | post-1.0 |')],
+    "r11_ac14_pairwise_one": [('for every pair of distinct IDs at least 2\n    scenes differ', 'for every pair of distinct IDs at least 1 scenes differ')],
+    "r11_ac14_unmasked": [('a substituted name, number or faction name alone never counts', 'a substituted name counts')],
+    "r11_ac16_no_act1_play": [('At least 6 play Act 1 themselves', 'None play Act 1 themselves')],
+    "r11_ac17_dropped": [("17. Pillar P5 voiced (a closing condition of Y2-PP-T17, after AC15): for each of the nine 1.0 side arcs (01-04,\n    06, 07, 10-12), a fixture record with one of that arc's `side_arc_flags` set makes the lock scene of the axis the\n    flag pushes voice at least one argument line the route data keys to that flag, and the same fixture with every\n    flag of that arc unset voices none of those lines. Arc 12 is tested for its `deleted:CHOOSE` push only.\n    *Blocked by:* Y2-PP-T17, Y1-P1-T03.", '')],
+    "r11_ac9_mutation_kill_dropped": [('a copy of\n   `load_check` with that clause deleted fails at least one fixture of this criterion', 'a copy of `load_check` with that clause deleted is noted')],
+    "r11_life_c9s18_noise_only": [(L, "keeps the source's condition: with every FIRSTWAKE offer prerequisite set it plays its decrypted form", 'plays only its incomplete form')],
+    "r11_life_c9s18_scope_dropped": [(L, '| `c9s18_logged` | 1 | C9-S18 with every FIRSTWAKE offer prerequisite set |\n', '')],
+    "r11_life_gate_damaged_assembly_line": [(L, 'the player sees a system-voice prompt (not the Assembly line) to reload the last save that passes the load check', 'the player hears that the Assembly has not decided')],
+    "r11_life_lac8_live_crisis_dropped": [(L, 'A live invalid-row record with nothing stored, injected past C8-S16 (in\n  Chapter 9), reads DAMAGED', 'A live invalid-row record with nothing stored, injected past C8-S16 (in Chapter 9), reads CRISIS')],
+    "r11_life_lac18_headless": [(L, 'one retained live Godot viewport screenshot each (not a headless or dummy-renderer\n  capture)', 'one retained screenshot each')],
 }
 # Controls: edits the checker must accept (expected PASS).
 CONTROLS = {

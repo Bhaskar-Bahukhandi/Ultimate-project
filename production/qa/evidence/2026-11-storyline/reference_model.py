@@ -1,8 +1,8 @@
 """Non-shipping reference model of the storyline axes and lifecycle (storyline-axes.md Open Question 16).
 
 Implements, independently of the GDD text (it parses nothing), the Formulas of design/gdd/storyline-axes.md
-(rev 10) and storyline-lifecycle.md (rev 6): formula_id, prereqs_met, family, lock_pass, phase_of, load_check
-(Edge Case 16: D1, D6-D9, D14-D17) and crisis_offers; then walks the lifecycle transitions T1-T9 breadth-first
+(rev 11) and storyline-lifecycle.md (rev 7): formula_id, prereqs_met, family, lock_pass, phase_of, load_check
+(Edge Case 16: D1, D6-D9, D14-D17; D0 is a shape check on typed records, not modelled) and crisis_offers; then walks the lifecycle transitions T1-T9 breadth-first
 for every seed context the game code allows, and asserts:
 
   A1  every reachable save passes load_check
@@ -25,14 +25,18 @@ plus the unit tables of axes AC5-AC9 and lifecycle L-AC2/L-AC3/L-AC5/L-AC8, a cl
 AC9 one-defect fixtures, a probe for records load_check accepts that play never writes, and negative controls
 (defects seeded into the model; each must make at least one assertion fail).
 
-Revision 10 (design review round 10, 2026-11-17): the model implements the rev 10 text (REV10) and keeps the
-rev 9 text (LITERAL) as a regression that must still fail (F1, F2, F9). The residuals F5, F7 and F10 are
-best-effort by decision (axes Open Question 17): they are reported, not asserted.
+Revision 10 (design review round 10, 2026-11-17): the model implemented the rev 10 text (REV10) and kept the
+rev 9 text (LITERAL) as a regression that must still fail (F1, F2, F9).
+Revision 11 (design review round 11, 2026-11-17): the model implements the rev 11 text (REV11): the live crisis is
+scoped to C8-S16 before its commit (axes Open Question 18, F11) and D7 refuses a duplicated retraction entry. The rev 10
+text stays a unit-level regression that must still fail on F11, and the rev 9 text a walk-level one. The accepted-
+record residuals are non-goals by the inclusion rule (axes Open Question 17): their counts are reported and their
+categories asserted against a pinned list (a new category fails the run).
 
 Usage: python -I -B reference_model.py [--quick]
-Exit status: 0 when every assertion and unit check passes under the rev 10 text, the rev 9 text still fails as
-expected, every negative control is caught and every AC9 clause is isolatable (D17's prefix clause is documentation
-only); 1 otherwise.
+Exit status: 0 when every assertion and unit check passes under the rev 11 text, the rev 10 and rev 9 texts
+still fail as expected, every negative control is caught, every AC9 clause has a fixture whose only clause it is
+(D7.multi and D17.prefix are documentation only) and the residual categories equal the pinned list; 1 otherwise.
 """
 import argparse
 import itertools
@@ -206,16 +210,27 @@ class Reading:
     text, kept as a regression: the model must still find F1, F2 and F9 in it."""
 
     def __init__(self, name, d17_before_commit_live=True, d14_match="strict", d7_reverse=False,
-                 gate_damaged_row=False):
+                 gate_damaged_row=False, live_crisis_scoped=False, d7_duplicate=False):
         self.name = name
         self.d17_before_commit_live = d17_before_commit_live   # rev 9: D17 clause (a) also tested on live records
         self.d14_match = d14_match                             # strict: beat id must equal beat_for_entry()
         self.d7_reverse = d7_reverse                           # rev 10: a log entry whose axis is not in axis_revised
         self.gate_damaged_row = gate_damaged_row               # rev 10: a live DAMAGED record at the gate is turned back
+        self.live_crisis_scoped = live_crisis_scoped           # rev 11 (OQ18): D9/D17(a) skipped only for live_crisis
+        self.d7_duplicate = d7_duplicate                       # rev 11 (OQ17): more than one retraction entry
 
 
 LITERAL = Reading("rev 9 text, literal")
 REV10 = Reading("rev 10 text", d17_before_commit_live=False, d7_reverse=True, gate_damaged_row=True)
+REV11 = Reading("rev 11 text", d17_before_commit_live=False, d7_reverse=True, gate_damaged_row=True,
+                live_crisis_scoped=True, d7_duplicate=True)
+
+
+def live_crisis(rec, loaded, pos):
+    """axes rev 11, Formulas: a live record inside C8-S16 before its commit, nothing stored, on an invalid row."""
+    a, f, d = row_of(rec)
+    return (not loaded and pos == "S16_OPEN" and not rec.storyline_id and UNSET not in (a, f, d)
+            and invalid(a, f, d))
 
 
 def load_check_tags(rec, flags, pos, loaded, reading=LITERAL):
@@ -223,6 +238,11 @@ def load_check_tags(rec, flags, pos, loaded, reading=LITERAL):
     a, f, d = row_of(rec)
     sid = rec.storyline_id
     pi = PIDX[pos]
+    if reading.live_crisis_scoped:      # rev 11: the two items are skipped for the live crisis only
+        d9_on = d17a_on = not live_crisis(rec, loaded, pos)
+    else:                               # rev 9 / rev 10: skipped for every live record (rev 9: D9 only)
+        d9_on = loaded
+        d17a_on = loaded or reading.d17_before_commit_live
     # D1
     if sid:
         if sid.startswith("SL-SECRET-"):
@@ -246,11 +266,13 @@ def load_check_tags(rec, flags, pos, loaded, reading=LITERAL):
         tags.add("D7.new_mismatch")
     if reading.d7_reverse and any(e.axis not in rec.axis_revised for e in rec.retraction_log):
         tags.add("D7.reverse")
+    if reading.d7_duplicate and len(rec.retraction_log) > 1:
+        tags.add("D7.duplicate")
     # D8
     if rec.root_phase in ("INSIDE", "FINAL") and not sid:
         tags.add("D8")
     # D9
-    if loaded and UNSET not in (a, f, d) and not sid:
+    if d9_on and UNSET not in (a, f, d) and not sid:
         tags.add("D9")
     # D14
     implied = {beat_for_entry(rec, e) for e in rec.retraction_log}
@@ -277,7 +299,7 @@ def load_check_tags(rec, flags, pos, loaded, reading=LITERAL):
     setmask = [getattr(rec, ax) != UNSET for ax in LOCK_ORDER]
     if setmask not in ([False] * 3, [True, False, False], [True, True, False], [True] * 3):
         tags.add("D17.prefix")
-    if loaded or reading.d17_before_commit_live:
+    if d17a_on:
         if any(getattr(rec, ax) != UNSET and pi < LOCK_DONE[ax] for ax in LOCK_ORDER):
             tags.add("D17.before_commit")
     return tags
@@ -714,7 +736,11 @@ def unit_checks(reading):
                lock_negotiated=frozenset(LOCK_ORDER)), True, "ROOT", "FIXED"),
           (rec("YOU", "HEARTH", UNSET, root="FINAL"), True, "S15", "DAMAGED"),
           (rec("NONE", "ARCHIVE", "RELEASE"), True, "CH9", "DAMAGED"),
-          (rec("NONE", "ARCHIVE", "RELEASE"), False, "S16_OPEN", "CRISIS")]
+          (rec("NONE", "ARCHIVE", "RELEASE"), True, "S16_OPEN", "DAMAGED"),
+          (rec("NONE", "ARCHIVE", "RELEASE"), False, "S16_OPEN", "CRISIS"),
+          # rev 11 (OQ18): the live crisis is bounded
+          (rec("NONE", "ARCHIVE", "RELEASE"), False, "CH9", "DAMAGED"),
+          (rec("SHARED", "ARCHIVE", "CHOOSE"), False, "S16_OPEN", "DAMAGED")]
     for r_, loaded, pos, exp in ex:
         got = phase_of(r_, loaded, frozenset(), pos, reading)
         chk(f"Formulas example {short(r_)} loaded={loaded} at {pos} -> {exp}", got == exp,
@@ -739,6 +765,30 @@ def unit_checks(reading):
     cr = fx["CRISIS"][0]
     chk("AC9 CRISIS fixture with loaded=true is DAMAGED",
         phase_of(cr, True, frozenset(), "S16_OPEN", reading) == "DAMAGED")
+    # rev 11 (OQ18): AC9's bounded live crisis, each with loaded=false
+    revd = rec("YOU", "HEARTH", "RELEASE", axis_revised=frozenset({"deleted"}), lock_negotiated=frozenset(LOCK_ORDER),
+               retraction_log=(Entry("deleted", "RESTORE", "RELEASE", WITHDRAWN["deleted"]["RESTORE"], "C8-S16"),),
+               beats_played=frozenset({"retract_R1_deleted_RELEASE"}))
+    bounded = {"CRISIS fixture in Chapter 9": (cr, "CH9"),
+               "CRISIS fixture at C8-S16's commit checkpoint": (cr, "S16_DONE"),
+               "valid row, nothing stored, inside C8-S16": (rec("SHARED", "ARCHIVE", "CHOOSE",
+                                                                lock_negotiated=frozenset(LOCK_ORDER)), "S16_OPEN"),
+               "valid stored ID inside C8-S16 before its commit": (fx["VALIDATED"][0], "S16_OPEN"),
+               "D9 fixture": (revd._replace(storyline_id=""), "S16_DONE"),
+               "D17 before-commit fixture": (revd._replace(storyline_id="SL-YOU-HEARTH-RELEASE"), "PRE_C8")}
+    bad_b = [k for k, (r_, pos) in bounded.items() if phase_of(r_, False, frozenset(), pos, reading) != "DAMAGED"]
+    chk("AC9 bounded live crisis (loaded=false): Chapter 9, the commit checkpoint, a live valid row, a stored ID "
+        "before the commit, the D9 and D17 fixtures are DAMAGED", not bad_b, str(bad_b))
+    # rev 11 (OQ17): one fixture per non-goal loads (load_check empty)
+    good = revd._replace(storyline_id="SL-YOU-HEARTH-RELEASE")
+    nongoals = {"edited lock_negotiated": (good._replace(lock_negotiated=frozenset({"authority", "deleted"})),
+                                           "S16_DONE"),
+                "edited withdrawn_item": (good._replace(retraction_log=(good.retraction_log[0]._replace(
+                    withdrawn_item="something else"),)), "S16_DONE"),
+                "FINAL record before the boss": (good._replace(root_phase="FINAL"), "CH9")}
+    bad_n = [k for k, (r_, pos) in nongoals.items() if load_check(r_, frozenset(), pos, reading)]
+    chk("AC9 non-goals load: an edited lock_negotiated, an edited withdrawn_item and a FINAL record before the boss "
+        "give load_check empty", not bad_n, str(bad_n))
     # L-AC8 gate matrix (story and load paths x storable phases), revision 10. The story cells of LEANING and
     # PARTLY_LOCKED run on a live record injected before C8-S16 (T6); the same record injected past C8-S16 reads
     # DAMAGED (D16) and a live DAMAGED record is turned back by the gate's DAMAGED row; a VALIDATED save positioned
@@ -772,6 +822,12 @@ def unit_checks(reading):
         gm.append(("story, live DAMAGED", "DAMAGED", dres[0]))
     chk("L-AC8 gate matrix: story cells (injected live records), live DAMAGED turned back, load cells "
         "(LEANING/PARTLY_LOCKED refused with D16, VALIDATED runs T7)", not gm, str(gm))
+    # rev 11 (OQ18, lifecycle rev 7): a live invalid-row record with nothing stored, injected in Chapter 9
+    cres = gate(cr, frozenset(), "CH9", "ROOT", "story", frozenset(), reading)[0]
+    lc_cr = load_check(cr, frozenset(), "CH9", reading)
+    chk("L-AC8 live crisis injected past C8-S16: DAMAGED with load_check {D9}, TURNED_BACK, record unchanged, not a "
+        "gate error", cres[1] == "GATE_DAMAGED" and cres[2] == cr and lc_cr == {"D9"},
+        f"{cres[0]} ({cres[1]}), load_check {sorted(lc_cr)}")
     return res
 
 
@@ -779,9 +835,24 @@ def unit_checks(reading):
 # Clause isolation and the accepted-but-unreachable probe
 # ---------------------------------------------------------------------------------------------------------------
 ALL_CLAUSES = ("D1.secret", "D1.unset_axis", "D1.invalid_row", "D1.other_id", "D6", "D7.unnamed", "D7.multi",
-               "D7.new_mismatch", "D7.reverse", "D8", "D9", "D14.undefined", "D14.no_entry", "D14.not_played", "D15",
-               "D16", "D17.prefix", "D17.before_commit")
-DOCUMENTATION_ONLY = ("D17.prefix",)   # rev 10: AC9 has no fixture of its own for D17's prefix clause
+               "D7.new_mismatch", "D7.reverse", "D7.duplicate", "D8", "D9", "D14.undefined", "D14.no_entry",
+               "D14.not_played", "D15", "D16", "D17.prefix", "D17.before_commit")
+# rev 11: AC9 lists these as documentation (equivalent mutants): D17.prefix never fires alone on a loaded record
+# (exhaustive check below); D7.multi cannot fire while D1 and D14 hold (no valid row admits two retractions).
+DOCUMENTATION_ONLY = ("D7.multi", "D17.prefix")
+_REVD = EMPTY._replace(authority="YOU", faction="HEARTH", deleted="RELEASE", storyline_id="SL-YOU-HEARTH-RELEASE",
+                       axis_revised=frozenset({"deleted"}), lock_negotiated=frozenset(LOCK_ORDER),
+                       retraction_log=(Entry("deleted", "RESTORE", "RELEASE", WITHDRAWN["deleted"]["RESTORE"],
+                                             "C8-S16"),),
+                       beats_played=frozenset({"retract_R1_deleted_RELEASE"}))
+_PLAIN = _REVD._replace(axis_revised=frozenset(), retraction_log=(), beats_played=frozenset())
+# rev 11 (round 11, qa-lead): hand-built fixtures for the clauses that single-field changes cannot isolate.
+HAND_FIXTURES = {
+    "D7.unnamed": (_PLAIN._replace(axis_revised=frozenset({"deleted"})), "S16_DONE"),
+    "D14.no_entry": (_PLAIN._replace(beats_played=frozenset({"retract_R1_deleted_RELEASE"})), "S16_DONE"),
+    "D14.not_played": (_REVD._replace(beats_played=frozenset()), "S16_DONE"),
+    "D7.duplicate": (_REVD._replace(retraction_log=_REVD.retraction_log * 2), "S16_DONE"),
+}
 
 
 def mutations(rec, pos, flags):
@@ -823,6 +894,7 @@ def mutations(rec, pos, flags):
             log[:i] + [e._replace(withdrawn_item="something else")] + log[i + 1:])), pos, flags
         yield "retraction scene", rec._replace(retraction_log=tuple(
             log[:i] + [e._replace(scene="C8-S13")] + log[i + 1:])), pos, flags
+        yield "retraction entry duplicated", rec._replace(retraction_log=tuple(log + [e])), pos, flags
     if not rec.retraction_log and UNSET not in row_of(rec):
         for ax in LOCK_ORDER:
             for v in VALUES[ax]:
@@ -841,6 +913,11 @@ def mutations(rec, pos, flags):
         add = [x for x in g if x not in flags]
         if present and add:
             yield "second flag of an exclusive group", rec, pos, flags | {add[0]}
+
+
+# rev 11 (OQ17 tripwire): the categories of accepted records play does not write. A new one fails the run.
+PINNED_RESIDUAL_KINDS = frozenset({"position", "seed flag toggle", "lock_negotiated toggle", "root_phase",
+                                   "retraction withdrawn_item", "retraction scene", "axis faction", "axis authority"})
 
 
 def probe(rep_by_sig, saves_by_sig, reading):
@@ -869,6 +946,11 @@ def probe(rep_by_sig, saves_by_sig, reading):
                         exact[c] = f"{kind}: {short(r2)} at {p2} -> tags {sorted(tags)}"
                     if tags == {c} and c not in alone:
                         alone[c] = f"{kind}: {short(r2)} at {p2}"
+    for c, (r2, p2) in HAND_FIXTURES.items():   # rev 11: AC9 asks for exactly {that clause id}
+        tags = load_check_tags(r2, frozenset(), p2, True, reading)
+        if tags == {c}:
+            alone.setdefault(c, f"hand-built: {short(r2)} at {p2}")
+            exact.setdefault(c, f"hand-built: {short(r2)} at {p2} -> tags {sorted(tags)}")
     return exact, alone, accepted, accepted_states
 
 
@@ -977,22 +1059,22 @@ def main():
     t0 = time.time()
     contexts = list(seed_contexts())
     sigs = {signature(c) for c in contexts}
-    print("Storyline reference model (storyline-axes.md OQ16) — axes rev 10, lifecycle rev 6")
+    print("Storyline reference model (storyline-axes.md OQ16) — axes rev 11, lifecycle rev 7")
     print(f"Seed contexts: {len(contexts)} (13 axis seeds; one Data Wraith flag at most), "
           f"{len(sigs)} distinct lock_pass signatures walked")
     print(f"Positions: {', '.join(POSITIONS)}; suppression windows: {', '.join(sorted(SPEC_WINDOWS))}")
     print()
     overall_ok = True
 
-    print("== Unit tables (" + REV10.name + ") ==")
-    units = unit_checks(REV10)
+    print("== Unit tables (" + REV11.name + ") ==")
+    units = unit_checks(REV11)
     for cid, ok, detail in units:
         print(f"  [{'PASS' if ok else 'FAIL'}] {cid}" + (f"  — {detail}" if detail and not ok else ""))
         overall_ok &= ok
     print()
 
-    print("== Walk, " + REV10.name + " (default knobs, no defects) ==")
-    fails, stats, sig_fails, saves_by_sig, rep_by_sig = run_suite(contexts, REV10, collect=True)
+    print("== Walk, " + REV11.name + " (default knobs, no defects) ==")
+    fails, stats, sig_fails, saves_by_sig, rep_by_sig = run_suite(contexts, REV11, collect=True)
     print(f"  states {stats['states']}, edges {stats['edges']}, saves {stats['saves']} "
           f"(summed over {len(sig_fails)} signatures)")
     print(f"  stored IDs reachable: {len(stats['ids'])} (by T3: {len(stats['ids_t3'])}, by T5: "
@@ -1025,11 +1107,22 @@ def main():
     overall_ok &= regression_ok
     print()
 
-    print("== Negative controls (each seeded defect must fail at least one assertion; " + REV10.name + ") ==")
+    print("== Regression: the " + REV10.name + " (what design review round 11 found; must still fail) ==")
+    r10bad = [u[0] for u in unit_checks(REV10) if not u[1]]
+    for u in r10bad:
+        print(f"      {u}")
+    r10_ok = any(u.startswith("L-AC8 live crisis") for u in r10bad) and \
+        any(u.startswith("AC9 bounded live crisis") for u in r10bad)
+    print(f"  [{'CAUGHT' if r10_ok else 'MISSED'}] the model still finds F11 (L-AC8 live crisis, AC9 bounded live "
+          "crisis) on the rev 10 text")
+    overall_ok &= r10_ok
+    print()
+
+    print("== Negative controls (each seeded defect must fail at least one assertion; " + REV11.name + ") ==")
     base_codes = {c for c, _ in fails}
     all_caught = True
     for name, desc in DEFECTS.items():
-        dfails, *_ = run_suite(contexts, REV10, frozenset({name}))
+        dfails, *_ = run_suite(contexts, REV11, frozenset({name}))
         codes = sorted({c for c, _ in dfails} - base_codes, key=lambda c: int(c[1:]))
         caught = bool(codes)
         all_caught &= caught
@@ -1037,19 +1130,24 @@ def main():
     overall_ok &= all_caught
     print()
 
-    print("== Clause isolation (AC9: one fixture per clause with load_check exactly {that item}) ==")
-    exact, alone, accepted, accepted_states = (probe(rep_by_sig, saves_by_sig, REV10) if not args.quick
+    print("== Clause isolation (AC9 rev 11: one fixture per clause with load_check exactly {that clause id}) ==")
+    exact, alone, accepted, accepted_states = (probe(rep_by_sig, saves_by_sig, REV11) if not args.quick
                                                else ({}, {}, {}, {}))
     redund = []
     if args.quick:
         print("  skipped (--quick)")
     else:
         for c in ALL_CLAUSES:
-            st = "exact" if c in exact else ("documentation only" if c in DOCUMENTATION_ONLY else "NOT ISOLATABLE")
-            print(f"  [{st}] {c}" + (f"  — {exact[c]}" if c in exact else "")
-                  + ("" if c in alone or c not in exact else "  (never the only clause firing)"))
-        missing = [c for c in ALL_CLAUSES if c not in exact and c not in DOCUMENTATION_ONLY]
+            st = ("alone" if c in alone else "documentation only" if c in DOCUMENTATION_ONLY
+                  else "item-exact only" if c in exact else "NOT ISOLATABLE")
+            print(f"  [{st}] {c}" + (f"  — {alone[c]}" if c in alone else f"  — {exact[c]}" if c in exact else ""))
+        missing = [c for c in ALL_CLAUSES if c not in alone and c not in DOCUMENTATION_ONLY]
         overall_ok &= not missing
+        doc_alone = [c for c in DOCUMENTATION_ONLY if c in alone]
+        print(f"  mutation kill: each clause above marked 'alone' has a fixture whose only clause it is, so a "
+              f"load_check with that clause deleted fails that fixture; documentation clauses found alone: "
+              f"{doc_alone or 'none'}")
+        overall_ok &= not doc_alone
         redund = d17_prefix_redundancy()
         print(f"  D17.prefix without D16 or D17.before_commit, exhaustive over 64 axis triples x "
               f"{len(POSITIONS)} positions: {len(redund)} case(s)")
@@ -1057,7 +1155,8 @@ def main():
     print()
 
     print("== Residual: records load_check accepts that no play in that seed context writes (single-field changes "
-          "of reachable saves; best-effort by design, Open Question 17: reported, not asserted) ==")
+          "of reachable saves; non-goals by the inclusion rule, Open Question 17: counts reported, categories "
+          "asserted) ==")
     stranded = {}
     n_live = 0
     if not args.quick:
@@ -1066,7 +1165,13 @@ def main():
             if pairs:
                 top = sorted(pairs.items(), key=lambda kv: (-kv[1], kv[0]))
                 print(f"           {len(top)} from->to pairs: " + ", ".join(p for p, _ in top))
-        n_live, stranded = liveness_of_accepted(accepted_states, REV10)
+        n_live, stranded = liveness_of_accepted(accepted_states, REV11)
+        cats = set(accepted)
+        cats_ok = cats == PINNED_RESIDUAL_KINDS
+        print(f"  [{'PASS' if cats_ok else 'FAIL'}] residual categories equal the pinned list"
+              + ("" if cats_ok else f": new {sorted(cats - PINNED_RESIDUAL_KINDS)}, gone "
+                                    f"{sorted(PINNED_RESIDUAL_KINDS - cats)}"))
+        overall_ok &= cats_ok
         n_str = sum(len(v) for v in stranded.values())
         print(f"  [INFO] from each of {n_live} distinct accepted records (load-path gate inside Root of Heaven, then "
               f"forward walk), FINAL is reachable except {n_str} (modelling choice M8: no route back to the final "
@@ -1080,38 +1185,39 @@ def main():
     def acc(k):
         return accepted.get(k, [0])[0]
 
-    print("== ROUND-10 FINDINGS: status under the rev 10 text ==")
+    print("== ROUND-10 AND ROUND-11 FINDINGS: status under the rev 11 text ==")
     ac9_crisis = next((u[1] for u in units if u[0].startswith("AC9 fixture CRISIS")), False)
     lac8 = next((u[1] for u in units if u[0].startswith("L-AC8")), False)
     formula_crisis = next((u[1] for u in units if "loaded=False at S16_OPEN -> CRISIS" in u[0]), False)
     st = []
     st.append(("F1", "resolved" if "A8" in {c for c, _ in lfails} and not fails and formula_crisis else "OPEN",
-               "D17's before-commit clause is load-only; the live crisis is CRISIS again"))
+               "D17's before-commit clause is skipped for the live crisis only (rev 11); the live crisis is CRISIS"))
     st.append(("F2", "resolved" if ac9_crisis else "OPEN", "AC9's CRISIS fixture reports {D9, D17}"))
     st.append(("F3", "documented" if not args.quick and not redund else "UNVERIFIED",
                "D17's prefix clause never fires alone; kept as documentation, no fixture"))
     st.append(("F4", "resolved" if "D7.new_mismatch" in exact else "OPEN" if not args.quick else "UNVERIFIED",
                "strict 'matching' plus the coordinated two-field fixture isolates D7's new-value clause"))
-    st.append(("F5", "open, best-effort (OQ17)",
+    st.append(("F5", "non-goal (OQ17, settled)",
                "; ".join(f"{k} {acc(k)}" for k in ("retraction withdrawn_item", "retraction scene",
                                                    "lock_negotiated toggle", "seed flag toggle", "axis faction",
                                                    "axis authority") if acc(k)) or "none accepted"))
     st.append(("F6", "resolved" if "D7.reverse" in exact and not acc("axis_revised toggle")
                else "OPEN" if not args.quick else "UNVERIFIED",
                f"D7 runs both ways; accepted axis_revised toggles: {acc('axis_revised toggle')}"))
-    st.append(("F7", "open, best-effort (OQ17)",
+    st.append(("F7", "non-goal (OQ17, settled)",
                f"{acc('position')} position and {acc('root_phase')} root_phase changes accepted; none is promised"))
     st.append(("F8", "resolved" if lac8 else "OPEN", "L-AC8 has a VALIDATED-on-load cell (T7)"))
     st.append(("F9", "resolved" if lac8 else "OPEN",
                "T6 kept as defence in depth, a DAMAGED gate row, injected live cells in L-AC8"))
-    st.append(("F10", "open, best-effort (OQ17)",
+    st.append(("F10", "waits on lifecycle OQ2 (candidate D18)",
                f"{sum(len(v) for v in stranded.values())} accepted records cannot reach FINAL (rests on M8)"))
-    # F11 (new in round 10, from the F1 repair): D9 and D17(a) are exempt for every live record, so a live record
-    # with an invalid row and nothing stored, positioned past C8-S16, reads CRISIS and reaches a gate with no row.
+    # F11 (round 10, settled in round 11 as OQ18): a live crisis record past C8-S16 reads DAMAGED and is turned back.
     crisis_gate = gate(EMPTY._replace(authority="NONE", faction="ARCHIVE", deleted="RELEASE"), frozenset(), "CH9",
-                       "ROOT", "story", frozenset(), REV10)[0][0]
-    st.append(("F11", "new, open (OQ18)" if "GATE_ERROR" in crisis_gate else "none",
+                       "ROOT", "story", frozenset(), REV11)[0][0]
+    st.append(("F11", "resolved (OQ18)" if crisis_gate.endswith(":TURNED_BACK:DAMAGED") else "OPEN",
                f"a live crisis record past C8-S16 at the story gate: {crisis_gate}"))
+    st.append(("R11-D7", "resolved" if "D7.duplicate" in alone else "OPEN" if not args.quick else "UNVERIFIED",
+               f"D7 refuses a duplicated retraction entry; accepted duplicates: {acc('retraction entry duplicated')}"))
     for fid, status, note in st:
         print(f"  {fid}: {status} — {note}")
         if status == "OPEN":
@@ -1144,12 +1250,14 @@ def main():
         "(record, position). The D7 new-value fixture is the one two-field edit (the entry's `new` and its beat).",
         "M10 A live DAMAGED record at the gate is TURNED_BACK by the gate's DAMAGED row and is not a transition "
         "(kind GATE_DAMAGED); the walk never produces one (A8), so L-AC8's cells inject it.",
+        "M11 'Inside C8-S16 before its commit' is the position S16_OPEN (rev 11, live_crisis). D0 (shape) is not "
+        "modelled: the model's records are typed; SaveService tests it (AC9's D0 fixtures).",
     ):
         print("  " + m)
     print()
-    print(f"RESULT: {'PASS' if overall_ok else 'FAIL'} ({REV10.name}; the rev 9 text still fails as expected: "
-          f"{'yes' if regression_ok else 'NO'}; best-effort residuals F5, F7, F10 reported, not asserted); "
-          f"{time.time() - t0:.1f} s")
+    print(f"RESULT: {'PASS' if overall_ok else 'FAIL'} ({REV11.name}; the rev 10 text still fails as expected: "
+          f"{'yes' if r10_ok else 'NO'}; the rev 9 text still fails as expected: {'yes' if regression_ok else 'NO'}; "
+          f"residual counts reported, categories asserted); {time.time() - t0:.1f} s")
     return 0 if overall_ok else 1
 
 

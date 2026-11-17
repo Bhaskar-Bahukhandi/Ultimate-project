@@ -281,3 +281,29 @@ Findings:
 - New during the fix: F11, a live CRISIS record positioned past C8-S16 reaches a gate with no CRISIS row (Open Question 18, not changed)
 Reviewed-Content-Hash: design/gdd/storyline-axes.md 4e1de86eea4481976742f9ffba10284177ecd941 (revision 9 as reviewed, HEAD 3c1bffb; revision 10 differs, so the next run re-reviews in full)
 Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285
+
+## Review — 2026-11-17 — Verdict: NEEDS REVISION
+Scope signal: L
+Specialists: game-designer, systems-designer, qa-lead, narrative-director, godot-specialist, creative-director (synthesis)
+Blocking items: 9 | Recommended: 6 (plus items routed to Y1-P1-T05, the producer, the lifecycle and Y2-PP-T17)
+Summary: Round 11 ran in full against reference_model.log (rev 10 run, PASS). The static core holds for an eleventh round, the round-10 fixes hold, and the model, not a reviewer, found the one new state defect (F11), so the evidence process works; the remaining defects are scoping, not structure. The round-9 tripwire concern is reduced but live until a model and checker re-run with asserted residuals is mandatory per state-layer revision. All 9 blockers were fixed in revision 11 (lifecycle revision 7) in the same session and verified: checker PASS, 247 mutations / 1 control / 0 unexpected, reference model RESULT PASS (rev 10 and rev 9 texts still fail as regressions; residual categories asserted); Open Question 16 now makes that re-run mandatory. A fresh re-review is still owed.
+Prior verdict resolved: Yes (round-10 blockers F1, F2, F9 fixed in rev 10 and confirmed by the model)
+Decisions taken by the user (2026-11-17): revise now; Open Question 18 settled by position-scoping (live_crisis; any other three-set, nothing-stored record DAMAGED; DAMAGED gate turn-back with dev assert and system-voice reload prompt; I5 amended); Open Question 17 settled by the three-part inclusion rule (D0 shape check and a D7 duplicate-entry clause added; F5a and F7 permanent non-goals; withdrawn_item and scene opaque; F10 waits on lifecycle OQ2; tripwires); C9-S18 option (b), the decrypted beat ending "logged, not answered".
+Findings:
+- [BLOCKING] Core Rule 6 / I6 / lifecycle S5: C9-S18 plays its "noise" form unconditionally, but PM:8043 reserves it for incomplete prerequisites (option b chosen)
+- [BLOCKING] Formulas storyline_phase / Edge Case 16: the D9 and D17(a) live exemption is unscoped, so CRISIS is returned at any position (F11) and two other live records are misread (settled: live_crisis)
+- [BLOCKING] Edge Case 16 / Open Question 17: no inclusion rule for the load check; no shape check (D0); D7 accepts a duplicated retraction entry; "reported, not asserted" untestable (settled: inclusion rule, tripwires)
+- [BLOCKING] Acceptance Criteria 14: passes on an interpolated token and on family modules shared by 8 IDs
+- [BLOCKING] Acceptance Criteria 9: "one fixture per clause" overclaims (D7 and D14 clause pairs; D7.multi redundant); needs Y1-P1-T03
+- [BLOCKING] Acceptance Criteria 16: n=5 at 70% cannot evidence the fantasy; crisis denominator undefined; fixture saves skip Act 1
+- [BLOCKING] Acceptance Criteria (P5): no runtime criterion that the nine 1.0 arcs voice an argument
+- [BLOCKING] Core Rule 11 / AC11: the Kaelthas trust condition is undefined
+- [BLOCKING] Open Question 10: "sole_dissent least likely" ignores renegotiation to YOU
+- [RECOMMENDED] Lifecycle cut order: the 16 cost beats are the only cut step
+- [RECOMMENDED] Crisis offers: log picks (advisory tripwire > 60% on one offer); present as one ask first
+- [RECOMMENDED] Side storylines: arcs 05/08/09 marked post-1.0 though they ship with epilogue lines
+- [RECOMMENDED] Counts / P3: state that 1.0 delivers 24, pending Open Question 14; game-concept.md "27" is a separate fix
+- [RECOMMENDED] Formulas examples need positions; checker pins the old exemption wording
+- [RECOMMENDED] Routed: SaveService gaps to Y1-P1-T05 (save suppression, deferred saves, commit rollback, store_* return, Windows rename, refusal off the .bak path); Blocked-by stories in no sprint (producer); L-AC18 live viewport and S6 turn-back (lifecycle); sole_dissent naming and ch1_root_purge (Y2-PP-T17)
+Reviewed-Content-Hash: design/gdd/storyline-axes.md 8d750656cc21da4b3c3d4a5992f4f40e13419c05 (revision 10 as reviewed, HEAD 3e0c554; revision 11 differs, so the next run re-reviews in full)
+Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285

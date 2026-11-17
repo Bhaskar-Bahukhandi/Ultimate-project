@@ -1,11 +1,11 @@
 # Mutation 'r4_knob_faction_negotiation' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-axes.r4_knob_faction_negotiation.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\876eafc3-facf-45b8-a148-aa8dc1eedfc9\scratchpad\mutations\storyline-axes.r4_knob_faction_negotiation.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-axes.r4_knob_faction_negotiation.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-axes.r4_knob_faction_negotiation.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
 FAIL [tuning knobs] knobs ['secret_route_enabled.WITNESS', 'secret_route_enabled.CROWNLESS, .FIRSTWAKE', 'secret_prerequisites[route] (list of flags)', 'secret_unlock_flag[route]', 'faction_negotiation_allowed'] != the pinned ['secret_route_enabled.WITNESS', 'secret_route_enabled.CROWNLESS, .FIRSTWAKE', 'secret_prerequisites[route] (list of flags)', 'secret_unlock_flag[route]']
 FAIL [tuning knobs] Tuning Knobs section names 'faction_negotiation_allowed'
-FAIL [stale] axes line 683: revision-3 vocabulary 'faction_negotiation_allowed' present
+FAIL [stale] axes line 727: revision-3 vocabulary 'faction_negotiation_allowed' present
 RESULT: FAIL (3 problems)
 exit code: 1
