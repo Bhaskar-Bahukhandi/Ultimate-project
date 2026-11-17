@@ -1,0 +1,121 @@
+Storyline reference model (storyline-axes.md OQ16) — axes rev 9, lifecycle rev 5
+Seed contexts: 4096 (13 axis seeds; one Data Wraith flag at most), 256 distinct lock_pass signatures walked
+Positions: PRE_C8, S13_OPEN, S13_DONE, S14_OPEN, S14_DONE, S15, S16_OPEN, S16_DONE, CH9, ROOT, ROOT_LEFT, FINAL_AUTH_OPEN, FINAL_DONE, STORY_PLUS, ROOT_STORY_PLUS; suppression windows: FINAL_AUTH_OPEN, S13_OPEN, S14_OPEN, S16_OPEN
+
+== Unit tables (literal reading) ==
+  [PASS] AC5 default knobs, 128 cases
+  [PASS] AC5 one route enabled at a time (synthetic)
+  [PASS] AC6 prerequisite subsets
+  [PASS] AC7 prereqs_met list lengths
+  [PASS] AC8 family over every id; split SOLE 8, BOUND 9, NONE_AUTH 7
+  [PASS] lock_pass: Formulas examples + L-AC2 fixtures (13)
+  [PASS] crisis_offers: 6/5/5 = 16; R2 and R3 share the five strings; 0 on every valid row
+  [PASS] crisis_offers: the R2/R3 Faction swap is not offered
+  [PASS] 16 distinct retraction beat ids
+  [PASS] L-AC3 red lines: exactly YOU+HEARTH R1, NONE+ARCHIVE R2, NONE+CONTINUITY R3; six pairs none
+  [PASS] Formulas example (YOU/HEARTH/UNSET OUTSIDE) loaded=True at S15 -> PARTLY_LOCKED
+  [PASS] Formulas example (SHARED/ARCHIVE/CHOOSE SL-SHARED-ARCHIVE-CHOOSE INSIDE neg=authority,deleted,faction) loaded=True at ROOT -> FIXED
+  [PASS] Formulas example (YOU/HEARTH/UNSET FINAL) loaded=True at S15 -> DAMAGED
+  [PASS] Formulas example (NONE/ARCHIVE/RELEASE OUTSIDE) loaded=True at CH9 -> DAMAGED
+  [FAIL] Formulas example (NONE/ARCHIVE/RELEASE OUTSIDE) loaded=False at S16_OPEN -> CRISIS  — got DAMAGED ['D17.before_commit']
+  [PASS] AC9 fixture LEANING: phase_of(loaded=True) LEANING, load_check {}
+  [PASS] AC9 fixture PARTLY_LOCKED: phase_of(loaded=True) PARTLY_LOCKED, load_check {}
+  [FAIL] AC9 fixture CRISIS: phase_of(loaded=False) CRISIS, load_check ['D9']  — phase DAMAGED, load_check ['D17', 'D9']
+  [PASS] AC9 fixture VALIDATED: phase_of(loaded=True) VALIDATED, load_check {}
+  [PASS] AC9 fixture FIXED: phase_of(loaded=True) FIXED, load_check {}
+  [PASS] AC9 fixture FINAL: phase_of(loaded=True) FINAL, load_check {}
+  [PASS] AC9 CRISIS fixture with loaded=true is DAMAGED
+  [FAIL] L-AC8 gate matrix, story and load paths (load of LEANING/PARTLY_LOCKED refused with D16)  — [('story', 'LEANING', 'story:GATE_ERROR:DAMAGED'), ('story', 'PARTLY_LOCKED', 'story:GATE_ERROR:DAMAGED'), ('load', 'VALIDATED', 'accepted, gate -> T7')]
+  note: L-AC8 extra cell [('load', 'VALIDATED', 'accepted, gate -> T7')]
+
+== Walk, literal reading (default knobs, no defects) ==
+  states 91648, edges 111872, saves 77312 (summed over 256 signatures)
+  stored IDs reachable: 24 (by T3: 24, by T5: 15); retraction beats played: 16; distinct (row, offer) taken: 16
+  lock_negotiated sets seen in saves: 8; sole_dissent reachable: ['by T5', 'by seeds']
+  transition kinds fired: T1, T2, T3, T4, T5, T7, T8, T9, move  (T6 TURNED_BACK never fires)
+  [FAIL] 768 violation(s) in 256 signature(s):
+  A8: 768 violation(s), 24 distinct
+      e.g. live state at S16_OPEN (YOU/HEARTH/RESTORE OUTSIDE neg=authority,deleted,faction) is DAMAGED (['D17.before_commit'])
+      e.g. live state at S16_OPEN (NONE/ARCHIVE/RELEASE OUTSIDE neg=authority,deleted,faction) is DAMAGED (['D17.before_commit'])
+      e.g. live state at S16_OPEN (NONE/CONTINUITY/RELEASE OUTSIDE neg=authority,deleted,faction) is DAMAGED (['D17.before_commit'])
+
+== Walk, repaired reading (repaired: D17 before-commit clause tested on loaded records only) ==
+  [PASS] A1-A14 (0 violation(s)); unit tables: 21/23 pass; failing: ["AC9 fixture CRISIS: phase_of(loaded=False) CRISIS, load_check ['D9']", 'L-AC8 gate matrix, story and load paths (load of LEANING/PARTLY_LOCKED refused with D16)']
+
+== Negative controls (each seeded defect must fail at least one assertion; literal reading) ==
+  [CAUGHT] t4_checkpoint: T4 writes a checkpoint (a save inside the crisis) -> A1
+  [CAUGHT] save_in_crisis: manual save allowed inside C8-S16 -> A1, A3
+  [CAUGHT] save_in_final_auth: manual save allowed inside the final authorization -> A3
+  [CAUGHT] t3_no_store: T3 sets the Deleted value but does not store the ID -> A1, A4, A5, A10, A11, A14
+  [CAUGHT] r2_no_offers: the crisis offers nothing on R2 -> A4, A5, A11, A14
+  [CAUGHT] r1_drops_offer: the crisis drops revise:deleted:CHOOSE on R1 -> A11, A14
+  [CAUGHT] offers_after_store: C8-S16 still offers renegotiations after the ID is stored -> A1, A4, A5, A6, A7, A9, A10
+  [CAUGHT] t5_no_axis_revised: T5 does not add the axis to axis_revised -> A13
+  [CAUGHT] t5_no_beat: T5 records the retraction but plays no beat -> A1, A4, A5, A10, A13, A14
+  [CAUGHT] lock_order_skip: the story graph can start C8-S16 straight after C8-S13 -> A4, A5
+  [CAUGHT] gate_skip_world_map: the world-map path enters Root of Heaven without the gate check -> A10
+  [CAUGHT] id_recomputed_at_gate: the gate recomputes the ID from the axes with the Deleted value swapped -> A1, A4, A5, A6, A10
+
+== Clause isolation (AC9: one fixture per clause with load_check exactly {that item}) ==
+  [exact] D1.secret  — storyline_id: (NONE/CONTINUITY/UNSET SL-SECRET-WITNESS OUTSIDE neg=authority,faction) at S14_DONE -> tags ['D1.secret']
+  [exact] D1.unset_axis  — storyline_id: (NONE/CONTINUITY/UNSET SL-YOU-HEARTH-RELEASE OUTSIDE neg=authority,faction) at S14_DONE -> tags ['D1.unset_axis']
+  [exact] D1.invalid_row  — axis authority: (NONE/ARCHIVE/RELEASE SL-YOU-ARCHIVE-RELEASE OUTSIDE neg=authority,deleted,faction) at S16_DONE -> tags ['D1.invalid_row']
+  [exact] D1.other_id  — storyline_id: (NONE/ARCHIVE/RESTORE SL-YOU-HEARTH-RELEASE OUTSIDE rev=deleted neg=authority,deleted,faction) at CH9 -> tags ['D1.other_id']
+  [exact] D6  — lock_negotiated toggle: (NONE/ARCHIVE/RESTORE SL-NONE-ARCHIVE-RESTORE OUTSIDE rev=deleted neg=authority,faction) at CH9 -> tags ['D6']
+  [exact] D7.unnamed  — axis_revised toggle: (NONE/CONTINUITY/UNSET OUTSIDE rev=faction neg=authority,faction) at S14_DONE -> tags ['D7.unnamed']
+  [exact] D7.multi  — axis_revised toggle: (NONE/ARCHIVE/RESTORE SL-NONE-ARCHIVE-RESTORE OUTSIDE rev=deleted,faction neg=authority,deleted,faction) at CH9 -> tags ['D7.multi', 'D7.unnamed']  (never the only clause firing)
+  [NOT ISOLATABLE] D7.new_mismatch
+  [exact] D8  — root_phase: (NONE/CONTINUITY/UNSET INSIDE neg=authority,faction) at S14_DONE -> tags ['D8']
+  [exact] D9  — storyline_id: (NONE/ARCHIVE/RESTORE OUTSIDE rev=deleted neg=authority,deleted,faction) at CH9 -> tags ['D9']
+  [exact] D14.undefined  — beats_played toggle: (NONE/CONTINUITY/UNSET OUTSIDE neg=authority,faction) at S14_DONE -> tags ['D14.undefined']
+  [exact] D14.no_entry  — beats_played toggle: (NONE/CONTINUITY/UNSET OUTSIDE neg=authority,faction) at S14_DONE -> tags ['D14.no_entry']
+  [exact] D14.not_played  — retraction old: (NONE/ARCHIVE/RESTORE SL-NONE-ARCHIVE-RESTORE OUTSIDE rev=deleted neg=authority,deleted,faction) at CH9 -> tags ['D14.no_entry', 'D14.not_played']
+  [exact] D15  — seed flag toggle: (NONE/CONTINUITY/UNSET OUTSIDE neg=authority,faction) at S14_DONE -> tags ['D15']
+  [exact] D16  — axis authority: (UNSET/CONTINUITY/UNSET OUTSIDE neg=authority,faction) at S14_DONE -> tags ['D16']
+  [exact] D17.prefix  — axis deleted: (UNSET/HEARTH/RESTORE OUTSIDE neg=faction) at S13_DONE -> tags ['D17.before_commit', 'D17.prefix']  (never the only clause firing)
+  [exact] D17.before_commit  — position: (NONE/CONTINUITY/UNSET OUTSIDE neg=authority,faction) at PRE_C8 -> tags ['D17.before_commit']
+  D17.prefix without D16 or D17.before_commit, exhaustive over 64 axis triples x 15 positions: 0 case(s)
+
+== Records load_check accepts that no play in that seed context writes (single-field changes of reachable saves) ==
+   404992  position  e.g. from S14_DONE (NONE/CONTINUITY/UNSET OUTSIDE neg=authority,faction): (NONE/CONTINUITY/UNSET OUTSIDE neg=authority,faction) at S16_OPEN
+           43 from->to pairs: CH9->FINAL_AUTH_OPEN, CH9->FINAL_DONE, CH9->ROOT, CH9->ROOT_LEFT, CH9->ROOT_STORY_PLUS, CH9->STORY_PLUS, FINAL_DONE->CH9, FINAL_DONE->FINAL_AUTH_OPEN, FINAL_DONE->ROOT, FINAL_DONE->ROOT_LEFT, FINAL_DONE->S16_DONE, ROOT->CH9, ROOT->FINAL_AUTH_OPEN, ROOT->FINAL_DONE, ROOT->ROOT_STORY_PLUS, ROOT->S16_DONE, ROOT->STORY_PLUS, ROOT_LEFT->CH9, ROOT_LEFT->FINAL_AUTH_OPEN, ROOT_LEFT->FINAL_DONE, ROOT_LEFT->ROOT_STORY_PLUS, ROOT_LEFT->S16_DONE, ROOT_LEFT->STORY_PLUS, ROOT_STORY_PLUS->CH9, ROOT_STORY_PLUS->FINAL_AUTH_OPEN, ROOT_STORY_PLUS->ROOT, ROOT_STORY_PLUS->ROOT_LEFT, ROOT_STORY_PLUS->S16_DONE, S16_DONE->FINAL_AUTH_OPEN, S16_DONE->FINAL_DONE, S16_DONE->ROOT, S16_DONE->ROOT_LEFT, S16_DONE->ROOT_STORY_PLUS, S16_DONE->STORY_PLUS, STORY_PLUS->CH9, STORY_PLUS->FINAL_AUTH_OPEN, STORY_PLUS->ROOT, STORY_PLUS->ROOT_LEFT, STORY_PLUS->S16_DONE, S14_DONE->S16_OPEN, S15->S16_OPEN, S13_DONE->S14_OPEN, PRE_C8->S13_OPEN
+   212224  seed flag toggle  e.g. from S14_DONE (NONE/CONTINUITY/UNSET OUTSIDE neg=authority,faction): (NONE/CONTINUITY/UNSET OUTSIDE neg=authority,faction) at S14_DONE
+   203264  lock_negotiated toggle  e.g. from S14_DONE (NONE/CONTINUITY/UNSET OUTSIDE neg=authority,faction): (NONE/CONTINUITY/UNSET OUTSIDE neg=authority) at S14_DONE
+   143360  root_phase  e.g. from CH9 (NONE/ARCHIVE/RESTORE SL-NONE-ARCHIVE-RESTORE OUTSIDE rev=deleted neg=authority,deleted,faction): (NONE/ARCHIVE/RESTORE SL-NONE-ARCHIVE-RESTORE INSIDE rev=deleted neg=authority,deleted,faction) at CH9
+    28672  axis_revised toggle  e.g. from CH9 (NONE/ARCHIVE/RESTORE SL-NONE-ARCHIVE-RESTORE OUTSIDE rev=deleted neg=authority,deleted,faction): (NONE/ARCHIVE/RESTORE SL-NONE-ARCHIVE-RESTORE OUTSIDE neg=authority,deleted,faction) at CH9
+    28672  retraction withdrawn_item  e.g. from CH9 (NONE/ARCHIVE/RESTORE SL-NONE-ARCHIVE-RESTORE OUTSIDE rev=deleted neg=authority,deleted,faction): (NONE/ARCHIVE/RESTORE SL-NONE-ARCHIVE-RESTORE OUTSIDE rev=deleted neg=authority,deleted,faction) at CH9
+    28672  retraction scene  e.g. from CH9 (NONE/ARCHIVE/RESTORE SL-NONE-ARCHIVE-RESTORE OUTSIDE rev=deleted neg=authority,deleted,faction): (NONE/ARCHIVE/RESTORE SL-NONE-ARCHIVE-RESTORE OUTSIDE rev=deleted neg=authority,deleted,faction) at CH9
+     5376  axis faction  e.g. from S14_DONE (NONE/CONTINUITY/UNSET OUTSIDE neg=authority,faction): (NONE/HEARTH/UNSET OUTSIDE neg=authority,faction) at S14_DONE
+     4608  axis authority  e.g. from S14_DONE (NONE/CONTINUITY/UNSET OUTSIDE neg=faction): (YOU/CONTINUITY/UNSET OUTSIDE neg=faction) at S14_DONE
+  [FAIL] Core Rule 8 'no loaded state is stranded': from each of 466688 distinct accepted records (load-path gate inside Root of Heaven, then forward walk), FINAL is reachable; 61440 stranded
+      position: 40804, e.g. (NONE/ARCHIVE/RESTORE SL-NONE-ARCHIVE-RESTORE INSIDE rev=deleted neg=authority,deleted,faction) at FINAL_DONE (phase FIXED)
+      root_phase: 20636, e.g. (SHARED/ARCHIVE/RELEASE SL-SHARED-ARCHIVE-RELEASE OUTSIDE rev=authority neg=authority,deleted,faction) at STORY_PLUS (phase VALIDATED)
+       20480 at FINAL_DONE (phase FIXED)
+       20480 at ROOT_STORY_PLUS (phase FIXED)
+       10240 at STORY_PLUS (phase VALIDATED)
+       10240 at STORY_PLUS (phase FIXED)
+
+== FINDINGS (observations for design review round 10) ==
+  F1 (contradiction). Edge Case 16 D17's second clause ('an axis is set while the story position is before its lock scene's commit'; a position inside a lock scene counts as before it) is not limited to loaded records, unlike D9. The live crisis record — Deleted set by T4, nothing stored, position inside C8-S16 — therefore satisfies D17, and storyline_phase() returns DAMAGED instead of CRISIS for every live crisis (the Formulas' own example '(NONE, ARCHIVE, RELEASE, nothing stored, OUTSIDE) -> CRISIS' with loaded false fails). Candidate repair (the 'repaired' run above, all assertions PASS): test D17's before-commit clause on a loaded record only, like D9.
+  F2 (AC wording). Axes AC9 expects load_check() of the CRISIS fixture to be exactly {D9}. The fixture must be positioned inside C8-S16 (the only place a crisis exists), so D17 fires too: phase DAMAGED, load_check ['D17', 'D9']. This holds under either reading (load_check always tests a loaded record). Candidate: AC9 says {D9, D17} for the CRISIS fixture.
+  F3 (redundant clause). D17's prefix clause never fires alone: whenever the set axes are not a prefix of the lock order, either an UNSET axis sits behind the position (D16) or a set axis is ahead of it (D17 before-commit); the exhaustive check above found 0 counter-example(s). AC9's 'one fixture per clause' can only isolate it in combination with D17's other clause (same item, so 'exactly {D17}' still passes). Candidate: drop the prefix clause or keep it as documentation.
+  F4 (AC9 fixtures). No single-field defect of a reachable save gives load_check exactly {item} for: D7.new_mismatch. D7.new_mismatch: changing a retraction entry's `new` also breaks the beat it implies (D14 under the model's strict 'matching': beat id = retract_<rule of the row before>_<axis>_<new>), and changing the record's axis value breaks the ID (D1). D14 does not define 'matching'. Under a looser reading (a beat matches an entry with the same axis) the same fixture gives exactly {D7}: confirmed by the model. Decide 'matching', or let AC9's D7 fixture also report D14. AC9 asks for one fixture per clause.
+  F5 (load-check gaps; debug or edited saves only). load_check accepts records no play writes (counts are single-field changes summed over signatures): retraction withdrawn_item 28672; retraction scene 28672; lock_negotiated toggle 203264; seed flag toggle 212224; axis faction 5376; axis authority 4608. Nothing compares `lock_negotiated` with lock_pass() of the saved seeds (an edited save can turn sole_dissent on or off, and a changed Faction or Authority value before C8-S16 keeps the old lock_negotiated), and nothing compares a retraction entry's withdrawn item or scene with the retraction table. None of these records strands the player (forward walk above), so they are content-integrity gaps, not soft-locks. Edge Case 16 does not claim to catch them; decide whether that is acceptable or add D-items.
+  F6 (D7 is one-directional). A record with a retraction_log entry (and its beat) but an empty axis_revised passes load_check: D7 requires every revised axis to be named by an entry, not every entry's axis to be revised (28672 such records accepted). The composer reads axis_revised. Candidate: D7 clause 'a retraction_log entry whose axis is not in axis_revised'.
+  F7 (position vs root_phase). No Edge Case 16 item ties root_phase to the story position: 404992 position changes and 143360 root_phase changes of reachable saves load, e.g. an INSIDE record positioned in Chapter 9, a FINAL record positioned before the boss, an OUTSIDE (VALIDATED) record inside Root of Heaven, and records positioned inside a suppression window (FINAL_AUTH_OPEN, S13_OPEN, S14_OPEN, S16_OPEN): load_check does not enforce I9's 'no save is positioned inside a lock scene'. Some strand the player (see above).
+  F8 (L-AC8 coverage). L-AC8's load path lists LEANING, PARTLY_LOCKED, FIXED and FINAL outcomes but no VALIDATED cell; a VALIDATED save positioned inside Root of Heaven cannot be written by play (T7 is atomic) yet passes load_check, and the load-path gate then runs T7. The model treats this as acceptable; the lifecycle could say so.
+  F9 (dead transition). T6 (TURNED_BACK) can never fire. The story path reaches the gate only after the Chapter 9 end and the world-map path only once Root of Heaven is on the map, so every record at the gate is positioned past C8-S16; with an UNSET axis that position satisfies D16, and storyline_phase() (which runs the damaged-record check first, on live records too) returns DAMAGED, not LEANING or PARTLY_LOCKED. The walk never fires T6, and L-AC8's synthetic story-path cells for LEANING and PARTLY_LOCKED cannot be set up: a fixture save there is refused on load (D16), and a live record there meets the gate as DAMAGED, a phase the gate table has no row for. Candidates: (a) keep T6 as a defensive row and give the gate a DAMAGED row (TURNED_BACK, or a data error), with L-AC8 testing it by injecting a live record; or (b) drop T6 and the two L-AC8 cells, since D16 already guarantees them unreachable.
+  F10 (load check vs Story+; edited saves only). 61440 accepted records cannot reach FINAL, all of them a record whose root_phase is not FINAL positioned after the final authorization's commit (FINAL_DONE, Story+). load_check accepts them (no item ties root_phase to the position, F7), and once in Story+ the model has no route back to the final authorization (modelling choice M8), so the ending is never confirmed. Play never writes them (T9 commits root_phase FINAL with its checkpoint). Candidate D-item: 'root_phase is not FINAL at a position past the final authorization's commit, or FINAL before it'.
+
+== Modelling choices (where the GDDs leave the model a reading) ==
+  M1 Seed contexts hold the 13 axis-seed flags only: modifier and timing rows are not read by lock_pass or load_check (except D15, which play cannot reach because set_story_flag clears the group). Seeds are fixed before C8-S13 (Act 1); side-arc flags join after Y2-PP-T17 maps them (AC15) and are not modelled.
+  M2 Contexts are walked once per lock_pass signature: the transitions read seeds only through lock_pass.
+  M3 A save is any reachable state outside the four suppression windows, plus every checkpoint. A quit or crash reloads an earlier save, which is a reachable state already in the walk, so reload edges add no states; A1/A2 check every save's load.
+  M4 The `world_map` path is modelled only for re-entry (after leaving Root of Heaven, and from Story+); before the Chapter 9 end Root of Heaven is not on the map (lifecycle S6).
+  M5 Positions are coarse: Chapter 9 is one position; the boss is one event (ROOT -> final authorization). A crisis-time save would sit at S16_OPEN.
+  M6 D14 'matching' = the beat id retract_<rule of the row before the renegotiation>_<axis>_<new>; D1's four clauses are tagged in the order secret, UNSET axis, invalid row, other ID.
+  M7 In 1.0 the invocation input I is always false (no source exists); every knob is false. Knob values are read only by formula_id at C8-S16 and the gate, so A6 also covers a mid-play knob patch.
+  M8 Story+ (after T9) offers no route back to the boss or the final authorization; re-entering Root of Heaven from Story+ is T8 only. Whether Story+ can replay the boss belongs to the combat system (lifecycle Open Question 2).
+  M9 The accepted-record probe applies one field change to every reachable save (both readings' saves are the same); 'accepted' means load_check is empty and no play in the mutated seed signature writes that (record, position).
+
+RESULT: FAIL (literal reading; 10 finding(s)); 308.3 s

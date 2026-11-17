@@ -358,3 +358,38 @@ observable. The checker accepts that exact phrase only (and requires it); report
 - **Still NOT checked**: whether the docs' state machine is sound (Open Question 16's reference model); prose outside
   the pinned sentences; PM line numbers cited in prose; the L-AC bodies beyond their pinned phrases; whether the
   retired Edge Case 16 numbers are ever reused by a later revision (only the current list is pinned).
+
+## Reference model (axes Open Question 16, 2026-11-17)
+
+- User decisions (2026-11-17): build the model in this folder, with its log and this section; no GDD edits. Where the
+  spec is ambiguous the model takes the literal reading and reports a finding ("Pick + report").
+- `reference_model.py` (stdlib only, never shipped): an independent re-implementation (it parses no GDD text) of
+  `formula_id`, `prereqs_met`, `family`, `lock_pass`, `phase_of`, `load_check` (D1, D6-D9, D14-D17) and
+  `crisis_offers`. It walks T1-T9 breadth-first for every seed context the code allows (13 axis seeds, at most one
+  Data Wraith flag: 4096 contexts, 256 distinct `lock_pass` signatures). It asserts A1-A14 (every reachable save
+  passes `load_check` and reloads in its phase; no save inside a suppression window; a way forward and FINAL
+  reachable from every state; I1-I5, I7-I9; T5 = L-AC7; 24 IDs, 16 offers, 16 beats) and runs the unit tables of
+  axes AC5-AC9 and lifecycle L-AC2, L-AC3, L-AC5 and L-AC8. It also searches for one AC9 fixture per D clause and
+  probes the records `load_check` accepts that play never writes, then walks forward from each of them.
+- 12 negative controls (defects seeded into the model) each fail at least one assertion; without them a PASS would
+  prove nothing.
+- Reproduce: `python -I -B reference_model.py > reference_model.log` (about 5 min; `--quick` skips the probe).
+- **Result** (2026-11-17, axes rev 9 / lifecycle rev 5): `RESULT: FAIL (literal reading; 10 finding(s))`. All 12
+  controls are CAUGHT. With F1's candidate repair (D17's before-commit clause tested on loaded records only),
+  A1-A14 pass. Findings for round 10, in `reference_model.log`:
+  F1 D17 makes every live crisis DAMAGED (the Formulas' own CRISIS example fails);
+  F2 AC9's CRISIS fixture gives {D9, D17}, not {D9};
+  F3 D17's prefix clause never fires without D16 or D17's other clause;
+  F4 D7's `new` clause cannot be isolated, because D14 does not define "matching";
+  F5 `lock_negotiated` is not checked against the saved seeds, and a retraction's item and scene are not checked;
+  F6 D7 is one-directional (an entry without `axis_revised` loads);
+  F7 nothing ties `root_phase` to the position (saves inside suppression windows load too);
+  F8 L-AC8 has no VALIDATED load cell;
+  F9 T6 TURNED_BACK is dead (any record at the gate with an UNSET axis is DAMAGED by D16), so L-AC8's two
+  synthetic story cells cannot be set up;
+  F10 an edited save with `root_phase` not FINAL positioned in Story+ never reaches FINAL (this depends on M8: Story+
+  cannot replay the final authorization).
+  F1, F2 and F9 contradict the docs' own examples or ACs. F3-F8 and F10 concern debug or edited saves, or AC wording.
+- **Not modelled**: side-arc flags (AC15), the secret routes (all disabled; formula level only), NG+ carry-over,
+  scene content (P3/AC14, L-AC16), the time model. The model's positions are coarse (Chapter 9 is one position, the
+  boss one event). Modelling choices M1-M9 are listed in the log.
