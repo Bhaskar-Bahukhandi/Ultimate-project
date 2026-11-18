@@ -1,9 +1,10 @@
 # Mutation 'r6_ec16_d7_dropped' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-axes.r6_ec16_d7_dropped.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-axes.r6_ec16_d7_dropped.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r6_ec16_d7_dropped.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r6_ec16_d7_dropped.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [edge cases] line 609: Edge Case 16 D7 'axis_revised holding an axis' differs from the pinned 'axis_revised holding an axis that no retraction_log entry names (D7.unnamed), or a retraction_log entry whose axis is not in axis_revised (D7.reverse; the composer reads axis_revised), or more than one axis (D7.multi), or a retraction_log entry whose new value is not the record's value for its axis (D7.new_mismatch), or more than one retraction_log entry (D7.duplicate: play takes at most one renegotiation, Core Rule 7, and a second entry would play the cost beat twice). D7.multi cannot fire while D1 and D14 hold (no valid row admits two consistent retractions) and is kept as documentation'
-RESULT: FAIL (1 problems)
+FAIL [edge cases] line 686: Edge Case 16 D7 'axis_revised holding an axis' differs from the pinned 'axis_revised holding an axis that no retraction_log entry names (D7.unnamed), or a retraction_log entry whose axis is not in axis_revised (D7.reverse; the composer reads axis_revised), or a retraction_log entry whose new value is not the record's value for its axis (D7.new_mismatch). The clauses D7.multi and D7.duplicate of revision 11 are retired (design review round 12): D0 refuses a second entry, so neither could fire, and the revision-11 reason given for D7.multi was false: (NONE, HEARTH, RELEASE) admits two consistent Faction retractions, from R2 (ARCHIVE→HEARTH) and from R3 (CONTINUITY→HEARTH), which is now a D0 fixture (AC9)'
+FAIL [edge cases] Edge Case 16 D7 clause ids [] != the active clauses ['unnamed', 'reverse', 'new_mismatch']
+RESULT: FAIL (2 problems)
 exit code: 1

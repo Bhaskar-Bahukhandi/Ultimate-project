@@ -1,10 +1,10 @@
 # Mutation 'r3_timing_in_body' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-axes.r3_timing_in_body.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-axes.r3_timing_in_body.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r3_timing_in_body.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r3_timing_in_body.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [formulas] line 433: storyline_id body reads 'act1_' (timing/companion input)
-FAIL [formulas] line 433: storyline_id body differs from the pinned body: 'if A, F or D is UNSET or act1_pace_late → PENDING' (expected 'if A, F or D is UNSET → PENDING')
+FAIL [formulas] line 499: storyline_id body reads 'act1_' (timing/companion input)
+FAIL [formulas] line 499: storyline_id body differs from the pinned body: 'if A, F or D is UNSET or act1_pace_late → PENDING' (expected 'if A, F or D is UNSET → PENDING')
 RESULT: FAIL (2 problems)
 exit code: 1

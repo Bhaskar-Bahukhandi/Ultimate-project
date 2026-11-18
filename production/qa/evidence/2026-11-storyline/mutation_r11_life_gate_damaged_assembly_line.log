@@ -1,9 +1,9 @@
 # Mutation 'r11_life_gate_damaged_assembly_line' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-lifecycle.r11_life_gate_damaged_assembly_line.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r11_life_gate_damaged_assembly_line.md
 gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
-lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-lifecycle.r11_life_gate_damaged_assembly_line.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r11_life_gate_damaged_assembly_line.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [gate] line 137 (DAMAGED (a live record)): outcome 'TURNED_BACK: a data error, no transition; a dev build asserts; the player hears that the Assembly has not decided' differs from the pinned outcome
+FAIL [gate] line 154 (DAMAGED (a live record)): outcome 'TURNED_BACK: a data error, no transition; a dev build asserts; the player hears that the Assembly has not decided' differs from the pinned outcome
 RESULT: FAIL (1 problems)
 exit code: 1

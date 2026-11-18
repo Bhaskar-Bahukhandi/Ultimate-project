@@ -1,9 +1,9 @@
 # Mutation 'r4_red_line_pair' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-lifecycle.r4_red_line_pair.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r4_red_line_pair.md
 gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
-lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-lifecycle.r4_red_line_pair.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r4_red_line_pair.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [red lines] line 71 (R2): pair 'SHARED + ARCHIVE', expected 'NONE + ARCHIVE' (the rule's combination)
+FAIL [red lines] line 81 (R2): pair 'SHARED + ARCHIVE', expected 'NONE + ARCHIVE' (the rule's combination)
 RESULT: FAIL (1 problems)
 exit code: 1

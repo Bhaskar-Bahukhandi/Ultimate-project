@@ -1,0 +1,12 @@
+# Mutation 'r12_chapter_select_record_invalid' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r12_chapter_select_record_invalid.md
+gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r12_chapter_select_record_invalid.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [revision 12] chapter-select record SL-YOU-HEARTH-RESTORE is an invalid row
+FAIL [revision 12] chapter select says YOU and RESTORE appear in no invalid row; the rules table [('NONE', 'ARCHIVE', 'RELEASE'), ('NONE', 'CONTINUITY', 'RELEASE'), ('YOU', 'HEARTH', 'RESTORE')] disagrees or they are not the record's Authority and Deleted values
+FAIL [revision 12] chapter select does not say 'its ending is SOLE without sole_dissent' (family of YOU)
+FAIL [revision 12] L-AC19 does not expect storyline_id() SL-YOU-HEARTH-RESTORE, the chapter-select record
+RESULT: FAIL (4 problems)
+exit code: 1

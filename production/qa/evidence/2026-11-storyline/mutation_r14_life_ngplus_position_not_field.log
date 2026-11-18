@@ -1,0 +1,11 @@
+# Mutation 'r14_life_ngplus_position_not_field' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r14_life_ngplus_position_not_field.md
+gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r14_life_ngplus_position_not_field.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [revision 13] storyline-lifecycle.md lacks 'story_position → PRE_C8. The story position is reset with the record because a new record left at a Story+ position would be refused by D16'
+FAIL [lifecycle record] NG+ reset fields ['authority', 'axis_revised', 'beats_played', 'deleted', 'faction', 'lock_negotiated', 'retraction_log', 'root_phase', 'storyline_id'] != Inputs fields ['authority', 'axis_revised', 'beats_played', 'deleted', 'faction', 'lock_negotiated', 'retraction_log', 'root_phase', 'story_position', 'storyline_id']
+FAIL [lifecycle rules] lacks the pinned sentence 'story_position → PRE_C8.'
+RESULT: FAIL (3 problems)
+exit code: 1

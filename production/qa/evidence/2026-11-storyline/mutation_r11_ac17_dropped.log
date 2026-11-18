@@ -1,11 +1,13 @@
 # Mutation 'r11_ac17_dropped' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-axes.r11_ac17_dropped.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-axes.r11_ac17_dropped.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r11_ac17_dropped.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r11_ac17_dropped.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
 FAIL [acceptance] acceptance criteria numbered [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], expected 1-17
-FAIL [acceptance] AC 17 lacks 'for each of the nine 1.0 side arcs'
-FAIL [acceptance] AC 17 lacks 'voices none of those lines'
-RESULT: FAIL (3 problems)
+FAIL [acceptance] AC 17 lacks 'for each of the ten 1.0 side arcs that push an axis (01-04, 06-08, 10-12)'
+FAIL [acceptance] AC 17 lacks 'Arc 12 is tested for its deleted:CHOOSE push only, arc 08 for its Faction push only.'
+FAIL [acceptance] AC 17 lacks 'makes lock_arguments() of the axis the flag pushes contain an argument whose flag is that flag'
+FAIL [acceptance] AC 17 lacks 'gives a lock_arguments() that contains none of that arc's flags'
+RESULT: FAIL (5 problems)
 exit code: 1

@@ -1,9 +1,9 @@
 # Mutation 'r4_crisis_r2_gains_offer' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-lifecycle.r4_crisis_r2_gains_offer.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r4_crisis_r2_gains_offer.md
 gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
-lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-lifecycle.r4_crisis_r2_gains_offer.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r4_crisis_r2_gains_offer.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [crisis offers] line 87 (R2): offers ['revise:authority:SHARED', 'revise:authority:YOU', 'revise:deleted:CHOOSE', 'revise:deleted:RESTORE', 'revise:faction:CONTINUITY', 'revise:faction:HEARTH'] != crisis_offers ['revise:authority:SHARED', 'revise:authority:YOU', 'revise:deleted:CHOOSE', 'revise:deleted:RESTORE', 'revise:faction:HEARTH']
+FAIL [crisis offers] line 97 (R2): offers ['revise:authority:SHARED', 'revise:authority:YOU', 'revise:deleted:CHOOSE', 'revise:deleted:RESTORE', 'revise:faction:CONTINUITY', 'revise:faction:HEARTH'] != crisis_offers ['revise:authority:SHARED', 'revise:authority:YOU', 'revise:deleted:CHOOSE', 'revise:deleted:RESTORE', 'revise:faction:HEARTH']
 RESULT: FAIL (1 problems)
 exit code: 1

@@ -1,13 +1,21 @@
 # Storyline Lifecycle
 
-> **Status**: Draft (revision 7: design review round 11 of `storyline-axes.md`, 2026-11-17 — C9-S18 plays its decrypted
+> **Status**: Draft (revision 10: design review round 14 of `storyline-axes.md`, 2026-11-18 — a legacy save's
+> position is derived from its free-travel story scene, its own scene or its chapter, and the scene-to-id map holds no
+> hub; revision 9: design review round 13 of `storyline-axes.md`, 2026-11-17 — the NG+ reset sets the
+> story position to `PRE_C8`, chapter select is keyed to its entry scene's position, a legacy save's position is
+> derived once, `gate_open()` excludes a DAMAGED record, the knob-read scope points to the axes Tuning Knobs, L-AC14
+> attribution fixed; revision 8: design review round 12 of `storyline-axes.md`, 2026-11-17 — the gate is one predicate
+> on every scene change into Root of Heaven, chapter select past Chapter 8 writes a valid record, every checkpoint
+> stores the story position, legacy saves are defaulted before the load check, L-AC19 added; revision 7: design
+> review round 11, 2026-11-17 — C9-S18 plays its decrypted
 > form when the First Wake leads are complete, the DAMAGED turn-back gets a dev assert and a reload prompt, L-AC8 gets
 > the live-crisis cell; revision 6: design review round 10 — the gate gets a row for
 > a live DAMAGED record, T6 is documented as defence in depth, L-AC8 matches what the reference model can set up;
 > revision 5: Witness Protocol moved post-1.0 with the other secret routes; one commit-and-save rule for every
 > transition)
 > **Author**: Claude with the project lead
-> **Last Updated**: 2026-11-17
+> **Last Updated**: 2026-11-18
 > **Implements**: the invariants I1-I9 of `design/gdd/storyline-axes.md`; contract for Y2-PP-T17 (ending composer /
 > route data model)
 > **Implements Pillar**: P3, P5, P8 (through `storyline-axes.md`)
@@ -29,7 +37,8 @@ once. An invalid row breaks the coalition inside C8-S16, and the scene does not 
 takes one of the refusing faction's demands, a renegotiation of one axis, and the withdrawn position is answered by
 one authored beat. Every transition writes its fields and its beat as one atomic checkpoint, and no save exists
 inside a transition. Every entry and re-entry into Root of Heaven runs one gate check, which only ever finds an ID
-stored or the locks not yet played; a save made past Chapter 8 before these fields existed is unsupported and does
+stored, the locks not yet played, or a live DAMAGED record (a defect, turned back as a data error, S6); a save made
+past Chapter 8 before these fields existed is unsupported and does
 not load; the final authorization only confirms. There is no state in which a player can be stranded, and no
 transition back from a stored ID.
 
@@ -47,9 +56,10 @@ transition back from a stored ID.
 ### Inputs and outputs
 
 Reads and writes the composer input record of `storyline-axes.md` (fields `authority`, `faction`, `deleted`,
-`storyline_id`, `root_phase`, `axis_revised`, `lock_negotiated`, `retraction_log`, `beats_played`) and the seed
+`storyline_id`, `root_phase`, `axis_revised`, `lock_negotiated`, `retraction_log`, `beats_played`, `story_position`) and the seed
 flags. Every field is saved, so a reload restores the retractions and beats exactly. `storyline_phase` is derived
-(`storyline-axes.md` Formulas), never stored. Knobs are read only at C8-S16 and the gate.
+(`storyline-axes.md` Formulas), never stored. Knobs are read only where `storyline-axes.md` Tuning Knobs states (C8-S16,
+the gate, and C9-S18's form).
 
 ### Scene contracts
 
@@ -100,7 +110,9 @@ start of C8-S13, C8-S14 and C8-S16 until the commit, and from the start of the f
 or crash before the commit reloads the last save before the scene, and the scene replays from its start; a reload
 from the checkpoint resumes at the start of the committed beat, and no offer or vote replays. T4 has no checkpoint of
 its own: the crisis it opens is part of C8-S16, and its writes are committed with the T5 that closes it. So no save ever
-holds a record that is half of a transition, and no save is positioned inside a lock scene.
+holds a record that is half of a transition, and no save is positioned inside a lock scene. Every checkpoint also
+stores the story position it reaches (`storyline-axes.md` Terms, Story position: the commit of C8-S13 writes
+`S13_DONE`, and so on), and a save made anywhere else stores the last position it has crossed (Y1-P1-T05).
 
 **Retractions.** A renegotiation withdraws Kaelen's superseded position on the record, and one authored cost beat
 plays: a speaker other than Kaelen — the delegate or companion whose position is withdrawn — answers it (beat id
@@ -126,8 +138,13 @@ prerequisite flags that content sets are kept and transform nothing, and the jou
 (`storyline-axes.md` Edge Cases 2-3).
 
 **S6 — The ID-lock gate.** Runs on every entry and re-entry into Root of Heaven, by each path: `story` (after the
-Chapter 9 end, before PM:8206 "Root of Heaven gate opens"), `world_map` (world map or free travel; protected logic,
-needs the user's approval when implemented) and `load` (a save positioned inside Root of Heaven). The stored-ID
+Chapter 9 end, before PM:8206 "Root of Heaven gate opens"; the Chapter 10 scene chain and chapter select count as
+this path), `world_map` (world map or free travel, including "Resume story" and the free-travel Root of Heaven
+region; protected logic, needs the user's approval when implemented) and `load` (a save positioned inside Root of
+Heaven). The check is one predicate, not a list of callers (design review round 12): it runs before every scene
+change whose target is a Root of Heaven scene, whoever requests it; on load, before any loaded state is applied; and
+before free travel unlocks the Root of Heaven region, which stays locked until the predicate passes. A new caller
+therefore cannot skip it, and setting a chapter-unlock flag alone never opens the gate. The stored-ID
 check is necessary, not sufficient: the story path reaches the gate only after the Chapter 9 end, and the world-map
 path only once Root of Heaven is on the map. Outcome by phase:
 
@@ -159,7 +176,27 @@ such saves; if one ships before these fields do, the decision is reopened. The p
 Chapter 8 are rewritten once by a dev-fixture migration, a tool script that is not shipped and is not part of this
 state machine (owner Y2-PP-T17 with Y1-P1-T05): the test author gives each fixture explicit axis values and an ID
 consistent with the branch flags it already holds. The legacy storyline flags the code sets today are superseded,
-not migrated (Dependencies).
+not migrated (Dependencies). A save of a schema version before these fields has its whole record block filled with
+the defaults before the load check runs (`storyline-axes.md` Edge Case 8), so the check meets a typed record: at
+`PRE_C8` it loads LEANING, and past a lock scene D16 refuses it. Such a save holds no story position, so the
+defaulting step derives it once, by the order in `storyline-axes.md` Terms (Story position): the free-travel story
+scene, else the save's own scene, through the scene-to-id map, which holds no hub; else the chapter number. A
+Chapter 8 save that no story scene places is left with no position, which D0 refuses (`D0.missing`).
+
+**Chapter select (user decisions 2026-11-17, design review rounds 12 and 13).** Chapter select is player-facing. It
+starts a new record, never edits a loaded one, and each entry is keyed to the story position of its entry scene, not
+to its chapter number (round 13: "Chapter 8 - Ending", `main_menu.gd:655-662`, is a Chapter 8 entry whose
+`ch8_ending` comes after the locks and autosaves on load). An entry positioned before C8-S13 starts LEANING with the
+defaults (position `PRE_C8`). An entry positioned past C8-S16's commit writes, as
+one atomic checkpoint before its entry scene loads, a fixed valid record: `SL-SHARED-ARCHIVE-CHOOSE` (SHARED, ARCHIVE, CHOOSE; SHARED
+and CHOOSE appear in no invalid row), `lock_negotiated` = {faction, authority, deleted} (no lock vote was
+played, so none passed clean), `axis_revised`, `retraction_log` and `beats_played` empty, `root_phase` OUTSIDE, the
+matching `AXIS*` and `lock_negotiated_*` mirror flags, and the story position of its entry scene (`S16_DONE` for a
+Chapter 8 entry after the locks, `CH9` for Chapter 9 and for every entry into Root of Heaven). An entry into Root of
+Heaven then enters through the gate (T7). No entry is positioned inside the lock scenes (`S13_OPEN` to `S16_OPEN`).
+So chapter select never writes a save the load check refuses, and its ending is
+BOUND without `sole_dissent`. Changing chapter select is protected story progression: the implementing story needs the
+user's approval.
 
 **S7 — Final authorization (PM:8786-8794).** After the boss: displays the stored structure, offers no
 reconsideration, and `confirm_execution` sets `root_phase` FINAL (T9); nothing else changes. Before the confirm,
@@ -208,7 +245,9 @@ fires no transition by itself, and a save positioned inside Root of Heaven then 
 entry.
 
 **NG+ reset** (until NG+ design decides carry-over): `authority`, `faction`, `deleted` → UNSET; `storyline_id` →
-empty; `root_phase` → OUTSIDE; `axis_revised`, `lock_negotiated`, `retraction_log`, `beats_played` → empty. The
+empty; `root_phase` → OUTSIDE; `axis_revised`, `lock_negotiated`, `retraction_log`, `beats_played` → empty;
+`story_position` → PRE_C8. The story position is reset with the record because a new record left at a Story+ position
+would be refused by D16 (design review round 13). The
 `AXIS*`, `axis_revised_*` and `lock_negotiated_*` flags and the secret routes' prerequisite and unlock flags are
 cleared with the record; the Act 1 seed flags follow NG+'s own flag reset. NG+ starts a new record, not a
 transition of this table: the previous cycle's record is kept for Story+ under its own ID (PM:11300, PM:11303);
@@ -247,7 +286,7 @@ when a route's invocation is offered, belong to the post-1.0 secret-route design
 
 | System | Direction | What flows | Status |
 |---|---|---|---|
-| Storyline axes (`design/gdd/storyline-axes.md`) | this ← axes | values, formulas, record, invariants I1-I9, knobs | revision 11 |
+| Storyline axes (`design/gdd/storyline-axes.md`) | this ← axes | values, formulas, record, invariants I1-I9, knobs | revision 14 |
 | SaveService (Y1-P1-T05) | this → save | record writes, including `retraction_log` and `beats_played`; save suppression inside lock scenes, the crisis and the final authorization; one atomic checkpoint per transition; the damaged-record check and load refusal | no GDD |
 | FlagRegistry / StoryGraph (Y1-P1-T03) | this ← registry | flags; scene order check at boot; the story position for Edge Case 16 D16-D17 | no GDD |
 | World map / free travel (protected) | this → world map | the gate check on the `world_map` path | no GDD — needs the user's approval when implemented |
@@ -280,7 +319,7 @@ the table below. Lint shows the text matches its pins; it is not evidence that t
 | `storyline_phase()` | the derived phase of the current record (`loaded` false; after a load that passed the check the value is the same either way) | — |
 | `storyline_id()` | the stored ID | empty string when nothing is stored |
 | `axis(name)` | the record's `authority`, `faction` or `deleted` | — |
-| `gate_open()` | true exactly when an ID is stored (the gate check passes; the path to the gate is story progression) | — |
+| `gate_open()` | true exactly when an ID is stored and the phase is not DAMAGED (the gate check passes; the path to the gate is story progression) | — |
 | `enter_root_of_heaven(path)` | for path `story`, `world_map` or `load`: ROOT_OF_HEAVEN or TURNED_BACK | — |
 | `current_scene()` | the id of the playing scene, or `load_menu` | — |
 | `current_beat()` | the id of the authored beat playing and whether it is at its start | empty |
@@ -379,11 +418,14 @@ the table below. Lint shows the text matches its pins; it is not evidence that t
   item, the load is refused (`current_scene()` stays `load_menu`), and `save_bytes()` of its slot is unchanged.
   *Blocked by:* Y2-PP-T17, Y1-P1-T05.
 - **L-AC14 Epilogue lines.** With the completion flags of arcs 05, 08 and 09 set — `CROWN_COORDINATES` (arc 08,
-  PM:3683), `OLD_HOME_MESSAGE` (arc 09, PM:3814) and arc 05's Quest 30 flag, which the sources do not name
-  (PM:2690-2691) and Y2-PP-T17 names before this runs — `epilogue_lines()` contains all three arcs on every 1.0
-  storyline, and contains none of them with no flag set. *Blocked by:* Y2-PP-T17.
-- **L-AC15 NG+ reset.** Starting NG+ from a FINAL record gives LEANING, every axis UNSET, `storyline_id()` empty,
-  the reset fields at their defaults, and `flag_set()` false for every secret prerequisite and unlock flag.
+  PM:3683), arc 09's flag and arc 05's Quest 30 flag — `epilogue_lines()` contains all three arcs on every 1.0
+  storyline, and contains none of them with no flag set. The sources name neither arc 05's flag (PM:2690-2691) nor
+  arc 09's: `OLD_HOME_MESSAGE` is set in the Chapter 3 End ledger (PM:3814), not by arc 09's own quests
+  (PM:3685-3707), so it would mark a player who never finished the arc; Y2-PP-T17 names both flags before this runs.
+  *Blocked by:* Y2-PP-T17.
+- **L-AC15 NG+ reset.** Starting NG+ from a FINAL record positioned at `STORY_PLUS` gives LEANING, every axis UNSET,
+  `storyline_id()` empty, the reset fields at their defaults, the story position `PRE_C8`, `load_errors()` empty for
+  the first save of the new cycle, and `flag_set()` false for every secret prerequisite and unlock flag.
   *Blocked by:* Y2-PP-T17.
 - **L-AC16 Content completeness.** For every id this contract defines — the 16 `retract_*`, `red_line_R1`,
   `red_line_R2`, `red_line_R3`, `sole_dissent`, `c9s18_logged` — `beat_text(id)` and `beat_speaker(id)` are non-empty and the text is
@@ -400,6 +442,17 @@ the table below. Lint shows the text matches its pins; it is not evidence that t
   invalid row; one retraction beat per axis; the final authorization; one ending per family (SOLE, BOUND, NONE_AUTH)
   and `sole_dissent`; one Story+ screen per family; the three arc epilogue lines; C9-S18's logged form; and the S6
   turn-back prompt for a live DAMAGED record (from an injected record in a dev build). *Blocked by:* Y2-PP-T17.
+
+- **L-AC19 Gate predicate and chapter select.** For each scene-change request whose target is a Root of Heaven
+  scene, issued from the Chapter 9 end, the Chapter 10 scene chain, world-map "Resume story", free travel and chapter
+  select, with a LEANING or PARTLY_LOCKED injected live record: `enter_root_of_heaven()` is TURNED_BACK and
+  `current_scene()` is not a Root of Heaven scene; with `ch10_unlocked` set and no ID stored, the free-travel Root of
+  Heaven region stays locked. Chapter select of Chapter 9 and of Chapter 10 from the main menu gives
+  `storyline_id()` `SL-SHARED-ARCHIVE-CHOOSE`, `record_field(lock_negotiated)` = {faction, authority, deleted} and
+  `load_errors()` empty for every save written before the first player input; for Chapter 10 the gate gives
+  ROOT_OF_HEAVEN. "Chapter 8 - Ending" gives the same record at `S16_DONE` with `load_errors()` empty for its
+  autosave. A chapter-select entry positioned before C8-S13 gives LEANING. *Blocked by:* Y2-PP-T17, Y1-P1-T05,
+  Y1-P1-T03.
 
 **Validation note:** the route bot of ROADMAP §12.4 starts from Chapter 8 fixture saves once the locks exist (owner
 Y2-PP-T17): one run per valid row through C8-S16 (24), one per renegotiation offer at C8-S16 (16), and the gate

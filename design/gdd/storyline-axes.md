@@ -1,12 +1,18 @@
 # Storyline Axes
 
-> **Status**: Draft (revision 11, after design review round 11: the live crisis scoped to C8-S16 (Open Question 18),
-> the load-check inclusion rule with D0 and a D7 duplicate clause (Open Question 17), C9-S18's decrypted form, the
-> Kaelthas trust flags, AC9, AC14 and AC16 rewritten, AC17 added; static core unchanged since revision 4 except the
-> 1.0 scope of the secret storylines)
+> **Status**: Draft (revision 14, after design review round 14, scope frozen to its six blockers (Open Question 20):
+> the purge row's reason re-grounded on its own scene, `story_position` a record field with a hub-safe legacy
+> derivation, `act1_pace` defaults to UNSET, AC9's clause ids listed, AC11's mirror sentence removed, AC15 Logic with
+> a `secret:<route>` push; main-story seeds named as a class (Open Question 21). Revision 13, after design review
+> round 13: the purge argues against YOU and the Authority
+> seeds state one discriminator, arc 08 pushes Faction in 1.0, the story position is written at every entry point
+> (NG+, chapter select by position, legacy saves derived once), D0 type-checks `beats_played` and leaves its
+> membership to D14, one knob-read scope, six citation and consistency fixes. Revision 12: Authority seeds against
+> unilateral history, Kaelthas outside the 1.0 companion set, the story-position contract, D0's one-entry
+> `retraction_log` cap. Static core unchanged since revision 4 except the 1.0 scope of the secret storylines)
 > **Author**: Claude (narrative-director research) with the project lead
-> **Last Updated**: 2026-11-17
-> **Last Verified**: 2026-11-11
+> **Last Updated**: 2026-11-18
+> **Last Verified**: 2026-11-18
 > **Implements Pillar**: P3 (24 storylines + 3 secret from three story axes), P5 (side storylines feed the main
 > story), P8 (Story+, a playable after-story per storyline) — DESIGN_PILLARS.md, ROADMAP §12.2
 
@@ -39,8 +45,8 @@ The Authority value picks one of three ending families in 1.0 (Sole, Bound, No A
 Witness Protocol), each with its own God King phase, final scene and Story+ arc; Faction and Deleted change a boss
 phase, ally lines, epilogue slides and which Story+ cases unlock. Act 1 flags seed the arguments each lock scene
 voices and record whether a lock vote passed clean or by negotiation; in 1.0 only a Sole ending makes that record
-audible (Core Rule 3). Nine of the twelve side storylines are to push the axes in 1.0 once Y2-PP-T17 maps their
-flags (AC15; the seed map holds none yet; arcs 05, 08 and 09 feed post-1.0 routes), and timing changes scenes and
+audible (Core Rule 3). Ten of the twelve side storylines are to push the axes in 1.0 once Y2-PP-T17 maps their
+flags (AC15; the seed map holds none yet; arcs 05 and 09 feed only post-1.0 routes), and timing changes scenes and
 slides without ever changing the storyline ID — so authored cost stays additive.
 
 ## Player Fantasy
@@ -93,16 +99,38 @@ with, and whether the deleted are brought back, let go, or asked.
   of Heaven gate opens" (PM:8206-8207).
 - **Final authorization**: the immediate post-boss scene (PM:8786-8794). The world asks for the authorization
   result, the system displays the chosen structure, and the player confirms execution. It changes nothing.
+- **Story position**: the save's place in the story, one id from this ordered list (earliest first): `PRE_C8`
+  (anywhere before C8-S13), `S13_OPEN`, `S13_DONE`, `S14_OPEN`, `S14_DONE`, `S15`, `S16_OPEN`, `S16_DONE`, `CH9`,
+  `ROOT`, `ROOT_LEFT`, `FINAL_AUTH_OPEN`, `FINAL_DONE`, `STORY_PLUS`, `ROOT_STORY_PLUS`. `<scene>_OPEN` is inside the
+  scene before its commit checkpoint; `<scene>_DONE` is the commit checkpoint and everything after it until the next
+  id. `ROOT` is inside Root of Heaven before the final authorization, `ROOT_LEFT` outside it after a first entry,
+  `ROOT_STORY_PLUS` inside it in Story+. The position is the record field `story_position` (Composer input record),
+  written by each commit checkpoint and
+  each story-graph step that crosses into the next id, never derived from the current scene file on load; D16 and
+  D17 compare it by list index, and every id they compare against precedes `CH9`. The other writers are a new game
+  and the NG+ reset (`PRE_C8`) and chapter select (the position of its entry scene; `storyline-lifecycle.md`
+  Chapter select). One exception to "never derived": a save of a schema version before these fields holds no
+  position, so SaveService derives it once, while defaulting that save (Edge Case 8), in this order: the save's
+  free-travel story scene, else its own scene, each through the scene-to-id map, which holds story scenes only and
+  never a hub (a hub is visited in every chapter, and a death revives the player in one); else its chapter number,
+  below 8 → `PRE_C8` and 9 or above → `CH9`. A Chapter 8 save that no mapped story scene places is left with no
+  position, which D0 refuses (user decision 2026-11-18, design review round 14). SaveService (Y1-P1-T05) carries the
+  stored position on every save the code writes (a chapter scene, a hub, free travel), and FlagRegistry
+  (Y1-P1-T03) checks the scene-to-id map at boot. The list is the reference model's `POSITIONS` (Open Question 16);
+  finer ids (a boss id, for candidate D18) may be added inside an id, never across one (user decision 2026-11-17,
+  design review round 12).
 
 ### Core Rules
 
 1. **Three axes, one value each.** Authority ∈ {YOU, SHARED, NONE}; Faction ∈ {HEARTH, ARCHIVE, CONTINUITY};
-   Deleted ∈ {RESTORE, RELEASE, CHOOSE}; each starts UNSET (SaveService writes UNSET for a new game and for a save
-   with no axis data). Once a storyline ID is stored, each axis holds exactly one value (PM:7522-7524, "Axis
+   Deleted ∈ {RESTORE, RELEASE, CHOOSE}; each starts UNSET (SaveService writes UNSET for a new game, and for a save
+   of a schema version before these fields, which the load check then refuses if it is positioned past a lock scene:
+   Edge Case 16, D16). Once a storyline ID is stored, each axis holds exactly one value (PM:7522-7524, "Axis
    validation").
 2. **Seeds are arguments, never gates.** Act 1 seeds are the leanings mapped for 1.0 (the 26 flags below);
    side storylines, companion persuasion and faction support become leanings the same way once Y2-PP-T17 maps their
-   flags (AC15): each axis seed makes its lock scene voice an argument for (`+`) or against (`−`) its value
+   flags (AC15), and so do main-story choices after Act 1 (main-story seeds; the first known is the Chapter 4 Null
+   Court promise, `AethelgardPrototype/scripts/chapter4/ch4_null_court.gd:125-136`, mapped by Open Question 21): each axis seed makes its lock scene voice an argument for (`+`) or against (`−`) its value
    ("Player influence can back one. Companion persuasion and side quests matter.", PM:6987-6988). Every lock scene
    always offers all three values; no seed adds or removes an option. No seed sets a value; only a lock scene or a
    renegotiation does ("This sets Faction Axis if vote passes.", PM:6989). The sources define no axis score.
@@ -114,9 +142,13 @@ with, and whether the deleted are brought back, let go, or asked.
    rule, not a knob), so no vote leaves an axis UNSET. How it passes is recorded (`lock_pass`, Formulas): **clean**
    when at least one seed for the backed value is set with direction `+` and none with direction `−`; otherwise
    **negotiated**, and `lock_negotiated_<axis>` is set ("If player lacks support choice may still be possible
-   through negotiations.", PM:6990). The test reads only which flags are set: no count, no weight. Only Faction has
-   a `−` seed today (`ch1_knight_killed`), so for Authority and Deleted clean means at least one `+` seed for the
-   backed value. Side-storyline flags join the test once Y2-PP-T17 maps them per flag. In 1.0 `lock_negotiated`
+   through negotiations.", PM:6990). The test reads only which flags are set: no count, no weight. Faction has one
+   `−` seed (`ch1_knight_killed`, against HEARTH) and Authority three, all against YOU (`ch1_aldric_kill_justified`,
+   `ch1_root_purge`, `ch2_seraphina_showoff`): power used on others without answering for it argues against keeping
+   Root alone (Story Bible §1, "Capability is not legitimacy"; user decisions 2026-11-17, design review rounds 12 and
+   13). Deleted has
+   none, so a Deleted vote is clean exactly when the one wraith seed backs its value. Side-storyline flags join the
+   test once Y2-PP-T17 maps them per flag. In 1.0 `lock_negotiated`
    feeds only the composer. One module makes it visible (user decision 2026-11-10): on a SOLE storyline whose
    `lock_negotiated` holds `authority`, the ending plays `sole_dissent`, in which the Assembly members who never
    endorsed Kaelen keeping Root are named on the record (new content, owner Y2-PP-T17). Nothing else in 1.0 reads
@@ -164,8 +196,9 @@ with, and whether the deleted are brought back, let go, or asked.
 8. **Storyline ID and the ID-lock gate.** The moment the coalition holds, the live ID (Formulas) is stored:
    `SL-{authority}-{faction}-{deleted}` or `SL-SECRET-{route}`. Before that nothing is stored. A stored ID is never
    recomputed from flags or knobs ("Every route must save a stable storyline ID.", PM:11303) and is final once
-   the final authorization concludes. Every entry and re-entry into Root of Heaven runs the gate check: with an ID stored the
-   gate is open (also after the boss and in Story+); before the three locks it turns the player back in the fiction
+   the final authorization concludes. Every entry and re-entry into Root of Heaven runs the gate check: with an ID stored
+   and the phase not DAMAGED the gate is open (also after the boss and in Story+); a DAMAGED record is turned back as a
+   data error whether or not it holds an ID (lifecycle S6); before the three locks it turns the player back in the fiction
    (the Assembly has not decided; `storyline-lifecycle.md` S6). In 1.0 that turn-back is defence in depth: Root of
    Heaven is entered only after the Chapter 9 end, so a record at the gate with an UNSET axis is already refused on
    load (D16), and a live one is a story-graph defect that the gate turns back as well (lifecycle T6; the reference
@@ -193,12 +226,14 @@ with, and whether the deleted are brought back, let go, or asked.
     vote that falls short leaves to Story+. Faction and Deleted are modifiers: a boss phase, ally lines, epilogue
     slides, Story+ cases.
 11. **Companions are independent of the axes.** Every storyline can include every surviving companion
-    (PM:7529-7537, PM:11302); a companion leaves through relationship flags (Edge Case 1), never through an axis.
-    The one axis read: Kaelthas "can remain companion outside Archive if trust supports it" (PM:7533), so on a
-    storyline whose Faction is not ARCHIVE his presence also needs that trust condition; on an ARCHIVE storyline
-    it does not. The trust condition is `ch3_kaelthas_allied` set and `ch3_kaelthas_betrayed` unset (both written
-    by Chapter 3 today, `AethelgardPrototype/scripts/chapter3/`; user decision 2026-11-17); no relationship number
-    is read. The axis can only waive a trust test, never remove a companion.
+    (PM:7529-7537, PM:11302); a companion leaves through relationship flags (Edge Case 1), never through an axis, and
+    no axis is read for presence. The 1.0 companion set is Elara, Seraphina and Lyra. Kaelthas is not in it: Chapter
+    3 always ends his alliance in betrayal (`AethelgardPrototype/scripts/chapter3/ch3_kaelthas_betrayal.gd:35,89`
+    set `ch3_kaelthas_betrayed` on the allied path, and nothing clears it), so the source's "can remain companion
+    outside Archive if trust supports it" (PM:7533) has no 1.0 save to apply to. That rule, the only axis read a
+    companion would have, is reserved for redemption content (Open Question 19; user decision 2026-11-17, design
+    review round 12, superseding the trust condition `ch3_kaelthas_allied` set and `ch3_kaelthas_betrayed` unset
+    decided in round 11). Kaelthas's own Chapter 9 and 10 lines, which read `ch3_kaelthas_allied`, are unaffected.
 12. **Timing is a modifier.** Pace values and timing flags change scenes, NPC fates, market events and ending slides
     through the composer, not the storyline ID (ROADMAP §12.4; PM:7527).
 
@@ -220,8 +255,9 @@ keep these invariants; a contract that breaks one is wrong, not this GDD:
 | I9 | Every transition commits its record writes and its beat id as one atomic checkpoint; no save exists inside a lock scene, the crisis or the final authorization before its commit | 3, 5, 8, 9 |
 
 `storyline_phase` is derived, never stored (Formulas), as are `secret_route` and `family`; of the lifecycle fields
-the record stores the axes, `storyline_id`, `root_phase`, `axis_revised`, `lock_negotiated`, `retraction_log` and
-`beats_played`; the phase depends on the first three, after the Edge Case 16 check.
+the record stores the axes, `storyline_id`, `root_phase`, `axis_revised`, `lock_negotiated`, `retraction_log`,
+`beats_played` and `story_position`; the Edge Case 16 check reads all of them with the saved flags, and once it
+passes the phase depends only on the axes, `storyline_id` and `root_phase`.
 
 | phase | meaning | gate |
 |---|---|---|
@@ -254,33 +290,33 @@ Rule 11).
 
 | id | authority | faction | deleted | status | family | rule | source | danger | companions_possible |
 |---|---|---|---|---|---|---|---|---|---|
-| SL-YOU-HEARTH-RESTORE | YOU | HEARTH | RESTORE | invalid | — | R1 | PRODUCTION_MASTER_2.1.md:713 | — | Elara, Seraphina, Lyra, Kaelthas |
-| SL-YOU-HEARTH-RELEASE | YOU | HEARTH | RELEASE | valid | SOLE | — | PRODUCTION_MASTER_2.1.md:8978 | PRODUCTION_MASTER_2.1.md:8987 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-YOU-HEARTH-CHOOSE | YOU | HEARTH | CHOOSE | valid | SOLE | — | PRODUCTION_MASTER_2.1.md:9071 | PRODUCTION_MASTER_2.1.md:9080 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-YOU-ARCHIVE-RESTORE | YOU | ARCHIVE | RESTORE | valid | SOLE | — | PRODUCTION_MASTER_2.1.md:9164 | PRODUCTION_MASTER_2.1.md:9173 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-YOU-ARCHIVE-RELEASE | YOU | ARCHIVE | RELEASE | valid | SOLE | — | PRODUCTION_MASTER_2.1.md:9257 | PRODUCTION_MASTER_2.1.md:9266 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-YOU-ARCHIVE-CHOOSE | YOU | ARCHIVE | CHOOSE | valid | SOLE | — | PRODUCTION_MASTER_2.1.md:9350 | PRODUCTION_MASTER_2.1.md:9359 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-YOU-CONTINUITY-RESTORE | YOU | CONTINUITY | RESTORE | valid | SOLE | — | PRODUCTION_MASTER_2.1.md:9443 | PRODUCTION_MASTER_2.1.md:9452 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-YOU-CONTINUITY-RELEASE | YOU | CONTINUITY | RELEASE | valid | SOLE | — | PRODUCTION_MASTER_2.1.md:9536 | PRODUCTION_MASTER_2.1.md:9545 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-YOU-CONTINUITY-CHOOSE | YOU | CONTINUITY | CHOOSE | valid | SOLE | — | PRODUCTION_MASTER_2.1.md:9629 | PRODUCTION_MASTER_2.1.md:9638 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-SHARED-HEARTH-RESTORE | SHARED | HEARTH | RESTORE | valid | BOUND | — | PRODUCTION_MASTER_2.1.md:9722 | PRODUCTION_MASTER_2.1.md:9731 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-SHARED-HEARTH-RELEASE | SHARED | HEARTH | RELEASE | valid | BOUND | — | PRODUCTION_MASTER_2.1.md:9815 | PRODUCTION_MASTER_2.1.md:9824 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-SHARED-HEARTH-CHOOSE | SHARED | HEARTH | CHOOSE | valid | BOUND | — | PRODUCTION_MASTER_2.1.md:9908 | PRODUCTION_MASTER_2.1.md:9917 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-SHARED-ARCHIVE-RESTORE | SHARED | ARCHIVE | RESTORE | valid | BOUND | — | PRODUCTION_MASTER_2.1.md:10001 | PRODUCTION_MASTER_2.1.md:10010 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-SHARED-ARCHIVE-RELEASE | SHARED | ARCHIVE | RELEASE | valid | BOUND | — | PRODUCTION_MASTER_2.1.md:10094 | PRODUCTION_MASTER_2.1.md:10103 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-SHARED-ARCHIVE-CHOOSE | SHARED | ARCHIVE | CHOOSE | valid | BOUND | — | PRODUCTION_MASTER_2.1.md:10187 | PRODUCTION_MASTER_2.1.md:10196 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-SHARED-CONTINUITY-RESTORE | SHARED | CONTINUITY | RESTORE | valid | BOUND | — | PRODUCTION_MASTER_2.1.md:10280 | PRODUCTION_MASTER_2.1.md:10289 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-SHARED-CONTINUITY-RELEASE | SHARED | CONTINUITY | RELEASE | valid | BOUND | — | PRODUCTION_MASTER_2.1.md:10373 | PRODUCTION_MASTER_2.1.md:10382 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-SHARED-CONTINUITY-CHOOSE | SHARED | CONTINUITY | CHOOSE | valid | BOUND | — | PRODUCTION_MASTER_2.1.md:10466 | PRODUCTION_MASTER_2.1.md:10475 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-NONE-HEARTH-RESTORE | NONE | HEARTH | RESTORE | valid | NONE_AUTH | — | PRODUCTION_MASTER_2.1.md:10559 | PRODUCTION_MASTER_2.1.md:10568 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-NONE-HEARTH-RELEASE | NONE | HEARTH | RELEASE | valid | NONE_AUTH | — | PRODUCTION_MASTER_2.1.md:10652 | PRODUCTION_MASTER_2.1.md:10661 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-NONE-HEARTH-CHOOSE | NONE | HEARTH | CHOOSE | valid | NONE_AUTH | — | PRODUCTION_MASTER_2.1.md:10745 | PRODUCTION_MASTER_2.1.md:10754 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-NONE-ARCHIVE-RESTORE | NONE | ARCHIVE | RESTORE | valid | NONE_AUTH | — | PRODUCTION_MASTER_2.1.md:10838 | PRODUCTION_MASTER_2.1.md:10847 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-NONE-ARCHIVE-RELEASE | NONE | ARCHIVE | RELEASE | invalid | — | R2 | PRODUCTION_MASTER_2.1.md:715 | — | Elara, Seraphina, Lyra, Kaelthas |
-| SL-NONE-ARCHIVE-CHOOSE | NONE | ARCHIVE | CHOOSE | valid | NONE_AUTH | — | PRODUCTION_MASTER_2.1.md:10931 | PRODUCTION_MASTER_2.1.md:10940 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-NONE-CONTINUITY-RESTORE | NONE | CONTINUITY | RESTORE | valid | NONE_AUTH | — | PRODUCTION_MASTER_2.1.md:11024 | PRODUCTION_MASTER_2.1.md:11033 | Elara, Seraphina, Lyra, Kaelthas |
-| SL-NONE-CONTINUITY-RELEASE | NONE | CONTINUITY | RELEASE | invalid | — | R3 | PRODUCTION_MASTER_2.1.md:717 | — | Elara, Seraphina, Lyra, Kaelthas |
-| SL-NONE-CONTINUITY-CHOOSE | NONE | CONTINUITY | CHOOSE | valid | NONE_AUTH | — | PRODUCTION_MASTER_2.1.md:11117 | PRODUCTION_MASTER_2.1.md:11126 | Elara, Seraphina, Lyra, Kaelthas |
+| SL-YOU-HEARTH-RESTORE | YOU | HEARTH | RESTORE | invalid | — | R1 | PRODUCTION_MASTER_2.1.md:713 | — | Elara, Seraphina, Lyra |
+| SL-YOU-HEARTH-RELEASE | YOU | HEARTH | RELEASE | valid | SOLE | — | PRODUCTION_MASTER_2.1.md:8978 | PRODUCTION_MASTER_2.1.md:8987 | Elara, Seraphina, Lyra |
+| SL-YOU-HEARTH-CHOOSE | YOU | HEARTH | CHOOSE | valid | SOLE | — | PRODUCTION_MASTER_2.1.md:9071 | PRODUCTION_MASTER_2.1.md:9080 | Elara, Seraphina, Lyra |
+| SL-YOU-ARCHIVE-RESTORE | YOU | ARCHIVE | RESTORE | valid | SOLE | — | PRODUCTION_MASTER_2.1.md:9164 | PRODUCTION_MASTER_2.1.md:9173 | Elara, Seraphina, Lyra |
+| SL-YOU-ARCHIVE-RELEASE | YOU | ARCHIVE | RELEASE | valid | SOLE | — | PRODUCTION_MASTER_2.1.md:9257 | PRODUCTION_MASTER_2.1.md:9266 | Elara, Seraphina, Lyra |
+| SL-YOU-ARCHIVE-CHOOSE | YOU | ARCHIVE | CHOOSE | valid | SOLE | — | PRODUCTION_MASTER_2.1.md:9350 | PRODUCTION_MASTER_2.1.md:9359 | Elara, Seraphina, Lyra |
+| SL-YOU-CONTINUITY-RESTORE | YOU | CONTINUITY | RESTORE | valid | SOLE | — | PRODUCTION_MASTER_2.1.md:9443 | PRODUCTION_MASTER_2.1.md:9452 | Elara, Seraphina, Lyra |
+| SL-YOU-CONTINUITY-RELEASE | YOU | CONTINUITY | RELEASE | valid | SOLE | — | PRODUCTION_MASTER_2.1.md:9536 | PRODUCTION_MASTER_2.1.md:9545 | Elara, Seraphina, Lyra |
+| SL-YOU-CONTINUITY-CHOOSE | YOU | CONTINUITY | CHOOSE | valid | SOLE | — | PRODUCTION_MASTER_2.1.md:9629 | PRODUCTION_MASTER_2.1.md:9638 | Elara, Seraphina, Lyra |
+| SL-SHARED-HEARTH-RESTORE | SHARED | HEARTH | RESTORE | valid | BOUND | — | PRODUCTION_MASTER_2.1.md:9722 | PRODUCTION_MASTER_2.1.md:9731 | Elara, Seraphina, Lyra |
+| SL-SHARED-HEARTH-RELEASE | SHARED | HEARTH | RELEASE | valid | BOUND | — | PRODUCTION_MASTER_2.1.md:9815 | PRODUCTION_MASTER_2.1.md:9824 | Elara, Seraphina, Lyra |
+| SL-SHARED-HEARTH-CHOOSE | SHARED | HEARTH | CHOOSE | valid | BOUND | — | PRODUCTION_MASTER_2.1.md:9908 | PRODUCTION_MASTER_2.1.md:9917 | Elara, Seraphina, Lyra |
+| SL-SHARED-ARCHIVE-RESTORE | SHARED | ARCHIVE | RESTORE | valid | BOUND | — | PRODUCTION_MASTER_2.1.md:10001 | PRODUCTION_MASTER_2.1.md:10010 | Elara, Seraphina, Lyra |
+| SL-SHARED-ARCHIVE-RELEASE | SHARED | ARCHIVE | RELEASE | valid | BOUND | — | PRODUCTION_MASTER_2.1.md:10094 | PRODUCTION_MASTER_2.1.md:10103 | Elara, Seraphina, Lyra |
+| SL-SHARED-ARCHIVE-CHOOSE | SHARED | ARCHIVE | CHOOSE | valid | BOUND | — | PRODUCTION_MASTER_2.1.md:10187 | PRODUCTION_MASTER_2.1.md:10196 | Elara, Seraphina, Lyra |
+| SL-SHARED-CONTINUITY-RESTORE | SHARED | CONTINUITY | RESTORE | valid | BOUND | — | PRODUCTION_MASTER_2.1.md:10280 | PRODUCTION_MASTER_2.1.md:10289 | Elara, Seraphina, Lyra |
+| SL-SHARED-CONTINUITY-RELEASE | SHARED | CONTINUITY | RELEASE | valid | BOUND | — | PRODUCTION_MASTER_2.1.md:10373 | PRODUCTION_MASTER_2.1.md:10382 | Elara, Seraphina, Lyra |
+| SL-SHARED-CONTINUITY-CHOOSE | SHARED | CONTINUITY | CHOOSE | valid | BOUND | — | PRODUCTION_MASTER_2.1.md:10466 | PRODUCTION_MASTER_2.1.md:10475 | Elara, Seraphina, Lyra |
+| SL-NONE-HEARTH-RESTORE | NONE | HEARTH | RESTORE | valid | NONE_AUTH | — | PRODUCTION_MASTER_2.1.md:10559 | PRODUCTION_MASTER_2.1.md:10568 | Elara, Seraphina, Lyra |
+| SL-NONE-HEARTH-RELEASE | NONE | HEARTH | RELEASE | valid | NONE_AUTH | — | PRODUCTION_MASTER_2.1.md:10652 | PRODUCTION_MASTER_2.1.md:10661 | Elara, Seraphina, Lyra |
+| SL-NONE-HEARTH-CHOOSE | NONE | HEARTH | CHOOSE | valid | NONE_AUTH | — | PRODUCTION_MASTER_2.1.md:10745 | PRODUCTION_MASTER_2.1.md:10754 | Elara, Seraphina, Lyra |
+| SL-NONE-ARCHIVE-RESTORE | NONE | ARCHIVE | RESTORE | valid | NONE_AUTH | — | PRODUCTION_MASTER_2.1.md:10838 | PRODUCTION_MASTER_2.1.md:10847 | Elara, Seraphina, Lyra |
+| SL-NONE-ARCHIVE-RELEASE | NONE | ARCHIVE | RELEASE | invalid | — | R2 | PRODUCTION_MASTER_2.1.md:715 | — | Elara, Seraphina, Lyra |
+| SL-NONE-ARCHIVE-CHOOSE | NONE | ARCHIVE | CHOOSE | valid | NONE_AUTH | — | PRODUCTION_MASTER_2.1.md:10931 | PRODUCTION_MASTER_2.1.md:10940 | Elara, Seraphina, Lyra |
+| SL-NONE-CONTINUITY-RESTORE | NONE | CONTINUITY | RESTORE | valid | NONE_AUTH | — | PRODUCTION_MASTER_2.1.md:11024 | PRODUCTION_MASTER_2.1.md:11033 | Elara, Seraphina, Lyra |
+| SL-NONE-CONTINUITY-RELEASE | NONE | CONTINUITY | RELEASE | invalid | — | R3 | PRODUCTION_MASTER_2.1.md:717 | — | Elara, Seraphina, Lyra |
+| SL-NONE-CONTINUITY-CHOOSE | NONE | CONTINUITY | CHOOSE | valid | NONE_AUTH | — | PRODUCTION_MASTER_2.1.md:11117 | PRODUCTION_MASTER_2.1.md:11126 | Elara, Seraphina, Lyra |
 
 SHARED and CHOOSE appear in no invalid row, so any row holding one of them can never reach a crisis: a known safe
 pick.
@@ -298,13 +334,15 @@ PM:8783-8784).
 
 ### Act 1 seed map
 
-Every flag below is set in `AethelgardPrototype/dialogue` or `scripts` (26 flags). `direction` for an axis seed:
+Every flag below is set in `AethelgardPrototype/dialogue` or `scripts` (26 flags in 28 rows: a flag may push a
+modifier and an axis, one row each, never two axes). `direction` for an axis seed:
 `+` makes the axis's lock scene voice an argument for the value, `−` an argument against it (the other two values
 are unaffected). For a modifier, `+` / `−` is the sign of the change the flag records (for a set such as
 `companions_present`, in or out of the set). `0`: the flag is read as it is and leans nowhere (timing selectors and
 neutral choices). `overturnable`: an axis seed's argument is voiced until its axis's lock scene resolves
 (`until:lock:faction`, `until:lock:authority`, `until:lock:deleted`); it never holds a value. A modifier or timing
-row is `no`. Rows marked (J) are judgement calls with no explicit source statement of direction, approved by the
+row is `no`. A flag that feeds only a post-1.0 secret route (Core Rule 6) pushes `secret:<route>` with direction `0`
+and `no`; the Act 1 map holds none, and side-arc flags join this way under AC15. Rows marked (J) are judgement calls with no explicit source statement of direction, approved by the
 user.
 
 | flag | pushes | direction | overturnable | source |
@@ -312,20 +350,22 @@ user.
 | act1_report_local | faction:HEARTH | + | until:lock:faction | PRODUCTION_MASTER_2.1.md:2856 |
 | act1_report_archive | faction:ARCHIVE | + | until:lock:faction | PRODUCTION_MASTER_2.1.md:2857 |
 | act1_report_command | faction:CONTINUITY | + | until:lock:faction | PRODUCTION_MASTER_2.1.md:2858 |
-| ch2_seraphina_truth | modifier:seraphina_relationship | + | no | STORY_BIBLE.md:206 (J) |
+| ch2_seraphina_truth | modifier:seraphina_relationship | + | no | dialogue/ch2/command_hall.dlg:22 |
+| ch2_seraphina_truth | authority:SHARED | + | until:lock:authority | dialogue/ch2/command_hall.dlg:23 (J) |
 | ch2_seraphina_cautious | modifier:seraphina_relationship | 0 | no | dialogue/ch2/command_hall.dlg:31 |
-| ch2_seraphina_showoff | modifier:seraphina_relationship | − | no | STORY_BIBLE.md:206 (J) |
+| ch2_seraphina_showoff | modifier:seraphina_relationship | − | no | dialogue/ch2/command_hall.dlg:40 |
+| ch2_seraphina_showoff | authority:YOU | − | until:lock:authority | dialogue/ch2/command_hall.dlg:46 (J) |
 | ch2_seraphina_recruited | modifier:companions_present | + | no | PRODUCTION_MASTER_2.1.md:3123 |
 | ch2_seraphina_stayed | modifier:companions_present | − | no | PRODUCTION_MASTER_2.1.md:3125 |
 | ch2_seraphina_rejected | modifier:companions_present | − | no | PRODUCTION_MASTER_2.1.md:3127 |
-| ch2_data_wraith_restored | deleted:RESTORE | + | until:lock:deleted | PRODUCTION_MASTER_2.1.md:3117 |
-| ch2_data_wraith_destroyed | deleted:RELEASE | + | until:lock:deleted | PRODUCTION_MASTER_2.1.md:3119 (J) |
+| ch2_data_wraith_restored | deleted:RESTORE | + | until:lock:deleted | dialogue/ch2/underground.dlg:63 |
+| ch2_data_wraith_destroyed | deleted:RELEASE | + | until:lock:deleted | dialogue/ch2/underground.dlg:64 (J) |
 | ch2_data_wraith_absorbed | deleted:CHOOSE | + | until:lock:deleted | PRODUCTION_MASTER_2.1.md:2468 (J) |
 | ch1_knight_killed | faction:HEARTH | − | until:lock:faction | PRODUCTION_MASTER_2.1.md:663 (J) |
 | ch1_knight_spared | modifier:aldric_restrained | + | no | PRODUCTION_MASTER_2.1.md:1806 |
-| ch1_root_purge | faction:HEARTH | + | until:lock:faction | PRODUCTION_MASTER_2.1.md:663 (J) |
-| ch1_aldric_kill_owned | authority:YOU | + | until:lock:authority | PRODUCTION_MASTER_2.1.md:1801 |
-| ch1_aldric_kill_justified | authority:YOU | + | until:lock:authority | STORY_BIBLE.md:196 (J) |
+| ch1_root_purge | authority:YOU | − | until:lock:authority | dialogue/ch1/aldric.dlg:57 (J) |
+| ch1_aldric_kill_owned | authority:YOU | + | until:lock:authority | PRODUCTION_MASTER_2.1.md:1801 (J) |
+| ch1_aldric_kill_justified | authority:YOU | − | until:lock:authority | dialogue/ch1/aldric.dlg:85 (J) |
 | ch1_aldric_kill_unsure | authority:SHARED | + | until:lock:authority | STORY_BIBLE.md:196 (J) |
 | ch1_root_first_edit | authority:YOU | + | until:lock:authority | STORY_BIBLE.md:190 (J) |
 | ch1_root_discovered_unused | authority:NONE | + | until:lock:authority | STORY_BIBLE.md:190 (J) |
@@ -337,23 +377,48 @@ user.
 | act1_pace_late | timing | 0 | no | PRODUCTION_MASTER_2.1.md:2871 |
 
 Notes on the (J) rows:
-- `ch1_root_purge` and `ch1_knight_killed`: PM:663 says only that Aldric supports Hearth "if he survives with
-  agency intact"; it names neither purge nor kill. The mapping is an inference approved by the user (2026-11-09,
-  re-confirmed 2026-11-10): the purge keeps Aldric alive, so his support can argue for Hearth; the kill removes it.
-  The purge is also a non-consensual rewrite of a person ("even if it takes his memory with it",
-  `dialogue/ch1/aldric.dlg:57`); that reading is recorded in Open Questions.
+- `ch1_knight_killed`: PM:663 says only that Aldric supports Hearth "if he survives with agency intact"; it names
+  no kill. The mapping is an inference approved by the user (2026-11-09, re-confirmed 2026-11-10): the kill removes
+  his support. `ch1_root_purge` argued for Hearth until revision 13; it now argues against YOU (user decision
+  2026-11-17, design review round 13), because Kaelen rewrites Aldric before he can say what it will cost: asked how
+  much memory it may take, he answers "I don't know. I honestly don't know.", and Elara replies "Then that's what
+  you say first. Before you do it." (`dialogue/ch1/aldric.dlg:104-107`). PM:663 is not cited for this row: the purge
+  leaves Aldric lucid (`dialogue/ch1/aldric.dlg:119-122`), so its "agency intact" condition does not argue against
+  the purge (design review round 14).
 - `ch2_seraphina_cautious` changes no trust value (`dialogue/ch2/command_hall.dlg:31-36`; truth and showoff do),
   hence `0`.
+- Authority (user decisions 2026-11-17, design review rounds 12 and 13, narrative-director): YOU's philosophy is
+  that "somebody must be accountable." (PM:636); Kaelen's own case for it is "Because someone has to be answerable
+  when this goes wrong." (PM:7048), and the source tracks his explanation apart from his act ("Flags track
+  explanation separately from action.", PM:1804). The discriminator, in one sentence: an Authority seed records
+  either Kaelen's first relation to the Key itself (`ch1_root_first_edit`, using it, argues for YOU;
+  `ch1_root_discovered_unused`, leaving it unused, argues for NONE) or whether he answered for power used on others
+  (owned → YOU `+`, unowned → YOU `−`, disclosed or doubted → SHARED `+`). `ch1_aldric_kill_owned` ("I ended his
+  life.", PM:1801) argues for YOU; `ch1_aldric_kill_justified` ("I stopped the threat.", PM:1802, after which Elara
+  reminds him "He was ours before he was a threat. Remember that part too.", `dialogue/ch1/aldric.dlg:85`) argues
+  against it, as do `ch2_seraphina_showoff`, a Root edit performed for the council ("It sounds similar from the
+  outside.", `dialogue/ch2/command_hall.dlg:46`), and `ch1_root_purge`, a rewrite of Aldric whose cost Kaelen did not
+  state before acting.
+  `ch2_seraphina_truth`, Kaelen disclosing the key and its cost to the council (`dialogue/ch2/command_hall.dlg:23`),
+  argues for SHARED. A player who purges Aldric and makes the first edit therefore reaches a negotiated YOU vote
+  (`lock_pass`) and hears `sole_dissent`. One `−` seed makes a vote negotiated whatever `+` seeds are set; this is
+  intended (no weights, Core Rule 3). `ch1_knight_spared` stays a modifier only: the Purge path sets it too
+  (`dialogue/ch1/aldric.dlg:116`), so as a SHARED seed it would argue for shared authority on behalf of a
+  non-consensual rewrite.
 
 ### Side storylines
 
 `axis:*` means the arc's own choices push that axis toward a value either way; no arc sets a value (Core Rule 2).
 Arc 13 onward are not among the 12 (PM:5837). Arc 12's secondary `deleted:CHOOSE` and the primary/secondary order
-of arc 06 ("Continuity or Hearth", PM:2695) are judgement calls (J).
+of arc 06 ("Continuity or Hearth", PM:2695) are judgement calls (J). Arc 08's secondary `faction:*` is its Quest 48
+faction effect (PM:3681-3682), not its "Axis effect:" line.
 
-**Pillar P5 in 1.0.** Arcs 05, 08 and 09 feed only the post-1.0 secret routes; in 1.0 they push no axis. P5
-("side storylines feed the main story") is to be met in 1.0 by the other nine arcs, once Y2-PP-T17 maps their flags
-into the seed map (AC15); today the seed map holds no side-arc flag, so P5 is planned, not yet covered. Arc 12 ships
+**Pillar P5 in 1.0.** Arcs 05 and 09 feed only the post-1.0 secret routes; in 1.0 they push no axis. Arc 08 feeds
+Crownless and also pushes Faction in 1.0: Quest 48's choice to leave a protected place blank on the public map
+argues against ARCHIVE and for HEARTH ("Archive faction dislikes omission." / "Hearth may support privacy.",
+PM:3681-3682; user decision 2026-11-17, design review round 13). P5 ("side storylines feed the main story") is to
+be met in 1.0 by the ten arcs that push an axis, once Y2-PP-T17 maps their flags into the seed map (AC15); today the
+seed map holds no side-arc flag, so P5 is planned, not yet covered. Arc 12 ships
 in 1.0 and pushes `deleted:CHOOSE`; its Witness Protocol feed waits for that route. Flags of arcs 05, 08, 09 and of
 arc 12's Witness feed are kept and never transform a row; no hint points at an unshipped route (Edge Case 3), but
 each of arcs 05, 08 and 09 gets one visible epilogue line in 1.0 acknowledging what the player did (owner
@@ -368,7 +433,7 @@ Y2-PP-T17), so nothing is lost silently (invariant I6).
 | 05 | The Flight List | secret:FIRSTWAKE | — | 1.0 (feeds post-1.0) | 2660 |
 | 06 | Three Auctions and a Funeral | faction:CONTINUITY | faction:HEARTH | 1.0 | 2695 |
 | 07 | Things Lyra Forgot | deleted:* | faction:ARCHIVE | 1.0 | 3619 |
-| 08 | Kaito's False Sky | secret:CROWNLESS | — | 1.0 (feeds post-1.0) | 3663 |
+| 08 | Kaito's False Sky | secret:CROWNLESS | faction:* | 1.0 (feeds post-1.0) | 3663 |
 | 09 | The Last Error | secret:FIRSTWAKE | — | 1.0 (feeds post-1.0) | 3687 |
 | 10 | The Names We Keep | deleted:* | — | 1.0 | 4373 |
 | 11 | The Clerk Who Stayed | authority:SHARED | — | 1.0 | 4423 |
@@ -377,7 +442,7 @@ Y2-PP-T17), so nothing is lost silently (invariant I6).
 ### Composer input record
 
 SaveService (Y1-P1-T05) stores the record and owns serialisation, the schema version and the defaults for a new
-game or a save without these fields (UNSET, empty, OUTSIDE). Every writer named below is a scene
+game or a save without these fields (UNSET, empty, OUTSIDE, `PRE_C8`; a legacy save's position is derived, Terms). Every writer named below is a scene
 owned by Y2-PP-T17 and specified in `storyline-lifecycle.md`; no other code writes these fields.
 
 | field | type | allowed | writer |
@@ -394,11 +459,12 @@ owned by Y2-PP-T17 and specified in `storyline-lifecycle.md`; no other code writ
 | lock_negotiated | set | faction, authority, deleted | the lock scenes by `lock_pass`; every renegotiation |
 | retraction_log | list | at most one entry {axis, old, new, withdrawn_item, scene}; `withdrawn_item` and `scene` are opaque display text that no code branches on | every renegotiation |
 | beats_played | set | the lifecycle's authored beat ids (`retract_*`) | the scene that plays the beat |
-| companions_present | set | Elara, Seraphina, Lyra, Kaelthas | `AethelgardPrototype/scripts/game_manager.gd` (`has_elara`, exclusive flag groups); `AethelgardPrototype/dialogue/ch2/fragment_two.dlg` |
+| story_position | enum | the story position ids of Terms (Story position), `PRE_C8` to `ROOT_STORY_PLUS` | each commit checkpoint and story-graph step that crosses into the next id; a new game, the NG+ reset and chapter select; SaveService once for a legacy save (Terms) |
+| companions_present | set | Elara, Seraphina, Lyra | `AethelgardPrototype/scripts/game_manager.gd` (`has_elara`, exclusive flag groups); `AethelgardPrototype/dialogue/ch2/fragment_two.dlg` |
 | regions_completed | set | ids of the eight regions | owner story Y2-PP-T17 (no writer in the code today) |
 | timing_flags | set of flags | `ch1_bridge_saved` / `_evacuated` / `_fell`, `ch2_medicine_early` / `_on_time` / `_late` | `AethelgardPrototype/dialogue/ch1/north_field.dlg`; `AethelgardPrototype/dialogue/ch2/act1_end.dlg` |
-| act1_pace | enum | act1_pace_early, act1_pace_on_time, act1_pace_late | `AethelgardPrototype/dialogue/ch2/act1_end.dlg` |
-| act2_pace, act3_pace, act4_pace | enum | names left to S06b | owner story Y1-P0-S06b |
+| act1_pace | enum | UNSET, act1_pace_early, act1_pace_on_time, act1_pace_late | `AethelgardPrototype/dialogue/ch2/act1_end.dlg` (UNSET until it plays) |
+| act2_pace, act3_pace, act4_pace | enum | UNSET and the names S06b defines | owner story Y1-P0-S06b |
 
 ### Interactions with Other Systems
 
@@ -485,7 +551,10 @@ renegotiation vote                                                     → NEGOT
 X is the axis being locked, v the value the player backs; a seed row is a row of the Act 1 seed map. NEGOTIATED sets
 `lock_negotiated_<X>`. Examples: HEARTH with `act1_report_local` set → CLEAN; with `act1_report_local` and
 `ch1_knight_killed` set → NEGOTIATED; HEARTH with only `ch1_knight_killed` → NEGOTIATED; ARCHIVE with no seed set →
-NEGOTIATED; YOU with `ch1_root_first_edit` set → CLEAN.
+NEGOTIATED; YOU with `ch1_root_first_edit` set → CLEAN; YOU with `ch1_root_first_edit` and
+`ch1_aldric_kill_justified` set → NEGOTIATED; YOU with `ch1_root_first_edit` and `ch1_root_purge` set → NEGOTIATED;
+SHARED with `ch2_seraphina_truth` set → CLEAN. A seed row is matched by
+its (flag, pushes) pair, so a flag's modifier row never enters the test.
 
 ### Storyline phase
 
@@ -501,8 +570,8 @@ storyline_phase(record, loaded, flags, position):
 ```
 
 `loaded` is true for a record just read from a save and false for the live record in play. `flags` is the set of
-story flags saved with the record and `position` the story position of the save (owned by Y1-P1-T03 and Y1-P1-T05);
-the record alone cannot show D15-D17, so the check takes them. `damaged(record, loaded, flags, position)` is true when
+story flags saved with the record and `position` the record's `story_position`, passed as its own argument (ids
+owned by Y1-P1-T03, stored by Y1-P1-T05); the other fields alone cannot show D15-D17, so the check takes them. `damaged(record, loaded, flags, position)` is true when
 the inputs hold an item of Edge Case 16, with one exemption, the live crisis: `live_crisis(record, loaded, position)`
 is true when `loaded` is false, the position is inside C8-S16 before its commit checkpoint, nothing is stored, and A,
 F and D are set with `invalid(A, F, D)`. D9 and the before-commit clause of D17 are tested on every record except a `live_crisis` one, because inside C8-S16
@@ -521,7 +590,8 @@ DAMAGED at C8-S15; (NONE, ARCHIVE, RELEASE, nothing stored, OUTSIDE) → DAMAGED
 RELEASE, nothing stored, OUTSIDE) → DAMAGED inside C8-S16 before its commit (no save exists there, I9). Examples (the live
 record in play, `loaded` false): (NONE, ARCHIVE, RELEASE, nothing stored, OUTSIDE) → CRISIS inside C8-S16 before its
 commit; (NONE, ARCHIVE, RELEASE, nothing stored, OUTSIDE) → DAMAGED in Chapter 9 (D9), which the gate turns back;
-(SHARED, ARCHIVE, CHOOSE, nothing stored, OUTSIDE) → DAMAGED inside C8-S16 before its commit (D9).
+(SHARED, ARCHIVE, CHOOSE, nothing stored, OUTSIDE) → DAMAGED inside C8-S16 before its commit (D9 and D17: a valid
+row is not `live_crisis`).
 
 ### Ending family
 
@@ -560,9 +630,10 @@ renegotiations, R2 and R3 five each (the Faction swap between them is not offere
 
 1. **A companion leaves (the plan's edge case).** A companion is absent through relationship flags, never an axis:
    Elara when `has_elara()` is false (`ch1_elara_trusted` and `_cautious` both unset), Seraphina on
-   `ch2_seraphina_stayed` / `_rejected`, Lyra on `ch3_lyra_left_alone`, Kaelthas on `ch3_kaelthas_refused` /
-   `_challenged`, his betrayal (PM:788), or, outside the Archive, too little trust (PM:7533; Core Rule 11). The
-   storyline is unchanged: no ending family needs a companion (Story Bible §5), so every valid storyline stays
+   `ch2_seraphina_stayed` / `_rejected`, Lyra on `ch3_lyra_left_alone`. Kaelthas is outside the 1.0 companion set:
+   every Chapter 3 branch ends with him refused, fought or gone after his betrayal (the allied path ends in a boss
+   fight at the Archive exit, `AethelgardPrototype/scripts/chapter3/ch3_kaelthas_betrayal.gd:157-161`; Core Rule 11,
+   Open Question 19). The storyline is unchanged: no ending family needs a companion (Story Bible §5), so every valid storyline stays
    reachable with any companion — or none — present; the composer omits that companion's modules.
 2. **Every Witness Protocol lead found in 1.0.** The route is reserved (Core Rule 6): R1 at C8-S16 offers only its
    six renegotiations, C9-S19 does not play, `SEVEN_WITNESSES_AVAILABLE` is never set, and the lead flags stay set
@@ -581,11 +652,17 @@ renegotiations, R2 and R3 five each (the Faction swap between them is not offere
    damaged: SaveService's load check reports it (Edge Case 16, D15); this system defines no tie-break.
 7. **Timing that goes badly** (`ch1_bridge_fell`, `act1_pace_late`). The storyline ID never changes; the composer
    picks different scene and slide modules (Core Rule 12).
-8. **A save from before the coalition holds** (every save today). It loads LEANING or PARTLY_LOCKED with nothing
-   stored; seeds already in the save are read as they are. No save is made in CRISIS: the crisis resolves
-   inside C8-S16. A save with no axis data positioned before C8-S13 loads LEANING with all axes UNSET; one
-   positioned past a lock scene (chapters 9 and 10 exist in the code today) is unsupported and does not load (Edge
-   Case 16, D16; the project's own fixture saves are migrated once, `storyline-lifecycle.md` Legacy saves). A save
+8. **A save from before the coalition holds.** A save of the current schema version made before the coalition
+   holds loads LEANING or PARTLY_LOCKED with nothing stored; seeds already in the save are read as they are. No save
+   is made in CRISIS: the crisis resolves inside C8-S16. A save of a schema version before these fields has its whole
+   lifecycle block filled with the defaults (UNSET, empty, OUTSIDE) before the load check runs, so D0 meets no missing field
+   but the position, and its story position is derived once (Terms, Story position; a Chapter 8 save no story scene places has none and is
+   D0); positioned before C8-S13
+   (`PRE_C8`) it then loads LEANING, and positioned past a lock scene (chapters 9 and 10 exist in the code today) it
+   is refused by D16 as unsupported (the project's own fixture saves are migrated once, `storyline-lifecycle.md`
+   Legacy saves). A save of the current schema version with a field missing is D0. Chapter select writes a valid
+   record before its first save for every entry positioned past C8-S16's commit, keyed to its entry scene's position,
+   not its chapter number (`storyline-lifecycle.md` Chapter select), so it never writes one D16 refuses. A save
    made after the coalition holds reloads its stored ID unchanged. The refusal holds only while no player-facing
    build has a save past Chapter 8; if one ships before these fields do, the decision is reopened.
 9. **NG+.** Whether axis leanings or the previous storyline carry into a new cycle is not decided here (Open
@@ -598,7 +675,7 @@ renegotiations, R2 and R3 five each (the Faction swap between them is not offere
     routes reserved); the post-1.0 design must decide where an invocation is offered (Open Question 15).
 12. **A renegotiation to the same value, or to the other invalid row.** Neither is offered: a renegotiation offers
     only other values that form a valid row.
-13. **A knob changes mid-playthrough** (e.g. a patch). Knobs are read only at C8-S16 and the gate. With an ID
+13. **A knob changes mid-playthrough** (e.g. a patch). Knobs are read only where Tuning Knobs states. With an ID
     stored, nothing changes (Core Rule 8). Enabling a secret route needs the post-1.0 GDD revision (Core Rule 6); a
     1.0 build that enables one fails boot validation (AC12).
 14. **The final authorization.** It displays the stored structure and the player confirms (PM:8788-8790); it
@@ -614,7 +691,7 @@ renegotiations, R2 and R3 five each (the Faction swap between them is not offere
     no transition fires and no gate runs, and the player returns to the load menu, which names the data error and
     offers the most recent save that passes the check. A refusal is never handled as file corruption: the refused
     save is kept as it is and no older save is loaded silently in its place. `load_check` always tests a loaded
-    record, so it runs every item, and reports clause ids (e.g. `D7.duplicate`); its item is the part before the dot.
+    record, so it runs every item, and reports clause ids (e.g. `D7.unnamed`); its item is the part before the dot.
     `storyline_phase` runs the same items on the live record, except that the two marked *(not for the live crisis)*
     are skipped for a `live_crisis` record (Formulas, Storyline phase): inside C8-S16 the live record is the crisis,
     an invalid row with its Deleted value set before the commit. A position inside a lock scene counts as before the
@@ -624,21 +701,30 @@ renegotiations, R2 and R3 five each (the Faction swap between them is not offere
     (i) accepting the record would crash the composer, strand the player, or break an invariant I1-I9 or the phase
     table; (ii) the refusal is decidable from the record, the saved flags and the position alone, and stays stable
     across patches and a growing seed map; (iii) it cannot refuse a record that play writes.
-    - D0 a record whose shape is wrong: a field missing or of the wrong type, an enum string outside its allowed
-      values, a set or list element of the wrong type, or a list longer than its maximum (`retraction_log` one entry,
-      `beats_played` sixteen). D0 is tested first; when it fires no other item runs, so `load_check` reports exactly
-      {D0}. It exists so that no later item and no composer read meets a value of the wrong type; it is not an
-      integrity check
-    - D1 a stored ID that is not `SL-A-F-D` for its axes on a valid row: any other ID, an ID with an UNSET axis,
-      the ID of an invalid row, or any `SL-SECRET-*` ID (no 1.0 play stores one)
+    - D0 a record whose shape is wrong: a field missing from a save of the current schema version, or a legacy
+      save left with no story position (an older save is defaulted first, Edge Case 8) (`D0.missing`), a field of
+      the wrong type (`D0.type`), an enum string outside its allowed values (`D0.enum`), a set or list element of
+      the wrong type (`D0.element`), a set holding one element twice (`D0.duplicate`), or a set or list longer than
+      its maximum (`D0.max`; `retraction_log` one entry: play takes at most one renegotiation, Core Rule 7, and a
+      second entry would play a cost beat twice; `beats_played` one, the one entry's beat). Allowed values are
+      checked for every field the composer record gives a closed list of values (and `retraction_log`'s `axis`,
+      `old` and `new`), except `storyline_id` and `beats_played`, which are checked for type only: which strings
+      they may hold is D1's and D14's (its undefined-beat clause). D0 is tested first; when it fires no other item
+      runs, so `load_check` reports only D0 clauses and its items are exactly {D0}. It exists so that no later item
+      and no composer read meets a value of the wrong type or count; it is not an integrity check
+    - D1 a stored ID that is not `SL-A-F-D` for its axes on a valid row, tested in this order and reported as the
+      first clause that holds: any `SL-SECRET-*` ID (`D1.secret`; no 1.0 play stores one), an ID with an UNSET axis
+      (`D1.unset_axis`), an ID while the record's axes form an invalid row (`D1.invalid_row`), or any other ID
+      (`D1.other_id`, which includes an invalid row's ID stored on a valid row)
     - D2-D5 retired (revision 9): they checked the Witness record fields, which 1.0 no longer stores
     - D6 `axis_revised` holding an axis that `lock_negotiated` lacks
     - D7 `axis_revised` holding an axis that no `retraction_log` entry names (`D7.unnamed`), or a `retraction_log`
-      entry whose axis is not in `axis_revised` (`D7.reverse`; the composer reads `axis_revised`), or more than one
-      axis (`D7.multi`), or a `retraction_log` entry whose `new` value is not the record's value for its axis
-      (`D7.new_mismatch`), or more than one `retraction_log` entry (`D7.duplicate`: play takes at most one
-      renegotiation, Core Rule 7, and a second entry would play the cost beat twice). `D7.multi` cannot fire while D1
-      and D14 hold (no valid row admits two consistent retractions) and is kept as documentation
+      entry whose axis is not in `axis_revised` (`D7.reverse`; the composer reads `axis_revised`), or a
+      `retraction_log` entry whose `new` value is not the record's value for its axis (`D7.new_mismatch`). The
+      clauses `D7.multi` and `D7.duplicate` of revision 11 are retired (design review round 12): D0 refuses a second
+      entry, so neither could fire, and the revision-11 reason given for `D7.multi` was false: (NONE, HEARTH,
+      RELEASE) admits two consistent Faction retractions, from R2 (ARCHIVE→HEARTH) and from R3 (CONTINUITY→HEARTH),
+      which is now a D0 fixture (AC9)
     - D8 `root_phase` INSIDE or FINAL with nothing stored
     - D9 three axes set with nothing stored *(not for the live crisis)*
     - D10-D13 retired (revision 9): they checked the witness vote fields
@@ -646,9 +732,11 @@ renegotiations, R2 and R3 five each (the Faction swap between them is not offere
       whose beat is not in `beats_played`, or a beat id the lifecycle does not define. A beat matches an entry
       exactly when its id is `retract_<rule>_<axis>_<new>`, rebuilt from the entry (`rule` is the invalid row R1-R3
       that the record's axes form with the entry's axis set back to `old`)
-    - D15 two flags of one exclusive group (Edge Case 6)
-    - D16 a story position past the lock scene of an UNSET axis (a save made past Chapter 8 before these fields
-      existed; unsupported, user decision 2026-11-10)
+    - D15 two flags of one exclusive group, as the groups stood at the save's schema version (Edge Case 6): a group
+      added or widened by a later patch never refuses an older save (inclusion rule (ii) and (iii); Open Question 5's
+      `ch1_oakhaven_warned_leaders` is the known case)
+    - D16 a story position (Terms) past the lock scene of an UNSET axis (a save made past Chapter 8 before these
+      fields existed; unsupported, user decision 2026-11-10)
     - D17 a lock-order defect, in two clauses. (a) *Before commit (not for the live crisis):* an axis is set while the story
       position is before its lock scene's commit: no lock scene could play from it (S1 needs every axis UNSET, S2
       needs Faction set, S4 needs Faction and Authority set), so loading it would strand the player. A position
@@ -683,7 +771,7 @@ renegotiations, R2 and R3 five each (the Faction swap between them is not offere
 
 | System | Direction | What flows | Status of its design doc |
 |---|---|---|---|
-| Storyline lifecycle (`design/gdd/storyline-lifecycle.md`, Y2-PP-T17) | this → lifecycle | the axes, formulas, record and invariants I1-I9 the scenes must keep | revision 7 (C9-S18 decrypted form, the DAMAGED turn-back copy, L-AC8 live-crisis cell); needs re-review |
+| Storyline lifecycle (`design/gdd/storyline-lifecycle.md`, Y2-PP-T17) | this → lifecycle | the axes, formulas, record and invariants I1-I9 the scenes must keep | revision 10 (the legacy position derivation of axes Terms: free-travel story scene, own scene, chapter number; no hub in the scene-to-id map); needs re-review |
 | Time model (`design/gdd/time-model.md`, Y1-P0-S06b) | this ← time model | per-act pace values (`act1_pace_*` exists; acts 2-4 named there), timing flags | not written yet — S06b must list this GDD as a dependent |
 | FlagRegistry / StoryGraph (Y1-P1-T03) | this ← registry | seed flags, the future `AXIS*`, `axis_revised_*`, `lock_negotiated_*` flags, secret prerequisite and unlock flags, exclusive-group and secret-knob validation | no GDD (an ADR/tech design later) — must cite this GDD's seed map |
 | SaveService (Y1-P1-T05) | this → save | the composer input record, saved and versioned; the damaged-record check | no GDD — must store the fields in the composer record |
@@ -705,7 +793,7 @@ the story that implements it:
 | protected area | what this design needs there | where specified |
 |---|---|---|
 | save/load schema | the composer record fields, defaults, the damaged-record check and load refusal, one atomic checkpoint per transition and save suppression inside lock scenes, the dev-fixture migration | Composer input record; Edge Cases 8, 15, 16; I9; lifecycle commit and save rule, Legacy saves |
-| story progression | the lock-scene order, the C8-S16 crisis, the gate on the `story` path, the secret-route scenes kept closed (C9-S18 incomplete form; C9-S19, C9-S20, C10-S13 to C10-S15 gated on the stored ID), the superseded legacy Chapter 8 and Chapter 10 flags | Core Rules 3-9; lifecycle S1-S7, Dependencies |
+| story progression | the lock-scene order, the C8-S16 crisis, the gate on the `story` path and on every scene change into Root of Heaven, chapter select past C8-S16 writing a valid record, the stored story position, the secret-route scenes kept closed (C9-S18 incomplete form; C9-S19, C9-S20, C10-S13 to C10-S15 gated on the stored ID), the superseded legacy Chapter 8 and Chapter 10 flags | Core Rules 3-9; lifecycle S1-S7, Dependencies |
 | world-map / free-travel logic | the gate check on the `world_map` path | Core Rule 8; lifecycle S6 |
 | combat | none beyond the source: boss phases read the stored axes (PM:8611-8616); the re-entry rule | Core Rule 9; lifecycle Edge Case 2 |
 | NG+ | the reset of the record and the axis, secret and unlock flags | Edge Case 9; lifecycle NG+ reset |
@@ -715,7 +803,11 @@ the story that implements it:
 
 ## Tuning Knobs
 
-Knobs are read only at C8-S16 and the gate, and never once an ID is stored (Core Rule 8). FlagRegistry checks the
+Knobs are read in exactly two places, and this is the one statement of where (Edge Case 13 and the lifecycle point
+here): every knob at C8-S16 and the gate, never once an ID is stored (Core Rule 8); and
+`secret_prerequisites[FIRSTWAKE]` at C9-S18, to choose its decrypted or noise form (Core Rule 6), which sets no
+field and changes no ID.
+FlagRegistry checks the
 secret-route knobs at boot; a failure is a boot error naming the route (Y1-P1-T03).
 
 | Knob | Default | Safe range | What it affects | Rationale / source |
@@ -774,7 +866,7 @@ the Formulas and a walk of the lifecycle transitions (Open Question 16).
    equals {YOU → SOLE, SHARED → BOUND, NONE → NONE_AUTH}; the side-storyline table has arcs 01-12, each `pm_line` an
    "Axis effect:" line, in arc order; the composer record has exactly the fields storyline_phase, storyline_id,
    root_phase, authority, faction, deleted, secret_route, family, axis_revised, lock_negotiated, retraction_log,
-   beats_played, companions_present, regions_completed, timing_flags, act1_pace and act2_pace/act3_pace/act4_pace,
+   beats_played, story_position, companions_present, regions_completed, timing_flags, act1_pace and act2_pace/act3_pace/act4_pace,
    each with its pinned allowed values and writer; `storyline_phase` allows exactly the phase table's values;
    `reachable_1_0` equals the valid rows plus the 1.0 secret rows (none).
 4. The Formulas define `storyline_id(A, F, D, I)` with exactly those four inputs and its pinned body, which names no
@@ -793,15 +885,27 @@ the Formulas and a walk of the lifecycle transitions (Open Question 16).
 | `family(id)` | the Formulas' `family` |
 | `phase_of(record, loaded, flags, position)` | the Formulas' `storyline_phase` |
 | `axis(record, name)` | the record's value for `authority`, `faction` or `deleted` |
+| `stored_id(record)` | the record's stored `storyline_id`, or empty while nothing is stored |
+| `companions_of(module_id)` | the companions the route data places in the party or gives a line in that module |
+| `keyed_axis(module_id)` | the axis whose value the route data keys a module to (`authority`, `faction`, `deleted`), `family` for a module keyed to the family, or `none` |
+| `base_lines(scene)` | the ordered (authored line id, masked-text hash) pairs a scene plays with no module selected, masked as in `scene_lines()` |
+| `lock_arguments(axis)` | the lifecycle's scene-level observable (`storyline-lifecycle.md` L-AC2): in that axis's lock scene, the (flag, value, sign) arguments voiced |
 | `composer_modules(record, flags)` | the module ids the composer selects (ids defined by Y2-PP-T17) |
 | `module_keys(flag)` | the module ids the route data keys to a flag |
 | `ending_render(id)` | the ordered (ending module id, masked-text hash) pairs the route data plays for a storyline ID, masked as in `scene_lines()` |
 | `story_plus_state(id)` | the set of Story+ unlock cases the route data creates for a storyline ID |
 | `boot_errors(knobs, flags, build)` | the data errors FlagRegistry finds at boot for a build (`1.0` or later) |
-| `load_check(record, flags, position)` | the clause ids of the data errors SaveService's load check reports for a save's record, flags and story position (Edge Case 16), e.g. `D7.duplicate`; a clause id's item is its part before the dot |
+| `load_check(record, flags, position)` | the clause ids of the data errors SaveService's load check reports for a save's record, flags and story position (Edge Case 16), e.g. `D7.unnamed`; a clause id's item is its part before the dot |
 | `scene_lines(id, scene)` | for a storyline ID and a scene, the ordered (authored line id, masked-text hash) pairs the route data plays, where the masked text replaces every interpolation slot the route data declares (`{faction_name}`, numbers, names) with one constant token and normalises whitespace and case |
 
-**Runtime — each criterion names the stories that must land before it can run:**
+**Runtime — each criterion names the stories that must land before it can run.** Story types and gates
+(`.claude/docs/coding-standards.md`): ACs 5-14 are Logic (BLOCKING), automated in the project's own SceneTree test
+harness (`AethelgardPrototype/tests/`, each test listed in `tests/suite_limits.txt`; gdUnit4 is not installed), with
+`load_check` and `phase_of` as static functions so no scene is needed, and with golden vectors exported from the
+reference model so the GDScript and the model cannot drift; AC15 is Logic (BLOCKING), a data scan; AC16 and AC17
+are Integration. The
+retained screenshots of the lock scenes, the gate turn-back and the three family endings are lifecycle L-AC18; three
+endings evidence the families, not the 24 ending sequences, which AC14 tests as data.
 
 5. For every (A, F, D) over {its three values, UNSET} (64 triples) and I ∈ {false, true} as a free formula input
    (128 cases), with every offer prerequisite set: with the default knobs, `formula_id` is `SL-A-F-D` for the 24
@@ -829,29 +933,42 @@ the Formulas and a walk of the lifecycle transitions (Open Question 16).
    C8-S16 before its commit gives DAMAGED; the D9 fixture and the D17 before-commit fixture give DAMAGED. Clause
    isolation: for each clause of each active Edge Case 16 item (D0, D1, D6-D9, D14-D17), a hand-built fixture that
    differs from a valid fixture by that defect (a defect may change the several fields that keep the other items
-   satisfied, e.g. the D7 new-value fixture changes a retraction entry's `new` and renames its beat to match) gives
-   `phase_of(…, true)` DAMAGED and `load_check()` exactly {that clause id}, except the clauses listed as
-   documentation (`D7.multi`, `D17.prefix`), which have no fixture; the D0 fixtures cover a missing field, a
-   wrong-typed field, an out-of-range enum string and an over-long list. Mutation kill: for each clause, a copy of
-   `load_check` with that clause deleted fails at least one fixture of this criterion, except the documentation
-   clauses, which are listed as equivalent mutants. Non-goals load: one fixture per non-goal of Edge Case 16 (an
-   edited `lock_negotiated`, an edited `withdrawn_item`, a FINAL record before the boss) gives `load_check()` empty.
-   `load_check()` gives the same result with every knob flipped. *Blocked by:* Y2-PP-T17, Y1-P1-T05, Y1-P1-T03 (story
-   positions; until it lands, the fixtures use the reference model's coarse positions).
+   satisfied, e.g. the D7 new-value fixture is (SHARED, ARCHIVE, RELEASE) stored as its own ID with the entry
+   {authority, NONE → YOU} and its beat `retract_R2_authority_YOU`) gives `phase_of(…, true)` DAMAGED and
+   `load_check()` exactly {that clause id}, except the clause listed as documentation (`D17.prefix`), which has no
+   fixture. The clause ids are exactly: `D0.missing`, `D0.type`, `D0.enum`, `D0.element`, `D0.duplicate`,
+   `D0.max`, `D1.secret`, `D1.unset_axis`, `D1.invalid_row`, `D1.other_id`, `D6`, `D7.unnamed`, `D7.reverse`,
+   `D7.new_mismatch`, `D8`, `D9`, `D14.undefined`, `D14.no_entry`, `D14.not_played`, `D15`, `D16`,
+   `D17.before_commit` and `D17.prefix`. The D0 fixtures include a missing field in a current-version save, a
+   Chapter 8 legacy save that no story scene places (`D0.missing`), a non-string `storyline_id` (`D0.type`), an
+   out-of-range `root_phase` and a retraction entry whose `old` is outside its axis's values (`D0.enum`), a
+   non-string `beats_played` element (`D0.element`), a set holding one element twice (`D0.duplicate`), a two-entry
+   `retraction_log` (the R2 and R3 Faction retractions of (NONE, HEARTH, RELEASE), each consistent on its own) and
+   a two-element `beats_played` (`D0.max`), and a D0 defect together with a D1 defect, whose items are exactly
+   {D0}; the D14 fixtures include a `beats_played` holding one undefined `retract_*` id, which reports D14, not D0.
+   New game: the first save of a new game (every field at its default, `act1_pace` UNSET, at `PRE_C8`) gives
+   `load_check()` empty and `phase_of(…, true)` LEANING.
+   Mutation kill: for each clause, a copy of `load_check` with that clause deleted fails at least one fixture of this
+   criterion, except the documentation clause, which is listed as an equivalent mutant. Legacy: a save of the
+   previous schema version with no lifecycle block, defaulted before the check (Edge Case 8), gives `load_check()`
+   empty and `phase_of(…, true)` LEANING at `PRE_C8`, and exactly {D16} at `CH9`. Non-goals load: one fixture per
+   non-goal of Edge Case 16 (an edited `lock_negotiated`, an edited `withdrawn_item`, an edited `scene`, a FINAL
+   record before the final authorization) gives `load_check()` empty. `load_check()` gives the same result with every
+   knob flipped. Fixtures use the position ids of Terms (Story position). *Blocked by:* Y2-PP-T17, Y1-P1-T05,
+   Y1-P1-T03 (the scene-to-position map).
 10. Seeds never lock: a record holding any one of the 26 seed flags in `flags`, or one flag from each exclusive group,
     positioned before C8-S13 with no lock scene played, has `axis()` UNSET for all three axes and `phase_of` LEANING;
     no input of `phase_of` or `axis()` but the record's own fields sets an axis (the scene-level counterpart, a lock
     vote keeping the backed value whatever seeds are set, is `storyline-lifecycle.md` L-AC2). *Blocked by:*
     Y2-PP-T17, Y1-P1-T03.
-11. Companions and timing: for one VALIDATED record per 1.0 family, the records with no companion and with all four,
-    crossed with the timing sets {`act1_pace_early`, `ch1_bridge_saved`} and {`act1_pace_late`, `ch1_bridge_fell`},
-    keep `storyline_id` and `family()` unchanged; `composer_modules()` holds no module of an absent companion; and
-    the symmetric difference of `composer_modules()` between the two timing sets equals the union of
-    `module_keys()` of the four timing flags. Kaelthas (Core Rule 11), with `ch3_kaelthas_refused`,
-    `_challenged` and `_betrayed` unset: with `ch3_kaelthas_allied` unset he is present on an ARCHIVE record and
-    absent on a HEARTH and a CONTINUITY record; with it set he is present on all three; with `ch3_kaelthas_betrayed`
-    set he is absent on all three whatever `ch3_kaelthas_allied` holds (Edge Case 1).
-    *Blocked by:* Y2-PP-T17.
+11. Companions and timing: for one VALIDATED record per 1.0 family, the records with no companion and with all three
+    1.0 companions (Elara, Seraphina, Lyra), each with no timing flag and with each of `act1_pace_early`,
+    `act1_pace_late`, `ch1_bridge_saved` and `ch1_bridge_fell` added alone, keep `stored_id()` and `family()`
+    unchanged; every module m in `composer_modules()` has `companions_of(m)` within the record's present companions;
+    and adding one timing flag f changes `composer_modules()` by exactly `module_keys(f)` (symmetric difference, per
+    flag, so a module keyed to two flags cannot false-fail). Kaelthas (Core Rule 11): on every such record, with any
+    combination of `ch3_kaelthas_allied`, `_refused`, `_challenged` and `_betrayed` set, no module m in
+    `composer_modules()` has Kaelthas in `companions_of(m)`. *Blocked by:* Y2-PP-T17.
 12. Boot validation: `boot_errors(knobs, flags, build)` names the route when a `secret_prerequisites` list has fewer
     than two flags, two lists share a flag, a flag is unknown to FlagRegistry, an unlock flag appears in a
     prerequisites list, or any secret route is enabled in a `1.0` build; with the default knobs and build `1.0` it is
@@ -859,24 +976,32 @@ the Formulas and a walk of the lifecycle transitions (Open Question 16).
 13. Sole dissent (Core Rule 3): for one VALIDATED fixture per 1.0 family, each with `lock_negotiated` = {authority},
     {faction, deleted} and {}, and one SOLE fixture reached by renegotiation to YOU (`axis_revised` and
     `lock_negotiated` = {authority}): `composer_modules()` contains `sole_dissent` exactly for the SOLE fixtures whose
-    `lock_negotiated` holds `authority`; `storyline_id` and `family()` are the same across a family's fixtures.
+    `lock_negotiated` holds `authority`; `stored_id()` and `family()` are the same across a family's fixtures.
     *Blocked by:* Y2-PP-T17.
 14. Pillar P3 (ROADMAP §2: a storyline changes ≥ 3 story scenes, has its own ending sequence and its own Story+
     state), over the 24 storylines reachable in 1.0, by authored lines with interpolation masked, not by ids or raw
-    text. Two IDs *differ in a scene* when `scene_lines()` of that scene differs between them in at least one authored
-    line id or masked-text hash; a substituted name, number or faction name alone never counts. A scene's *baseline*
-    is the `scene_lines()` value most of the 24 IDs share (on a tie, the one of the lexicographically first ID). For
-    every ID at least 3 scenes differ from their baseline, and at least one of those differences comes from a module
-    the route data keys to the ID's Faction or Deleted value, not only to its family; for every pair of distinct IDs at least 2
-    scenes differ, at least one of them a story scene before the ending (a `C<n>-S<m>` or boss id), `ending_render()`
-    differs in at least one masked-text hash, and `story_plus_state()` differs. The checker lints that every
-    substitution in a rendered line is a declared slot. A seeded defect must fail the criterion: route data in which
-    two IDs differ only by a faction name substituted into otherwise shared scenes. The smallest pairwise count is
-    reported; a threshold above 2 is Open Question 13. *Blocked by:* Y2-PP-T17.
-15. Pillar P5 tracking (a closing condition of Y2-PP-T17): Y2-PP-T17 lists every flag the nine 1.0 side arcs set
-    in a `side_arc_flags` table (arc, flag, source line); the set of those flags minus the flags of the seed map (or
-    its successor table) is empty, each such row has a `pushes` target and a direction, and the checker's flag list
-    includes it. *Blocked by:* Y1-P1-T03 (the arc flags exist in FlagRegistry).
+    text. A scene's *base* is `base_lines(scene)`, what it plays with no module selected (user decision 2026-11-17,
+    design review round 12; revision 11's most-shared baseline made `SL-SHARED-ARCHIVE-CHOOSE` the most-shared
+    variant of every scene keyed to one axis, so that ID could never differ). An ID *differs in a scene* when
+    `scene_lines(id, scene)` differs from the base in at least one authored line id or masked-text hash; a
+    substituted name, number or faction name alone never counts, and the checker lints that every substitution in a
+    rendered line is a declared slot. Pass: for every ID, at least 3 story scenes (a `C<n>-S<m>` or boss id; the
+    ending sequence does not count) differ from their base, and at least one of those differences comes from a module
+    whose `keyed_axis()` is `faction` or `deleted`; for every pair of distinct IDs, at least 2 scenes differ between
+    them, at least one of them a story scene, `ending_render()` differs in at least one masked-text hash, and
+    `story_plus_state()` differs. Seeded defects, each of which must fail the criterion: route data in which two IDs
+    differ only by a faction name substituted into otherwise shared scenes; route data in which every module's
+    `keyed_axis()` is `family`. A one-word edit under a new line id passes by construction, so for the pair with the
+    smallest count two raters confirm that its differing lines differ in content, not only wording; that result and
+    the smallest pairwise count are reported, and a threshold above 2 is Open Question 13. *Blocked by:* Y2-PP-T17.
+15. Pillar P5 tracking (a closing condition of Y2-PP-T17): Y2-PP-T17 lists every flag the ten 1.0 side arcs that push an axis
+    (01-04, 06-08, 10-12) set in a `side_arc_flags` table (arc, flag, source line); each of the ten arcs has at least
+    one row; every flag
+    that the arc's own scripts or dialogue under `AethelgardPrototype/` set is a row (a scan with zero hits is NOT
+    ASSESSED, never a pass); the set of those flags minus the flags of the seed map (or its successor table) is
+    empty, so every one of them has a seed-map row with a `pushes` target (an axis, a modifier, timing or
+    `secret:<route>`, Act 1 seed map) and a direction, and the checker's flag list includes it.
+    *Blocked by:* Y2-PP-T17, Y1-P1-T03 (the arc flags exist in FlagRegistry).
 16. Comprehension (Player Fantasy, "Authorship, not a menu" and "Costs are real"; playtest, Integration): a blind
     playtest of Chapter 8 with at least 12 testers. At least 6 play Act 1 themselves, with at least one day between
     Act 1 and Chapter 8; the rest start from fixture saves with differing Act 1 seeds. At least 2 testers per invalid
@@ -884,21 +1009,24 @@ the Formulas and a walk of the lifecycle transitions (Open Question 16).
     choices its arguments refer to; for a crisis, the refusing faction and the value it refused), and two raters who
     did not run the session score the transcripts against it; a disagreement goes to the lower score. After each lock
     scene the tester is first asked, unprompted, why the Assembly argued as it did, then asked to name the earlier
-    choice behind an argument. Pass: (a) at least 70% of testers name an earlier choice behind an argument in at
-    least 2 of the 3 lock scenes, unprompted or prompted, with the unprompted rate reported; (b) at least 75% of
-    crisis testers name both the refusing faction and the value it refused; (c) every tester answers "did you feel
-    you had a choice at the crisis?" and "did the crisis feel foreshadowed?" on a 1-5 scale, reported, not gated;
-    (d) which crisis offer each crisis tester took is recorded. If one offer is taken by more than 60% of crisis
-    testers, that is an advisory finding against the crisis framing, not a failure. The report gives counts with
-    95% Wilson intervals, not only percentages, and is retained at
-    `production/qa/evidence/<date>-storyline-playtest/` with the fixture list and answer keys. Failure action: the
-    seed arguments or the red lines are revised, not the bar, and the playtest is re-run with at least 6 new
-    testers; after two failed rounds the result goes to the narrative-director and creative-director. *Blocked by:*
+    choice behind an argument. Pass: (a) of the testers who played Act 1 themselves, at least 70% name an earlier
+    choice behind an argument in at least 2 of the lock scenes whose `lock_arguments()` was non-empty for them,
+    unprompted or prompted (a tester with fewer than 2 such scenes counts as a fail); the unprompted rate is reported
+    beside it, and the fixture-save testers' rate is reported, not gated, because they never made the choices;
+    (b) at least 75% of crisis testers name both the refusing faction and the value it refused. Reported measures
+    with no verdict effect: (c) every tester's 1-5 answers to "did you feel you had a choice at the crisis?" and "did
+    the crisis feel foreshadowed?"; (d) which crisis offer each crisis tester took, with any offer taken by more than
+    60% of crisis testers flagged to the narrative-director. The report gives counts with 95% Wilson intervals beside
+    every rate, and is retained at `production/qa/evidence/<date>-storyline-playtest/` with the fixture list and
+    answer keys. A run is never stopped early or extended to reach the bar. Failure action: the seed arguments or the
+    red lines are revised, not the bar, and the playtest is re-run as a fresh run of this whole criterion (at least
+    12 new testers, judged alone, never pooled with a failed run); after two failed runs the result goes to the
+    narrative-director and creative-director. *Blocked by:*
     Y2-PP-T17, Y1-P1-T05 (fixture saves), Y1-P1-T03 (seed flags).
-17. Pillar P5 voiced (a closing condition of Y2-PP-T17, after AC15): for each of the nine 1.0 side arcs (01-04,
-    06, 07, 10-12), a fixture record with one of that arc's `side_arc_flags` set makes the lock scene of the axis the
-    flag pushes voice at least one argument line the route data keys to that flag, and the same fixture with every
-    flag of that arc unset voices none of those lines. Arc 12 is tested for its `deleted:CHOOSE` push only.
+17. Pillar P5 voiced (a closing condition of Y2-PP-T17, after AC15): for each of the ten 1.0 side arcs that push an axis
+    (01-04, 06-08, 10-12), a fixture record with one of that arc's `side_arc_flags` set makes `lock_arguments()` of the axis
+    the flag pushes contain an argument whose flag is that flag, and the same fixture with every flag of that arc
+    unset gives a `lock_arguments()` that contains none of that arc's flags. Arc 12 is tested for its `deleted:CHOOSE` push only, arc 08 for its Faction push only.
     *Blocked by:* Y2-PP-T17, Y1-P1-T03.
 
 The scene-level criteria (locks, red lines, crisis, the commit and save rule, renegotiation, gate, secret routes
@@ -917,8 +1045,8 @@ closed, final authorization, saves, visual evidence, the route bot) are `storyli
    fixed (protected story code). The Oakhaven flags have no faction mapping yet.
 6. **Companion count:** ROADMAP names 8 companions; the Story Bible has 4 with Companion status. The production
    master also lets Nema, Seven, Rook and Kaito stay or leave on any route (PM:7534-7537), with per-companion
-   secret-route reactions (PM:11229-11236). This GDD uses the 4; `companions_present` grows when the others are
-   confirmed.
+   secret-route reactions (PM:11229-11236). This GDD uses 3 of the 4 (Elara, Seraphina, Lyra); Kaelthas is reserved
+   (Core Rule 11, Open Question 19). `companions_present` grows when the others are confirmed.
 7. **Systems index:** `design/gdd/systems-index.md` does not exist; `/map-systems` creates it later.
 8. **Story Bible §5** gives the Consent family the God King "loses its health bar" fight, which the production
    master gives to Crownless (PM:11247); a separate Story Bible fix.
@@ -926,15 +1054,23 @@ closed, final authorization, saves, visual evidence, the route bot) are `storyli
    Y2-PP-T17.
 10. **Seed readings kept despite review objections (2026-11-10):** `ch1_aldric_kill_unsure` → SHARED may read as
     deferral ("don't decide it tonight", `aldric.dlg:90`); `ch2_data_wraith_destroyed` → RELEASE is a unilateral
-    destruction while RELEASE ends involuntary preservation (PM:686, PM:7094); `ch1_root_purge` is a non-consensual
-    rewrite that could argue for YOU instead of Hearth; `ch2_data_wraith_absorbed` → CHOOSE is unilateral and held
-    in Kaelen's own Root layer (PM:2468), which could argue for YOU. YOU also has three `+` seeds against one each
-    for SHARED and NONE, so a first Authority vote for YOU passes clean most easily; `sole_dissent` (the one audible
-    negotiated result) is still reached two ways, a YOU vote with no `+` seed and a renegotiation to YOU at C8-S16
-    (R2 and R3 offer it, and every renegotiation sets `lock_negotiated`; corrected in revision 11, design review
-    round 11). Deleted has at most one `+` seed (one exclusive group), so a Deleted lock is the most often
-    negotiated and is never audible in 1.0. Round 9 (narrative-director): `ch1_root_purge` → HEARTH contradicts its own source
-    (PM:663, "if he survives with agency intact"), and `ch1_knight_spared` fits it better. Revisit in a narrative
+    destruction while RELEASE ends involuntary preservation (PM:686, PM:7094); `ch2_data_wraith_absorbed` → CHOOSE is unilateral and held
+    in Kaelen's own Root layer (PM:2468), which could argue for YOU. Revision 12 (user decision 2026-11-17, design review round 12) moved
+    Authority's arguments from whether Kaelen acted to whether he answered for it, and revision 13 (user decision
+    2026-11-17, design review round 13) moved `ch1_root_purge` from HEARTH `+` to YOU `−` and stated the one
+    discriminator (Act 1 seed map notes): YOU has two `+` seeds (`ch1_aldric_kill_owned`, `ch1_root_first_edit`) and
+    three `−` (`ch1_aldric_kill_justified`, `ch2_seraphina_showoff`, `ch1_root_purge`), SHARED two `+`
+    (`ch1_aldric_kill_unsure`, `ch2_seraphina_truth`), NONE one; HEARTH keeps one `+` (`act1_report_local`). A player
+    who kills Aldric and calls it justified, or purges him, and keeps Root alone now hears `sole_dissent`; before
+    revision 12 the first passed clean and only a restrained player heard it, which inverted P10, and before revision
+    13 the second passed clean. `sole_dissent` is reached three ways: a YOU vote with no `+`
+    seed, a YOU vote with a `−` seed, and a renegotiation to YOU at C8-S16 (R2 and R3 offer it, and every
+    renegotiation sets `lock_negotiated`). `ch1_knight_spared` was proposed for SHARED and dropped, because the
+    Purge path sets it too (`dialogue/ch1/aldric.dlg:116`). New evidence against `ch2_data_wraith_destroyed` →
+    RELEASE (round 12, narrative-director): RELEASE needs staged verification (PM:7118), while destroying the wraith
+    loses anyone still recoverable (`dialogue/ch2/underground.dlg:64`); the user kept the row (2026-11-17). Deleted has at most one `+` seed (one exclusive group), so a Deleted lock is the most often
+    negotiated and is never audible in 1.0. `ch1_root_purge` → YOU `−` rests on `dialogue/ch1/aldric.dlg:104-107`
+    (revision 14); PM:663 is not cited for it, since the purge leaves Aldric lucid. Revisit the rest in a narrative
     pass, with the AC16 playtest as evidence.
 11. **Reserved: post-boss reconsideration.** PM:8791 allows "one last lawful reconsideration" if final circumstances
     changed drastically. Cut from this design (user decision 2026-11-10) because boss phases 2-4 already read every
@@ -943,8 +1079,8 @@ closed, final authorization, saves, visual evidence, the route bot) are `storyli
 12. **Deferred to Y2-PP-T17:** the `sole_dissent` module text; whether the ledger Variants and Policies
     (PM:7569-7582) later make `lock_negotiated` visible beyond `sole_dissent`. The Witness items of revision 8 (the
     witness institution, signposts, candidates, the vote, the stand-down) moved to Open Question 15.
-13. **P3 baseline and the storyline cut order.** (a) AC14 now tests rendered text: ≥ 3 non-shared scenes per ID and
-    a pairwise minimum of 1 scene (round 9). The all-pairs ≥ 3 test stays dropped because the design never shows that
+13. **P3 baseline and the storyline cut order.** (a) AC14 now tests rendered text: ≥ 3 story scenes per ID that
+    differ from their base, and a pairwise minimum of 2 scenes (rounds 11 and 12). The all-pairs ≥ 3 test stays dropped because the design never shows that
     a single Faction or Deleted value touches three scenes; set a higher pairwise threshold once Y2-PP-T17 counts the
     scenes each axis value varies (PM:8975 promises five changes per route). (b) `design/gdd/game-concept.md` lists "storylines 27→18" in the cut order and "~6 storylines" for the
     smaller game. The axes, their values and R1-R3 are not knobs here, so neither cut has a mechanism: collapsing one
@@ -976,7 +1112,8 @@ closed, final authorization, saves, visual evidence, the route bot) are `storyli
 17. **Load-check scope — settled (user decisions 2026-11-17, design review rounds 10 and 11).** The load check
     promises that every save play writes loads, that a loaded record is consistent with the lock order (D16, D17),
     and that no accepted record crashes the composer, strands the player or breaks an invariant; it never promises
-    edited-save integrity. Edge Case 16 states the inclusion rule, the items it added (D0, `D7.duplicate`), the
+    edited-save integrity. Edge Case 16 states the inclusion rule, the items it added (D0; `D7.duplicate` was folded
+    into D0's one-entry cap in revision 12), the
     non-goals (`lock_negotiated` against `lock_pass`; `root_phase` against position; `withdrawn_item` and `scene` as
     opaque text) and the tripwires. The one part still waiting is the reference model's F10 (non-FINAL records after
     the final authorization), which rests on modelling choice M8 = lifecycle Open Question 2: when that is decided, or
@@ -988,3 +1125,28 @@ closed, final authorization, saves, visual evidence, the route bot) are `storyli
     a system-voice prompt to reload, `storyline-lifecycle.md` S6); I5 names that case. A CRISIS row at the gate was
     rejected because it would legitimise a state the phase table, I2 and S6 call impossible; a gate that replays
     C8-S16 was rejected as a runtime catch-up (user decision 2026-11-10).
+19. **Kaelthas as a companion (user decision 2026-11-17, design review round 12).** No 1.0 save has Kaelthas in the
+    party past Chapter 3: the allied path always sets `ch3_kaelthas_betrayed` (`AethelgardPrototype/scripts/chapter3/
+    ch3_kaelthas_betrayal.gd:35,89`) and every other branch is a boss fight. He is outside the 1.0 companion set, and
+    PM:7533 ("can remain companion outside Archive if trust supports it") is reserved. Redemption content that lets
+    him rejoin needs: a flag that marks it (never a relationship number), its owner and scope (a Y2-PP-T17 content
+    request with producer sign-off), the protected story-progression approval for Chapter 3-7 changes, and a GDD
+    revision that restores the Archive waiver and its AC11 rows.
+20. **Review exit criteria — adopted (user decision 2026-11-18, design review round 14; proposed by the
+    creative-director in round 12).** Revision 14 changes only the six round-14 blockers and Open Question 21's
+    class, each in one place. The reference model covers the whole stored record (every closed-list field,
+    `story_position`, legacy derivation including hub saves, a new-game save), and the model, the checker and the
+    mutations are re-run and pass. Round 15 runs lean on the revision-14 diff and the model log; a finding blocks only
+    with a failing model case, a contradiction in the text or a false citation, and is otherwise routed or
+    recommended. If round 15 finds only blockers with one-line fixes, they are fixed and verified in that session and
+    the GDD is approved, with no round 16.
+21. **Main-story seeds (user decision 2026-11-18, design review round 14).** Main-story choices after Act 1 become
+    seeds the same way side arcs do (Core Rule 2). The first known is the Chapter 4 Null Court promise
+    (`ch4_choice_preserve_deleted`, `_release_deleted`, `_bargain_deleted`, set at
+    `AethelgardPrototype/scripts/chapter4/ch4_null_court.gd:125-136` and read in Chapters 5 to 10), which no axis
+    reads today, so a player who promised the deleted something in Chapter 4 hears only the Chapter 2 wraith at the
+    Deleted lock. The narrative-director proposes the mappings before Y2-PP-T17 writes C8-S15 and C8-S16, with their
+    AC rows; note that the code's "release the backups" returns the deleted, which is closer to RESTORE than to the
+    axis's RELEASE (PM:686). Also to decide: whether a locked Deleted value overrides Chapter 10 lines keyed to
+    `ch4_choice_*` where the two conflict. Owner Y2-PP-T17; the seed map and its 26-flag list are unchanged until
+    then.

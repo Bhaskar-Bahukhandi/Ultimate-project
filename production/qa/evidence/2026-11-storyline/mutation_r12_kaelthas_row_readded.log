@@ -1,0 +1,10 @@
+# Mutation 'r12_kaelthas_row_readded' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r12_kaelthas_row_readded.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r12_kaelthas_row_readded.md
+lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [combinations] line 313 (SL-NONE-HEARTH-CHOOSE): companions_possible has unknown names ['Kaelthas']
+FAIL [revision 12] axes still has the round-11 wording 'Elara, Seraphina, Lyra, Kaelthas'
+RESULT: FAIL (2 problems)
+exit code: 1

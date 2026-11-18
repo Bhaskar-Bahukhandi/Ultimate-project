@@ -2,7 +2,12 @@
 document-level criteria of storyline-lifecycle.md (axes revision 9 / lifecycle revision 5, design review round 9,
 user decisions 2026-11-11: Witness Protocol moved post-1.0 with the other two secret routes, so the deferral,
 invocation, witness vote, stand-down and Consent variants are gone; invariant I9, one atomic checkpoint per
-transition; transitions T1-T9; Edge Case 16 with D2-D5 and D10-D13 retired and D17 added; AC16).
+transition; transitions T1-T9; Edge Case 16 with D2-D5 and D10-D13 retired and D17 added; AC16). Synced to axes
+revision 12 / lifecycle revision 8 (design review round 12, user decisions 2026-11-17): a seed flag may have one
+modifier row and one axis row (26 flags in 28 rows; the Authority remap), Kaelthas outside the 1.0 companion set,
+D0 owning the one-entry retraction_log cap (D7.multi and D7.duplicate retired), D15 scoped to the save's schema
+version, the Terms story-position list equal to the reference model's POSITIONS, legacy defaulting, chapter select,
+the gate predicate, L-AC19, and AC9/AC11/AC14-AC17 rewritten (check_revision12 and the pins marked "Revision 12").
 
 This is document lint: it proves that the text matches constants pinned here (or values derived here from other
 parts of the text), not that the state machine is correct. The reference model that would show the latter is
@@ -28,7 +33,7 @@ storyline-axes.md
    Rules 7 and 9, the invariants table I1-I9, the phase table, the Tuning Knobs table (exactly four knobs, every
    enable default false as the secret table's scopes give), Edge Case numbering and Edge Case 16's item list
    (active and retired entries, cross-references derived);
-8. the acceptance criteria: AC1-AC16 contiguous, each runtime AC names its pinned blocking stories and calls only
+8. the acceptance criteria: AC1-AC17 contiguous, each runtime AC names its pinned blocking stories and calls only
    the pinned Observables table; AC5's case counts derived; AC9's active-item list derived from Edge Case 16;
 storyline-lifecycle.md
 9. headings; the Inputs field list (= the fields the axes doc says the record stores) and the NG+ reset (fields and
@@ -42,7 +47,7 @@ storyline-lifecycle.md
     table, the commit and save rule and L-AC6;
 13. the Formulas block, its offer counts, the no-knob Tuning Knobs section, pinned scene sentences; S5's unlock
     flags and Edge Case 5's Witness leads derived from the axes knobs;
-14. L-AC1-L-AC18 contiguous, each with known blocking stories and only the pinned observables; derived numbers and
+14. L-AC1-L-AC19 contiguous, each with known blocking stories and only the pinned observables; derived numbers and
     key phrases; L-AC2's lock-pass fixtures recomputed; the Validation note's run arithmetic and pass rule;
 both
 15. the dated decision line in the Story Bible; no stale strings, revision-3 vocabulary or revision-8 secret-route
@@ -76,7 +81,9 @@ FAMILY_BY_AUTHORITY = {"YOU": "SOLE", "SHARED": "BOUND", "NONE": "NONE_AUTH"}
 # One-letter codes the production master uses in route headings and secret foundations (e.g. YHL, NAL).
 ABBR = {"YOU": "Y", "SHARED": "S", "NONE": "N", "HEARTH": "H", "ARCHIVE": "A", "CONTINUITY": "C",
         "RESTORE": "R", "RELEASE": "L", "CHOOSE": "C"}
-COMPANIONS = frozenset({"Elara", "Seraphina", "Lyra", "Kaelthas"})
+# Revision 12 (user decision 2026-11-17, design review round 12): Kaelthas is outside the 1.0 companion set.
+COMPANION_ORDER = ("Elara", "Seraphina", "Lyra")
+COMPANIONS = frozenset(COMPANION_ORDER)
 # Companions each ending family requires. Story Bible §5: no family needs one. (Revision 9: no CONSENT in 1.0.)
 FAMILY_NEEDS: dict[str, frozenset[str]] = {
     "SOLE": frozenset(), "BOUND": frozenset(), "NONE_AUTH": frozenset(),
@@ -94,37 +101,44 @@ SECRET_EXPECTED = {  # id -> (family cell, scope). Revision 9 (user, 2026-11-11)
 # PRODUCTION_MASTER_2.1.md:8784, canonical association of secret route and the invalid row it transforms.
 SECRET_FOUNDATION = {"WITNESS": "YHR", "CROWNLESS": "NAL", "FIRSTWAKE": "NCL"}
 
-# Story S06a, Audit 4 (23 flags) plus the three Aldric-kill flags: 26 flags, each with its approved
-# (pushes, direction). A change here is a design decision.
-SEED_EXPECTED: dict[str, tuple[str, str]] = {
-    "act1_report_local": ("faction:HEARTH", "+"),
-    "act1_report_archive": ("faction:ARCHIVE", "+"),
-    "act1_report_command": ("faction:CONTINUITY", "+"),
-    "ch2_seraphina_truth": ("modifier:seraphina_relationship", "+"),
-    "ch2_seraphina_cautious": ("modifier:seraphina_relationship", "0"),
-    "ch2_seraphina_showoff": ("modifier:seraphina_relationship", "−"),
-    "ch2_seraphina_recruited": ("modifier:companions_present", "+"),
-    "ch2_seraphina_stayed": ("modifier:companions_present", "−"),
-    "ch2_seraphina_rejected": ("modifier:companions_present", "−"),
-    "ch2_data_wraith_restored": ("deleted:RESTORE", "+"),
-    "ch2_data_wraith_destroyed": ("deleted:RELEASE", "+"),
-    "ch2_data_wraith_absorbed": ("deleted:CHOOSE", "+"),
-    "ch1_knight_killed": ("faction:HEARTH", "−"),
-    "ch1_knight_spared": ("modifier:aldric_restrained", "+"),
-    "ch1_root_purge": ("faction:HEARTH", "+"),
-    "ch1_aldric_kill_owned": ("authority:YOU", "+"),
-    "ch1_aldric_kill_justified": ("authority:YOU", "+"),
-    "ch1_aldric_kill_unsure": ("authority:SHARED", "+"),
-    "ch1_root_first_edit": ("authority:YOU", "+"),
-    "ch1_root_discovered_unused": ("authority:NONE", "+"),
-    "ch1_oakhaven_warned_villagers": ("modifier:A1-OAK-SAVED", "+"),
-    "ch1_oakhaven_warned_leaders": ("modifier:A1-OAK-SAVED", "+"),
-    "ch1_oakhaven_left_quietly": ("modifier:A1-OAK-QUIET", "+"),
-    "act1_pace_early": ("timing", "0"),
-    "act1_pace_on_time": ("timing", "0"),
-    "act1_pace_late": ("timing", "0"),
-}
-SEED_FLAGS = frozenset(SEED_EXPECTED)
+# Story S06a, Audit 4 (23 flags) plus the three Aldric-kill flags: 26 flags, each row with its approved
+# (pushes, direction). A change here is a design decision. Revision 12 (user decision 2026-11-17, design review
+# round 12): a flag may have one modifier row and one axis row, never two axis rows; ch1_aldric_kill_justified
+# argues against YOU, ch2_seraphina_showoff (against YOU) and ch2_seraphina_truth (for SHARED) gain axis rows.
+# lock_pass matches a row by (flag, pushes), so a modifier row never enters it. 26 flags in 28 rows.
+# Revision 13 (user decision 2026-11-17, design review round 13): ch1_root_purge argues against YOU (not for HEARTH).
+SEED_ROWS: tuple[tuple[str, str, str], ...] = (
+    ("act1_report_local", "faction:HEARTH", "+"),
+    ("act1_report_archive", "faction:ARCHIVE", "+"),
+    ("act1_report_command", "faction:CONTINUITY", "+"),
+    ("ch2_seraphina_truth", "modifier:seraphina_relationship", "+"),
+    ("ch2_seraphina_truth", "authority:SHARED", "+"),
+    ("ch2_seraphina_cautious", "modifier:seraphina_relationship", "0"),
+    ("ch2_seraphina_showoff", "modifier:seraphina_relationship", "−"),
+    ("ch2_seraphina_showoff", "authority:YOU", "−"),
+    ("ch2_seraphina_recruited", "modifier:companions_present", "+"),
+    ("ch2_seraphina_stayed", "modifier:companions_present", "−"),
+    ("ch2_seraphina_rejected", "modifier:companions_present", "−"),
+    ("ch2_data_wraith_restored", "deleted:RESTORE", "+"),
+    ("ch2_data_wraith_destroyed", "deleted:RELEASE", "+"),
+    ("ch2_data_wraith_absorbed", "deleted:CHOOSE", "+"),
+    ("ch1_knight_killed", "faction:HEARTH", "−"),
+    ("ch1_knight_spared", "modifier:aldric_restrained", "+"),
+    ("ch1_root_purge", "authority:YOU", "−"),  # revision 13 (round 13): was faction:HEARTH +
+    ("ch1_aldric_kill_owned", "authority:YOU", "+"),
+    ("ch1_aldric_kill_justified", "authority:YOU", "−"),
+    ("ch1_aldric_kill_unsure", "authority:SHARED", "+"),
+    ("ch1_root_first_edit", "authority:YOU", "+"),
+    ("ch1_root_discovered_unused", "authority:NONE", "+"),
+    ("ch1_oakhaven_warned_villagers", "modifier:A1-OAK-SAVED", "+"),
+    ("ch1_oakhaven_warned_leaders", "modifier:A1-OAK-SAVED", "+"),
+    ("ch1_oakhaven_left_quietly", "modifier:A1-OAK-QUIET", "+"),
+    ("act1_pace_early", "timing", "0"),
+    ("act1_pace_on_time", "timing", "0"),
+    ("act1_pace_late", "timing", "0"),
+)
+SEED_FLAGS = frozenset(flag for flag, _, _ in SEED_ROWS)
+SEED_FLAG_COUNT = len(SEED_FLAGS)  # 26 (AC2, AC10, the seed map intro)
 LEAN_DIRECTIONS = ("+", "−", "-")  # "−" is U+2212; ASCII hyphen accepted as the same sign.
 NEUTRAL = "0"
 DIRECTIONS = (*LEAN_DIRECTIONS, NEUTRAL)
@@ -190,15 +204,20 @@ COMPOSER: dict[str, tuple[str, frozenset[str] | str, str]] = {
     "retraction_log": ("list", "at most one entry {axis, old, new, withdrawn_item, scene}; withdrawn_item and scene "
                        "are opaque display text that no code branches on", "every renegotiation"),
     "beats_played": ("set", "the lifecycle's authored beat ids (retract_*)", "the scene that plays the beat"),
+    # Revision 14 (round 14): the story position is a record field, so D0 covers a missing or unlisted one.
+    "story_position": ("enum", "the story position ids of Terms (Story position), PRE_C8 to ROOT_STORY_PLUS",
+                       "each commit checkpoint and story-graph step that crosses into the next id; a new game, the "
+                       "NG+ reset and chapter select; SaveService once for a legacy save (Terms)"),
     "companions_present": ("set", COMPANIONS,
                            "AethelgardPrototype/scripts/game_manager.gd (has_elara, exclusive flag groups); "
                            "AethelgardPrototype/dialogue/ch2/fragment_two.dlg"),
     "regions_completed": ("set", "ids of the eight regions", "owner story Y2-PP-T17 (no writer in the code today)"),
     "timing_flags": ("set of flags", "ch1_bridge_saved / _evacuated / _fell, ch2_medicine_early / _on_time / _late",
                      "AethelgardPrototype/dialogue/ch1/north_field.dlg; AethelgardPrototype/dialogue/ch2/act1_end.dlg"),
-    "act1_pace": ("enum", frozenset(f for f, (push, _) in SEED_EXPECTED.items() if push == "timing"),
-                  "AethelgardPrototype/dialogue/ch2/act1_end.dlg"),
-    "act2_pace, act3_pace, act4_pace": ("enum", "names left to S06b", "owner story Y1-P0-S06b"),
+    # Revision 14 (round 14): act1_pace defaults to UNSET, so D0 accepts a save made before the end of Act 1.
+    "act1_pace": ("enum", frozenset({UNSET} | {f for f, push, _ in SEED_ROWS if push == "timing"}),
+                  "AethelgardPrototype/dialogue/ch2/act1_end.dlg (UNSET until it plays)"),
+    "act2_pace, act3_pace, act4_pace": ("enum", "UNSET and the names S06b defines", "owner story Y1-P0-S06b"),
 }
 
 CORE_RULE_TITLES = (
@@ -251,16 +270,23 @@ CORE_RULE_KEYS: dict[int, tuple[str, ...]] = {
         "What the check refuses follows one inclusion rule (Edge Case 16",
         "it never promises edited-save integrity, only that no accepted record crashes the composer, strands the "
         "player or breaks an invariant",
-        "The refusal holds only while no player-facing build has such saves"),
+        "The refusal holds only while no player-facing build has such saves",
+        # Revision 12 (round 12): the gate opens on a stored ID only when the phase is not DAMAGED.
+        "with an ID stored and the phase not DAMAGED the gate is open (also after the boss and in Story+)",
+        "a DAMAGED record is turned back as a data error whether or not it holds an ID (lifecycle S6)"),
     9: ("It changes no axis and no ID.", "this design offers none", "and the player confirms execution."),
     10: ("the secret storylines' families are reserved until their routes ship",
          "Consent (post-1.0): seven affected witnesses authorize one irreversible act",
          "Its rules are designed with the secret routes (Open Question 15)",
          "Faction and Deleted are modifiers"),
-    11: ("a companion leaves through relationship flags (Edge Case 1), never through an axis.",
-         "The axis can only waive a trust test, never remove a companion.",
-         # Revision 11 (round 11): the trust condition is named.
-         "The trust condition is ch3_kaelthas_allied set and ch3_kaelthas_betrayed unset"),
+    # Revision 12 (round 12): Kaelthas is outside the 1.0 companion set; the round-11 trust condition is superseded.
+    # The companion-set sentence is derived from COMPANION_ORDER in check_core_rules.
+    11: ("a companion leaves through relationship flags (Edge Case 1), never through an axis, and no axis is read for "
+         "presence.",
+         "Kaelthas is not in it: Chapter 3 always ends his alliance in betrayal",
+         "is reserved for redemption content (Open Question 19; user decision 2026-11-17, design review round 12, "
+         "superseding the trust condition ch3_kaelthas_allied set and ch3_kaelthas_betrayed unset decided in round 11)",
+         "Kaelthas's own Chapter 9 and 10 lines, which read ch3_kaelthas_allied, are unaffected."),
     12: ("change scenes, NPC fates, market events and ending slides through the composer, not the storyline ID",),
 }
 NO_MODAL_RULES = (7, 9)  # these rules forbid; a "may/can/could" in them is an exception being smuggled in
@@ -337,23 +363,38 @@ NOT_KNOB_KEYS = ("the invalid set R1-R3", "the family mapping", "the lock_pass t
 EC16_RETIRED_PREFIX = "retired (revision 9):"
 EC16_ENTRIES = (
     # Revision 11 (round 11, Open Question 17): D0, the shape check, tested first.
-    (0, 0, "a record whose shape is wrong: a field missing or of the wrong type, an enum string outside its allowed "
-           "values, a set or list element of the wrong type, or a list longer than its maximum (retraction_log one "
-           "entry, beats_played sixteen). D0 is tested first; when it fires no other item runs, so load_check reports "
-           "exactly {D0}. It exists so that no later item and no composer read meets a value of the wrong type; it is "
-           "not an integrity check"),
-    (1, 1, "a stored ID that is not SL-A-F-D for its axes on a valid row: any other ID, an ID with an UNSET axis, the "
-           "ID of an invalid row, or any SL-SECRET-* ID (no 1.0 play stores one)"),
+    # Revision 13 (round 13): beats_played capped at one; D0 type-checks storyline_id and beats_played only, so it no
+    # longer shadows D14's undefined-beat clause.
+    # Revision 12 (round 12): D0 owns the one-entry retraction_log cap and refuses a set holding an element twice; a
+    # missing field is D0 only for a current-schema save (an older one is defaulted first, Edge Case 8).
+    # Revision 14 (round 14): D0 and D1 name their clause ids (AC9's clause-id list).
+    (0, 0, "a record whose shape is wrong: a field missing from a save of the current schema version, or a legacy "
+           "save left with no story position (an older save is defaulted first, Edge Case 8) (D0.missing), a field of "
+           "the wrong type (D0.type), an enum string outside its allowed values (D0.enum), a set or list element of the "
+           "wrong type (D0.element), a set holding one element twice (D0.duplicate), or a set or list longer than its "
+           "maximum (D0.max; retraction_log one entry: play takes at most one renegotiation, Core Rule 7, and a second "
+           "entry would play a cost beat twice; beats_played one, the one entry's beat). Allowed values are checked for "
+           "every field the composer record gives a closed list of values (and retraction_log's axis, old and new), "
+           "except storyline_id and beats_played, which are checked for type only: which strings they may hold is D1's "
+           "and D14's (its undefined-beat clause). D0 is tested first; when it fires no other item runs, so load_check "
+           "reports only D0 clauses and its items are exactly {D0}. It exists so that no later item and no composer "
+           "read meets a value of the wrong type or count; it is not an integrity check"),
+    (1, 1, "a stored ID that is not SL-A-F-D for its axes on a valid row, tested in this order and reported as the "
+           "first clause that holds: any SL-SECRET-* ID (D1.secret; no 1.0 play stores one), an ID with an UNSET axis "
+           "(D1.unset_axis), an ID while the record's axes form an invalid row (D1.invalid_row), or any other ID "
+           "(D1.other_id, which includes an invalid row's ID stored on a valid row)"),
     (2, 5, "retired (revision 9): they checked the Witness record fields, which 1.0 no longer stores"),
     (6, 6, "axis_revised holding an axis that lock_negotiated lacks"),
     # Revision 10 (round 10, F6): D7 also runs the other way (the composer reads axis_revised).
     # Revision 11 (round 11): clause ids, and the duplicate-entry clause.
+    # Revision 12 (round 12): D7.multi and D7.duplicate retired (D0 refuses a second entry first).
     (7, 7, "axis_revised holding an axis that no retraction_log entry names (D7.unnamed), or a retraction_log entry "
-           "whose axis is not in axis_revised (D7.reverse; the composer reads axis_revised), or more than one axis "
-           "(D7.multi), or a retraction_log entry whose new value is not the record's value for its axis "
-           "(D7.new_mismatch), or more than one retraction_log entry (D7.duplicate: play takes at most one "
-           "renegotiation, Core Rule 7, and a second entry would play the cost beat twice). D7.multi cannot fire while "
-           "D1 and D14 hold (no valid row admits two consistent retractions) and is kept as documentation"),
+           "whose axis is not in axis_revised (D7.reverse; the composer reads axis_revised), or a retraction_log entry "
+           "whose new value is not the record's value for its axis (D7.new_mismatch). The clauses D7.multi and "
+           "D7.duplicate of revision 11 are retired (design review round 12): D0 refuses a second entry, so neither "
+           "could fire, and the revision-11 reason given for D7.multi was false: (NONE, HEARTH, RELEASE) admits two "
+           "consistent Faction retractions, from R2 (ARCHIVE→HEARTH) and from R3 (CONTINUITY→HEARTH), which is now a "
+           "D0 fixture (AC9)"),
     (8, 8, "root_phase INSIDE or FINAL with nothing stored"),
     (9, 9, "three axes set with nothing stored *(not for the live crisis)*"),
     (10, 13, "retired (revision 9): they checked the witness vote fields"),
@@ -362,9 +403,12 @@ EC16_ENTRIES = (
              "beat is not in beats_played, or a beat id the lifecycle does not define. A beat matches an entry "
              "exactly when its id is retract_<rule>_<axis>_<new>, rebuilt from the entry (rule is the invalid row "
              "R1-R3 that the record's axes form with the entry's axis set back to old)"),
-    (15, 15, "two flags of one exclusive group (Edge Case 6)"),
-    (16, 16, "a story position past the lock scene of an UNSET axis (a save made past Chapter 8 before these fields "
-             "existed; unsupported, user decision 2026-11-10)"),
+    # Revision 12 (round 12): D15 is scoped to the groups at the save's schema version; D16 cites Terms.
+    (15, 15, "two flags of one exclusive group, as the groups stood at the save's schema version (Edge Case 6): a "
+             "group added or widened by a later patch never refuses an older save (inclusion rule (ii) and (iii); Open "
+             "Question 5's ch1_oakhaven_warned_leaders is the known case)"),
+    (16, 16, "a story position (Terms) past the lock scene of an UNSET axis (a save made past Chapter 8 before these "
+             "fields existed; unsupported, user decision 2026-11-10)"),
     # Revision 8 (design review round 8), clarified in revision 9: out-of-order lock sets are damaged.
     # Revision 10 (round 10, F1/F3): clause (a) is load-only (the live crisis is set before its commit); clause (b) is
     # implied for a loaded record, so it is documentation with no fixture of its own.
@@ -384,6 +428,8 @@ EC16_EXCLUSIVE = 15  # the D-number of the exclusive-group item (cited by Edge C
 EC16_LEGACY = 16  # the D-number of the pre-axes save item (cited by Core Rule 8, Edge Case 8, the lifecycle)
 EC16_CRISIS = 9  # the D-number of the saved-crisis item (cited by AC9)
 EC16_ORDER = 17  # the D-number of the lock-order item (the record alone cannot show D15-D17)
+EC16_D7_CLAUSES = ("unnamed", "reverse", "new_mismatch")  # revision 12: multi and duplicate retired
+EC16_DOC_CLAUSES = ("D17.prefix",)  # revision 12: the one documentation clause (AC9), an equivalent mutant
 EC16_KEYS = ("it compares and never rewrites the stored ID or the save, and reads no knob, so a patch never damages "
              "a save.",
              "SaveService's load check reports each item below as a data error on load and refuses the load",
@@ -430,14 +476,20 @@ STORYLINE_ID_PARAMS = ("A", "F", "D", "I")
 AXES_AC_BLOCKED = {
     5: {"Y2-PP-T17"}, 6: {"Y2-PP-T17", "Y1-P1-T03"}, 7: {"Y2-PP-T17", "Y1-P1-T03"}, 8: {"Y2-PP-T17"},
     9: {"Y2-PP-T17", "Y1-P1-T05", "Y1-P1-T03"}, 10: {"Y2-PP-T17", "Y1-P1-T03"}, 11: {"Y2-PP-T17"},
-    12: {"Y2-PP-T17", "Y1-P1-T03"}, 13: {"Y2-PP-T17"}, 14: {"Y2-PP-T17"}, 15: {"Y1-P1-T03"},
+    # Revision 12 (round 12): AC15 is also blocked by Y2-PP-T17 (it lists the arc flags).
+    12: {"Y2-PP-T17", "Y1-P1-T03"}, 13: {"Y2-PP-T17"}, 14: {"Y2-PP-T17"}, 15: {"Y2-PP-T17", "Y1-P1-T03"},
     16: {"Y2-PP-T17", "Y1-P1-T05", "Y1-P1-T03"}, 17: {"Y2-PP-T17", "Y1-P1-T03"},
 }
 # Revision 9: the axes Observables table's first column, in order (scene_variants and ending_sequence removed;
 # module_keys, scene_render, ending_render added; phase_of / load_check take flags and position).
 AXES_OBSERVABLES = (
     "formula_id(A, F, D, I, knobs, flags)", "prereqs_met(T, knobs, flags)", "family(id)",
-    "phase_of(record, loaded, flags, position)", "axis(record, name)", "composer_modules(record, flags)",
+    "phase_of(record, loaded, flags, position)", "axis(record, name)",
+    # Revision 12 (round 12): AC11/AC13 read stored_id, AC14 keyed_axis and base_lines, AC16/AC17 lock_arguments.
+    # Revision 14 (round 14): AC11 reads companions_of.
+    "stored_id(record)", "companions_of(module_id)", "keyed_axis(module_id)", "base_lines(scene)",
+    "lock_arguments(axis)",
+    "composer_modules(record, flags)",
     "module_keys(flag)", "ending_render(id)", "story_plus_state(id)",
     "boot_errors(knobs, flags, build)", "load_check(record, flags, position)",
     "scene_lines(id, scene)",  # revision 11 (round 11): masked authored lines replace scene_render
@@ -456,25 +508,90 @@ AXES_AC_KEYS: dict[int, tuple[str, ...]] = {
         "The live crisis is bounded (Open Question 18)",
         "at C8-S16's commit checkpoint gives DAMAGED",
         "a copy of load_check with that clause deleted fails at least one fixture of this criterion",
-        "which are listed as equivalent mutants",
-        "Non-goals load: one fixture per non-goal of Edge Case 16",
-        "load_check() gives the same result with every knob flipped"),
+        # Revision 12 (round 12): one documentation clause; the D0 fixtures; the legacy fixture; an edited scene.
+        "except the documentation clause, which is listed as an equivalent mutant",
+        # Revision 14 (round 14): the clause-id list, one D0 fixture per clause, the D7 fixture, a new game.
+        "The clause ids are exactly: D0.missing, D0.type, D0.enum, D0.element, D0.duplicate, D0.max, D1.secret, "
+        "D1.unset_axis, D1.invalid_row, D1.other_id, D6, D7.unnamed, D7.reverse, D7.new_mismatch, D8, D9, "
+        "D14.undefined, D14.no_entry, D14.not_played, D15, D16, D17.before_commit and D17.prefix.",
+        "a Chapter 8 legacy save that no story scene places (D0.missing), a non-string storyline_id (D0.type)",
+        "a non-string beats_played element (D0.element), a set holding one element twice (D0.duplicate)",
+        "a two-entry retraction_log (the R2 and R3 Faction retractions of (NONE, HEARTH, RELEASE), each consistent on "
+        "its own) and a two-element beats_played (D0.max)",
+        "the D7 new-value fixture is (SHARED, ARCHIVE, RELEASE) stored as its own ID with the entry {authority, NONE "
+        "→ YOU} and its beat retract_R2_authority_YOU",
+        "New game: the first save of a new game (every field at its default, act1_pace UNSET, at PRE_C8) gives "
+        "load_check() empty and phase_of(…, true) LEANING.",
+        # Revision 13 (round 13): D0 no longer shadows D14's undefined-beat clause.
+        "the D14 fixtures include a beats_played holding one undefined retract_* id, which reports D14, not D0",
+        "Legacy: a save of the previous schema version with no lifecycle block, defaulted before the check (Edge Case "
+        "8), gives load_check() empty and phase_of(…, true) LEANING at PRE_C8, and exactly {D16} at CH9",
+        "Non-goals load: one fixture per non-goal of Edge Case 16 (an edited lock_negotiated, an edited "
+        "withdrawn_item, an edited scene, a FINAL record before the final authorization)",
+        "load_check() gives the same result with every knob flipped",
+        "Fixtures use the position ids of Terms (Story position)."),
+    # Revision 12 (round 12): the three 1.0 companions, timing per flag, stored_id, Kaelthas never placed.
+    11: ("the records with no companion and with all three 1.0 companions (Elara, Seraphina, Lyra)",
+         "keep stored_id() and family() unchanged",
+         "adding one timing flag f changes composer_modules() by exactly module_keys(f)",
+         # Revision 14 (round 14): the mirror-flag sentence is gone; companions_of is the observable.
+         "every module m in composer_modules() has companions_of(m) within the record's present companions",
+         "no module m in composer_modules() has Kaelthas in companions_of(m)"),
     12: ("or any secret route is enabled in a 1.0 build; with the default knobs and build 1.0 it is empty",),
-    # Revision 11 (round 11): masked authored lines, a baseline, pairwise 2, a seeded defect.
+    # Revision 11 (round 11): masked authored lines, pairwise 2. Revision 12 (round 12): the base is base_lines(),
+    # three story scenes, keyed_axis(), two seeded defects, the raters on the smallest pair.
     14: ("over the {reach} storylines reachable in 1.0, by authored lines with interpolation masked, not by ids or raw "
          "text",
          "a substituted name, number or faction name alone never counts",
-         "For every ID at least 3 scenes differ from their baseline",
-         "for every pair of distinct IDs at least 2 scenes differ, at least one of them a story scene before the ending",
-         "A seeded defect must fail the criterion",
+         "A scene's *base* is base_lines(scene), what it plays with no module selected",
+         "An ID *differs in a scene* when scene_lines(id, scene) differs from the base",
+         "Pass: for every ID, at least 3 story scenes (a C<n>-S<m> or boss id; the ending sequence does not count) "
+         "differ from their base",
+         "at least one of those differences comes from a module whose keyed_axis() is faction or deleted",
+         "for every pair of distinct IDs, at least 2 scenes differ between them, at least one of them a story scene",
+         "Seeded defects, each of which must fail the criterion",
+         "route data in which every module's keyed_axis() is family",
+         "for the pair with the smallest count two raters confirm that its differing lines differ in content",
          "a threshold above 2 is Open Question 13"),
+    # Revision 12 (round 12): every arc has a row; a zero-hit scan is NOT ASSESSED.
+    # Revision 13 (round 13): arc 08 pushes Faction, so ten arcs.
+    15: ("lists every flag the ten 1.0 side arcs that push an axis (01-04, 06-08, 10-12) set in a side_arc_flags table",
+         "each of the ten arcs has at least one row",
+         "(a scan with zero hits is NOT ASSESSED, never a pass)"),
     16: ("a blind playtest of Chapter 8 with at least 12 testers", "At least 6 play Act 1 themselves",
          "At least 2 testers per invalid row", "two raters who did not run the session",
-         "at least 70% of testers name an earlier choice behind an argument in at least 2 of the 3 lock scenes",
+         # Revision 12 (round 12): the Act-1 subgroup gate, (c)/(d) reported, a fresh re-run of at least 12.
+         "(a) of the testers who played Act 1 themselves, at least 70% name an earlier choice behind an argument in at "
+         "least 2 of the lock scenes whose lock_arguments() was non-empty for them",
+         "the fixture-save testers' rate is reported, not gated",
          "at least 75% of crisis testers name both the refusing faction and the value it refused",
-         "95% Wilson intervals", "Failure action:"),
-    17: ("for each of the nine 1.0 side arcs", "voices none of those lines"),
+         "Reported measures with no verdict effect:",
+         "95% Wilson intervals beside every rate",
+         "A run is never stopped early or extended to reach the bar.",
+         "Failure action:",
+         "the playtest is re-run as a fresh run of this whole criterion (at least 12 new testers, judged alone, never "
+         "pooled with a failed run)"),
+    # Revision 12 (round 12): lock_arguments() replaces "voices ... lines".
+    17: ("for each of the ten 1.0 side arcs that push an axis (01-04, 06-08, 10-12)",
+         "Arc 12 is tested for its deleted:CHOOSE push only, arc 08 for its Faction push only.",
+         "makes lock_arguments() of the axis the flag pushes contain an argument "
+         "whose flag is that flag",
+         "gives a lock_arguments() that contains none of that arc's flags"),
 }
+# Revision 12 (round 12): retired AC wording that must not come back.
+AXES_AC_FORBIDDEN: dict[int, tuple[str, ...]] = {
+    9: ("which are listed as equivalent mutants", "D7.multi, D17.prefix"),
+    14: ("most of the 24 IDs share", "differ from their baseline"),
+    16: ("at least 6 new testers", "in at least 2 of the 3 lock scenes"),
+    17: ("voices none of those lines",),
+}
+# Revision 12 (round 12): the story-type paragraph after the "Runtime" heading.
+AXES_RUNTIME_KEYS = (
+    "ACs 5-14 are Logic (BLOCKING), automated in the project's own SceneTree test harness",
+    "with golden vectors exported from the reference model so the GDScript and the model cannot drift",
+    "AC15 is Logic (BLOCKING), a data scan; AC16 and AC17 are Integration.",
+    "three endings evidence the families, not the 24 ending sequences, which AC14 tests as data.",
+)
 AXES_DOC_AC_KEYS = (
     "Document-level (document lint, Config/Data, advisory)",
     "it shows the document is internally consistent and unchanged where pinned, not that the state machine is "
@@ -577,6 +694,39 @@ LIFE_KEYS = (  # normalized sentences the lifecycle doc must keep
     "commit (live_crisis)",
     "The DAMAGED turn-back repairs nothing",
     "Lint shows the text matches its pins; it is not evidence that the state machine is correct",
+    # Lifecycle revision 8 (axes round 12): every checkpoint stores the story position.
+    "Every checkpoint also stores the story position it reaches (storyline-axes.md Terms, Story position: the commit "
+    "of C8-S13 writes S13_DONE, and so on), and a save made anywhere else stores the last position it has crossed "
+    "(Y1-P1-T05).",
+    # The gate is one predicate on every scene change into Root of Heaven.
+    "the Chapter 10 scene chain and chapter select count as this path",
+    "including \"Resume story\" and the free-travel Root of Heaven region",
+    "The check is one predicate, not a list of callers (design review round 12): it runs before every scene change "
+    "whose target is a Root of Heaven scene, whoever requests it; on load, before any loaded state is applied; and "
+    "before free travel unlocks the Root of Heaven region, which stays locked until the predicate passes.",
+    "A new caller therefore cannot skip it, and setting a chapter-unlock flag alone never opens the gate.",
+    # Legacy saves are defaulted before the load check.
+    "A save of a schema version before these fields has its whole record block filled with the defaults before the "
+    "load check runs (storyline-axes.md Edge Case 8), so the check meets a typed record: at PRE_C8 it loads LEANING, "
+    "and past a lock scene D16 refuses it.",
+    # Chapter select (the record itself is derived in check_revision12).
+    # Revision 9 of the lifecycle (axes round 13): keyed to the entry scene's position, not the chapter number.
+    "Chapter select (user decisions 2026-11-17, design review rounds 12 and 13). Chapter select is player-facing.",
+    "It starts a new record, never edits a loaded one, and each entry is keyed to the story position of its entry "
+    "scene, not to its chapter number",
+    "An entry positioned before C8-S13 starts LEANING with the defaults (position PRE_C8).",
+    "An entry positioned past C8-S16's commit writes, as one atomic checkpoint before its entry scene loads, a fixed "
+    "valid record",
+    "axis_revised, retraction_log and beats_played empty, root_phase OUTSIDE, the matching AXIS* and "
+    "lock_negotiated_* mirror flags, and the story position of its entry scene (S16_DONE for a Chapter 8 entry after "
+    "the locks, CH9 for Chapter 9 and for every entry into Root of Heaven).",
+    "An entry into Root of Heaven then enters through the gate (T7). No entry is positioned inside the lock scenes "
+    "(S13_OPEN to S16_OPEN). So chapter select never writes a save the load check refuses",
+    # Lifecycle revision 9: the NG+ reset sets the story position; a legacy position is derived once.
+    "story_position → PRE_C8.",
+    "Such a save holds no story position, so the defaulting step derives it once, by the order in "
+    "storyline-axes.md Terms (Story position)",
+    "Changing chapter select is protected story progression: the implementing story needs the user's approval.",
 )
 # Lifecycle revision 5: the scene-level Observables table's first column, in order.
 LIFE_OBSERVABLES = (
@@ -587,7 +737,7 @@ LIFE_OBSERVABLES = (
     "confirm_execution()", "load_errors()", "save_bytes(slot)", "epilogue_lines()", "record_field(name)",
     "flag_set(name)",
 )
-LIFE_AC_COUNT = 18  # lifecycle revision 5
+LIFE_AC_COUNT = 19  # lifecycle revision 5: 18; revision 8 (axes round 12): L-AC19, the gate predicate and chapter select
 # Key phrases of the L-AC bodies (normalized); {legacy} and {total} are filled in from derived values.
 LAC_KEYS: dict[int, tuple[str, ...]] = {
     5: ("with every secret prerequisite flag set and with none",),
@@ -632,6 +782,18 @@ LAC_KEYS: dict[int, tuple[str, ...]] = {
     18: ("one retained live Godot viewport screenshot each (not a headless or dummy-renderer capture) in "
          "production/qa/evidence/, with lead sign-off recorded beside them",
          "the S6 turn-back prompt for a live DAMAGED record"),
+    # Lifecycle revision 8 (axes round 12): the gate predicate on every path, and chapter select.
+    19: ("For each scene-change request whose target is a Root of Heaven scene, issued from the Chapter 9 end, the "
+         "Chapter 10 scene chain, world-map \"Resume story\", free travel and chapter select, with a LEANING or "
+         "PARTLY_LOCKED injected live record: enter_root_of_heaven() is TURNED_BACK and current_scene() is not a Root "
+         "of Heaven scene",
+         "with ch10_unlocked set and no ID stored, the free-travel Root of Heaven region stays locked",
+         "Chapter select of Chapter 9 and of Chapter 10 from the main menu gives",
+         "record_field(lock_negotiated) = {faction, authority, deleted} and load_errors() empty for every save "
+         "written before the first player input",
+         "for Chapter 10 the gate gives ROOT_OF_HEAVEN",
+         "\"Chapter 8 - Ending\" gives the same record at S16_DONE with load_errors() empty for its autosave.",
+         "A chapter-select entry positioned before C8-S13 gives LEANING."),
 }
 # Assertions that cannot fail (offers() is empty in every non-offer scene): forbidden in the L-ACs (round 2).
 NON_FAILING = ("offers() is empty", "offers nothing", "offers() there is empty")
@@ -650,8 +812,11 @@ OPTIONAL_HEADINGS = frozenset({"Summary", "Cross-References", "Open Questions"})
 # Removed by review revisions 1-2; must not reappear. ("secret_invoked" left this list in revision 4: it is the
 # composer set of confirmed invocations again, GDD AC3.) "C8-S17" is the mis-cited final scene in the axes doc;
 # the lifecycle doc cites the real C8-S17 Revolution Name (PM:7155-7163), so it is exempt there.
+# Revision 12: "PM:7118" was stale as a whole because round 2 cited it for a claim it does not make; round 12 cites
+# it correctly (staged verification), so the stale string is now that old claim, and check_revision12 requires every
+# PM:7118 citation to be the supported one.
 STALE_STRINGS = ("PM:3615", "C8-S17", "ch8_choice_made", "S = T", "Kaelen only executes", "PM:8735",
-                 "final authorization, before", "PM:7118", "Kaelen may be one witness",
+                 "final authorization, before", "involuntary preservation (PM:7118)", "Kaelen may be one witness",
                  "at the final confrontation, to dismantle", "PM:7062-7070",
                  # revision 6 / lifecycle revision 2
                  "consent_failed_mandate", "failed-mandate", "authorized over dissent", "lock catch-up",
@@ -904,8 +1069,8 @@ def crisis_offers(rules: dict[str, tuple[str, ...]]) -> dict[str, set[str]]:
 def py_lock_pass(axis: str, value: str, flags: set[str]) -> str:
     """``lock_pass`` over the approved seed map: CLEAN iff some (axis:value, +) seed and no (axis:value, −) seed."""
     target = f"{axis}:{value}"
-    plus = any(SEED_EXPECTED.get(f) == (target, "+") for f in flags)
-    minus = any(SEED_EXPECTED.get(f) == (target, "−") for f in flags)
+    plus = any((f, target, "+") in SEED_ROWS for f in flags)
+    minus = any((f, target, "−") in SEED_ROWS for f in flags)
     return "CLEAN" if plus and not minus else "NEGOTIATED"
 
 
@@ -1283,8 +1448,18 @@ def check_seed_map(lines: list[str], game_text: str, src: SourceResolver, probs:
         probs.add(area, f"seed flag '{flag}' missing from the seed map")
     for flag in sorted(set(flags) - SEED_FLAGS):
         probs.add(area, f"flag '{flag}' is not a seed flag")
-    for flag in sorted({f for f in flags if flags.count(f) > 1}):
-        probs.add(area, f"flag '{flag}' listed {flags.count(flag)} times")
+    # Revision 12: a flag has at most one axis row and at most one non-axis (modifier or timing) row.
+    for flag in sorted(set(flags)):
+        kinds = [cells[1].partition(":")[0] in AXES for _, cells in rows if cells[0] == flag]
+        if kinds.count(True) > 1:
+            probs.add(area, f"flag '{flag}' has {kinds.count(True)} axis rows (a flag pushes at most one axis)")
+        if kinds.count(False) > 1:
+            probs.add(area, f"flag '{flag}' has {kinds.count(False)} modifier or timing rows (at most one)")
+    got_rows = {(cells[0], cells[1], cells[2].replace("-", "−")) for _, cells in rows}
+    for flag, push, direction in SEED_ROWS:
+        if (flag, push, direction) not in got_rows and flag in flags:
+            have = [f"{c[1]} {c[2]}" for _, c in rows if c[0] == flag]
+            probs.add(area, f"approved row '{flag} | {push} | {direction}' missing (the map has {have})")
     for lineno, (flag, pushes, direction, overturn, source) in rows:
         where = f"line {lineno} ({flag})"
         if not FLAG_RE.match(flag) or not flag_exists(flag, game_text):
@@ -1305,12 +1480,28 @@ def check_seed_map(lines: list[str], game_text: str, src: SourceResolver, probs:
             probs.add(area, f"{where}: overturnable '{overturn}' for pushes '{pushes}', expected {want}")
         if (err := src.check(source.removesuffix(JUDGEMENT_SUFFIX))) is not None:
             probs.add(area, f"{where}: {err}")
-        if flag in SEED_EXPECTED:
-            want_push, want_dir = SEED_EXPECTED[flag]
-            if pushes != want_push or direction.replace("-", "−") != want_dir:
-                probs.add(area, f"{where}: '{pushes} {direction}' differs from the approved '{want_push} {want_dir}'")
-    if not any(f"({len(SEED_EXPECTED)} flags)" in line for line in lines):
-        probs.add(area, f"seed map intro does not state '({len(SEED_EXPECTED)} flags)'")
+        if flag in SEED_FLAGS and (flag, pushes, direction.replace("-", "−")) not in SEED_ROWS:
+            want = [f"{p} {d}" for f, p, d in SEED_ROWS if f == flag]
+            probs.add(area, f"{where}: '{pushes} {direction}' is not an approved row for this flag ({want})")
+    intro = f"({SEED_FLAG_COUNT} flags in {len(SEED_ROWS)} rows: a flag may push a modifier and an axis, one row each, " \
+            "never two axes)"
+    if intro not in norm(" ".join(lines)):
+        probs.add(area, f"seed map intro does not state '{intro}'")
+    whole = norm(" ".join(lines))
+    if "A seed row is matched by its (flag, pushes) pair, so a flag's modifier row never enters the test." not in whole:
+        probs.add(area, "Formulas lack 'A seed row is matched by its (flag, pushes) pair, so a flag's modifier row never "
+                        "enters the test.'")
+    # Revision 12 (round 12): the Authority remap's reasons, including why ch1_knight_spared stays a modifier.
+    # Revision 13 (round 13): one stated discriminator, verbatim quotes of PM:636 and PM:7048, PM:1804 cited.
+    for key in ("The discriminator, in one sentence: an Authority seed records either Kaelen's first relation to "
+                "the Key itself",
+                "that \"somebody must be accountable.\" (PM:636)",
+                "\"Because someone has to be answerable when this goes wrong.\" (PM:7048)",
+                "(\"Flags track explanation separately from action.\", PM:1804)",
+                "A player who purges Aldric and makes the first edit therefore reaches a negotiated YOU vote",
+                "ch1_knight_spared stays a modifier only: the Purge path sets it too (dialogue/ch1/aldric.dlg:116)"):
+        if key not in whole:
+            probs.add(area, f"seed map notes lack '{key}'")
 
 
 def check_side_arcs(lines: list[str], src: SourceResolver, probs: Problems) -> None:
@@ -1473,7 +1664,8 @@ def check_formulas(lines: list[str], rules: dict[str, tuple[str, ...]], probs: P
                      "a live_crisis one",
                      "Every other item applies to every record",
                      "CRISIS is returned only for live_crisis",
-                     f"the record alone cannot show D{EC16_EXCLUSIVE}-D{EC16_ORDER}, so the check takes them",
+                     "position the record's story_position, passed as its own argument",
+                     f"the other fields alone cannot show D{EC16_EXCLUSIVE}-D{EC16_ORDER}, so the check takes them",
                      "FINAL and FIXED need a stored ID"):
             if want not in norm(text):
                 probs.add(area, f"storyline_phase paragraph lacks '{want}'")
@@ -1613,6 +1805,19 @@ def check_core_rules(lines: list[str], rules: dict[str, tuple[str, ...]], probs:
     if first in offers and others:
         keys[5].append(f"{NUMBER_WORDS[len(offers[first])]} for {first}, "
                        f"{NUMBER_WORDS[len(offers[others[0]])]} for {' or '.join(others)}")
+    # Rule 3 (revision 12): the '−' seeds per axis, derived from the seed rows.
+    minus = {axis: sorted(f for f, push, d in SEED_ROWS if push.startswith(f"{axis}:") and d == "−") for axis in AXES}
+    targets = {axis: sorted({push.split(":")[1] for f, push, d in SEED_ROWS if push.startswith(f"{axis}:")
+                             and d == "−"}) for axis in AXES}
+    keys[3].append(f"Faction has {NUMBER_WORDS.get(len(minus['faction']), 'no')} − seed "
+                   f"({', '.join(minus['faction'])}, against {', '.join(targets['faction'])}) and Authority "
+                   f"{NUMBER_WORDS.get(len(minus['authority']), 'no')}, "
+                   f"{'both' if len(minus['authority']) == 2 else 'all'} against {', '.join(targets['authority'])} "
+                   f"({', '.join(minus['authority'])})")
+    keys[3].append("Deleted has none, so a Deleted vote is clean exactly when the one wraith seed backs its value"
+                   if not minus["deleted"] else "Deleted has a − seed")
+    # Rule 11 (revision 12): the 1.0 companion set, derived.
+    keys[11].append(f"The 1.0 companion set is {join_and(list(COMPANION_ORDER))}.")
     for lineno, num, title, text in items:
         if 1 <= num <= len(CORE_RULE_TITLES) and title != CORE_RULE_TITLES[num - 1]:
             probs.add(area, f"line {lineno}: Core Rule {num} title '{title}', expected '{CORE_RULE_TITLES[num - 1]}'")
@@ -1743,20 +1948,38 @@ def check_axes_edge_cases(lines: list[str], probs: Problems) -> None:
         if key not in text:
             probs.add(area, f"line {lineno}: Edge Case 16 lacks the pinned sentence '{key}'")
     # Cross-references: the items cited by number must be the ones meant, and active.
-    if ("exclusive group" not in EC16_TEXT.get(EC16_EXCLUSIVE, "") or "story position past"
+    if ("exclusive group" not in EC16_TEXT.get(EC16_EXCLUSIVE, "") or "story position (Terms) past"
             not in EC16_TEXT.get(EC16_LEGACY, "") or "nothing stored" not in EC16_TEXT.get(EC16_CRISIS, "")
             or "lock order" not in EC16_TEXT.get(EC16_ORDER, "")):
         probs.add(area, "EC16_EXCLUSIVE / _LEGACY / _CRISIS / _ORDER do not point at their active items")
+    # Revision 12 (round 12): D7's clause ids are exactly the active ones; the retired ones are named only as retired.
+    d7_ids = re.findall(r"\(D7\.(\w+)[;)]", EC16_TEXT.get(7, ""))
+    got_d7 = [m for m in re.findall(r"\(D7\.(\w+)[;)]", next((t for lo, hi, t in got if lo == 7), ""))]
+    if got_d7 != d7_ids or d7_ids != list(EC16_D7_CLAUSES):
+        probs.add(area, f"Edge Case 16 D7 clause ids {got_d7} != the active clauses {list(EC16_D7_CLAUSES)}")
     ec = {num: t for _, num, _, t in items}
     if f"(Edge Case 16, D{EC16_EXCLUSIVE})" not in ec.get(6, ""):
         probs.add(area, f"Edge Case 6 does not cite '(Edge Case 16, D{EC16_EXCLUSIVE})', the exclusive-group item")
-    if f"(Edge Case 16, D{EC16_LEGACY};" not in ec.get(8, ""):
-        probs.add(area, f"Edge Case 8 does not cite 'Edge Case 16, D{EC16_LEGACY}', the pre-axes save item")
-    if "is unsupported and does not load" not in ec.get(8, ""):
-        probs.add(area, "Edge Case 8 no longer says a pre-axes save past a lock scene 'is unsupported and does not load'")
+    # Revision 12 (round 12): an older save is defaulted before the check, so D16 (not D0) refuses it past a lock.
+    for key in ("has its whole lifecycle block filled with the defaults (UNSET, empty, OUTSIDE) before the load check "
+                "runs, so D0 meets no missing field but the position",
+                f"positioned past a lock scene (chapters 9 and 10 exist in the code today) it is refused by "
+                f"D{EC16_LEGACY} as unsupported",
+                "A save of the current schema version with a field missing is D0.",
+                # Revision 13 (round 13): keyed to the entry scene's position; the legacy position is derived once.
+                "Chapter select writes a valid record before its first save for every entry positioned past C8-S16's "
+                "commit, keyed to its entry scene's position, not its chapter number (storyline-lifecycle.md Chapter "
+                "select), so it never writes one D16 refuses.",
+                "its story position is derived once (Terms, Story position; a Chapter 8 save no story scene places "
+                "has none and is D0)"):
+        if key not in ec.get(8, ""):
+            probs.add(area, f"Edge Case 8 lacks '{key}'")
     if "holds only while no player-facing build has a save past Chapter 8" not in ec.get(8, ""):
         probs.add(area, "Edge Case 8 lost the precondition 'holds only while no player-facing build has a save past "
                         "Chapter 8' (design review round 7)")
+    # Revision 12 (round 12): Kaelthas is outside the 1.0 companion set in Edge Case 1 too.
+    if "Kaelthas is outside the 1.0 companion set" not in ec.get(1, ""):
+        probs.add(area, "Edge Case 1 lacks 'Kaelthas is outside the 1.0 companion set'")
     # Round 6 blocker 3: the over-promise guard on clean/negotiated.
     whole = norm(" ".join(lines))
     for key in NO_OVERPROMISE_KEYS:
@@ -1770,8 +1993,9 @@ def check_axes_edge_cases(lines: list[str], probs: Problems) -> None:
     want = f"for each clause of each active Edge Case 16 item ({compress_items(EC16_ACTIVE)})"
     if want not in whole:
         probs.add(area, f"AC9 lacks '{want}' (derived from Edge Case 16)")
-    if "the clauses listed as documentation (D7.multi, D17.prefix)" not in whole:
-        probs.add(area, "AC9 does not list the documentation clauses (D7.multi, D17.prefix)")
+    want = f"except the clause listed as documentation ({', '.join(EC16_DOC_CLAUSES)}), which has no fixture"
+    if want not in whole:
+        probs.add(area, f"AC9 does not say '{want}'")
     playable = [p for p in PHASES if p != "DAMAGED"]
     # Revision 10 (round 10, F2): the CRISIS fixture sits inside C8-S16, so D17 fires with D9.
     for want in (f"for one fixture per phase other than DAMAGED ({', '.join(playable)})",
@@ -1808,8 +2032,9 @@ REVISION9_AXES_KEYS = (
     "The secret routes are post-1.0, so 1.0 ships the 24 and every contradiction is renegotiated.",
     "are post-1.0 and will be designed together as one mechanism (user decision 2026-11-11)",
     "1.0 shows no hint of a door it does not ship",
+    # Revision 14 (round 14): story_position joins the stored fields.
     "of the lifecycle fields the record stores the axes, storyline_id, root_phase, axis_revised, lock_negotiated, "
-    "retraction_log and beats_played",
+    "retraction_log, beats_played and story_position",
     "in 1.0 always false: no route is enabled and the record holds no invocation",
     "with the default knobs it never fires.",
     "With the default knobs no secret route is enabled: reachable_1_0: 24.",
@@ -1858,7 +2083,9 @@ def check_revision9(gdd: list[str], life: list[str], valid_rows: int, probs: Pro
                 probs.add(area, f"{doc} names 'I1-I{m[1]}', but the invariants table has I1-I{len(INVARIANTS)}")
         if not re.search(rf"\bI1-I{len(INVARIANTS)}\b", text):
             probs.add(area, f"{doc} never names the invariants 'I1-I{len(INVARIANTS)}'")
-    m = re.search(r"of the lifecycle fields the record stores the axes, (.+?); the phase depends", whole)
+    # Revision 12: the sentence now goes on "; the Edge Case 16 check reads all of them ..." (pinned in revision 12).
+    m = re.search(r"of the lifecycle fields the record stores the axes, (.+?); the Edge Case 16 check reads all of them",
+                  whole)
     stored = set(AXES) | set(re.findall(r"\w+", m[1].replace(" and ", ", "))) if m else set()
     bounds = section(life, "### Inputs and outputs")
     fields = re.search(r"\(fields (.+?)\)", " ".join(life[bounds[0]:bounds[1]])) if bounds else None
@@ -1907,6 +2134,256 @@ def check_protected(lines: list[str], root: Path, probs: Problems) -> None:
     deps = section(lines, "## Dependencies")
     if deps is None or not any(lines[n].startswith("| protected area |") for n in range(*deps)):
         probs.add(area, "the protected touchpoints table is not in the Dependencies section")
+
+
+# --- Design review round 12 (2026-11-17): axes revision 12 / lifecycle revision 8 ---------------------------------
+REFERENCE_MODEL = Path(__file__).resolve().parent / "reference_model.py"
+REVISION12_AXES_KEYS = (
+    # Terms: the story position is stored, compared by list index, and is the model's POSITIONS list.
+    "The position is the record field story_position (Composer input record), written by each commit checkpoint and "
+    "each story-graph step that crosses into the next id, never derived from the current scene file on load; D16 and "
+    "D17 compare it by list index, and every id they compare against precedes CH9.",
+    "The list is the reference model's POSITIONS (Open Question 16); finer ids (a boss id, for candidate D18) may be "
+    "added inside an id, never across one",
+    # Core Rule 1: a pre-lifecycle save is written UNSET, then D16 refuses it past a lock scene.
+    "SaveService writes UNSET for a new game, and for a save of a schema version before these fields, which the load "
+    "check then refuses if it is positioned past a lock scene: Edge Case 16, D16",
+    # The phase depends only on three fields once the Edge Case 16 check passes.
+    "the Edge Case 16 check reads all of them with the saved flags, and once it passes the phase depends only on "
+    "the axes, storyline_id and root_phase.",
+    # Open Questions 10, 17, 19 and 20.
+    "ch1_knight_spared was proposed for SHARED and dropped, because the Purge path sets it too",
+    "RELEASE needs staged verification (PM:7118), while destroying the wraith loses anyone still recoverable "
+    "(dialogue/ch2/underground.dlg:64); the user kept the row (2026-11-17).",
+    "(D0; D7.duplicate was folded into D0's one-entry cap in revision 12)",
+    "19. Kaelthas as a companion (user decision 2026-11-17, design review round 12).",
+    "a GDD revision that restores the Archive waiver and its AC11 rows.",
+    "20. Review exit criteria — adopted (user decision 2026-11-18, design review round 14; proposed by the "
+    "creative-director in round 12).",
+)
+# Protected touchpoints: the story-progression row names the round-12 additions.
+REVISION12_PROTECTED_KEYS = ("the gate on the story path and on every scene change into Root of Heaven",
+                             "chapter select past C8-S16 writing a valid record", "the stored story position")
+REVISION12_FORBIDDEN = (  # round 11 wording the round-12 revision replaced (both documents)
+    "his presence also needs that trust condition", "The axis can only waive a trust test",
+    "Elara, Seraphina, Lyra, Kaelthas",
+)
+# PM:7118 is "Release policy requires staged verification where possible." Round 2 cited it for a claim it does not
+# make ("RELEASE ends involuntary preservation"); round 12 cites it for what it says. Every citation must be the latter.
+PM7118_CLAIM = "RELEASE needs staged verification (PM:7118)"
+PM7118_TEXT = "staged verification"
+LIFE_CHAPTER_SELECT_RE = re.compile(
+    r"a fixed valid record: (SL-(\w+)-(\w+)-(\w+)) \((\w+), (\w+), (\w+); (\w+) and (\w+) appear in no invalid row\), "
+    r"lock_negotiated = \{([^}]*)\}")
+
+
+def model_positions() -> tuple[str, ...] | None:
+    """The reference model's POSITIONS tuple, read from its source without running it (stdlib ast)."""
+    import ast
+    try:
+        tree = ast.parse(REFERENCE_MODEL.read_text(encoding="utf-8"))
+    except (OSError, SyntaxError, UnicodeDecodeError):
+        return None
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id == "POSITIONS" for t in node.targets):
+            try:
+                return tuple(ast.literal_eval(node.value))
+            except ValueError:
+                return None
+    return None
+
+
+def check_revision12(gdd: list[str], life: list[str], rules: dict[str, tuple[str, ...]], src: SourceResolver,
+                     probs: Problems) -> None:
+    """Design review round 12: the story-position list equals the model's POSITIONS; pinned axes sentences; the
+    chapter-select record is a valid row outside every invalid row's Authority and Deleted values, BOUND, with all
+    three axes negotiated; PM:7118 cited only for what it says; retired round-11 wording absent."""
+    area = "revision 12"
+    whole, life_whole = norm(" ".join(gdd)), norm(" ".join(life))
+    for key in REVISION12_AXES_KEYS:
+        if key not in whole:
+            probs.add(area, f"storyline-axes.md lacks '{key}'")
+    # Terms, Story position: the ordered id list equals the model's POSITIONS.
+    m = re.search(r"Story position: the save's place in the story, one id from this ordered list \(earliest first\): "
+                  r"(.+?)\. <scene>_OPEN", whole)
+    listed = tuple(re.findall(r"\b([A-Z][A-Z0-9_]+)\b(?: \([^)]*\))?(?:,|$)", m[1])) if m else ()
+    positions = model_positions()
+    if positions is None:
+        probs.add(area, f"cannot read POSITIONS from {REFERENCE_MODEL.name}")
+    elif listed != positions:
+        probs.add(area, f"Terms story positions {list(listed)} != the reference model's POSITIONS {list(positions)}")
+    rows = get_table(gdd, H_PROTECTED, area, probs)
+    story = next((cells[1] for _, cells in rows if cells[0] == "story progression"), "")
+    for key in REVISION12_PROTECTED_KEYS:
+        if key not in story:
+            probs.add(area, f"protected touchpoints 'story progression' lacks '{key}'")
+    for doc, text in (("axes", whole), ("lifecycle", life_whole)):
+        for bad in REVISION12_FORBIDDEN:
+            if bad in text:
+                probs.add(area, f"{doc} still has the round-11 wording '{bad}'")
+    # PM:7118: every citation makes the claim the line supports.
+    pm = src.pm() or []
+    if len(pm) < 7118 or PM7118_TEXT not in pm[7117]:
+        probs.add(area, f"PRODUCTION_MASTER_2.1.md:7118 no longer says '{PM7118_TEXT}'")
+    for doc, text in (("axes", whole), ("lifecycle", life_whole)):
+        if text.count("PM:7118") != text.count(PM7118_CLAIM):
+            probs.add(area, f"{doc} cites PM:7118 other than as '{PM7118_CLAIM}'")
+    # Lifecycle Chapter select: the fixed record, derived properties.
+    m = LIFE_CHAPTER_SELECT_RE.search(life_whole)
+    if m is None:
+        probs.add(area, "lifecycle Chapter select names no 'a fixed valid record: SL-A-F-D (A, F, D; X and Y appear in "
+                        "no invalid row), lock_negotiated = {...}'")
+    else:
+        sid, a, f, d, a2, f2, d2, x, y, neg = m.groups()
+        invalid = set(rules.values())
+        if (a, f, d) != (a2, f2, d2) or a not in AUTHORITY or f not in FACTION or d not in DELETED:
+            probs.add(area, f"chapter-select record {sid} does not match its axes ({a2}, {f2}, {d2})")
+        if (a, f, d) in invalid:
+            probs.add(area, f"chapter-select record {sid} is an invalid row")
+        in_invalid = {v for triple in invalid for v in triple}
+        if {x, y} != {a, d} or x in in_invalid or y in in_invalid:
+            probs.add(area, f"chapter select says {x} and {y} appear in no invalid row; the rules table "
+                            f"{sorted(invalid)} disagrees or they are not the record's Authority and Deleted values")
+        if {v.strip() for v in neg.split(",")} != set(AXES):
+            probs.add(area, f"chapter-select lock_negotiated {{{neg}}} != all three axes (no lock vote was played)")
+        fam = FAMILY_BY_AUTHORITY.get(a, "?")
+        if f"its ending is {fam} without sole_dissent" not in life_whole:
+            probs.add(area, f"chapter select does not say 'its ending is {fam} without sole_dissent' (family of {a})")
+        if f"L-AC19" in life_whole and f"storyline_id() {sid}" not in life_whole:
+            probs.add(area, f"L-AC19 does not expect storyline_id() {sid}, the chapter-select record")
+
+
+# --- Design review round 13 (2026-11-17): axes revision 13 / lifecycle revision 9 ---------------------------------
+# Side-storyline secondary effects, pinned (revision 13: arc 08's Quest 48 faction effect, PM:3681-3682).
+SIDE_SECONDARY = {"06": "faction:HEARTH", "07": "faction:ARCHIVE", "08": "faction:*", "12": "deleted:CHOOSE"}
+REVISION13_AXES_KEYS = (
+    # Terms: the other position writers, and the one exception to "never derived".
+    "The other writers are a new game and the NG+ reset (PRE_C8) and chapter select (the position of its entry scene; "
+    "storyline-lifecycle.md Chapter select).",
+    "One exception to \"never derived\": a save of a schema version before these fields holds no position, so "
+    "SaveService derives it once, while defaulting that save (Edge Case 8), in this order",
+    # Tuning Knobs: the one statement of where knobs are read.
+    "Knobs are read in exactly two places, and this is the one statement of where",
+    "and secret_prerequisites[FIRSTWAKE] at C9-S18, to choose its decrypted or noise form (Core Rule 6), which sets no "
+    "field and changes no ID.",
+    "Knobs are read only where Tuning Knobs states.",
+    # Side storylines: arc 08 pushes Faction in 1.0.
+    "Arc 08 feeds Crownless and also pushes Faction in 1.0",
+    "P5 (\"side storylines feed the main story\") is to be met in 1.0 by the ten arcs that push an axis",
+    # Citations fixed in round 13.
+    "AethelgardPrototype/scripts/chapter3/ch3_kaelthas_betrayal.gd:157-161",
+    "This GDD uses 3 of the 4 (Elara, Seraphina, Lyra); Kaelthas is reserved",
+    "and a pairwise minimum of 2 scenes (rounds 11 and 12)",
+    "DAMAGED inside C8-S16 before its commit (D9 and D17: a valid row is not live_crisis).",
+)
+REVISION13_AXES_FORBIDDEN = (
+    "someone must be answerable",   # verbatim at neither PM:636 nor PM:7048
+    "This GDD uses the 4",
+    "pairwise minimum of 1 scene",
+    "Elara's rebuke",
+    "(PM:788; Core Rule 11",
+    "beats_played sixteen",
+    "Knobs are read only at C8-S16 and the gate",
+)
+REVISION13_LIFE_KEYS = (
+    "true exactly when an ID is stored and the phase is not DAMAGED",
+    "or a live DAMAGED record (a defect, turned back as a data error, S6)",
+    "story_position → PRE_C8. The story position is reset with the record because a new record left at a Story+ "
+    "position would be refused by D16",
+    "Knobs are read only where storyline-axes.md Tuning Knobs states (C8-S16, the gate, and C9-S18's form).",
+    "OLD_HOME_MESSAGE is set in the Chapter 3 End ledger (PM:3814), not by arc 09's own quests (PM:3685-3707)",
+    "Starting NG+ from a FINAL record positioned at STORY_PLUS gives LEANING",
+    "the story position PRE_C8, load_errors() empty for the first save of the new cycle",
+)
+REVISION13_LIFE_FORBIDDEN = (
+    "(arc 09, PM:3814)",
+    "Knobs are read only at C8-S16 and the gate",
+    "For Chapter 8 or earlier",
+)
+
+
+def check_revision13(gdd: list[str], life: list[str], probs: Problems) -> None:
+    """Design review round 13: pinned sentences of axes revision 13 and lifecycle revision 9, retired wording absent,
+    and the side-storyline secondary column pinned (arc 08's faction effect)."""
+    area = "revision 13"
+    whole, life_whole = norm(" ".join(gdd)), norm(" ".join(life))
+    for key in REVISION13_AXES_KEYS:
+        if key not in whole:
+            probs.add(area, f"storyline-axes.md lacks '{key}'")
+    for bad in REVISION13_AXES_FORBIDDEN:
+        if bad in whole:
+            probs.add(area, f"storyline-axes.md still says '{bad}' (retired in revision 13)")
+    for key in REVISION13_LIFE_KEYS:
+        if key not in life_whole:
+            probs.add(area, f"storyline-lifecycle.md lacks '{key}'")
+    for bad in REVISION13_LIFE_FORBIDDEN:
+        if bad in life_whole:
+            probs.add(area, f"storyline-lifecycle.md still says '{bad}' (retired in lifecycle revision 9)")
+    for lineno, (arc, _title, _primary, secondary, _scope, _pm) in get_table(gdd, H_SIDE, area, probs):
+        want = SIDE_SECONDARY.get(arc)
+        if (want is None and not is_dash(secondary)) or (want is not None and secondary != want):
+            probs.add(area, f"line {lineno} (arc {arc}): secondary '{secondary}', expected {want or '—'}")
+
+
+# --- Design review round 14 (2026-11-18): axes revision 14 / lifecycle revision 10 --------------------------------
+# Scope frozen to the six round-14 blockers (Open Question 20, adopted) and Open Question 21's class.
+REVISION14_AXES_KEYS = (
+    # Blocker 1: the purge row rests on its own scene; PM:663 is not cited for it.
+    "because Kaelen rewrites Aldric before he can say what it will cost",
+    "(dialogue/ch1/aldric.dlg:104-107). PM:663 is not cited for this row: the purge leaves Aldric lucid "
+    "(dialogue/ch1/aldric.dlg:119-122)",
+    "ch1_root_purge → YOU − rests on dialogue/ch1/aldric.dlg:104-107 (revision 14)",
+    # Blocker 2: the legacy derivation order; hubs are not in the map; a Chapter 8 save is refused.
+    "free-travel story scene, else its own scene, each through the scene-to-id map, which holds story scenes only and "
+    "never a hub",
+    "else its chapter number, below 8 → PRE_C8 and 9 or above → CH9. A Chapter 8 save that no mapped story scene "
+    "places is left with no position, which D0 refuses (user decision 2026-11-18, design review round 14).",
+    "SaveService (Y1-P1-T05) carries the stored position on every save the code writes",
+    # Blocker 6: a secret-only flag's push.
+    "A flag that feeds only a post-1.0 secret route (Core Rule 6) pushes secret:<route> with direction 0 and no",
+    "every one of them has a seed-map row with a pushes target (an axis, a modifier, timing or secret:<route>",
+    # Open Question 21: main-story seeds.
+    "and so do main-story choices after Act 1 (main-story seeds; the first known is the Chapter 4 Null Court promise",
+    "21. Main-story seeds (user decision 2026-11-18, design review round 14).",
+    "the seed map and its 26-flag list are unchanged until then.",
+    # Open Question 20 adopted.
+    "Round 15 runs lean on the revision-14 diff and the model log",
+)
+REVISION14_AXES_FORBIDDEN = (
+    "which PM:663 names as the condition of his support",     # inverts its source (round 14, narrative-director)
+    "a rewrite of a person done without his consent",       # not in aldric.dlg:57
+    "a rewrite of Aldric without his consent",
+    "is resolved by revision 13",
+    "a scene the map does not hold leaves the field missing",  # position was not a record field (round 14)
+    "except for modules module_keys() keys to a Faction mirror flag",   # contradicts Core Rule 3 and AC14
+    "renames its beat to match",                              # yields {D7.new_mismatch, D14.undefined} on Faction
+    "proposed, not yet adopted by the user",
+)
+REVISION14_LIFE_KEYS = (
+    "the free-travel story scene, else the save's own scene, through the scene-to-id map, which holds no hub; else "
+    "the chapter number. A Chapter 8 save that no story scene places is left with no position, which D0 refuses "
+    "(D0.missing).",
+)
+REVISION14_LIFE_FORBIDDEN = ("a scene the map lacks leaves the field missing",)
+
+
+def check_revision14(gdd: list[str], life: list[str], probs: Problems) -> None:
+    """Design review round 14: pinned sentences of axes revision 14 and lifecycle revision 10, retired wording
+    absent."""
+    area = "revision 14"
+    whole, life_whole = norm(" ".join(gdd)), norm(" ".join(life))
+    for key in REVISION14_AXES_KEYS:
+        if key not in whole:
+            probs.add(area, f"storyline-axes.md lacks '{key}'")
+    for bad in REVISION14_AXES_FORBIDDEN:
+        if bad in whole:
+            probs.add(area, f"storyline-axes.md still says '{bad}' (retired in revision 14)")
+    for key in REVISION14_LIFE_KEYS:
+        if key not in life_whole:
+            probs.add(area, f"storyline-lifecycle.md lacks '{key}'")
+    for bad in REVISION14_LIFE_FORBIDDEN:
+        if bad in life_whole:
+            probs.add(area, f"storyline-lifecycle.md still says '{bad}' (retired in lifecycle revision 10)")
 
 
 # --- 8. Acceptance criteria ----------------------------------------------------------------------------------------
@@ -1976,6 +2453,19 @@ def check_axes_acs(lines: list[str], valid_rows: int, rules: dict[str, tuple[str
             key = key.replace("{reach}", str(reach))
             if key not in norm(texts.get(number, "")):
                 probs.add(area, f"AC {number} lacks '{key}'")
+    for number, bads in AXES_AC_FORBIDDEN.items():
+        for bad in bads:
+            if bad in norm(texts.get(number, "")):
+                probs.add(area, f"AC {number} has the retired wording '{bad}' (design review round 12)")
+    rt = next((n for n, line in enumerate(lines) if line.startswith("**Runtime — each criterion names")), None)
+    runtime = []
+    for line in lines[rt:] if rt is not None else []:
+        if not line.strip():
+            break
+        runtime.append(line)
+    for key in AXES_RUNTIME_KEYS:
+        if key not in norm(" ".join(runtime)):
+            probs.add(area, f"the Runtime paragraph lacks '{key}' (story types and gates)")
     route_rule = CTX.get("route_rule", {})
     want = "(" + ", ".join(f"{route} on {rule}" for route, rule in sorted(route_rule.items(), key=lambda x: x[1])) + ")"
     if want not in norm(texts.get(5, "")):
@@ -1997,8 +2487,8 @@ def check_axes_acs(lines: list[str], valid_rows: int, rules: dict[str, tuple[str
     for key in want5:
         if key not in norm(texts.get(5, "")):
             probs.add(area, f"AC 5 lacks '{key}' (derived from the vocabularies and the table)")
-    if f"the {len(SEED_EXPECTED)} seed flags" not in norm(texts.get(10, "")):
-        probs.add(area, f"AC 10 does not say 'the {len(SEED_EXPECTED)} seed flags'")
+    if f"the {SEED_FLAG_COUNT} seed flags" not in norm(texts.get(10, "")):
+        probs.add(area, f"AC 10 does not say 'the {SEED_FLAG_COUNT} seed flags'")
 
 
 # --- 9-14. storyline-lifecycle.md ----------------------------------------------------------------------------------
@@ -2037,7 +2527,7 @@ def check_life_record(life: list[str], probs: Problems) -> None:
             continue
         typ, allowed, _ = COMPOSER[field]
         want = ("UNSET" if field in AXES else ROOT_PHASES[0] if field == "root_phase"
-                else "false" if typ == "bool" else "empty")
+                else "PRE_C8" if field == "story_position" else "false" if typ == "bool" else "empty")
         if default != want:
             probs.add(area, f"NG+ reset {field} → '{default}', expected '{want}'")
     if set(stated) != set(inputs):
@@ -2280,7 +2770,7 @@ def check_number_words(lines: list[str], doc: str, rules: dict[str, tuple[str, .
 
 
 def check_life_acs(life: list[str], valid_rows: int, rules: dict[str, tuple[str, ...]], probs: Problems) -> None:
-    """L-AC1-L-AC18 contiguous; Blocked by; only the pinned observables; derived numbers; the Validation note."""
+    """L-AC1-L-AC19 contiguous; Blocked by; only the pinned observables; derived numbers; the Validation note."""
     area = "lifecycle acceptance"
     allowed = observables(life, H_LIFE_OBSERVABLES, area, probs)
     obs = [cells[0] for _, cells in get_table(life, H_LIFE_OBSERVABLES, area, probs)]
@@ -2369,7 +2859,7 @@ def check_life_acs(life: list[str], valid_rows: int, rules: dict[str, tuple[str,
         if NUMBER_WORDS.get(len(clauses)) != m[2]:
             probs.add(area, f"L-AC2 says '{m[2]} fixtures' but lists {len(clauses)}")
         for clause in clauses:
-            flags = {f for f in re.findall(r"[a-z0-9_]+", clause.split("→")[0]) if f in SEED_EXPECTED}
+            flags = {f for f in re.findall(r"[a-z0-9_]+", clause.split("→")[0]) if f in SEED_FLAGS}
             want = "NEGOTIATED" if py_lock_pass("faction", m[1], flags) == "NEGOTIATED" else "CLEAN"
             got = "NEGOTIATED" if "contains" in clause.split("→")[1] else "CLEAN"
             if want != got:
@@ -2529,6 +3019,9 @@ def main(argv: list[str] | None = None) -> int:
     check_revision7(gdd, life, probs)
     check_revision9(gdd, life, valid_rows, probs)
     check_protected(gdd, args.root, probs)
+    check_revision12(gdd, life, rules, src, probs)
+    check_revision13(gdd, life, probs)
+    check_revision14(gdd, life, probs)
     check_axes_acs(gdd, valid_rows, rules, probs)
     check_number_words(gdd, "axes", rules, probs)
     # storyline-lifecycle.md

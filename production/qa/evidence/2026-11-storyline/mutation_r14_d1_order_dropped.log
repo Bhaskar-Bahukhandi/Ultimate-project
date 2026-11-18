@@ -1,0 +1,9 @@
+# Mutation 'r14_d1_order_dropped' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r14_d1_order_dropped.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r14_d1_order_dropped.md
+lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [edge cases] line 686: Edge Case 16 D1 'a stored ID that is not SL-A-F-D for its axes on a valid row, tested in this order and reported as the first clause that holds: any SL-SECRET-* ID (D1.secret; no 1.0 play stores one), an ID with an UNSET axis (D1.unset_axis), the ID of an invalid row (D1.invalid_row), or any other ID (D1.other_id, which includes an invalid row's ID stored on a valid row)' differs from the pinned 'a stored ID that is not SL-A-F-D for its axes on a valid row, tested in this order and reported as the first clause that holds: any SL-SECRET-* ID (D1.secret; no 1.0 play stores one), an ID with an UNSET axis (D1.unset_axis), an ID while the record's axes form an invalid row (D1.invalid_row), or any other ID (D1.other_id, which includes an invalid row's ID stored on a valid row)'
+RESULT: FAIL (1 problems)
+exit code: 1

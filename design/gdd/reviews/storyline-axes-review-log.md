@@ -307,3 +307,97 @@ Findings:
 - [RECOMMENDED] Routed: SaveService gaps to Y1-P1-T05 (save suppression, deferred saves, commit rollback, store_* return, Windows rename, refusal off the .bak path); Blocked-by stories in no sprint (producer); L-AC18 live viewport and S6 turn-back (lifecycle); sole_dissent naming and ch1_root_purge (Y2-PP-T17)
 Reviewed-Content-Hash: design/gdd/storyline-axes.md 8d750656cc21da4b3c3d4a5992f4f40e13419c05 (revision 10 as reviewed, HEAD 3e0c554; revision 11 differs, so the next run re-reviews in full)
 Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285
+
+## Review — 2026-11-17 — Verdict: NEEDS REVISION
+Scope signal: L
+Specialists: game-designer, systems-designer, qa-lead, narrative-director, godot-specialist, creative-director (synthesis)
+Blocking items: 8 | Recommended: 9 (plus items routed to Y1-P1-T05, the lifecycle, Y2-PP-T17, Y1-P1-T03 and the producer)
+Summary: Round 12 ran in full on revision 11 (HEAD 01bda7f). The static core holds for a twelfth round and the round-11 fixes hold; every blocker is fixable without touching it. The two that matter most are content: Authority dissent is aimed at the restrained player rather than the unilateral one, inverting P10, and Kaelthas can never be present because the Chapter 3 allied path always sets ch3_kaelthas_betrayed. The rest are internal contradictions (D0 shadows D7.duplicate), an AC14 baseline that cannot pass, and play paths (chapter select, no story position) that write saves the load check refuses. The creative-director proposes pre-declared exit criteria for round 13: lean, scoped to the rev-12 diff plus a model re-run with D0 modelled; a new finding blocks only with a failing model case, a textual contradiction or a false citation.
+Prior verdict resolved: Yes (round-11 blockers fixed in rev 11; the round-11 Kaelthas fix exposed the code consequence above)
+Decisions taken by the user (2026-11-17): revise now.
+Findings:
+- [BLOCKING] Edge Case 16 / AC9: D0's one-entry cap on retraction_log runs first and exclusively, so D7.duplicate never fires; the D7.multi justification is false ((NONE,HEARTH,RELEASE) admits R2 and R3 faction retractions); the model hides it (D0 not modelled, M11)
+- [BLOCKING] Core Rules 1 and 8 / Edge Cases 8 and 16 / L-AC13: legacy-save rule inconsistent (D0 missing field vs LEANING load; Core Rule 1 vs D16); gate "open with an ID stored" ignores live DAMAGED
+- [BLOCKING] Acceptance Criteria 14: plurality baseline makes SL-SHARED-ARCHIVE-CHOOSE modal in every single-axis scene; ">= 3 scenes" met by ending scenes alone; no keyed-axis observable
+- [BLOCKING] Act 1 seed map / Core Rule 3: all Authority seeds are +, unilateral history gives a clean YOU vote and no sole_dissent; the restrained player hears dissent (inverts P10)
+- [BLOCKING] Core Rule 11 / Edge Case 1 / AC11 / 27-row table: ch3_kaelthas_betrayal.gd:35,89 always sets betrayed on the allied path, so the settled trust condition never holds; every Kaelthas companions_possible cell is false
+- [BLOCKING] Formulas storyline_phase / Edge Case 16 D16-D17 / Core Rule 8: no story position exists in code; player-facing chapter select writes Ch9/10 state with UNSET axes and ch10_root_intro autosaves a D16-refused save; gate entry paths beyond story/world_map unlisted
+- [BLOCKING] Acceptance Criteria 16: (a) pools fixture testers and can pass at 0% unprompted; re-run ">= 6 new" contradicts settled >= 12; (c)/(d) not criteria; no stopping rule
+- [BLOCKING] Act 1 seed map: citations fail (PM:1801 states no direction; STORY_BIBLE:206 is a read-by cell; PM:3117/3119 are composer visuals)
+- [RECOMMENDED] Core Rule 5 / lifecycle Retractions: costs not felt after C8-S16 (nothing reads retraction_log); offers should reuse seed argument lines; SHARED/CHOOSE beats carry source costs
+- [RECOMMENDED] Edge Case 16 D15: scope to the save's schema version (fails inclusion rule ii/iii if a group is fixed later)
+- [RECOMMENDED] Edge Case 16 D14 / composer record: text vs model scope; beats_played list vs set
+- [RECOMMENDED] Lifecycle invariants / header: "phase depends on the first three" wrong; Last Verified stale; model DIGITS comment contradicts AXIS1=Authority
+- [RECOMMENDED] Acceptance Criteria 9: split into 9a-9e; declare story type and real test path per AC (gdUnit4 absent; SceneTree harness)
+- [RECOMMENDED] Acceptance Criteria 11/13/17: observables (bare storyline_id; AC17 needs lock_arguments); AC11 per-flag rewrite; mirror-flag AC
+- [RECOMMENDED] Acceptance Criteria 15: require >= 1 row per arc
+- [RECOMMENDED] Side storylines: arc 08 has source faction effects (PM:3681-3682)
+- [RECOMMENDED] Core Rule 10 / AC14: record within-family "colour only" as deliberate, or one Deleted-keyed beat per family
+Reviewed-Content-Hash: design/gdd/storyline-axes.md 7b0f9cb6c6fe0e6e3796052800bcdcaf9c27abbd (revision 11 as reviewed, HEAD 01bda7f)
+Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285
+
+## Review — 2026-11-17 — Verdict: NEEDS REVISION
+Scope signal: M
+Specialists: game-designer, systems-designer, qa-lead, narrative-director, godot-specialist, creative-director (synthesis)
+Blocking items: 15 (6 substantive, 9 one-line) | Recommended: 10 (plus items routed to Y1-P1-T05, Y2-PP-T17, the producer and the lifecycle)
+Summary: Round 13 ran in full on revision 12 (HEAD 01bda7f, uncommitted rev 12). The static core holds for a fifth round running; most blockers were introduced by revision 12's own new text (the story-position contract, the D0 cap, the Authority seeds) or a fix not carried into the lifecycle (gate_open). The Authority seed map still contradicts its own answered-not-acted principle, so a purge-and-edit player passes YOU clean. The creative-director states a blocking bar (a refused or stranded play save or an AC that cannot pass; a rule contradiction; a citation that does not say what it is cited for) and exit conditions for round 14 (adopt OQ20, fix only the list, one canonical statement per repeated rule, model re-run with full D0 and entry positions). All 15 blockers were fixed in revision 13 (lifecycle revision 9) in the same session and verified: checker PASS, 323 mutations / 1 control / 0 unexpected, reference model RESULT PASS (rev 12, 11, 10 and 9 texts still fail as regressions; residual categories asserted). Recommended and routed items were not applied. A fresh re-review is still owed.
+Prior verdict resolved: Yes (round-12 blockers fixed in rev 12; three of its fixes opened new defects)
+Decisions taken by the user (2026-11-17): revise now; ch1_root_purge moves from faction:HEARTH+ to authority:YOU−; arc 08 is mapped to Faction (ten 1.0 seed arcs).
+Findings:
+- [BLOCKING] Act 1 seed map / Core Rule 3: ch1_root_first_edit (act) and ch1_root_discovered_unused (non-act) contradict the answered-not-acted principle; purge has no Authority seed (P10 inversion relocated)
+- [BLOCKING] Lifecycle NG+ reset: story position not reset; NG+ record refused by D16, L-AC15 cannot pass, I9 broken
+- [BLOCKING] Terms story position / Edge Case 8 / D16: a pre-schema save holds no position, yet position is "never derived"; Edge Case 8 first sentence contradicts its third
+- [BLOCKING] Edge Case 8 / lifecycle Chapter select: rule keyed to chapter number; "Chapter 8 - Ending" (main_menu.gd:655-662) starts past the locks and ch8_ending.gd:15 autosaves a D16-refused save
+- [BLOCKING] Edge Case 16 D0 / D14: D0's enum check on beats_played shadows D14.undefined; beats_played cap 16 is dead (model only type-checks beats_played)
+- [BLOCKING] Side storylines: arc 08 "pushes no axis" contradicts PM:3681-3682 (faction effects)
+- [BLOCKING] Lifecycle gate_open(): "true exactly when an ID is stored" ignores a live DAMAGED record
+- [BLOCKING] Act 1 seed map notes: "someone must be answerable" is verbatim at neither PM:636 nor PM:7048
+- [BLOCKING] Open Question 6: "uses the 4" companions contradicts Core Rule 11's three
+- [BLOCKING] Lifecycle L-AC14: PM:3814 is the Chapter 3 end ledger, not arc 09 completion
+- [BLOCKING] Open Question 13: pairwise minimum 1 contradicts AC14's 2
+- [BLOCKING] Edge Case 13 / Tuning Knobs: "knobs read only at C8-S16 and the gate" contradicts C9-S18 reading secret_prerequisites[FIRSTWAKE]
+- [BLOCKING] Formulas storyline_phase example: (SHARED, ARCHIVE, CHOOSE) live in C8-S16 fires {D9, D17}, not D9
+- [BLOCKING] Act 1 seed map notes: aldric.dlg:85 is a reminder, not a rebuke
+- [BLOCKING] Edge Case 1: PM:788 says only "ally or betrayer"
+- [RECOMMENDED] AC9: knob-flip clause vacuous; split 9a-9e; D0 precedence fixture
+- [RECOMMENDED] AC10: wording contradicts the phase_of signature
+- [RECOMMENDED] AC11: no module-to-companion observable; Kaelthas combinations mostly unreachable
+- [RECOMMENDED] AC14: rater rubric; AC15 wording; AC17 (flag, value, sign)
+- [RECOMMENDED] AC16(a): passable at 0% unprompted; Wilson bound unused
+- [RECOMMENDED] Lifecycle L-AC11: assert no field but root_phase changes
+- [RECOMMENDED] Player Fantasy "Costs are real": no AC that an ending shows its danger line
+- [RECOMMENDED] Player Fantasy "Nobody is forced to agree": no companion dissent line
+- [RECOMMENDED] Core Rule 6 / I6: define "hint" as a journal or UI signpost (C9-S18, arc 12 quest log)
+- [RECOMMENDED] Interactions: one gate chokepoint and a ROOT_SCENES list; I9 reopened by GDD revision if Y1-P1-T05 cannot build it
+- Routed: save API checkpoint/suppression and refusal-as-corruption (Y1-P1-T05); Root entry callers and change_scene bypasses (Y2-PP-T17 with Y1-P1-T05); Y1-P1-T03 scope and T03/T05/T17 in no sprint (producer); end-to-end seeds-to-sole_dissent test (lifecycle L-AC, Y2-PP-T17)
+Reviewed-Content-Hash: design/gdd/storyline-axes.md 74b86ac0766c77d43b319acdaec07e50a293c573 (revision 12 as reviewed, uncommitted on HEAD 01bda7f; revision 13 differs, so the next run re-reviews in full)
+Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285
+
+## Review — 2026-11-18 — Verdict: NEEDS REVISION
+Scope signal: L
+Specialists: game-designer, systems-designer, qa-lead, narrative-director, godot-specialist, creative-director (synthesis)
+Blocking items: 6 | Recommended: 11 (plus items routed to Y1-P1-T05 and Y2-PP-T17)
+Summary: Round 14 ran in full on revision 13 (uncommitted on HEAD 01bda7f) under the round-13 bar. The static core holds for a sixth round running; five of the six blockers sit in text added in revisions 12-13 or in the ACs, and two (act1_pace, story_position) were invisible to the reference model because it models only the lifecycle fields. The creative-director's most important creative finding is below the bar: the Chapter 4 Null Court promise (ch4_choice_*_deleted, read in Chapters 5 and 10) is not a Deleted seed. The creative-director recommended adopting Open Question 20 with a scope freeze; the user adopted it.
+Prior verdict resolved: Yes (round-13 blockers hold, except that the rev-13 purge rationale inverts its source)
+Decisions taken by the user (2026-11-18): revise now; adopt Open Question 20 with a scope freeze (revision 14 fixes only the blockers, the reference model is extended to the full record, round 15 runs lean on the diff and is the last if it finds only one-line blockers).
+Findings:
+- [BLOCKING] Act 1 seed map notes / Open Question 10: purge rationale cites PM:663 "agency intact" but the purge path leaves Aldric lucid (aldric.dlg:119-133); PM:1806 is the spare path; "without his consent" not in dlg:57
+- [BLOCKING] Terms story position / Edge Case 8 / D0: position is not a record field yet "missing → D0 refuses"; legacy scene map cannot place a hub save (hubs autosave)
+- [BLOCKING] Composer record / D0: act1_pace has no UNSET, so D0 refuses every save before the end of Act 1 (I9)
+- [BLOCKING] Acceptance Criteria 11: Faction sentence contradicts Core Rule 3 and AC14; companion/Kaelthas clauses have no observable
+- [BLOCKING] Acceptance Criteria 9: mutation kill unmeetable (D0 sub-clauses without fixtures or ids); D7.new_mismatch construction reports two clauses
+- [BLOCKING] Acceptance Criteria 15: arcs 08/12 secret-only flags have no pushes type; closing condition filed as advisory
+- [RECOMMENDED] Acceptance Criteria: no lock_pass AC with an Authority − seed; seeds → sole_dissent untested end to end (top priority)
+- [RECOMMENDED] Act 1 seed map: YOU clean ~27% (estimate) so sole_dissent is the YOU default; sole_dissent should name its seed
+- [RECOMMENDED] Player Fantasy: "vote between proposals" overclaims; "always passes" is a tightening of PM:6990
+- [RECOMMENDED] Acceptance Criteria: no AC that an ending shows its danger line; companion "they argue" has no content; S13/S14 source arguer is Kaelthas
+- [RECOMMENDED] Act 1 seed map notes: Authority discriminator is a table with exceptions; purge-then-disclose negotiated YOU intended
+- [RECOMMENDED] Player Fantasy: line 73 "no hint" vs line 76 C9-S18; STORY_BIBLE:109 still lists Kaelthas
+- [RECOMMENDED] Detailed Design (Side storylines / seeds): Chapter 4 Null Court Deleted choice unmapped (needs user decision)
+- [RECOMMENDED] Chapter select / Tuning Knobs / D1 / prereqs: True Ending entry writes FINAL; knob read site; D1 id; distinct prerequisite flags; variable tables
+- [RECOMMENDED] Acceptance Criteria hygiene: split AC9; AC16 Wilson bound; AC17 tuple; AC10; AC5 mutant; AC12; re-block ACs 5-9 on T03/T05
+- [RECOMMENDED] Header: P5/P8 "implements" → "supplies state for"
+- [RECOMMENDED] Formulas: lock_pass, storyline_phase, family, Counts lack variable tables
+- Routed (Y1-P1-T05 / Y2-PP-T17): save suppression inside save_game and the deferred flush (pause-menu save in the crisis); load_check outside _read_valid_save; JSON type pinning; static scan for gate bypasses; ROOT_LEFT writer
+Reviewed-Content-Hash: design/gdd/storyline-axes.md 530341eb71de5d5b58d81cf0318b73c51abfd54c
+Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285

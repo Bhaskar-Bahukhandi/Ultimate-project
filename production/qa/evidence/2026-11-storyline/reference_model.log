@@ -1,14 +1,15 @@
-Storyline reference model (storyline-axes.md OQ16) — axes rev 11, lifecycle rev 7
-Seed contexts: 4096 (13 axis seeds; one Data Wraith flag at most), 256 distinct lock_pass signatures walked
+Storyline reference model (storyline-axes.md OQ16) — axes rev 14, lifecycle rev 10
+Seed contexts: 16384 (15 axis seeds; one Data Wraith flag at most), 256 distinct lock_pass signatures walked
 Positions: PRE_C8, S13_OPEN, S13_DONE, S14_OPEN, S14_DONE, S15, S16_OPEN, S16_DONE, CH9, ROOT, ROOT_LEFT, FINAL_AUTH_OPEN, FINAL_DONE, STORY_PLUS, ROOT_STORY_PLUS; suppression windows: FINAL_AUTH_OPEN, S13_OPEN, S14_OPEN, S16_OPEN
 
-== Unit tables (rev 11 text) ==
+== Unit tables (rev 14 text) ==
   [PASS] AC5 default knobs, 128 cases
   [PASS] AC5 one route enabled at a time (synthetic)
   [PASS] AC6 prerequisite subsets
   [PASS] AC7 prereqs_met list lengths
   [PASS] AC8 family over every id; split SOLE 8, BOUND 9, NONE_AUTH 7
   [PASS] lock_pass: Formulas examples + L-AC2 fixtures (13)
+  [PASS] P10 lock_pass (rev 12 Authority seeds): a justified kill or a show-off edit makes a YOU vote negotiated; ch2_seraphina_truth backs SHARED clean; modifier rows never enter the test
   [PASS] crisis_offers: 6/5/5 = 16; R2 and R3 share the five strings; 0 on every valid row
   [PASS] crisis_offers: the R2/R3 Faction swap is not offered
   [PASS] 16 distinct retraction beat ids
@@ -29,12 +30,30 @@ Positions: PRE_C8, S13_OPEN, S13_DONE, S14_OPEN, S14_DONE, S15, S16_OPEN, S16_DO
   [PASS] AC9 fixture FINAL: phase_of(loaded=True) FINAL, load_check {}
   [PASS] AC9 CRISIS fixture with loaded=true is DAMAGED
   [PASS] AC9 bounded live crisis (loaded=false): Chapter 9, the commit checkpoint, a live valid row, a stored ID before the commit, the D9 and D17 fixtures are DAMAGED
-  [PASS] AC9 non-goals load: an edited lock_negotiated, an edited withdrawn_item and a FINAL record before the boss give load_check empty
+  [PASS] AC9 non-goals load: an edited lock_negotiated, withdrawn_item and scene, and a FINAL record before the final authorization give load_check empty
+  [PASS] AC9 hand-built clause fixtures (D7.unnamed, D14.no_entry, D14.not_played, D14.undefined) each give exactly their clause
+  [PASS] AC9 D0 two-entry retraction_log: the R2 and R3 Faction retractions of (NONE, HEARTH, RELEASE) are each consistent alone, and together give load_check exactly {D0}
+  [PASS] AC9 D0 fixtures (missing field (current schema), wrong-typed field, out-of-range enum string, two-entry retraction_log) each give exactly {D0} (a set holding one element twice is not modelled, M12)
+  [PASS] AC9 legacy: a pre-lifecycle save, defaulted before the check, loads LEANING with load_check empty at PRE_C8 and gives exactly {D16} at CH9
+  [PASS] D14 refuses any beat id the lifecycle does not define (retract_R9_faction_NOWHERE, sole_dissent, red_line_R1 each give exactly {D14.undefined})
+  [PASS] Chapter select: Chapter 9 or 10 writes SL-SHARED-ARCHIVE-CHOOSE at CH9 with lock_negotiated all three, load_check empty, VALIDATED, family BOUND (no sole_dissent); Chapter 10's gate runs T7; Chapters 1-8 start LEANING at PRE_C8 (Chapter 8: F12)
+  [PASS] L-AC19 gate predicate: an injected live LEANING- or PARTLY_LOCKED-shaped record is TURNED_BACK and stays outside Root of Heaven from each of the five paths (one predicate, so the free-travel region stays locked with no ID stored); gate rows used: GATE_DAMAGED
   [PASS] L-AC8 gate matrix: story cells (injected live records), live DAMAGED turned back, load cells (LEANING/PARTLY_LOCKED refused with D16, VALIDATED runs T7)
   [PASS] L-AC8 live crisis injected past C8-S16: DAMAGED with load_check {D9}, TURNED_BACK, record unchanged, not a gate error
+  [PASS] P10 purge (rev 13): a purge with the first edit makes a YOU vote negotiated; it no longer argues for HEARTH
+  [PASS] Chapter select by entry position (lifecycle rev 9): every entry's first save passes load_check; 'Chapter 8 - Ending' writes the fixed record at S16_DONE; Chapter 10 passes the gate by T7
+  [PASS] NG+ reset (lifecycle L-AC15): a new cycle started from FINAL_DONE, STORY_PLUS or ROOT_STORY_PLUS is at PRE_C8, LEANING, load_check empty
+  [PASS] Legacy position (Terms, Edge Case 8): a pre-lifecycle save's position is derived from its scene: before Chapter 8 LEANING, Chapter 9 or Root of Heaven exactly {D16}, a scene the map lacks exactly {D0}
+  [PASS] AC9 D0 (rev 13): a two-element beats_played and a D0 defect with a D1 defect each give exactly {D0}; one undefined retract_* id gives D14, not D0
+  [PASS] New game (rev 14): the first save of a new game, act1_pace UNSET at PRE_C8, gives load_check empty and loads LEANING
+  [PASS] Position field (rev 14): a current-schema save with no story_position gives exactly {D0.missing}, an unlisted one exactly {D0.enum}, a listed one passes
+  [PASS] Legacy hub (rev 14): a pre-lifecycle save's position comes from its free-travel story scene, else its own scene (no hub in the map), else its chapter; a Chapter 8 hub save is exactly {D0.missing}
+  [PASS] AC9 D0 clause ids (rev 14): one fixture per D0 clause gives exactly that clause (a retraction entry's old outside its axis is D0.enum; D0.duplicate is the decoder's, M12); d0_clauses agrees with shape_wrong
+  [PASS] AC9 D7 new-value fixture (rev 14): (SHARED, ARCHIVE, RELEASE) with {authority, NONE -> YOU} and retract_R2_authority_YOU gives exactly {D7.new_mismatch}; the rev 13 Faction construction gives two clauses
+  [PASS] Closed-list fields (rev 14): companions_present holds only Elara, Seraphina and Lyra, timing_flags only the six timing flags; a wrong value, type or a missing field is D0
 
-== Walk, rev 11 text (default knobs, no defects) ==
-  states 91648, edges 111872, saves 77312 (summed over 256 signatures)
+== Walk, rev 14 text (default knobs, no defects) ==
+  states 93312, edges 113744, saves 78768 (summed over 256 signatures)
   stored IDs reachable: 24 (by T3: 24, by T5: 15); retraction beats played: 16; distinct (row, offer) taken: 16
   lock_negotiated sets seen in saves: 8; sole_dissent reachable: ['by T5', 'by seeds']
   transition kinds fired: T1, T2, T3, T4, T5, T7, T8, T9, move  (T6 TURNED_BACK never fires in play: defence in depth, lifecycle S6)
@@ -42,26 +61,89 @@ Positions: PRE_C8, S13_OPEN, S13_DONE, S14_OPEN, S14_DONE, S15, S16_OPEN, S16_DO
 
 == Regression: the rev 9 text, literal (what design review round 10 found; must still fail) ==
   A8: 768 violation(s), 24 distinct
+      e.g. live state at S16_OPEN (NONE/CONTINUITY/RELEASE OUTSIDE neg=authority,deleted,faction) is DAMAGED (['D17.before_commit'])
       e.g. live state at S16_OPEN (NONE/ARCHIVE/RELEASE OUTSIDE neg=authority,deleted,faction) is DAMAGED (['D17.before_commit'])
       e.g. live state at S16_OPEN (YOU/HEARTH/RESTORE OUTSIDE neg=authority,deleted,faction) is DAMAGED (['D17.before_commit'])
-      e.g. live state at S16_OPEN (NONE/CONTINUITY/RELEASE OUTSIDE neg=authority,deleted,faction) is DAMAGED (['D17.before_commit'])
-  unit tables failing on the rev 9 text: 6
+  unit tables failing on the rev 9 text: 19
+      P10 lock_pass (rev 12 Authority seeds): a justified kill or a show-off edit makes a YOU vote negotiated; ch2_seraphina_truth backs SHARED clean; modifier rows never enter the test
       Formulas example (NONE/ARCHIVE/RELEASE OUTSIDE) loaded=False at S16_OPEN -> CRISIS
       Formulas example (NONE/ARCHIVE/RELEASE OUTSIDE) loaded=False at CH9 -> DAMAGED
       AC9 fixture CRISIS: phase_of(loaded=False) CRISIS, load_check ['D17', 'D9']
       AC9 bounded live crisis (loaded=false): Chapter 9, the commit checkpoint, a live valid row, a stored ID before the commit, the D9 and D17 fixtures are DAMAGED
+      AC9 D0 two-entry retraction_log: the R2 and R3 Faction retractions of (NONE, HEARTH, RELEASE) are each consistent alone, and together give load_check exactly {D0}
+      AC9 D0 fixtures (missing field (current schema), wrong-typed field, out-of-range enum string, two-entry retraction_log) each give exactly {D0} (a set holding one element twice is not modelled, M12)
       L-AC8 gate matrix: story cells (injected live records), live DAMAGED turned back, load cells (LEANING/PARTLY_LOCKED refused with D16, VALIDATED runs T7)
       L-AC8 live crisis injected past C8-S16: DAMAGED with load_check {D9}, TURNED_BACK, record unchanged, not a gate error
+      P10 purge (rev 13): a purge with the first edit makes a YOU vote negotiated; it no longer argues for HEARTH
+      Chapter select by entry position (lifecycle rev 9): every entry's first save passes load_check; 'Chapter 8 - Ending' writes the fixed record at S16_DONE; Chapter 10 passes the gate by T7
+      NG+ reset (lifecycle L-AC15): a new cycle started from FINAL_DONE, STORY_PLUS or ROOT_STORY_PLUS is at PRE_C8, LEANING, load_check empty
+      Legacy position (Terms, Edge Case 8): a pre-lifecycle save's position is derived from its scene: before Chapter 8 LEANING, Chapter 9 or Root of Heaven exactly {D16}, a scene the map lacks exactly {D0}
+      AC9 D0 (rev 13): a two-element beats_played and a D0 defect with a D1 defect each give exactly {D0}; one undefined retract_* id gives D14, not D0
+      New game (rev 14): the first save of a new game, act1_pace UNSET at PRE_C8, gives load_check empty and loads LEANING
+      Position field (rev 14): a current-schema save with no story_position gives exactly {D0.missing}, an unlisted one exactly {D0.enum}, a listed one passes
+      Legacy hub (rev 14): a pre-lifecycle save's position comes from its free-travel story scene, else its own scene (no hub in the map), else its chapter; a Chapter 8 hub save is exactly {D0.missing}
+      AC9 D0 clause ids (rev 14): one fixture per D0 clause gives exactly that clause (a retraction entry's old outside its axis is D0.enum; D0.duplicate is the decoder's, M12); d0_clauses agrees with shape_wrong
+      Closed-list fields (rev 14): companions_present holds only Elara, Seraphina and Lyra, timing_flags only the six timing flags; a wrong value, type or a missing field is D0
   [CAUGHT] the model still finds F1 (A8), F2/F1 (AC9 CRISIS fixture) and F9 (L-AC8) on the rev 9 text
 
 == Regression: the rev 10 text (what design review round 11 found; must still fail) ==
+      P10 lock_pass (rev 12 Authority seeds): a justified kill or a show-off edit makes a YOU vote negotiated; ch2_seraphina_truth backs SHARED clean; modifier rows never enter the test
       Formulas example (NONE/ARCHIVE/RELEASE OUTSIDE) loaded=False at CH9 -> DAMAGED
       Formulas example (SHARED/ARCHIVE/CHOOSE OUTSIDE) loaded=False at S16_OPEN -> DAMAGED
       AC9 bounded live crisis (loaded=false): Chapter 9, the commit checkpoint, a live valid row, a stored ID before the commit, the D9 and D17 fixtures are DAMAGED
+      AC9 D0 two-entry retraction_log: the R2 and R3 Faction retractions of (NONE, HEARTH, RELEASE) are each consistent alone, and together give load_check exactly {D0}
+      AC9 D0 fixtures (missing field (current schema), wrong-typed field, out-of-range enum string, two-entry retraction_log) each give exactly {D0} (a set holding one element twice is not modelled, M12)
       L-AC8 live crisis injected past C8-S16: DAMAGED with load_check {D9}, TURNED_BACK, record unchanged, not a gate error
+      P10 purge (rev 13): a purge with the first edit makes a YOU vote negotiated; it no longer argues for HEARTH
+      Chapter select by entry position (lifecycle rev 9): every entry's first save passes load_check; 'Chapter 8 - Ending' writes the fixed record at S16_DONE; Chapter 10 passes the gate by T7
+      NG+ reset (lifecycle L-AC15): a new cycle started from FINAL_DONE, STORY_PLUS or ROOT_STORY_PLUS is at PRE_C8, LEANING, load_check empty
+      Legacy position (Terms, Edge Case 8): a pre-lifecycle save's position is derived from its scene: before Chapter 8 LEANING, Chapter 9 or Root of Heaven exactly {D16}, a scene the map lacks exactly {D0}
+      AC9 D0 (rev 13): a two-element beats_played and a D0 defect with a D1 defect each give exactly {D0}; one undefined retract_* id gives D14, not D0
+      New game (rev 14): the first save of a new game, act1_pace UNSET at PRE_C8, gives load_check empty and loads LEANING
+      Position field (rev 14): a current-schema save with no story_position gives exactly {D0.missing}, an unlisted one exactly {D0.enum}, a listed one passes
+      Legacy hub (rev 14): a pre-lifecycle save's position comes from its free-travel story scene, else its own scene (no hub in the map), else its chapter; a Chapter 8 hub save is exactly {D0.missing}
+      AC9 D0 clause ids (rev 14): one fixture per D0 clause gives exactly that clause (a retraction entry's old outside its axis is D0.enum; D0.duplicate is the decoder's, M12); d0_clauses agrees with shape_wrong
+      Closed-list fields (rev 14): companions_present holds only Elara, Seraphina and Lyra, timing_flags only the six timing flags; a wrong value, type or a missing field is D0
   [CAUGHT] the model still finds F11 (L-AC8 live crisis, AC9 bounded live crisis) on the rev 10 text
 
-== Negative controls (each seeded defect must fail at least one assertion; rev 11 text) ==
+== Regression: the rev 11 text (what design review round 12 found; must still fail) ==
+      P10 lock_pass (rev 12 Authority seeds): a justified kill or a show-off edit makes a YOU vote negotiated; ch2_seraphina_truth backs SHARED clean; modifier rows never enter the test
+      AC9 hand-built clause fixtures (D7.unnamed, D14.no_entry, D14.not_played, D14.undefined, D7.duplicate) each give exactly their clause
+      AC9 legacy: a pre-lifecycle save, defaulted before the check, loads LEANING with load_check empty at PRE_C8 and gives exactly {D16} at CH9
+      P10 purge (rev 13): a purge with the first edit makes a YOU vote negotiated; it no longer argues for HEARTH
+      Chapter select by entry position (lifecycle rev 9): every entry's first save passes load_check; 'Chapter 8 - Ending' writes the fixed record at S16_DONE; Chapter 10 passes the gate by T7
+      NG+ reset (lifecycle L-AC15): a new cycle started from FINAL_DONE, STORY_PLUS or ROOT_STORY_PLUS is at PRE_C8, LEANING, load_check empty
+      Legacy position (Terms, Edge Case 8): a pre-lifecycle save's position is derived from its scene: before Chapter 8 LEANING, Chapter 9 or Root of Heaven exactly {D16}, a scene the map lacks exactly {D0}
+      AC9 D0 (rev 13): a two-element beats_played and a D0 defect with a D1 defect each give exactly {D0}; one undefined retract_* id gives D14, not D0
+      New game (rev 14): the first save of a new game, act1_pace UNSET at PRE_C8, gives load_check empty and loads LEANING
+      Position field (rev 14): a current-schema save with no story_position gives exactly {D0.missing}, an unlisted one exactly {D0.enum}, a listed one passes
+      Legacy hub (rev 14): a pre-lifecycle save's position comes from its free-travel story scene, else its own scene (no hub in the map), else its chapter; a Chapter 8 hub save is exactly {D0.missing}
+      AC9 D0 clause ids (rev 14): one fixture per D0 clause gives exactly that clause (a retraction entry's old outside its axis is D0.enum; D0.duplicate is the decoder's, M12); d0_clauses agrees with shape_wrong
+      Closed-list fields (rev 14): companions_present holds only Elara, Seraphina and Lyra, timing_flags only the six timing flags; a wrong value, type or a missing field is D0
+  [CAUGHT] the model still finds, on the rev 11 text: D7.duplicate has no fixture of its own (D0's one-entry cap fires first), a pre-lifecycle save at PRE_C8 is D0 instead of LEANING, and a justified Aldric kill passes a YOU vote clean (P10)
+
+== Regression: the rev 12 text (what design review round 13 found; must still fail) ==
+      P10 purge (rev 13): a purge with the first edit makes a YOU vote negotiated; it no longer argues for HEARTH
+      Chapter select by entry position (lifecycle rev 9): every entry's first save passes load_check; 'Chapter 8 - Ending' writes the fixed record at S16_DONE; Chapter 10 passes the gate by T7
+      NG+ reset (lifecycle L-AC15): a new cycle started from FINAL_DONE, STORY_PLUS or ROOT_STORY_PLUS is at PRE_C8, LEANING, load_check empty
+      Legacy position (Terms, Edge Case 8): a pre-lifecycle save's position is derived from its scene: before Chapter 8 LEANING, Chapter 9 or Root of Heaven exactly {D16}, a scene the map lacks exactly {D0}
+      AC9 D0 (rev 13): a two-element beats_played and a D0 defect with a D1 defect each give exactly {D0}; one undefined retract_* id gives D14, not D0
+      New game (rev 14): the first save of a new game, act1_pace UNSET at PRE_C8, gives load_check empty and loads LEANING
+      Position field (rev 14): a current-schema save with no story_position gives exactly {D0.missing}, an unlisted one exactly {D0.enum}, a listed one passes
+      Legacy hub (rev 14): a pre-lifecycle save's position comes from its free-travel story scene, else its own scene (no hub in the map), else its chapter; a Chapter 8 hub save is exactly {D0.missing}
+      AC9 D0 clause ids (rev 14): one fixture per D0 clause gives exactly that clause (a retraction entry's old outside its axis is D0.enum; D0.duplicate is the decoder's, M12); d0_clauses agrees with shape_wrong
+      Closed-list fields (rev 14): companions_present holds only Elara, Seraphina and Lyra, timing_flags only the six timing flags; a wrong value, type or a missing field is D0
+  [CAUGHT] the model still finds, on the rev 12 text: a purge with the first edit passes YOU clean (P10), 'Chapter 8 - Ending' autosaves a D16-refused save, a new NG+ cycle is refused by D16, a legacy Chapter 9 save loads LEANING at PRE_C8, and a two-element beats_played is not D0
+
+== Regression: the rev 13 text (what design review round 14 found; must still fail) ==
+      New game (rev 14): the first save of a new game, act1_pace UNSET at PRE_C8, gives load_check empty and loads LEANING
+      Position field (rev 14): a current-schema save with no story_position gives exactly {D0.missing}, an unlisted one exactly {D0.enum}, a listed one passes
+      Legacy hub (rev 14): a pre-lifecycle save's position comes from its free-travel story scene, else its own scene (no hub in the map), else its chapter; a Chapter 8 hub save is exactly {D0.missing}
+      AC9 D0 clause ids (rev 14): one fixture per D0 clause gives exactly that clause (a retraction entry's old outside its axis is D0.enum; D0.duplicate is the decoder's, M12); d0_clauses agrees with shape_wrong
+      Closed-list fields (rev 14): companions_present holds only Elara, Seraphina and Lyra, timing_flags only the six timing flags; a wrong value, type or a missing field is D0
+  [CAUGHT] the model still finds, on the rev 13 text: a new-game save is D0 (act1_pace has no UNSET), a missing or unlisted story position is refused by no item, a Chapter 9 or Chapter 8 hub save loads LEANING at PRE_C8, and D0 names no clause ids
+
+== Negative controls (each seeded defect must fail at least one assertion; rev 14 text) ==
   [CAUGHT] t4_checkpoint: T4 writes a checkpoint (a save inside the crisis) -> A1
   [CAUGHT] save_in_crisis: manual save allowed inside C8-S16 -> A1, A3
   [CAUGHT] save_in_final_auth: manual save allowed inside the final authorization -> A3
@@ -75,60 +157,74 @@ Positions: PRE_C8, S13_OPEN, S13_DONE, S14_OPEN, S14_DONE, S15, S16_OPEN, S16_DO
   [CAUGHT] gate_skip_world_map: the world-map path enters Root of Heaven without the gate check -> A10
   [CAUGHT] id_recomputed_at_gate: the gate recomputes the ID from the axes with the Deleted value swapped -> A1, A4, A5, A6, A8
 
-== Clause isolation (AC9 rev 11: one fixture per clause with load_check exactly {that clause id}) ==
-  [alone] D1.secret  — storyline_id: (NONE/HEARTH/RELEASE SL-SECRET-WITNESS FINAL neg=authority,deleted,faction) at FINAL_DONE
-  [alone] D1.unset_axis  — storyline_id: (NONE/CONTINUITY/UNSET SL-YOU-HEARTH-RELEASE OUTSIDE neg=authority,faction) at S15
-  [alone] D1.invalid_row  — axis faction: (NONE/ARCHIVE/RELEASE SL-NONE-HEARTH-RELEASE FINAL neg=authority,deleted,faction) at FINAL_DONE
-  [alone] D1.other_id  — storyline_id: (NONE/HEARTH/RELEASE SL-YOU-HEARTH-RELEASE FINAL neg=authority,deleted,faction) at FINAL_DONE
-  [alone] D6  — lock_negotiated toggle: (NONE/CONTINUITY/CHOOSE SL-NONE-CONTINUITY-CHOOSE INSIDE rev=deleted neg=authority,faction) at ROOT
-  [alone] D7.unnamed  — axis_revised toggle: (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE FINAL rev=faction neg=authority,deleted,faction) at FINAL_DONE
-  [documentation only] D7.multi  — axis_revised toggle: (NONE/CONTINUITY/CHOOSE SL-NONE-CONTINUITY-CHOOSE INSIDE rev=deleted,faction neg=authority,deleted,faction) at ROOT -> tags ['D7.multi', 'D7.unnamed']
-  [alone] D7.new_mismatch  — retraction new + beat renamed: (NONE/CONTINUITY/CHOOSE SL-NONE-CONTINUITY-CHOOSE INSIDE rev=deleted neg=authority,deleted,faction) at ROOT
-  [alone] D7.reverse  — axis_revised toggle: (NONE/CONTINUITY/CHOOSE SL-NONE-CONTINUITY-CHOOSE INSIDE neg=authority,deleted,faction) at ROOT
-  [alone] D7.duplicate  — retraction entry duplicated: (NONE/CONTINUITY/CHOOSE SL-NONE-CONTINUITY-CHOOSE INSIDE rev=deleted neg=authority,deleted,faction) at ROOT
-  [alone] D8  — root_phase: (NONE/CONTINUITY/UNSET INSIDE neg=authority,faction) at S15
-  [alone] D9  — storyline_id: (NONE/CONTINUITY/CHOOSE OUTSIDE rev=deleted neg=authority,deleted,faction) at S16_DONE
-  [alone] D14.undefined  — beats_played toggle: (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE FINAL neg=authority,deleted,faction) at FINAL_DONE
-  [alone] D14.no_entry  — beats_played toggle: (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE FINAL neg=authority,deleted,faction) at FINAL_DONE
-  [alone] D14.not_played  — beats_played toggle: (NONE/CONTINUITY/CHOOSE SL-NONE-CONTINUITY-CHOOSE INSIDE rev=deleted neg=authority,deleted,faction) at ROOT
-  [alone] D15  — seed flag toggle: (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE FINAL neg=authority,deleted,faction) at FINAL_DONE
-  [alone] D16  — axis authority: (UNSET/CONTINUITY/UNSET OUTSIDE neg=authority,faction) at S15
+== Clause isolation (AC9 rev 14: one fixture per clause with load_check exactly {that clause id}; the D0 clause ids are the unit table 'AC9 D0 clause ids') ==
+  [alone] D0  — retraction axis: (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE FINAL rev=faction neg=authority,deleted,faction) at FINAL_DONE
+  [alone] D1.invalid_row  — axis authority: (YOU/HEARTH/RESTORE SL-SHARED-HEARTH-RESTORE INSIDE neg=authority,deleted,faction) at ROOT_LEFT
+  [alone] D1.other_id  — storyline_id: (SHARED/HEARTH/RESTORE SL-YOU-HEARTH-RELEASE INSIDE neg=authority,deleted,faction) at ROOT_LEFT
+  [alone] D1.secret  — storyline_id: (SHARED/HEARTH/RESTORE SL-SECRET-WITNESS INSIDE neg=authority,deleted,faction) at ROOT_LEFT
+  [alone] D1.unset_axis  — storyline_id: (SHARED/HEARTH/UNSET SL-YOU-HEARTH-RELEASE OUTSIDE neg=authority,faction) at S15
+  [alone] D6  — lock_negotiated toggle: (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE FINAL rev=faction neg=authority,deleted) at FINAL_DONE
+  [alone] D7.new_mismatch  — retraction new + beat renamed: (SHARED/ARCHIVE/RELEASE SL-SHARED-ARCHIVE-RELEASE OUTSIDE rev=authority neg=authority,deleted,faction) at S16_DONE
+  [alone] D7.reverse  — axis_revised toggle: (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE FINAL neg=authority,deleted,faction) at FINAL_DONE
+  [alone] D7.unnamed  — axis_revised toggle: (SHARED/HEARTH/RESTORE SL-SHARED-HEARTH-RESTORE INSIDE rev=faction neg=authority,deleted,faction) at ROOT_LEFT
+  [alone] D8  — root_phase: (SHARED/HEARTH/UNSET INSIDE neg=authority,faction) at S15
+  [alone] D9  — storyline_id: (YOU/CONTINUITY/RESTORE OUTSIDE neg=authority,deleted,faction) at S16_DONE
+  [alone] D14.no_entry  — beats_played toggle: (SHARED/HEARTH/RESTORE SL-SHARED-HEARTH-RESTORE INSIDE neg=authority,deleted,faction) at ROOT_LEFT
+  [alone] D14.not_played  — beats_played toggle: (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE FINAL rev=faction neg=authority,deleted,faction) at FINAL_DONE
+  [alone] D14.undefined  — beats_played toggle: (SHARED/HEARTH/RESTORE SL-SHARED-HEARTH-RESTORE INSIDE neg=authority,deleted,faction) at ROOT_LEFT
+  [alone] D15  — seed flag toggle: (SHARED/ARCHIVE/RELEASE SL-SHARED-ARCHIVE-RELEASE FINAL neg=authority,deleted,faction) at ROOT_STORY_PLUS
+  [alone] D16  — axis authority: (UNSET/HEARTH/UNSET OUTSIDE neg=authority,faction) at S15
+  [alone] D17.before_commit  — position: (SHARED/HEARTH/RESTORE SL-SHARED-HEARTH-RESTORE INSIDE neg=authority,deleted,faction) at PRE_C8
   [documentation only] D17.prefix  — axis deleted: (UNSET/CONTINUITY/RESTORE OUTSIDE neg=faction) at S13_DONE -> tags ['D17.before_commit', 'D17.prefix']
-  [alone] D17.before_commit  — position: (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE FINAL neg=authority,deleted,faction) at PRE_C8
   mutation kill: each clause above marked 'alone' has a fixture whose only clause it is, so a load_check with that clause deleted fails that fixture; documentation clauses found alone: none
   D17.prefix without D16 or D17.before_commit, exhaustive over 64 axis triples x 15 positions: 0 case(s)
 
 == Residual: records load_check accepts that no play in that seed context writes (single-field changes of reachable saves; non-goals by the inclusion rule, Open Question 17: counts reported, categories asserted) ==
-   404992  position  e.g. from FINAL_DONE (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE FINAL neg=authority,deleted,faction): (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE FINAL neg=authority,deleted,faction) at S16_DONE
+   413104  position  e.g. from ROOT_LEFT (SHARED/HEARTH/RESTORE SL-SHARED-HEARTH-RESTORE INSIDE neg=authority,deleted,faction): (SHARED/HEARTH/RESTORE SL-SHARED-HEARTH-RESTORE INSIDE neg=authority,deleted,faction) at S16_DONE
            43 from->to pairs: CH9->FINAL_AUTH_OPEN, CH9->FINAL_DONE, CH9->ROOT, CH9->ROOT_LEFT, CH9->ROOT_STORY_PLUS, CH9->STORY_PLUS, FINAL_DONE->CH9, FINAL_DONE->FINAL_AUTH_OPEN, FINAL_DONE->ROOT, FINAL_DONE->ROOT_LEFT, FINAL_DONE->S16_DONE, ROOT->CH9, ROOT->FINAL_AUTH_OPEN, ROOT->FINAL_DONE, ROOT->ROOT_STORY_PLUS, ROOT->S16_DONE, ROOT->STORY_PLUS, ROOT_LEFT->CH9, ROOT_LEFT->FINAL_AUTH_OPEN, ROOT_LEFT->FINAL_DONE, ROOT_LEFT->ROOT_STORY_PLUS, ROOT_LEFT->S16_DONE, ROOT_LEFT->STORY_PLUS, ROOT_STORY_PLUS->CH9, ROOT_STORY_PLUS->FINAL_AUTH_OPEN, ROOT_STORY_PLUS->ROOT, ROOT_STORY_PLUS->ROOT_LEFT, ROOT_STORY_PLUS->S16_DONE, S16_DONE->FINAL_AUTH_OPEN, S16_DONE->FINAL_DONE, S16_DONE->ROOT, S16_DONE->ROOT_LEFT, S16_DONE->ROOT_STORY_PLUS, S16_DONE->STORY_PLUS, STORY_PLUS->CH9, STORY_PLUS->FINAL_AUTH_OPEN, STORY_PLUS->ROOT, STORY_PLUS->ROOT_LEFT, STORY_PLUS->S16_DONE, S14_DONE->S16_OPEN, S15->S16_OPEN, S13_DONE->S14_OPEN, PRE_C8->S13_OPEN
-   212224  seed flag toggle  e.g. from FINAL_DONE (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE FINAL neg=authority,deleted,faction): (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE FINAL neg=authority,deleted,faction) at FINAL_DONE
-   203264  lock_negotiated toggle  e.g. from FINAL_DONE (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE FINAL neg=authority,deleted,faction): (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE FINAL neg=authority,deleted) at FINAL_DONE
-   143360  root_phase  e.g. from FINAL_DONE (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE FINAL neg=authority,deleted,faction): (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE OUTSIDE neg=authority,deleted,faction) at FINAL_DONE
-    28672  retraction withdrawn_item  e.g. from ROOT (NONE/CONTINUITY/CHOOSE SL-NONE-CONTINUITY-CHOOSE INSIDE rev=deleted neg=authority,deleted,faction): (NONE/CONTINUITY/CHOOSE SL-NONE-CONTINUITY-CHOOSE INSIDE rev=deleted neg=authority,deleted,faction) at ROOT
-    28672  retraction scene  e.g. from ROOT (NONE/CONTINUITY/CHOOSE SL-NONE-CONTINUITY-CHOOSE INSIDE rev=deleted neg=authority,deleted,faction): (NONE/CONTINUITY/CHOOSE SL-NONE-CONTINUITY-CHOOSE INSIDE rev=deleted neg=authority,deleted,faction) at ROOT
-     5376  axis faction  e.g. from S15 (NONE/CONTINUITY/UNSET OUTSIDE neg=authority,faction): (NONE/HEARTH/UNSET OUTSIDE neg=authority,faction) at S15
-     4608  axis authority  e.g. from S14_DONE (YOU/CONTINUITY/UNSET OUTSIDE neg=authority,faction): (NONE/CONTINUITY/UNSET OUTSIDE neg=authority,faction) at S14_DONE
+   231328  seed flag toggle  e.g. from ROOT_LEFT (SHARED/HEARTH/RESTORE SL-SHARED-HEARTH-RESTORE INSIDE neg=authority,deleted,faction): (SHARED/HEARTH/RESTORE SL-SHARED-HEARTH-RESTORE INSIDE neg=authority,deleted,faction) at ROOT_LEFT
+   206064  lock_negotiated toggle  e.g. from ROOT_LEFT (SHARED/HEARTH/RESTORE SL-SHARED-HEARTH-RESTORE INSIDE neg=authority,deleted,faction): (SHARED/HEARTH/RESTORE SL-SHARED-HEARTH-RESTORE INSIDE neg=authority,deleted) at ROOT_LEFT
+   146272  root_phase  e.g. from ROOT_LEFT (SHARED/HEARTH/RESTORE SL-SHARED-HEARTH-RESTORE INSIDE neg=authority,deleted,faction): (SHARED/HEARTH/RESTORE SL-SHARED-HEARTH-RESTORE OUTSIDE neg=authority,deleted,faction) at ROOT_LEFT
+    28672  retraction withdrawn_item  e.g. from FINAL_DONE (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE FINAL rev=faction neg=authority,deleted,faction): (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE FINAL rev=faction neg=authority,deleted,faction) at FINAL_DONE
+    28672  retraction scene  e.g. from FINAL_DONE (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE FINAL rev=faction neg=authority,deleted,faction): (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE FINAL rev=faction neg=authority,deleted,faction) at FINAL_DONE
+     5376  axis faction  e.g. from S15 (SHARED/HEARTH/UNSET OUTSIDE neg=authority,faction): (SHARED/CONTINUITY/UNSET OUTSIDE neg=authority,faction) at S15
+     4608  axis authority  e.g. from S14_DONE (SHARED/CONTINUITY/UNSET OUTSIDE neg=faction): (YOU/CONTINUITY/UNSET OUTSIDE neg=faction) at S14_DONE
   [PASS] residual categories equal the pinned list
-  [INFO] from each of 438016 distinct accepted records (load-path gate inside Root of Heaven, then forward walk), FINAL is reachable except 61440 (modelling choice M8: no route back to the final authorization from Story+)
-      root_phase: 22932, e.g. (NONE/HEARTH/RELEASE SL-NONE-HEARTH-RELEASE INSIDE neg=authority,deleted,faction) at FINAL_DONE (phase FIXED)
-      position: 38508, e.g. (NONE/CONTINUITY/RESTORE SL-NONE-CONTINUITY-RESTORE INSIDE neg=authority,deleted,faction) at FINAL_DONE (phase FIXED)
+  [INFO] from each of 443232 distinct accepted records (load-path gate inside Root of Heaven, then forward walk), FINAL is reachable except 62688 (modelling choice M8: no route back to the final authorization from Story+)
+      position: 40698, e.g. (SHARED/HEARTH/RESTORE SL-SHARED-HEARTH-RESTORE INSIDE neg=authority,deleted,faction) at FINAL_DONE (phase FIXED)
+      root_phase: 21990, e.g. (SHARED/ARCHIVE/RELEASE SL-SHARED-ARCHIVE-RELEASE INSIDE neg=authority,deleted,faction) at ROOT_STORY_PLUS (phase FIXED)
 
-== ROUND-10 AND ROUND-11 FINDINGS: status under the rev 11 text ==
+== ROUND-10 TO ROUND-14 FINDINGS: status under the rev 14 text ==
   F1: resolved — D17's before-commit clause is skipped for the live crisis only (rev 11); the live crisis is CRISIS
   F2: resolved — AC9's CRISIS fixture reports {D9, D17}
   F3: documented — D17's prefix clause never fires alone; kept as documentation, no fixture
   F4: resolved — strict 'matching' plus the coordinated two-field fixture isolates D7's new-value clause
-  F5: non-goal (OQ17, settled) — retraction withdrawn_item 28672; retraction scene 28672; lock_negotiated toggle 203264; seed flag toggle 212224; axis faction 5376; axis authority 4608
+  F5: non-goal (OQ17, settled) — retraction withdrawn_item 28672; retraction scene 28672; lock_negotiated toggle 206064; seed flag toggle 231328; axis faction 5376; axis authority 4608
   F6: resolved — D7 runs both ways; accepted axis_revised toggles: 0
-  F7: non-goal (OQ17, settled) — 404992 position and 143360 root_phase changes accepted; none is promised
+  F7: non-goal (OQ17, settled) — 413104 position and 146272 root_phase changes accepted; none is promised
   F8: resolved — L-AC8 has a VALIDATED-on-load cell (T7)
   F9: resolved — T6 kept as defence in depth, a DAMAGED gate row, injected live cells in L-AC8
-  F10: waits on lifecycle OQ2 (candidate D18) — 61440 accepted records cannot reach FINAL (rests on M8)
+  F10: waits on lifecycle OQ2 (candidate D18) — 62688 accepted records cannot reach FINAL (rests on M8)
   F11: resolved (OQ18) — a live crisis record past C8-S16 at the story gate: story:TURNED_BACK:DAMAGED
-  R11-D7: resolved — D7 refuses a duplicated retraction entry; accepted duplicates: 0
+  R12-D0: resolved — D0 refuses a second retraction entry (the R2/R3 two-entry fixture gives {D0}); accepted duplicates: 0
+  R12-legacy: resolved — an older save is defaulted before the check: LEANING at PRE_C8, {D16} at CH9
+  R12-D14: resolved — D14 refuses any beat id the lifecycle does not define (the model checked retract_* ids only before)
+  R12-P10: resolved — sole_dissent reachable ['by T5', 'by seeds']; a justified kill makes a YOU vote negotiated
+  R12-chapter-select: resolved — chapter select of Chapter 9/10 writes a record the load check accepts; the walk from it holds A1-A14
+  F12: resolved — chapter select is keyed to the entry scene's position (lifecycle rev 9): 'Chapter 8 - Ending' writes the fixed record at S16_DONE, which the walk starts from
+  R13-P10-purge: resolved — a purge with the first edit makes a YOU vote negotiated (sole_dissent)
+  R13-NG+: resolved — the NG+ reset sets PRE_C8, so a new cycle loads LEANING
+  R13-legacy-position: resolved — a legacy save's position is derived once from its scene
+  R13-D0-D14: resolved — beats_played capped at one; D0 type-checks it, D14 owns its ids
+  R14-new-game: resolved — act1_pace defaults to UNSET, so a new-game save loads LEANING
+  R14-position-field: resolved — story_position is a record field; D0 covers it
+  R14-legacy-hub: resolved — a legacy hub save is placed by its free-travel story scene or chapter; a Chapter 8 one is D0.missing
+  R14-D0-ids: resolved — D0 names its clause ids, one fixture each
+  R14-D7-fixture: resolved — the D7 fixture isolates D7.new_mismatch
+  F13: reported (lifecycle L-AC19) — a LEANING- or PARTLY_LOCKED-shaped record injected at a past-C8-S16 request reads DAMAGED (D16), so L-AC19's TURNED_BACK comes from the DAMAGED row, not T6; the assertion holds
 
 == Modelling choices (where the GDDs leave the model a reading) ==
-  M1 Seed contexts hold the 13 axis-seed flags only: modifier and timing rows are not read by lock_pass or load_check (except D15, which play cannot reach because set_story_flag clears the group). Seeds are fixed before C8-S13 (Act 1); side-arc flags join after Y2-PP-T17 maps them (AC15) and are not modelled.
+  M1 Seed contexts hold the 15 axis-seed rows' flags only (rev 12): modifier and timing rows are not read by lock_pass (it matches a row by (flag, pushes)) or load_check (except D15, which play cannot reach because set_story_flag clears the group). The three Aldric-kill flags and the three Seraphina command-hall flags are branches of one choice each but no exclusive group, so the contexts are a superset of what play sets. Seeds are fixed before C8-S13 (Act 1); side-arc flags join after Y2-PP-T17 maps them (AC15) and are not modelled. Walks use the rev 12 seed map for every reading; the earlier texts' seed maps are read only by the unit tables.
   M2 Contexts are walked once per lock_pass signature: the transitions read seeds only through lock_pass.
   M3 A save is any reachable state outside the four suppression windows, plus every checkpoint. A quit or crash reloads an earlier save, which is a reachable state already in the walk, so reload edges add no states; A1/A2 check every save's load.
   M4 The `world_map` path is modelled only for re-entry (after leaving Root of Heaven, and from Story+); before the Chapter 9 end Root of Heaven is not on the map (lifecycle S6).
@@ -138,6 +234,11 @@ Positions: PRE_C8, S13_OPEN, S13_DONE, S14_OPEN, S14_DONE, S15, S16_OPEN, S16_DO
   M8 Story+ (after T9) offers no route back to the boss or the final authorization; re-entering Root of Heaven from Story+ is T8 only. Whether Story+ can replay the boss belongs to the combat system (lifecycle Open Question 2).
   M9 The accepted-record probe applies one field change to every reachable save (both readings' saves are the same); 'accepted' means load_check is empty and no play in the mutated seed signature writes that (record, position). The D7 new-value fixture is the one two-field edit (the entry's `new` and its beat).
   M10 A live DAMAGED record at the gate is TURNED_BACK by the gate's DAMAGED row and is not a transition (kind GATE_DAMAGED); the walk never produces one (A8), so L-AC8's cells inject it.
-  M11 'Inside C8-S16 before its commit' is the position S16_OPEN (rev 11, live_crisis). D0 (shape) is not modelled: the model's records are typed; SaveService tests it (AC9's D0 fixtures).
+  M11 'Inside C8-S16 before its commit' is the position S16_OPEN (rev 11, live_crisis).
+  M12 D0 (rev 12) is modelled as far as a typed record can express it: an axis, root_phase or retraction enum outside its values, an element of the wrong type, retraction_log over one entry, beats_played over sixteen (rev 12) or one (rev 13); a missing field through decode() of a current-schema save. 'A set holding one element twice' is NOT modelled: a frozenset cannot hold one, so that D0 fixture belongs to SaveService's decoder tests. D0 checks only that beats_played elements are strings; which beat ids exist is D14's (Edge Case 16).
+  M13 A save of the schema version before the lifecycle fields has no lifecycle block; decode() fills it with EMPTY before load_check (Edge Case 8); rev 13 derives its position from its scene (LEGACY_SCENES stands in for the scene-to-id map). Chapter select writes its record at CH9 as the walk's second start, and rev 13 adds 'Chapter 8 - Ending' at S16_DONE as a third (CHAPTER_SELECT_ENTRIES stands in for main_menu.gd).
+  M15 NG+ is a unit check, not a walk edge: an NG+ edge would start a new record and so trip A6 (a stored ID never changes), which holds within one cycle. The unit starts a new cycle from every position after the final authorization.
+  M14 Kaelthas is outside the 1.0 companion set (Core Rule 11); the model never modelled companions, and the ch3_kaelthas_* exclusive group stays because it is game code that D15 reads.
+  M16 Rev 14 covers the whole stored record at the save level (stored_save_check): the lifecycle block plus act1_pace, story_position, companions_present (the three 1.0 companions) and timing_flags (the six timing flags), each against its allowed values. The walk's Record stays the lifecycle block with the position beside it. regions_completed is not modelled (the GDD gives 'ids of the eight regions', no enumerated list) and the act2-4 paces wait for S06b's names; derived fields (storyline_phase, secret_route, family) are never stored. SCENE_TO_ID and HUB_SCENES stand in for Y1-P1-T03's scene-to-id map (story scenes only) and the game's hubs. load_check_tags keeps reporting D0 as one item for every text; d0_clauses gives rev 14's clause ids.
 
-RESULT: PASS (rev 11 text; the rev 10 text still fails as expected: yes; the rev 9 text still fails as expected: yes; residual counts reported, categories asserted); 328.9 s
+RESULT: PASS (rev 14 text; the rev 13 text still fails as expected: yes; the rev 12 text still fails as expected: yes; the rev 11 text still fails as expected: yes; the rev 10 text still fails as expected: yes; the rev 9 text still fails as expected: yes; residual counts reported, categories asserted); 213.1 s

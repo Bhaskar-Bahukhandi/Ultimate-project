@@ -1,0 +1,9 @@
+# Mutation 'r14_ac9_clause_list_dropped' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r14_ac9_clause_list_dropped.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r14_ac9_clause_list_dropped.md
+lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [acceptance] AC 9 lacks 'The clause ids are exactly: D0.missing, D0.type, D0.enum, D0.element, D0.duplicate, D0.max, D1.secret, D1.unset_axis, D1.invalid_row, D1.other_id, D6, D7.unnamed, D7.reverse, D7.new_mismatch, D8, D9, D14.undefined, D14.no_entry, D14.not_played, D15, D16, D17.before_commit and D17.prefix.'
+RESULT: FAIL (1 problems)
+exit code: 1

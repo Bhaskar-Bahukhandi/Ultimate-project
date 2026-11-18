@@ -1,0 +1,16 @@
+# Mutation 'r12_chapter_select_dropped' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r12_chapter_select_dropped.md
+gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r12_chapter_select_dropped.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [revision 12] lifecycle Chapter select names no 'a fixed valid record: SL-A-F-D (A, F, D; X and Y appear in no invalid row), lock_negotiated = {...}'
+FAIL [lifecycle rules] lacks the pinned sentence 'Chapter select (user decisions 2026-11-17, design review rounds 12 and 13). Chapter select is player-facing.'
+FAIL [lifecycle rules] lacks the pinned sentence 'It starts a new record, never edits a loaded one, and each entry is keyed to the story position of its entry scene, not to its chapter number'
+FAIL [lifecycle rules] lacks the pinned sentence 'An entry positioned before C8-S13 starts LEANING with the defaults (position PRE_C8).'
+FAIL [lifecycle rules] lacks the pinned sentence 'An entry positioned past C8-S16's commit writes, as one atomic checkpoint before its entry scene loads, a fixed valid record'
+FAIL [lifecycle rules] lacks the pinned sentence 'axis_revised, retraction_log and beats_played empty, root_phase OUTSIDE, the matching AXIS* and lock_negotiated_* mirror flags, and the story position of its entry scene (S16_DONE for a Chapter 8 entry after the locks, CH9 for Chapter 9 and for every entry into Root of Heaven).'
+FAIL [lifecycle rules] lacks the pinned sentence 'An entry into Root of Heaven then enters through the gate (T7). No entry is positioned inside the lock scenes (S13_OPEN to S16_OPEN). So chapter select never writes a save the load check refuses'
+FAIL [lifecycle rules] lacks the pinned sentence 'Changing chapter select is protected story progression: the implementing story needs the user's approval.'
+RESULT: FAIL (8 problems)
+exit code: 1

@@ -1,0 +1,17 @@
+# Mutation 'r12_lac19_dropped' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r12_lac19_dropped.md
+gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r12_lac19_dropped.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [revision 12] L-AC19 does not expect storyline_id() SL-SHARED-ARCHIVE-CHOOSE, the chapter-select record
+FAIL [lifecycle acceptance] L-ACs numbered [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], expected 1-19
+FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase 'For each scene-change request whose target is a Root of Heaven scene, issued from the Chapter 9 end, the Chapter 10 scene chain, world-map "Resume story", free travel and chapter select, with a LEANING or PARTLY_LOCKED injected live record: enter_root_of_heaven() is TURNED_BACK and current_scene() is not a Root of Heaven scene'
+FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase 'with ch10_unlocked set and no ID stored, the free-travel Root of Heaven region stays locked'
+FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase 'Chapter select of Chapter 9 and of Chapter 10 from the main menu gives'
+FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase 'record_field(lock_negotiated) = {faction, authority, deleted} and load_errors() empty for every save written before the first player input'
+FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase 'for Chapter 10 the gate gives ROOT_OF_HEAVEN'
+FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase '"Chapter 8 - Ending" gives the same record at S16_DONE with load_errors() empty for its autosave.'
+FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase 'A chapter-select entry positioned before C8-S13 gives LEANING.'
+RESULT: FAIL (9 problems)
+exit code: 1

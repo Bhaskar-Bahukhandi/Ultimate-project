@@ -1,0 +1,9 @@
+# Mutation 'r12_d15_schema_scope_dropped' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r12_d15_schema_scope_dropped.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r12_d15_schema_scope_dropped.md
+lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [edge cases] line 686: Edge Case 16 D15 'two flags of one exclusive group (Edge Case 6): a group added or widened by a later patch never refuses an older save (inclusion rule (ii) and (iii); Open Question 5's ch1_oakhaven_warned_leaders is the known case)' differs from the pinned 'two flags of one exclusive group, as the groups stood at the save's schema version (Edge Case 6): a group added or widened by a later patch never refuses an older save (inclusion rule (ii) and (iii); Open Question 5's ch1_oakhaven_warned_leaders is the known case)'
+RESULT: FAIL (1 problems)
+exit code: 1

@@ -1,10 +1,10 @@
 # Mutation 'r4_family_reserved_changed' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-axes.r4_family_reserved_changed.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-axes.r4_family_reserved_changed.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r4_family_reserved_changed.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r4_family_reserved_changed.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [formulas] line 530: family body differs from the pinned body: 'SL-SECRET-WITNESS, SL-SECRET-CROWNLESS, SL-SECRET-FIRSTWAKE → NO_FAMILY (unreachable while their routes are disabled)' (expected 'SL-SECRET-WITNESS, SL-SECRET-CROWNLESS, SL-SECRET-FIRSTWAKE → RESERVED (unreachable while their routes are disabled)')
+FAIL [formulas] line 600: family body differs from the pinned body: 'SL-SECRET-WITNESS, SL-SECRET-CROWNLESS, SL-SECRET-FIRSTWAKE → NO_FAMILY (unreachable while their routes are disabled)' (expected 'SL-SECRET-WITNESS, SL-SECRET-CROWNLESS, SL-SECRET-FIRSTWAKE → RESERVED (unreachable while their routes are disabled)')
 FAIL [formulas] family() returns ['BOUND', 'NONE_AUTH', 'NO_FAMILY', 'SOLE'], expected ['BOUND', 'NONE_AUTH', 'NO_FAMILY', 'RESERVED', 'SOLE']
 FAIL [formulas] family() maps [] → RESERVED, expected every secret id once ['SL-SECRET-CROWNLESS', 'SL-SECRET-FIRSTWAKE', 'SL-SECRET-WITNESS']
 RESULT: FAIL (3 problems)

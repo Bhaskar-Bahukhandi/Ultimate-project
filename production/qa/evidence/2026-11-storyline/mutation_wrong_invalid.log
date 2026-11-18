@@ -1,19 +1,19 @@
 # Mutation 'wrong_invalid' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-axes.wrong_invalid.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\5718ffff-b247-46cb-b354-171931414277\scratchpad\mutations\storyline-axes.wrong_invalid.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.wrong_invalid.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.wrong_invalid.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [combinations] line 257 (SL-YOU-HEARTH-RESTORE): source PRODUCTION_MASTER_2.1.md:713 is not the '# STORYLINE YHR' heading
+FAIL [combinations] line 293 (SL-YOU-HEARTH-RESTORE): source PRODUCTION_MASTER_2.1.md:713 is not the '# STORYLINE YHR' heading
 FAIL [combinations] 2 invalid rows, but the rules table has 3 rules
 FAIL [combinations] rule combination YOU-HEARTH-RESTORE is not an invalid row
-FAIL [combinations] line 249: valid_count: 24 but the table has 25 valid rows
-FAIL [combinations] line 249: family split {'SOLE': 8, 'BOUND': 9, 'NONE_AUTH': 7} but the table has {'SOLE': 9, 'BOUND': 9, 'NONE_AUTH': 7}
-FAIL [secrets] line 540: reachable_1_0: 24, expected 25 + 0
-FAIL [counts] line 546: valid_count = 24, but the tables give 25
-FAIL [counts] line 548: design_storylines = 27, but the tables give 28
-FAIL [counts] line 549: reachable_1_0 = 24, but the tables give 25
-FAIL [counts] line 550: family_SOLE = 8, but the tables give 9
+FAIL [combinations] line 285: valid_count: 24 but the table has 25 valid rows
+FAIL [combinations] line 285: family split {'SOLE': 8, 'BOUND': 9, 'NONE_AUTH': 7} but the table has {'SOLE': 9, 'BOUND': 9, 'NONE_AUTH': 7}
+FAIL [secrets] line 610: reachable_1_0: 24, expected 25 + 0
+FAIL [counts] line 616: valid_count = 24, but the tables give 25
+FAIL [counts] line 618: design_storylines = 27, but the tables give 28
+FAIL [counts] line 619: reachable_1_0 = 24, but the tables give 25
+FAIL [counts] line 620: family_SOLE = 8, but the tables give 9
 FAIL [revision 9] storyline-axes.md lacks 'With the default knobs no secret route is enabled: reachable_1_0: 25.'
 FAIL [acceptance] AC 14 lacks 'over the 25 storylines reachable in 1.0, by authored lines with interpolation masked, not by ids or raw text'
 FAIL [acceptance] AC 5 lacks 'the 25 valid triples' (derived from the vocabularies and the table)

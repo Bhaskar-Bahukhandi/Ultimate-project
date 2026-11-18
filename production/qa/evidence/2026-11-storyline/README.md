@@ -435,3 +435,143 @@ creative-director) gave NEEDS REVISION with 9 blockers; the user settled Open Qu
   Result: PASS in 328.9 s (`reference_model.log`). D0 (shape) is not modelled (typed records; SaveService tests it).
 - Still not evidence of: the composer, the scenes, SaveService's save suppression and refusal path (routed to
   Y1-P1-T05), or anything a player sees.
+
+## Design review round 12 (2026-11-17): axes revision 12 / lifecycle revision 8 sync
+
+User decisions (2026-11-17, design review round 12; changeset approved: "Yes, the whole set"):
+
+- Authority remap: the seeds read whether Kaelen answered for what he did. `ch1_aldric_kill_justified` → authority:YOU
+  `−`; `ch2_seraphina_showoff` gains an authority:YOU `−` row and `ch2_seraphina_truth` an authority:SHARED `+` row,
+  each beside its modifier row (26 flags in 28 rows; `lock_pass` matches a row by (flag, pushes)). `ch1_knight_spared`
+  was proposed for SHARED and dropped, because the Purge path sets it too (`dialogue/ch1/aldric.dlg:116`).
+- Kaelthas is out of the 1.0 companion set (Elara, Seraphina, Lyra); his redemption is axes Open Question 19.
+- Chapter select past Chapter 8 seeds `SL-SHARED-ARCHIVE-CHOOSE` at `CH9` with `lock_negotiated` = all three axes.
+- `ch2_data_wraith_destroyed` → RELEASE is kept (`+`, (J)) despite the narrative-director's new objection.
+- Revise now, in this round; the whole changeset approved.
+
+The tooling was synced without editing either GDD.
+
+- `check_storyline_axes.py`: `SEED_EXPECTED` became `SEED_ROWS` (flag, pushes, direction); the flag set is still
+  exactly 26, a flag may have at most one axis row and one modifier/timing row, and every approved row must be present.
+  `COMPANIONS` has no Kaelthas. Re-pinned to the new text: Core Rules 3 (the `−` seeds per axis, derived from the seed
+  rows), 8 ("and the phase not DAMAGED", a DAMAGED record turned back) and 11 (the companion set, derived); Edge Case 1;
+  Edge Case 8 (legacy defaulting, D0 for a current-schema missing field, chapter select); Edge Case 16 D0 (one-entry
+  cap, duplicate element), D7 (clause ids exactly `unnamed`, `reverse`, `new_mismatch`; the retirement sentence), D15
+  (schema scope), D16 (Terms); AC9 (one documentation clause, D0 fixtures with the R2/R3 two-entry record, legacy,
+  edited `scene`), AC11, AC14 (`base_lines`, three story scenes, `keyed_axis`, two seeded defects), AC15 (every arc a
+  row, zero-hit scan NOT ASSESSED, blocked by Y2-PP-T17 too), AC16 (Act-1 subgroup gate, (c)/(d) reported, no early
+  stop, fresh re-run of at least 12), AC17 (`lock_arguments`), the four new observables, the Runtime story-type
+  paragraph. New `check_revision12`: the Terms story-position list equals `POSITIONS` read from `reference_model.py`
+  (by `ast`, not executed); the protected story-progression row; Open Questions 10, 17, 19, 20; the chapter-select
+  record derived (a valid row, its Authority and Deleted values in no invalid row, family BOUND, all three axes
+  negotiated, L-AC19 expects its ID); every `PM:7118` citation must be the supported claim "RELEASE needs staged
+  verification" (the blanket stale string `PM:7118` from round 2, which cited it for "involuntary preservation", is
+  now that old phrase only). Lifecycle: the stored story position, the one-predicate gate (chapter select and the
+  Chapter 10 chain on the `story` path, free travel locked), legacy defaulting, chapter select, L-AC1-L-AC19.
+- `run_mutations.py`: 15 mutations retargeted to the rev 12 text (same name, same intent: `deleted_row` and `companion_removed` with the
+  three-companion cell, `r4_seed_intro_count`, `r5_ac14_unknown_observable`, `r6_qa_ec8_body`, `r6_ec16_d16_dropped`,
+  `r6_ec16_d7_dropped`, `r7_ac14_pairwise_restored`, `r9_ac15_blocked`, `r9_ac11_blocked`, `r9_dependency_revision`,
+  `r10_d17_prefix_fixture`, `r11_ec16_d0_dropped`, `r11_ac14_pairwise_one`, `r11_ac14_unmasked`, `r11_ac17_dropped`,
+  `r11_ac9_mutation_kill_dropped`); 2 retired because their target text is gone (`r11_d7_duplicate_dropped`,
+  `r11_kaelthas_trust_dropped`; old logs left in place, unrefreshed); 52 `r12_*` added, one per new pin (Authority
+  seed flip, a second axis row, Kaelthas re-added in the composer, the table, Core Rule 11, Edge Case 1 and AC11,
+  `D7.duplicate` re-added, D0's cap and duplicate clause, D15 scope, AC14 back to the most-shared baseline, AC16 back to
+  6 re-run testers, Core Rule 8 without "and the phase not DAMAGED", the chapter-select paragraph, the S6 predicate,
+  both legacy-defaulting sentences, the story-position list, PM:7118 misattributed, L-AC19, ...). Each first FAIL
+  line names the check it targets. Final result, against the real documents after the main session's fixes below:
+  **297 mutations FAIL, 1 control PASS, 0 unexpected**; `check_pass.log` is the real documents, **PASS (0 problems)**.
+- `reference_model.py`: REV12 reading. D0 modelled (enum and type shape, `retraction_log` over one entry,
+  `beats_played` over sixteen, a current-schema missing field via `decode()`); "a set holding one element twice" is
+  not modelled (a frozenset cannot hold one; M12). Legacy saves defaulted before the check (LEANING at `PRE_C8`,
+  {D16} at `CH9`). `D7.multi` and `D7.duplicate` retired; the duplicate case is the D0 two-entry fixture (the R2 and
+  R3 Faction retractions of (NONE, HEARTH, RELEASE), each consistent alone). D14 refuses any beat id outside the 16
+  `retract_*` ids (the model checked malformed `retract_*` ids only; fixed for every reading). `AXIS_SEEDS` has the
+  15 rev-12 axis rows (16384 contexts, still 256 `lock_pass` signatures). `DIGITS` now reads Authority=AXIS1,
+  Faction=AXIS2, Deleted=AXIS3 (Core Rule 3). Chapter select is the walk's second start (CH9) and has its own unit
+  check; L-AC19 is checked on five paths. Kaelthas was never modelled as a companion (M14). The rev 11 text is a new
+  unit-level regression that must still fail: its `D7.duplicate` fixture gives {D0}, its legacy save is D0, and its
+  seed map passes a justified kill clean. Result: `RESULT: PASS` in 367.4 s (`reference_model.log`): unit tables, A1-A14 in every signature, 12/12 negative
+  controls caught, every active clause isolated (D17.prefix documentation only), residual categories equal the pinned
+  list; the rev 11, rev 10 and rev 9 texts still fail as expected. New reported findings: F12, chapter select of
+  Chapter 8 itself is named by neither sentence of lifecycle Chapter select ("before Chapter 8" / "Chapter 9 or
+  later"); the model reads it as the new-game start. F13, L-AC19's "LEANING or PARTLY_LOCKED injected live record"
+  reads DAMAGED (D16) at every past-C8-S16 request, so its TURNED_BACK comes from the DAMAGED row, not T6; the
+  assertion still holds.
+- GDD findings from the sync, fixed in the main session (2026-11-17) and re-verified: the lifecycle Dependencies row "| Storyline axes (`design/gdd/storyline-axes.md`) | this ← axes | values,
+  formulas, record, invariants I1-I9, knobs | revision 11 |" names axes revision 11; the axes document is revision
+  12, so the checker's cross-revision check (round 9) fails on the real text. Plus the two model findings F12 and F13
+  above (wording gaps, no failing assertion). Fixes: the cell now names revision 12; lifecycle Chapter select and
+  L-AC19 now say "Chapter 8 or earlier" (F12 resolved in the text; the model's F12 line is a fixed report string and
+  still reads as before); the two checker pins and the mutation `r12_chapter_select_dropped` were retargeted to that
+  wording. F13 stands as a note. Re-runs on the final text: checker PASS (0 problems); 297 mutations FAIL / 1 control
+  PASS / 0 unexpected; reference model `RESULT: PASS` (rev 11, rev 10, rev 9 texts still fail; residual categories
+  asserted), 384.4 s. `check_pass_lifecycle_depfix.log` was removed as obsolete.
+
+## Design review round 13 (2026-11-17)
+
+- Verdict NEEDS REVISION (game-designer, systems-designer, qa-lead, narrative-director, godot-specialist;
+  creative-director synthesis): 6 substantive and 9 one-line blockers, none touching the static core; log entry in
+  `design/gdd/reviews/storyline-axes-review-log.md`. The creative-director stated the blocking bar (a play save refused
+  or stranded, or an AC that cannot pass; two rules in contradiction; a citation that does not say what it is cited
+  for) and the exit conditions for round 14.
+- User decisions (2026-11-17): revise now; `ch1_root_purge` moves from `faction:HEARTH +` to `authority:YOU −`
+  (power used on others without answering for it; resolves round 9's PM:663 objection); arc 08 is mapped to Faction
+  (secondary `faction:*`, PM:3681-3682), so ten arcs push an axis in 1.0.
+- Axes revision 13 / lifecycle revision 9: the Authority seed note states one discriminator and quotes PM:636 and
+  PM:7048 verbatim, citing PM:1804; the story position is written at every entry point (new game and NG+ reset at
+  `PRE_C8`, chapter select keyed to its entry scene's position, so "Chapter 8 - Ending" writes the fixed record at
+  `S16_DONE`; a legacy save's position derived once from its scene, a scene the map lacks is D0); D0 caps
+  `beats_played` at one and type-checks it, so D14's undefined-beat clause is no longer shadowed; one knob-read
+  statement in Tuning Knobs (C8-S16 and the gate, plus `secret_prerequisites[FIRSTWAKE]` at C9-S18); `gate_open()`
+  excludes DAMAGED; Open Questions 6 and 13, Edge Case 1 (code citation), L-AC14 (PM:3814 is the Chapter 3 End
+  ledger) and the Formulas example ({D9, D17}) corrected. Recommended and routed items were not applied (exit
+  condition: fix only the blocking list).
+- Checker: `SEED_ROWS` purge row; Core Rule 3's derived sentence says "all" for three `−` seeds; D0, Edge Case 8,
+  AC9/15/17, lifecycle chapter-select and L-AC19 pins retargeted; new `check_revision13` (pinned sentences, retired
+  wording, the side-storyline secondary column).
+- Mutations: 13 targets moved by revision 13 were retargeted; 26 `r13_*` mutations added. Result: 323 mutations FAIL /
+  1 control PASS / 0 unexpected; `check_pass.log` PASS.
+- Reference model: `REV13` is the current reading (seed map with the purge row, `beats_max` 1, chapter select by entry
+  position with "Chapter 8 - Ending" as a third walk start, NG+ reset to `PRE_C8`, legacy position derived from
+  `LEGACY_SCENES`); new unit checks P10 purge, Chapter select by entry position, NG+ reset, Legacy position and AC9 D0
+  (rev 13). NG+ is a unit check, not a walk edge (M15: an NG+ edge would trip A6 across cycles). The rev 12 text is a
+  new regression that must still fail on each of those five. F12 resolved. Result: `RESULT: PASS` in 369.1 s
+  (`reference_model.log`; rev 12, 11, 10 and 9 texts still fail as expected; residual categories asserted).
+
+## Design review round 14 (2026-11-18)
+
+- Verdict NEEDS REVISION (game-designer, systems-designer, qa-lead, narrative-director, godot-specialist;
+  creative-director synthesis) under the round-13 bar: 6 blockers, the static core intact for a sixth round; log entry
+  in `design/gdd/reviews/storyline-axes-review-log.md`. Two blockers (`act1_pace`, `story_position`) were invisible to
+  the model because it modelled only the lifecycle block. Round 13's README entry says the purge move "resolves round
+  9's PM:663 objection"; round 14 found that rationale inverted (the purge leaves Aldric lucid, `aldric.dlg:119-122`).
+- User decisions (2026-11-18): revise now; adopt Open Question 20 with a scope freeze (revision 14 fixes only the
+  blockers; round 15 runs lean on the diff and the model log); a Chapter 8 legacy save no story scene places is
+  refused (`D0.missing`); main-story seeds named as a class, the Chapter 4 Null Court mapping deferred to Open
+  Question 21 (seed map and its 26-flag list unchanged).
+- Axes revision 14 / lifecycle revision 10: the purge row rests on `aldric.dlg:104-107` and PM:663 is no longer cited
+  for it; `story_position` is a record field, a legacy position is derived from the free-travel story scene, else the
+  save's own scene (no hub in the scene-to-id map), else the chapter; `act1_pace` (and acts 2-4) allow UNSET; D0 and D1
+  name their clause ids and AC9 lists every clause id, with one D0 fixture per clause, a new-game fixture and the D7
+  fixture (SHARED, ARCHIVE, RELEASE) with {authority, NONE → YOU}; AC11's mirror-flag sentence removed and
+  `companions_of(module_id)` added; AC15 Logic (BLOCKING) with a `secret:<route>` push; Open Questions 20 (adopted)
+  and 21. Recommended and routed items were not applied (scope freeze).
+- Checker: composer pins (`act1_pace` UNSET, `story_position` row), D0/D1, AC9/AC11/AC15, Observables, Edge Case 8,
+  Formulas and lifecycle pins retargeted; NG+ reset default for `story_position` (`PRE_C8`); new `check_revision14`
+  (pinned sentences and retired wording). A first mutation run found one pin lost in the AC9 rewrite (the two-entry
+  `retraction_log` fixture; `r12_ac9_two_entry_dropped` passed) and it was restored.
+- Mutations: 14 targets moved by revision 14 were retargeted; 24 `r14_*` mutations added. Result: 347 mutations FAIL /
+  1 control PASS / 0 unexpected; `check_pass.log` PASS. Logs were written to the session scratchpad and copied here,
+  because a OneDrive write lock (`Errno 22`) interrupted one run that wrote here directly.
+- Reference model: `REV14` is the current reading; new `stored_save_check` (the lifecycle block plus `act1_pace` and
+  `story_position`), `d0_clauses` (D0 clause ids; `D0.duplicate` stays the decoder's, M12), `legacy_position` /
+  `LEGACY_SAVES` (hub-safe order, `SCENE_TO_ID` and `HUB_SCENES` stand in for the map and the game's hubs, M16); new
+  unit checks New game, Position field, Legacy hub, AC9 D0 clause ids and AC9 D7 new-value fixture (rev 14). The rev 13
+  text is a new regression that must still fail on the first four. Result: `RESULT: PASS` in 279.9 s
+  (rev 13, 12, 11, 10 and 9 texts still fail as expected; residual categories asserted).
+- Before round 15 (user request, 2026-11-18): Open Question 20 says the model covers every closed-list field, so
+  `stored_save_check` now also checks `companions_present` (Elara, Seraphina, Lyra) and `timing_flags` (the six timing
+  flags) against their allowed values, with a new unit check "Closed-list fields (rev 14)". `regions_completed` has no
+  enumerated list in the GDD and the act 2-4 paces wait for S06b's names (M16). Re-run: `RESULT: PASS` in 213.1 s
+  (`reference_model.log`; regressions and residual categories as before); checker PASS. No GDD text changed, so the
+  mutation logs stand.
