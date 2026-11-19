@@ -2,13 +2,13 @@
 
 > **Epic**: Y1-P0 Stabilize (Sprint 001)
 > **Task ID**: Y1-P0-S06a (`production/plan/_source/Y1-P0.json#Y1-P0-S06`, days 1–2; sprint plan row Y1-P0-S06)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Foundation (design)
 > **Type**: Integration
 > **Estimate**: 2 days (the plan's S06 days 1–2). Day 1 the 27-row table, the families and the Act 1 seed map; day 2
 > the side storylines, the composer input record, the checker and `/design-review`.
 > **Manifest Version**: N/A — `docs/architecture/control-manifest.md` does not exist
-> **Last Updated**: 2026-11-08
+> **Last Updated**: 2026-11-19
 
 ## Context
 
@@ -177,5 +177,37 @@ on each named mutation), the `/design-review` report, and the evidence README (A
 ---
 
 ## Completion Notes
-
-(empty until /story-done)
+**Completed**: 2026-11-19 (verdict COMPLETE WITH NOTES; closed by the user: "Close the story")
+**Criteria**: 7/7 passing (none deferred). AC-1's "each section approved before the next" rests on the evidence
+README's approvals table, not on a machine check.
+**Verified 2026-11-19 at HEAD 9e6e2c3**: `check_storyline_axes.py` RESULT PASS (0 problems); the six named
+mutations (deleted row, duplicate id, bogus flag, dropped arc, wrong count, missing heading) each log RESULT FAIL;
+latest full run 383 mutations FAIL / 1 control PASS / 0 unexpected; `reference_model.log` PASS (rev 15, 392.8 s;
+log only, not re-run at close); `/design-review` APPROVED (axes round 15, 2026-11-18, lean under Open Question 20;
+erratum lines APPROVED in lifecycle round 16, 2026-11-19); `git diff --name-only 2d27572 --
+AethelgardPrototype/scripts scenes dialogue` empty; `git diff --check` clean; Story Bible line at STORY_BIBLE.md:145;
+`valid_count: 24`, so the ROADMAP / Story Bible "24 + 3" lines stay correct.
+**Deviations** (ADVISORY, each approved by the user during the review rounds and recorded in the evidence README and
+review logs; the AC text above was not amended):
+- AC-1: Visual/Audio, Game Feel and UI Requirements template sections dropped as N/A for a narrative system.
+- AC-3/AC-7: the seed map holds 26 flags (the 23 Audit 4 flags plus 3 Aldric-kill flags), not exactly the Audit 4
+  set; `until:lock:<axis>` tokens replace `until:<flag>`.
+- AC-2: `companions_possible` covers 3 companions; Kaelthas is outside the 1.0 companion set (round 12).
+- AC-4: arcs 05, 08 and 09 are scoped "1.0 (feeds post-1.0)" rather than "post-1.0".
+- Scope: the story grew a second GDD, `design/gdd/storyline-lifecycle.md` (APPROVED rev 11, round 16), a non-shipping
+  reference model and 16 review rounds. Estimate 2 days; actual 2026-11-08 → 2026-11-19.
+**Test Evidence**: Integration — `production/qa/evidence/2026-11-storyline/` (checker, mutation logs, reference
+model, README with AC map and section approvals); review logs in `design/gdd/reviews/`.
+**QA coverage gate (QL-TEST-COVERAGE, qa-lead)**: ADEQUATE, 7 advisory gaps, none fixed here:
+1. Arc `primary` cells are not pinned (flipping arc 04's primary still passes the checker).
+2. The companion check cannot fail on real input (`FAMILY_NEEDS` empty; every row lists all companions).
+3. The approved deviations above are recorded only in the README and review logs, not in the ACs.
+4. `git diff` results are not kept as a log; about 58 stale logs from retired mutations remain in the folder.
+5. Typed Integration, but the checker is a document lint (text consistency, not design correctness).
+6. Round 15 has no README section; its APPROVED is a lean review under the OQ20 bar.
+7. `flag_exists` comment stripping is untested (needs a mutated game tree).
+**Code Review**: Skipped — LP-CODE-REVIEW not run: no game implementation files; the Python files are non-shipping
+evidence tooling.
+**Routed, not done here**: Y1-P1-T05 (save/load checkpoint mechanisms), Y2-PP-T17 (lock scenes, final
+authorization, C9-S18, retraction beats), 9 recommended lifecycle-review items, the axes round-14/15 recommended
+items, OQ14 Story Bible/pillars edit, `game-concept.md` "27" fix; T03/T05/T17 sit in no sprint (producer).
