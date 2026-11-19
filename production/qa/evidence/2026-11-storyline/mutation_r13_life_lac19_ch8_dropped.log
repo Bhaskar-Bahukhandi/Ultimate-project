@@ -1,9 +1,27 @@
 # Mutation 'r13_life_lac19_ch8_dropped' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r13_life_lac19_ch8_dropped.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-lifecycle.r13_life_lac19_ch8_dropped.md
 gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
-lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r13_life_lac19_ch8_dropped.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-lifecycle.r13_life_lac19_ch8_dropped.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase '"Chapter 8 - Ending" gives the same record at S16_DONE with load_errors() empty for its autosave.'
-RESULT: FAIL (1 problems)
+FAIL [revision 15] chapter-select table has 12 rows, main_menu.gd 13 Chapter 8-10 entries
+FAIL [revision 15] line 307 (row 5): entry 'Chapter 9 - Human Patch' is not main_menu.gd's 'Chapter 8 - Ending'
+FAIL [revision 15] line 307 (row 5): entry scene 'ch9_human_patch_intro' is not main_menu.gd's ch8_ending
+FAIL [revision 15] line 308 (row 6): entry 'Chapter 9 - Memory Lab' is not main_menu.gd's 'Chapter 9 - Human Patch'
+FAIL [revision 15] line 308 (row 6): entry scene 'ch9_memory_lab' is not main_menu.gd's ch9_human_patch_intro
+FAIL [revision 15] line 309 (row 7): entry 'Chapter 9 - Creator Trial' is not main_menu.gd's 'Chapter 9 - Memory Lab'
+FAIL [revision 15] line 309 (row 7): entry scene 'ch9_creator_trial' is not main_menu.gd's ch9_memory_lab
+FAIL [revision 15] line 310 (row 8): entry 'Chapter 9 - Ending' is not main_menu.gd's 'Chapter 9 - Creator Trial'
+FAIL [revision 15] line 310 (row 8): entry scene 'ch9_ending' is not main_menu.gd's ch9_creator_trial
+FAIL [revision 15] line 311 (row 9): entry 'Chapter 10 - Root of Heaven' is not main_menu.gd's 'Chapter 9 - Ending'
+FAIL [revision 15] line 311 (row 9): entry scene 'ch10_root_intro' is not main_menu.gd's ch9_ending
+FAIL [revision 15] line 312 (row 10): entry 'Chapter 10 - Kernel Descent' is not main_menu.gd's 'Chapter 10 - Root of Heaven'
+FAIL [revision 15] line 312 (row 10): entry scene 'ch10_kernel_descent' is not main_menu.gd's ch10_root_intro
+FAIL [revision 15] line 313 (row 11): entry 'Chapter 10 - Witness Chamber' is not main_menu.gd's 'Chapter 10 - Kernel Descent'
+FAIL [revision 15] line 313 (row 11): entry scene 'ch10_witness_chamber' is not main_menu.gd's ch10_kernel_descent
+FAIL [revision 15] line 314 (row 12): entry 'Chapter 10 - Final Confrontation' is not main_menu.gd's 'Chapter 10 - Witness Chamber'
+FAIL [revision 15] line 314 (row 12): entry scene 'ch10_sovereign_final_trial, the boss (was ch10_sovereign_confrontation, superseded)' is not main_menu.gd's ch10_witness_chamber
+FAIL [revision 15] line 315 (row 13): entry 'Chapter 10 - True Ending' is not main_menu.gd's 'Chapter 10 - Final Confrontation'
+FAIL [revision 15] line 315 (row 13): ch10_sovereign_confrontation is superseded, but the row does not reroute it
+RESULT: FAIL (19 problems)
 exit code: 1

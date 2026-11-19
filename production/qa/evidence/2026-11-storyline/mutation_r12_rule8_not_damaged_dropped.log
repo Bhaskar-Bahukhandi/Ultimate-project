@@ -1,9 +1,9 @@
 # Mutation 'r12_rule8_not_damaged_dropped' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r12_rule8_not_damaged_dropped.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r12_rule8_not_damaged_dropped.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-axes.r12_rule8_not_damaged_dropped.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-axes.r12_rule8_not_damaged_dropped.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [core rules] line 196: Core Rule 8 lacks the pinned sentence 'with an ID stored and the phase not DAMAGED the gate is open (also after the boss and in Story+)'
+FAIL [core rules] line 199: Core Rule 8 lacks the pinned sentence 'with an ID stored and the phase not DAMAGED the gate is open (also after the boss and in Story+)'
 RESULT: FAIL (1 problems)
 exit code: 1

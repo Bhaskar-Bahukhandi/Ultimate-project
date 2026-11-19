@@ -1,7 +1,7 @@
 # Mutation 'r11_life_lac8_live_crisis_dropped' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r11_life_lac8_live_crisis_dropped.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-lifecycle.r11_life_lac8_live_crisis_dropped.md
 gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
-lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r11_life_lac8_live_crisis_dropped.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-lifecycle.r11_life_lac8_live_crisis_dropped.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
 FAIL [lifecycle acceptance] L-AC8 lacks the pinned phrase 'A live invalid-row record with nothing stored, injected past C8-S16 (in Chapter 9), reads DAMAGED'

@@ -1,0 +1,9 @@
+# Mutation 'r15_hub_revival_runs_gate' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-lifecycle.r15_hub_revival_runs_gate.md
+gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-lifecycle.r15_hub_revival_runs_gate.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [revision 15] storyline-lifecycle.md lacks 'That is a scene change out of the set: it writes ROOT_LEFT (STORY_PLUS when root_phase is FINAL), changes no other field and never runs the gate'
+RESULT: FAIL (1 problems)
+exit code: 1

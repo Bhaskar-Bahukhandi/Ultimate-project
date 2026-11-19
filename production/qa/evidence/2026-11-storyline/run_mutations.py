@@ -1,6 +1,6 @@
 """Run the storyline checker on the real GDDs and on mutated copies; write one log per run.
 
-Design review rounds 2-13 (2026-11-10 to 2026-11-17; round 5 is also the lifecycle document's round 1, round 6 its
+Design review rounds 2-14 and the lifecycle review of 2026-11-18 (2026-11-10 to 2026-11-19; round 5 is also the lifecycle document's round 1, round 6 its
 round 2). Round 9 retired the mutations aimed at the removed Witness design (listed in README.md); their old logs
 are left in place, unrefreshed. Every mutation must make the checker FAIL; every control must PASS; the real
 documents must PASS. Mutated copies go to <scratch_dir>/mutations (outside the repo); logs go to --log-dir
@@ -102,7 +102,7 @@ MUTATIONS = {
     "r4_t13_to_leaning": [(L, "| the final authorization scene is playing | FINAL |", "| the final authorization scene is playing | LEANING |")],
     "r4_t7_event_changed": [(L, "| a renegotiation is taken |", "| a renegotiation is offered |")],
     "r4_t6_guard_dropped": [(L, "| faction set, authority UNSET |", "| — |")],
-    "r4_t5_effect_dropped": [(L, "gain it; retraction recorded; retraction beat played; ID stored", "gain it; ID stored")],
+    "r4_t5_effect_dropped": [(L, 'gain it; retraction recorded; retraction beat played; `kaelen_commitment` set when the new Authority is YOU; ID stored', 'gain it; ID stored')],
     "r4_t14_backward_added": [(L, "| `root_phase` FINAL; checkpoint |\n", "| `root_phase` FINAL; checkpoint |\n| T10 | VALIDATED | a knob changes | — | CRISIS | ID cleared |\n")],
     "r4_t8_knob_guard": [(L, "| the offer is in the row's offer set |", "| the offer is in the row's offer set; WITNESS enabled |")],
     "r4_no_other_transition": [(L, "No other transition exists:", "Other transitions may exist:")],
@@ -163,11 +163,11 @@ MUTATIONS = {
     # lifecycle formulas, sentences, record
     "r4_life_formula_invalid_dropped": [(L, "v ≠ row[axis], not invalid(row with axis = v)", "v ≠ row[axis]")],
     "r4_life_offer_count_sentence": [(L, "so 16 renegotiation offers in all", "so 17 renegotiation offers in all")],
-    "r4_life_crisis_leavable": [(L, "cannot be left, skipped or saved", "can be left but not saved")],
+    "r4_life_crisis_leavable": [(L, 'cannot be left or skipped until an offer is taken', 'can be left until an offer is taken')],
     "r4_life_s8_reconsideration": [(L, "offers no\nreconsideration", "offers one\nreconsideration")],
     "r4_life_own_knob": [(L, "None of its own. It reads", "One of its own, `crisis_retry_limit` (default 3). It reads")],
     "r4_ng_reset_default": [(L, "`root_phase` → OUTSIDE", "`root_phase` → INSIDE")],
-    "r4_ng_reset_field_dropped": [(L, "`retraction_log`, `beats_played` → empty", "`retraction_log` → empty")],
+    "r4_ng_reset_field_dropped": [(L, '`retraction_log`, `beats_played`, `companions_present`', '`retraction_log`, `companions_present`')],
     "r4_life_number_word": [(L, "offers only its six\n   renegotiations (S5)", "offers only its five\n   renegotiations (S5)")],
     "r4_life_edge_case_gap": [(L, "6. **A crash between two writes", "7. **A crash between two writes")],
     "r4_life_heading": [(L, "## Tuning Knobs\n\nNone of its own", "## Knobs\n\nNone of its own")],
@@ -184,7 +184,7 @@ MUTATIONS = {
     # stale revision-3 vocabulary
     "r4_stale_storyline_state": [(L, "(fields `authority`,", "(fields `storyline_state`, `authority`,")],
     "r4_stale_storyline_state_axes": [("implements `storyline_id`, `storyline_phase`,", "implements `storyline_id`, `storyline_state`,")],
-    "r4_stale_gate_crisis": [(L, "the gate, and C9-S18's form).", "the gate, and C9-S18's form; no GATE_CRISIS).")],
+    "r4_stale_gate_crisis": [(L, 'this document keeps no list of its own (design review 2026-11-18).', 'this document keeps no list of its own; no GATE_CRISIS (design review 2026-11-18).')],
     # --- review round 5 (axes) + round 1 (lifecycle): one per new pin or derived check
     # axes: composer record, Edge Case 16, protected touchpoints, Core Rules 3/6/10, ACs
     "r5_composer_retraction_log_dropped": [('| retraction_log | list | at most one entry {axis, old, new, withdrawn_item, scene}; `withdrawn_item` and `scene` are opaque display text that no code branches on | every renegotiation |\n', '')],
@@ -205,7 +205,7 @@ MUTATIONS = {
     "r5_life_edge_case_gap": [(L, "5. **Every Witness lead found in 1.0.**", "4. **Every Witness lead found in 1.0.**")],
     # --- review round 6 (axes) + round 2 (lifecycle)
     # qa-lead's round-6 survivors, re-expressed against the revised text (they PASSED revision 5's checker)
-    "r6_qa_lac20_replays": [(L, "`current_scene()` stays `load_menu`, and no lock scene plays.", "`current_scene()` becomes C8-S13, and the lock scenes replay.")],
+    "r6_qa_lac20_replays": [(L, '`current_scene()` stays `load_menu`, and `scenes_played()` holds\n  no lock scene.', '`current_scene()` becomes C8-S13, and the lock scenes replay.')],
     "r6_qa_lac15_withdrawn_stated": [(L, "`revise:authority:NONE`) → WITHDRAWN", "`revise:authority:NONE`) → STATED")],
     "r6_qa_rule8_stranded": [("Every save that play writes loads (I9)", "Every save that play writes is stranded (I9)")],
     "r6_qa_ec8_body": [('it\n   is refused by D16 as unsupported', 'it loads LEANING')],
@@ -230,7 +230,7 @@ MUTATIONS = {
     # lifecycle blocker 3: the save window
     "r6_save_window_dropped": [(L, "autosave and manual save are suppressed from the", "autosave and manual save are allowed from the")],
     "r6_save_checkpoint_late": [(L, "as one atomic checkpoint before that beat plays", "as one checkpoint after C8-S17")],
-    "r6_lac5_save_allowed": [(L, "until its commit `try_save()` is false", "until its commit `try_save()` is true")],
+    "r6_lac5_save_allowed": [(L, 'window `try_save()` is false and no entry', 'window `try_save()` is true and no entry')],
     # lifecycle blocker 4: the deferral disclosure
     # lifecycle blocker 5: the FAILED vote
     "r6_t13_unguarded": [(L, "| the final authorization scene is playing | FINAL |", "| — | FINAL |")],
@@ -244,7 +244,7 @@ MUTATIONS = {
     "r6_legacy_wrong_lines": [(L, "ch10_ending.gd:15-16", "ch10_ending.gd:20-21")],
     # lifecycle blockers 6-7: fail-capable ACs and evidence
     "r6_nonfailing_assertion": [(L, "In FIXED after the boss: `take()`", "In FIXED after the boss: `offers()` is empty; `take()`")],
-    "r6_lac23_kaelen_allowed": [(L, "every `retract_*` id `beat_speaker(id)` is not Kaelen", "every `retract_*` id `beat_speaker(id)` may be Kaelen")],
+    "r6_lac23_kaelen_allowed": [(L, 'Continuity), so never Kaelen. *Blocked by:*', 'Continuity), or Kaelen. *Blocked by:*')],
     "r6_lac23_count": [(L, "defines — the 16 `retract_*`", "defines — the 15 `retract_*`")],
     "r6_lac24_no_signoff": [(L, "`production/qa/evidence/`, with lead sign-off\n  recorded beside them", "`production/qa/evidence/`")],
     "r6_validation_load_cells": [(L, "which pass when the\nload is refused", "which pass when\nTURNED_BACK")],
@@ -276,7 +276,7 @@ MUTATIONS = {
     "r9_stale_identifier_in_oq": [(L, "the deferral, invocation, witness vote, stand-down and Consent variants of revision 4", "`witness_deferred`, the invocation, witness vote, stand-down and Consent variants of revision 4")],
     "r9_checkpoint_missing": [(L, "| `root_phase` INSIDE; checkpoint |", "| `root_phase` INSIDE |")],
     "r9_commit_list": [(L, "(T1, T2, T3, T5, T7, T9) commits", "(T1, T2, T3, T5, T9) commits")],
-    "r9_lac6_list": [(L, "For each record-writing transition (T1, T2, T3, T5, T7, T9)", "For each record-writing transition (T1, T2, T3, T5)")],
+    "r9_lac6_list": [(L, 'For each transition of the window table (T1, T2, T3, T5, T7, T9)', 'For each transition of the window table (T1, T2, T3, T5)')],
     "r9_ec16_retired_reactivated": [("    - D2-D5 retired (revision 9): they checked the Witness record fields, which 1.0 no longer stores", "    - D2-D5 a stored ID on a row other than R1")],
     "r9_ac9_clause_list": [('for each clause of each active Edge Case 16 item (D0, D1,', 'for each active Edge Case 16 item (D1,')],
     "r9_phase_example_lock_order": [("(YOU, HEARTH, UNSET, nothing stored, OUTSIDE) →", "(UNSET, HEARTH, CHOOSE, nothing stored, OUTSIDE) →")],
@@ -288,9 +288,9 @@ MUTATIONS = {
     "r9_ac5_formula_mention": [("so a swapped `transform()` fails", "so `transform()` is covered")],
     "r9_lac2_fixture_wrong": [(L, "`act1_report_local` → not;", "`act1_report_local` → contains;")],
     "r9_s5_unlock_flag": [(L, "`SEVEN_WITNESSES_AVAILABLE`, `CROWNLESS_AVAILABLE`, `FIRST_WAKE_AVAILABLE`) is set", "`SEVEN_WITNESSES_AVAILABLE`, `FIRST_WAKE_AVAILABLE`) is set")],
-    "r9_dependency_revision": [(L, 'invariants I1-I9, knobs | revision 14 |', 'invariants I1-I9, knobs | revision 8 |')],
+    "r9_dependency_revision": [(L, 'invariants I1-I9, knobs | revision 15 (erratum: `kaelen_commitment`) |', 'invariants I1-I9, knobs | revision 8 |')],
     "r9_content_scope_count": [(L, "| red lines | 3 |", "| red lines | 4 |")],
-    "r9_gate_row_dropped": [(L, "| FIXED, FINAL | ROOT_OF_HEAVEN; nothing changes (T8) |\n", "")],
+    "r9_gate_row_dropped": [(L, "| FIXED, FINAL | ROOT_OF_HEAVEN; nothing changes but the story position (T8: `ROOT_LEFT` → `ROOT`, `STORY_PLUS` → `ROOT_STORY_PLUS`, Scene placement) |\n", "")],
     "r9_life_formula_signpost": [(L, "= HIDDEN while T is disabled", "= OPEN while T is disabled")],
     "r9_ec2_offer_count": [("R1 at C8-S16 offers only its\n   six renegotiations", "R1 at C8-S16 offers only its\n   seven renegotiations")],
     "r9_red_line_names_route": [(L, "No line names a secret route or the institution\none needs", "The R1 line names the witnesses")],
@@ -376,15 +376,15 @@ MUTATIONS = {
     "r12_oq20_adopted": [('Review exit criteria — adopted (user decision 2026-11-18', 'Review exit criteria — adopted (user decision 2026-11-17')],
     "r12_pm7118_misattributed": [('RELEASE needs staged verification (PM:7118)', 'RELEASE ends involuntary preservation (PM:7118)')],
     "r12_life_commit_position_dropped": [(L, ' Every checkpoint also\nstores the story position it reaches (`storyline-axes.md` Terms, Story position: the commit of C8-S13 writes\n`S13_DONE`, and so on), and a save made anywhere else stores the last position it has crossed (Y1-P1-T05).', '')],
-    "r12_s6_predicate_dropped": [(L, 'The check is one predicate, not a list of callers (design review round 12): it runs before every scene\nchange whose target is a Root of Heaven scene, whoever requests it; on load, before any loaded state is applied; and\nbefore free travel unlocks the Root of Heaven region, which stays locked until the predicate passes. A new caller\ntherefore cannot skip it, and setting a chapter-unlock flag alone never opens the gate. ', '')],
+    "r12_s6_predicate_dropped": [(L, 'The check is one predicate, not a list of callers (design review round 12): it runs before every scene\nchange whose target is a Root of Heaven scene (the Root of Heaven scene set, Scene placement), whoever requests it;\non load, for a save positioned inside Root of Heaven; and before free travel unlocks the Root of Heaven region, which\nstays locked until the predicate passes. A new caller\ntherefore cannot skip it, and setting a chapter-unlock flag alone never opens the gate. ', '')],
     "r12_s6_chapter_select_path_dropped": [(L, 'the Chapter 10 scene chain and chapter select count as\nthis path', 'the Chapter 10 scene chain counts as this path')],
-    "r12_chapter_select_dropped": [(L, '**Chapter select (user decisions 2026-11-17, design review rounds 12 and 13).** Chapter select is player-facing. It\nstarts a new record, never edits a loaded one, and each entry is keyed to the story position of its entry scene, not\nto its chapter number (round 13: "Chapter 8 - Ending", `main_menu.gd:655-662`, is a Chapter 8 entry whose\n`ch8_ending` comes after the locks and autosaves on load). An entry positioned before C8-S13 starts LEANING with the\ndefaults (position `PRE_C8`). An entry positioned past C8-S16\'s commit writes, as\none atomic checkpoint before its entry scene loads, a fixed valid record: `SL-SHARED-ARCHIVE-CHOOSE` (SHARED, ARCHIVE, CHOOSE; SHARED\nand CHOOSE appear in no invalid row), `lock_negotiated` = {faction, authority, deleted} (no lock vote was\nplayed, so none passed clean), `axis_revised`, `retraction_log` and `beats_played` empty, `root_phase` OUTSIDE, the\nmatching `AXIS*` and `lock_negotiated_*` mirror flags, and the story position of its entry scene (`S16_DONE` for a\nChapter 8 entry after the locks, `CH9` for Chapter 9 and for every entry into Root of Heaven). An entry into Root of\nHeaven then enters through the gate (T7). No entry is positioned inside the lock scenes (`S13_OPEN` to `S16_OPEN`).\nSo chapter select never writes a save the load check refuses, and its ending is\nBOUND without `sole_dissent`. Changing chapter select is protected story progression: the implementing story needs the\nuser\'s approval.\n\n', '')],
-    "r12_chapter_select_record_invalid": [(L, '`SL-SHARED-ARCHIVE-CHOOSE` (SHARED, ARCHIVE, CHOOSE; SHARED\nand CHOOSE appear in no invalid row)', '`SL-YOU-HEARTH-RESTORE` (YOU, HEARTH, RESTORE; YOU and RESTORE appear in no invalid row)')],
+    "r12_chapter_select_dropped": [(L, '**Chapter select (user decisions 2026-11-17 and 2026-11-19, design review rounds 12 and 13, review 2026-11-18).**\nChapter select is player-facing. It starts a new record, never edits a loaded one, and each entry is keyed to the story\nposition of its entry scene, not to its chapter number (round 13: "Chapter 8 - Ending", `main_menu.gd:655-662`, is a\nChapter 8 entry whose `ch8_ending` comes after the locks and autosaves on load). An entry positioned before C8-S13\nstarts LEANING with the defaults (position `PRE_C8`). An entry positioned past C8-S16\'s commit writes a fixed valid\nrecord: `SL-SHARED-ARCHIVE-CHOOSE` (SHARED, ARCHIVE, CHOOSE; SHARED and CHOOSE appear in no invalid row),\n`lock_negotiated` = {faction, authority, deleted} (no lock vote was played, so none passed clean), `axis_revised`,\n`retraction_log` and `beats_played` empty, `kaelen_commitment` UNSET, `root_phase` OUTSIDE (FINAL for row 13), the\nmatching `AXIS*` and `lock_negotiated_*` mirror flags, and the row\'s story position. No entry is positioned inside the\nlock scenes (`S13_OPEN` to `S16_OPEN`) or the final authorization (`FINAL_AUTH_OPEN`).\n\nThe requirement is the outcome, not the mechanism (design review 2026-11-18): the record and position are written\nbefore the entry scene\'s first save, and every save written after a chapter-select start, from the first, holds the\nwhole record and the row\'s position. Nothing is saved from the main menu (the save API refuses there,\n`game_manager.gd:1441`); which code writes the record, and when SaveService first saves it, is Y1-P1-T05\'s.\n\nOne row per Chapter 8-10 entry of `AethelgardPrototype/scripts/main_menu.gd`, in its order (user decisions 2026-11-19\nfor rows 3, 12 and 13):\n\n| # | entry | entry scene | record | position of the first save | `root_phase` at the first save | then |\n|---|---|---|---|---|---|---|\n| 1 | Chapter 8 - Revolt Intro | `ch8_revolt_intro` | defaults (LEANING) | `PRE_C8` | OUTSIDE | the three locks play |\n| 2 | Chapter 8 - Saved Assembly | `ch8_saved_assembly` | defaults (LEANING) | `PRE_C8` | OUTSIDE | the three locks play |\n| 3 | Chapter 8 - Revolt Crisis, relabelled "Chapter 8 - Assembly Votes" | C8-S13 (was `ch8_revolt_crisis`, superseded) | defaults (LEANING) | `S13_DONE` (chapter select writes `PRE_C8`; C8-S13 opens its window at its start, so the first save is T1\'s checkpoint) | OUTSIDE | C8-S13 starts, so the three locks play |\n| 4 | Chapter 8 - Ending | `ch8_ending` | fixed | `S16_DONE` | OUTSIDE | — |\n| 5 | Chapter 9 - Human Patch | `ch9_human_patch_intro` | fixed | `CH9` | OUTSIDE | — |\n| 6 | Chapter 9 - Memory Lab | `ch9_memory_lab` | fixed | `CH9` | OUTSIDE | — |\n| 7 | Chapter 9 - Creator Trial | `ch9_creator_trial` | fixed | `CH9` | OUTSIDE | — |\n| 8 | Chapter 9 - Ending | `ch9_ending` | fixed | `CH9` | OUTSIDE | its exit runs the gate (T7) |\n| 9 | Chapter 10 - Root of Heaven | `ch10_root_intro` | fixed | `ROOT` (chapter select writes `CH9`, T7 writes `ROOT`) | INSIDE (T7) | enters through the gate (T7) |\n| 10 | Chapter 10 - Kernel Descent | `ch10_kernel_descent` | fixed | `ROOT` (chapter select writes `CH9`, T7 writes `ROOT`) | INSIDE (T7) | enters through the gate (T7) |\n| 11 | Chapter 10 - Witness Chamber | `ch10_witness_chamber` | fixed | `ROOT` (chapter select writes `CH9`, T7 writes `ROOT`) | INSIDE (T7) | enters through the gate (T7) |\n| 12 | Chapter 10 - Final Confrontation | `ch10_sovereign_final_trial`, the boss (was `ch10_sovereign_confrontation`, superseded) | fixed | `ROOT` (chapter select writes `CH9`, T7 writes `ROOT`) | INSIDE (T7) | enters through the gate (T7); after the boss the final authorization plays and T9 fires |\n| 13 | Chapter 10 - True Ending | `ch10_ending` | fixed, `root_phase` FINAL | `FINAL_DONE` | FINAL | enters through the gate (T8) |\n\nSo chapter select never writes a save the load check refuses, its ending is BOUND without `sole_dissent`, and no entry\nreaches a superseded scene. Row 13 is the one record chapter select writes as FINAL without T9: the entry starts at the\nending, so it gets the ending\'s record. Changing chapter select is protected story progression: the implementing story\nneeds the user\'s approval.\n\n', '')],
+    "r12_chapter_select_record_invalid": [(L, '`SL-SHARED-ARCHIVE-CHOOSE` (SHARED, ARCHIVE, CHOOSE; SHARED and CHOOSE appear in no invalid row)', '`SL-YOU-HEARTH-RESTORE` (YOU, HEARTH, RESTORE; YOU and RESTORE appear in no invalid row)')],
     "r12_chapter_select_negotiated_partial": [(L, '`lock_negotiated` = {faction, authority, deleted} (no lock vote', '`lock_negotiated` = {faction, authority} (no lock vote')],
-    "r12_chapter_select_family_wrong": [(L, 'its ending is\nBOUND without `sole_dissent`', 'its ending is SOLE without `sole_dissent`')],
-    "r12_lac19_dropped": [(L, '- **L-AC19 Gate predicate and chapter select.** For each scene-change request whose target is a Root of Heaven\n  scene, issued from the Chapter 9 end, the Chapter 10 scene chain, world-map "Resume story", free travel and chapter\n  select, with a LEANING or PARTLY_LOCKED injected live record: `enter_root_of_heaven()` is TURNED_BACK and\n  `current_scene()` is not a Root of Heaven scene; with `ch10_unlocked` set and no ID stored, the free-travel Root of\n  Heaven region stays locked. Chapter select of Chapter 9 and of Chapter 10 from the main menu gives\n  `storyline_id()` `SL-SHARED-ARCHIVE-CHOOSE`, `record_field(lock_negotiated)` = {faction, authority, deleted} and\n  `load_errors()` empty for every save written before the first player input; for Chapter 10 the gate gives\n  ROOT_OF_HEAVEN. "Chapter 8 - Ending" gives the same record at `S16_DONE` with `load_errors()` empty for its\n  autosave. A chapter-select entry positioned before C8-S13 gives LEANING. *Blocked by:* Y2-PP-T17, Y1-P1-T05,\n  Y1-P1-T03.\n', '')],
-    "r12_lac19_chapter10_turned_back": [(L, 'for Chapter 10 the gate gives\n  ROOT_OF_HEAVEN.', 'for Chapter 10 the gate gives TURNED_BACK.')],
-    "r12_lac19_region_unlocks": [(L, 'the free-travel Root of\n  Heaven region stays locked', 'the free-travel Root of Heaven region unlocks')],
+    "r12_chapter_select_family_wrong": [(L, 'its ending is BOUND without `sole_dissent`', 'its ending is SOLE without `sole_dissent`')],
+    "r12_lac19_dropped": [(L, '- **L-AC19 Gate predicate and chapter select.** For each scene-change request whose target is a Root of Heaven\n  scene, issued from the Chapter 9 end, the Chapter 10 scene chain, world-map "Resume story", free travel and chapter\n  select, with a LEANING or PARTLY_LOCKED injected live record: `enter_root_of_heaven()` is TURNED_BACK,\n  `current_scene()` is not a Root of Heaven scene but S6\'s landing for that path, and `saves_written()` gains nothing;\n  with `ch10_unlocked` set and no ID stored, `region_unlocked(root_of_heaven)` is false. For each of the 13 rows of the\n  chapter-select table, started from the main menu: every entry of `saves_written()` before the first player input\n  holds the row\'s record (`storyline_id()` `SL-SHARED-ARCHIVE-CHOOSE` for a fixed record and empty for the\n  defaults, `record_field(lock_negotiated)`, `record_field(root_phase)`,\n  `record_field(kaelen_commitment)`) and `record_field(story_position)` the row\'s position of the first save, and\n  reloads with `load_errors()` empty; rows 9-12 give `enter_root_of_heaven()` ROOT_OF_HEAVEN and `storyline_phase()`\n  FIXED, and row 12 then reaches the final authorization, where `confirm_execution()` gives FINAL; row 13 gives\n  `storyline_phase()` FINAL and `enter_root_of_heaven()` ROOT_OF_HEAVEN with `record_hash()` unchanged (T8); rows 1-3\n  start LEANING, and row 3\'s `scenes_played()` starts with C8-S13; no row\'s `scenes_played()` holds `ch8_revolt_crisis` or\n  `ch10_sovereign_confrontation`. *Blocked by:* Y2-PP-T17, Y1-P1-T05, Y1-P1-T03.\n', '')],
+    "r12_lac19_chapter10_turned_back": [(L, 'rows 9-12 give `enter_root_of_heaven()` ROOT_OF_HEAVEN', 'rows 9-12 give `enter_root_of_heaven()` TURNED_BACK')],
+    "r12_lac19_region_unlocks": [(L, '`region_unlocked(root_of_heaven)` is false', '`region_unlocked(root_of_heaven)` is true')],
     # Design review round 13 (axes revision 13, lifecycle revision 9).
     "r13_purge_hearth_restored": [('| ch1_root_purge | authority:YOU | − | until:lock:authority | dialogue/ch1/aldric.dlg:57 (J) |', '| ch1_root_purge | faction:HEARTH | + | until:lock:faction | PRODUCTION_MASTER_2.1.md:663 (J) |')],
     "r13_discriminator_dropped": [('The discriminator, in one sentence:', 'In short:')],
@@ -405,12 +405,12 @@ MUTATIONS = {
     "r13_lock_pass_example_purge": [('YOU with `ch1_root_first_edit` and `ch1_root_purge` set → NEGOTIATED', 'YOU with `ch1_root_first_edit` and `ch1_root_purge` set → CLEAN')],
     "r13_life_gate_open_id_only": [(L, 'true exactly when an ID is stored and the phase is not DAMAGED', 'true exactly when an ID is stored')],
     "r13_life_overview_damaged_dropped": [(L, 'stored, the locks not yet played, or a live DAMAGED record (a defect, turned back as a data error, S6); a save made', 'stored or the locks not yet played; a save made')],
-    "r13_life_ngplus_position_dropped": [(L, ';\n`story_position` → PRE_C8. The story position is reset with the record because a new record left at a Story+ position\nwould be refused by D16 (design review round 13).', '.')],
-    "r13_life_chapter_select_by_chapter": [(L, 'each entry is keyed to the story position of its entry scene, not\nto its chapter number', 'each entry is keyed to its chapter number')],
-    "r13_life_ch8_entry_wrong_position": [(L, '(`S16_DONE` for a\nChapter 8 entry after the locks,', '(`PRE_C8` for a\nChapter 8 entry after the locks,')],
+    "r13_life_ngplus_position_dropped": [(L, '; `story_position` →\nPRE_C8. The story position is reset with the record because a new record left at a Story+ position\nwould be refused by D16 (design review round 13).', '.')],
+    "r13_life_chapter_select_by_chapter": [(L, 'each entry is keyed to the story\nposition of its entry scene, not to its chapter number', 'each entry is keyed to its chapter number')],
+    "r13_life_ch8_entry_wrong_position": [(L, '| 4 | Chapter 8 - Ending | `ch8_ending` | fixed | `S16_DONE` |', '| 4 | Chapter 8 - Ending | `ch8_ending` | fixed | `PRE_C8` |')],
     "r13_life_lac14_pm3814_restored": [(L, "arc 09's flag and arc 05's Quest 30 flag", "`OLD_HOME_MESSAGE` (arc 09, PM:3814) and arc 05's Quest 30 flag")],
-    "r13_life_lac15_position_dropped": [(L, ', the story position `PRE_C8`, `load_errors()` empty for\n  the first save of the new cycle,', ',')],
-    "r13_life_lac19_ch8_dropped": [(L, ' "Chapter 8 - Ending" gives the same record at `S16_DONE` with `load_errors()` empty for its\n  autosave.', '')],
+    "r13_life_lac15_position_dropped": [(L, ', the story position `PRE_C8` among them;', ';')],
+    "r13_life_lac19_ch8_dropped": [(L, '| 4 | Chapter 8 - Ending | `ch8_ending` | fixed | `S16_DONE` | OUTSIDE | — |\n', '')],
     "r13_life_legacy_derive_dropped": [(L, ' Such a save holds no story position, so the\ndefaulting step derives it once, by the order in `storyline-axes.md` Terms (Story position): the free-travel story\nscene, else the save\'s own scene, through the scene-to-id map, which holds no hub; else the chapter number. A\nChapter 8 save that no story scene places is left with no position, which D0 refuses (`D0.missing`).', '')],
     # --- review round 14 (2026-11-18): axes revision 14 / lifecycle revision 10 (scope frozen, Open Question 20)
     "r14_purge_pm663_restored": [('because Kaelen rewrites Aldric before he can say what it will cost', 'because a purge leaves Aldric alive without his agency, which PM:663 names as the condition of his support')],
@@ -435,8 +435,46 @@ MUTATIONS = {
     "r14_rule2_main_story_dropped": [('and so do main-story choices after Act 1', 'and so may later choices')],
     "r14_oq20_not_adopted": [('Review exit criteria — adopted', 'Review exit criteria — proposed')],
     "r14_life_legacy_hub": [(L, 'which holds no hub; else', 'which holds every scene; else')],
-    "r14_life_inputs_no_position": [(L, '`beats_played`, `story_position`) and the seed', '`beats_played`) and the seed')],
-    "r14_life_ngplus_position_not_field": [(L, '`story_position` → PRE_C8.', 'the story position → PRE_C8.')],
+    "r14_life_inputs_no_position": [(L, '`kaelen_commitment`,\n`story_position`) and the seed', '`kaelen_commitment`) and the seed')],
+    "r14_life_ngplus_position_not_field": [(L, '`story_position` →\nPRE_C8. The story position is reset', 'the story position →\nPRE_C8. The story position is reset')],
+    # --- lifecycle review 2026-11-18: lifecycle revision 11 / axes revision 15 (scope frozen, lifecycle Open
+    # Question 7). The 23 entries above whose text moved were retargeted to the revision-11 wording, same intent.
+    "r15_cs_row_dropped": [(L, '| 13 | Chapter 10 - True Ending | `ch10_ending` | fixed, `root_phase` FINAL | `FINAL_DONE` | FINAL | enters through the gate (T8) |\n', '')],
+    "r15_cs_label_wrong": [(L, '| 6 | Chapter 9 - Memory Lab |', '| 6 | Chapter 9 - Memory Vault |')],
+    "r15_cs_revolt_crisis_not_rerouted": [(L, '| C8-S13 (was `ch8_revolt_crisis`, superseded) |', '| `ch8_revolt_crisis` |')],
+    "r15_cs_final_confrontation_not_rerouted": [(L, '| `ch10_sovereign_final_trial`, the boss (was `ch10_sovereign_confrontation`, superseded) |', '| `ch10_sovereign_confrontation` |')],
+    "r15_cs_inside_lock_scene": [(L, '| defaults (LEANING) | `S13_DONE` (chapter select writes `PRE_C8`;', '| defaults (LEANING) | `S13_DONE` (chapter select writes `S13_OPEN`;')],
+    "r15_cs_root_entry_no_gate": [(L, '| 10 | Chapter 10 - Kernel Descent | `ch10_kernel_descent` | fixed | `ROOT` (chapter select writes `CH9`, T7 writes `ROOT`) | INSIDE (T7) | enters through the gate (T7) |\n', '| 10 | Chapter 10 - Kernel Descent | `ch10_kernel_descent` | fixed | `ROOT` (chapter select writes `CH9`, T7 writes `ROOT`) | INSIDE (T7) | — |\n')],
+    "r15_cs_true_ending_not_final": [(L, '| 13 | Chapter 10 - True Ending | `ch10_ending` | fixed, `root_phase` FINAL | `FINAL_DONE` | FINAL | enters through the gate (T8) |\n', '| 13 | Chapter 10 - True Ending | `ch10_ending` | fixed, `root_phase` FINAL | `CH9` | FINAL | enters through the gate (T8) |\n')],
+    "r15_placement_scene_dropped": [(L, '| `chapter9/ch9_memory_lab.tscn` | C9-S05 to C9-S12 | `CH9` | no | kept |\n', '')],
+    "r15_placement_superseded_unmarked": [(L, '| superseded by the final authorization (`ch10_sovereign_confrontation.gd`)', '| kept (`ch10_sovereign_confrontation.gd`)')],
+    "r15_placement_root_set_wrong": [(L, '| `chapter10/ch10_kernel_descent.tscn` | C10-S04 to C10-S08 | `ROOT` | yes |', '| `chapter10/ch10_kernel_descent.tscn` | C10-S04 to C10-S08 | `ROOT` | no |')],
+    "r15_writer_row_dropped": [(L, '| `ROOT_LEFT` | every scene change from a Root of Heaven scene to a scene outside the set while `root_phase` is INSIDE (the world map, free travel, a hub revival) |\n', '')],
+    "r15_writer_empty": [(L, "| `FINAL_AUTH_OPEN` | the boss victory's step into the final authorization (never saved) |", '| `FINAL_AUTH_OPEN` | — |')],
+    "r15_window_row_dropped": [(L, '| T7 | the gate passes on a VALIDATED record (no scene, no player input) | the first save inside Root of Heaven | `root_phase` INSIDE, `ROOT` | the last save before the gate, whose gate check runs T7 again | `root_entry`, the start of the Root of Heaven scene entered | a second entry is T8: `record_hash()` unchanged |\n', '')],
+    "r15_window_resume_duplicate": [(L, '| `c8s14_after_vote` |', '| `c8s13_after_vote` |')],
+    "r15_landing_path_dropped": [(L, '| `world_map` ("Resume story", free travel) | the Assembly line; the player stays on the world map (`overworld`), the region locked | the system-voice prompt, then the load menu |\n', '')],
+    "r15_take_not_handler": [(L, 'submits the offer to the production T5 handler, the code the crisis screen calls, in whatever scene is playing: true if the handler took it (it is in `offers()`) and T5 ran;', 'true if the offer is in `offers()` and was taken;')],
+    "r15_commitment_quote_wrong": [(L, '`LISTEN` ("I LISTEN.")', '`LISTEN` ("I WILL LISTEN.")')],
+    "r15_composer_commitment_dropped": [('| kaelen_commitment | enum | UNSET, LISTEN, OVERRIDE_IMMEDIATE_LOSS, CANNOT_PROMISE_NEVER (PM:7054-7058); UNSET exactly when the record never held YOU (Authority is not YOU and no `retraction_log` entry has `old` YOU) | C8-S14 when YOU is backed; a renegotiation to YOU at C8-S16; UNSET from a new game, the NG+ reset and chapter select (user decision 2026-11-19) |\n', '')],
+    "r15_d0_commitment_dropped": [('`kaelen_commitment` is also outside its allowed\n      values (`D0.enum`) when it is UNSET on a record that held YOU (Authority YOU, or a `retraction_log` entry with\n      `old` YOU) or set on one that never did: play writes it exactly when SOVEREIGN can quote it (lifecycle S2;\n      user decision 2026-11-19).', '')],
+    "r15_axes_c9s18_incomplete_restored": [('C9-S18 in the form Core Rule 6 states, decrypted and logged with every FIRSTWAKE prerequisite set and noise otherwise;', 'C9-S18 incomplete form;')],
+    "r15_answerer_person_restored": [(L, "answered by the refusing faction's delegate; Kaelen, whose position it was, never\n  answers his own retraction", 'answered by the person whose position it was')],
+    "r15_knob_list_restored": [(L, 'Knobs: Tuning Knobs below.', 'Knobs are read only at C8-S16 and the gate.')],
+    "r15_ngplus_region_dropped": [(L, '`companions_present`, `regions_completed`, `timing_flags` → empty', '`companions_present`, `timing_flags` → empty')],
+    "r15_ngplus_pace_dropped": [(L, '`kaelen_commitment`, `act1_pace`, `act2_pace`', '`kaelen_commitment`, `act2_pace`')],
+    "r15_lac8_validated_cell_excluded": [(L, 'so the cell is synthetic and counted', 'so the cell is unit-level, outside the counted cells')],
+    "r15_note_validated_unit_level": [(L, 'the live-DAMAGED and live invalid-row checks of L-AC8 are\nunit-level', 'the live-DAMAGED and VALIDATED-on-load checks of L-AC8 are\nunit-level')],
+    "r15_pm8206_alone": [(L, 'before PM:8206-8207 "Root of Heaven gate opens"', 'before PM:8206 "Root of Heaven gate opens"')],
+    "r15_crisis_saved_cited_to_pm": [(L, 'cannot be left or skipped until an offer is taken\n(PM:7143, PM:7153), and it cannot be saved (`storyline-axes.md` I9).', 'cannot be left, skipped or saved until an offer is taken (PM:7143, PM:7153).')],
+    "r15_oq4_brokering_restored": [(L, "(PM:7141; the RESTORE\n   hearing's unresolved consent argument, PM:7102-7106, is context for how a Deleted concession is voiced, not a\n   source for brokering)", '(PM:7102-7106, 7141)')],
+    "r15_lac_prose_observable": [(L, '`beats_played()` with no `retract_*` beat. *Blocked by:*', '`beats_played()` with no `retract_*` beat, and the story position `S16_DONE`. *Blocked by:*')],
+    "r15_lac_unlisted_call": [(L, '`beats_played()` with no `retract_*` beat. *Blocked by:*', '`beats_played()` with no `retract_*` beat and checkpoint_count() 1. *Blocked by:*')],
+    "r15_oq7_not_adopted": [(L, '7. **Review exit criteria — adopted', '7. **Review exit criteria — proposed')],
+    "r15_hub_revival_runs_gate": [(L, 'changes no other field\nand never runs the gate', 'changes no other field\nand runs the gate')],
+    "r15_cs_checkpoint_mechanism_restored": [(L, "An entry positioned past C8-S16's commit writes a fixed valid\nrecord:", "An entry positioned past C8-S16's commit writes, as one atomic checkpoint before its entry scene loads, a fixed valid record:")],
+    "r15_load_before_applied_restored": [(L, 'on load, for a save positioned inside Root of Heaven;', 'on load, before any loaded state is applied;')],
+    "r15_superseded_dependency_dropped": [(L, '; the scenes of `ch8_revolt_crisis.gd` and `ch10_sovereign_confrontation.gd`, superseded (Scene placement)', '')],
 }
 # Controls: edits the checker must accept (expected PASS).
 CONTROLS = {

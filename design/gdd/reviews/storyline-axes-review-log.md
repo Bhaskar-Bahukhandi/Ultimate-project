@@ -401,3 +401,31 @@ Findings:
 - Routed (Y1-P1-T05 / Y2-PP-T17): save suppression inside save_game and the deferred flush (pause-menu save in the crisis); load_check outside _read_valid_save; JSON type pinning; static scan for gate bypasses; ROOT_LEFT writer
 Reviewed-Content-Hash: design/gdd/storyline-axes.md 530341eb71de5d5b58d81cf0318b73c51abfd54c
 Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285
+
+## Review — 2026-11-18 — Verdict: APPROVED
+Scope signal: XL (earlier rounds logged L; 9 dependencies and protected save/story/world-map touchpoints put it at XL by the rubric; producer to verify)
+Specialists: none (lean; single-session review under the Open Question 20 bar)
+Blocking items: 0 | Recommended: 6
+Summary: Round 15 ran lean on revision 14 (HEAD 8187f90) under the Open Question 20 bar: a finding blocks only with a failing model case, a contradiction in the text or a false citation. The checker was re-run and passes (0 problems); the reference model log (PASS on the rev-14 text, rev 9-13 still fail) is newer than both GDDs and was not re-run in this session. The rev-14 citations resolve against the dialogue, code and PM lines. Approval is under the user-adopted bar, not an adversarial specialist sign-off; routed items stay open.
+Prior verdict resolved: Yes (the six round-14 blockers hold)
+Findings:
+- [RECOMMENDED] Act 1 seed map notes / Open Question 10: the purge rationale says Kaelen did not state the cost before acting, but aldric.dlg:106 shows "I don't know" before the choice (:109) and :132 "Mostly, I think"; under the table's own "disclosed or doubted -> SHARED +" rule the cited evidence points the other way (reword to "states it to Elara, never to Aldric", or let AC16 decide)
+- [RECOMMENDED] Core Rule 11 / Edge Case 1 / Open Question 19: ch3_kaelthas_betrayal.gd:35,89 reads as two set sites; :35 is the branch, :89 the set
+- [RECOMMENDED] Edge Case 16 D14: clause ids (undefined, no_entry, not_played) used by AC9 are not tagged in the item text
+- [RECOMMENDED] game-concept.md:264,345,349 say 27 endings at Alpha; the GDD ships 24 in 1.0 (already routed)
+- [RECOMMENDED] Carried from round 14 (frozen): lock_pass golden-vector AC with an Authority - seed; seeds -> sole_dissent end to end; header P5/P8 wording; variable tables for lock_pass, storyline_phase, family, Counts; PM:6990 tightening
+- [RECOMMENDED] Tuning Knobs secret_unlock_flag: add "(post-1.0)" to "set when the invocation scene plays"
+- Routed, still open: Y1-P1-T05 save checkpoint/suppression and refusal-as-corruption; Y2-PP-T17 Root entry callers/ROOT_SCENES; T03/T05/T17 in no sprint (producer); protected-area approvals per implementing story
+Reviewed-Content-Hash: design/gdd/storyline-axes.md e9a26b2b82f7f447648eec27f3cbc581dee453df
+Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285
+
+## Review — 2026-11-19 — Verdict: APPROVED (erratum lines, lifecycle round 16)
+Scope signal: XL (unchanged)
+Specialists: none (lean; covered by the lifecycle round-16 review under lifecycle Open Question 7)
+Blocking items: 0 | Recommended: 1
+Summary: Revision 15 is an erratum after the lifecycle review of 2026-11-18 (user decision 2026-11-19). Its new lines are the status header, the `kaelen_commitment` composer row, the stored-field sentence, the AC3 field list, the D0 commitment clause, the AC9 fixture, the lifecycle Dependencies row and the C9-S18 protected-touchpoints wording. The round-15 receipt (e9a26b2) does not cover them. Lifecycle round 16 reviewed them: the commitment invariant (UNSET exactly when the record never held YOU) agrees with lifecycle S2, T2, T5, L-AC12, chapter select and the NG+ reset; PM:7054-7059 resolves; the C9-S18 wording now matches Core Rule 6 and lifecycle S5. Checker PASS, 383 mutations / 0 unexpected, reference model REV15 PASS. The rest of the document is unchanged since round 15.
+Prior verdict resolved: Yes (round 15 APPROVED stands for the unchanged lines)
+Findings:
+- [RECOMMENDED] Header: "Last Verified" still reads 2026-11-18 after the revision-15 erratum
+Reviewed-Content-Hash: design/gdd/storyline-axes.md 775318b641bd5c85d0af8da2eb91bc2d9a6ccaee
+Reviewed-Content-Hash: design/registry/entities.yaml 216ffa67ed4d5d24548df37b2ce899fcba892285

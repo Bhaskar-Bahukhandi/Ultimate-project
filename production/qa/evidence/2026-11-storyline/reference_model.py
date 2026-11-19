@@ -54,8 +54,17 @@ derived from its free-travel story scene, else its own scene (the scene-to-id ma
 Chapter 8 save no story scene places is D0.missing), and D0 names its clause ids. The rev 13 text is a unit-level
 regression that must still fail on each of these.
 
+Lifecycle review 2026-11-18 (lifecycle revision 11 / axes revision 15 erratum; scope frozen by lifecycle Open
+Question 7): the model implements that text (REV15): the record stores kaelen_commitment (D0 refuses it UNSET on a
+record that held YOU or set on one that never did), chapter select has one row per Chapter 8-10 main-menu entry
+(True Ending FINAL at FINAL_DONE, Final Confrontation rerouted to the boss, Revolt Crisis to C8-S13), the scene
+placement table gives the Root of Heaven scene set and a writer for every position (a hub revival writes ROOT_LEFT),
+the window table gives every checkpoint transition its window, commit and resume point, take() goes through the T5
+handler, and the NG+ reset sets every stored field to a new game's. The rev 14 text (lifecycle revision 10) is a
+unit-level regression that must still fail on each of these.
+
 Usage: python -I -B reference_model.py [--quick]
-Exit status: 0 when every assertion and unit check passes under the rev 14 text, the rev 13, rev 12, rev 11, rev 10 and rev 9 texts
+Exit status: 0 when every assertion and unit check passes under the rev 15 text, the rev 14, rev 13, rev 12, rev 11, rev 10 and rev 9 texts
 still fail as expected, every negative control is caught, every AC9 clause has a fixture whose only clause it is
 (D17.prefix is documentation only) and the residual categories equal the pinned list; 1 otherwise.
 """
@@ -162,7 +171,7 @@ LOCK_DONE = {"faction": PIDX["S13_DONE"], "authority": PIDX["S14_DONE"], "delete
 ROOT_POSITIONS = frozenset({"ROOT", "FINAL_AUTH_OPEN", "FINAL_DONE", "ROOT_STORY_PLUS"})
 
 Record = namedtuple("Record", "authority faction deleted storyline_id root_phase axis_revised lock_negotiated "
-                              "retraction_log beats_played")
+                              "retraction_log beats_played kaelen_commitment", defaults=(UNSET,))
 Entry = namedtuple("Entry", "axis old new withdrawn_item scene")
 EMPTY = Record(UNSET, UNSET, UNSET, "", "OUTSIDE", frozenset(), frozenset(), (), frozenset())
 ROOT_PHASES = ("OUTSIDE", "INSIDE", "FINAL")
@@ -176,6 +185,27 @@ MISSING_FIELD = object()   # decode() result for a current-version save whose li
 CHAPTER_SELECT_RECORD = EMPTY._replace(authority="SHARED", faction="ARCHIVE", deleted="CHOOSE",
                                        storyline_id="SL-SHARED-ARCHIVE-CHOOSE",
                                        lock_negotiated=frozenset(LOCK_ORDER))
+# Rev 15 (axes erratum, lifecycle S2): the commitment SOVEREIGN quotes, chosen when YOU is backed (PM:7054-7058).
+COMMITMENTS = ("LISTEN", "OVERRIDE_IMMEDIATE_LOSS", "CANNOT_PROMISE_NEVER")
+
+
+def held_you(rec):
+    """The record held YOU: Authority is YOU, or a retraction withdrew YOU (the records SOVEREIGN can quote)."""
+    log = rec.retraction_log if isinstance(rec.retraction_log, tuple) else ()
+    return rec.authority == "YOU" or any(isinstance(e, Entry) and e.axis == "authority" and e.old == "YOU"
+                                         for e in log)
+
+
+def commitment_wrong(rec):
+    """Rev 15 D0.enum clause: kaelen_commitment outside its values, UNSET on a record that held YOU, or set on one
+    that never did."""
+    c = rec.kaelen_commitment
+    return c not in COMMITMENTS + (UNSET,) or (c != UNSET) != held_you(rec)
+
+
+def fit_commitment(rec, choice="LISTEN"):
+    """A hand-built fixture with the commitment play would have written (older readings ignore the field)."""
+    return rec._replace(kaelen_commitment=choice if held_you(rec) else UNSET)
 
 
 def row_of(rec):
@@ -270,7 +300,7 @@ class Reading:
     def __init__(self, name, d17_before_commit_live=True, d14_match="strict", d7_reverse=False,
                  gate_damaged_row=False, live_crisis_scoped=False, d7_duplicate=False, d7_multi=True, d0=False,
                  legacy_default=False, chapter_select=False, seeds=AXIS_SEEDS_REV11, beats_max=BEATS_PLAYED_MAX,
-                 cs_by_position=False, ngplus_reset=False, legacy_derive=False, rev14=False):
+                 cs_by_position=False, ngplus_reset=False, legacy_derive=False, rev14=False, life11=False):
         self.name = name
         self.d17_before_commit_live = d17_before_commit_live   # rev 9: D17 clause (a) also tested on live records
         self.d14_match = d14_match                             # strict: beat id must equal beat_for_entry()
@@ -288,6 +318,7 @@ class Reading:
         self.ngplus_reset = ngplus_reset                       # lifecycle rev 9: the NG+ reset sets PRE_C8
         self.legacy_derive = legacy_derive                     # rev 13: a legacy save's position derived once
         self.rev14 = rev14      # rev 14: story_position and act1_pace stored and checked, hub-safe legacy order, D0 ids
+        self.life11 = life11    # rev 15 / lifecycle rev 11: commitment, chapter-select rows, windows, take(), NG+
 
     def clauses(self):
         """The clause ids this text's load_check can report (AC9's one-fixture-per-clause list)."""
@@ -314,9 +345,13 @@ REV14 = Reading("rev 14 text", d17_before_commit_live=False, d7_reverse=True, ga
                 live_crisis_scoped=True, d7_duplicate=False, d7_multi=False, d0=True, legacy_default=True,
                 chapter_select=True, seeds=AXIS_SEEDS, beats_max=1, cs_by_position=True, ngplus_reset=True,
                 legacy_derive=True, rev14=True)
+REV15 = Reading("rev 15 text (lifecycle rev 11)", d17_before_commit_live=False, d7_reverse=True,
+                gate_damaged_row=True, live_crisis_scoped=True, d7_duplicate=False, d7_multi=False, d0=True,
+                legacy_default=True, chapter_select=True, seeds=AXIS_SEEDS, beats_max=1, cs_by_position=True,
+                ngplus_reset=True, legacy_derive=True, rev14=True, life11=True)
 
 
-def shape_wrong(rec, beats_max=BEATS_PLAYED_MAX):
+def shape_wrong(rec, beats_max=BEATS_PLAYED_MAX, commitment_rule=False):
     """D0 as far as a typed record can show it: an enum outside its values, an element of the wrong type, a set or
     list over its maximum. A missing field is decode()'s; a set holding one element twice cannot be built (M12)."""
     if any(getattr(rec, ax) not in VALUES[ax] + (UNSET,) for ax in LOCK_ORDER):
@@ -336,8 +371,9 @@ def shape_wrong(rec, beats_max=BEATS_PLAYED_MAX):
                 or not isinstance(e.scene, str)):
             return True
     beats = rec.beats_played
-    return (not isinstance(beats, frozenset) or len(beats) > beats_max
-            or any(not isinstance(b, str) for b in beats))
+    if not isinstance(beats, frozenset) or len(beats) > beats_max or any(not isinstance(b, str) for b in beats):
+        return True
+    return commitment_rule and commitment_wrong(rec)
 
 
 def decode(raw, schema, reading):
@@ -427,7 +463,7 @@ NEW_GAME_EXTRA = {"act1_pace": UNSET, "story_position": "PRE_C8", "companions_pr
                   "timing_flags": frozenset()}
 
 
-def d0_clauses(rec, beats_max=1):
+def d0_clauses(rec, beats_max=1, commitment_rule=False):
     """Rev 14: the D0 clause ids a typed record shows. D0.missing is the decoder's (a field absent from a stored save)
     and D0.duplicate cannot be built from a frozenset (M12). Non-empty exactly when shape_wrong() is true."""
     out = set()
@@ -459,6 +495,8 @@ def d0_clauses(rec, beats_max=1):
             out.add("D0.element")
         if len(beats) > beats_max:
             out.add("D0.max")
+    if commitment_rule and commitment_wrong(rec):
+        out.add("D0.enum")
     return out
 
 
@@ -496,8 +534,8 @@ def stored_save_check(raw, extra, flags, reading):
     if rec is MISSING_FIELD:
         tags.add("D0.missing")
     elif reading.rev14:
-        tags |= d0_clauses(rec, reading.beats_max)
-    elif shape_wrong(rec, reading.beats_max):
+        tags |= d0_clauses(rec, reading.beats_max, reading.life11)
+    elif shape_wrong(rec, reading.beats_max, reading.life11):
         tags.add("D0")
     if tags:
         return tags if reading.rev14 else {"D0"}
@@ -555,7 +593,7 @@ def live_crisis(rec, loaded, pos):
 
 def load_check_tags(rec, flags, pos, loaded, reading=LITERAL):
     # D0 (rev 11-12): tested first; when it fires no other item runs, so load_check reports exactly {D0}.
-    if reading.d0 and shape_wrong(rec, reading.beats_max):
+    if reading.d0 and shape_wrong(rec, reading.beats_max, reading.life11):
         return {"D0"}
     tags = set()
     a, f, d = row_of(rec)
@@ -711,8 +749,9 @@ def gate(rec, flags, pos, target, kind_prefix, defects, reading):
     return [(kind_prefix + ":GATE_ERROR:" + ph, "GATE_ERROR", rec, pos, False)]
 
 
-def events(rec, pos, flags, knobs, defects, reading):
-    """Every event enabled in (rec, pos): (label, kind, new_rec, new_pos, checkpoint)."""
+def events(rec, pos, flags, knobs, defects, reading, commitment="LISTEN"):
+    """Every event enabled in (rec, pos): (label, kind, new_rec, new_pos, checkpoint). Rev 15: T2 and T5 write the
+    commitment chosen when YOU is backed (``commitment``), and a hub revival leaves Root of Heaven."""
     out = []
     a, f, d = row_of(rec)
     if pos == "PRE_C8":
@@ -725,8 +764,11 @@ def events(rec, pos, flags, knobs, defects, reading):
         if "lock_order_skip" in defects:
             out.append(("start C8-S16 (skip)", "move", rec, "S16_OPEN", False))
     elif pos == "S14_OPEN" and f != UNSET and a == UNSET:
-        out += [(f"T2 back {v}", "T2", lock(rec, flags, "authority", v), "S14_DONE", True)
-                for v in VALUES["authority"]]
+        for v in VALUES["authority"]:
+            new = lock(rec, flags, "authority", v)
+            if reading.life11 and v == "YOU":
+                new = new._replace(kaelen_commitment=commitment)
+            out.append((f"T2 back {v}", "T2", new, "S14_DONE", True))
     elif pos == "S14_DONE":
         out.append(("start C8-S15", "move", rec, "S15", False))
     elif pos == "S15":
@@ -753,6 +795,8 @@ def events(rec, pos, flags, knobs, defects, reading):
             new = new._replace(axis_revised=frozenset(revised), lock_negotiated=rec.lock_negotiated | {axis},
                                retraction_log=rec.retraction_log + (entry,), beats_played=frozenset(beats),
                                storyline_id=formula_id(*row_of(new), False, knobs, flags))
+            if reading.life11 and axis == "authority" and v == "YOU":
+                new = new._replace(kaelen_commitment=commitment)
             out.append((f"T5 take {o}", "T5", new, "S16_DONE", True))
     elif pos == "S16_DONE":
         out.append(("leave C8-S16", "move", rec, "CH9", False))
@@ -765,6 +809,8 @@ def events(rec, pos, flags, knobs, defects, reading):
         out += gate(rec, flags, pos, "ROOT", "story gate", defects, reading)
     elif pos == "ROOT":
         out.append(("leave Root of Heaven", "move", rec, "ROOT_LEFT", False))
+        if reading.life11:
+            out.append(("hub revival", "move", rec, "ROOT_LEFT", False))
         out.append(("defeat the boss", "move", rec, "FINAL_AUTH_OPEN", False))
     elif pos == "ROOT_LEFT":
         if "gate_skip_world_map" in defects:
@@ -779,6 +825,8 @@ def events(rec, pos, flags, knobs, defects, reading):
         out += gate(rec, flags, pos, "ROOT_STORY_PLUS", "world_map gate", defects, reading)
     elif pos == "ROOT_STORY_PLUS":
         out.append(("leave Root of Heaven", "move", rec, "STORY_PLUS", False))
+        if reading.life11:
+            out.append(("hub revival", "move", rec, "STORY_PLUS", False))
     return out
 
 
@@ -792,9 +840,324 @@ def model_windows(defects):
 
 
 # ---------------------------------------------------------------------------------------------------------------
+# Lifecycle revision 11 (review 2026-11-18): chapter-select rows, scene placement, windows, take(), the NG+ reset
+# ---------------------------------------------------------------------------------------------------------------
+CS_FINAL_RECORD = CHAPTER_SELECT_RECORD._replace(root_phase="FINAL")
+SUPERSEDED = frozenset({"ch8_revolt_crisis", "ch10_sovereign_confrontation"})
+# main_menu.gd's Chapter 8-10 entries in file order: (row, label, the scene main_menu.gd loads today).
+CHAPTER_SELECT_ROWS = (
+    (1, "Chapter 8 - Revolt Intro", "ch8_revolt_intro"), (2, "Chapter 8 - Saved Assembly", "ch8_saved_assembly"),
+    (3, "Chapter 8 - Revolt Crisis", "ch8_revolt_crisis"), (4, "Chapter 8 - Ending", "ch8_ending"),
+    (5, "Chapter 9 - Human Patch", "ch9_human_patch_intro"), (6, "Chapter 9 - Memory Lab", "ch9_memory_lab"),
+    (7, "Chapter 9 - Creator Trial", "ch9_creator_trial"), (8, "Chapter 9 - Ending", "ch9_ending"),
+    (9, "Chapter 10 - Root of Heaven", "ch10_root_intro"), (10, "Chapter 10 - Kernel Descent", "ch10_kernel_descent"),
+    (11, "Chapter 10 - Witness Chamber", "ch10_witness_chamber"),
+    (12, "Chapter 10 - Final Confrontation", "ch10_sovereign_confrontation"),
+    (13, "Chapter 10 - True Ending", "ch10_ending"))
+# Scene placement (rev 15): scene -> (story position, in the Root of Heaven scene set, next story scene or None).
+PLACEMENT = {
+    "ch8_revolt_intro": ("PRE_C8", False, "ch8_saved_assembly"),
+    "ch8_saved_assembly": ("PRE_C8", False, "C8-S13"),
+    "C8-S13": ("S13_OPEN", False, "C8-S14"), "C8-S14": ("S14_OPEN", False, "C8-S15"),
+    "C8-S15": ("S15", False, "C8-S16"), "C8-S16": ("S16_OPEN", False, "ch8_ending"),
+    "ch8_revolt_crisis": (None, False, None),
+    "ch8_ending": ("S16_DONE", False, "ch9_human_patch_intro"),
+    "ch9_human_patch_intro": ("CH9", False, "ch9_memory_lab"), "ch9_memory_lab": ("CH9", False, "ch9_creator_trial"),
+    "ch9_creator_trial": ("CH9", False, "C9-S18"), "C9-S18": ("CH9", False, "ch9_ending"),
+    "ch9_ending": ("CH9", False, "ch10_root_intro"),
+    "ch10_root_intro": ("ROOT", True, "ch10_kernel_descent"),
+    "ch10_kernel_descent": ("ROOT", True, "ch10_witness_chamber"),
+    "ch10_witness_chamber": ("ROOT", True, "ch10_sovereign_final_trial"),
+    "ch10_sovereign_final_trial": ("ROOT", True, "final_authorization"),
+    "final_authorization": ("FINAL_AUTH_OPEN", True, "ch10_ending"),
+    "ch10_sovereign_confrontation": (None, True, None),
+    "ch10_ending": ("FINAL_DONE", True, None),
+}
+LOAD_GATE_POSITIONS = frozenset({"ROOT", "FINAL_DONE", "ROOT_STORY_PLUS"})
+# Rev 15 position writers: position -> the walk events (kind, label prefix) that write it, beside the starts.
+WRITERS = {
+    "PRE_C8": (), "S13_OPEN": (("move", "start C8-S13"),), "S13_DONE": (("T1", "T1"),),
+    "S14_OPEN": (("move", "start C8-S14"),), "S14_DONE": (("T2", "T2"),), "S15": (("move", "start C8-S15"),),
+    "S16_OPEN": (("move", "start C8-S16"), ("T4", "T4")), "S16_DONE": (("T3", "T3"), ("T5", "T5")),
+    "CH9": (("move", "leave C8-S16"),), "ROOT": (("T7", "story gate"), ("T8", "world_map gate")),
+    "ROOT_LEFT": (("move", "leave Root of Heaven"), ("move", "hub revival")),
+    "FINAL_AUTH_OPEN": (("move", "defeat the boss"),), "FINAL_DONE": (("T9", "T9"),),
+    "STORY_PLUS": (("move", "enter Story+"), ("move", "leave Root of Heaven"), ("move", "hub revival")),
+    "ROOT_STORY_PLUS": (("T8", "world_map gate"),),
+}
+# The window table (rev 15): transition -> (window opens, commit position, resume point). "gate" = the gate check.
+WINDOW_TABLE = {"T1": ("S13_OPEN", "S13_DONE", "c8s13_after_vote"), "T2": ("S14_OPEN", "S14_DONE", "c8s14_after_vote"),
+                "T3": ("S16_OPEN", "S16_DONE", "c8s16_after_vote"), "T5": ("S16_OPEN", "S16_DONE", "retract_*"),
+                "T7": ("gate", "ROOT", "root_entry"), "T9": ("FINAL_AUTH_OPEN", "FINAL_DONE",
+                                                           "final_auth_after_confirm")}
+# Lifecycle revision 10's commit rule: windows from "the start of its scene"; T7 has no scene, and the rule names no
+# resume point for T1, T2, T7 or T9 (the review's L-AC6 finding).
+WINDOW_TABLE_REV10 = {"T1": ("S13_OPEN", "S13_DONE", None), "T2": ("S14_OPEN", "S14_DONE", None),
+                      "T3": ("S16_OPEN", "S16_DONE", "the committed beat"),
+                      "T5": ("S16_OPEN", "S16_DONE", "retract_*"), "T7": (None, "ROOT", None),
+                      "T9": ("FINAL_AUTH_OPEN", "FINAL_DONE", None)}
+NEW_GAME_FULL = dict(NEW_GAME_EXTRA, regions_completed=frozenset(), act2_pace=UNSET, act3_pace=UNSET, act4_pace=UNSET)
+
+
+def chapter_select_row(row, reading):
+    """(record written, position written, entry scene) for a chapter-select row, or None when the text leaves the
+    row unplaced. Rev 15: the lifecycle's table. Rev 14 (lifecycle rev 10): keyed to the entry scene's position by
+    one rule (S16_DONE for a Chapter 8 entry after the locks, CH9 for Chapter 9 and every Root of Heaven entry), with
+    no placement for the Saved Assembly or the Revolt Crisis, and the legacy scenes loaded as they are."""
+    n, _label, scene = CHAPTER_SELECT_ROWS[row - 1]
+    if reading.life11:
+        if n <= 3:
+            return EMPTY, "PRE_C8", ("C8-S13" if n == 3 else scene)
+        if n == 4:
+            return CHAPTER_SELECT_RECORD, "S16_DONE", scene
+        if n == 13:
+            return CS_FINAL_RECORD, "FINAL_DONE", scene
+        return CHAPTER_SELECT_RECORD, "CH9", ("ch10_sovereign_final_trial" if n == 12 else scene)
+    if n == 1:
+        return EMPTY, "PRE_C8", scene
+    if n in (2, 3):
+        return None
+    if n == 4:
+        return CHAPTER_SELECT_RECORD, "S16_DONE", scene
+    return CHAPTER_SELECT_RECORD, "CH9", scene
+
+
+def first_save(row, reading, flags=frozenset()):
+    """(record, position) of the first save after a chapter-select start: the entry scene's autosave, T1's
+    checkpoint when the entry scene opens a window at its start (C8-S13), or T7's checkpoint for a Root of Heaven
+    entry from CH9."""
+    got = chapter_select_row(row, reading)
+    if got is None:
+        return None
+    rec, pos, scene = got
+    placed = PLACEMENT.get(scene, (None, False, None))
+    if scene == "C8-S13":
+        return lock(rec, flags, "faction", "ARCHIVE"), "S13_DONE"
+    if placed[1] and pos == "CH9":            # enters through the gate from CH9
+        out = gate(rec, flags, "CH9", "ROOT", "chapter select", frozenset(), reading)[0]
+        return out[2], out[3]
+    return rec, pos
+
+
+def take(rec, pos, offer, reading, defects=frozenset()):
+    """Lifecycle observable take(offer). Rev 15: submitted to the T5 handler (``t5_handler``) in any scene. Rev 14
+    (lifecycle rev 10): 'true if the offer is in offers() and was taken; otherwise false', so the handler is never
+    called outside the crisis and a handler that takes offers anywhere is invisible."""
+    if not reading.life11 and offer not in offers(rec, pos, defects):
+        return False, rec
+    new = t5_handler(rec, pos, offer, defects)
+    return (new is not None), (new if new is not None else rec)
+
+
+def t5_handler(rec, pos, offer, defects=frozenset()):
+    """The production T5 handler the crisis screen calls: the renegotiated record, or None if it refuses. Defect
+    ``handler_ignores_scene``: it applies any offer whose result is a valid row, in any scene."""
+    _, axis, v = offer.split(":")
+    if offer in offers(rec, pos, defects):
+        new = rec._replace(**{axis: v})
+        return new._replace(storyline_id=f"SL-{new.authority}-{new.faction}-{new.deleted}")
+    if "handler_ignores_scene" in defects and UNSET not in row_of(rec) and getattr(rec, axis) != v:
+        new = rec._replace(**{axis: v})
+        if not invalid(*row_of(new)):
+            return new._replace(storyline_id=f"SL-{new.authority}-{new.faction}-{new.deleted}")
+    return None
+
+
+def ng_plus_full(rec, extra, pos, reading):
+    """The NG+ reset of the whole stored record: (record, other stored fields). Rev 15: every field to a new game's
+    default. Rev 14 (lifecycle rev 10): the lifecycle block and the position only; companions_present,
+    regions_completed, timing_flags and the paces keep the old cycle's values."""
+    new_rec, new_pos = ng_plus(rec, pos, reading)
+    if reading.life11:
+        return new_rec, dict(NEW_GAME_FULL, story_position=new_pos)
+    return new_rec, dict(extra, story_position=new_pos)
+
+
+def quoted_commitment(rec):
+    """Lifecycle observable quoted_commitment(): (status, commitment)."""
+    if rec.authority == "YOU":
+        return "STATED", rec.kaelen_commitment
+    if held_you(rec):
+        return "WITHDRAWN", rec.kaelen_commitment
+    return "NONE", rec.kaelen_commitment
+
+
+def life11_checks(reading, contexts_sample):
+    """Unit checks of lifecycle revision 11 (rev 15). Every check starts with a prefix the regression names."""
+    res = []
+
+    def chk(cid, ok, detail=""):
+        res.append((cid, bool(ok), detail))
+
+    flags0 = contexts_sample[0]
+    # 1. Chapter select: 13 rows, each placed, none at a window or a superseded scene, each first save loading to
+    # its phase, True Ending FINAL, Final Confrontation reaching T9, the Root of Heaven entries through T7.
+    bad = []
+    for n, label, _scene in CHAPTER_SELECT_ROWS:
+        got = chapter_select_row(n, reading)
+        if got is None:
+            bad.append(f"row {n} {label}: unplaced")
+            continue
+        rec, pos, scene = got
+        if scene in SUPERSEDED:
+            bad.append(f"row {n} {label}: enters the superseded {scene}")
+        if pos in SPEC_WINDOWS or (PIDX["S13_OPEN"] <= PIDX[pos] < PIDX["S16_DONE"]):
+            bad.append(f"row {n}: starts at {pos}")
+        fs = first_save(n, reading, flags0)
+        frec, fpos = fs
+        extra = dict(NEW_GAME_EXTRA, story_position=fpos)
+        lc = stored_save_check(frec._asdict(), extra, flags0, reading)
+        ph = phase_of(frec, True, flags0, fpos, reading) if not lc else "DAMAGED"
+        want = {13: "FINAL"}.get(n, "FIXED" if PLACEMENT.get(scene, (0, False))[1] else
+                                 "PARTLY_LOCKED" if n == 3 else "LEANING" if n <= 2 else "VALIDATED")
+        if lc or ph != want:
+            bad.append(f"row {n} {label}: first save at {fpos} {sorted(lc)} loads {ph}, expected {want}")
+        if fpos in LOAD_GATE_POSITIONS:
+            g = gate(frec, flags0, fpos, fpos, "load", frozenset(), reading)[0]
+            if not g[0].endswith("ROOT_OF_HEAVEN"):
+                bad.append(f"row {n}: load-path gate {g[0]}")
+    # Final Confrontation: the walk from its first save reaches T9.
+    fc = first_save(12, reading, flags0)
+    seen, edges, _ = walk(flags0, DEFAULT_KNOBS, frozenset(), reading)
+    t9_from_fc = fc is not None and any(e[2] == "T9" for e in edges) and fc in seen
+    chk("Chapter select rows (rev 15): the 13 Chapter 8-10 entries are each placed, none starts in a window or "
+        "enters a superseded scene, each first save loads to its phase (True Ending FINAL, Root of Heaven entries "
+        "FIXED through T7), and Final Confrontation reaches T9", not bad and t9_from_fc, "; ".join(bad[:4]))
+    # 2. Root of Heaven positions and the scene placement: the set, the load-gate positions, writers for every
+    # position, no story step into a superseded scene, every walk edge writing its target through a named writer.
+    root_pos = {p for s, (p, inr, _) in PLACEMENT.items() if inr and p} | {"ROOT_STORY_PLUS"}
+    pbad = []
+    if not reading.life11:
+        pbad.append("no placement table, Root of Heaven scene set or position writers (lifecycle rev 10)")
+    if root_pos != ROOT_POSITIONS:
+        pbad.append(f"Root scene positions {sorted(root_pos)} != ROOT_POSITIONS")
+    if ROOT_POSITIONS - SPEC_WINDOWS != LOAD_GATE_POSITIONS:
+        pbad.append("load-gate positions differ")
+    if set(WRITERS) != set(POSITIONS):
+        pbad.append("a position has no writer row")
+    if any(nxt in SUPERSEDED for _, _, nxt in PLACEMENT.values()):
+        pbad.append("a story step leads into a superseded scene")
+    for (s, label, kind, t, ck) in edges:
+        if t[1] == s[1]:
+            continue
+        ok = any(kind == k and label.startswith(pre) for k, pre in WRITERS.get(t[1], ()))
+        if not ok:
+            pbad.append(f"'{label}' ({kind}) writes {t[1]}, which names no such writer")
+            break
+    revival = [e for e in edges if e[1] == "hub revival"]
+    if reading.life11 and (not revival or any(e[3][0] != e[0][0] or e[3][1] not in ("ROOT_LEFT", "STORY_PLUS")
+                                              for e in revival)):
+        pbad.append("a hub revival changes the record or lands elsewhere")
+    chk("Root positions (rev 15): the Root of Heaven scene set gives ROOT_POSITIONS, the load gate runs at ROOT, "
+        "FINAL_DONE and ROOT_STORY_PLUS, every position has a writer and every walk step uses one, a hub revival "
+        "writes ROOT_LEFT/STORY_PLUS only, and no story step reaches a superseded scene", not pbad,
+        "; ".join(pbad[:3]))
+    # 3. Windows: every checkpoint transition has a window with an opening, a commit and a resume point; each
+    # checkpoint edge goes from its opening to its commit; nothing of that kind replays from the commit.
+    table = WINDOW_TABLE if reading.life11 else WINDOW_TABLE_REV10
+    wbad = []
+    kinds = {e[2] for e in edges if e[4]}
+    if kinds != set(table):
+        wbad.append(f"checkpoint kinds {sorted(kinds)} != window rows {sorted(table)}")
+    for k, (opens, commit, resume) in table.items():
+        if opens is None or resume is None:
+            wbad.append(f"{k}: no window opening or resume point")
+    resumes = [r for _, _, r in table.values()]
+    if len(set(resumes)) != len(resumes):
+        wbad.append("resume points not distinct")
+    out_by = defaultdict(list)
+    for e in edges:
+        out_by[e[0]].append(e)
+    for (s, label, kind, t, ck) in edges:
+        if not ck or kind not in table:
+            continue
+        opens, commit, _ = table[kind]
+        src_ok = (s[1] not in ROOT_POSITIONS) if opens == "gate" else s[1] == opens
+        if not src_ok or t[1] != commit:
+            wbad.append(f"{kind} checkpoint {s[1]} -> {t[1]}, table {opens} -> {commit}")
+        if any(e[2] == kind or (kind in ("T3", "T5") and e[2] in ("T5", "LATE_OFFER")) for e in out_by[t]):
+            wbad.append(f"{kind} replays after its commit at {t[1]}")
+    if any(e[2] in ("T4", "T6", "T8") and e[4] for e in edges):
+        wbad.append("T4, T6 or T8 writes a checkpoint")
+    chk("Windows (rev 15): every checkpoint transition (T1, T2, T3, T5, T7, T9) has a window opening, a commit and "
+        "a distinct resume point; each checkpoint goes from its opening to its commit and never replays",
+        not wbad, "; ".join(list(dict.fromkeys(wbad))[:3]))
+    # 4. take() through the T5 handler: outside the crisis every offer is refused with the record unchanged, and a
+    # handler that ignores the scene is caught.
+    all_offers = sorted({o for row in RULES.values() for o in crisis_offers(row)})
+
+    def take_holds(defects):
+        for rec, pos in seen:
+            in_crisis = bool(offers(rec, pos, frozenset()))
+            for o in all_offers:
+                ok, new = take(rec, pos, o, reading, defects)
+                if in_crisis:
+                    if ok != (o in offers(rec, pos, frozenset())):
+                        return False
+                elif ok or new != rec:
+                    return False
+        return True
+    clean, caught = take_holds(frozenset()), not take_holds(frozenset({"handler_ignores_scene"}))
+    chk("take() via the T5 handler (rev 15): outside the crisis take() of each of the 16 offers is false with the "
+        "record unchanged, and a handler that takes offers in any scene fails that check", clean and caught,
+        f"clean {clean}, defect caught {caught}")
+    # 5. The NG+ reset of every stored field.
+    full = fit_commitment(EMPTY._replace(
+        authority="YOU", faction="ARCHIVE", deleted="RELEASE", storyline_id="SL-YOU-ARCHIVE-RELEASE",
+        root_phase="FINAL", axis_revised=frozenset({"authority"}), lock_negotiated=frozenset(LOCK_ORDER),
+        retraction_log=(Entry("authority", "NONE", "YOU", WITHDRAWN["authority"]["NONE"], "C8-S16"),),
+        beats_played=frozenset({"retract_R2_authority_YOU"})), "CANNOT_PROMISE_NEVER")
+    extra = {"act1_pace": "act1_pace_late", "story_position": "STORY_PLUS", "companions_present": frozenset({"Elara"}),
+             "timing_flags": frozenset({"ch1_bridge_saved"}), "regions_completed": frozenset({"oakhaven"}),
+             "act2_pace": "act2_pace_s06b", "act3_pace": "act3_pace_s06b", "act4_pace": "act4_pace_s06b"}
+    pre = stored_save_check(full._asdict(), extra, frozenset(), reading)
+    nrec, nextra = ng_plus_full(full, extra, "STORY_PLUS", reading)
+    same = nrec == EMPTY and nextra == NEW_GAME_FULL
+    post = stored_save_check(nrec._asdict(), nextra, frozenset(), reading)
+    chk("NG+ full reset (rev 15): from a FINAL Story+ record with every field set, the new cycle's record equals a "
+        "new game's field for field and its first save loads LEANING", not pre and same and not post,
+        f"before {sorted(pre)}, equal {same}, after {sorted(post)}, kept "
+        f"{sorted(k for k in NEW_GAME_FULL if nextra.get(k) != NEW_GAME_FULL[k])}")
+    # 6. The commitment: each choice is written by T2/T5 and survives; D0 refuses the inconsistent records;
+    # quoted_commitment follows L-AC12.
+    cbad = []
+    for choice in COMMITMENTS:
+        s2, e2, saves2 = walk(flags0, DEFAULT_KNOBS, frozenset(), reading, choice)
+        fails2 = []
+        stats2 = defaultdict(set)
+        for k in ("states", "saves", "edges"):
+            stats2[k] = 0
+        check_walk(flags0, s2, e2, saves2, reading, fails2, stats2)
+        if fails2:
+            cbad.append(f"{choice}: {fails2[0]}")
+        if any(r.authority == "YOU" and r.kaelen_commitment != choice for r, _ in saves2):
+            cbad.append(f"{choice}: a YOU save does not hold it")
+    you = fit_commitment(_PLAIN)
+    d0 = {"YOU, UNSET": load_check(you._replace(kaelen_commitment=UNSET), frozenset(), "S16_DONE", reading),
+          "SHARED, LISTEN": load_check(CHAPTER_SELECT_RECORD._replace(kaelen_commitment="LISTEN"), frozenset(), "CH9",
+                                       reading),
+          "YOU, BOGUS": load_check(you._replace(kaelen_commitment="BOGUS"), frozenset(), "S16_DONE", reading),
+          "YOU, LISTEN": load_check(you, frozenset(), "S16_DONE", reading)}
+    if d0 != {"YOU, UNSET": {"D0"}, "SHARED, LISTEN": {"D0"}, "YOU, BOGUS": {"D0"}, "YOU, LISTEN": set()}:
+        cbad.append(f"D0 {d0}")
+    withdrawn = fit_commitment(EMPTY._replace(
+        authority="SHARED", faction="HEARTH", deleted="RESTORE", storyline_id="SL-SHARED-HEARTH-RESTORE",
+        axis_revised=frozenset({"authority"}), lock_negotiated=frozenset(LOCK_ORDER),
+        retraction_log=(Entry("authority", "YOU", "SHARED", WITHDRAWN["authority"]["YOU"], "C8-S16"),),
+        beats_played=frozenset({"retract_R1_authority_SHARED"})))
+    qc = (quoted_commitment(you)[0], quoted_commitment(withdrawn)[0], quoted_commitment(CHAPTER_SELECT_RECORD)[0])
+    if qc != ("STATED", "WITHDRAWN", "NONE") or load_check(withdrawn, frozenset(), "S16_DONE", reading):
+        cbad.append(f"quoted {qc}, withdrawn record {sorted(load_check(withdrawn, frozenset(), 'S16_DONE', reading))}")
+    chk("Commitment (rev 15): T2 and T5 store each of the three commitments and every YOU save holds the chosen one "
+        "(A1-A14 hold per choice); D0 refuses UNSET on a YOU record, a commitment on a never-YOU record and an "
+        "unlisted value; a withdrawn YOU keeps it and reads WITHDRAWN", not cbad, "; ".join(cbad[:3]))
+    return res
+
+
+# ---------------------------------------------------------------------------------------------------------------
 # Walk
 # ---------------------------------------------------------------------------------------------------------------
-def walk(flags, knobs=DEFAULT_KNOBS, defects=frozenset(), reading=LITERAL):
+def walk(flags, knobs=DEFAULT_KNOBS, defects=frozenset(), reading=LITERAL, commitment="LISTEN"):
     # A new game starts at PRE_C8; lifecycle rev 8 adds chapter select of Chapter 9 or 10 (its record at CH9; a
     # Chapter 10 select then runs the gate from CH9, which is the walk's story gate). Before Chapter 8 (and, as the
     # model reads F12, Chapter 8 itself) chapter select writes the new-game start.
@@ -803,12 +1166,14 @@ def walk(flags, knobs=DEFAULT_KNOBS, defects=frozenset(), reading=LITERAL):
         cs8 = chapter_select_entry(8, "S16_DONE", reading)
         if cs8 not in starts:
             starts.append(cs8)
+    if reading.life11:           # lifecycle rev 11, chapter-select row 13: True Ending, FINAL at FINAL_DONE
+        starts.append((CS_FINAL_RECORD, "FINAL_DONE"))
     seen = set(starts)
     q = deque(starts)
     edges = []
     while q:
         s = q.popleft()
-        for label, kind, nrec, npos, ckpt in events(*s, flags, knobs, defects, reading):
+        for label, kind, nrec, npos, ckpt in events(*s, flags, knobs, defects, reading, commitment):
             t = (nrec, npos)
             edges.append((s, label, kind, t, ckpt))
             if t not in seen:
@@ -1075,7 +1440,8 @@ def unit_checks(reading):
         all(rl[k] == exp_rl.get(k, set()) for k in rl), str({k: v for k, v in rl.items() if v}))
     # phase_of: Formulas examples
     def rec(a, f, d, sid="", root="OUTSIDE", **kw):
-        return EMPTY._replace(authority=a, faction=f, deleted=d, storyline_id=sid, root_phase=root, **kw)
+        return fit_commitment(EMPTY._replace(authority=a, faction=f, deleted=d, storyline_id=sid, root_phase=root,
+                                             **kw))
     ex = [(rec("YOU", "HEARTH", UNSET), True, "S15", "PARTLY_LOCKED"),
           (rec("SHARED", "ARCHIVE", "CHOOSE", "SL-SHARED-ARCHIVE-CHOOSE", "INSIDE",
                lock_negotiated=frozenset(LOCK_ORDER)), True, "ROOT", "FIXED"),
@@ -1394,11 +1760,11 @@ ALL_CLAUSES = REV13.clauses()
 # rev 12: AC9 lists D17.prefix as documentation (an equivalent mutant): it never fires alone on a loaded record
 # (exhaustive check below). D7.multi and D7.duplicate are retired: D0 refuses a second entry first.
 DOCUMENTATION_ONLY = ("D17.prefix",)
-_REVD = EMPTY._replace(authority="YOU", faction="HEARTH", deleted="RELEASE", storyline_id="SL-YOU-HEARTH-RELEASE",
-                       axis_revised=frozenset({"deleted"}), lock_negotiated=frozenset(LOCK_ORDER),
-                       retraction_log=(Entry("deleted", "RESTORE", "RELEASE", WITHDRAWN["deleted"]["RESTORE"],
-                                             "C8-S16"),),
-                       beats_played=frozenset({"retract_R1_deleted_RELEASE"}))
+_REVD = fit_commitment(EMPTY._replace(
+    authority="YOU", faction="HEARTH", deleted="RELEASE", storyline_id="SL-YOU-HEARTH-RELEASE",
+    axis_revised=frozenset({"deleted"}), lock_negotiated=frozenset(LOCK_ORDER),
+    retraction_log=(Entry("deleted", "RESTORE", "RELEASE", WITHDRAWN["deleted"]["RESTORE"], "C8-S16"),),
+    beats_played=frozenset({"retract_R1_deleted_RELEASE"})))
 _PLAIN = _REVD._replace(axis_revised=frozenset(), retraction_log=(), beats_played=frozenset())
 # rev 11 (round 11, qa-lead): hand-built fixtures for the clauses that single-field changes cannot isolate. The
 # D7.duplicate fixture stays for the rev 11 regression: under that text D0 fires first, so it is never isolated.
@@ -1637,22 +2003,22 @@ def main():
     t0 = time.time()
     contexts = list(seed_contexts())
     sigs = {signature(c) for c in contexts}
-    print("Storyline reference model (storyline-axes.md OQ16) — axes rev 14, lifecycle rev 10")
+    print("Storyline reference model (storyline-axes.md OQ16) — axes rev 15, lifecycle rev 11")
     print(f"Seed contexts: {len(contexts)} ({len(AXIS_SEEDS)} axis seeds; one Data Wraith flag at most), "
           f"{len(sigs)} distinct lock_pass signatures walked")
     print(f"Positions: {', '.join(POSITIONS)}; suppression windows: {', '.join(sorted(SPEC_WINDOWS))}")
     print()
     overall_ok = True
 
-    print("== Unit tables (" + REV14.name + ") ==")
-    units = unit_checks(REV14)
+    print("== Unit tables (" + REV15.name + ") ==")
+    units = unit_checks(REV15) + life11_checks(REV15, contexts)
     for cid, ok, detail in units:
         print(f"  [{'PASS' if ok else 'FAIL'}] {cid}" + (f"  — {detail}" if detail and not ok else ""))
         overall_ok &= ok
     print()
 
-    print("== Walk, " + REV14.name + " (default knobs, no defects) ==")
-    fails, stats, sig_fails, saves_by_sig, rep_by_sig = run_suite(contexts, REV14, collect=True)
+    print("== Walk, " + REV15.name + " (default knobs, no defects) ==")
+    fails, stats, sig_fails, saves_by_sig, rep_by_sig = run_suite(contexts, REV15, collect=True)
     print(f"  states {stats['states']}, edges {stats['edges']}, saves {stats['saves']} "
           f"(summed over {len(sig_fails)} signatures)")
     print(f"  stored IDs reachable: {len(stats['ids'])} (by T3: {len(stats['ids_t3'])}, by T5: "
@@ -1734,11 +2100,26 @@ def main():
     overall_ok &= r13_ok
     print()
 
-    print("== Negative controls (each seeded defect must fail at least one assertion; " + REV14.name + ") ==")
+    print("== Regression: the " + REV14.name + " (lifecycle rev 10; what the lifecycle review of 2026-11-18 "
+          "found; must still fail) ==")
+    r14bad = [u[0] for u in unit_checks(REV14) + life11_checks(REV14, contexts) if not u[1]]
+    for u in r14bad:
+        print(f"      {u}")
+    r14_ok = all(any(u.startswith(k) for u in r14bad)
+                 for k in ("Chapter select rows (rev 15)", "Root positions (rev 15)", "Windows (rev 15)",
+                           "take() via the T5 handler (rev 15)", "NG+ full reset (rev 15)", "Commitment (rev 15)"))
+    print(f"  [{'CAUGHT' if r14_ok else 'MISSED'}] the model still finds, on the rev 14 text: chapter-select rows "
+          "unplaced or ending FIXED or in a superseded scene, no Root scene set or position writers, windows "
+          "without an opening or resume point, take() blind to a handler that ignores the scene, an NG+ reset that "
+          "keeps companions, regions, timing and paces, and no stored commitment")
+    overall_ok &= r14_ok
+    print()
+
+    print("== Negative controls (each seeded defect must fail at least one assertion; " + REV15.name + ") ==")
     base_codes = {c for c, _ in fails}
     all_caught = True
     for name, desc in DEFECTS.items():
-        dfails, *_ = run_suite(contexts, REV14, frozenset({name}))
+        dfails, *_ = run_suite(contexts, REV15, frozenset({name}))
         codes = sorted({c for c, _ in dfails} - base_codes, key=lambda c: int(c[1:]))
         caught = bool(codes)
         all_caught &= caught
@@ -1746,9 +2127,9 @@ def main():
     overall_ok &= all_caught
     print()
 
-    print("== Clause isolation (AC9 rev 14: one fixture per clause with load_check exactly {that clause id}; the D0 "
+    print("== Clause isolation (AC9 rev 15: one fixture per clause with load_check exactly {that clause id}; the D0 "
           "clause ids are the unit table 'AC9 D0 clause ids') ==")
-    exact, alone, accepted, accepted_states = (probe(rep_by_sig, saves_by_sig, REV14) if not args.quick
+    exact, alone, accepted, accepted_states = (probe(rep_by_sig, saves_by_sig, REV15) if not args.quick
                                                else ({}, {}, {}, {}))
     redund = []
     if args.quick:
@@ -1782,7 +2163,7 @@ def main():
             if pairs:
                 top = sorted(pairs.items(), key=lambda kv: (-kv[1], kv[0]))
                 print(f"           {len(top)} from->to pairs: " + ", ".join(p for p, _ in top))
-        n_live, stranded = liveness_of_accepted(accepted_states, REV14)
+        n_live, stranded = liveness_of_accepted(accepted_states, REV15)
         cats = set(accepted)
         cats_ok = cats == PINNED_RESIDUAL_KINDS
         print(f"  [{'PASS' if cats_ok else 'FAIL'}] residual categories equal the pinned list"
@@ -1802,7 +2183,7 @@ def main():
     def acc(k):
         return accepted.get(k, [0])[0]
 
-    print("== ROUND-10 TO ROUND-14 FINDINGS: status under the rev 14 text ==")
+    print("== ROUND-10 TO ROUND-14 AND LIFECYCLE 2026-11-18 FINDINGS: status under the rev 15 text ==")
     ac9_crisis = next((u[1] for u in units if u[0].startswith("AC9 fixture CRISIS")), False)
     lac8 = next((u[1] for u in units if u[0].startswith("L-AC8")), False)
     formula_crisis = next((u[1] for u in units if "loaded=False at S16_OPEN -> CRISIS" in u[0]), False)
@@ -1830,7 +2211,7 @@ def main():
                f"{sum(len(v) for v in stranded.values())} accepted records cannot reach FINAL (rests on M8)"))
     # F11 (round 10, settled in round 11 as OQ18): a live crisis record past C8-S16 reads DAMAGED and is turned back.
     crisis_gate = gate(EMPTY._replace(authority="NONE", faction="ARCHIVE", deleted="RELEASE"), frozenset(), "CH9",
-                       "ROOT", "story", frozenset(), REV14)[0][0]
+                       "ROOT", "story", frozenset(), REV15)[0][0]
     st.append(("F11", "resolved (OQ18)" if crisis_gate.endswith(":TURNED_BACK:DAMAGED") else "OPEN",
                f"a live crisis record past C8-S16 at the story gate: {crisis_gate}"))
     # Round 12: D0 owns the one-entry cap (D7.duplicate and D7.multi retired); the duplicated entry is refused as D0.
@@ -1863,7 +2244,15 @@ def main():
             ("R14-legacy-hub", "Legacy hub (rev 14)", "a legacy hub save is placed by its free-travel story scene "
              "or chapter; a Chapter 8 one is D0.missing"),
             ("R14-D0-ids", "AC9 D0 clause ids (rev 14)", "D0 names its clause ids, one fixture each"),
-            ("R14-D7-fixture", "AC9 D7 new-value fixture (rev 14)", "the D7 fixture isolates D7.new_mismatch")):
+            ("R14-D7-fixture", "AC9 D7 new-value fixture (rev 14)", "the D7 fixture isolates D7.new_mismatch"),
+            ("L11-1 chapter select", "Chapter select rows (rev 15)", "13 rows placed; True Ending FINAL; Final "
+             "Confrontation reaches T9; no superseded scene"),
+            ("L11-2 Root positions", "Root positions (rev 15)", "Root scene set, load-gate positions, a writer for "
+             "every position, hub revival"),
+            ("L11-4 windows", "Windows (rev 15)", "a window, commit and resume point for T1, T2, T3, T5, T7, T9"),
+            ("L11-5 take()", "take() via the T5 handler (rev 15)", "take() calls the T5 handler in every scene"),
+            ("L11-8 commitment", "Commitment (rev 15)", "kaelen_commitment stored, D0 on the inconsistent records"),
+            ("L11-11 NG+", "NG+ full reset (rev 15)", "every stored field reset to a new game's")):
         st.append((fid, "resolved" if next((u[1] for u in units if u[0].startswith(prefix)), False) else "OPEN",
                    note))
     st.append(("F13", "reported (lifecycle L-AC19)",
@@ -1928,10 +2317,20 @@ def main():
         "stored. SCENE_TO_ID and HUB_SCENES stand in for Y1-P1-T03's scene-to-id map "
         "(story scenes only) and the game's hubs. load_check_tags keeps reporting D0 as one item for every text; "
         "d0_clauses gives rev 14's clause ids.",
+        "M17 Rev 15 (lifecycle rev 11): kaelen_commitment is a Record field with default UNSET (older readings never "
+        "write it and do not check it). The main walk chooses LISTEN whenever YOU is backed; the unit 'Commitment' "
+        "walks one seed context per choice. The accepted-record probe does not toggle the commitment (its D0 rule "
+        "refuses every inconsistent value; a change between two of the three choices on a YOU record is accepted "
+        "and is a non-goal like the other display-level fields). Chapter-select rows, the scene placement, the "
+        "position writers and the window table are stand-ins for the lifecycle tables (the checker compares the "
+        "tables with main_menu.gd and the scene files); a hub revival is a walk edge from ROOT and ROOT_STORY_PLUS. "
+        "take() and the T5 handler are modelled for the 16 offers over one walk; the negative control "
+        "handler_ignores_scene is checked inside that unit, not in the A1-A14 walk.",
     ):
         print("  " + m)
     print()
-    print(f"RESULT: {'PASS' if overall_ok else 'FAIL'} ({REV14.name}; the rev 13 text still fails as expected: "
+    print(f"RESULT: {'PASS' if overall_ok else 'FAIL'} ({REV15.name}; the rev 14 text still fails as expected: "
+          f"{'yes' if r14_ok else 'NO'}; the rev 13 text still fails as expected: "
           f"{'yes' if r13_ok else 'NO'}; the rev 12 text still fails as expected: "
           f"{'yes' if r12_ok else 'NO'}; the rev 11 text still fails as expected: "
           f"{'yes' if r11_ok else 'NO'}; the rev 10 text still fails as expected: {'yes' if r10_ok else 'NO'}; "

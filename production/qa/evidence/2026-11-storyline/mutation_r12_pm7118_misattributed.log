@@ -1,11 +1,11 @@
 # Mutation 'r12_pm7118_misattributed' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r12_pm7118_misattributed.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r12_pm7118_misattributed.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-axes.r12_pm7118_misattributed.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-axes.r12_pm7118_misattributed.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
 FAIL [revision 12] storyline-axes.md lacks 'RELEASE needs staged verification (PM:7118), while destroying the wraith loses anyone still recoverable (dialogue/ch2/underground.dlg:64); the user kept the row (2026-11-17).'
 FAIL [revision 12] axes cites PM:7118 other than as 'RELEASE needs staged verification (PM:7118)'
-FAIL [stale] axes line 1070: stale string 'involuntary preservation (PM:7118)' present
+FAIL [stale] axes line 1078: stale string 'involuntary preservation (PM:7118)' present
 RESULT: FAIL (3 problems)
 exit code: 1

@@ -1,0 +1,9 @@
+# Mutation 'r15_writer_row_dropped' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-lifecycle.r15_writer_row_dropped.md
+gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-lifecycle.r15_writer_row_dropped.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [revision 15] position-writer table names ['CH9', 'FINAL_AUTH_OPEN', 'FINAL_DONE', 'PRE_C8', 'ROOT', 'ROOT_STORY_PLUS', 'S13_DONE', 'S13_OPEN', 'S14_DONE', 'S14_OPEN', 'S15', 'S16_DONE', 'S16_OPEN', 'STORY_PLUS'], expected the model's POSITIONS ['CH9', 'FINAL_AUTH_OPEN', 'FINAL_DONE', 'PRE_C8', 'ROOT', 'ROOT_LEFT', 'ROOT_STORY_PLUS', 'S13_DONE', 'S13_OPEN', 'S14_DONE', 'S14_OPEN', 'S15', 'S16_DONE', 'S16_OPEN', 'STORY_PLUS']
+RESULT: FAIL (1 problems)
+exit code: 1

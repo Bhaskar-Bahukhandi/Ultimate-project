@@ -1,0 +1,10 @@
+# Mutation 'r15_load_before_applied_restored' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-lifecycle.r15_load_before_applied_restored.md
+gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-lifecycle.r15_load_before_applied_restored.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [lifecycle rules] lacks the pinned sentence 'The check is one predicate, not a list of callers (design review round 12): it runs before every scene change whose target is a Root of Heaven scene (the Root of Heaven scene set, Scene placement), whoever requests it; on load, for a save positioned inside Root of Heaven; and before free travel unlocks the Root of Heaven region, which stays locked until the predicate passes.'
+FAIL [revision 15] storyline-lifecycle.md still says 'before any loaded state is applied' (retired in lifecycle revision 11)
+RESULT: FAIL (2 problems)
+exit code: 1

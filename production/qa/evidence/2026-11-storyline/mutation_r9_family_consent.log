@@ -1,10 +1,10 @@
 # Mutation 'r9_family_consent' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r9_family_consent.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r9_family_consent.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-axes.r9_family_consent.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-axes.r9_family_consent.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [formulas] line 600: family body differs from the pinned body: 'SL-SECRET-WITNESS → CONSENT; SL-SECRET-CROWNLESS, SL-SECRET-FIRSTWAKE → RESERVED (unreachable while their routes are disabled)' (expected 'SL-SECRET-WITNESS, SL-SECRET-CROWNLESS, SL-SECRET-FIRSTWAKE → RESERVED (unreachable while their routes are disabled)')
+FAIL [formulas] line 604: family body differs from the pinned body: 'SL-SECRET-WITNESS → CONSENT; SL-SECRET-CROWNLESS, SL-SECRET-FIRSTWAKE → RESERVED (unreachable while their routes are disabled)' (expected 'SL-SECRET-WITNESS, SL-SECRET-CROWNLESS, SL-SECRET-FIRSTWAKE → RESERVED (unreachable while their routes are disabled)')
 FAIL [formulas] family() returns ['BOUND', 'CONSENT', 'NONE_AUTH', 'NO_FAMILY', 'RESERVED', 'SOLE'], expected ['BOUND', 'NONE_AUTH', 'NO_FAMILY', 'RESERVED', 'SOLE']
 FAIL [formulas] family() maps [] → RESERVED, expected every secret id once ['SL-SECRET-CROWNLESS', 'SL-SECRET-FIRSTWAKE', 'SL-SECRET-WITNESS']
 FAIL [formulas] family() names CONSENT, a post-1.0 family (revision 9)

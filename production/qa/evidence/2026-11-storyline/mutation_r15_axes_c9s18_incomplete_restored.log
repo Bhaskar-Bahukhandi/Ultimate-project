@@ -1,0 +1,10 @@
+# Mutation 'r15_axes_c9s18_incomplete_restored' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-axes.r15_axes_c9s18_incomplete_restored.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-axes.r15_axes_c9s18_incomplete_restored.md
+lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [revision 15] storyline-axes.md lacks 'C9-S18 in the form Core Rule 6 states, decrypted and logged with every FIRSTWAKE prerequisite set and noise otherwise'
+FAIL [revision 15] storyline-axes.md still says 'C9-S18 incomplete form' (retired in revision 15)
+RESULT: FAIL (2 problems)
+exit code: 1

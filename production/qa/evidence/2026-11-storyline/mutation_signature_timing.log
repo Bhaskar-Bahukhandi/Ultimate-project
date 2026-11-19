@@ -1,10 +1,10 @@
 # Mutation 'signature_timing' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.signature_timing.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.signature_timing.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-axes.signature_timing.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-axes.signature_timing.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [formulas] line 498: storyline_id('A', 'F', 'D', 'I', 'timing') != storyline_id('A', 'F', 'D', 'I')
-FAIL [formulas] line 498: storyline_id body differs from the pinned body: 'storyline_id(A, F, D, I, timing):' (expected 'storyline_id(A, F, D, I):')
+FAIL [formulas] line 502: storyline_id('A', 'F', 'D', 'I', 'timing') != storyline_id('A', 'F', 'D', 'I')
+FAIL [formulas] line 502: storyline_id body differs from the pinned body: 'storyline_id(A, F, D, I, timing):' (expected 'storyline_id(A, F, D, I):')
 RESULT: FAIL (2 problems)
 exit code: 1

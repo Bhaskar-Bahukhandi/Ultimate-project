@@ -1,0 +1,9 @@
+# Mutation 'r15_ngplus_pace_dropped' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-lifecycle.r15_ngplus_pace_dropped.md
+gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-lifecycle.r15_ngplus_pace_dropped.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [lifecycle record] NG+ reset fields ['act2_pace', 'act3_pace', 'act4_pace', 'authority', 'axis_revised', 'beats_played', 'companions_present', 'deleted', 'faction', 'kaelen_commitment', 'lock_negotiated', 'regions_completed', 'retraction_log', 'root_phase', 'story_position', 'storyline_id', 'timing_flags'] != the composer record's stored fields ['act1_pace', 'act2_pace', 'act3_pace', 'act4_pace', 'authority', 'axis_revised', 'beats_played', 'companions_present', 'deleted', 'faction', 'kaelen_commitment', 'lock_negotiated', 'regions_completed', 'retraction_log', 'root_phase', 'story_position', 'storyline_id', 'timing_flags']
+RESULT: FAIL (1 problems)
+exit code: 1

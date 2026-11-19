@@ -1,6 +1,9 @@
 # Storyline Axes
 
-> **Status**: Draft (revision 14, after design review round 14, scope frozen to its six blockers (Open Question 20):
+> **Status**: Draft (revision 15, an erratum after the lifecycle review of 2026-11-18 (user decision 2026-11-19):
+> `kaelen_commitment` added to the composer record, the stored-field list, AC3, D0 and AC9, and the protected touchpoints' C9-S18 wording
+> corrected; the round-15 approval of revision 14 does not cover these lines. Revision 14, after design review round
+> 14, scope frozen to its six blockers (Open Question 20):
 > the purge row's reason re-grounded on its own scene, `story_position` a record field with a hub-safe legacy
 > derivation, `act1_pace` defaults to UNSET, AC9's clause ids listed, AC11's mirror sentence removed, AC15 Logic with
 > a `secret:<route>` push; main-story seeds named as a class (Open Question 21). Revision 13, after design review
@@ -11,7 +14,7 @@
 > unilateral history, Kaelthas outside the 1.0 companion set, the story-position contract, D0's one-entry
 > `retraction_log` cap. Static core unchanged since revision 4 except the 1.0 scope of the secret storylines)
 > **Author**: Claude (narrative-director research) with the project lead
-> **Last Updated**: 2026-11-18
+> **Last Updated**: 2026-11-19
 > **Last Verified**: 2026-11-18
 > **Implements Pillar**: P3 (24 storylines + 3 secret from three story axes), P5 (side storylines feed the main
 > story), P8 (Story+, a playable after-story per storyline) — DESIGN_PILLARS.md, ROADMAP §12.2
@@ -256,7 +259,7 @@ keep these invariants; a contract that breaks one is wrong, not this GDD:
 
 `storyline_phase` is derived, never stored (Formulas), as are `secret_route` and `family`; of the lifecycle fields
 the record stores the axes, `storyline_id`, `root_phase`, `axis_revised`, `lock_negotiated`, `retraction_log`,
-`beats_played` and `story_position`; the Edge Case 16 check reads all of them with the saved flags, and once it
+`beats_played`, `kaelen_commitment` and `story_position`; the Edge Case 16 check reads all of them with the saved flags, and once it
 passes the phase depends only on the axes, `storyline_id` and `root_phase`.
 
 | phase | meaning | gate |
@@ -459,6 +462,7 @@ owned by Y2-PP-T17 and specified in `storyline-lifecycle.md`; no other code writ
 | lock_negotiated | set | faction, authority, deleted | the lock scenes by `lock_pass`; every renegotiation |
 | retraction_log | list | at most one entry {axis, old, new, withdrawn_item, scene}; `withdrawn_item` and `scene` are opaque display text that no code branches on | every renegotiation |
 | beats_played | set | the lifecycle's authored beat ids (`retract_*`) | the scene that plays the beat |
+| kaelen_commitment | enum | UNSET, LISTEN, OVERRIDE_IMMEDIATE_LOSS, CANNOT_PROMISE_NEVER (PM:7054-7058); UNSET exactly when the record never held YOU (Authority is not YOU and no `retraction_log` entry has `old` YOU) | C8-S14 when YOU is backed; a renegotiation to YOU at C8-S16; UNSET from a new game, the NG+ reset and chapter select (user decision 2026-11-19) |
 | story_position | enum | the story position ids of Terms (Story position), `PRE_C8` to `ROOT_STORY_PLUS` | each commit checkpoint and story-graph step that crosses into the next id; a new game, the NG+ reset and chapter select; SaveService once for a legacy save (Terms) |
 | companions_present | set | Elara, Seraphina, Lyra | `AethelgardPrototype/scripts/game_manager.gd` (`has_elara`, exclusive flag groups); `AethelgardPrototype/dialogue/ch2/fragment_two.dlg` |
 | regions_completed | set | ids of the eight regions | owner story Y2-PP-T17 (no writer in the code today) |
@@ -709,7 +713,10 @@ renegotiations, R2 and R3 five each (the Faction swap between them is not offere
       second entry would play a cost beat twice; `beats_played` one, the one entry's beat). Allowed values are
       checked for every field the composer record gives a closed list of values (and `retraction_log`'s `axis`,
       `old` and `new`), except `storyline_id` and `beats_played`, which are checked for type only: which strings
-      they may hold is D1's and D14's (its undefined-beat clause). D0 is tested first; when it fires no other item
+      they may hold is D1's and D14's (its undefined-beat clause). `kaelen_commitment` is also outside its allowed
+      values (`D0.enum`) when it is UNSET on a record that held YOU (Authority YOU, or a `retraction_log` entry with
+      `old` YOU) or set on one that never did: play writes it exactly when SOVEREIGN can quote it (lifecycle S2;
+      user decision 2026-11-19). D0 is tested first; when it fires no other item
       runs, so `load_check` reports only D0 clauses and its items are exactly {D0}. It exists so that no later item
       and no composer read meets a value of the wrong type or count; it is not an integrity check
     - D1 a stored ID that is not `SL-A-F-D` for its axes on a valid row, tested in this order and reported as the
@@ -771,7 +778,7 @@ renegotiations, R2 and R3 five each (the Faction swap between them is not offere
 
 | System | Direction | What flows | Status of its design doc |
 |---|---|---|---|
-| Storyline lifecycle (`design/gdd/storyline-lifecycle.md`, Y2-PP-T17) | this → lifecycle | the axes, formulas, record and invariants I1-I9 the scenes must keep | revision 10 (the legacy position derivation of axes Terms: free-travel story scene, own scene, chapter number; no hub in the scene-to-id map); needs re-review |
+| Storyline lifecycle (`design/gdd/storyline-lifecycle.md`, Y2-PP-T17) | this → lifecycle | the axes, formulas, record and invariants I1-I9 the scenes must keep | revision 11 (chapter select per entry, scene placement, windows, `kaelen_commitment`, the full NG+ reset; lifecycle Open Question 7); needs re-review |
 | Time model (`design/gdd/time-model.md`, Y1-P0-S06b) | this ← time model | per-act pace values (`act1_pace_*` exists; acts 2-4 named there), timing flags | not written yet — S06b must list this GDD as a dependent |
 | FlagRegistry / StoryGraph (Y1-P1-T03) | this ← registry | seed flags, the future `AXIS*`, `axis_revised_*`, `lock_negotiated_*` flags, secret prerequisite and unlock flags, exclusive-group and secret-knob validation | no GDD (an ADR/tech design later) — must cite this GDD's seed map |
 | SaveService (Y1-P1-T05) | this → save | the composer input record, saved and versioned; the damaged-record check | no GDD — must store the fields in the composer record |
@@ -793,7 +800,7 @@ the story that implements it:
 | protected area | what this design needs there | where specified |
 |---|---|---|
 | save/load schema | the composer record fields, defaults, the damaged-record check and load refusal, one atomic checkpoint per transition and save suppression inside lock scenes, the dev-fixture migration | Composer input record; Edge Cases 8, 15, 16; I9; lifecycle commit and save rule, Legacy saves |
-| story progression | the lock-scene order, the C8-S16 crisis, the gate on the `story` path and on every scene change into Root of Heaven, chapter select past C8-S16 writing a valid record, the stored story position, the secret-route scenes kept closed (C9-S18 incomplete form; C9-S19, C9-S20, C10-S13 to C10-S15 gated on the stored ID), the superseded legacy Chapter 8 and Chapter 10 flags | Core Rules 3-9; lifecycle S1-S7, Dependencies |
+| story progression | the lock-scene order, the C8-S16 crisis, the gate on the `story` path and on every scene change into Root of Heaven, chapter select past C8-S16 writing a valid record, the stored story position, the secret-route scenes kept closed (C9-S18 in the form Core Rule 6 states, decrypted and logged with every FIRSTWAKE prerequisite set and noise otherwise; C9-S19, C9-S20, C10-S13 to C10-S15 gated on the stored ID), the superseded legacy Chapter 8 and Chapter 10 flags | Core Rules 3-9; lifecycle S1-S7, Dependencies |
 | world-map / free-travel logic | the gate check on the `world_map` path | Core Rule 8; lifecycle S6 |
 | combat | none beyond the source: boss phases read the stored axes (PM:8611-8616); the re-entry rule | Core Rule 9; lifecycle Edge Case 2 |
 | NG+ | the reset of the record and the axis, secret and unlock flags | Edge Case 9; lifecycle NG+ reset |
@@ -866,7 +873,7 @@ the Formulas and a walk of the lifecycle transitions (Open Question 16).
    equals {YOU → SOLE, SHARED → BOUND, NONE → NONE_AUTH}; the side-storyline table has arcs 01-12, each `pm_line` an
    "Axis effect:" line, in arc order; the composer record has exactly the fields storyline_phase, storyline_id,
    root_phase, authority, faction, deleted, secret_route, family, axis_revised, lock_negotiated, retraction_log,
-   beats_played, story_position, companions_present, regions_completed, timing_flags, act1_pace and act2_pace/act3_pace/act4_pace,
+   beats_played, kaelen_commitment, story_position, companions_present, regions_completed, timing_flags, act1_pace and act2_pace/act3_pace/act4_pace,
    each with its pinned allowed values and writer; `storyline_phase` allows exactly the phase table's values;
    `reachable_1_0` equals the valid rows plus the 1.0 secret rows (none).
 4. The Formulas define `storyline_id(A, F, D, I)` with exactly those four inputs and its pinned body, which names no
@@ -941,7 +948,8 @@ endings evidence the families, not the 24 ending sequences, which AC14 tests as 
    `D7.new_mismatch`, `D8`, `D9`, `D14.undefined`, `D14.no_entry`, `D14.not_played`, `D15`, `D16`,
    `D17.before_commit` and `D17.prefix`. The D0 fixtures include a missing field in a current-version save, a
    Chapter 8 legacy save that no story scene places (`D0.missing`), a non-string `storyline_id` (`D0.type`), an
-   out-of-range `root_phase` and a retraction entry whose `old` is outside its axis's values (`D0.enum`), a
+   out-of-range `root_phase`, a retraction entry whose `old` is outside its axis's values and a YOU record with
+   `kaelen_commitment` UNSET (`D0.enum`), a
    non-string `beats_played` element (`D0.element`), a set holding one element twice (`D0.duplicate`), a two-entry
    `retraction_log` (the R2 and R3 Faction retractions of (NONE, HEARTH, RELEASE), each consistent on its own) and
    a two-element `beats_played` (`D0.max`), and a D0 defect together with a D1 defect, whose items are exactly

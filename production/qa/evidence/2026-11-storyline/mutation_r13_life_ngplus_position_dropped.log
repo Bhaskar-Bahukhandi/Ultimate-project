@@ -1,11 +1,11 @@
 # Mutation 'r13_life_ngplus_position_dropped' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r13_life_ngplus_position_dropped.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-lifecycle.r13_life_ngplus_position_dropped.md
 gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
-lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r13_life_ngplus_position_dropped.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-lifecycle.r13_life_ngplus_position_dropped.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
 FAIL [revision 13] storyline-lifecycle.md lacks 'story_position → PRE_C8. The story position is reset with the record because a new record left at a Story+ position would be refused by D16'
-FAIL [lifecycle record] NG+ reset fields ['authority', 'axis_revised', 'beats_played', 'deleted', 'faction', 'lock_negotiated', 'retraction_log', 'root_phase', 'storyline_id'] != Inputs fields ['authority', 'axis_revised', 'beats_played', 'deleted', 'faction', 'lock_negotiated', 'retraction_log', 'root_phase', 'story_position', 'storyline_id']
+FAIL [lifecycle record] NG+ reset fields ['act1_pace', 'act2_pace', 'act3_pace', 'act4_pace', 'authority', 'axis_revised', 'beats_played', 'companions_present', 'deleted', 'faction', 'kaelen_commitment', 'lock_negotiated', 'regions_completed', 'retraction_log', 'root_phase', 'storyline_id', 'timing_flags'] != the composer record's stored fields ['act1_pace', 'act2_pace', 'act3_pace', 'act4_pace', 'authority', 'axis_revised', 'beats_played', 'companions_present', 'deleted', 'faction', 'kaelen_commitment', 'lock_negotiated', 'regions_completed', 'retraction_log', 'root_phase', 'story_position', 'storyline_id', 'timing_flags']
 FAIL [lifecycle rules] lacks the pinned sentence 'story_position → PRE_C8.'
 RESULT: FAIL (3 problems)
 exit code: 1

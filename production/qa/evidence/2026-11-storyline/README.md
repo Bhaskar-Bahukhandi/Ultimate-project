@@ -575,3 +575,43 @@ The tooling was synced without editing either GDD.
   enumerated list in the GDD and the act 2-4 paces wait for S06b's names (M16). Re-run: `RESULT: PASS` in 213.1 s
   (`reference_model.log`; regressions and residual categories as before); checker PASS. No GDD text changed, so the
   mutation logs stand.
+
+## Lifecycle review 2026-11-18: lifecycle revision 11 / axes revision 15 (erratum), 2026-11-19
+
+- Verdict NEEDS REVISION (game-designer, systems-designer, narrative-director, qa-lead, godot-specialist;
+  creative-director synthesis): 13 blockers; log entry in `design/gdd/reviews/storyline-lifecycle-review-log.md`.
+- User decisions (2026-11-19): `kaelen_commitment` becomes a record field (axes erratum: composer record, the
+  stored-field sentence, AC3, D0 and one AC9 fixture); chapter select reroutes "Final Confrontation" to the boss and
+  writes "True Ending" FINAL at `FINAL_DONE`; "Revolt Crisis" is remapped to C8-S13 (relabelled "Assembly Votes");
+  lifecycle Open Question 7 adopts a scope freeze modelled on axes Open Question 20 (round 16 lean on the diff).
+- Lifecycle revision 11: a 13-row chapter-select table; a scene placement table (Root of Heaven scene set, load-gate
+  positions `ROOT`, `FINAL_DONE`, `ROOT_STORY_PLUS`, a writer for every story position, hub revival,
+  `ch8_revolt_crisis` and `ch10_sovereign_confrontation` superseded); the chapter-select and load-path checkpoints
+  stated as outcomes (mechanism Y1-P1-T05); a window table for T1, T2, T3, T5, T7, T9 that L-AC6 uses; `take()`
+  through the T5 handler; five new observables; L-AC8 and the Validation note agree that the load × VALIDATED cell is
+  counted and synthetic; the retraction answerer is the refusing faction's delegate; one knob-read statement; the NG+
+  reset sets every stored field; turn-back landings per path; citation errata (PM:8206-8207, I9, PM:7102-7106,
+  PM:7045-7058). Axes revision 15 also corrects the protected-touchpoints C9-S18 wording. The round-15 approval of
+  axes revision 14 does not cover the erratum lines.
+- Found while extending the model: the draft's chapter-select row 3 gave `PRE_C8` as its first save, but C8-S13 opens
+  its window at its start, so the first save is T1's checkpoint (`S13_DONE`); row 3 and L-AC19 were corrected and the
+  checker now reads the position chapter select writes separately from the first save's.
+- Checker: composer `kaelen_commitment` and the D0 pin; the NG+ reset against every stored composer field; T2/T5 and
+  the lifecycle pins retargeted; new `check_revision15` (chapter-select rows against `main_menu.gd`, placement against
+  the scene files, writers against the model's `POSITIONS`, the window table, landings, `take()`, the commitment
+  values against PM:7055-7057, the observables lint for every call and for prose that names an observable). The first
+  mutation run found two gaps, both fixed: the prose patterns had lost their word boundaries in the patch (they could
+  never match), and the superseded-scene Dependencies check was satisfied by the legacy-flags row.
+- Mutations: 23 targets moved by revision 11 were retargeted (same intent); 36 `r15_*` mutations added. Result: 383
+  mutations FAIL / 1 control PASS / 0 unexpected; `check_pass.log` PASS.
+- Reference model: `REV15` is the current reading; `kaelen_commitment` is a `Record` field (default UNSET, M17);
+  new `life11_checks` (Chapter select rows, Root positions, Windows, take() via the T5 handler, NG+ full reset,
+  Commitment), each passing under `REV15` and failing under `REV14` (the lifecycle rev 10 text, a new regression).
+  Result: `RESULT: PASS` in 380.3 s (rev 14, 13, 12, 11, 10 and 9 texts still fail as expected; residual categories
+  asserted). Logs written to the session scratchpad and copied here (OneDrive lock).
+
+## Lifecycle design review round 16 (lean, Open Question 7 bar), 2026-11-19
+
+- Verdict APPROVED on lifecycle revision 11 and the axes revision-15 erratum. Log entries are in both review logs.
+- One blocker was fixed in the session with the user's approval. S6's FIXED/FINAL outcome and Edge Case 2 said T8 changes nothing, but the Scene placement writer table has T8 write `ROOT` / `ROOT_STORY_PLUS`. Both now read "nothing changes but the story position". `GATE_TABLE["FIXED, FINAL"]` in the checker and the `r9_gate_row_dropped` target in `run_mutations.py` follow the new text. The reference model already moved the position on T8 (the gate edge from `ROOT_LEFT` / `STORY_PLUS`), so its readings are unchanged.
+- Re-run on the final text: checker PASS (0 problems); 383 mutations FAIL / 1 control PASS / 0 unexpected; reference model RESULT PASS in 392.8 s. Logs were written to the session scratchpad and copied here. Pass `run_mutations.py` an absolute repo root: with `.` the checker resolves `design\gdd\...` against this folder, and every run reports ERROR(2).

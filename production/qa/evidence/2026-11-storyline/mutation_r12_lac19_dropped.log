@@ -1,17 +1,17 @@
 # Mutation 'r12_lac19_dropped' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r12_lac19_dropped.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-lifecycle.r12_lac19_dropped.md
 gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
-lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r12_lac19_dropped.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-lifecycle.r12_lac19_dropped.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
 FAIL [revision 12] L-AC19 does not expect storyline_id() SL-SHARED-ARCHIVE-CHOOSE, the chapter-select record
 FAIL [lifecycle acceptance] L-ACs numbered [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], expected 1-19
-FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase 'For each scene-change request whose target is a Root of Heaven scene, issued from the Chapter 9 end, the Chapter 10 scene chain, world-map "Resume story", free travel and chapter select, with a LEANING or PARTLY_LOCKED injected live record: enter_root_of_heaven() is TURNED_BACK and current_scene() is not a Root of Heaven scene'
-FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase 'with ch10_unlocked set and no ID stored, the free-travel Root of Heaven region stays locked'
-FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase 'Chapter select of Chapter 9 and of Chapter 10 from the main menu gives'
-FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase 'record_field(lock_negotiated) = {faction, authority, deleted} and load_errors() empty for every save written before the first player input'
-FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase 'for Chapter 10 the gate gives ROOT_OF_HEAVEN'
-FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase '"Chapter 8 - Ending" gives the same record at S16_DONE with load_errors() empty for its autosave.'
-FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase 'A chapter-select entry positioned before C8-S13 gives LEANING.'
+FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase 'For each scene-change request whose target is a Root of Heaven scene, issued from the Chapter 9 end, the Chapter 10 scene chain, world-map "Resume story", free travel and chapter select, with a LEANING or PARTLY_LOCKED injected live record: enter_root_of_heaven() is TURNED_BACK, current_scene() is not a Root of Heaven scene but S6's landing for that path, and saves_written() gains nothing'
+FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase 'with ch10_unlocked set and no ID stored, region_unlocked(root_of_heaven) is false'
+FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase 'For each of the 13 rows of the chapter-select table, started from the main menu'
+FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase 'rows 9-12 give enter_root_of_heaven() ROOT_OF_HEAVEN and storyline_phase() FIXED, and row 12 then reaches the final authorization, where confirm_execution() gives FINAL'
+FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase 'row 13 gives storyline_phase() FINAL and enter_root_of_heaven() ROOT_OF_HEAVEN with record_hash() unchanged (T8)'
+FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase 'rows 1-3 start LEANING, and row 3's scenes_played() starts with C8-S13'
+FAIL [lifecycle acceptance] L-AC19 lacks the pinned phrase 'no row's scenes_played() holds ch8_revolt_crisis or ch10_sovereign_confrontation'
 RESULT: FAIL (9 problems)
 exit code: 1

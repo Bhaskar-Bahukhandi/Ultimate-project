@@ -1,9 +1,10 @@
 # Mutation 'r13_life_ch8_entry_wrong_position' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r13_life_ch8_entry_wrong_position.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-lifecycle.r13_life_ch8_entry_wrong_position.md
 gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
-lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-lifecycle.r13_life_ch8_entry_wrong_position.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-lifecycle.r13_life_ch8_entry_wrong_position.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
-FAIL [lifecycle rules] lacks the pinned sentence 'axis_revised, retraction_log and beats_played empty, root_phase OUTSIDE, the matching AXIS* and lock_negotiated_* mirror flags, and the story position of its entry scene (S16_DONE for a Chapter 8 entry after the locks, CH9 for Chapter 9 and for every entry into Root of Heaven).'
-RESULT: FAIL (1 problems)
+FAIL [revision 15] line 307 (row 4): first save at PRE_C8, but the placement table puts ch8_ending at S16_DONE
+FAIL [revision 15] line 307 (row 4): a PRE_C8 entry must start from the defaults
+RESULT: FAIL (2 problems)
 exit code: 1

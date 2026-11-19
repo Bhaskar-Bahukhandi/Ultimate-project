@@ -8,6 +8,14 @@ modifier row and one axis row (26 flags in 28 rows; the Authority remap), Kaelth
 D0 owning the one-entry retraction_log cap (D7.multi and D7.duplicate retired), D15 scoped to the save's schema
 version, the Terms story-position list equal to the reference model's POSITIONS, legacy defaulting, chapter select,
 the gate predicate, L-AC19, and AC9/AC11/AC14-AC17 rewritten (check_revision12 and the pins marked "Revision 12").
+Synced to axes revision 15 (erratum) / lifecycle revision 11 (lifecycle review 2026-11-18, 13 blockers; scope frozen
+by lifecycle Open Question 7): the composer's kaelen_commitment and its D0 clause, the NG+ reset against every stored
+composer field, and check_revision15 (the chapter-select table against main_menu.gd's 13 Chapter 8-10 entries, the
+scene placement table against the scene files, the position writers against the model's POSITIONS, the window table
+against the checkpoint transitions, the turn-back landings, take() through the T5 handler, the commitment values
+against PM:7055-7057, and an observables lint: every call in an L-AC, backticked or not, is in the Observables
+table, and prose that names an observable — story position, region locked, saves written, C9-S18's form, scenes
+played, a data error — comes with its call).
 
 This is document lint: it proves that the text matches constants pinned here (or values derived here from other
 parts of the text), not that the state machine is correct. The reference model that would show the latter is
@@ -204,6 +212,13 @@ COMPOSER: dict[str, tuple[str, frozenset[str] | str, str]] = {
     "retraction_log": ("list", "at most one entry {axis, old, new, withdrawn_item, scene}; withdrawn_item and scene "
                        "are opaque display text that no code branches on", "every renegotiation"),
     "beats_played": ("set", "the lifecycle's authored beat ids (retract_*)", "the scene that plays the beat"),
+    # Revision 15 (erratum after the lifecycle review of 2026-11-18, user decision 2026-11-19): the commitment
+    # SOVEREIGN quotes (PM:7054-7059) is stored; its UNSET rule is D0's.
+    "kaelen_commitment": ("enum", "UNSET, LISTEN, OVERRIDE_IMMEDIATE_LOSS, CANNOT_PROMISE_NEVER (PM:7054-7058); UNSET "
+                          "exactly when the record never held YOU (Authority is not YOU and no retraction_log entry "
+                          "has old YOU)",
+                          "C8-S14 when YOU is backed; a renegotiation to YOU at C8-S16; UNSET from a new game, the NG+ "
+                          "reset and chapter select (user decision 2026-11-19)"),
     # Revision 14 (round 14): the story position is a record field, so D0 covers a missing or unlisted one.
     "story_position": ("enum", "the story position ids of Terms (Story position), PRE_C8 to ROOT_STORY_PLUS",
                        "each commit checkpoint and story-graph step that crosses into the next id; a new game, the "
@@ -376,7 +391,10 @@ EC16_ENTRIES = (
            "entry would play a cost beat twice; beats_played one, the one entry's beat). Allowed values are checked for "
            "every field the composer record gives a closed list of values (and retraction_log's axis, old and new), "
            "except storyline_id and beats_played, which are checked for type only: which strings they may hold is D1's "
-           "and D14's (its undefined-beat clause). D0 is tested first; when it fires no other item runs, so load_check "
+           "and D14's (its undefined-beat clause). kaelen_commitment is also outside its allowed values (D0.enum) "
+           "when it is UNSET on a record that held YOU (Authority YOU, or a retraction_log entry with old YOU) or set "
+           "on one that never did: play writes it exactly when SOVEREIGN can quote it (lifecycle S2; user decision "
+           "2026-11-19). D0 is tested first; when it fires no other item runs, so load_check "
            "reports only D0 clauses and its items are exactly {D0}. It exists so that no later item and no composer "
            "read meets a value of the wrong type or count; it is not an integrity check"),
     (1, 1, "a stored ID that is not SL-A-F-D for its axes on a valid row, tested in this order and reported as the "
@@ -605,14 +623,14 @@ AXES_DOC_AC_KEYS = (
 TRANSITIONS = {  # id -> (from, event, guard, to, effects), backticks removed. Lifecycle revision 5: T1-T9.
     "T1": ("LEANING", "C8-S13 resolves", "—", "PARTLY_LOCKED", "faction set; lock_negotiated per lock_pass; checkpoint"),
     "T2": ("PARTLY_LOCKED", "C8-S14 resolves", "faction set, authority UNSET", "PARTLY_LOCKED",
-           "authority set; lock_negotiated per lock_pass; checkpoint"),
+           "authority set; kaelen_commitment set when YOU; lock_negotiated per lock_pass; checkpoint"),
     "T3": ("PARTLY_LOCKED", "C8-S16 resolves", "faction and authority set; the row is valid", "VALIDATED",
            "deleted set; lock_negotiated per lock_pass; ID stored; checkpoint"),
     "T4": ("PARTLY_LOCKED", "C8-S16 resolves", "faction and authority set; the row is invalid", "CRISIS",
            "deleted set; lock_negotiated per lock_pass; the refusing faction breaks the coalition; no checkpoint"),
     "T5": ("CRISIS", "a renegotiation is taken", "the offer is in the row's offer set", "VALIDATED",
            "the axis changed; axis_revised, lock_negotiated gain it; retraction recorded; retraction beat played; "
-           "ID stored; checkpoint"),
+           "kaelen_commitment set when the new Authority is YOU; ID stored; checkpoint"),
     "T6": ("LEANING or PARTLY_LOCKED", "Root of Heaven entry, any path", "—", "unchanged", "TURNED_BACK"),
     "T7": ("VALIDATED", "Root of Heaven entry, any path", "—", "FIXED", "root_phase INSIDE; checkpoint"),
     "T8": ("FIXED or FINAL", "Root of Heaven entry, any path", "—", "unchanged", "open"),
@@ -629,7 +647,9 @@ GATE_TABLE = {  # phases cell -> outcome cell, backticks removed (lifecycle revi
                                "system-voice prompt (not the Assembly line) to reload the last save that passes the "
                                "load check",
     "VALIDATED": "ROOT_OF_HEAVEN; root_phase becomes INSIDE (T7)",
-    "FIXED, FINAL": "ROOT_OF_HEAVEN; nothing changes (T8)",
+    # round 16: T8 writes only the story position (Scene placement's writer table)
+    "FIXED, FINAL": "ROOT_OF_HEAVEN; nothing changes but the story position (T8: ROOT_LEFT → ROOT, "
+                    "STORY_PLUS → ROOT_STORY_PLUS, Scene placement)",
 }
 RED_LINE_VALUES = {"R1": "no one hand compels the deleted back",
                    "R2": "no release that destroys unresolved memory appeals",
@@ -642,7 +662,9 @@ LIFE_FORMULAS = (
     "signpost(T) = HIDDEN while T is disabled (every secret route in 1.0)",
 )
 LIFE_KEYS = (  # normalized sentences the lifecycle doc must keep
-    "The crisis cannot be left, skipped or saved until an offer is taken",
+    # Lifecycle revision 11 (review 2026-11-18, item 13): "cannot be saved" is I9's, not PM:7143/7153's.
+    "The crisis cannot be left or skipped until an offer is taken (PM:7143, PM:7153), and it cannot be saved "
+    "(storyline-axes.md I9).",
     "displays the stored structure, offers no reconsideration, and confirm_execution sets root_phase FINAL (T9); "
     "nothing else changes.",
     "No other transition exists: nothing leads from VALIDATED, FIXED or FINAL to an earlier phase or to CRISIS — not "
@@ -701,9 +723,13 @@ LIFE_KEYS = (  # normalized sentences the lifecycle doc must keep
     # The gate is one predicate on every scene change into Root of Heaven.
     "the Chapter 10 scene chain and chapter select count as this path",
     "including \"Resume story\" and the free-travel Root of Heaven region",
+    # Lifecycle revision 11 (item 3): the load-path checkpoint is stated as an outcome; the mechanism is T05's.
     "The check is one predicate, not a list of callers (design review round 12): it runs before every scene change "
-    "whose target is a Root of Heaven scene, whoever requests it; on load, before any loaded state is applied; and "
-    "before free travel unlocks the Root of Heaven region, which stays locked until the predicate passes.",
+    "whose target is a Root of Heaven scene (the Root of Heaven scene set, Scene placement), whoever requests it; on "
+    "load, for a save positioned inside Root of Heaven; and before free travel unlocks the Root of Heaven region, "
+    "which stays locked until the predicate passes.",
+    "On load the outcome is decided from the saved record and position alone: a load the check refuses or the gate "
+    "turns back leaves the game as it was before the load request and writes no save.",
     "A new caller therefore cannot skip it, and setting a chapter-unlock flag alone never opens the gate.",
     # Legacy saves are defaulted before the load check.
     "A save of a schema version before these fields has its whole record block filled with the defaults before the "
@@ -711,17 +737,20 @@ LIFE_KEYS = (  # normalized sentences the lifecycle doc must keep
     "and past a lock scene D16 refuses it.",
     # Chapter select (the record itself is derived in check_revision12).
     # Revision 9 of the lifecycle (axes round 13): keyed to the entry scene's position, not the chapter number.
-    "Chapter select (user decisions 2026-11-17, design review rounds 12 and 13). Chapter select is player-facing.",
+    "Chapter select (user decisions 2026-11-17 and 2026-11-19, design review rounds 12 and 13, review 2026-11-18). "
+    "Chapter select is player-facing.",
     "It starts a new record, never edits a loaded one, and each entry is keyed to the story position of its entry "
     "scene, not to its chapter number",
     "An entry positioned before C8-S13 starts LEANING with the defaults (position PRE_C8).",
-    "An entry positioned past C8-S16's commit writes, as one atomic checkpoint before its entry scene loads, a fixed "
-    "valid record",
-    "axis_revised, retraction_log and beats_played empty, root_phase OUTSIDE, the matching AXIS* and "
-    "lock_negotiated_* mirror flags, and the story position of its entry scene (S16_DONE for a Chapter 8 entry after "
-    "the locks, CH9 for Chapter 9 and for every entry into Root of Heaven).",
-    "An entry into Root of Heaven then enters through the gate (T7). No entry is positioned inside the lock scenes "
-    "(S13_OPEN to S16_OPEN). So chapter select never writes a save the load check refuses",
+    # Lifecycle revision 11 (items 1 and 3): the record is per row; the checkpoint is an outcome.
+    "An entry positioned past C8-S16's commit writes a fixed valid record",
+    "axis_revised, retraction_log and beats_played empty, kaelen_commitment UNSET, root_phase OUTSIDE (FINAL for row "
+    "13), the matching AXIS* and lock_negotiated_* mirror flags, and the row's story position.",
+    "No entry is positioned inside the lock scenes (S13_OPEN to S16_OPEN) or the final authorization "
+    "(FINAL_AUTH_OPEN).",
+    "every save written after a chapter-select start, from the first, holds the whole record and the row's position",
+    "So chapter select never writes a save the load check refuses, its ending is BOUND without sole_dissent, and no "
+    "entry reaches a superseded scene.",
     # Lifecycle revision 9: the NG+ reset sets the story position; a legacy position is derived once.
     "story_position → PRE_C8.",
     "Such a save holds no story position, so the defaulting step derives it once, by the order in "
@@ -736,15 +765,18 @@ LIFE_OBSERVABLES = (
     "beat_speaker(id)", "signpost(route)", "quoted_commitment()", "route_lines()", "ending_modules()",
     "confirm_execution()", "load_errors()", "save_bytes(slot)", "epilogue_lines()", "record_field(name)",
     "flag_set(name)",
+    # Lifecycle revision 11 (review 2026-11-18, item 6): the observables the L-ACs used in prose.
+    "region_unlocked(id)", "saves_written()", "scenes_played()", "c9s18_form()", "data_errors()",
 )
 LIFE_AC_COUNT = 19  # lifecycle revision 5: 18; revision 8 (axes round 12): L-AC19, the gate predicate and chapter select
 # Key phrases of the L-AC bodies (normalized); {legacy} and {total} are filled in from derived values.
 LAC_KEYS: dict[int, tuple[str, ...]] = {
     5: ("with every secret prerequisite flag set and with none",),
-    6: ("from the start of its scene until its commit try_save() is false and current_scene() stays that scene",
-        "a quit before the commit and a reload give the record_hash() of the last save before the scene",
-        "reloading it gives the committed record_hash(), current_beat() the committed beat at its start, and take() of "
-        "every offer of that row false",
+    # Lifecycle revision 11 (item 4): L-AC6 runs on the window table.
+    6: ("inside its window try_save() is false and no entry of saves_written() holds a position inside it",
+        "a quit inside the window and a reload give the record_hash() of the last save before the window",
+        "reloading it gives the committed record_hash(), current_beat() the table's resume point at its start, and the "
+        "table's never-replays check",
         "For T5 the crisis (T4) is inside the window: try_save() is false throughout."),
     7: ("and the {total} runs yield {total} distinct beat ids",
         "take() of a value not offered (the same value; the other invalid row) is false and record_hash() is "
@@ -753,47 +785,62 @@ LAC_KEYS: dict[int, tuple[str, ...]] = {
         "on the load path the load is refused with load_errors() naming D{legacy} and no gate entry",
         "VALIDATED → ROOT_OF_HEAVEN and FIXED; FIXED and FINAL → ROOT_OF_HEAVEN, phase unchanged",
         "they run on a live record that the test injects at the gate, and are reported as synthetic",
-        "The same injection with a live DAMAGED record → TURNED_BACK, record_hash() unchanged and a data error logged",
+        "The same injection with a live DAMAGED record → TURNED_BACK, record_hash() unchanged and data_errors() naming "
+        "the gate's DAMAGED row",
         # Lifecycle revision 7 (axes round 11, Open Question 18).
         "A live invalid-row record with nothing stored, injected past C8-S16 (in Chapter 9), reads DAMAGED",
         "not a gate error",
-        "A VALIDATED fixture save positioned inside Root of Heaven loads, and the load-path gate gives "
-        "ROOT_OF_HEAVEN and FIXED"),
+        # Lifecycle revision 11 (item 7): the load × VALIDATED cell is counted and synthetic, here and in the note.
+        "The load × VALIDATED cell is a VALIDATED fixture save positioned at ROOT: it loads, and the load-path gate "
+        "gives ROOT_OF_HEAVEN and FIXED; play cannot write that save (T7 is atomic), so the cell is synthetic and "
+        "counted",
+        "Every TURNED_BACK lands where S6's landing table says (current_scene())."),
     9: ("take() of each of the {total} renegotiation offers is false with record_hash() unchanged",
         "after setting every secret prerequisite flag and flipping every knob, storyline_id() and storyline_phase() "
         "are unchanged"),
     10: ("With every secret prerequisite flag set and the default knobs",
          "C9-S19, C9-S20, C10-S13, C10-S14 and C10-S15 never become current_scene()",
-         "C9-S18 plays c9s18_logged", "its noise form", "signpost() is HIDDEN for all three routes"),
+         "c9s18_form() is LOGGED (and, on a second record with one FIRSTWAKE prerequisite unset, NOISE)",
+         "signpost() is HIDDEN for all three routes"),
     11: ("take() of each renegotiation offer is false with record_hash() unchanged",
          "confirm_execution() gives FINAL with storyline_id() unchanged",
          "confirm_execution() anywhere else is false with record_hash() unchanged."),
-    12: ("YOU locked at C8-S14 and never revised → STATED, the C8-S14 commitment",
+    12: ("YOU locked at C8-S14 with each of the three commitments and never revised → STATED, "
+         "record_field(kaelen_commitment) the one chosen",
+         "Authority never YOU → NONE, with record_field(kaelen_commitment) UNSET",
          "YOU kept through any other R1 renegotiation (Faction or Deleted) → STATED, the C8-S14 commitment",
          "Authority never YOU → NONE"),
     13: ("a save with no axis data positioned before C8-S13 loads LEANING with load_errors() empty",
          "each damaged-record fixture of storyline-axes.md AC9 gives load_errors() exactly its item, the load is "
          "refused (current_scene() stays load_menu), and save_bytes() of its slot is unchanged."),
     14: ("on every 1.0 storyline, and contains none of them with no flag set",),
-    15: ("flag_set() false for every secret prerequisite and unlock flag",),
+    # Lifecycle revision 11 (item 11): every stored field and the mirror flags.
+    15: ("record_field() of every stored field of the composer record equal to a new game's default",
+         "flag_set() false for every AXIS*, axis_revised_* and lock_negotiated_* mirror flag and for every secret "
+         "prerequisite and unlock flag"),
     16: ("texts are pairwise distinct except where the cut order shares them",
-         "for every retract_* id beat_speaker(id) is not Kaelen"),
-    17: ("on load load_errors() names D{legacy}, current_scene() stays load_menu, and no lock scene plays.",),
+         # Lifecycle revision 11 (item 9): the answerer is the refusing faction's delegate.
+         "for every retract_<rule>_* id beat_speaker(id) is that rule's refusing-faction delegate (R1 Hearth, R2 "
+         "Archive, R3 Continuity), so never Kaelen"),
+    17: ("on load load_errors() names D{legacy}, current_scene() stays load_menu, and scenes_played() holds no lock "
+         "scene.",),
     18: ("one retained live Godot viewport screenshot each (not a headless or dummy-renderer capture) in "
          "production/qa/evidence/, with lead sign-off recorded beside them",
          "the S6 turn-back prompt for a live DAMAGED record"),
     # Lifecycle revision 8 (axes round 12): the gate predicate on every path, and chapter select.
+    # Lifecycle revision 11 (items 1 and 12): every chapter-select row, and the landings.
     19: ("For each scene-change request whose target is a Root of Heaven scene, issued from the Chapter 9 end, the "
          "Chapter 10 scene chain, world-map \"Resume story\", free travel and chapter select, with a LEANING or "
-         "PARTLY_LOCKED injected live record: enter_root_of_heaven() is TURNED_BACK and current_scene() is not a Root "
-         "of Heaven scene",
-         "with ch10_unlocked set and no ID stored, the free-travel Root of Heaven region stays locked",
-         "Chapter select of Chapter 9 and of Chapter 10 from the main menu gives",
-         "record_field(lock_negotiated) = {faction, authority, deleted} and load_errors() empty for every save "
-         "written before the first player input",
-         "for Chapter 10 the gate gives ROOT_OF_HEAVEN",
-         "\"Chapter 8 - Ending\" gives the same record at S16_DONE with load_errors() empty for its autosave.",
-         "A chapter-select entry positioned before C8-S13 gives LEANING."),
+         "PARTLY_LOCKED injected live record: enter_root_of_heaven() is TURNED_BACK, current_scene() is not a Root of "
+         "Heaven scene but S6's landing for that path, and saves_written() gains nothing",
+         "with ch10_unlocked set and no ID stored, region_unlocked(root_of_heaven) is false",
+         "For each of the 13 rows of the chapter-select table, started from the main menu",
+         "rows 9-12 give enter_root_of_heaven() ROOT_OF_HEAVEN and storyline_phase() FIXED, and row 12 then reaches the "
+         "final authorization, where confirm_execution() gives FINAL",
+         "row 13 gives storyline_phase() FINAL and enter_root_of_heaven() ROOT_OF_HEAVEN with record_hash() unchanged "
+         "(T8)",
+         "rows 1-3 start LEANING, and row 3's scenes_played() starts with C8-S13",
+         "no row's scenes_played() holds ch8_revolt_crisis or ch10_sovereign_confrontation"),
 }
 # Assertions that cannot fail (offers() is empty in every non-offer scene): forbidden in the L-ACs (round 2).
 NON_FAILING = ("offers() is empty", "offers nothing", "offers() there is empty")
@@ -2034,7 +2081,7 @@ REVISION9_AXES_KEYS = (
     "1.0 shows no hint of a door it does not ship",
     # Revision 14 (round 14): story_position joins the stored fields.
     "of the lifecycle fields the record stores the axes, storyline_id, root_phase, axis_revised, lock_negotiated, "
-    "retraction_log, beats_played and story_position",
+    "retraction_log, beats_played, kaelen_commitment and story_position",   # revision 15 erratum
     "in 1.0 always false: no route is enabled and the record holds no invocation",
     "with the default knobs it never fires.",
     "With the default knobs no secret route is enabled: reachable_1_0: 24.",
@@ -2104,7 +2151,8 @@ def check_revision9(gdd: list[str], life: list[str], valid_rows: int, probs: Pro
                 if cells[0].startswith("Storyline axes")]
     if not axes_row or not axes_row[0][3].startswith(f"revision {life_rev} "):
         probs.add(area, f"axes Dependencies does not give the lifecycle's revision {life_rev}")
-    if not life_row or life_row[0][3] != f"revision {axes_rev}":
+    # Revision 15: the cell may carry a parenthesised note after the number ("revision 15 (erratum: ...)").
+    if not life_row or not re.fullmatch(rf"revision {axes_rev}( \(.+\))?", life_row[0][3]):
         probs.add(area, f"lifecycle Dependencies does not give the axes revision {axes_rev}")
 
 
@@ -2290,10 +2338,10 @@ REVISION13_LIFE_KEYS = (
     "or a live DAMAGED record (a defect, turned back as a data error, S6)",
     "story_position → PRE_C8. The story position is reset with the record because a new record left at a Story+ "
     "position would be refused by D16",
-    "Knobs are read only where storyline-axes.md Tuning Knobs states (C8-S16, the gate, and C9-S18's form).",
     "OLD_HOME_MESSAGE is set in the Chapter 3 End ledger (PM:3814), not by arc 09's own quests (PM:3685-3707)",
-    "Starting NG+ from a FINAL record positioned at STORY_PLUS gives LEANING",
-    "the story position PRE_C8, load_errors() empty for the first save of the new cycle",
+    # Lifecycle revision 11 (item 11) reworded L-AC15; its NG+ start and the position reset are kept.
+    "Starting NG+ from a FINAL record positioned at STORY_PLUS in which every field holds a non-default value",
+    "the story position PRE_C8 among them",
 )
 REVISION13_LIFE_FORBIDDEN = (
     "(arc 09, PM:3814)",
@@ -2384,6 +2432,280 @@ def check_revision14(gdd: list[str], life: list[str], probs: Problems) -> None:
     for bad in REVISION14_LIFE_FORBIDDEN:
         if bad in life_whole:
             probs.add(area, f"storyline-lifecycle.md still says '{bad}' (retired in lifecycle revision 10)")
+
+
+def composer_stored_fields() -> dict[str, tuple[str, frozenset[str] | str]]:
+    """The composer record's stored fields (combined keys split), name -> (type, allowed); derived fields dropped."""
+    out = {}
+    for key, (typ, allowed, writer) in COMPOSER.items():
+        if "never stored" in writer:
+            continue
+        for name in key.split(","):
+            out[name.strip()] = (typ, allowed)
+    return out
+
+
+# --- Lifecycle review 2026-11-18: lifecycle revision 11 / axes revision 15 (erratum) ---------------------------------
+# Scope frozen to the review's 13 blockers (lifecycle Open Question 7, adopted 2026-11-19).
+H_CHAPTER_SELECT = ("#", "entry", "entry scene", "record", "position of the first save", "root_phase at the first save",
+                    "then")
+H_PLACEMENT = ("scene", "source scenes", "story position", "Root of Heaven scene set", "status")
+H_WRITERS = ("position", "written by")
+H_WINDOWS = ("#", "window opens", "window closes (the commit)", "the checkpoint holds",
+             "a quit inside the window reloads", "a reload of the checkpoint resumes at",
+             "never replays after the commit")
+H_LANDINGS = ("path", "LEANING, PARTLY_LOCKED", "DAMAGED (a live record)")
+SUPERSEDED_SCENES = {"ch8_revolt_crisis": "AethelgardPrototype/scripts/chapter8/ch8_revolt_crisis.gd",
+                     "ch10_sovereign_confrontation": "AethelgardPrototype/scripts/chapter10/ch10_sovereign_confrontation.gd"}
+NO_CHAPTER_SELECT_POSITIONS = ("S13_OPEN", "S13_DONE", "S14_OPEN", "S14_DONE", "S15", "S16_OPEN", "FINAL_AUTH_OPEN")
+LOAD_GATE_SENTENCE = ("A save is positioned inside Root of Heaven when its position is ROOT, FINAL_DONE or "
+                      "ROOT_STORY_PLUS (FINAL_AUTH_OPEN is never saved, I9)")
+# The positions whose writers the review named as missing (item 2).
+NAMED_WRITERS = ("CH9", "ROOT_LEFT", "FINAL_AUTH_OPEN", "STORY_PLUS", "ROOT_STORY_PLUS")
+COMMITMENT_QUOTES = {"LISTEN": ("I LISTEN.", 7055), "OVERRIDE_IMMEDIATE_LOSS": ("I OVERRIDE ONLY TO PREVENT "
+                                                                              "IMMEDIATE LOSS.", 7056),
+                     "CANNOT_PROMISE_NEVER": ("I CANNOT PROMISE NEVER.", 7057)}
+# Prose that names an observable without calling it (item 6): pattern -> the observable the L-AC must then call.
+PROSE_OBSERVABLES = (
+    (r"\bstory position\b", "record_field"),
+    (r"\bregion\b[^.;]*\b(?:locked|unlocked)\b", "region_unlocked"),
+    (r"\bcheckpoint exists\b|\bevery save written\b|\bfirst save of the new cycle\b", "saves_written"),
+    (r"\bC9-S18 plays\b|\bnoise form\b|\bdecrypted form\b", "c9s18_form"),
+    (r"\block scene plays\b|\bscenes? played\b", "scenes_played"),
+    (r"\bdata error (?:is )?logged\b|\blogs? a data error\b", "data_errors"),
+)
+REVISION15_LIFE_KEYS = (
+    # Item 2: hub revival and the writers.
+    "Hub revival. A death in a Root of Heaven scene revives the player in a hub",
+    "That is a scene change out of the set: it writes ROOT_LEFT (STORY_PLUS when root_phase is FINAL), changes no other "
+    "field and never runs the gate",
+    LOAD_GATE_SENTENCE,
+    # Item 3: chapter select's checkpoint is an outcome; the mechanism is routed.
+    "Nothing is saved from the main menu (the save API refuses there, game_manager.gd:1441); which code writes the "
+    "record, and when SaveService first saves it, is Y1-P1-T05's.",
+    # Item 5.
+    "Because take() goes through the T5 handler, the test fails if the handler takes an offer outside the crisis",
+    # Item 8.
+    "T2 writes the choice to kaelen_commitment (user decision 2026-11-19), and it is the answer SOVEREIGN quotes "
+    "exactly (PM:7059) unless it is later withdrawn.",
+    "When a renegotiation withdraws YOU, kaelen_commitment keeps the C8-S14 choice and quoted_commitment() reads "
+    "WITHDRAWN.",
+    # Item 9.
+    "answered by the refusing faction's delegate; Kaelen, whose position it was, never answers his own retraction",
+    "and that speaker is the refusing faction's delegate — R1 the Hearth delegate, R2 the Archive delegate, R3 the "
+    "Continuity delegate",
+    "so the rule holds for any cast",
+    # Item 10.
+    "It reads the knobs of storyline-axes.md only where that document's Tuning Knobs says, the one statement of where "
+    "they are read; this document keeps no list of its own",
+    # Item 11.
+    "every stored field of the composer record (storyline-axes.md Composer input record) is set to a new game's "
+    "default, so the new cycle's record equals a new game's field for field",
+    # Item 7: the Validation note agrees with L-AC8.
+    "and the load cell of VALIDATED, run from a fixture save) count and are listed as synthetic in the run report; the "
+    "live-DAMAGED and live invalid-row checks of L-AC8 are unit-level, outside the 10 counted cells",
+    # Item 13: citations.
+    "before PM:8206-8207 \"Root of Heaven gate opens\"",
+    "the RESTORE hearing's unresolved consent argument, PM:7102-7106, is context for how a Deleted concession is "
+    "voiced, not a source for brokering",
+    "Kaelen answers for the role (PM:7045-7053) and the player chooses his commitment from the source's three "
+    "variants (PM:7054-7058)",
+    # Open Question 7: the freeze.
+    "7. Review exit criteria — adopted (user decision 2026-11-19, after the lifecycle review of 2026-11-18",
+)
+REVISION15_LIFE_FORBIDDEN = (
+    "answered by the person whose position it was",
+    "the delegate or companion whose position is withdrawn",
+    "before any loaded state is applied",
+    "as one atomic checkpoint before its entry scene loads",
+    "only at C8-S16 and the gate",
+    "(C8-S16, the gate, and C9-S18's form)",
+    "skipped or saved until an offer",
+    "VALIDATED-on-load checks of L-AC8 are unit-level",
+    "PM:7045-7057",
+    "(PM:7102-7106, 7141)",
+    "CH9 for Chapter 9 and for every entry into Root of Heaven",
+)
+REVISION15_AXES_KEYS = (
+    "C9-S18 in the form Core Rule 6 states, decrypted and logged with every FIRSTWAKE prerequisite set and noise "
+    "otherwise",
+    "a YOU record with kaelen_commitment UNSET (D0.enum)",
+    "the round-15 approval of revision 14 does not cover these lines",
+)
+REVISION15_AXES_FORBIDDEN = ("C9-S18 incomplete form",)
+
+
+def main_menu_entries(root: Path) -> list[tuple[str, str]]:
+    """(label, scene basename) of every Chapter 8-10 chapter-select entry in main_menu.gd, in file order."""
+    path = root / "AethelgardPrototype/scripts/main_menu.gd"
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return []
+    out = []
+    for m in re.finditer(r'"label": "(Chapter (?:8|9|10) - [^"]+)",\s*\n\s*"desc": "[^"]*",\s*\n\s*'
+                         r'"scene": "res://scenes/[\w/]+/(\w+)\.tscn"', text):
+        out.append((m[1], m[2]))
+    return out
+
+
+def check_revision15(gdd: list[str], life: list[str], src: SourceResolver, root: Path, probs: Problems) -> None:
+    """Lifecycle review 2026-11-18 (13 blockers): the chapter-select rows against main_menu.gd, the scene placement
+    table against the scene files, the position writers against the model's POSITIONS, the window table against the
+    checkpoint transitions, the landings per path, the commitment values against the source, the observables lint,
+    pinned and retired wording in both documents."""
+    area = "revision 15"
+    whole, life_whole = norm(" ".join(gdd)), norm(" ".join(life))
+    for key in REVISION15_LIFE_KEYS:
+        if key not in life_whole:
+            probs.add(area, f"storyline-lifecycle.md lacks '{key}'")
+    for bad in REVISION15_LIFE_FORBIDDEN:
+        if bad in life_whole:
+            probs.add(area, f"storyline-lifecycle.md still says '{bad}' (retired in lifecycle revision 11)")
+    for key in REVISION15_AXES_KEYS:
+        if key not in whole:
+            probs.add(area, f"storyline-axes.md lacks '{key}'")
+    for bad in REVISION15_AXES_FORBIDDEN:
+        if bad in whole:
+            probs.add(area, f"storyline-axes.md still says '{bad}' (retired in revision 15)")
+    if re.search(r"PM:8206(?!-8207)", life_whole):
+        probs.add(area, "lifecycle cites PM:8206 alone; the gate line is PM:8206-8207")
+    positions = model_positions() or ()
+    # Item 2: the scene placement table covers every Chapter 8-10 scene file; superseded scenes are marked.
+    placement = get_table(life, H_PLACEMENT, area, probs)
+    by_scene = {}
+    for lineno, (scene, _src_scenes, pos, in_root, status) in placement:
+        m = re.match(r"chapter(?:8|9|10)/(\w+)\.tscn$", scene)
+        if m:
+            by_scene[m[1]] = (lineno, pos, in_root, status)
+        first = pos.split()[0] if pos and not is_dash(pos) else ""
+        if first.startswith(("PRE_", "S1", "CH", "ROOT", "FINAL", "STORY")) and first not in positions:
+            probs.add(area, f"line {lineno}: placement position '{first}' is not one of the model's POSITIONS")
+        root_pos = first in ("ROOT", "FINAL_AUTH_OPEN", "FINAL_DONE", "ROOT_STORY_PLUS")
+        if first and (in_root.startswith("yes") != root_pos):
+            probs.add(area, f"line {lineno}: '{scene}' at {first} is {'not ' if root_pos else ''}a Root of Heaven "
+                            f"position but its set cell says '{in_root}'")
+    for chapter in ("chapter8", "chapter9", "chapter10"):
+        for path in sorted((root / "AethelgardPrototype/scenes" / chapter).glob("*.tscn")):
+            if path.stem not in by_scene:
+                probs.add(area, f"scene placement table lacks {chapter}/{path.name}")
+    for stem, script in SUPERSEDED_SCENES.items():
+        row = by_scene.get(stem)
+        if row is None or not row[3].startswith("superseded") or Path(script).name not in row[3]:
+            probs.add(area, f"scene placement does not mark {stem} superseded with its script {Path(script).name}")
+        if not (root / script).exists():
+            probs.add(area, f"superseded script {script} does not exist")
+    # The legacy-flags row already cites ch8_revolt_crisis.gd for its flags, so the scene's retirement is pinned as
+    # its own phrase (a bare file-name search passed with the phrase dropped).
+    deps = section(life, "## Dependencies")
+    want = ("the scenes of " + " and ".join(Path(p).name for p in SUPERSEDED_SCENES.values())
+            + ", superseded (Scene placement)")
+    if deps is None or want not in norm(" ".join(life[deps[0]:deps[1]])):
+        probs.add(area, f"lifecycle Dependencies lacks '{want}'")
+    # Item 2: every position has a writer row; the review's five named ones are non-empty.
+    writers = get_table(life, H_WRITERS, area, probs)
+    named = [p.strip() for _, (cell, _w) in writers for p in cell.split(",")]
+    if positions and sorted(named) != sorted(positions):
+        probs.add(area, f"position-writer table names {sorted(named)}, expected the model's POSITIONS "
+                        f"{sorted(positions)}")
+    for _, (cell, writer) in writers:
+        if any(p.strip() in NAMED_WRITERS for p in cell.split(",")) and (not writer or is_dash(writer)):
+            probs.add(area, f"position '{cell}' has no writer")
+    # Item 1: one chapter-select row per main_menu.gd Chapter 8-10 entry, in order.
+    entries = main_menu_entries(root)
+    rows = get_table(life, H_CHAPTER_SELECT, area, probs)
+    if len(entries) != 13:
+        probs.add(area, f"main_menu.gd has {len(entries)} Chapter 8-10 entries, expected 13")
+    if len(rows) != len(entries):
+        probs.add(area, f"chapter-select table has {len(rows)} rows, main_menu.gd {len(entries)} Chapter 8-10 entries")
+    for (lineno, (num, entry, scene, record, pos, root_phase, then)), (label, stem) in zip(rows, entries):
+        where = f"line {lineno} (row {num})"
+        if not entry.startswith(label):
+            probs.add(area, f"{where}: entry '{entry}' is not main_menu.gd's '{label}'")
+        if stem in SUPERSEDED_SCENES:
+            if f"was {stem}, superseded" not in scene:
+                probs.add(area, f"{where}: {stem} is superseded, but the row does not reroute it")
+        elif not scene.startswith(stem):
+            probs.add(area, f"{where}: entry scene '{scene}' is not main_menu.gd's {stem}")
+        first = pos.split()[0]
+        # The position chapter select writes, when it differs from the first save's: "(chapter select writes X".
+        m = re.search(r"chapter select writes (\w+)", pos)
+        written = m[1] if m else first
+        for p_ in (first, written):
+            if positions and p_ not in positions:
+                probs.add(area, f"{where}: position '{p_}' is not one of the model's POSITIONS")
+        if written in NO_CHAPTER_SELECT_POSITIONS:
+            probs.add(area, f"{where}: chapter select may not start at {written}")
+        target = scene.split(",")[0].split(" ")[0]
+        placed = by_scene.get(target)
+        in_root = placed is not None and placed[2].startswith("yes")
+        if in_root and "enters through the gate" not in then:
+            probs.add(area, f"{where}: {target} is a Root of Heaven scene but the row does not enter through the gate")
+        if placed is not None and placed[1].split()[0] != first:
+            probs.add(area, f"{where}: first save at {first}, but the placement table puts {target} at "
+                            f"{placed[1].split()[0]}")
+        want_rp = "FINAL" if first == "FINAL_DONE" else "INSIDE" if first == "ROOT" else "OUTSIDE"
+        if root_phase.split()[0] != want_rp:
+            probs.add(area, f"{where}: root_phase at the first save '{root_phase}', expected {want_rp} at {first}")
+        if written == "PRE_C8" and not record.startswith("defaults"):
+            probs.add(area, f"{where}: a PRE_C8 entry must start from the defaults")
+        if written != "PRE_C8" and not record.startswith("fixed"):
+            probs.add(area, f"{where}: an entry past C8-S16 must write the fixed record")
+    # Item 4: the window table has exactly the checkpoint transitions, every cell filled, distinct resume points.
+    windows = get_table(life, H_WINDOWS, area, probs)
+    ids = [cells[0] for _, cells in windows]
+    ckpt = CTX.get("checkpoints", [])
+    if ckpt and ids != list(ckpt):
+        probs.add(area, f"window table rows {ids} != the checkpoint transitions {list(ckpt)}")
+    resumes = [cells[5] for _, cells in windows]
+    if len(set(resumes)) != len(resumes):
+        probs.add(area, f"window table resume points are not distinct: {resumes}")
+    for lineno, cells in windows:
+        if any(not c or is_dash(c) for c in cells):
+            probs.add(area, f"line {lineno}: window table row {cells[0]} has an empty cell")
+    # Item 12: a landing for every path.
+    landings = get_table(life, H_LANDINGS, area, probs)
+    for path in ("story", "world_map", "load"):
+        if not any(cells[0] == path or cells[0].startswith(path + " ") for _, cells in landings):
+            probs.add(area, f"landing table has no row for the {path} path")
+    for lineno, cells in landings:
+        if any(not c or is_dash(c) for c in cells):
+            probs.add(area, f"line {lineno}: landing row '{cells[0]}' has an empty cell")
+    # Item 5: take() goes through the production T5 handler.
+    take = [cells for _, cells in get_table(life, H_LIFE_OBSERVABLES, area, probs) if cells[0] == "take(offer)"]
+    if not take or "production T5 handler" not in take[0][1]:
+        probs.add(area, "take(offer) does not go through the production T5 handler")
+    # Item 8: the commitment values are the composer's and quote the source lines.
+    allowed = COMPOSER.get("kaelen_commitment", ("", "", ""))[1]
+    pm = src.pm() or []
+    for value, (quote, line) in COMMITMENT_QUOTES.items():
+        if value not in str(allowed):
+            probs.add(area, f"composer kaelen_commitment lacks {value}")
+        if f'{value} ("{quote}")' not in life_whole:
+            probs.add(area, f"lifecycle S2 does not give {value} with its source line \"{quote}\"")
+        if line > len(pm) or pm[line - 1].strip() != quote:
+            probs.add(area, f"PRODUCTION_MASTER_2.1.md:{line} is not \"{quote}\"")
+    # Item 6: every observable an L-AC uses is in the table, called or named in prose.
+    allowed_obs = observables(life, H_LIFE_OBSERVABLES, area, probs)
+    bounds = section(life, "## Acceptance Criteria")
+    acs: dict[int, list[str]] = {}
+    current = None
+    for line in life[bounds[0]:bounds[1]] if bounds else []:
+        if m := re.match(r"^- \*\*L-AC(\d+) ", line):
+            current = int(m[1])
+            acs[current] = [line]
+        elif current is not None and line.startswith("  "):
+            acs[current].append(line)
+        else:
+            current = None
+    for number, body in sorted(acs.items()):
+        text = norm(" ".join(body))
+        for call in re.findall(r"(?<![\w.-])(\w+)\(", text):
+            if call not in allowed_obs:
+                probs.add(area, f"L-AC{number} calls '{call}()', which the Observables table does not list")
+        for pattern, obs in PROSE_OBSERVABLES:
+            if re.search(pattern, text) and f"{obs}(" not in text:
+                probs.add(area, f"L-AC{number} names '{re.search(pattern, text)[0]}' without calling {obs}()")
 
 
 # --- 8. Acceptance criteria ----------------------------------------------------------------------------------------
@@ -2501,9 +2823,10 @@ def check_life_record(life: list[str], probs: Problems) -> None:
     inputs = re.findall(r"`(\w+)`", m[1]) if m else []
     if not inputs:
         probs.add(area, "Inputs and outputs names no '(fields ...)' list")
+    stored_fields = composer_stored_fields()
     for field in inputs:
-        if field not in COMPOSER:
-            probs.add(area, f"Inputs field '{field}' is not a composer record field")
+        if field not in stored_fields:
+            probs.add(area, f"Inputs field '{field}' is not a stored composer record field")
     reset = next((n for n, line in enumerate(life) if line.startswith("**NG+ reset**")), None)
     if reset is None:
         probs.add(area, "no '**NG+ reset**' paragraph")
@@ -2522,16 +2845,20 @@ def check_life_record(life: list[str], probs: Problems) -> None:
         for field in re.findall(r"`(\w+)`", names):
             stated[field] = default.strip().rstrip(".")
     for field, default in stated.items():
-        if field not in COMPOSER:
-            probs.add(area, f"NG+ reset field '{field}' is not a composer record field")
+        if field not in stored_fields:
+            probs.add(area, f"NG+ reset field '{field}' is not a stored composer record field")
             continue
-        typ, allowed, _ = COMPOSER[field]
-        want = ("UNSET" if field in AXES else ROOT_PHASES[0] if field == "root_phase"
+        typ, allowed = stored_fields[field]
+        has_unset = (isinstance(allowed, frozenset) and UNSET in allowed) or (isinstance(allowed, str)
+                                                                             and allowed.startswith("UNSET"))
+        want = ("UNSET" if has_unset else ROOT_PHASES[0] if field == "root_phase"
                 else "PRE_C8" if field == "story_position" else "false" if typ == "bool" else "empty")
         if default != want:
             probs.add(area, f"NG+ reset {field} → '{default}', expected '{want}'")
-    if set(stated) != set(inputs):
-        probs.add(area, f"NG+ reset fields {sorted(stated)} != Inputs fields {sorted(inputs)}")
+    # Lifecycle revision 11 (review 2026-11-18, item 11): the reset names every stored field, not only the Inputs.
+    if set(stated) != set(stored_fields):
+        probs.add(area, f"NG+ reset fields {sorted(stated)} != the composer record's stored fields "
+                        f"{sorted(stored_fields)}")
 
 
 def check_red_lines(life: list[str], rules: dict[str, tuple[str, ...]], probs: Problems) -> None:
@@ -2821,10 +3148,11 @@ def check_life_acs(life: list[str], valid_rows: int, rules: dict[str, tuple[str,
     families = list(dict.fromkeys(FAMILY_BY_AUTHORITY.values()))
     derived = {3: [f"each of the other {NUMBER_WORDS[pairs - len(rules)]} pairs"],
                4: [f"For each of the {valid_rows} valid rows"],
-               6: [f"For each record-writing transition ({', '.join(ckpt)})"],
+               6: [f"For each transition of the window table ({', '.join(ckpt)})"],
                7: [f"for each of its offers ({total} runs)"],
                8: [f"each storable phase ({', '.join(storable)})"],
-               12: [f"YOU reached by a renegotiation (from {' or '.join(you_to)}) → STATED, that scene's commitment"]
+               12: [f"YOU reached by a renegotiation (from {' or '.join(you_to)}) → STATED, the commitment chosen in "
+                    "that scene"]
                + [f"YOU withdrawn by a renegotiation from {r} ({', '.join(sorted(o, key=lambda x: AUTHORITY.index(x.split(':')[2])))}) → WITHDRAWN"
                   for r, o in you_from],
                13: [f"A save in each storable phase ({', '.join(storable)})"],
@@ -3036,6 +3364,7 @@ def main(argv: list[str] | None = None) -> int:
     check_edge_cases(life, LIFE_EDGE_CASES, "lifecycle edge cases", probs)
     check_life_acs(life, valid_rows, rules, probs)
     check_life_derived(life, rules, args.root, probs)
+    check_revision15(gdd, life, src, args.root, probs)   # after check_transitions: it reads CTX["checkpoints"]
     check_number_words(life, "lifecycle", rules, probs)
     # both
     check_bible(bible, probs)

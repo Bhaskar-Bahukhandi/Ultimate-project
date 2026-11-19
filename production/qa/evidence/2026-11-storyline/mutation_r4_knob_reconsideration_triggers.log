@@ -1,11 +1,11 @@
 # Mutation 'r4_knob_reconsideration_triggers' (expected FAIL)
-$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r4_knob_reconsideration_triggers.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
-gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\d6e551fd-301f-41b7-b08c-c9bb4c5cb462\scratchpad\mutations\storyline-axes.r4_knob_reconsideration_triggers.md
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-axes.r4_knob_reconsideration_triggers.md --lifecycle C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
+gdd:       C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-axes.r4_knob_reconsideration_triggers.md
 lifecycle: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-lifecycle.md
 bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
 root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
 FAIL [tuning knobs] knobs ['secret_route_enabled.WITNESS', 'secret_route_enabled.CROWNLESS, .FIRSTWAKE', 'secret_prerequisites[route] (list of flags)', 'secret_unlock_flag[route]', 'reconsideration_triggers'] != the pinned ['secret_route_enabled.WITNESS', 'secret_route_enabled.CROWNLESS, .FIRSTWAKE', 'secret_prerequisites[route] (list of flags)', 'secret_unlock_flag[route]']
 FAIL [tuning knobs] Tuning Knobs section names 'reconsideration_triggers'
-FAIL [stale] axes line 819: revision-3 vocabulary 'reconsideration_triggers' present
+FAIL [stale] axes line 826: revision-3 vocabulary 'reconsideration_triggers' present
 RESULT: FAIL (3 problems)
 exit code: 1

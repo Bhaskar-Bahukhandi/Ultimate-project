@@ -1,0 +1,9 @@
+# Mutation 'r15_lac8_validated_cell_excluded' (expected FAIL)
+$ python -I -B check_storyline_axes.py --gdd C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md --lifecycle C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-lifecycle.r15_lac8_validated_cell_excluded.md
+gdd:       C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\design\gdd\storyline-axes.md
+lifecycle: C:\Users\BHASKA~1\AppData\Local\Temp\claude\8fa830b671f9d755\c1070ed3-eb23-465e-a0e6-121b1a2e5aae\scratchpad\mutscratch2\mutations\storyline-lifecycle.r15_lac8_validated_cell_excluded.md
+bible:     C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project\AethelgardPrototype\story\STORY_BIBLE.md
+root:      C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+FAIL [lifecycle acceptance] L-AC8 lacks the pinned phrase 'The load × VALIDATED cell is a VALIDATED fixture save positioned at ROOT: it loads, and the load-path gate gives ROOT_OF_HEAVEN and FIXED; play cannot write that save (T7 is atomic), so the cell is synthetic and counted'
+RESULT: FAIL (1 problems)
+exit code: 1
