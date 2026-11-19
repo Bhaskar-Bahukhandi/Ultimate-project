@@ -1,0 +1,8 @@
+mutation: field_type_removed — delete the only Order-specific field row
+command:  python -I -B check_time_model.py --root C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project --gdd <mutated copy>
+changed:  -| first_step, then_step | step id | two different steps | Order |
+gdd:  C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\tmpfz6xufw3\time-model.md
+root: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+PROBLEM [fields] no row of the field table is specific to the Order type
+RESULT: FAIL (1 problems)
+expected FAIL, checker exit 1: AS EXPECTED

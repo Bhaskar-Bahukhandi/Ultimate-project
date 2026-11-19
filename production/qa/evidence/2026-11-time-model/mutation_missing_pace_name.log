@@ -1,0 +1,9 @@
+mutation: missing_pace_name — delete the act 4 pace row
+command:  python -I -B check_time_model.py --root C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project --gdd <mutated copy>
+changed:  -| 4 | act4_pace_early | act4_pace_on_time | act4_pace_late | new | open, as act 2 | PM:8202-8204 |
+gdd:  C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\tmpyx4wqe4e\time-model.md
+root: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+PROBLEM [pace] acts in the table are ['1', '2', '3'], expected ['1', '2', '3', '4']
+PROBLEM [pace] 9 flags (9 distinct), expected 12 distinct
+RESULT: FAIL (2 problems)
+expected FAIL, checker exit 1: AS EXPECTED

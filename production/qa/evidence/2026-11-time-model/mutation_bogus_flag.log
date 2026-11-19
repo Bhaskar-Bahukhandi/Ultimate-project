@@ -1,0 +1,9 @@
+mutation: bogus_flag — ch1_bridge_fell -> ch1_bridge_fall in the bridge Outcomes bullet
+command:  python -I -B check_time_model.py --root C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project --gdd <mutated copy>
+changed:  -  Core Rule 9), `ch1_bridge_fell` (dusk reached with the bridge not saved). `ch1_bridge_evacuated` is the warn choice
+changed:  +  Core Rule 9), `ch1_bridge_fall` (dusk reached with the bridge not saved). `ch1_bridge_evacuated` is the warn choice
+gdd:  C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\tmpyzjc7igk\time-model.md
+root: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+PROBLEM [flags] line 246: outcome flag 'ch1_bridge_fall' is not in scripts or dialogue
+RESULT: FAIL (1 problems)
+expected FAIL, checker exit 1: AS EXPECTED

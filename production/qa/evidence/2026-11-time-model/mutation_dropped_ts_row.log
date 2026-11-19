@@ -1,0 +1,10 @@
+mutation: dropped_ts_row — delete the TS17 row
+command:  python -I -B check_time_model.py --root C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project --gdd <mutated copy>
+changed:  -| TS17 | Appeal Migration | Deadline | 12162 |
+gdd:  C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\tmptkx4p5uj\time-model.md
+root: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+PROBLEM [ts] TS17 is missing from the table
+PROBLEM [ts] 39 rows, expected 40
+PROBLEM [ts] type counts {'Window': 15, 'Deadline': 13, 'Order': 5, 'Duration': 6}, expected {'Window': 15, 'Deadline': 14, 'Order': 5, 'Duration': 6}
+RESULT: FAIL (3 problems)
+expected FAIL, checker exit 1: AS EXPECTED

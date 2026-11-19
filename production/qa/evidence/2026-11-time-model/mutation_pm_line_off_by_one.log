@@ -1,0 +1,9 @@
+mutation: pm_line_off_by_one — TS10 pm_line 12071 -> 12072
+command:  python -I -B check_time_model.py --root C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project --gdd <mutated copy>
+changed:  -| TS10 | Limited Blade Release | Window | 12071 |
+changed:  +| TS10 | Limited Blade Release | Window | 12072 |
+gdd:  C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\tmpu1gr2uo4\time-model.md
+root: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+PROBLEM [ts] line 194: pm_line 12072 is not the '## TS10' heading (it is PM:12071)
+RESULT: FAIL (1 problems)
+expected FAIL, checker exit 1: AS EXPECTED

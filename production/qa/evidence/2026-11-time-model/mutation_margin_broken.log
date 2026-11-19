@@ -1,0 +1,11 @@
+mutation: margin_broken — bridge base_deadline_min default 300 -> 200
+command:  python -I -B check_time_model.py --root C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project --gdd <mutated copy>
+changed:  -| `base_deadline_min` (bridge) | 300 | 250 to 450 | how long the bridge warning leaves the player | F5: ≥ 247 at 85 %; the clock starts at `dusk_min − scale(base_deadline_min)` (13:00 at 100 %) |
+changed:  +| `base_deadline_min` (bridge) | 200 | 250 to 450 | how long the bridge warning leaves the player | F5: ≥ 247 at 85 %; the clock starts at `dusk_min − scale(base_deadline_min)` (13:00 at 100 %) |
+gdd:  C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\tmpj_td8933\time-model.md
+root: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+PROBLEM [margins] bridge: leniency 100 % leaves slack 20 < margin 30 (base 200, cost 180)
+PROBLEM [margins] bridge: leniency 100 % leaves slack 20 < margin 30 (base 200, cost 180)
+PROBLEM [margins] bridge: leniency 85 % leaves slack -10 < margin 30 (base 200, cost 180)
+RESULT: FAIL (3 problems)
+expected FAIL, checker exit 1: AS EXPECTED

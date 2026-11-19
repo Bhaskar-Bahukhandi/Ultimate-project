@@ -1,0 +1,10 @@
+mutation: ts_type_swapped — TS04 Order -> Window
+command:  python -I -B check_time_model.py --root C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project --gdd <mutated copy>
+changed:  -| TS04 | Aldric at the Gate | Order | 11993 |
+changed:  +| TS04 | Aldric at the Gate | Window | 11993 |
+gdd:  C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\tmpbhd0s1eo\time-model.md
+root: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+PROBLEM [ts] line 188: TS04 is 'Window' but PM:11993 says 'Timing type: Order'
+PROBLEM [ts] type counts {'Window': 16, 'Deadline': 14, 'Order': 4, 'Duration': 6}, expected {'Window': 15, 'Deadline': 14, 'Order': 5, 'Duration': 6}
+RESULT: FAIL (2 problems)
+expected FAIL, checker exit 1: AS EXPECTED

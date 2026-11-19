@@ -1,0 +1,7 @@
+mutation: control — no change; must PASS
+command:  python -I -B check_time_model.py --root C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project --gdd <mutated copy>
+changed:  (nothing)
+gdd:  C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\tmp3b_kmomq\time-model.md
+root: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+RESULT: PASS (0 problems)
+expected PASS, checker exit 0: AS EXPECTED

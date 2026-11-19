@@ -1,0 +1,8 @@
+mutation: missing_heading — delete the '## Formulas' heading
+command:  python -I -B check_time_model.py --root C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project --gdd <mutated copy>
+changed:  -## Formulas
+gdd:  C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\tmpyjfuj8ya\time-model.md
+root: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+PROBLEM [headings] missing heading '## Formulas'
+RESULT: FAIL (1 problems)
+expected FAIL, checker exit 1: AS EXPECTED

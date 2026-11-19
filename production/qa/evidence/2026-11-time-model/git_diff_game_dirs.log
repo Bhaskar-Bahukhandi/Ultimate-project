@@ -1,0 +1,5 @@
+command: git diff --name-only f745aeb -- AethelgardPrototype/scripts AethelgardPrototype/scenes AethelgardPrototype/dialogue (run at /story-done, revision 3)
+files listed above: 0
+command: git diff --check (working tree vs index)
+clean
+modified or untracked under AethelgardPrototype: 0

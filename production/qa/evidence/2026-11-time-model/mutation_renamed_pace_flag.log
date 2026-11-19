@@ -1,0 +1,9 @@
+mutation: renamed_pace_flag — act2_pace_late -> act2_pace_slow in the pace row
+command:  python -I -B check_time_model.py --root C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project --gdd <mutated copy>
+changed:  -| 2 | act2_pace_early | act2_pace_on_time | act2_pace_late | new | open: set by the act's closing scene; the rule is chosen when the act is built (user decision D3, 2026-11-19) | PM:3810-3812 and PM:6659-6661 (two PM sets; their merge is decided when Act 2 is built) |
+changed:  +| 2 | act2_pace_early | act2_pace_on_time | act2_pace_slow | new | open: set by the act's closing scene; the rule is chosen when the act is built (user decision D3, 2026-11-19) | PM:3810-3812 and PM:6659-6661 (two PM sets; their merge is decided when Act 2 is built) |
+gdd:  C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\tmpxc3ldmr4\time-model.md
+root: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+PROBLEM [pace] line 295: 'act2_pace_slow' does not match act2_pace_late
+RESULT: FAIL (1 problems)
+expected FAIL, checker exit 1: AS EXPECTED
