@@ -1,0 +1,9 @@
+mutation: persistence_global — persistence: per-run -> persistence: global
+command:  python -I -B check_difficulty_profiles.py --root C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project --gdd <mutated copy>
+changed:  -persistence: per-run
+changed:  +persistence: global
+gdd:  C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\tmp0nl_z2pb\difficulty-profiles.md
+root: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+PROBLEM [mapping] no 'persistence: per-run' line (user decision 2026-11-19)
+RESULT: FAIL (1 problems)
+expected FAIL, checker exit 1: AS EXPECTED

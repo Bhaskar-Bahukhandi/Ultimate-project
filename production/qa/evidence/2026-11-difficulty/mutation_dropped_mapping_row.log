@@ -1,0 +1,8 @@
+mutation: dropped_mapping_row — delete the old value 2 (NORMAL) mapping row
+command:  python -I -B check_difficulty_profiles.py --root C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project --gdd <mutated copy>
+changed:  -| 2 | NORMAL | medium | enemy damage unchanged; parry about 11 to 6 frames (nearly halved); dodge i-frames about 14 to 12 |
+gdd:  C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\tmppy4u8hcb\difficulty-profiles.md
+root: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+PROBLEM [mapping] old value '2' appears 0 times, expected 1
+RESULT: FAIL (1 problems)
+expected FAIL, checker exit 1: AS EXPECTED

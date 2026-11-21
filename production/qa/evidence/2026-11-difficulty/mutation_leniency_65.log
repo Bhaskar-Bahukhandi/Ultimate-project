@@ -1,0 +1,10 @@
+mutation: leniency_65 — hell deadline_leniency 85 -> 65
+command:  python -I -B check_difficulty_profiles.py --root C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project --gdd <mutated copy>
+changed:  -| deadline_leniency | 150 | 125 | 100 | 100 | 85 | percent | ROADMAP:473; time-model.md |
+changed:  +| deadline_leniency | 150 | 125 | 100 | 100 | 65 | percent | ROADMAP:473; time-model.md |
+gdd:  C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\tmpxejpdwf9\difficulty-profiles.md
+root: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+PROBLEM [leniency] hell: deadline_leniency 65 is below 70 (time-model F5)
+PROBLEM [leniency] hell: bridge slack 15 < 30 at leniency 65 (F8)
+RESULT: FAIL (2 problems)
+expected FAIL, checker exit 1: AS EXPECTED

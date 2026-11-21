@@ -1,0 +1,11 @@
+mutation: dropped_profile_row — delete the healing row of the profile table
+command:  python -I -B check_difficulty_profiles.py --root C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project --gdd <mutated copy>
+changed:  -| healing | 5 | 4 | 3 | 2 | 1 | heal casts per rest | ROADMAP:471; decision 2026-11-19 |
+gdd:  C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\tmpxcyz0cl8\difficulty-profiles.md
+root: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+PROBLEM [profiles] required row 'healing' is missing
+PROBLEM [constants] line 162: becomes 'healing (unchanged; the cast cap is added beside it)' is neither a profile row nor 'removed (...)'
+PROBLEM [constants] line 163: becomes 'healing (unchanged)' is neither a profile row nor 'removed (...)'
+PROBLEM [constants] line 164: becomes 'healing (unchanged)' is neither a profile row nor 'removed (...)'
+RESULT: FAIL (4 problems)
+expected FAIL, checker exit 1: AS EXPECTED

@@ -1,0 +1,9 @@
+mutation: mapping_swapped — old value 2 maps to hard instead of medium
+command:  python -I -B check_difficulty_profiles.py --root C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project --gdd <mutated copy>
+changed:  -| 2 | NORMAL | medium | enemy damage unchanged; parry about 11 to 6 frames (nearly halved); dodge i-frames about 14 to 12 |
+changed:  +| 2 | NORMAL | hard | enemy damage unchanged; parry about 11 to 6 frames (nearly halved); dodge i-frames about 14 to 12 |
+gdd:  C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\tmp7s6kem7k\difficulty-profiles.md
+root: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+PROBLEM [mapping] line 179: old value '2' maps to 'hard', expected medium
+RESULT: FAIL (1 problems)
+expected FAIL, checker exit 1: AS EXPECTED

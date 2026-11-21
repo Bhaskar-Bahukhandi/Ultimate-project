@@ -1,0 +1,9 @@
+mutation: bad_token — constants map: PARRY_WINDOW cited at :121 instead of :120
+command:  python -I -B check_difficulty_profiles.py --root C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project --gdd <mutated copy>
+changed:  -| parry_window | PARRY_WINDOW | scripts/combat/player_combat.gd:120 | PARRY_WINDOW | 0.18 s (about 11 frames); the extended_parry charm still multiplies it (:1240) | parry_window |
+changed:  +| parry_window | PARRY_WINDOW | scripts/combat/player_combat.gd:121 | PARRY_WINDOW | 0.18 s (about 11 frames); the extended_parry charm still multiplies it (:1240) | parry_window |
+gdd:  C:\Users\BHASKAR BAHUKHANDI\AppData\Local\Temp\tmpw_tikter\difficulty-profiles.md
+root: C:\Users\BHASKAR BAHUKHANDI\OneDrive\Desktop\Ultimate project
+PROBLEM [constants] line 135: scripts/combat/player_combat.gd:121 does not contain token 'PARRY_WINDOW'
+RESULT: FAIL (1 problems)
+expected FAIL, checker exit 1: AS EXPECTED

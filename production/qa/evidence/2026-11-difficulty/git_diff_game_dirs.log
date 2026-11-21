@@ -1,0 +1,3 @@
+command: git diff --name-only 5646010 -- AethelgardPrototype/scripts AethelgardPrototype/scenes AethelgardPrototype/dialogue (revision 3)
+files listed: 0
+git diff --check: clean
