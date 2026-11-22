@@ -8,7 +8,8 @@
 # If Godot never starts (a missing or unrunnable exe, so no exit code), or the pipeline
 # throws before the exit code is read, the runner prints "RUNNER FAIL <script>: Godot did not
 # start, or the runner failed before reading its exit code" and exits 1 (TD-009).
-# Setting the GODOT environment variable to an absolute exe path replaces the C:\Godot lookup
+# Setting the GODOT environment variable to an absolute exe path replaces the pinned C:\Godot lookup
+# (tools/pinned_godot.ps1)
 # (TD-010: tests/runner_selftest points it at a stub) and prints "GODOT override: <path>";
 # unset, the lookup is unchanged.
 # Two limits per suite come from tests/suite_limits.txt (TD-007):
@@ -46,8 +47,8 @@ if ($env:GODOT) {
     # Said out loud: a GODOT left set in the shell (say, to the non-console exe) changes every run.
     Write-Host "GODOT override: $($godot.FullName)"
 } else {
-    $godot = Get-ChildItem "C:\Godot" -Filter "Godot_v4*_console.exe" | Sort-Object Name -Descending | Select-Object -First 1
-    if (-not $godot) { throw "Godot console executable not found under C:\Godot" }
+    . (Join-Path $PSScriptRoot "..\tools\pinned_godot.ps1")
+    $godot = Get-PinnedGodot   # the pinned version, not the newest in C:\Godot
 }
 
 # Each line of suite_limits.txt: <res:// path> <min_checks> <timeout_seconds>; '#' starts a comment.

@@ -29,8 +29,8 @@ param(
 )
 $ErrorActionPreference = "Stop"
 $project = Split-Path -Parent $PSScriptRoot
-$godot = Get-ChildItem "C:\Godot" -Filter "Godot_v4*_console.exe" | Sort-Object Name -Descending | Select-Object -First 1
-if (-not $godot) { throw "Godot console executable not found under C:\Godot" }
+. (Join-Path $PSScriptRoot "pinned_godot.ps1")
+$godot = Get-PinnedGodot   # the pinned version, not the newest in C:\Godot
 $failures = New-Object System.Collections.Generic.List[string]
 
 # "4.6.3.stable.official.7d41c59c4" -> templates live in export_templates\4.6.3.stable

@@ -18,8 +18,8 @@ if ($Evidence -and $Evidence -notmatch '^[a-z0-9]+(-[a-z0-9]+)*$') {
 }
 $ErrorActionPreference = "Stop"
 $project = Split-Path -Parent $PSScriptRoot
-$godot = Get-ChildItem "C:\Godot" -Filter "Godot_v4*_console.exe" | Sort-Object Name -Descending | Select-Object -First 1
-if (-not $godot) { throw "Godot console executable not found under C:\Godot" }
+. (Join-Path $PSScriptRoot "..\tools\pinned_godot.ps1")
+$godot = Get-PinnedGodot   # the pinned version, not the newest in C:\Godot
 
 $artifacts = Join-Path $project "run_artifacts"
 $out = Join-Path $artifacts ("screenshots\" + (Get-Date -Format "yyyyMMdd-HHmmss"))

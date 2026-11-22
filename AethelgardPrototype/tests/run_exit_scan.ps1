@@ -31,8 +31,8 @@ if (-not $Out) {
     $Out = Join-Path $repoRoot "production\qa\evidence\2026-10-exit-leak\exit.log"
 }
 if (-not (Test-Path (Join-Path $Project "project.godot"))) { throw "No project.godot under $Project" }
-$godot = Get-ChildItem "C:\Godot" -Filter "Godot_v4*_console.exe" | Sort-Object Name -Descending | Select-Object -First 1
-if (-not $godot) { throw "Godot console executable not found under C:\Godot" }
+. (Join-Path $PSScriptRoot "..\tools\pinned_godot.ps1")
+$godot = Get-PinnedGodot   # the pinned version, not the newest in C:\Godot
 $outDir = Split-Path -Parent ([IO.Path]::GetFullPath($Out))
 New-Item -ItemType Directory -Force $outDir | Out-Null
 
