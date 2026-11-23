@@ -36,22 +36,22 @@
 # ── Before the break ──────────────────────────────────────────────────────
 
 ~ bridge
-Kaelen: Halfway across, the oak just stops. It's steel from there on, riveted to the planks like somebody ran out of trees.
-Elara: Oakhaven ends where the oak does. Don't ask me who decided that.
-Kaelen (Internal): Someone did decide it. Nothing that grows or rusts ends in a line this straight.
-Elara: Stay close when we cross. If I tell you to keep walking, keep walking.
-Kaelen: Okay. It's a bridge. People cross bridges all the time, and almost none of them fall off.
+Kaelen: Halfway across, the oak stops and it's steel the rest of the way, riveted down in rows. I've been counting the rivets.
+Elara: Oakhaven ends where the oak does. Mind the seam between the two; it's caught better boots than yours.
+Kaelen (Internal): Somebody chose where that seam goes. Nothing that grows or rusts ends this straight on its own.
+Elara: Stay on the middle planks. If I say walk, you walk, and you don't stop to look at anything.
+Kaelen: It's a bridge. People cross bridges every day, and almost none of them— middle planks. Got it.
 => END
 
 ~ shift
 do desaturate
-Kaelen: The lamps back in Oakhaven were yellow a second ago. Now they're grey. Everything's going grey.
+Kaelen: The lamps back in Oakhaven were yellow a second ago, and now they're grey. So's your cloak. So are my hands.
 System: SYSTEM TRACE: REGION BOUNDARY — OAKHAVEN REACH / IRONHOLD CROWN.
-Elara: Here it comes. Feel how warm it's getting? That's the other side breathing on us.
-Kaelen: It's not just warm. There's a hum under everything, like a wire that's about to go.
+Elara: Here it comes. Feel that? Warm as Mara's back step on baking day. That's the other side, and we don't stop for it.
+Kaelen: It's not only warm. There's a hum under the planks, like a transformer in the minute before it—
 do shake
-Kaelen: The bridge is still here. You're still here. I'd really like both of those to stay true.
-Elara: Then stop talking and walk. Eyes on my back, not over the side.
+Kaelen: The bridge is still here. You're still here. Please, both of you, stay that way.
+Elara: Then walk. Eyes on my back, not the river, and not on Oakhaven either.
 => END
 
 # The screen is black. The world speaking, not a greeting.
@@ -63,14 +63,14 @@ System: SYSTEM TRACE: RECONSTRUCTION COMPLETE. REGION: IRONHOLD CROWN.
 
 ~ start
 Kaelen (Internal): Everything's heavier. My boots, my arms, the sword. Like the ground just remembered I'm standing on it.
-Kaelen: Okay. Either the world just came apart and put itself back together, or I hit my head harder than I—
-Elara: You didn't hit your head. I'd have heard it.
-Elara: First time I came this way, I lost an hour in a ditch being sick. You're doing better than I did.
+Kaelen: Two possibilities. The whole world just came apart and rebuilt itself around us, or I hit my head on the rail and I'm—
+Elara: You didn't hit your head. I was watching it the whole way over.
+Elara: First time I came this way, I lost an hour and my breakfast in a ditch. You're still standing, which is more than I managed.
 Kaelen (Internal): The air tastes like soot and hot copper, and there's steam hissing somewhere close that never stops for breath.
 do pan_ironhold
-Kaelen: That's Ironhold, isn't it? What are we walking into?
-Elara: Work, mostly. Forges, caravan yards, a bell for every shift. They'll want to know who you are at the gate.
-Kaelen: Then I hope they're patient. I'm still working that out myself.
+Kaelen: All those chimneys. That's Ironhold, isn't it? What are we walking into?
+Elara: Work, mostly. Forges, caravan yards, a bell for every shift. And a gate that asks who you are, so think of something.
+Kaelen: I've got a name. Past that, I've got a flight number and a sword that isn't mine.
 => aldric
 
 ~ aldric
@@ -81,40 +81,40 @@ Kaelen: Then I hope they're patient. I'm still working that out myself.
 
 ~ after_kill
 do look_back
-Kaelen (Internal): Somewhere behind that smoke is the gate he died guarding. It already looks smaller than it should.
-Elara: You're doing it again. Staring.
-Kaelen: He said "good". Right before. I keep trying to work out what he meant by it.
+Kaelen (Internal): Somewhere behind that smoke is the gate he died guarding. From here I could cover it with my thumb.
+Elara: You've stopped walking again. That's twice since the bridge.
+Kaelen: He said "good". Right before. Just the one word, and I keep turning it over like there's a—
 Elara: He meant it. Aldric never said anything he didn't mean, not even to be kind.
-[if ch1_aldric_kill_owned] Kaelen: You told me not to dress it up. I'm not going to start now.
-[if ch1_aldric_kill_justified] Kaelen: He was a threat. That's true, and it isn't enough, is it?
-[if ch1_aldric_kill_unsure] Kaelen: You said it'd still be there in the morning. It's not morning, and it's still there.
-Elara: Then carry it. Just don't carry it alone.
+[if ch1_aldric_kill_owned] Kaelen: You told me not to dress it up. I killed him. That's the whole of it, and I'm not adding anything.
+[if ch1_aldric_kill_justified] Kaelen: He was a threat. That's true. I just thought true would weigh more than this.
+[if ch1_aldric_kill_unsure] Kaelen: You said it'd still be there in the morning. It's not morning yet, and it hasn't moved an inch.
+Elara: Then carry it, and pass some over when it gets too heavy. I've hauled worse than you up worse hills.
 => village
 
 ~ after_spare
 do look_back
 Kaelen (Internal): He's back there in his own village, still arguing with an order nobody else can hear.
-Elara: He'll come back or he won't. Standing here won't decide it.
-Kaelen: I know. I just wanted to be the last one who looked.
-Elara: Oakhaven's stubborn. It'll keep an eye on him whether he likes it or not.
-Kaelen: Okay. If he's still in there, the directive slips eventually. If he isn't—
-Elara: Don't finish that. Not out loud.
+Elara: He'll come back or he won't. Staring at the smoke won't tip it, and we're losing the dark.
+Kaelen: One more second. I want to be the last one who looked.
+Elara: Mara will feed him and Bran will write down every time he sneezes. He won't get a minute to himself.
+Kaelen: If he's still in there, the directive slips eventually. It has to. And if he isn't—
+Elara: Don't finish that. Not this close to home.
 => village
 
 ~ after_purge
 do look_back
-Kaelen (Internal): He knew her name. He knew she was lying. That's two things the purge didn't take, and I don't know what it did.
-Elara: He remembered me. I keep waiting to find out what he didn't.
-Kaelen: I'm sorry. I couldn't tell you what it would cost, and I did it anyway.
-Elara: You told me you didn't know. Before you did it. That's the part I'll hold on to.
+Kaelen (Internal): He knew her name. He knew she was lying. Two things the purge didn't take, and I can't count the ones it did.
+Elara: He knew me. Called me a liar, same as ever. I keep waiting to find out what he's lost instead.
+Kaelen: I'm sorry, I— I didn't know what it would cost, and I did it anyway. I should have—
+Elara: You told me you didn't know, before you did it, not after. I'll keep that part.
 Kaelen: And the rest of it?
 Elara: Ask me in a week. Ask him, if he's the one who answers.
 => village
 
 ~ after_none
 do look_back
-Kaelen (Internal): Oakhaven's behind the smoke now. Everything I did there already feels like it happened to someone else.
-Elara: It didn't. It happened to you, and to us. Keep walking.
+Kaelen (Internal): Oakhaven's behind the smoke now, and all of it, the field, the gate, already feels like something I read about someone else.
+Elara: It happened to you. And to us, so don't go giving it away. Keep moving.
 => village
 
 # The village meeting (fragment_one.dlg, C1-S11). Each branch is short on purpose.
@@ -126,40 +126,40 @@ do pause 2.0
 => village_none
 
 ~ village_warned
-Kaelen: I told Mara I'd find out about the wells. I said give me a day.
-Elara: She'll have the whole village boiling water until you come back and tell her to stop.
-Kaelen: Then I'd better come back with an answer.
+Kaelen: I told Mara I'd find out about the wells. I said a day. I should've said two.
+Elara: She'll have every kettle in the lane boiling till you come back. Half of them won't know why, and all of them will complain.
+Kaelen: Then I need an answer worth all that firewood.
 => under
 
 ~ village_leaders
-Kaelen: Bran and Mara know. Tobb too, once Bran's woken him and put it in writing for him.
-Kaelen: Three people out of a whole village. Was that enough, do you think?
-Elara: Ask me after the council's met. Bran will have written down who said what.
+Kaelen: Bran and Mara know. Tobb will, once Bran wakes him up and hands it to him in writing.
+Kaelen: Three people. I don't even know how many live there. Was three enough?
+Elara: Ask me after the council's met. Bran will have it all in ink by then, who said what and who sulked.
 => under
 
 # Elara answers him sideways. She doesn't use his name here, and that's on purpose.
 ~ village_quiet
-Kaelen: You think I should have told them.
+Kaelen: You think I should've told them. You've been quiet about it for a mile.
 Elara: Tull and Wenna will be arguing about the water again by morning. Nobody's told them it was never the sluice.
 => under
 
 ~ village_none
-Kaelen (Internal): Nobody back there knows what's under their village. I'm not sure I do either.
+Kaelen (Internal): Nobody back there knows what's under their village. I've stood in it, and I couldn't draw it for them.
 => under
 
 # What Kaelen knows by the end of Chapter 1: the shrine words, and one memory of
 # arguing for seven signatures (fragment_one.dlg). Nothing more. No Human Patch yet.
 ~ under
-Kaelen: Down in the shrine, those words on the wall. I knew them before I read them.
-Elara: I remember. You went white.
-Kaelen: Someone made it so nothing down there changes without seven signatures. I remember arguing for it.
-Kaelen: If some of what's under Oakhaven is mine, I need to know which parts before I touch anything else.
+Kaelen: The words on the shrine wall. I knew them before my eyes got to the end of the line.
+Elara: I remember. You went the colour of skimmed milk.
+Kaelen: Nothing down there changes without seven signatures. Someone wrote that rule, and I remember arguing for it.
+Kaelen: If any of what's under Oakhaven is mine, I want to know which parts before I put my hands on anything else.
 Elara: Mara's bread is still Mara's bread, whoever laid the stones under her oven.
-Elara: And if you start feeling guilty about it, don't you dare go fixing my arm to make up for it.
+Elara: And if this turns into you owing the world something, don't you dare start paying it off on my arm.
 => onward
 
 ~ onward
-Kaelen: I probably wasn't going to.
-Elara: Come on, Kaelen. It's further than it looks, and I'd like walls round us by morning.
+Kaelen: I wasn't going to. It's your arm.
+Elara: Come on, Kaelen. It's further than it looks, the wind's turning, and I'd like walls round us by morning.
 Kaelen: Okay. Walls first. Then the list of names.
 => END

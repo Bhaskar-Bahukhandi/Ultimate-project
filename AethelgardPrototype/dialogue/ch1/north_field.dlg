@@ -8,74 +8,74 @@
 # C1-S04: the bell rings twice, then stutters.
 ~ alarm
 do bell_alarm
-Farmer: The north field! It's split, it's split right down the middle!
+Farmer: The north field! It's split right down the middle, and it's still going!
 do elara_stands
-Kaelen: Split how? Like the ground opened?
-Elara: You're about to find out. Grab that lantern.
-? Kaelen (Internal): She's already moving.
+Kaelen: Split how? Cracked, like an earthquake? Or the other kind?
+Elara: You'll see soon enough. Lantern's by the door, and my hands are full.
+? Kaelen (Internal): She's already out the door. She didn't wait to see if I'd follow.
 - I'm coming with you. => help
-- This isn't my... I don't even know where I am. => hesitate
+- This isn't my... I've been here half a day. I'd only be in the way. => hesitate
 
 ~ help
 set ch1_north_field_helped
 do trust elara 10
-Elara: Keep up, stranger. And don't touch anything that flickers.
+Elara: Keep up, stranger. Anything out there that flickers, you go round it, not through it.
 
 ~ hesitate
-Mara: Go on. The village can look after itself, mostly. But nobody's going down the south road until that field's sorted, love, so you might as well.
+Mara: Still here? Think we can't look after ourselves, love? And who do you reckon gets down the south road with that field split? Not you.
 do fracture_spreads
-? Kaelen (Internal): It's spreading toward the houses.
-- All right. I'm coming. => help
+? Kaelen (Internal): It's spreading toward the houses. Faster than a crack should, and in a straighter line.
+- That's heading for the houses. I'm coming. => help
 - I'm staying here. => refuse
 
 ~ refuse
 set ch1_north_field_refused
 do trust elara -10
-Mara: Suit yourself. I'll put the kettle on for whoever comes back.
+Mara: Suit yourself. Kettle's going on, and I'm getting the bandages down. Someone'll need both.
 
 # C1-S05: the irrigation water is flowing uphill. Data Vision shows why.
 ~ field_water
 System: SYSTEM TRACE: WATER_SIM RULESET CONFLICT.
 System: VERSION A17. VERSION B04.
-Kaelen: There are two sets of rules running at once. They're fighting over the same water.
-Elara: Can you stop one?
-Kaelen: Maybe. If I pick the right one.
-Elara: I hate that word. "Maybe" has never once dug a ditch.
-? Kaelen (Internal): The sluice. How do I fix it?
-- Edit it. Let the current terrain win. => edit_terrain
-- Edit it. Wall this channel off from the rest. => edit_isolate
-- Leave the code alone. Dig a new channel by hand. => dig
+Kaelen: That's two sets of rules running at once, and they're both trying to tell the same water where to go.
+Elara: Then one of them has to stop. Can you do that, or do I fetch shovels?
+Kaelen: Maybe. If I pick the right one. If I pick the wrong one, the water goes— I don't actually know where.
+Elara: "Maybe" has never once dug a ditch round here. Pick the right one, then.
+? Kaelen (Internal): The sluice is where the two rules meet. Which way do I fix it?
+- Edit it. Let the ground as it is now win. => edit_terrain
+- Edit it. Wall this channel off so nothing else touches it. => edit_isolate
+- Leave the code alone. Borrow a shovel and dig a new channel. => dig
 
 ~ edit_terrain
 set ch1_sluice_edited
 do root_edit sluice terrain_priority
-Elara: Fixed? Properly fixed?
-Kaelen: For now. Downhill's winning again.
-Elara: You say "for now" a lot. I'm starting to notice.
+Elara: Is that fixed, or is it fixed until I turn my back?
+Kaelen: For now. Downhill's winning again. I'd want to watch it through a proper rain before I promised more.
+Elara: Rain's due tonight. You'll get your test whether you want it or not.
 
 ~ edit_isolate
 set ch1_sluice_isolated
 do root_edit sluice isolate
-Elara: The beans are going to be very confused about where their water went.
-Kaelen: They're not the only ones.
+Elara: Wenna's going to walk out to her beans tomorrow and wonder where her water went. You can explain it to her.
+Kaelen: I'll tell her. I'll leave out the part where I'm not sure where it went either.
 
 ~ dig
 set ch1_sluice_dug
 do dig_channel
-Elara: You could've done your trick. It would have been faster.
-Kaelen: I could've. I'd rather know it works without the trick first.
+Elara: Your trick would've had that done before I'd even found a shovel.
+Kaelen: Probably. But if the trick breaks, I want something under it that doesn't. A ditch doesn't need me to keep working.
 do trust elara 10
-Elara: Huh. That's not what I expected you to say.
+Elara: Huh. Pass me the other shovel. I'll take the far end.
 
 # C1-S06: a corrupted boar guarding an erased nest. Data Vision shows DEFEND NEST
 # with a null nest reference, the same error as the guardian on the road.
 ~ boar
-Kaelen: It's the same error as the guardian. It's guarding a nest that isn't there.
+Kaelen: Same error as the guardian on the road. It's guarding a nest that isn't there anymore.
 Elara: Then it's not a monster. It's a mother with nowhere to be a mother.
-? Kaelen (Internal): What do we do about it?
+? Kaelen (Internal): It's pawing the ground, still facing where the nest should be. What do I do about it?
 - Fight it. => boar_fight
-- Turn its aggression down. => boar_calm
-- Build it something that looks like a nest. => boar_nest
+- Turn its aggression down. Leave the rest of it alone. => boar_calm
+- Give it a nest. Something close enough to fool it. => boar_nest
 
 ~ boar_fight
 set ch1_boar_fought
@@ -88,49 +88,49 @@ do root_edit boar aggression
 ~ boar_nest
 set ch1_boar_nest_rebuilt
 do trust elara 10
-Elara: Moss, sticks, and whatever it is you do. Go on. Make it a home.
+Elara: Moss from the ditch, sticks off the fence, and whatever it is you do with your hands. Quickly, before she charges.
 do boar_nest_anchor
 
 # Later, at Mara's, if the nest was rebuilt.
 ~ mara_boar
-Mara: I hear you saved a boar. Built it a little house and everything.
-Kaelen: It was confused. It just needed somewhere to be.
-Mara: So are most of the men in this village, and nobody builds them houses.
-Old Fen: Heard that!
-Mara: You were meant to, Fen.
+Mara: A boar, love? You built a boar a house? Was there a door, or did you leave that bit to her?
+Kaelen: A nest. Mostly moss. It needed something there so it could stop guarding nothing.
+Mara: Guarding nothing? Half the men in this village do that all day outside my shop, and nobody builds them a nest.
+Old Fen: Guarding nothing, she says.
+Mara: You were meant to hear that, Fen. Shut the door, you're letting the heat out.
 
 # C1-S07: the north bridge is badly fractured. The first explicit deadline.
 ~ bridge
-Bran: North bridge is cracked right through. There's rain coming tonight, and if it's still cracked when the river comes up, it's going in.
-Kaelen: How long have we got before the river comes up?
-Bran: Until dark. I've written it down, so it's official.
+Bran: North bridge is cracked right through. I got my fingers in it to the knuckle. Rain tonight, and when the river comes up, it's going in.
+Kaelen: How long before the river comes up? In hours, please, if you've got them.
+Bran: I don't do hours for weather. Until dark. That's at the top of today's page now, above the goats and the caravans.
 do quest_start bridge_before_dark
-? Kaelen (Internal): The bridge, or Aldric's trail?
-- I'll fix it before dark. => bridge_fix
-- At least keep people off it. => bridge_warn
-- It'll have to wait. => bridge_wait
+? Kaelen (Internal): One deadline, and two places I need to be. The bridge, or Aldric's trail?
+- Leave it with me. It'll be fixed before dark. => bridge_fix
+- If I can't fix it, at least keep everyone off it. => bridge_warn
+- I can't. It'll have to wait. => bridge_wait
 
 ~ bridge_fix
 set ch1_bridge_repair_accepted
-Bran: Good lad. I'll put it in the ledger as "fixed by the crater".
+Bran: Then I'm writing it now, before you change your mind: north bridge, "fixed by the crater". Don't make a liar of my ink.
 
 ~ bridge_warn
 set ch1_bridge_evacuated
-Bran: I'll put a man at each end. They'll complain. They always complain.
+Bran: A man at each end, then. Two of the Pell boys; they're big and they're idle. They'll complain, and I'll write the complaining down too.
 
 ~ bridge_wait
 set ch1_bridge_ignored
-Bran: It's your road too, you know. You walked in on it.
+Bran: I'm not writing that down. It's your road too, you know. You walked in on it with crater on your boots.
 
 # The bridge outcome is set by the scene at dark: ch1_bridge_saved or
 # ch1_bridge_fell. Later caravans, prices and the ending reference it.
 ~ bridge_saved
-Bran: Huh. It's holding. Rain and all, it's holding. That's going in the ledger.
+Bran: Stood on it myself, rain and all, river right up under the boards. Didn't creak once. That's going in the ledger, lad, in my best hand.
 
 ~ bridge_fell
 Bran: Heard it go about an hour ago. Sounded like the whole hill sighing.
-[if ch1_bridge_evacuated] Bran: Nobody was on it. That's your doing, that part.
-[if not ch1_bridge_evacuated] Bran: Tobb's cart was halfway over. He's all right. The cart isn't, and neither's his leg.
+[if ch1_bridge_evacuated] Bran: Nobody was on it. I wrote that down first, before the rest, because that part's yours.
+[if not ch1_bridge_evacuated] Bran: Tobb's cart was halfway over when it went. He got out. The cart didn't, and his leg's not right. I've written the hour by his name.
 
 # The staged boar fight (no side-scroll arena for it yet).
 ~ boar_fight_staged
@@ -144,18 +144,18 @@ do boar_charge
 Elara: Again! I'll wall it in!
 do boar_pogo
 System: ELITE DEFEATED.
-Kaelen: ...It was still trying to get back to the nest. Right up until the end.
+Kaelen: ...It was still trying to get back to the nest. Every charge, it kept turning toward—
 Elara: I know. I saw.
 
 # Y1-P0-T13c: back in the village after the boar fight in the arena. Its two
 # closing lines, moved here word for word from boar_fight_staged (unplayed now).
 ~ boar_fight_after
-Kaelen: ...It was still trying to get back to the nest. Right up until the end.
+Kaelen: ...It was still trying to get back to the nest. Every charge, it kept turning toward—
 Elara: I know. I saw.
 
 # Kaelen stayed in the village. Time passes; the field gets closed without him.
 ~ field_refused_aftermath
 do time_passes
-Mara: They got it closed. Bran's lads, the Pell boys, and half a fence.
+Mara: They got it closed. Bran's lads, the Pell boys, and half a fence. Took them till the bread burned.
 Mara: Jory's arm's broken. He'll live. He's already telling it bigger than it was.
 set ch1_north_field_injuries

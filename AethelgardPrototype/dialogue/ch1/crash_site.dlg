@@ -7,59 +7,59 @@
 
 ~ start
 Kaelen: Ow. Okay. Ow.
-Kaelen (Internal): Okay. Breathing. Breathing's step one. Everything else can wait for step two.
-Kaelen: The flight. We were coming down, and then—
+Kaelen (Internal): Still breathing. That's step one done. Step two is standing up, and I'm not ready for step two.
+Kaelen: The flight. We were coming down, the cups were going everywhere, and then—
 Kaelen: Where's the plane?
 do objective Find the plane. Look for survivors.
 
 # The first time the player walks toward the crater's centre.
 ~ call_out
 Kaelen: Hello? Can anyone hear me?
-Kaelen: Flight 707! If anyone can hear me, shout. Bang on something. Anything!
-Kaelen (Internal): Nothing. Not an alarm, not a voice. Just wind.
+Kaelen: Flight 707! Anyone from 707! Shout, bang on something, and I'll come to you!
+Kaelen (Internal): No alarm. No voice. Nobody shouting back, not even to tell me to keep it down. Just wind.
 
 ~ scorched_ground
-Kaelen: No fuel smell. There should be fuel everywhere.
-Kaelen (Internal): Everything should smell like fuel and burnt plastic. Why does it smell like rain?
+Kaelen: Scorch marks. And no fuel smell, none, after a whole plane came down.
+Kaelen (Internal): It should be fuel and burnt plastic for a mile. Instead it smells like rain on somebody's garden.
 
 ~ fused_metal
-Kaelen: That's off the plane. That's a piece of the plane, it has to be...
-Kaelen: I think that's off the plane.
+Kaelen: That's metal. That's aircraft metal, it has to be. That's a piece of the plane...
+Kaelen: I think it's ours. I can't even tell which part it was.
 do translation_flicker
 System: SYSTEM TRACE: RECOVERY SECTOR 04-A.
 System: SYSTEM TRACE: LOCAL SETTLEMENT ROUTE — EAST.
 do runes_return
-Kaelen: No. No, no, I saw that. That was text. Actual text, floating over it.
+Kaelen: That was text. Floating over the metal, like a debug label. Somebody tell me I didn't see that.
 Kaelen (Internal): Okay. Either I hit my head harder than I think, or something just gave me directions.
 Kaelen (Internal): East, then. If anyone else walked out of here, that's the way they'd have gone.
 set ch1_crash_trace_seen
 do objective Find people. A settlement east may know what happened to Flight 707.
 
 ~ safety_card
-Kaelen: A safety card. "In the unlikely event of a water landing—"
-Kaelen: That's all that's left of it. Just the number in the corner.
-Kaelen (Internal): 707. Okay. So it happened. It was real, and I was on it.
+Kaelen: A safety card. "In the unlikely event of a water landing—" I never once read one of these to the end.
+Kaelen: The rest is gone. All that's left is the number in the corner.
+Kaelen (Internal): 707. So it wasn't a bad dream on a long flight. It happened, and I was on it.
 set ch1_flight_fragment_found
 
 ~ seat_marks
-Kaelen: That's a row of seats. That's the exact shape a row of seats leaves.
-Kaelen: So where are the people who were sitting in them?
-Kaelen: No. There were people here. There were people sitting right here.
+Kaelen: That's a row. That's where a row was. You can see where the feet were bolted down.
+Kaelen: Somebody sat here. Somebody had the window, and somebody had the aisle. Where are they?
+Kaelen: There were people here. Step one: find one person. Just one, and then the next one.
 
 ~ sky
 Kaelen: The clouds are moving two different ways at once.
-Kaelen: Sure. Great. The sky's broken too. Why wouldn't it be?
+Kaelen: Clouds don't do that. They don't— no. Not the clouds. People first.
 
 ~ perimeter
-Kaelen: Bags. Shoes. A phone. Anything at all.
-Kaelen: Come on. Somebody had to drop something...
+Kaelen: A bag. A shoe. Somebody's phone. Anything with a name on it.
+Kaelen: Come on. Nobody gets off a plane with nothing. Somebody had to drop something...
 
 # The player reaches the east road after finding the trace.
 ~ leave
 do sfx distant_cry
-Kaelen (Internal): Whatever made that noise, it isn't a survivor.
-Kaelen (Internal): East. Keep moving east.
+Kaelen (Internal): Whatever made that noise, it isn't one of ours. People don't sound like that, not even hurt.
+Kaelen (Internal): East. Keep moving east, faster than I want to.
 
 # The player tries to leave before finding the trace.
 ~ leave_blocked
-Kaelen (Internal): I'm not walking off until I know which way they'd have gone. Not yet.
+Kaelen (Internal): Not until I know which way they'd have gone. I'm not leaving anyone behind on a guess.

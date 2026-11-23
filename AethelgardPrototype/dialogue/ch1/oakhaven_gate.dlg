@@ -5,45 +5,45 @@
 # south road, and the south road needs fixing.
 
 ~ start
-Bran: Three hours, Elara. You said one. I had it written down as one.
-Elara: I found a problem.
-Kaelen: Hi. I'm the problem.
+Bran: Three hours, Elara. You said one. I had one written down, in ink, and now I'll have to cross it out, and you know what crossings-out do to a ledger.
+Elara: I found a problem. It walked most of the way here by itself.
+Kaelen: Hi. That's— I'm the problem. Kaelen. Sorry about your three hours.
 Bran: Does it talk? Usually they don't talk.
-Elara: You'll wish it didn't.
-Kaelen: We've only just met, to be fair to me.
-Bran: ...That's crater dust on your boots. You came from the north.
+Elara: You'll wish it didn't. It apologises to everything, me included.
+Kaelen: I'm right here. And to be fair to me, you've only seen me on a bad day.
+Bran: ...Hold still. That grey on your boots is crater dust; spit won't shift it. You came down from the north, lad.
 Elara: From the crater, Bran.
 Bran: Elara.
-Elara: I know. I know.
-Bran: Does Mara know yet?
-Elara: Why would Mara know?
+Elara: I know. Don't write it down yet.
+Bran: Does Mara know yet? I'd like it on record that I asked, before she tells everyone I didn't.
+Elara: Why would Mara know? Nobody's seen him but you.
 Bran: Mara knows everything by lunch.
-Mara: I heard that!
-Bran: See? Lunch. Not even lunch yet.
+Mara: I heard that! Has it eaten? Is it staying? Why's it still standing in your gate when my oven's hot?
+Bran: See? Not even lunch yet. That's going in the ledger, and I'm underlining "not even".
 set ch1_oakhaven_entered
 do gate_opens
 
 ~ ledger
-Kaelen: Elara said you keep road records.
+Kaelen: Elara said you keep road records. Travellers, strangers, things that fall out of places.
 Bran: I keep the arguments written down, so everyone can have exactly the same argument again next spring. It's called civic memory. Nobody thanks me for it.
-Kaelen: Has anyone else ever come out of the crater? Before me?
-Bran: What, today?
-Kaelen: Ever. At any point.
+Kaelen: Has anyone else come out of the crater? Before me? There were a lot of us on that plane.
+Bran: What, today? Today it's just you, and I've not even found a column for you yet.
+Kaelen: Any day. Ever. I'll take anything with a date next to it.
 do bran_opens_ledger
 # Mostly caravans, weather closures, missing goats, patrol notes. A few old
 # entries are marked NORTHFALL.
 Bran: We've found people up north before. Near the crater, mind, not in it. One at a time, usually.
-Kaelen: Usually? What does "usually" mean?
-Bran: Rare enough that we remember them, common enough that I stopped saying "impossible". The ledger calls them Northfalls.
+Kaelen: "Usually." How usual is usually? A number, please. Any number.
+Bran: No number, lad. Rare enough that we remember them, common enough that I stopped saying "impossible". The ledger calls them Northfalls.
 do ledger_entry_highlight
-Kaelen: This one says "transferred to Ironhold Arrival Registry".
+Kaelen: This one says "transferred to Ironhold Arrival Registry". Transferred. Somebody went somewhere.
 Bran: Years back, that one. Name's gone, the ink ran. Ironhold took them, whoever they were.
 # This entry is Seraphina. Nobody, the player included, can know that yet.
 set ch1_northfall_registry_seen
-Kaelen: Then I need to get to Ironhold.
-Bran: Then you need the south road. And the south road needs the old watch route—
+Kaelen: Then that's where I'm going. Ironhold, and their registry, and whatever names are in it.
+Bran: Then you need the south road. And the south road's no good without the old watch route, and the old watch route—
 Elara: —which has been bad all week.
-Bran: And the north field's worse than the watch route.
-Kaelen: How much worse are we talking?
-Bran: You've turned up on a very educational day, lad.
+Bran: Thank you, Elara. And the north field's worse than the watch route, which I'd have said myself if I'd been let finish.
+Kaelen: How much worse? Give me them in order. I'll take them one at a time.
+Bran: You've turned up on a very educational day, lad. I'm starting you a page. Don't make me cross it out.
 do journal Lead: the Ironhold Arrival Registry. Blocker: Oakhaven's road south is unsafe.

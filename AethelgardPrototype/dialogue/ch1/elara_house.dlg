@@ -8,37 +8,37 @@ do elara_serves_stew
 Kaelen: This smells amazing. What is it?
 Elara: Stew.
 Kaelen: That's a category, not a recipe.
-Elara: Today it's both. Eat it before it gets cold and turns into a different category.
+Elara: Today it's both. Eat. You've the face of someone who forgot meals existed somewhere around noon.
 => topics
 
 ~ topics
 ? Kaelen (Internal): Ask her something?
-- [if not ch1_stew_asked_where] So where am I, exactly? => where
-- [if not ch1_stew_asked_fracture] What is the Fracture? => fracture
-- [if not ch1_stew_asked_magic] How does magic work here? => magic
-- [if not ch1_elara_arm_talked] About your arm... => arm
+- [if not ch1_stew_asked_where] So where am I, exactly? Properly, this time. => where
+- [if not ch1_stew_asked_fracture] What's the Fracture? The short version. => fracture
+- [if not ch1_stew_asked_magic] How does magic work here? Is there a rule to it? => magic
+- [if not ch1_elara_arm_talked] About your arm... can I ask? => arm
 - (Just eat.) => END
 
 ~ where
 set ch1_stew_asked_where
 Elara: Aethelgard. You asked me that on the road.
-Kaelen: I know. I'm asking again. Is that the country?
+Kaelen: I know. It didn't stick. Is it a country? I'd like something today to be just a country.
 Elara: It's the world. All of it.
-Kaelen: Of course it is. Why would it be anything smaller.
-Elara: You did ask.
+Kaelen: Of course it is. Why would it be any— no. Then they're in it. All of them, somewhere in it.
+Elara: It's big enough to hold them. Finish the bowl before you go looking.
 => topics
 
 ~ fracture
 set ch1_stew_asked_fracture
 Elara: It's when things stop agreeing with themselves. Trees, water, roads. People, sometimes.
-Kaelen: That's the actual definition?
-Elara: It's the useful one. The priests have a longer one with more stars in it. It doesn't move carts.
+Kaelen: Things not agreeing with themselves. And that's the official version?
+Elara: It's the useful one. The priests have a longer one with more stars in it. It's never moved a cart.
 => topics
 
 ~ magic
 set ch1_stew_asked_magic
 Elara: You're asking me? You're the one who reached inside a beast this afternoon.
-Kaelen: Okay. Point taken. I'll ask you again when I understand what I did.
+Kaelen: That wasn't me reaching, it was— I don't know what it was. Can I finish the stew before I find out?
 => topics
 
 ~ arm
@@ -48,9 +48,9 @@ set ch1_elara_arm_talked
 
 ~ arm_waited
 Elara: You waited. On the road, when I did the cart. You saw, and you didn't say anything.
-Kaelen: You didn't look like you wanted to talk about it.
+Kaelen: You didn't look like you wanted it talked about. I've worn that look myself.
 Elara: I still don't.
-Kaelen: Okay. Then we won't.
+Kaelen: Then we won't. Is there more of this, or did I eat yours?
 Elara: ...Thank you, stranger.
 do trust elara 10
 => topics
@@ -62,31 +62,31 @@ do pause 1.2
 Elara: There it is.
 Kaelen: There what is?
 Elara: Stranger turns up, sees one afternoon of my life, and solves it.
-Kaelen: I didn't mean it like that. I just—
+Kaelen: I didn't mean it like that. I just— something's wrong, and I go straight for the fix.
 Elara: I know you didn't. That's why I'm only annoyed with you.
 => topics
 
 # ── Things in the room ────────────────────────────────────────────────────
 
 ~ inspect_bandages
-Kaelen (Internal): Bandages. A lot of them, rolled and ready.
+Kaelen (Internal): Bandages. A lot of them, rolled and ready. More than one person ought to need.
 do elara_sees_him_look
 Elara: They're mine, before you ask.
-Kaelen: I guessed they might be.
-Elara: Good. That saves us a conversation.
+Kaelen: I wasn't going to ask.
+Elara: You were. Your face asks before your mouth does.
 
 ~ inspect_herbs
-Kaelen (Internal): Half of these I don't recognise. The other half I don't recognise either.
+Kaelen (Internal): Half of these I don't recognise. The rest I'd only know in a jar, with a label on it.
 
 ~ inspect_focuses
-Kaelen (Internal): Three cracked... wands? Foci? Whatever they are, she goes through them fast.
+Kaelen (Internal): Three cracked... wands? Foci? Whatever they are, she goes through them fast. Faster than she should.
 
 ~ inspect_cloak
-Kaelen (Internal): Patched so many times there's more patch than cloak.
+Kaelen (Internal): Patched so many times there's more patch than cloak. Every stitch is neat, though.
 
 ~ inspect_map
 Kaelen (Internal): Oakhaven, the crater, a road going south. Someone's drawn a skull over the north field.
 
 # After the road ledger, on the way to her house.
 ~ invite
-Elara: Come on, stranger. Food first, then you can worry about roads.
+Elara: You're swaying, stranger. Food first, then you can worry about roads.

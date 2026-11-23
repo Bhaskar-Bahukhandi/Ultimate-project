@@ -8,18 +8,18 @@
 do touch_fragment
 System: SOURCE AUTHORIZATION: ONE OF SEVEN.
 do kaelen_recoils
-Elara: What? What happened? You went white.
+Elara: Sit down before you fall. You went white.
 Kaelen: I knew those words.
-Elara: You just read them. They're right there on the wall.
-Kaelen: No. Before. I knew them before I read them.
+Elara: You read them. They're cut into the wall, right in front of your nose.
+Kaelen: Before I read them. I knew how it ended before I got to the end.
 do memory_flash
-Colleague: Seven signatures for every root change? That's going to be slow.
+Colleague: Seven signatures for every root change? Nothing will ever get through.
 Kaelen (Memory): That's the point.
 do flash_ends
 Elara: Kaelen? Kaelen, look at me.
-Kaelen: I've been here before. I don't know how, but I have.
-Elara: In this shrine? Nobody's been down here in years.
-Kaelen: No. Not in it. Under it. There's something under it.
+Kaelen: I've been here before. That can't be right, and it is. I don't know how.
+Elara: In this shrine? Nobody's been down those steps in years. Look at the dust.
+Kaelen: Not in it. Under it. There's something under the floor, and it's still running.
 # The scene awards it (GameManager.collect_source_key sets source_key_fragment_1
 # and counts it; setting the flag here would stop it counting).
 do fragment_acquired 1
@@ -27,61 +27,61 @@ do fragment_acquired 1
 # C1-S11: Oakhaven wants to know what happened.
 ~ meeting
 do village_gathers
-Mara: Well? What was it down there? Is the north field going to do that again? Is it going to reach the houses?
-? Kaelen (Internal): How much do I tell them?
-- Everything I know. It spreads, and something old under the village is failing. => public
-- The council, and whoever has to deal with it. Not everyone. => limited
+Mara: Well? What was it down there? Is the north field going to do that again? Is it coming for the houses, or do I move the flour?
+? Kaelen (Internal): Every face in the square is turned my way. How much do I tell them?
+- All of it. It spreads, and there's something old under Oakhaven that's failing. => public
+- Just the people who'll have to deal with it. Not the whole square. => limited
 - It's handled. That's all they need tonight. => silent
 
 ~ public
 set ch1_oakhaven_warned_villagers
-Kaelen: The Fracture can spread. Whatever's under Oakhaven is old, and some of it's failing. I don't know how fast. I don't know a lot of things yet.
+Kaelen: The Fracture can spread. There's something under Oakhaven, very old, and parts of it are failing. How fast, I can't tell you yet.
 do villagers_panic
-Mara: Can it reach the wells?
-Kaelen: I don't know. I'm not going to guess about your water.
-Mara: Can you find out?
-Kaelen: Yes. Give me a day.
-Mara: Then that's tomorrow sorted. Everybody home. Boil your water.
+Mara: Can it reach the wells? Is it in them already? Do I tell the whole lane to stop drawing?
+Kaelen: I don't know, and I won't guess. Not about water people drink.
+Mara: Can you find out? How long do I keep the lane off the wells?
+Kaelen: A day. Give me a day, and somebody who knows where the wells run.
+Mara: One day, then. I'm counting it. Everybody home. Boil your water, and the washing water too.
 
 ~ limited
 set ch1_oakhaven_warned_leaders
-Kaelen: Bran, Mara, can I have a minute? You two, and whoever runs the council.
-Bran: That's us. And Tobb, who's asleep. I'll tell him. He'll want it in writing.
+Kaelen: Bran. Mara. Can I borrow you both somewhere quieter? And whoever runs the council.
+Bran: That's us, and Tobb, who's asleep. I can tell from your hands it's bad. I'll take it down for him; Tobb trusts ink over faces.
 
 ~ silent
 set ch1_oakhaven_left_quietly
 do trust elara -10
-Kaelen: It's handled. You're safe tonight. Go home and get some sleep.
-Mara: Tonight. Right. And tomorrow, I suppose, we'll see.
+Kaelen: It's handled. You're safe tonight. Please, everyone, go home and sleep.
+Mara: Tonight. Fine. And tomorrow? I'll be baking either way.
 do elara_watches
-Elara: That's not what you saw down there, and you know it.
-Kaelen: It's what they can do something with. The rest would just scare them.
-Elara: They're not children, stranger.
+Elara: That is not what you saw down there. You know that.
+Kaelen: It's the part they can do something about. The rest would only keep them awake.
+Elara: They're not children, stranger. They live on top of it.
 
 # C1-S12: Elara packs. elara_trust_high is kept up to date by every
 # "do trust elara …" in Chapter 1 (DialogueManager, TRUST_HIGH = 30).
 ~ joins
 do elara_packs
-Kaelen: You're packing. Does that mean you're coming?
-Elara: Was that a question, or a hope?
-Kaelen: It was me trying to be optimistic.
-Elara: Dangerous habit. It'll get you killed out here.
+Kaelen: You're packing. That's a lot of bandages for someone who isn't coming.
+Elara: They're for me. Some of them might end up on you.
+Kaelen: So that's a yes? I'd like it out loud. I can't read people while they're folding things.
+Elara: You can't read people, full stop. Pass me that cloak, and mind the patches.
 [if elara_trust_high] => joins_high
 => joins_low
 
 ~ joins_low
-Elara: I'm not following you. Let's be clear about that.
-Kaelen: That sounded very specific.
-Elara: I'm following the thing that keeps making my arm worse. You just happen to be standing next to it.
+Elara: Let us be clear. I am not following you.
+Kaelen: You've had that one ready since the meeting, haven't you?
+Elara: I am following whatever keeps making my arm worse. You happen to be standing next to it.
 => joined
 
 ~ joins_high
 Elara: Somebody has to stop you rewriting a horse because it looks tired.
-Kaelen: I wouldn't do that.
-Elara: Good. I'm glad to hear it.
-Kaelen: I probably wouldn't do that.
-Elara: There it is.
-Elara: Come on, Kaelen. The road won't walk itself.
+Kaelen: I'd only look at it. Looking's harmless.
+Elara: You look at things, and then they're different. I've watched you do it since the crater.
+Kaelen: ...I'd probably leave the horse alone.
+Elara: That's why I'm packing.
+Elara: Come on, Kaelen. You're carrying the herbs. Don't sit on them.
 => joined
 
 ~ joined

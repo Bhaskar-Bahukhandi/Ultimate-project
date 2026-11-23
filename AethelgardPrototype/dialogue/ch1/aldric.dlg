@@ -8,17 +8,17 @@
 # quiet. Everyone else around him still talks like a person.)
 
 ~ start
-Child: Uncle Aldric!
+Child: Uncle Aldric! You're back! I told everyone you were coming back—
 do elara_goes_still
-Elara: Inside. Now.
+Elara: Inside. Now. Don't stop to look.
 do child_runs_inside
-Kaelen: Who's Aldric?
-Elara: Someone who should be dead.
+Kaelen: Who's Aldric? That kid knew him before I could even see a face.
+Elara: Someone who should be dead. Nobody else walks like that.
 do aldric_approaches
 Aldric: RETURN.
-Elara: Aldric...
+Elara: Aldric. Aldric, put it down.
 Aldric: RETURN.
-Elara: It's me. It's Elara.
+Elara: It's me. It's Elara. Look at me, not the gate.
 do aldric_visor_glitch
 Aldric: El—
 do directive_surge
@@ -51,29 +51,29 @@ Aldric: Elara...
 do aldric_kneels
 do show_directive_tree
 System: WARNING: PURGE MAY DAMAGE MEMORY.
-? Kaelen (Internal): He's down. The directive's still running.
-- End it, before he hurts anyone else. => kill
-- Hold him. I'm not deciding his life here. => spare
-- Purge the directive, even if it takes his memory with it. => purge
+? Kaelen (Internal): He's on his knees, and the directive's still running. I can see every branch of it.
+- End it, now, before he gets back up and hurts someone. => kill
+- Hold him down. His life isn't mine to decide, not here. => spare
+- Cut the directive out, even if it takes his memory with it. => purge
 
 ~ kill
 set ch1_knight_killed
 do kaelen_raises_weapon
 # Elara doesn't stop him.
 do aldric_eye_clears
-Aldric: ...Good.
+Aldric: ...Good. Before it comes back.
 do kaelen_freezes
-Aldric: Gate...
+Aldric: The gate... I cannot... the gate.
 do directive_returns
 do kaelen_strikes
 do pause 1.5
-Elara: He's gone.
-Kaelen: I know.
-Elara: Don't say sorry. Not unless you know what you're sorry for.
-? Kaelen (Internal): What did I just do?
+Elara: He's gone. Leave the visor down.
+Kaelen: I know. I'm still holding the—
+Elara: Not sorry. Do not say sorry to me until you know what it is for.
+? Kaelen (Internal): My hands won't let go of it. What did I just do?
 - I ended his life. => kill_owned
-- I stopped a threat. => kill_justified
-- I don't know yet. => kill_unsure
+- He was a threat, and I stopped him. => kill_justified
+- I don't know yet. I can't see it from in here. => kill_unsure
 
 ~ kill_owned
 set ch1_aldric_kill_owned
@@ -82,32 +82,32 @@ Elara: ...Yes. You did. Thank you for not dressing it up.
 
 ~ kill_justified
 set ch1_aldric_kill_justified
-Elara: He was ours before he was a threat. Remember that part too.
+Elara: He was ours before he was a threat. He stood our night watch. You will remember that part as well.
 => after
 
 ~ kill_unsure
 set ch1_aldric_kill_unsure
-Elara: Then don't decide it tonight. It'll still be there in the morning.
+Elara: Then don't decide it tonight. It'll keep till morning. He isn't going anywhere now.
 => after
 
 ~ spare
 set ch1_knight_spared
 do aldric_restrained
-Elara: He might never come back. You know that, don't you?
-Kaelen: Maybe. Maybe not.
-Elara: Do you actually believe that?
-Kaelen: No. Not really.
-Kaelen: I just wasn't ready to decide he couldn't.
+Elara: He might never come back from this. You know that, don't you? That child doesn't.
+Kaelen: The directive's sitting on top of him. He's still under it. I saw him, for a second, when he said your name.
+Elara: Do you believe that, or do you need to?
+Kaelen: Mostly I need to.
+Kaelen: I wasn't going to be the one who decided he couldn't come back.
 => after
 
 ~ purge
 System: PURGE MAY CAUSE MEMORY LOSS.
-Elara: What does that mean? How much memory?
-Kaelen: I don't know. I honestly don't know.
-Elara: Then that's what you say first. Before you do it.
-? Kaelen (Internal): Purge it?
-- Do it. => purge_confirm
-- No. Not like this. Hold him instead. => spare
+Elara: How much memory? Tell me how much.
+Kaelen: I don't know. I can see where the directive is. I can't see where he stops.
+Elara: Then that is what you say first, before you put your hands inside him.
+? Kaelen (Internal): If I purge it, he might wake up not knowing her. Or anyone.
+- Purge it. I'll answer for whatever it takes. => purge_confirm
+- Not like this. Hold him instead, while there's still a him to hold. => spare
 
 ~ purge_confirm
 set ch1_root_purge
@@ -128,6 +128,6 @@ do open_shrine_gate
 
 # Later, if he was purged and remembers enough to talk (Chapter 1 epilogue or after).
 ~ purged_later
-Aldric: It worked on me. Whatever you did, it worked.
-Kaelen: Yes. Mostly, I think.
-Aldric: Then don't make me your argument. I'm a man, not a proof.
+Aldric: It worked on me. I am boring again. I had earned that.
+Kaelen: Mostly. There are gaps I can't see the edges of. If you'd let me look again, I could—
+Aldric: No. Do not make me your argument. I am a man, not a proof.

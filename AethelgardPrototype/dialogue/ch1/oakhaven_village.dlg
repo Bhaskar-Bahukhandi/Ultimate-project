@@ -7,79 +7,79 @@
 # (Old Fen speaks in as few words as he can get away with. That's him.)
 
 ~ chicken
-Child: Mum! Mum, there's two Pebbles!
+Child: Mum! Mum, there's two Pebbles! The same one, twice, and they're both looking at me!
 Mother: There's one Pebbles, love. There's always been one Pebbles.
 do chicken_duplicate
 Kaelen: ...
-Kaelen: I'm not going to ask about the chicken. I'm just not.
+Kaelen: I'm not going to ask about the chicken. I've got a list, and it isn't on it.
 
 ~ old_fen
 Old Fen: New, are you.
-Kaelen: I guess so.
+Kaelen: I guess so. Since about this morning.
 Old Fen: You'll get over it.
 Kaelen: Being new?
 Old Fen: Guessing.
 
 ~ jessa
-Jessa: So Elara brought you in, did she?
-Kaelen: Is that unusual?
+Jessa: So Elara brought you in, did she? You're bigger than her usual.
+Kaelen: Her usual? Is this something she does a lot?
 Jessa: She usually brings in plants. Sick ones, mostly. Nurses them back and gives them away.
-Kaelen: Better company than me, probably.
-Jessa: Quieter, anyway. Plants don't ask where the crater went.
+Kaelen: Easier patients than me, I'd bet. They stay where you put them.
+Jessa: And they wilt quieter. Plants don't ask where the crater went.
 
 ~ mara
-Mara: So you're the crater. Sit down before you fall down. Have you eaten? Is she feeding you, or was it the stew again?
-Kaelen: It was the stew. It was good stew.
-Mara: Course it was, it always is, and it's always the same. Here. Don't argue, I've already decided.
-Kaelen: Thank you. Really. I don't have any money.
-Mara: Thank me by not falling over in my doorway. We'll talk about money when you've got some.
+Mara: So you're the crater. Sit down before you fall down. Have you eaten? Is she feeding you? Was it the stew again?
+Kaelen: It was the stew. I had two bowls, and I'd have had a third if she'd looked away.
+Mara: Course it was. It's always the stew. Here, end of the batch, still warm. Don't argue, I've already decided.
+Kaelen: Thank you. I've got no money. I can fix things, mostly, if that's worth anything.
+Mara: Thank me by not falling over in my doorway. We'll settle up when you've got money, and I'll remember the price.
 set ch1_mara_met
 
 ~ farmers
-Tull: Water doesn't go uphill, Wenna. It just doesn't.
+Tull: Water doesn't go uphill, Wenna. It's water. It goes down. That's the whole of what it does.
 Wenna: Then go and tell it that, because it's halfway up my bean rows.
-Tull: You left the sluice open again, didn't you.
+Tull: You left the sluice open again, didn't you? I'm going to check either way.
 Wenna: I've never left a sluice open in my life.
-Tull: The spring of the flood. You left it open the spring of the flood.
+Tull: The spring of the flood. You left it open, and I said so at the time, and I've not changed my mind.
 Wenna: That was the sluice's fault.
 
 ~ lost_sword
-Child: Have you seen my sword? It's wood. It's a really good one.
-Kaelen: I haven't. What does it look like?
+Child: Have you seen my sword? It's wood. It's the best one in Oakhaven, because it's the only one.
+Kaelen: I haven't, sorry. What does it look like?
 Child: Like a sword. A wooden one.
-Kaelen: ...Right. Of course. I'll keep an eye out for a wooden sword.
+Kaelen: ...I walked into that. I'll look under things. Lost things are always under things.
 
 ~ lost_sword_found_pickup
 Kaelen (Internal): A wooden sword, half under a bush. It's a good one, too. Someone carved the grip.
 
 ~ lost_sword_found
-Child: You found it! You actually found it! Are you a knight?
-Kaelen: No. I just look like I lost a fight with one.
-Child: My uncle Aldric's a knight. He's away right now. He's going to come back.
+Child: You found it! I knew somebody would! Are you a knight? You've got a sword, so you might be.
+Kaelen: No. I've got the sword, but mostly I look like I lost a fight with one.
+Child: My uncle Aldric's a knight. A proper one. He's away right now, but he's coming back soon, so you can meet him.
 set ch1_child_sword_returned
 
 # ── Second visits: everyone has something, nobody goes silent ─────────────
 
 ~ lost_sword_waiting
-Child: I was playing by the south fence, near the field path. It might be there. It might be anywhere.
+Child: I was playing by the south fence, near the field path, so it's there. Or it's somewhere else. Probably there.
 
 ~ child_repeat
-Child: I'm going to show Uncle Aldric the sword the second he's back. He'll say it's a good one.
+Child: I'm going to show Uncle Aldric the sword the second he's back. He'll say it's a good one, because it is.
 
 ~ farmers_repeat
 [if not ch1_north_field_helped] Tull: Still uphill. I've checked it twice and I'm going to check it again.
-[if not ch1_north_field_helped] Wenna: He's been checking it all morning. The beans don't care either way.
-[if ch1_north_field_helped] Wenna: Water's going downhill again. Tull's very upset about being right.
+[if not ch1_north_field_helped] Wenna: He's been checking it all morning, love. The beans don't care who's right. They're drowning.
+[if ch1_north_field_helped] Wenna: Water's going downhill again. Tull's terribly upset about being right.
 [if ch1_north_field_helped] Tull: I'm not upset. I'm vindicated. It's a different feeling.
 
 ~ wenna_repeat
-Wenna: Don't take sides in this, love. He remembers sides. He remembers them for years.
+Wenna: Don't take sides in this, love. It's between me, Tull and that sluice, and the sluice started it.
 
 ~ old_fen_repeat
 Old Fen: Still new.
 
 ~ jessa_repeat
-Jessa: If Elara ever hands you a plant, water it. And don't ask it anything.
+Jessa: If Elara ever hands you a plant, water it and leave it be. Same goes for her.
 
 ~ mother_repeat
 Mother: One Pebbles. I counted this morning. I count every morning now.
@@ -87,10 +87,10 @@ Mother: One Pebbles. I counted this morning. I count every morning now.
 # ── Free roam: repeat visits, the shop, the market stone, Bran's post ─────
 
 ~ mara_repeat
-Mara: Back again? Good. Buy something or carry something, love. Pick one.
+Mara: Back again? Hungry? Got your hands free? Buy something or carry something, love. Pick one.
 
 ~ whispering_stone
-Kaelen: What is this thing? It's humming.
+Kaelen: What is this thing? It's humming, and I'm fairly sure rocks don't.
 Elara: The Whispering Stone. It tells you prices, mostly.
 Kaelen (Internal): Numbers crawling up a rock. Grain in Ironhold, iron in places I've never heard of. It's a live market feed, carved into stone.
 Kaelen: Does anybody actually use it?
@@ -98,13 +98,13 @@ Elara: Rook does, when he comes through. Everyone else just argues with it.
 set ch1_auction_house_visited
 
 ~ whispering_stone_repeat
-Kaelen (Internal): Bread's up two coppers since this morning. Somebody, somewhere, is very happy about that.
+Kaelen (Internal): Bread's up two coppers since this morning. Mara will have something to say about that.
 
 ~ bran_repeat_field
-Bran: North field first, lad. Then we'll talk about roads.
+Bran: North field first. There's no field mud on those boots yet, so don't tell me you've been. Then we'll talk roads.
 
 ~ bran_repeat_road
-Bran: The bridge is south. Have a good look at it before you go anywhere.
+Bran: The bridge is south, lad. Have a good look before you trust your weight to it, and come back and tell me what you saw.
 
 # Data Vision secret under Bran's gatepost.
 ~ guard_post_secret
@@ -112,4 +112,4 @@ System: TRACE: EVACUATION_RIGHTS.CLAUSE — DISABLED.
 Kaelen (Internal): Someone switched off a rule about leaving. A long time ago. Right under Bran's gatepost.
 
 ~ elara_repeat
-Elara: Go on, have a look around. I'll be here, pretending I'm not watching you.
+Elara: Go on, have a look around. Light's good till supper. I'll be here, pretending I'm not watching you.

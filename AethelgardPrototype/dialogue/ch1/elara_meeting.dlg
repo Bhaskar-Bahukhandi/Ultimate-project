@@ -9,82 +9,82 @@
 
 ~ start
 Kaelen: Hang on. Why is there a sword on my belt?
-Kaelen: I don't own a sword. I've never owned a sword in my life.
-Kaelen: ...Apparently I own a sword.
+Kaelen: I don't own a sword. I own a laptop bag, and I don't even know where that is.
+Kaelen: Okay. Either somebody buckled it on me while I was out, or—
 do slime_appears
 
 ~ after_slime
-Kaelen: That wasn't blood. That wasn't anything. It just... came apart.
-???: Were you hoping it would be blood?
+Kaelen: That wasn't blood. It didn't bleed, it just came apart, like it forgot how to be a thing.
+???: Were you hoping it would bleed? Don't turn around.
 do elara_enters
-Elara: Hands where I can see them.
-Kaelen: One of them's holding a sword. Sorry. That's new.
-Elara: Then put that one down first.
-Kaelen: Okay. Putting it down. Slowly. Nobody panic.
+Elara: Hands where I can see them. Both.
+Kaelen: One of them's got a sword in it. Please don't— it isn't mine. Sorry.
+Elara: Then that one goes down first, stranger. Slowly.
+Kaelen: Going down. Point away from you. There, it's on the ground. I'm not touching it.
 do kaelen_lowers_sword
 Elara: Name?
 Kaelen: Kaelen.
 Elara: From where?
 Kaelen: Flight 707.
 Elara: Is that a place?
-Kaelen: It's a plane. It— it flies. It's a big metal thing full of people, and it flies.
+Kaelen: It's a plane. You sit in rows, and it flies, and it isn't supposed to land like— it isn't supposed to land here.
 # She looks at him the way you'd look at someone describing a dragon made of spoons.
-Kaelen: You didn't see anything fall today? Out of the sky, near here?
+Kaelen: Did you see anything come down today? Out of the sky, anywhere near here?
 Elara: You.
-Kaelen: Anyone else? Smoke, wreckage, people walking around in shock?
-Elara: No. Nothing like that.
-Elara: Were there supposed to be?
-Kaelen: ...A lot of them.
+Kaelen: Anyone else? Smoke, wreckage, people wandering around who look as lost as I do?
+Elara: No smoke. Nobody on this road but you and that thing you just cut in half.
+Elara: Were there more of you?
+Kaelen: ...It was a full flight.
 do elara_lowers_bow
-Elara: Then let's talk somewhere the road isn't trying to eat us.
-? Kaelen (Internal): How much do I tell her?
-- I was on a flight. Something happened, I woke up here, and everyone else is gone. => trust
-- There were people with me. I need to find them before I explain the rest. => cautious
-- You first. Where am I? Then I'll tell you how impossible this is. => deflect
+Elara: Then we talk walking. This road eats whatever stands still on it.
+? Kaelen (Internal): She's lowered the bow. How much do I tell her?
+- The truth. I was on a plane, I woke up in that crater, and everyone else is just... gone. => trust
+- There were people with me. Help me find them first, and I'll explain the rest. => cautious
+- You first. Where is this, exactly? Then I'll tell you the part you won't believe. => deflect
 
 ~ trust
 set elara_first_truth
 set ch1_elara_trusted
 do trust elara 10
 Elara: You remember them. Their faces, I mean, not just that they were there.
-Kaelen: Enough of them. Some.
-Elara: Good. Hold on to that as hard as you can.
-Kaelen: Why is that good?
+Kaelen: Some. Not enough. I keep trying to go row by row, and I keep losing my place.
+Elara: Then keep them. Go over them on the road if you have to. I won't listen.
+Kaelen: Why does it matter if I do?
 Elara: Because the people who walk out of bad places usually walk out remembering less.
 => after
 
 ~ cautious
 set elara_first_cautious
 set ch1_elara_cautious
-Elara: You remember enough to be careful. That's something.
-Kaelen: I remember enough to know I should be looking for them, not standing here.
-Elara: Then we want the same thing, for now. Somewhere with walls first.
+Elara: You pick your words like someone crossing a bad bridge. There are worse habits out here.
+Kaelen: Careful's all I've got. They're out there, and every minute I stand here they get further off.
+Elara: Then we want the same thing, for now. Walls first. You can't search for anyone with a slime on your leg.
 => after
 
 ~ deflect
 set elara_first_deflect
 set ch1_elara_cautious
 Elara: You're in Oakhaven Reach.
-Kaelen: Is that a country?
+Kaelen: Is that a country? A county? I'll take a county.
 Elara: A region. The country's a long argument; nobody agrees where it starts.
-Kaelen: Fine. Which world, then? Where is all of this?
-Elara: Aethelgard.
-Kaelen (Internal): Nothing. It's not a word I know. It's not even close to one.
+Kaelen: Bigger than that, then. What's the whole world called?
+Elara: Aethelgard. It was Aethelgard yesterday, too.
+Kaelen (Internal): It doesn't land on anything. Not a country I know, not a word I know, not even close to one.
 => after
 
 ~ after
 set elara_met
 Elara: You came out of the crater, stranger.
-Kaelen: I suppose I did. I woke up in it, anyway.
+Kaelen: I woke up in it. Climbing out was the only idea I had.
 Elara: People don't come out of the crater.
-Kaelen: Great. Today's going great. Really.
-Elara: Oakhaven keeps road records. Travellers, strangers... things that fall out of places they shouldn't.
+Kaelen: Well, I did. I'd love to know what that makes me. Maybe not today.
+Elara: Oakhaven keeps road records: travellers, strangers, and things that fall out of places they shouldn't.
 Kaelen: That happens often enough that someone writes it down?
-Elara: Often enough that Bran complains about the paperwork every single time.
+Elara: Ask Bran. Actually, don't. He'll complain about the paperwork until it's dark.
 do kaelen_reaches_for_sword
 do elara_raises_bow
-Kaelen: Right. Sorry. I'll leave that where it is.
+Kaelen: Sorry. I don't know why I keep doing that. My hand just goes there.
 Elara: Walk ahead of me, where I can see you.
-Kaelen: Very trusting of you.
-Elara: Very practical. You'd do the same.
+Kaelen: Fair enough. I'd do the same, I think.
+Elara: You'd do it worse. You keep reaching for that sword like it's a pocket.
 do objective Reach Oakhaven. Follow the first lead on the missing passengers.
