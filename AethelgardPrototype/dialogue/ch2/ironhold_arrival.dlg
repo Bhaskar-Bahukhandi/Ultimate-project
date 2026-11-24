@@ -8,42 +8,42 @@
 # comic beat. Both are meant to be short.)
 
 ~ road
-Elara: You keep checking the sky. Every few steps, like it owes you money.
-Kaelen: Habit. Old job, I think.
-Elara: Bad sky where you're from?
-Kaelen: Less programmable, usually.
-Elara: And what's an airplane, anyway? You keep nearly saying it.
-Kaelen: A metal tube that talks gravity into waiting.
-Elara: Not very well, then.
+Elara: You keep checking the sky. Every few steps, the way Bran checks for rain before he opens the gate.
+Kaelen: Habit, I think. Something from the old job. I can't remember what I was waiting to see up there.
+Elara: Bad skies where you're from, then?
+Kaelen: No. It mostly stayed where you left it. Rained when it said it would, give or take.
+Elara: You keep starting to say "airplane" and stopping. What is one, properly?
+Kaelen: A metal room full of people. It argues with gravity for a few hours, and it's supposed to win.
+Elara: Sounds like it lost the argument.
 do kaelen_stops
 # He stops walking. She hears what she just said.
-Elara: ...Sorry. That came out wrong.
-Kaelen: No. You're not wrong. That's the problem.
+Elara: ...Sorry. I said that without thinking.
+Kaelen: No, it's— you're right. It lost. I just hadn't heard anyone say it out loud yet.
 do walk_on
 
 # C2-S01 — Iron on the Horizon.
 ~ horizon
 do ironhold_reveal
-Kaelen (Internal): Workshops at the bottom. Market terraces on top of those. Fortress bridges right at the top, and a clock tower you can see from anywhere, like it wants you to know the time.
-Elara: Try not to insult anyone before we find a bed.
+Kaelen (Internal): Workshops at the bottom, market terraces stacked on top, fortress bridges over all of it. And a clock tower you can see from anywhere, whether you want the time or not.
+Elara: Try not to insult anyone before we've found a bed and something hot to eat.
 Kaelen: I did fine in Oakhaven. Nobody threw anything at me.
 Elara: Mara charged you double.
-Kaelen: That was personal. She told me it was personal.
-Elara: It got personal very quickly.
+Kaelen: She said double was the friendly rate. I still don't know what strangers pay.
+Elara: Strangers get the burnt end and a fair price. Double means she expects you back.
 do convoy_passes
-Paladin: Left side clear! Keep the centre open! Children stay inside the wagons!
+Paladin: Children inside the wagons, for me, please! Left side clear! Keep the aisle— keep the centre open!
 Kaelen (Internal): Keep the aisle clear...
 [if elara_trust_high] Elara: Kaelen? What is it?
 [if not elara_trust_high] Elara: Stranger? You've gone pale.
-Kaelen: I know that voice. I've heard it say that before.
+Kaelen: I know that voice. I've heard it tell me to stay in my seat.
 
 # C2-S02 — The Knight-Commander.
 ~ commander
 do seraphina_helmet_off
-Seraphina: Move, please. You're standing in the lane.
+Seraphina: Move, please. You're standing in the lane, and there are children in the wagon behind you.
 Kaelen: I know you. I'm sure I know you.
 Seraphina: That line works better without a sword on your hip.
-Kaelen: Your voice. You said "keep the aisle clear". You said it exactly like that.
+Kaelen: Your voice. You said "keep the aisle—" back there and caught yourself. I've heard you finish it.
 Kaelen: Flight 707.
 do seraphina_grip
 Seraphina: Where did you hear that number?
@@ -65,9 +65,9 @@ do pause 0.8
 Seraphina: We died together.
 do kaelen_still
 # She regrets it the moment it's out.
-Seraphina: Or nearly. Nearly died.
-Kaelen: That's a big correction to make in the middle of a road.
-Seraphina: I've had practice making it.
+Seraphina: Nearly. I meant nearly.
+Kaelen: You had that correction ready. You've said it to someone before.
+Seraphina: I've had practice. Behind the last wagon, both of you, please. Keep up.
 set ch2_seraphina_met
 
 # C2-S03 — Ironhold Gate. Three queues: residents, traders, Fracture inspection.
@@ -77,12 +77,12 @@ Kaelen: Knight-Commander?
 Seraphina: Later.
 Kaelen: You were a flight attendant.
 Seraphina: Later.
-Elara: I like her.
-Seraphina: You can stop liking me after the paperwork. They're with me, officer. Inspection line, then residents.
+Elara: I like her already.
+Seraphina: Wait until you've stood in my queues. Two with me, officer, on my count. Inspection line, then residents, please.
 do queues
-Rook: That crate is medicinal resin. It says so on the side, in letters.
+Rook: That crate is medicinal resin. It says so on the side, in letters, which I'd have thought was the cheap way to settle this.
 Clerk: It's listed as decorative sap.
-Rook: Because whoever wrote that category has never been ill in their life.
+Rook: Then whoever wrote that list has never paid for a fever. Ask the lower streets what one costs this month.
 # He notices Kaelen. He doesn't introduce himself. He files him away.
-Kaelen (Internal): That man just looked at me the way Bran looks at a ledger.
+Kaelen (Internal): That man just looked me over, boots to sword hilt, like he was working out what I'd fetch.
 set ch2_ironhold_entered

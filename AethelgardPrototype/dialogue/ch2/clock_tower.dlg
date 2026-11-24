@@ -8,36 +8,36 @@
 do bell_thirteen
 Kaelen (Internal): ...eleven. Twelve. Thirteen.
 # Then silence. Merchants stop. Children count on their fingers. Paladins look up.
-Brask: Seal the lower streets. All of them, now.
-Seraphina: We don't know what's happened yet, Brask.
+Brask: Lower streets. Every gate, every stair. Sealed, now.
+Seraphina: Brask, half the lower city's still out on those stairs. We don't know what this is yet.
 Brask: That is why we seal them.
 do data_vision_trace
 System: TRACE: CLOCK AUTHORITY CONFLICT.
 System: TRACE: LEGACY SCHEDULES ACTIVE.
 System: TRACE: EXTERNAL ADMIN PROXY.
-Kaelen: Something's running that tower that isn't the tower.
-Seraphina: Then we go up there and ask it.
-[if ch2_medicine_quest_active and not ch2_medicine_done] Seraphina: And the convoy's still out. That was the evening bell, Kaelen. The west gate's closing.
+Kaelen: Two schedules fighting over one bell. And something outside the tower's got its hand on the rope.
+Seraphina: Then we climb up and ask it nicely. Once.
+[if ch2_medicine_quest_active and not ch2_medicine_done] Seraphina: And the convoy's still out. Forty-two people, and the west gate's closing on them. That was the evening bell, Kaelen.
 set ch2_tower_bell_stopped
 
 ~ entry
-Kaelen: The gears on this floor are all running at different times.
-Elara: They're arguing. Like the farmers over the sluice.
-Kaelen: That's... actually exactly what they're doing.
-Kaelen (Internal): I can slow one down with Root Access. Not stop it. Safely, a little.
+Kaelen: Every gear on this floor's keeping its own time. That one's fast. That one's a whole tick behind—
+Elara: They're arguing. Like Wenna and Tull over the sluice.
+Kaelen: Yes— that's it. Two rules on one axle, and nobody's told either of them it lost.
+Kaelen (Internal): Root Access could slow one of these down. Only a little, if I want to do it safely, and never all the way to a stop.
 
 # A mark scratched into the wall on the way up (a seed for Kaito, later).
 ~ mid
-Kaelen (Internal): Somebody's scratched a little map mark into the stone. Under it: NO SKY ABOVE FLOOR SIX.
-Elara: Is there sky above floor six?
-Kaelen: I'm not going to check. Some questions can stay questions.
+Kaelen (Internal): Someone's scratched a little map mark into the stone here. Under it, cut deeper: NO SKY ABOVE FLOOR SIX.
+Elara: Is there sky above floor six? Somebody wanted it said badly enough to use a knife.
+Kaelen: I'm not checking. If somebody carved a warning into a staircase, I'm taking the staircase's word for it.
 set ch2_tower_secret_mark
 
 ~ pre_boss
 System: SCHEDULE DEVIATION.
 Kaelen: That's us. We're the deviation.
-Seraphina: I've hated clocks before. Every flight attendant hates clocks.
-Seraphina: This is new.
+Seraphina: I've hated clocks before. Departure boards. The galley timer. The one over the cockpit door.
+Seraphina: None of them ever told me I was the mistake.
 
 # ── B02 The Minute Hand: barks, one line each ─────────────────────────────
 ~ bark_deviation
@@ -50,41 +50,41 @@ The Minute Hand: CORRECT.
 The Minute Hand: REPLAYING.
 
 ~ victory
-Kaelen: Half the tower's ours again. Half. The other half's still somebody else's.
+Kaelen: That's half the tower back on one clock. The top half's still taking orders from somewhere else.
 System: SHIFT LOG: LOWER WORKS, SHIFT FOUR — ENTERED 06:00. EXIT: NONE.
 set ch2_clock_tower_complete
 => missing_shift
 
 # C2-S11 — the missing shift. Not the faction choice; every option costs something.
 ~ missing_shift
-Seraphina: Forty workers went into the tunnels this morning. None of them came out.
-Brask: Then we quarantine the tunnels until we know what's down there.
+Seraphina: Shift four. Forty workers went down at six this morning, and I've had the gate count read to me twice. Nobody's come up.
+Brask: Lower works. Quarantined, from now until we know what's down there.
 Seraphina: We know what's down there. Forty people.
-? Kaelen (Internal): It's not my city. They're asking me anyway.
-- We go now. Every hour matters. => rescue_now
-- We scout first, and know what we're walking into. => scout_first
-- Seal it until morning. Nobody else goes missing tonight. => seal
+? Kaelen (Internal): Not my city, not my shift. And they're both looking at me like I've got the deciding vote.
+- Now. Every hour down there is an hour they might not have. => rescue_now
+- Scout first. I want to know what's down there before it knows we're coming. => scout_first
+- Seal it until morning. Nobody else goes down there and doesn't come back tonight. => seal
 
 ~ rescue_now
 set ch2_shift_rescue_now
 do trust seraphina 10
-Seraphina: Good. Get your things. We leave from the market stairs.
+Seraphina: Then get your things, please. Market stairs. I'll count us in at the top.
 Brask: If you lose a single paladin down there, Commander—
 Seraphina: Then you'll write it down, and I'll read it.
 => unlock
 
 ~ scout_first
 set ch2_shift_scout_first
-Seraphina: That'll cost us hours. They might not have hours.
-Kaelen: It'll cost more if we walk in blind.
-Seraphina: ...Fine. Hours. Not one minute more.
+Seraphina: That'll cost us hours, and forty people are paying for every one of them.
+Kaelen: If we walk in blind, you'll be counting us too.
+Seraphina: ...Hours, then. Not one minute past them. I'll be counting those as well.
 => unlock
 
 ~ seal
 set ch2_shift_sealed
 do trust seraphina -10
-Brask: Thank you. That's the first sensible thing anyone's said today.
-Seraphina: Don't thank him. He just bought whatever's down there a whole night to get worse.
+Brask: Thank you. Lower works, sealed until dawn. I'll write it exactly that way.
+Seraphina: Don't thank him. Forty people, and he's just bought whatever's down there a whole night to get worse.
 => unlock
 
 ~ unlock

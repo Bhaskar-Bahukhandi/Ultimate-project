@@ -3,32 +3,32 @@
 # Scene: scenes/chapter2/arena_district.tscn. Losing never hard-fails.
 
 ~ enter
-Vex: Ironhold! Here's a face you haven't seen before! Fresh off the road, still got all its teeth!
-Elara: Hit the one that's trying to hit you. That's my whole strategy.
-Kaelen: Thanks. Really, that's very helpful.
-Elara: I'm support. Support doesn't have to be good.
+Vex: Ironhold! Look what the road's brought us! A brand-new face, all its own teeth, and a sword it holds like a soup ladle!
+Elara: Hit whoever's trying to hit you. That's my whole strategy, and I'm still here.
+Kaelen: I was hoping for a strategy with at least one if-statement in it.
+Elara: My part is standing behind you with a bow. Nobody said I had to be clever about it.
 [if ch2_seraphina_met] Seraphina: His left shoulder drops before he swings.
-[if ch2_seraphina_met] Kaelen: Now that's support.
-[if ch2_seraphina_met] Elara: I liked you better before the armour.
+[if ch2_seraphina_met] Kaelen: Left shoulder, then the swing. That I can actually use.
+[if ch2_seraphina_met] Elara: Oh, so her strategy you'll use.
 
 # Between rounds, after the first win.
 ~ memorial
-Kaelen: The names carved on that wall. Some of them are flickering.
+Kaelen: There are names carved on that wall, and some of them are flickering. Like a screen with a loose cable.
 Seraphina: The arena started as defender training. People wanted danger with a bell.
-Kaelen: What does that mean, danger with a bell?
+Kaelen: Danger with a bell? What does that mean?
 Seraphina: Outside the walls, danger comes whenever it likes. In here, we ring first.
-Kaelen: These names keep changing while I'm looking at them.
-Seraphina: That's why I keep paper copies.
+Kaelen: That one just changed. A letter moved while I was reading it.
+Seraphina: That's why I keep paper copies. Every name, in my own hand.
 set ch2_arena_memorial_seen
 
 ~ victory
-Vex: And the crowd goes— well, the crowd goes somewhere! Come back tomorrow, fighter!
+Vex: And the crowd goes— well, the crowd goes somewhere! Same time tomorrow, Ironhold, and bring the fighter!
 
 ~ defeat
-Vex: Down he goes! Up he gets, I hope. Nobody leaves my arena dead, that's the one rule.
+Vex: Down he goes! Up he gets, I hope! Nobody leaves my arena dead, that's the one rule!
 
 ~ again
-Vex: Another round? Press {ui_accept} to fight again, or {ui_cancel} to go back to the city.
+Vex: Another round? Ironhold wants one! Press {ui_accept} to fight again, or {ui_cancel} to go back to the city!
 
 ~ again_after_loss
-Vex: Bad luck, fighter. Every loss teaches you something. Press {ui_accept} to try again, or {ui_cancel} to leave.
+Vex: Bad luck, fighter! Ironhold loves a comeback! Press {ui_accept} to try again, or {ui_cancel} to leave!

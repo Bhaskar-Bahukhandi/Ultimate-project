@@ -5,19 +5,19 @@
 # not the Axis 2 lock. The road sets Act 1's pace (early / on time / late).
 
 ~ report
-Kaelen (Internal): Everything I've found. Two fragments, the tower logs, what was under the market. Somebody who isn't me should have a copy.
-? Kaelen (Internal): Who gets the report?
-- Oakhaven's and Ironhold's councils. The people who have to live with it. => report_local
-- The archivists in the Wastes. People who keep records properly. => report_archive
-- Ironhold command. People who can act on it tomorrow. => report_command
+Kaelen (Internal): Two fragments, the tower logs, what was under the market. Right now the only copy is in my head. Somebody else should hold a backup.
+? Kaelen (Internal): Who gets the copy?
+- The councils, Oakhaven's and Ironhold's. They're the ones who'll live with whatever it means. => report_local
+- The archivists in the Wastes. If anyone out there keeps records properly, it's them. => report_archive
+- Ironhold command. They're the ones who can act on it tomorrow. => report_command
 
 ~ report_local
 set act1_report_local
-[if has_elara] Elara: Mara's going to read every word of that, and then tell everyone it was her idea.
+[if has_elara] Elara: Mara will read every word of that over breakfast, then tell the whole lane it was her idea.
 
 ~ report_archive
 set act1_report_archive
-Kaelen (Internal): Somebody out there writes things down for a living. I hope they're honest about it.
+Kaelen (Internal): Somebody out there writes things down for a living. Bran would like them. I hope they're honest about it.
 
 ~ report_command
 set act1_report_command
@@ -25,13 +25,13 @@ Brask: I'll read it. I might even agree with some of it.
 
 ~ road_out
 Kaelen (Internal): The next trace points at the Fractured Wastes.
-[if ch2_seraphina_recruited] Seraphina: Three ways there. The safe road's long. The old server road's short, and it isn't safe. The caravan route depends on Oakhaven's bridge.
-[if not ch2_seraphina_recruited] Rook: Three roads to the Wastes. Long and safe, short and stupid, or the caravan, if Oakhaven's bridge is still up.
-[if ch1_bridge_fell] Kaelen (Internal): It isn't. So, two roads.
-? Kaelen (Internal): Which way?
-- The old server road. Fast, and unstable. => pace_early
-- The safe road. => pace_on_time
-- [if not ch1_bridge_fell] The caravan route, with the traders. => pace_late
+[if ch2_seraphina_recruited] Seraphina: Three roads. The safe one's long. The old server road's short, and I wouldn't march a wagon down it. The caravan needs Oakhaven's bridge.
+[if not ch2_seraphina_recruited] Rook: Three roads to the Wastes, priced for you: long and safe, short and stupid, or the caravan, if Oakhaven's bridge is still up.
+[if ch1_bridge_fell] Kaelen (Internal): It isn't. That leaves two roads.
+? Kaelen (Internal): Which way out?
+- The old server road. Fast, if the ground stays under us. It's unstable. => pace_early
+- The safe road. Long gets there too. => pace_on_time
+- [if not ch1_bridge_fell] The caravan route. Ride with the traders. => pace_late
 
 ~ pace_early
 set act1_pace_early
@@ -41,7 +41,7 @@ set act1_pace_on_time
 
 ~ pace_late
 set act1_pace_late
-Rook: Caravan leaves at noon. I'm on it. You're paying for your own cart.
+Rook: Caravan leaves at noon, and I'm on it. You're paying for your own cart. It isn't cheap; I know the man who owns it.
 
 # The Act 1 end scene, on Ironhold's outer bridge.
 ~ end
@@ -56,26 +56,26 @@ Seraphina: My banner's folded in your pack. Don't use it as a pillow.
 => end_horizon
 
 ~ end_stayed
-Seraphina: Bring me back something useful. Not just stories.
-Kaelen: Like what? What counts as useful?
-Seraphina: Answers. Real ones.
-Kaelen: Those are rare out here.
-Seraphina: Then bring coffee. I'd settle for coffee.
+Seraphina: Bring me back something useful, please. Not stories. I get stories off every wagon through that gate.
+Kaelen: Useful like what? A map? A spare part? I'm terrible at gifts.
+Seraphina: Answers. The kind I can put in a report and Brask can't send back.
+Kaelen: Those are rare out here. I'll look under everything.
+Seraphina: Then bring coffee. And this time drink it. Don't wear it.
 => end_horizon
 
 ~ end_rejected
 Seraphina: I hope I'm wrong about you.
-Kaelen: Me too. I really do.
-Elara: Well. That was comfortable for everyone.
-Kaelen: Extremely. Let's never do it again.
+Kaelen: Me too. I'd— I'd like you to be.
+Elara: She counted you on the way out, you know. Habit. Come on, the road's long.
+Kaelen: I know. I'm keeping that.
 => end_horizon
 
 ~ end_horizon
-[if ch1_bridge_fell] Kaelen (Internal): There's a refugee wagon coming up the Oakhaven road. The bridge. Of course.
-[if ch1_bridge_saved] Kaelen (Internal): A trade wagon's heading down toward Oakhaven. Over mismatched planks, I bet. Holding, though.
-[if ch2_medicine_late] Kaelen (Internal): The infirmary bells are still ringing.
-[if ch2_medicine_early] Kaelen (Internal): Every light in the lower city is on.
+[if ch1_bridge_fell] Kaelen (Internal): A refugee wagon's coming up the Oakhaven road, loaded to the rails. That'll be the bridge.
+[if ch1_bridge_saved] Kaelen (Internal): A trade wagon's heading down toward Oakhaven. It'll cross on mismatched planks, and they'll hold.
+[if ch2_medicine_late] Kaelen (Internal): The infirmary bells are still going. Tomas. The Wren girl.
+[if ch2_medicine_early] Kaelen (Internal): Every light in the lower city is on. Rem's got beds to spare tonight.
 do sky_seam
 Kaelen: That way. Past the hills.
 Elara: You say that like the sky's pointing.
-Kaelen: It is. It's been pointing all day.
+Kaelen: It is. You've watched me check it every few steps since Oakhaven.

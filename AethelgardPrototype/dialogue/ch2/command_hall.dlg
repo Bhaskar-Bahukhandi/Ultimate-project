@@ -6,33 +6,33 @@
 
 ~ start
 do hall
-Brask: Another outsider. We seem to be collecting them this year.
-Seraphina: He's from further away than usual.
-Brask: That isn't a recommendation.
-Elara: He survived Oakhaven. Most of Oakhaven survived him, too.
-Brask: So did Oakhaven. Most places survive their first visitor.
-Brask: What do you want with Ironhold?
-? Kaelen (Internal): How much do I tell a room full of soldiers?
-- The truth. The Source Key, and what Root Access lets me do. => truth
-- Enough. The Fracture patterns point at Ironhold. => cautious
-- I'll show you. (Edit the practice construct.) => showoff
+Brask: Another outsider. The gate log says the Commander signed him in.
+Seraphina: Him and one more. He's come from further away than most.
+Brask: Distance doesn't go in a report. Origin does.
+Elara: He survived Oakhaven. Oakhaven mostly survived him, and Mara billed him for the difference.
+Brask: Oakhaven isn't my wall. Ironhold is.
+Brask: State your business with Ironhold. Briefly. I have a wall report at noon.
+? Kaelen (Internal): A room full of soldiers, and every one of them is waiting on me. How much do I tell them?
+- Everything. The Source Key, and what Root Access lets me do. => truth
+- Just enough. The Fracture's moving in a pattern, and the pattern ends here. => cautious
+- Easier if I show you. (Edit the practice construct.) => showoff
 
 ~ truth
 set ch2_seraphina_truth
 do trust seraphina 10
-Kaelen: There's a key in seven pieces. I found one under Oakhaven. And I can change things. Edit them. It costs me something, and I don't fully understand what.
-Brask: That's either the most dangerous thing anyone's said in this hall, or the most honest.
-Seraphina: You told them more in two minutes than you told me.
-Kaelen: You were holding a spear at the time.
+Kaelen: There's a key in seven pieces; I found one under Oakhaven. And I can edit things. It costs me something, and I don't know what yet.
+Brask: That goes in my report as the most dangerous thing said in this hall. Possibly the most honest. I'll find out which.
+Seraphina: Two minutes in this hall, and they've had more out of you than I got at the gate.
+Kaelen: You were holding a spear at the time. I was choosing my words around it.
 Seraphina: I'm still holding a spear.
 => invitation
 
 ~ cautious
 set ch2_seraphina_cautious
-Kaelen: The Fracture moves in patterns. The patterns point here. I'd like to know why before it arrives.
-Brask: That's a soldier's answer. I don't trust soldiers' answers. I've given too many.
-Seraphina: You left out the important part. I could hear you leaving it out.
-Kaelen: I'm learning the local customs.
+Kaelen: The Fracture moves in patterns, and the patterns point here. I'd rather know why before it reaches your wall.
+Brask: That's a soldier's answer. I've given too many of them to trust one.
+Seraphina: You left something out. Passengers sound like that when I ask what's in the bag.
+Kaelen: Ask me again somewhere with fewer spears in it.
 => invitation
 
 ~ showoff
@@ -41,18 +41,18 @@ do trust seraphina -10
 do root_edit construct
 # The training construct bows to the council. Nobody in the hall moves.
 Brask: Put it back. Exactly how it was.
-Seraphina: That's useful.
-Kaelen: You sound almost impressed.
+Seraphina: Hands where they are, everyone, please. ...That's a useful thing to be able to do.
+Kaelen: That almost sounded like you were impressed.
 Seraphina: I'm concerned. It sounds similar from the outside.
 => invitation
 
 # C2-S08 — the arena trial.
 ~ invitation
-Seraphina: There's an arena trial. Win enough rounds and command trusts you near the lower city.
-Kaelen: Why does winning a fight get me into the sewers?
-Seraphina: Tradition. Ironhold runs on it.
-Kaelen: That isn't an explanation.
-Seraphina: It's the explanation that survived.
-Seraphina: One more thing. Rem, at the infirmary, needs hands. There's fever in the lower city, and the medicine's stuck out west.
+Seraphina: There's an arena trial. Win enough rounds, and command will trust you near the lower city.
+Kaelen: Why does winning a fight get me into the sewers? I'm not even sure I can win one.
+Seraphina: Tradition. Ironhold runs on it, and on coal.
+Kaelen: That's not a reason, though. That's just a description of what happens.
+Seraphina: It's the only one anybody's given me, and I've asked.
+Seraphina: One more thing, please. Rem at the infirmary needs hands. Fever's in the lower city, and the medicine's stuck out on the west road.
 set ch2_command_hall_done
 set ch2_arena_unlocked

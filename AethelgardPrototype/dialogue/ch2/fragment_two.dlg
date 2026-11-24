@@ -16,12 +16,12 @@ Colleague: Until somebody's unconscious and can't sign.
 # Past Kaelen hesitates. That's the whole memory: him hesitating.
 do flash_ends
 do fragment_acquired 2
-Seraphina: A memory? You had that look again.
-Kaelen: Yeah. Another one.
+Seraphina: You had that look again. Like a passenger who's just heard the engines change.
+Kaelen: Another memory. Give me a second, it's still arriving.
 Seraphina: Yours?
-Kaelen: Yeah. Mine, from before.
+Kaelen: Mine. Someone asked me a question and I didn't answer it fast enough.
 Seraphina: A bad one?
-Kaelen: I don't know yet. I can't tell from the inside.
+Kaelen: I don't know yet. It's hard to judge a room you're still standing in.
 # She studies him the way she'd study a passenger who says he's fine.
 Seraphina: Tell me when you do.
 set ch2_seraphina_tell_me
@@ -30,31 +30,31 @@ set ch2_seraphina_tell_me
 ~ wall
 do upper_wall
 Seraphina: I remember the plane.
-Kaelen: More than I do. I've got pieces, mostly.
-Seraphina: I wish I didn't. Some nights especially.
-Kaelen: I remember rain. On a window.
+Kaelen: More than I do. I've got pieces. A sound, a colour, all in the wrong order.
+Seraphina: I wish I didn't. I still count the room before I can sleep.
+Kaelen: I remember rain on a window. That's one of my pieces.
 Seraphina: There was rain.
-Kaelen: An airport window. Before we boarded.
+Kaelen: Not on the plane, though. An airport window, before we boarded.
 Seraphina: You had a laptop open.
 # He looks at her.
-Seraphina: You were working all through boarding.
-Kaelen: That sounds right. That sounds very like me.
+Seraphina: You were typing all through boarding. You didn't look up once.
+Kaelen: Was I? ...Yes. Fixing something nobody had asked me to fix.
 Seraphina: I told you to close it for takeoff.
 Kaelen: Did I close it?
-Seraphina: Eventually. After I asked twice.
+Seraphina: Eventually. The second time I asked, in the voice I save for people who don't listen.
 # She smiles, once.
 Seraphina: You looked annoyed.
-Kaelen: I probably was. I usually am, apparently.
-Seraphina: I didn't like you. Not one bit.
-Kaelen: This keeps getting better and better.
+Kaelen: I probably was. Did I at least say thank you?
+Seraphina: No. You held up one finger at me, like I was a waiter. I didn't like you.
+Kaelen: So far I'm rude, slow and difficult. Tell me there's a better part coming.
 Seraphina: Then we crashed.
 do pause 1.5
 Seraphina: I counted people until I couldn't.
 [if seraphina_trust_high and not ch2_seraphina_186_told] Seraphina: One hundred and eighty-six. That's where I stopped.
-Kaelen: I'm sorry. I'm so sorry.
+Kaelen: I'm— I should have—
 Seraphina: For what?
 Kaelen: ...I don't know.
-Seraphina: Good. Don't apologise for the crash unless you remember causing it.
+Seraphina: Then stop. Don't apologise for the crash unless you remember causing it.
 
 # C2-S17 — she decides.
 ~ commitment
@@ -64,21 +64,21 @@ Seraphina: Good. Don't apologise for the crash unless you remember causing it.
 
 ~ recruited
 Seraphina: Brask can hold the city.
-Brask: I'm standing right here, Commander.
-Seraphina: Good. Practise. You'll be doing it a lot.
+Brask: Commander. I'd prefer that in a report.
+Seraphina: You'll get one. It'll say the same thing, with more commas.
 Seraphina: I'm going with Kaelen.
 Brask: That wasn't a request, was it.
-Seraphina: No. It wasn't. I'm sorry, Brask.
+Seraphina: No. The shift lists are on my desk, every name. I'm sorry, Brask.
 set ch2_seraphina_recruited
 
 ~ stays
-Seraphina: I can't leave. Not with the city like this.
-Kaelen: I understand. Really, I do.
+Seraphina: I can't leave. Not while there are people here I haven't counted twice.
+Kaelen: I understand. It's yours.
 Seraphina: Do you? You've never had a city.
-Kaelen: I'm trying to. That has to count for something.
+Kaelen: No. But I've got a list of names I'm trying to keep, and it keeps getting longer.
 set ch2_seraphina_stayed
 
 ~ rejected
-Seraphina: I believe your problem is real, Kaelen. I want to be clear about that.
+Seraphina: I believe your problem is real, Kaelen. I'm saying that first, so you hear it.
 Seraphina: I don't believe following you is the same thing as solving it.
 set ch2_seraphina_rejected

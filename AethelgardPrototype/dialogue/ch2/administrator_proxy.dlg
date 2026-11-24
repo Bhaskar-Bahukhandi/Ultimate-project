@@ -6,9 +6,9 @@
 # ("Kaelen. / Yeah. / Break it." is the moment Seraphina stops arguing.)
 
 ~ start
-Kaelen (Internal): The missing shift wasn't lost. It was used. Their sessions are what's holding this thing together.
+Kaelen (Internal): The shift didn't go missing. Somebody spent it. Forty sessions, propping this thing up like scaffolding.
 Administrator Proxy: ORDER PREVENTS LOSS.
-Seraphina: Then why are people missing? Forty of them, from one shift?
+Seraphina: Then where's shift four? Forty people, and not one of them has come home.
 Administrator Proxy: ACCEPTABLE CENTRALIZATION COST.
 Seraphina: You mean people. Say it properly.
 Administrator Proxy: RESOURCES.
@@ -16,8 +16,8 @@ Administrator Proxy: RESOURCES.
 Seraphina: Kaelen.
 Kaelen: Yeah.
 Seraphina: Break it.
-[if ch2_medicine_late] Kaelen (Internal): Rem's healers couldn't come; the fever's got half of them. The arena medics came instead. They look terrified.
-[if not ch2_medicine_late] Seraphina: Rem's people are behind me. Nothing gets past my shield to them.
+[if ch2_medicine_late] Kaelen (Internal): Rem's healers couldn't come; the fever's got half of them. The arena medics came instead. One's holding a bandage roll like a knife.
+[if not ch2_medicine_late] Seraphina: Rem's people stay behind me, please. All of them. Nothing gets past this shield.
 
 # ── B04 barks, one line each ───────────────────────────────────────────────
 ~ bark_lane
@@ -32,11 +32,11 @@ Administrator Proxy: COMPLIANCE IS CARE.
 # Phase 3: a short, blocking exchange between attacks.
 ~ compliance_reply
 Administrator Proxy: COMPLIANCE IS CARE.
-Kaelen: That's a horrible thing to paint on a wall.
-Seraphina: Then we'll carve it on its grave.
+Kaelen: Forty people are holding you up, and that's what you've got to say about it?
+Seraphina: It can't say the word. I'll carve it on its grave, properly, in letters it can read.
 
 ~ victory
-Seraphina: ...It's down. Is it down?
-Kaelen: It's down. It's actually down.
-Seraphina: Then somebody's going to have to explain to Brask what's been running his city.
+Seraphina: ...It's not moving. Is it down? Everybody stay where you are, please.
+Kaelen: It's down. Nothing's running in it— I keep waiting for it to restart.
+Seraphina: Then somebody has to tell Brask what's been running his city, and he's going to want it in a report.
 set ch2_administrator_proxy_defeated

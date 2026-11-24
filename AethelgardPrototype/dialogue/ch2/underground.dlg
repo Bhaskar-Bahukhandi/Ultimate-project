@@ -9,17 +9,17 @@
 
 ~ entry
 Kaelen (Internal): The stone stops after the first stairs. Underneath, it's conduits. Cable runs. Junction boxes older than the city.
-Seraphina: You know this place. Don't tell me you don't.
-Kaelen: Not this place. The way it's built. I've seen wiring like this before.
-Seraphina: I don't love how you said that.
-Elara: You get used to it. I didn't, but you might.
+Seraphina: You've stopped watching your feet. You know this place, so don't tell me you don't.
+Kaelen: Not this place. The way it's wired. I know this kind of mess, I just can't remember where from.
+Seraphina: Then you're walking in front. There's a whole shift down here, and I want every one of them walking back up.
+Elara: He does that. Knows the "wiring" of everything except himself. Watch the third step, it's loose.
 [if ch2_shift_sealed] Kaelen (Internal): A night's made it worse. The lights are wrong all the way down.
 [if ch2_shift_rescue_now] Kaelen (Internal): We're going in fast and half-ready. Seraphina hasn't stopped counting since the stairs.
 
 # Workers caught in pockets of repeating time.
 ~ workers
 Worker: Shift starts at six. Shift starts at six. Is it six yet?
-Seraphina: It's well past six. You're coming with me.
+Seraphina: It's well past six. Take my hand, please. I'm counting you, and we're walking out.
 Worker: I clocked out. I remember clocking out. I've never once clocked out of this shift.
 
 # The Wraith speaks through the lights before it shows itself.
@@ -37,12 +37,12 @@ Data Wraith: RESTORE.
 do data_vision_wraith
 Kaelen: It isn't one ghost. It isn't lots of separate people, either. Something tried to restore them all at once, and they ran together.
 Seraphina: Are they in pain? Any of them?
-Kaelen: I think so. I think all of them are.
+Kaelen: I think so. I can't tell where one of them stops and the next one starts.
 Data Wraith: YES.
 Data Wraith: NO.
 Data Wraith: DEFINE.
 Elara: That sounded like you.
-Kaelen: I know. It sounded exactly like me.
+Kaelen: I know. It's what I say when I'm stuck. I'd rather it didn't sound like me while it's hurting.
 do wraith_hostile
 
 # ── B03 barks ──────────────────────────────────────────────────────────────
@@ -60,9 +60,9 @@ Data Wraith: PLEASE.
 set ch2_data_wraith_defeated
 do wraith_unstable
 ? Kaelen (Internal): It's still running. It's still them.
-- Restore it. Try to pull the people apart. (Some may not come back whole.) => restore
-- Destroy it. End the process. (Anyone still recoverable is lost.) => destroy
-- Absorb it. Hold them in my Root layer until there's a better answer. (Corruption. Identity bleed.) => absorb
+- Restore them. Pull every name back out, one at a time. (Some may not come back whole.) => restore
+- Destroy it. Stop the process, all of it, now. (Anyone still recoverable is lost.) => destroy
+- Absorb them. Carry them in my Root layer until I've got a better answer. (Corruption. Identity bleed.) => absorb
 
 ~ restore
 set ch2_data_wraith_restored
@@ -70,7 +70,7 @@ do root_edit wraith_separate
 Kaelen (Internal): Records. Shift lists. Anything with a name on it.
 do wraith_split
 Iven: My name's Iven.
-Kaelen: Iven. Got it. Iven.
+Kaelen: Iven. Iven. One more time, slowly, so I get it right.
 Iven: Don't lose it. I nearly did.
 do kaelen_writes_name
 Kaelen (Internal): I write it down. I write it down twice.
@@ -79,7 +79,7 @@ Kaelen (Internal): I write it down. I write it down twice.
 set ch2_data_wraith_destroyed
 Seraphina: Are you sure?
 Kaelen: No.
-Seraphina: That isn't what I asked.
+Seraphina: You said no.
 Kaelen: It's still the answer.
 do wraith_ends
 # The lights go out, one by one, all the way down the tunnel.
@@ -87,9 +87,9 @@ do wraith_ends
 ~ absorb
 set ch2_data_wraith_absorbed
 do absorb_wraith
-Elara: Tell me this is safe. Just say it, even if you're guessing.
-Kaelen: It isn't. It really isn't.
-Elara: Then thank you for not lying to me.
+Elara: Tell me this is safe. Guess, if you have to. Just say it.
+Kaelen: It isn't. Somebody in here is still waiting for six o'clock, and it isn't me.
+Elara: Then thank you for not lying. Now sit down before you fall.
 # The fragments go into him. His corruption climbs. Later, the voices come back as single words.
 
 # The routing junction in the puzzle chamber.
